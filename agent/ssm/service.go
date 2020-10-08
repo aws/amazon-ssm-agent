@@ -262,10 +262,10 @@ func (svc *sdkService) UpdateInstanceInformation(
 	switch goOS {
 	case "windows":
 		params.PlatformType = aws.String(ssm.PlatformTypeWindows)
-	case "linux", "freebsd", "darwin":
-		// darwin masquerades as Linux to bypass OS validation on
-		// the backend until official support can be added.
+	case "linux", "freebsd":
 		params.PlatformType = aws.String(ssm.PlatformTypeLinux)
+	case "darwin":
+		params.PlatformType = aws.String(ssm.PlatformTypeMacOs)
 	default:
 		return nil, fmt.Errorf("Cannot report platform type of unrecognized OS. %v", goOS)
 	}
@@ -325,10 +325,10 @@ func (svc *sdkService) UpdateEmptyInstanceInformation(
 	switch goOS {
 	case "windows":
 		params.PlatformType = aws.String(ssm.PlatformTypeWindows)
-	case "linux", "freebsd", "darwin":
-		// darwin masquerades as Linux to bypass OS validation on
-		// the backend until official support can be added.
+	case "linux", "freebsd":
 		params.PlatformType = aws.String(ssm.PlatformTypeLinux)
+	case "darwin":
+		params.PlatformType = aws.String(ssm.PlatformTypeMacOs)
 	}
 
 	// InstanceId is a required parameter for UpdateInstanceInformation

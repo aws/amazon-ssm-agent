@@ -23,6 +23,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"runtime"
 	"strings"
 	"time"
 
@@ -333,6 +334,7 @@ func Unzip(src, dest string) error {
 		}
 	}()
 
+	isMacOS := runtime.GOOS == "darwin"
 	os.MkdirAll(dest, appconfig.ReadWriteExecuteAccess)
 	// Closure to address file descriptors issue with all the deferred .Close() methods
 	extractAndWriteFile := func(f *zip.File) error {
@@ -348,6 +350,10 @@ func Unzip(src, dest string) error {
 
 		path := filepath.Join(dest, f.Name)
 
+		// MacOS unzips one folder level deeper then where we look for (unlike Windows & Linux), so we have to manually unzip one level higher
+		if isMacOS {
+			path = filepath.Join(dest, filepath.Base(f.Name))
+		}
 		if !isUnderDir(path, dest) {
 			return fmt.Errorf("%v attepts to place files outside %v subtree", f.Name, dest)
 		}

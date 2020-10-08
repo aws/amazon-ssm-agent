@@ -11,13 +11,12 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// +build freebsd linux netbsd openbsd
+// +build darwin
 
 package instancedetailedinformation
 
 import (
 	"fmt"
-	"math"
 	"os/exec"
 	"strconv"
 	"strings"
@@ -27,13 +26,12 @@ import (
 )
 
 const (
-	lscpuCmd          = "lscpu"
-	socketsKey        = "Socket(s)"
-	coresPerSocketKey = "Core(s) per socket"
-	threadsPerCoreKey = "Thread(s) per core"
-	cpuModelNameKey   = "Model name"
-	cpusKey           = "CPU(s)"
-	cpuSpeedMHzKey    = "CPU MHz"
+	sysctlCmd       = "sysctl"
+	cpuModelNameKey = "machdep.cpu.brand_string"
+	cpuCoreKey      = "hw.physicalcpu"
+	cpusKey         = "hw.logicalcpu"
+	cpuFreqKey      = "hw.cpufrequency"
+	threadTypeKey   = "hw.cputhreadtype"
 )
 
 // cmdExecutor decouples exec.Command for easy testability
@@ -49,61 +47,54 @@ func collectPlatformDependentInstanceData(context context.T) (appData []model.In
 
 	var output []byte
 	var err error
-	cmd := lscpuCmd
+	cmd := sysctlCmd
+	args := []string{cpuModelNameKey, cpuCoreKey, cpusKey, cpuFreqKey, threadTypeKey}
 
 	log.Infof("Executing command: %v", cmd)
-	if output, err = cmdExecutor(cmd); err != nil {
-		log.Errorf("Failed to execute command : %v; error: %v", cmd, err.Error())
+	if output, err = cmdExecutor(cmd, args...); err != nil {
+		log.Errorf("Failed to execute command : %v %v; with error: %v", cmd, args, err.Error())
 		log.Debugf("Command Stderr: %v", string(output))
 		return
 	}
 
 	log.Infof("Parsing output %v", string(output))
-	r := parseLscpuOutput(string(output))
+	r := parseSysctlOutput(string(output))
 	log.Infof("Parsed output %v", r)
 	return r
 }
 
-// parseLscpuOutput collects relevant fields from lscpu output, which has the following format (some lines omitted):
-//   CPU(s):                2
-//   Thread(s) per core:    1
-//   Core(s) per socket:    2
-//   Socket(s):             1
-//   Model name:            Intel(R) Xeon(R) CPU E5-2676 v3 @ 2.40GHz
-//   CPU MHz:               2400.072
-func parseLscpuOutput(output string) (data []model.InstanceDetailedInformation) {
-	cpuSpeedMHzStr := getFieldValue(output, cpuSpeedMHzKey)
-	if cpuSpeedMHzStr != "" {
-		cpuSpeedMHzStr = strconv.Itoa(int(math.Trunc(parseFloat(cpuSpeedMHzStr, 0))))
-	}
-
-	socketsStr := getFieldValue(output, socketsKey)
-
-	cpuCoresStr := ""
-	coresPerSocketStr := getFieldValue(output, coresPerSocketKey)
-	if socketsStr != "" && coresPerSocketStr != "" {
-		sockets := parseInt(socketsStr, 0)
-		coresPerSocket := parseInt(coresPerSocketStr, 0)
-		cpuCoresStr = strconv.Itoa(sockets * coresPerSocket)
-	}
-
-	hyperThreadEnabledStr := ""
-	threadsPerCoreStr := getFieldValue(output, threadsPerCoreKey)
-	if threadsPerCoreStr != "" {
-		hyperThreadEnabledStr = boolToStr(parseInt(threadsPerCoreStr, 0) > 1)
-	}
+// parseSysctlOutput collects relevant fields from sysctl output, which has the following format
+// machdep.cpu.brand_string: Intel(R) Core(TM) i7-8569U CPU @ 2.80GHz
+// hw.physicalcpu: 4
+// hw.logicalcpu: 8
+// hw.cpufrequency: 2800000000
+// hw.cputhreadtype: 1
+func parseSysctlOutput(output string) (data []model.InstanceDetailedInformation) {
+	var cpuSpeed = parseInt(getFieldValue(output, cpuFreqKey), 0)
+	// convert the frequency to MHz
+	var cpuSpeedMHzStr = strconv.Itoa(cpuSpeed / 1000000)
+	var threadTypeVal = parseInt(getFieldValue(output, threadTypeKey), 0)
+	var hyperThreadEnabledStr = boolToStr(threadTypeVal > 0)
 
 	itemContent := model.InstanceDetailedInformation{
 		CPUModel:              getFieldValue(output, cpuModelNameKey),
+		CPUCores:              getFieldValue(output, cpuCoreKey),
 		CPUs:                  getFieldValue(output, cpusKey),
 		CPUSpeedMHz:           cpuSpeedMHzStr,
-		CPUSockets:            socketsStr,
-		CPUCores:              cpuCoresStr,
+		CPUSockets:            "",
 		CPUHyperThreadEnabled: hyperThreadEnabledStr,
 	}
 
 	data = append(data, itemContent)
 	return
+}
+
+func parseInt(value string, defaultValue int) int {
+	res, err := strconv.Atoi(value)
+	if err != nil {
+		return defaultValue
+	}
+	return res
 }
 
 // getFieldValue looks for the first substring of the form "key: value \n" and returns the "value"
@@ -118,22 +109,6 @@ func getFieldValue(input string, key string) string {
 	afterKey := input[keyStartPos+len(key)+1:] + "\n"
 	valueEndPos := strings.Index(afterKey, "\n")
 	return strings.TrimSpace(afterKey[:valueEndPos])
-}
-
-func parseInt(value string, defaultValue int) int {
-	res, err := strconv.Atoi(value)
-	if err != nil {
-		return defaultValue
-	}
-	return res
-}
-
-func parseFloat(value string, defaultValue float64) float64 {
-	res, err := strconv.ParseFloat(value, 64)
-	if err != nil {
-		return defaultValue
-	}
-	return res
 }
 
 func boolToStr(b bool) string {

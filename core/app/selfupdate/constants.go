@@ -62,6 +62,12 @@ const (
 	// PlatformUbuntu represents Ubuntu
 	PlatformUbuntu = "ubuntu"
 
+	//PlatformDarwin represents darwin
+	PlatformDarwin = "darwin"
+
+	//PlatformMacOsX represents mac os
+	PlatformMacOsX = "mac os x"
+
 	// PlatformOracleLinux represents oracle linux
 	PlatformOracleLinux = "oracle"
 

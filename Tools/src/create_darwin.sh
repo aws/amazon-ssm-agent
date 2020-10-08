@@ -6,7 +6,7 @@ echo "Creating tar file for Mac OS X amd64    "
 echo "****************************************"
 
 ROOTFS=${GO_SPACE}/bin/darwin_amd64/darwin
-TAR_NAME=ssm-agent-darwin.tar.gz
+TAR_NAME=amazon-ssm-agent.tar.gz
 DESTINATION=${GO_SPACE}/bin/amazon-ssm-agent-darwin-`cat ${GO_SPACE}/VERSION`.tar.gz
 rm -rf ${ROOTFS}
 
@@ -22,11 +22,16 @@ mkdir -p ${PROGRAM_FOLDER}/bin
 echo "Copying application files"
 
 cp ${GO_SPACE}/bin/darwin_amd64/amazon-ssm-agent ${PROGRAM_FOLDER}/bin/
+cp ${GO_SPACE}/bin/darwin_amd64/ssm-agent-worker ${PROGRAM_FOLDER}/bin/
 cp ${GO_SPACE}/bin/darwin_amd64/ssm-document-worker ${PROGRAM_FOLDER}/bin/
 cp ${GO_SPACE}/bin/darwin_amd64/ssm-cli ${PROGRAM_FOLDER}/bin/
+cp ${GO_SPACE}/bin/darwin_amd64/ssm-session-logger ${PROGRAM_FOLDER}/bin/
+cp ${GO_SPACE}/bin/darwin_amd64/ssm-session-worker ${PROGRAM_FOLDER}/bin/
 
-cp ${GO_SPACE}/seelog_unix.xml ${PROGRAM_FOLDER}/seelog.xml
+cp ${GO_SPACE}/seelog_unix.xml ${PROGRAM_FOLDER}/seelog.xml.template
 cp ${GO_SPACE}/amazon-ssm-agent.json.template ${PROGRAM_FOLDER}/
+cp ${GO_SPACE}/RELEASENOTES.md ${PROGRAM_FOLDER}/
+cp ${GO_SPACE}/README.md ${PROGRAM_FOLDER}/
 cp ${GO_SPACE}/packaging/darwin/com.amazon.aws.ssm.plist ${ROOTFS}/Library/LaunchDaemons/
 
 echo "Setting permissions as required by launchd"

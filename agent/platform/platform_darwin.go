@@ -11,6 +11,8 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+// +build darwin
+
 // Package platform contains platform specific utilities.
 package platform
 
@@ -35,7 +37,7 @@ func getPlatformName(log log.T) (value string, err error) {
 }
 
 func getPlatformType(log log.T) (value string, err error) {
-	return "linux", nil
+	return "macos", nil
 }
 
 func getPlatformVersion(log log.T) (value string, err error) {

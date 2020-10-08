@@ -115,6 +115,7 @@ func TestCreateInstanceContext(t *testing.T) {
 		{"us-east-1", PlatformOracleLinux, nil, "7.7", nil, PlatformOracleLinux, PlatformLinux, false},
 		{"us-east-1", PlatformUbuntu, nil, "12", nil, PlatformUbuntu, PlatformUbuntu, false},
 		{"us-east-1", PlatformWindows, nil, "5", nil, PlatformWindows, PlatformWindows, false},
+		{"us-east-1", PlatformMacOsX, nil, "10.14.2", nil, PlatformMacOsX, PlatformDarwin, false},
 		{"us-east-1", "", fmt.Errorf("error"), "", nil, "", "", true},
 		{"us-east-1", "", nil, "", fmt.Errorf("error"), "", "", true},
 		{"", "", nil, "", nil, "", "", true},
@@ -165,6 +166,7 @@ func TestFileNameConstruction(t *testing.T) {
 		{InstanceContext{"us-east-1", "linux", "2015.9", "linux", "amd64", "tar.gz"}, "amazon-ssm-agent-linux-amd64.tar.gz"},
 		{InstanceContext{"us-east-1", "linux", "2015.9", "linux", "386", "tar.gz"}, "amazon-ssm-agent-linux-386.tar.gz"},
 		{InstanceContext{"us-west-1", "ubuntu", "12", "ubuntu", "386", "tar.gz"}, "amazon-ssm-agent-ubuntu-386.tar.gz"},
+		{InstanceContext{"us-west-1", "max os x", "10.14.2", "darwin", "amd64", "tar.gz"}, "amazon-ssm-agent-darwin-amd64.tar.gz"},
 	}
 
 	for _, test := range testCases {

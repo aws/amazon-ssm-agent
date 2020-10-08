@@ -25,6 +25,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/session/utility/model"
 )
 
 var ShellPluginCommandName = "sh"
@@ -74,7 +75,7 @@ func (u *SessionUtil) CreateLocalAdminUser(log log.T) (newPassword string, err e
 // createLocalUser creates an OS local user.
 func (u *SessionUtil) createLocalUser(log log.T) error {
 
-	commandArgs := append(ShellPluginCommandArgs, fmt.Sprintf("useradd -m %s", appconfig.DefaultRunAsUserName))
+	commandArgs := append(ShellPluginCommandArgs, fmt.Sprintf(model.AddUserCommand, appconfig.DefaultRunAsUserName))
 	cmd := exec.Command(ShellPluginCommandName, commandArgs...)
 	if err := cmd.Run(); err != nil {
 		log.Errorf("Failed to create %s: %v", appconfig.DefaultRunAsUserName, err)

@@ -14,6 +14,7 @@ const (
 	amazonPublisherName = "amazon"
 	amazonSsmAgentLinux = "amazon-ssm-agent"
 	amazonSsmAgentWin   = "amazon ssm agent"
+	amazonSsmAgentMac   = "com.amazon.aws.ssm"
 	awsToolsWindows     = "aws tools for windows"
 	ec2ConfigService    = "ec2configservice"
 	awsCfnBootstrap     = "aws-cfn-bootstrap"
@@ -34,6 +35,7 @@ func init() {
 	selectAwsApps = make(map[string]string)
 	selectAwsApps[amazonSsmAgentLinux] = amazonPublisherName
 	selectAwsApps[amazonSsmAgentWin] = amazonPublisherName
+	selectAwsApps[amazonSsmAgentMac] = amazonPublisherName
 	selectAwsApps[awsToolsWindows] = amazonPublisherName
 	selectAwsApps[ec2ConfigService] = amazonPublisherName
 	selectAwsApps[awsCfnBootstrap] = amazonPublisherName

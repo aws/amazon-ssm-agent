@@ -11,11 +11,11 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// +build freebsd linux netbsd openbsd
+// +build windows
 
-//Package model contains data objects for long running container
+//Package model contains data objects for session utility
 package model
 
-import "github.com/aws/amazon-ssm-agent/agent/appconfig"
-
-var SSMAgentWorkerBinaryName = appconfig.DefaultSSMAgentWorker
+const (
+	AddUserCommand = ""
+)

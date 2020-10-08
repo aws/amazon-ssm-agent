@@ -13,9 +13,9 @@
 
 // +build freebsd linux netbsd openbsd
 
-//Package model contains data objects for long running container
+//Package model contains data objects for session utility
 package model
 
-import "github.com/aws/amazon-ssm-agent/agent/appconfig"
-
-var SSMAgentWorkerBinaryName = appconfig.DefaultSSMAgentWorker
+const (
+	AddUserCommand = "useradd -m %s"
+)

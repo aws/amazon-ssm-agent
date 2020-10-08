@@ -5,7 +5,8 @@ GO_BUILD_PIE := go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs
 # Default build configuration, can be overridden at build time.
 GOARCH?=$(shell go env GOARCH)
 GOOS?=$(shell go env GOOS)
-GO_SRC_TYPE?=unix
+GO_CORE_SRC_TYPE?=unix
+GO_WORKER_SRC_TYPE?=unix
 GO_BUILD?=$(GO_BUILD_NOPIE)
 
 # Initailize workspace if it's empty
@@ -45,7 +46,7 @@ package:: create-package-folder package-linux package-windows package-darwin
 
 build-release:: clean quick-integtest checkstyle pre-release build prepack package finalize
 
-release:: clean quick-integtest checkstyle pre-release cpy-plugins copy-win-dep finalize
+release:: clean quick-integtest checkstyle pre-release build-darwin cpy-plugins copy-win-dep finalize
 
 package-src:: clean quick-integtest checkstyle pre-release cpy-plugins finalize
 
@@ -125,11 +126,11 @@ pre-build:
 build-any-%: checkstyle copy-src pre-build
 	@echo "Build for $(GOARCH) $(GOOS) agent"
 	GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO_BUILD) -o $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/amazon-ssm-agent$(EXE_EXT) -v \
-	    $(GO_SPACE)/core/agent.go $(GO_SPACE)/core/agent_$(GO_SRC_TYPE).go $(GO_SPACE)/core/agent_parser.go
+	    $(GO_SPACE)/core/agent.go $(GO_SPACE)/core/agent_$(GO_CORE_SRC_TYPE).go $(GO_SPACE)/core/agent_parser.go
 	GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO_BUILD) -o $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/ssm-agent-worker$(EXE_EXT) -v \
-	    $(GO_SPACE)/agent/agent.go $(GO_SPACE)/agent/agent_$(GO_SRC_TYPE).go $(GO_SPACE)/agent/agent_parser.go
+	    $(GO_SPACE)/agent/agent.go $(GO_SPACE)/agent/agent_$(GO_WORKER_SRC_TYPE).go $(GO_SPACE)/agent/agent_parser.go
 	GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO_BUILD) -o $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/updater$(EXE_EXT) -v \
-	    $(GO_SPACE)/agent/update/updater/updater.go $(GO_SPACE)/agent/update/updater/updater_$(GO_SRC_TYPE).go
+	    $(GO_SPACE)/agent/update/updater/updater.go $(GO_SPACE)/agent/update/updater/updater_$(GO_WORKER_SRC_TYPE).go
 	GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO_BUILD) -o $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/ssm-cli$(EXE_EXT) -v \
 	    $(GO_SPACE)/agent/cli-main/cli-main.go
 	GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO_BUILD) -o $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/ssm-document-worker$(EXE_EXT) -v \
@@ -158,6 +159,8 @@ build-freebsd: build-any-amd64-freebsd
 build-darwin: GOARCH=amd64
 build-darwin: GOOS=darwin
 build-darwin: GO_BUILD=$(GO_BUILD_NOPIE)
+build-darwin: GO_CORE_SRC_TYPE=darwin
+build-darwin: GO_WORKER_SRC_TYPE=unix
 build-darwin: build-any-darwin-amd64
 
 .PHONY: build-windows
@@ -165,7 +168,8 @@ build-windows: GOOS=windows
 build-windows: GOARCH=amd64
 build-windows: GO_BUILD=$(GO_BUILD_NOPIE)
 build-windows: EXE_EXT=.exe
-build-windows: GO_SRC_TYPE=windows
+build-windows: GO_CORE_SRC_TYPE=windows
+build-windows: GO_WORKER_SRC_TYPE=windows
 build-windows: build-any-windows-amd64
 
 .PHONY: build-linux-386
@@ -174,18 +178,13 @@ build-linux-386: GOARCH=386
 build-linux-386: GO_BUILD=$(GO_BUILD_NOPIE)
 build-linux-386: build-any-linux-386
 
-.PHONY: build-darwin-386
-build-darwin-386: GOOS=darwin
-build-darwin-386: GOARCH=386
-build-darwin-386: GO_BUILD=$(GO_BUILD_NOPIE)
-build-darwin-386: build-any-darwin-386
-
 .PHONY: build-windows-386
 build-windows-386: GOOS=windows
 build-windows-386: GOARCH=386
 build-windows-386: GO_BUILD=$(GO_BUILD_NOPIE)
 build-windows-386: EXE_EXT=.exe
-build-windows-386: GO_SRC_TYPE=windows
+build-windows-386: GO_CORE_SRC_TYPE=windows
+build-windows-386: GO_WORKER_SRC_TYPE=windows
 build-windows-386: build-any-windows-386
 
 .PHONY: build-arm
@@ -329,6 +328,7 @@ package-win: create-package-folder
 .PHONY: package-darwin
 package-darwin:
 	$(GO_SPACE)/Tools/src/create_darwin.sh
+	$(GO_SPACE)/Tools/src/create_darwin_package.sh
 
 .PHONY: package-rpm-386
 package-rpm-386: create-package-folder

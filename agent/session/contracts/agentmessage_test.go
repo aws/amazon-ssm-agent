@@ -190,7 +190,8 @@ func TestParseAgentMessage(t *testing.T) {
 	agentJson := "{\"DataChannelId\":\"44da928d-1200-4501-a38a-f10d72e38cc4\",\"documentContent\":{\"schemaVersion\":\"1.0\"," +
 		"\"inputs\":{\"cloudWatchLogGroup\":\"\",\"s3BucketName\":\"\",\"s3KeyPrefix\":\"\"},\"description\":\"Document to hold " +
 		"regional settings for Session Manager\",\"sessionType\":\"Standard_Stream\",\"parameters\":{}," +
-		"\"properties\":{\"windows\":{\"commands\":\"date\",\"runAsElevated\":true},\"linux\":{\"commands\":\"ls\",\"runAsElevated\":true}}}," +
+		"\"properties\":{\"windows\":{\"commands\":\"date\",\"runAsElevated\":true}," +
+		"\"linux\":{\"commands\":\"ls\",\"runAsElevated\":true}, \"macos\":{\"commands\":\"ls\",\"runAsElevated\":true}}}," +
 		"\"sessionId\":\"44da928d-1200-4501-a38a-f10d72e38cc4\"," +
 		"\"runAsUser\":\"test-user\"," +
 		"\"DataChannelToken\":\"AAEAAdDZESkS1C2/AWLlDccG608LYJUJZJLkxcjxl0x1T70kAAAAAFrozgJYbJT2fY6yQPDqQZhygozZ83LhsoYdP7VWmuo\"}"
@@ -218,6 +219,10 @@ func TestParseAgentMessage(t *testing.T) {
 			RunAsElevated: true,
 		},
 		Linux: ShellConfig{
+			Commands:      "ls",
+			RunAsElevated: true,
+		},
+		MacOS: ShellConfig{
 			Commands:      "ls",
 			RunAsElevated: true,
 		},

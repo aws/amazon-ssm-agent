@@ -88,10 +88,10 @@ const (
 	DefaultSessionLogger  = DefaultProgramFolder + "bin/ssm-session-logger"
 
 	// PowerShellPluginCommandName is the path of the powershell.exe to be used by the runPowerShellScript plugin
-	PowerShellPluginCommandName = "/usr/bin/powershell"
+	PowerShellPluginCommandName = "/usr/local/bin/pwsh"
 
 	// PowerShellPluginCommandArgs is the arguments of powershell.exe to be used by the runPowerShellScript plugin
-	PowerShellPluginCommandArgs = ""
+	PowerShellPluginCommandArgs = "-f"
 
 	// Exit Code for a command that exits before completion (generally due to timeout or cancel)
 	CommandStoppedPreemptivelyExitCode = 137 // Fatal error (128) + signal for SIGKILL (9) = 137

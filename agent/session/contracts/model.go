@@ -49,6 +49,7 @@ const (
 type ShellProperties struct {
 	Windows ShellConfig `json:"windows" yaml:"windows"`
 	Linux   ShellConfig `json:"linux" yaml:"linux"`
+	MacOS   ShellConfig `json:"macos" yaml:"macos"`
 }
 
 type ShellConfig struct {

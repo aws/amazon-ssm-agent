@@ -463,6 +463,8 @@ func (u *SelfUpdate) getPlatformName(log logger.T) (platformName string, err err
 		platformName = PlatformUbuntu
 	} else if strings.Contains(platformName, PlatformDebian) {
 		platformName = PlatformUbuntu
+	} else if strings.Contains(platformName, PlatformMacOsX) {
+		platformName = PlatformDarwin
 	} else if strings.Contains(platformName, PlatformUbuntu) {
 		if isSnap, err := u.isAgentInstalledUsingSnap(log); err == nil && isSnap {
 			platformName = PlatformUbuntuSnap

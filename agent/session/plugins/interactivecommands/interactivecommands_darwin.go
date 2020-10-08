@@ -10,12 +10,23 @@
 // on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
+//
+// +build darwin
 
-// +build freebsd linux netbsd openbsd
+// Package interactivecommands implements session shell plugin with interactive commands.
+package interactivecommands
 
-//Package model contains data objects for long running container
-package model
+import (
+	"fmt"
+	"strings"
 
-import "github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/session/contracts"
+)
 
-var SSMAgentWorkerBinaryName = appconfig.DefaultSSMAgentWorker
+// validateProperties validates whether the commands are not empty.
+func (p *InteractiveCommandsPlugin) validateProperties(shellProps contracts.ShellProperties) error {
+	if strings.TrimSpace(shellProps.MacOS.Commands) == "" {
+		return fmt.Errorf("Commands cannot be empty for session type %s", p.name())
+	}
+	return nil
+}

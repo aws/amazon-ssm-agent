@@ -109,6 +109,9 @@ const (
 	// PlatformUbuntuSnap represents Ubuntu
 	PlatformUbuntuSnap = "snap"
 
+	//PlatformDarwin represents darwin
+	PlatformDarwin = "darwin"
+
 	// PlatformCentOS represents CentOS
 	PlatformCentOS = "centos"
 
@@ -126,6 +129,9 @@ const (
 
 	//PlatformWindowsNano represents windows nano
 	PlatformWindowsNano = "windows-nano"
+
+	//PlatformMacOsX represents mac os
+	PlatformMacOsX = "mac os x"
 
 	// DefaultUpdateExecutionTimeoutInSeconds represents default timeout time for execution update related scripts in seconds
 	DefaultUpdateExecutionTimeoutInSeconds = 150
@@ -455,6 +461,11 @@ func (util *Utility) CreateInstanceContext(log log.T) (context *InstanceContext,
 	} else if strings.Contains(platformName, PlatformDebian) {
 		platformName = PlatformDebian
 		installerName = PlatformUbuntu
+		Installer = InstallScript
+		UnInstaller = UninstallScript
+	} else if strings.Contains(platformName, PlatformMacOsX) {
+		platformName = PlatformMacOsX
+		installerName = PlatformDarwin
 		Installer = InstallScript
 		UnInstaller = UninstallScript
 	} else if isNano, _ := platform.IsPlatformNanoServer(log); isNano {
