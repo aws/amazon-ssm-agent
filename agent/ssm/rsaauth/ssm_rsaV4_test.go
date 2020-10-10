@@ -1,4 +1,4 @@
-package v4
+package rsaauth
 
 import (
 	"net/http"
@@ -43,7 +43,7 @@ func TestRsaSignRequest(t *testing.T) {
 	signer.signRsa()
 
 	expectedDate := "19700101T000000Z"
-	expectedSig := "AWS4-HMAC-SHA256 Credential=s-1234567890abcdefa/19700101/us-east-1/ssm/aws4_request, SignedHeaders=content-type;host;x-amz-date;x-amz-meta-other-header;x-amz-target, Signature="
+	expectedSig := "AWS4-HMAC-SHA256 Credential=s-1234567890abcdefa/19700101/us-east-1/ssm/aws4_request, SignedHeaders=content-length;content-type;host;x-amz-date;x-amz-meta-other-header;x-amz-target, Signature="
 
 	q := signer.Request.Header
 	assert.Contains(t, q.Get("Authorization"), expectedSig)
