@@ -1,12 +1,13 @@
-package v4
+package rsaauth
 
 import (
+	"net/url"
+	"strings"
+
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/auth"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/request"
-	"net/url"
-	"strings"
 )
 
 // Sign requests with Beagle RSA using signature version 4.
@@ -131,7 +132,7 @@ func (v4 *signer) buildRsa() {
 	}
 }
 
-//Sign the stringToSign using the private key
+// Sign the stringToSign using the private key
 func (v4 *signer) buildRsaSignature() (err error) {
 	var rsaKey auth.RsaKey
 	rsaKey, err = auth.DecodePrivateKey(v4.CredValues.SecretAccessKey)
