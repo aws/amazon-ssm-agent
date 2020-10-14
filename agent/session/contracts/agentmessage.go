@@ -328,7 +328,7 @@ func deserializeAgentTaskPayload(log logger.T, agentMessage AgentMessage) (agent
 
 	// workaround to unmarshal the real payload (should be fixed from the service side)
 	if err = json.Unmarshal([]byte(mgsPayload.Payload), &agentTaskPayload); err != nil {
-		log.Errorf("Could not deserialize AgentTask payload rawMessage: %s", string(mgsPayload.Payload))
+		log.Errorf("Could not deserialize AgentTask payload rawMessage: %v", err)
 	}
 	return
 }
@@ -352,6 +352,7 @@ func buildDocumentInfo(
 		DocumentName:   parsedMessagePayload.DocumentName,
 		DocumentStatus: contracts.ResultStatusInProgress,
 		RunAsUser:      parsedMessagePayload.RunAsUser,
+		SessionOwner:   parsedMessagePayload.SessionOwner,
 	}
 }
 

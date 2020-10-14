@@ -97,6 +97,9 @@ func (p *InteractiveCommandsPlugin) Execute(context context.T,
 		return
 	}
 
+	// streaming of logs is not supported for interactive commands scenario, set it to false
+	config.CloudWatchStreamingEnabled = false
+
 	p.shell.Execute(context, config, cancelFlag, output, dataChannel, shellProps)
 }
 

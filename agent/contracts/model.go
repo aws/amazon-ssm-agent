@@ -201,6 +201,7 @@ type SessionInputs struct {
 	S3EncryptionEnabled         bool               `json:"s3EncryptionEnabled" yaml:"s3EncryptionEnabled"`
 	CloudWatchLogGroupName      string             `json:"cloudWatchLogGroupName" yaml:"cloudWatchLogGroupName"`
 	CloudWatchEncryptionEnabled bool               `json:"cloudWatchEncryptionEnabled" yaml:"cloudWatchEncryptionEnabled"`
+	CloudWatchStreamingEnabled  bool               `json:"cloudWatchStreamingEnabled" yaml:"cloudWatchStreamingEnabled"`
 	KmsKeyId                    string             `json:"kmsKeyId" yaml:"kmsKeyId"`
 	RunAsEnabled                bool               `json:"runAsEnabled" yaml:"runAsEnabled"`
 	RunAsDefaultUser            string             `json:"runAsDefaultUser" yaml:"runAsDefaultUser"`

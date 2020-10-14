@@ -37,6 +37,7 @@ import (
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/session/datachannel"
 	"github.com/aws/amazon-ssm-agent/agent/task"
+	"github.com/aws/aws-sdk-go/service/cloudwatchlogs"
 )
 
 // Plugin is the type for the plugin.
@@ -44,9 +45,22 @@ type ShellPlugin struct {
 	name        string
 	stdin       *os.File
 	stdout      *os.File
-	ipcFilePath string
-	logFilePath string
+	runAsUser   string
 	dataChannel datachannel.IDataChannel
+	logger      logger
+}
+
+// logger is used for storing the information related to logging of session data to S3/CW
+type logger struct {
+	ipcFilePath                 string
+	logFilePath                 string
+	logFileName                 string
+	transcriptDirPath           string
+	ptyTerminated               chan bool
+	cloudWatchStreamingFinished chan bool
+	streamLogsToCloudWatch      bool
+	s3Util                      s3util.IAmazonS3Util
+	cwl                         cloudwatchlogsinterface.ICloudWatchLogsService
 }
 
 type IShellPlugin interface {
@@ -56,27 +70,49 @@ type IShellPlugin interface {
 
 // NewPlugin returns a new instance of the Shell Plugin
 func NewPlugin(name string) (*ShellPlugin, error) {
-	var plugin = ShellPlugin{name: name}
+	var plugin = ShellPlugin{
+		name:      name,
+		runAsUser: appconfig.DefaultRunAsUserName,
+		logger: logger{
+			ptyTerminated:               make(chan bool),
+			cloudWatchStreamingFinished: make(chan bool),
+		},
+	}
 	return &plugin, nil
 }
 
-// validate validates the cloudwatch and s3 encryption configuration.
-func (p *ShellPlugin) validate(context context.T,
-	config agentContracts.Configuration,
-	cwl cloudwatchlogsinterface.ICloudWatchLogsService,
-	s3Util s3util.IAmazonS3Util) error {
+// validate validates the cloudwatch and s3 configurations.
+func (p *ShellPlugin) validate(context context.T, config agentContracts.Configuration) error {
 
-	if config.CloudWatchLogGroup != "" && config.CloudWatchEncryptionEnabled {
-		if encrypted, err := cwl.IsLogGroupEncryptedWithKMS(context.Log(), config.CloudWatchLogGroup); err != nil {
-			return errors.New(fmt.Sprintf("Couldn't start the session because we are unable to validate encryption on CloudWatch Logs log group. Error: %v", err))
-		} else if !encrypted {
-			return errors.New(mgsConfig.CloudWatchEncryptionErrorMsg)
+	log := context.Log()
+	if config.CloudWatchLogGroup != "" {
+		var logGroup *cloudwatchlogs.LogGroup
+		var logGroupExists bool
+		if logGroupExists, logGroup = p.logger.cwl.IsLogGroupPresent(context.Log(), config.CloudWatchLogGroup); !logGroupExists {
+			log.Warnf("The CloudWatch log group specified in session preferences either does not exist or unable to validate its existence. " +
+				"This might result in no logging of session data to CloudWatch.")
+			p.logger.streamLogsToCloudWatch = false
+		}
+
+		if config.CloudWatchEncryptionEnabled {
+			if encrypted, err := p.logger.cwl.IsLogGroupEncryptedWithKMS(context.Log(), logGroup); err != nil {
+				return fmt.Errorf("Couldn't start the session because we are unable to validate encryption on CloudWatch Logs log group. Error: %v", err)
+			} else if !encrypted {
+				return errors.New(mgsConfig.CloudWatchEncryptionErrorMsg)
+			}
+		}
+
+		if p.logger.streamLogsToCloudWatch {
+			if logStreamingSupported, err := p.isLogStreamingSupported(context.Log()); !logStreamingSupported {
+				log.Warn(err.Error())
+				p.logger.streamLogsToCloudWatch = false
+			}
 		}
 	}
 
 	if config.OutputS3BucketName != "" && config.S3EncryptionEnabled {
-		if encrypted, err := s3Util.IsBucketEncrypted(context.Log(), config.OutputS3BucketName); err != nil {
-			return errors.New(fmt.Sprintf("Couldn't start the session because we are unable to validate encryption on Amazon S3 bucket. Error: %v", err))
+		if encrypted, err := p.logger.s3Util.IsBucketEncrypted(context.Log(), config.OutputS3BucketName); err != nil {
+			return fmt.Errorf("Couldn't start the session because we are unable to validate encryption on Amazon S3 bucket. Error: %v", err)
 		} else if !encrypted {
 			return errors.New(mgsConfig.S3EncryptionErrorMsg)
 		}
@@ -97,7 +133,7 @@ func (p *ShellPlugin) Execute(context context.T,
 	log := context.Log()
 	p.dataChannel = dataChannel
 	defer func() {
-		if err := Stop(log); err != nil {
+		if err := p.stop(log); err != nil {
 			log.Errorf("Error occurred while closing pty: %v", err)
 		}
 		if err := recover(); err != nil {
@@ -116,8 +152,14 @@ func (p *ShellPlugin) Execute(context context.T,
 	}
 }
 
-var startPty = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config agentContracts.Configuration) (stdin *os.File, stdout *os.File, err error) {
-	return StartPty(log, shellProps, isSessionLogger, config)
+var startPty = func(
+	log log.T,
+	shellProps mgsContracts.ShellProperties,
+	isSessionLogger bool,
+	config agentContracts.Configuration,
+	plugin *ShellPlugin) (err error) {
+
+	return StartPty(log, shellProps, isSessionLogger, config, plugin)
 }
 
 // execute starts pseudo terminal.
@@ -129,46 +171,44 @@ func (p *ShellPlugin) execute(context context.T,
 	output iohandler.IOHandler,
 	shellProps mgsContracts.ShellProperties) {
 
+	// Initialization
 	log := context.Log()
-	var err error
 	sessionPluginResultOutput := mgsContracts.SessionPluginResultOutput{}
+	p.initializeLogger(log, config)
 
-	var cwl cloudwatchlogsinterface.ICloudWatchLogsService
-	var s3Util s3util.IAmazonS3Util
-	if config.OutputS3BucketName != "" {
-		s3Util, err = s3util.NewAmazonS3Util(log, config.OutputS3BucketName)
-		if err != nil {
-			log.Errorf("S3 client initialization failed, err: %v", err)
-			return
-		}
-	}
-	if config.CloudWatchLogGroup != "" {
-		cwl = cloudwatchlogspublisher.NewCloudWatchLogsService(log)
-	}
-	if err = p.validate(context, config, cwl, s3Util); err != nil {
+	// Validate session configuration before starting
+	if err := p.validate(context, config); err != nil {
 		output.SetExitCode(appconfig.ErrorExitCode)
 		output.SetStatus(agentContracts.ResultStatusFailed)
 		sessionPluginResultOutput.Output = err.Error()
 		output.SetOutput(sessionPluginResultOutput)
-		log.Errorf("Encryption validation failed, err: %s", err)
+		log.Errorf("Validation failed, err: %s", err)
+
+		// currently there is a race condition scenario in which error messages do not get propagated back to console/cli,
+		// while we are working on the permanent fix, adding some delay to resolve this issue as a temporary solution
+		time.Sleep(2 * time.Second)
 		return
 	}
 
-	p.stdin, p.stdout, err = startPty(log, shellProps, false, config)
-	if err != nil {
+	// Start pseudo terminal
+	if err := startPty(log, shellProps, false, config, p); err != nil {
 		errorString := fmt.Errorf("Unable to start shell: %s", err)
 		log.Error(errorString)
 		output.MarkAsFailed(errorString)
 		return
 	}
 
-	// Generate ipc file path
-	p.ipcFilePath = filepath.Join(config.OrchestrationDirectory, mgsConfig.IpcFileName+mgsConfig.LogFileExtension)
+	// Create ipcFile used for logging session data temporarily on disk
+	ipcFile, err := os.Create(p.logger.ipcFilePath)
+	if err != nil {
+		errorString := fmt.Errorf("encountered an error while creating file %s: %s", p.logger.ipcFilePath, err)
+		log.Error(errorString)
+		output.MarkAsFailed(errorString)
+		return
+	}
+	defer ipcFile.Close()
 
-	// Generate final log file path
-	logFileName := config.SessionId + mgsConfig.LogFileExtension
-	p.logFilePath = filepath.Join(config.OrchestrationDirectory, logFileName)
-
+	// Setup cancellation flag for accepting TerminateSession requests and idle session timeout scenarios
 	cancelled := make(chan bool, 1)
 	go func() {
 		cancelState := cancelFlag.Wait()
@@ -179,12 +219,12 @@ func (p *ShellPlugin) execute(context context.T,
 		log.Debugf("Cancel flag set to %v in session", cancelState)
 	}()
 
+	// Start to read from shell and write to datachannel
 	log.Debugf("Start separate go routine to read from pty stdout and write to data channel")
 	done := make(chan int, 1)
 	go func() {
-		done <- p.writePump(log)
+		done <- p.writePump(log, ipcFile)
 	}()
-
 	log.Infof("Plugin %s started", p.name)
 
 	// Execute shell profile
@@ -197,10 +237,14 @@ func (p *ShellPlugin) execute(context context.T,
 		}
 	}
 
+	// Start logging activity like streaming to CW
+	p.startStreamingLogs(log, ipcFile, config)
+
+	// Wait for session to be completed/cancelled/interrupted
 	select {
 	case <-cancelled:
 		log.Debug("Session cancelled. Attempting to stop pty.")
-		if err := Stop(log); err != nil {
+		if err := p.stop(log); err != nil {
 			log.Errorf("Error occurred while closing pty: %v", err)
 		}
 		errorCode := 0
@@ -225,48 +269,54 @@ func (p *ShellPlugin) execute(context context.T,
 		}
 	}
 
-	// Generate log data only if customer has enabled logging.
-	// TODO: Move below logic of uploading logs to S3 and cloudwatch to IOHandler
-	if config.OutputS3BucketName != "" || config.CloudWatchLogGroup != "" {
-		log.Debugf("Creating log file for shell session id %s at %s", config.SessionId, p.logFilePath)
-		if err = p.generateLogData(log, config); err != nil {
-			errorString := fmt.Errorf("unable to generate log data: %s", err)
-			log.Error(errorString)
-			output.MarkAsFailed(errorString)
-			return
-		}
-
-		log.Debug("Starting S3 logging")
-		if config.OutputS3BucketName != "" {
-			s3KeyPrefix := fileutil.BuildS3Path(config.OutputS3KeyPrefix, logFileName)
-			p.uploadShellSessionLogsToS3(log, s3Util, config, s3KeyPrefix)
-			sessionPluginResultOutput.S3Bucket = config.OutputS3BucketName
-			sessionPluginResultOutput.S3UrlSuffix = s3KeyPrefix
-		}
-
-		log.Debug("Starting CloudWatch logging")
-		if config.CloudWatchLogGroup != "" {
-			cwl.StreamData(log, config.CloudWatchLogGroup, config.SessionId, p.logFilePath, true, false)
-			sessionPluginResultOutput.CwlGroup = config.CloudWatchLogGroup
-			sessionPluginResultOutput.CwlStream = config.SessionId
-		}
-	}
-	output.SetOutput(sessionPluginResultOutput)
+	// Finish logger activity like uploading logs to S3/CW
+	p.finishLogging(log, config, output, sessionPluginResultOutput)
 
 	log.Debug("Shell session execution complete")
 }
 
+// initializeLogger initializes plugin logger to be used for s3/cw logging
+func (p *ShellPlugin) initializeLogger(log log.T, config agentContracts.Configuration) {
+	if config.OutputS3BucketName != "" {
+		var err error
+		p.logger.s3Util, err = s3util.NewAmazonS3Util(log, config.OutputS3BucketName)
+		if err != nil {
+			log.Warnf("S3 client initialization failed, err: %v", err)
+		}
+	}
+	if config.CloudWatchLogGroup != "" && p.logger.cwl == nil {
+		p.logger.cwl = cloudwatchlogspublisher.NewCloudWatchLogsService(log)
+	}
+
+	// Set CW streaming as true if log group provided and streaming enabled
+	if config.CloudWatchLogGroup != "" && config.CloudWatchStreamingEnabled {
+		p.logger.streamLogsToCloudWatch = true
+	}
+
+	// Generate ipc file path
+	p.logger.ipcFilePath = filepath.Join(config.OrchestrationDirectory, mgsConfig.IpcFileName+mgsConfig.LogFileExtension)
+
+	// Generate final log file path
+	p.logger.logFileName = config.SessionId + mgsConfig.LogFileExtension
+	p.logger.logFilePath = filepath.Join(config.OrchestrationDirectory, p.logger.logFileName)
+}
+
 // uploadShellSessionLogsToS3 uploads shell session logs to S3 bucket specified.
 func (p *ShellPlugin) uploadShellSessionLogsToS3(log log.T, s3UploaderUtil s3util.IAmazonS3Util, config agentContracts.Configuration, s3KeyPrefix string) {
+	if s3UploaderUtil == nil {
+		log.Warnf("Uploading logs to S3 cannot be completed due to failure in initializing s3util.")
+		return
+	}
+
 	log.Debugf("Preparing to upload session logs to S3 bucket %s and prefix %s", config.OutputS3BucketName, s3KeyPrefix)
 
-	if err := s3UploaderUtil.S3Upload(log, config.OutputS3BucketName, s3KeyPrefix, p.logFilePath); err != nil {
+	if err := s3UploaderUtil.S3Upload(log, config.OutputS3BucketName, s3KeyPrefix, p.logger.logFilePath); err != nil {
 		log.Errorf("Failed to upload shell session logs to S3: %s", err)
 	}
 }
 
 // writePump reads from pty stdout and writes to data channel.
-func (p *ShellPlugin) writePump(log log.T) (errorCode int) {
+func (p *ShellPlugin) writePump(log log.T, ipcFile *os.File) (errorCode int) {
 	defer func() {
 		if err := recover(); err != nil {
 			fmt.Println("WritePump thread crashed with message: \n", err)
@@ -275,14 +325,6 @@ func (p *ShellPlugin) writePump(log log.T) (errorCode int) {
 
 	stdoutBytes := make([]byte, mgsConfig.StreamDataPayloadSize)
 	reader := bufio.NewReader(p.stdout)
-
-	// Create ipc file
-	file, err := os.Create(p.ipcFilePath)
-	if err != nil {
-		log.Errorf("Encountered an error while creating file: %s", err)
-		return appconfig.ErrorExitCode
-	}
-	defer file.Close()
 
 	// Wait for all input commands to run.
 	time.Sleep(time.Second)
@@ -296,7 +338,7 @@ func (p *ShellPlugin) writePump(log log.T) (errorCode int) {
 		}
 
 		// unprocessedBuf contains incomplete utf8 encoded unicode bytes returned after processing of stdoutBytes
-		if unprocessedBuf, err = p.processStdoutData(log, stdoutBytes, stdoutBytesLen, unprocessedBuf, file); err != nil {
+		if unprocessedBuf, err = p.processStdoutData(log, stdoutBytes, stdoutBytesLen, unprocessedBuf, ipcFile); err != nil {
 			log.Errorf("Error processing stdout data, %v", err)
 			return appconfig.ErrorExitCode
 		}
@@ -361,4 +403,110 @@ func (p *ShellPlugin) processStdoutData(
 		unprocessedBuf.Write(unprocessedBytes[i:unprocessedBytesLen])
 	}
 	return unprocessedBuf, nil
+}
+
+// startStreamingLogs starts streaming of logs to CloudWatch
+func (p *ShellPlugin) startStreamingLogs(
+	log log.T,
+	ipcFile *os.File,
+	config agentContracts.Configuration) (err error) {
+
+	// do nothing if streaming is disabled
+	if !p.logger.streamLogsToCloudWatch {
+		return
+	}
+
+	p.logger.cwl.SetCloudWatchMessage(
+		"1.0",
+		p.dataChannel.GetRegion(),
+		p.dataChannel.GetInstanceId(),
+		p.runAsUser,
+		config.SessionId,
+		config.SessionOwner)
+
+	var streamingFilePath string
+	if streamingFilePath, err = p.getStreamingFilePath(log); err != nil {
+		return fmt.Errorf("error getting local transcript file path: %v", err)
+	}
+
+	// starts streaming
+	go func() {
+		p.logger.cloudWatchStreamingFinished <- p.logger.cwl.StreamData(
+			log,
+			config.CloudWatchLogGroup,
+			config.SessionId,
+			streamingFilePath,
+			false,
+			false,
+			p.logger.ptyTerminated,
+			p.isCleanupOfControlCharactersRequired(),
+			true)
+	}()
+
+	// check if log streaming is interrupted
+	go func() {
+		checkForLoggingInterruption(log, ipcFile, p)
+	}()
+
+	log.Debug("Streaming of logs to CloudWatch has started")
+	return
+}
+
+// finishLogging generates and uploads logs to S3/CW, terminates streaming to CW if enabled
+func (p *ShellPlugin) finishLogging(
+	log log.T,
+	config agentContracts.Configuration,
+	output iohandler.IOHandler,
+	sessionPluginResultOutput mgsContracts.SessionPluginResultOutput) {
+
+	// Generate log data only if customer has either enabled S3 logging or CW logging with streaming disabled
+	if config.OutputS3BucketName != "" || (config.CloudWatchLogGroup != "" && !config.CloudWatchStreamingEnabled) {
+		log.Debugf("Creating log file for shell session id %s at %s", config.SessionId, p.logger.logFilePath)
+		if err := p.generateLogData(log, config); err != nil {
+			errorString := fmt.Errorf("unable to generate log data: %s", err)
+			log.Error(errorString)
+			output.MarkAsFailed(errorString)
+			return
+		}
+
+		if config.OutputS3BucketName != "" {
+			log.Debug("Starting S3 logging")
+			s3KeyPrefix := fileutil.BuildS3Path(config.OutputS3KeyPrefix, p.logger.logFileName)
+			p.uploadShellSessionLogsToS3(log, p.logger.s3Util, config, s3KeyPrefix)
+			sessionPluginResultOutput.S3Bucket = config.OutputS3BucketName
+			sessionPluginResultOutput.S3UrlSuffix = s3KeyPrefix
+		}
+
+		if config.CloudWatchLogGroup != "" && !config.CloudWatchStreamingEnabled {
+			log.Debug("Starting CloudWatch logging")
+			p.logger.cwl.StreamData(
+				log,
+				config.CloudWatchLogGroup,
+				config.SessionId,
+				p.logger.logFilePath,
+				true,
+				false,
+				p.logger.ptyTerminated,
+				false,
+				false)
+		}
+	}
+
+	// End streaming of logs since pty is terminated
+	if p.logger.streamLogsToCloudWatch {
+		p.logger.ptyTerminated <- true
+		log.Debug("Waiting for streaming to finish")
+
+		<-p.logger.cloudWatchStreamingFinished
+		log.Debug("Streaming done, proceed to close session worker")
+
+		p.cleanupLogFile(log)
+	}
+
+	// Populate CW log group information
+	if config.CloudWatchLogGroup != "" {
+		sessionPluginResultOutput.CwlGroup = config.CloudWatchLogGroup
+		sessionPluginResultOutput.CwlStream = config.SessionId
+	}
+	output.SetOutput(sessionPluginResultOutput)
 }

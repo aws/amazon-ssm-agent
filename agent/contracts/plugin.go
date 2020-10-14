@@ -81,6 +81,7 @@ type Configuration struct {
 	S3EncryptionEnabled         bool
 	CloudWatchLogGroup          string
 	CloudWatchEncryptionEnabled bool
+	CloudWatchStreamingEnabled  bool
 	OrchestrationDirectory      string
 	MessageId                   string
 	BookKeepingFileName         string
@@ -96,6 +97,7 @@ type Configuration struct {
 	RunAsEnabled                bool
 	RunAsUser                   string
 	ShellProfile                ShellProfileConfig
+	SessionOwner                string
 }
 
 // Plugin wraps the plugin configuration and plugin result.

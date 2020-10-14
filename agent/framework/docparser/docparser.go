@@ -138,7 +138,7 @@ func (sessionDocContent *SessionDocContent) ParseDocument(log log.T,
 	resolvedDocContent, _ := jsonutil.MarshalIndent(*sessionDocContent)
 	log.Debugf("Resolved session document content %s", resolvedDocContent)
 
-	return sessionDocContent.parsePluginStateForStartSession(parserInfo, docInfo.DocumentID, docInfo.ClientId, docInfo.RunAsUser)
+	return sessionDocContent.parsePluginStateForStartSession(parserInfo, docInfo)
 }
 
 // validateAndReplaceSessionDocumentParameters validates the parameters and modifies the document content by replacing all parameters with their actual values.
@@ -368,17 +368,15 @@ func validateAndReplaceParametersInPreconditionArguments(docContent *DocContent,
 // parsePluginStateForStartSession initializes instancePluginsInfo for the docState. Used by startSession.
 func (sessionDocContent *SessionDocContent) parsePluginStateForStartSession(
 	parserInfo DocumentParserInfo,
-	sessionId string,
-	clientId string,
-	runAsUserFromIam string) (pluginsInfo []contracts.PluginState, err error) {
+	docInfo contracts.DocumentInfo) (pluginsInfo []contracts.PluginState, err error) {
 
 	// getPluginConfigurations converts from PluginConfig (structure from the MGS message) to plugin.Configuration (structure expected by the plugin)
 	pluginName := sessionDocContent.SessionType
 
 	// decides which user to use. User from IAM principal always has higher priority than the default one.
 	runAsUser := sessionDocContent.Inputs.RunAsDefaultUser
-	if strings.TrimSpace(runAsUserFromIam) != "" {
-		runAsUser = runAsUserFromIam
+	if strings.TrimSpace(docInfo.RunAsUser) != "" {
+		runAsUser = docInfo.RunAsUser
 	}
 
 	config := contracts.Configuration{
@@ -387,19 +385,21 @@ func (sessionDocContent *SessionDocContent) parsePluginStateForStartSession(
 		PluginName:                  pluginName,
 		PluginID:                    pluginName,
 		DefaultWorkingDirectory:     parserInfo.DefaultWorkingDir,
-		SessionId:                   sessionId,
+		SessionId:                   docInfo.DocumentID,
 		OutputS3KeyPrefix:           sessionDocContent.Inputs.S3KeyPrefix,
 		OutputS3BucketName:          sessionDocContent.Inputs.S3BucketName,
 		S3EncryptionEnabled:         sessionDocContent.Inputs.S3EncryptionEnabled,
 		OrchestrationDirectory:      fileutil.BuildPath(parserInfo.OrchestrationDir, pluginName),
-		ClientId:                    clientId,
+		ClientId:                    docInfo.ClientId,
 		CloudWatchLogGroup:          sessionDocContent.Inputs.CloudWatchLogGroupName,
 		CloudWatchEncryptionEnabled: sessionDocContent.Inputs.CloudWatchEncryptionEnabled,
+		CloudWatchStreamingEnabled:  sessionDocContent.Inputs.CloudWatchStreamingEnabled,
 		KmsKeyId:                    sessionDocContent.Inputs.KmsKeyId,
 		Properties:                  sessionDocContent.Properties,
 		RunAsEnabled:                sessionDocContent.Inputs.RunAsEnabled,
 		RunAsUser:                   runAsUser,
 		ShellProfile:                sessionDocContent.Inputs.ShellProfile,
+		SessionOwner:                docInfo.SessionOwner,
 	}
 
 	var plugin contracts.PluginState

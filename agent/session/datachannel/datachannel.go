@@ -70,6 +70,8 @@ type IDataChannel interface {
 	SkipHandshake(log log.T)
 	PerformHandshake(log log.T, kmsKeyId string, encryptionEnabled bool, sessionTypeRequest mgsContracts.SessionTypeRequest) (err error)
 	GetClientVersion() string
+	GetInstanceId() string
+	GetRegion() string
 }
 
 // DataChannel used for session communication between the message gateway service and the agent.
@@ -1065,6 +1067,16 @@ func (dataChannel *DataChannel) sendStreamDataMessageJson(log log.T,
 // GetClientVersion returns version of the client
 func (dataChannel *DataChannel) GetClientVersion() string {
 	return dataChannel.handshake.clientVersion
+}
+
+// GetInstanceId returns id of the target
+func (dataChannel *DataChannel) GetInstanceId() string {
+	return dataChannel.InstanceId
+}
+
+// GetRegion returns aws region of the target
+func (dataChannel *DataChannel) GetRegion() string {
+	return dataChannel.Service.GetRegion()
 }
 
 // getDataChannelToken calls CreateDataChannel to get the token for this session.

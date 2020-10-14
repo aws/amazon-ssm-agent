@@ -114,7 +114,7 @@ func (cloudwatchPublisher *CloudWatchPublisher) CloudWatchLogsEventsListener() {
 // createLogGroupAndStream checks if log group and log stream are present. If not, creates them
 func (cloudwatchPublisher *CloudWatchPublisher) createLogGroupAndStream(logGroup, logStream string) error {
 
-	if !cloudwatchPublisher.cloudWatchLogsService.IsLogGroupPresent(cloudwatchPublisher.log, logGroup) {
+	if logGroupPresent, _ := cloudwatchPublisher.cloudWatchLogsService.IsLogGroupPresent(cloudwatchPublisher.log, logGroup); !logGroupPresent {
 		//Create Log Group
 		if err := cloudwatchPublisher.cloudWatchLogsService.CreateLogGroup(cloudwatchPublisher.log, logGroup); err != nil {
 			// Aborting Init
