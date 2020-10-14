@@ -36,10 +36,11 @@ type ICloudWatchLogsService interface {
 	CreateLogStream(log log.T, logGroup, logStream string) (err error)
 	DescribeLogGroups(log log.T, logGroupPrefix, nextToken string) (response *cloudwatchlogs.DescribeLogGroupsOutput, err error)
 	DescribeLogStreams(log log.T, logGroup, logStreamPrefix, nextToken string) (response *cloudwatchlogs.DescribeLogStreamsOutput, err error)
-	IsLogGroupPresent(log log.T, logGroup string) bool
+	IsLogGroupPresent(log log.T, logGroup string) (bool, *cloudwatchlogs.LogGroup)
 	IsLogStreamPresent(log log.T, logGroupName, logStreamName string) bool
 	GetSequenceTokenForStream(log log.T, logGroupName, logStreamName string) (sequenceToken *string)
 	PutLogEvents(log log.T, messages []*cloudwatchlogs.InputLogEvent, logGroup, logStream string, sequenceToken *string) (nextSequenceToken *string, err error)
-	IsLogGroupEncryptedWithKMS(log log.T, logGroupName string) (bool, error)
-	StreamData(log log.T, logGroupName string, logStreamName string, absoluteFilePath string, isFileComplete bool, isLogStreamCreated bool)
+	IsLogGroupEncryptedWithKMS(log log.T, logGroup *cloudwatchlogs.LogGroup) (bool, error)
+	StreamData(log log.T, logGroupName string, logStreamName string, absoluteFilePath string, isFileComplete bool, isLogStreamCreated bool, fileCompleteSignal chan bool, cleanupControlCharacters bool, structuredLogs bool) (success bool)
+	SetCloudWatchMessage(eventVersion string, awsRegion string, targetId string, runAsUser string, sessionId string, sessionOwner string)
 }

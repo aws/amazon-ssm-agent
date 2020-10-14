@@ -111,9 +111,9 @@ func (m *CloudWatchLogsServiceMock) GetLogGroupDetails(log log.T, logGroup strin
 }
 
 // IsLogGroupPresent mocks CloudWatchLogsService IsLogGroupPresent method
-func (m *CloudWatchLogsServiceMock) IsLogGroupPresent(log log.T, logGroup string) bool {
+func (m *CloudWatchLogsServiceMock) IsLogGroupPresent(log log.T, logGroup string) (bool, *cloudwatchlogs.LogGroup) {
 	args := m.Called(log, logGroup)
-	return args.Bool(0)
+	return args.Bool(0), args.Get(1).(*cloudwatchlogs.LogGroup)
 }
 
 // IsLogStreamPresent mocks CloudWatchLogsService IsLogStreamPresent method
@@ -153,12 +153,18 @@ func (m *CloudWatchLogsServiceMock) retryPutWithNewSequenceToken(log log.T, mess
 }
 
 // IsLogGroupEncryptedWithKMS mocks CloudWatchLogsService IsLogGroupEncryptedWithKMS method
-func (m *CloudWatchLogsServiceMock) IsLogGroupEncryptedWithKMS(log log.T, logGroupName string) (bool, error) {
-	args := m.Called(log, logGroupName)
+func (m *CloudWatchLogsServiceMock) IsLogGroupEncryptedWithKMS(log log.T, logGroup *cloudwatchlogs.LogGroup) (bool, error) {
+	args := m.Called(log, logGroup)
 	return args.Get(0).(bool), args.Error(1)
 }
 
 // StreamData mocks CloudWatchLogsService StreamData method
-func (m *CloudWatchLogsServiceMock) StreamData(log log.T, logGroupName string, logStreamName string, absoluteFilePath string, isFileComplete bool, isLogStreamCreated bool) {
-	m.Called(log, logGroupName, logStreamName, absoluteFilePath, isFileComplete, isLogStreamCreated)
+func (m *CloudWatchLogsServiceMock) StreamData(log log.T, logGroupName string, logStreamName string, absoluteFilePath string, isFileComplete bool, isLogStreamCreated bool, fileCompleteSignal chan bool, processControlSequences bool, structuredLogs bool) (success bool) {
+	args := m.Called(log, logGroupName, logStreamName, absoluteFilePath, isFileComplete, isLogStreamCreated, fileCompleteSignal, processControlSequences, structuredLogs)
+	return args.Bool(0)
+}
+
+// SetCloudWatchMessage mocks CloudWatchLogsService SetCloudWatchMessage method
+func (m *CloudWatchLogsServiceMock) SetCloudWatchMessage(eventVersion string, awsRegion string, targetId string, runAsUser string, sessionId string, sessionOwner string) {
+
 }

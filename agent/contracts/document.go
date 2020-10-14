@@ -75,6 +75,7 @@ type DocumentInfo struct {
 	ProcInfo        OSProcInfo
 	ClientId        string
 	RunAsUser       string
+	SessionOwner    string
 }
 
 //CloudWatchConfiguration represents information relevant to command output in cloudWatch
