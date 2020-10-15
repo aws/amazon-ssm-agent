@@ -160,16 +160,7 @@ func runUpdateAgent(
 	updateRetryDelayBase := 1000 // 1000 millisecond
 	updateRetryDelay := 500      // 500 millisecond
 
-	for retryCounter := 1; retryCounter <= noOfRetries; retryCounter++ {
-		manifest, downloadErr = manager.downloadManifest(log, util, &pluginInput, context, output)
-		if downloadErr == nil {
-			break
-		}
-		if retryCounter < noOfRetries {
-			time.Sleep(time.Duration(updateRetryDelayBase+rand.Intn(updateRetryDelay)) * time.Millisecond)
-		}
-	}
-
+	manifest, downloadErr = manager.downloadManifest(log, util, &pluginInput, context, output)
 	if downloadErr != nil {
 		output.MarkAsFailed(downloadErr)
 		return

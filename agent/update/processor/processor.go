@@ -165,9 +165,6 @@ func prepareInstallationPackages(mgr *updateManager, log log.T, context *UpdateC
 
 	var manifestDownloadOutput *artifact.DownloadOutput
 	updateDownloadFolder := ""
-	updateOperationsRetryCount := 3
-	updateRetryDelay := 500      // 500 millisecond
-	updateRetryDelayBase := 1000 // 1000 millisecond
 
 	updateDownload := ""
 
@@ -209,18 +206,9 @@ func prepareInstallationPackages(mgr *updateManager, log log.T, context *UpdateC
 		},
 		DestinationDirectory: updateDownload,
 	}
-	for retryCounter := 1; retryCounter <= updateOperationsRetryCount; retryCounter++ {
-		// sleep for sometime before download
-		time.Sleep(time.Duration(updateRetryDelayBase+rand.Intn(updateRetryDelay)) * time.Millisecond)
-		err = mgr.download(mgr, log, downloadInput, context, context.Current.SourceVersion)
-		if err == nil {
-			break
-		}
-	}
-	if err != nil {
+	if err = mgr.download(mgr, log, downloadInput, context, context.Current.SourceVersion); err != nil {
 		return mgr.failed(context, log, updateutil.ErrorSourcePkgDownload, err.Error(), true)
 	}
-
 	// Download target
 	downloadInput = artifact.DownloadInput{
 		SourceURL: context.Current.TargetLocation,
@@ -229,16 +217,7 @@ func prepareInstallationPackages(mgr *updateManager, log log.T, context *UpdateC
 		},
 		DestinationDirectory: updateDownload,
 	}
-
-	for retryCounter := 1; retryCounter <= updateOperationsRetryCount; retryCounter++ {
-		// sleep for sometime before download
-		time.Sleep(time.Duration(updateRetryDelayBase+rand.Intn(updateRetryDelay)) * time.Millisecond)
-		err = mgr.download(mgr, log, downloadInput, context, context.Current.TargetVersion)
-		if err == nil {
-			break
-		}
-	}
-	if err != nil {
+	if err = mgr.download(mgr, log, downloadInput, context, context.Current.TargetVersion); err != nil {
 		return mgr.failed(context, log, updateutil.ErrorTargetPkgDownload, err.Error(), true)
 	}
 	// Update stdout
