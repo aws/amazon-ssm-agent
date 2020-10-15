@@ -276,9 +276,7 @@ func makeArguments(log log.T, scriptPath string, pluginInput DomainJoinPluginInp
 	if len(pluginInput.DirectoryOU) != 0 {
 		log.Debugf("Customized directory OU parameter provided: %v", pluginInput.DirectoryOU)
 		buffer.WriteString(DirectoryOUArg)
-		buffer.WriteString("'")
 		buffer.WriteString(pluginInput.DirectoryOU)
-		buffer.WriteString("'")
 	}
 
 	if isShellInjection(pluginInput.DirectoryOU) {
