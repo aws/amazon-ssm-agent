@@ -1,5 +1,13 @@
 Latest
 ===============
+- Added steps to the updater to validate IPC functionality
+- Added SSM_COMMAND_ID environment variable to runShellScript plugin
+- Improved retry for S3 and http(s) downloads
+- Fix to clean up terminated worker processes
+- Fix for DomainJoin when using domain-ou
+
+3.0.222.0
+===============
 - Added agent and worker version logging
 - Added new config parameters to README.md
 - Added support for TCP multiplexing in port plugin
