@@ -59,6 +59,9 @@ const (
 
 	// Completed represents the state value completed for agent update
 	Completed UpdateState = "Completed"
+
+	// TestExecution represents state value denoting test execution on customer's instance
+	TestExecution UpdateState = "TestExecution"
 )
 
 const (

@@ -38,6 +38,8 @@ const (
 	ResultStatusTimedOut ResultStatus = "TimedOut"
 	// ResultStatusSkipped represents Skipped status
 	ResultStatusSkipped ResultStatus = "Skipped"
+	// ResultStatusTestFailure represents test failure
+	ResultStatusTestFailure ResultStatus = "TestFailure"
 )
 
 // IsSuccess checks whether the result is success or not
