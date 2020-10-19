@@ -42,6 +42,8 @@ const (
 	updateSucceeded = "UpdateSucceeded"
 	// updateFailed represents update is failed
 	updateFailed = "UpdateFailed"
+	// testFailed represents tests fail during update
+	testFailed = "TestFailed"
 )
 
 var ssmSvc ssm.Service
@@ -94,6 +96,10 @@ func PrepareHealthStatus(update *UpdateDetail, errorCode string, additionalStatu
 		}
 		if update.Result == contracts.ResultStatusSuccess {
 			result = updateSucceeded
+		}
+	case TestExecution:
+		if update.Result == contracts.ResultStatusTestFailure {
+			result = testFailed
 		}
 	case Rollback:
 		result = rollingBack

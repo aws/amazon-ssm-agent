@@ -49,7 +49,7 @@ type Channel struct {
 }
 
 // NewChannel creates an new instance of Channel
-func NewChannel(log log.T) *Channel {
+func NewChannel(log log.T) IChannel {
 	return &Channel{
 		log: log,
 	}

@@ -67,6 +67,18 @@ func (u *updateManager) inProgress(context *UpdateContext, log logPkg.T, state U
 	return nil
 }
 
+func (u *updateManager) reportTestFailure(context *UpdateContext, log logPkg.T, testOutput string) {
+	updateDetail := &UpdateDetail{
+		State:         TestExecution,
+		Result:        contracts.ResultStatusTestFailure,
+		TargetVersion: context.Current.TargetVersion,
+		SourceVersion: context.Current.SourceVersion,
+	}
+	if err := u.svc.UpdateHealthCheck(log, updateDetail, testOutput); err != nil {
+		log.Errorf("error while sending test failure metric: %v", err.Error())
+	}
+}
+
 // succeeded sets update to completed
 func (u *updateManager) succeeded(context *UpdateContext, log logPkg.T) (err error) {
 	update := context.Current
