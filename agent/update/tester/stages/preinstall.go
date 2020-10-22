@@ -57,6 +57,9 @@ func (t *preInstallTester) RunTests() bool {
 		t.currentTest = testCaseName
 		testCaseObj.Initialize(t.logger)
 		testCaseOutput := testCaseObj.ExecuteTestCase()
+		if testCaseOutput.Err != nil {
+			t.logger.Errorf("error during pre-install test case execution %v", testCaseOutput.Err)
+		}
 		testCaseObj.CleanupTestCase()
 		if testCaseOutput.Result == testCommon.TestCaseFail {
 			return false

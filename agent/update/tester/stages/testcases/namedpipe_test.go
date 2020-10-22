@@ -42,6 +42,9 @@ func TestNamedPipeTestCaseTestSuite(t *testing.T) {
 
 // SetupTest initializes Setup
 func (suite *NamedPipeTestCaseTestSuite) SetupTest() {
+	channelCreator = func() error {
+		return nil
+	}
 	suite.namedPipeTestCaseObj = &NamedPipeTestCase{}
 	logger := log.NewMockLog()
 	logger.On("WithContext", []string{"[Test" + suite.namedPipeTestCaseObj.GetTestCaseName() + "]"}).Return(logger)
