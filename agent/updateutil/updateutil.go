@@ -682,7 +682,7 @@ func (util *Utility) IsServiceRunning(log log.T, i *InstanceContext) (result boo
 		}
 	} else {
 		expectedOutput = agentExpectedStatus()
-		if commandOutput, err = agentStatusOutput(); err != nil {
+		if commandOutput, err = agentStatusOutput(log); err != nil {
 			return false, err
 		}
 	}
