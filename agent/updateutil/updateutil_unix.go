@@ -19,6 +19,8 @@ package updateutil
 import (
 	"os/exec"
 	"syscall"
+
+	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
 const (
@@ -85,7 +87,7 @@ func prepareProcess(command *exec.Cmd) {
 	command.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
 }
 
-func agentStatusOutput() ([]byte, error) {
+func agentStatusOutput(log log.T) ([]byte, error) {
 	return execCommand("status", "amazon-ssm-agent").Output()
 }
 
