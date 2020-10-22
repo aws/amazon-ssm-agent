@@ -29,7 +29,8 @@ import (
 )
 
 var (
-	createChannel = channel.NewChannel
+	createChannel  = channel.NewChannel
+	channelCreator = testCommon.CreateIPCChannelIfNotExists
 )
 
 // NamedPipeTestCase represents the test case testing the named pipe on customer instance
@@ -56,6 +57,12 @@ func (l *NamedPipeTestCase) ExecuteTestCase() testCommon.TestOutput {
 	testOutput := testCommon.TestOutput{
 		Err:    errors.New("dialing was unsuccessful"),
 		Result: testCommon.TestCaseFail,
+	}
+
+	// creates the ipc folder
+	if err := channelCreator(); err != nil {
+		testOutput.Err = err
+		return testOutput
 	}
 
 	go func() {

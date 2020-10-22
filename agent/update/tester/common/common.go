@@ -15,6 +15,8 @@
 package common
 
 import (
+	"os"
+
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/common/message"
 )
@@ -48,6 +50,8 @@ type TestOutput struct {
 const (
 	// NamedPipeTestCaseName is named pipe test case name
 	NamedPipeTestCaseName string = "NamedPipe"
+
+	defaultFileCreateMode = 0750
 )
 
 const (
@@ -77,3 +81,11 @@ const (
 	// TestCaseFail denotes test case fail
 	TestCaseFail TestResult = "Fail"
 )
+
+func createIfNotExist(dir string) (err error) {
+	if _, err = os.Stat(dir); os.IsNotExist(err) {
+		//configure it to be not accessible by others
+		err = os.MkdirAll(dir, defaultFileCreateMode)
+	}
+	return
+}
