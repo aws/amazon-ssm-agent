@@ -10,11 +10,11 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/basicexecuter"
-	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/channel"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/messaging"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/proc"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
+	"github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc"
 )
 
 type Backend messaging.MessagingBackend
@@ -34,8 +34,8 @@ type OutOfProcExecuter struct {
 	cancelFlag task.CancelFlag
 }
 
-var channelCreator = func(log log.T, mode channel.Mode, documentID string) (channel.Channel, error, bool) {
-	return channel.CreateFileChannel(log, mode, documentID)
+var channelCreator = func(log log.T, mode filewatcherbasedipc.Mode, documentID string) (filewatcherbasedipc.IPCChannel, error, bool) {
+	return filewatcherbasedipc.CreateFileWatcherChannel(log, mode, documentID, false)
 }
 
 var processFinder = func(log log.T, procinfo contracts.OSProcInfo) bool {
@@ -107,7 +107,7 @@ func (e *OutOfProcExecuter) Run(
 //Executer spins up an ipc transmission worker, it creates a Data processing backend and hands off the backend to the ipc worker
 //ipc worker and data backend act as 2 threads exchange raw json messages, and messaging protocol happened in data backend, data backend is self-contained and exit when command finishes accordingly
 //Executer however does hold a timer to the worker to forcefully termniate both of them
-func (e *OutOfProcExecuter) messaging(log log.T, ipc channel.Channel, resChan chan contracts.DocumentResult, cancelFlag task.CancelFlag, stopTimer chan bool) {
+func (e *OutOfProcExecuter) messaging(log log.T, ipc filewatcherbasedipc.IPCChannel, resChan chan contracts.DocumentResult, cancelFlag task.CancelFlag, stopTimer chan bool) {
 
 	//handoff reply functionalities to data backend.
 	backend := messaging.NewExecuterBackend(resChan, e.docState, cancelFlag)
@@ -147,12 +147,12 @@ func (e *OutOfProcExecuter) generateUnexpectedFailResult(errMsg string) contract
 
 //prepare the channel for messaging as well as launching the document worker process, if the channel already exists, re-open it.
 //launch timeout timer based off the discovered process status
-func (e *OutOfProcExecuter) initialize(stopTimer chan bool) (ipc channel.Channel, err error) {
+func (e *OutOfProcExecuter) initialize(stopTimer chan bool) (ipc filewatcherbasedipc.IPCChannel, err error) {
 	log := e.ctx.Log()
 	var found bool
 	documentID := e.docState.DocumentInformation.DocumentID
 	instanceID := e.docState.DocumentInformation.InstanceID
-	ipc, err, found = channelCreator(log, channel.ModeMaster, documentID)
+	ipc, err, found = channelCreator(log, filewatcherbasedipc.ModeMaster, documentID)
 
 	if err != nil {
 		log.Errorf("failed to create ipc channel: %v", err)

@@ -14,13 +14,16 @@
 // +build integration
 
 //Package channel defines and implements the communication interface between agent and command runner process
-package channel
+package filewatcherbasedipc
 
 import (
 	"testing"
 	"time"
 
+	"errors"
+	"os"
 	"path"
+	"path/filepath"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/stretchr/testify/assert"
@@ -33,6 +36,9 @@ var messageSet1 = []string{"s000", "s001", "s002"}
 var messageSet2 = []string{"r000", "r001", "r002"}
 var messageSet3 = []string{"n000", "n001", "n002"}
 
+var cwPath, _ = os.Getwd()
+var filePath = filepath.Join(cwPath, "sampleChannel.txt")
+
 func TestChannelDuplexTransmission(t *testing.T) {
 	logger.Info("hello filewatcher channel started")
 	order := []Mode{ModeMaster, ModeWorker}
@@ -40,14 +46,14 @@ func TestChannelDuplexTransmission(t *testing.T) {
 		roleA := order[i%2]
 		roleB := order[(i+1)%2]
 		done := make(chan bool)
-		channelA, err := NewFileWatcherChannel(log.NewMockLogWithContext(string(roleA)), roleA, path.Join(defaultRootDir, channelName))
+		channelA, err := NewFileWatcherChannel(log.NewMockLogWithContext(string(roleA)), roleA, path.Join(defaultRootDir, channelName), false)
 		assert.NoError(t, err)
 		logger.Info("agent channel opened, start transmission")
 		// sender non-blocked
 		send(channelA, messageSet1, string(roleA))
 		go verifyReceive(t, channelA, messageSet2, string(roleA), done)
 
-		channelB, err := NewFileWatcherChannel(log.NewMockLogWithContext(string(roleB)), roleB, path.Join(defaultRootDir, channelName))
+		channelB, err := NewFileWatcherChannel(log.NewMockLogWithContext(string(roleB)), roleB, path.Join(defaultRootDir, channelName), false)
 		assert.NoError(t, err)
 		logger.Info("worker channel opened, start transmission")
 		send(channelB, messageSet2, string(roleB))
@@ -66,7 +72,7 @@ func TestChannelDuplexTransmission(t *testing.T) {
 //agent channel is reopened, and starts receiving only after re-open
 func TestChannelReopen(t *testing.T) {
 	done := make(chan bool)
-	agentChannel, err := NewFileWatcherChannel(log.NewMockLogWithContext("AGENT"), ModeMaster, path.Join(defaultRootDir, channelName))
+	agentChannel, err := NewFileWatcherChannel(log.NewMockLogWithContext("AGENT"), ModeMaster, path.Join(defaultRootDir, channelName), false)
 	assert.NoError(t, err)
 	logger.Info("agent channel opened, start transmission")
 	// run all threads in parallel
@@ -77,13 +83,13 @@ func TestChannelReopen(t *testing.T) {
 	time.Sleep(250 * time.Millisecond)
 
 	logger.Info("agent channel closed")
-	workerChannel, err := NewFileWatcherChannel(log.NewMockLogWithContext("WORKER"), ModeWorker, path.Join(defaultRootDir, channelName))
+	workerChannel, err := NewFileWatcherChannel(log.NewMockLogWithContext("WORKER"), ModeWorker, path.Join(defaultRootDir, channelName), false)
 	assert.NoError(t, err)
 	logger.Info("worker channel opened, start transmission")
 	send(workerChannel, messageSet3, "worker")
 
 	logger.Info("re-opening agent channel...")
-	newAgentChannel, err := NewFileWatcherChannel(log.NewMockLogWithContext("NEWAGENT"), ModeMaster, path.Join(defaultRootDir, channelName))
+	newAgentChannel, err := NewFileWatcherChannel(log.NewMockLogWithContext("NEWAGENT"), ModeMaster, path.Join(defaultRootDir, channelName), false)
 	assert.NoError(t, err)
 	send(newAgentChannel, messageSet2, "new agent")
 	assert.NoError(t, err)
@@ -115,4 +121,61 @@ func send(ch Channel, messages []string, name string) {
 		ch.Send(testMsg)
 		time.Sleep(200 * time.Millisecond)
 	}
+}
+
+// Test case for reading file
+func TestReadFile(t *testing.T) {
+	defer func() {
+		os.Remove(filePath)
+	}()
+
+	fd, err := os.Create(filePath)
+	osStatFn = os.Stat
+
+	assert.Nil(t, err)
+	fileBytes := []byte("sample content1")
+	fd.Write(fileBytes)
+	fd.Close()
+
+	output, err := fileRead(logger, filePath)
+	assert.Nil(t, err)
+	assert.Equal(t, string(output), string(fileBytes))
+}
+
+// Test case for reading file through retry
+func TestReadFileWithRetry(t *testing.T) {
+	defer func() {
+		os.Remove(filePath)
+	}()
+	osStatFn = os.Stat
+	fd, err := os.Create(filePath)
+	assert.Nil(t, err)
+	fileBytes := []byte("sample content2")
+	fd.Write(fileBytes)
+	fd.Close()
+
+	output, err := fileReadWithRetry(filePath)
+	assert.Nil(t, err)
+	assert.Equal(t, string(output), string(fileBytes))
+}
+
+// Test case for reading file through retry and produce error
+func TestReadFileRetryWithError(t *testing.T) {
+	defer func() {
+		os.Remove(filePath)
+	}()
+	dummyError := "dummy error"
+	osStatFn = func(name string) (info os.FileInfo, err error) {
+		return info, errors.New("dummy error")
+	}
+
+	fd, err := os.Create(filePath)
+	assert.Nil(t, err)
+	fileBytes := []byte("sample content3")
+	fd.Write(fileBytes)
+	fd.Close()
+
+	_, err = fileReadWithRetry(filePath)
+	assert.NotNil(t, err)
+	assert.Equal(t, err.Error(), dummyError)
 }

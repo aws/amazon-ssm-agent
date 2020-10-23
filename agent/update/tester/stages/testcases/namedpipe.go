@@ -23,14 +23,16 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	testCommon "github.com/aws/amazon-ssm-agent/agent/update/tester/common"
 	"github.com/aws/amazon-ssm-agent/common/channel"
+	channelutil "github.com/aws/amazon-ssm-agent/common/channel/utils"
 	"github.com/aws/amazon-ssm-agent/common/message"
 	"go.nanomsg.org/mangos/v3"
 	_ "go.nanomsg.org/mangos/v3/transport/ipc"
 )
 
 var (
-	createChannel  = channel.NewChannel
 	channelCreator = testCommon.CreateIPCChannelIfNotExists
+
+	createChannel func(log.T) channel.IChannel
 )
 
 // NamedPipeTestCase represents the test case testing the named pipe on customer instance
@@ -45,6 +47,9 @@ type NamedPipeTestCase struct {
 // Initialize initializes values needed for this test case
 func (l *NamedPipeTestCase) Initialize(logger log.T) {
 	l.log = logger.WithContext("[Test" + l.GetTestCaseName() + "]")
+	if createChannel == nil {
+		createChannel = channel.NewNamedPipeChannel
+	}
 	l.listenChannel = createChannel(l.log)
 	l.dialChannel = createChannel(l.log)
 	l.expectedOutput = "reply"
@@ -94,7 +99,7 @@ func (l *NamedPipeTestCase) listenPipe() (err error) {
 	var msg []byte
 	l.log.Info("listen pipe thread started")
 
-	if err = l.listenChannel.Initialize(channel.Surveyor); err != nil {
+	if err = l.listenChannel.Initialize(channelutil.Surveyor); err != nil {
 		return errors.New(fmt.Sprintf("listen pipe initialization failed: %v", err))
 	}
 	if err = l.listenChannel.Listen(testCommon.TestIPCChannel); err != nil {
@@ -141,7 +146,7 @@ func (l *NamedPipeTestCase) dialPipe() {
 	var msg []byte
 	var err error
 
-	if err = l.dialChannel.Initialize(channel.Respondent); err != nil {
+	if err = l.dialChannel.Initialize(channelutil.Respondent); err != nil {
 		l.log.Errorf("dial pipe initialization failed: %v", err)
 		return
 	}

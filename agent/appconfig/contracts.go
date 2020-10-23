@@ -58,6 +58,7 @@ type AgentInfo struct {
 	TelemetryMetricsNamespace               string
 	LongRunningWorkerMonitorIntervalSeconds int
 	AuditExpirationDay                      int
+	ForceFileIPC                            bool
 }
 
 // MgsConfig represents configuration for Message Gateway service

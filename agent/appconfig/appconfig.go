@@ -123,6 +123,7 @@ func DefaultConfig() SsmagentConfig {
 		TelemetryMetricsNamespace:               DefaultTelemetryNamespace,
 		AuditExpirationDay:                      DefaultAuditExpirationDay,
 		LongRunningWorkerMonitorIntervalSeconds: defaultLongRunningWorkerMonitorIntervalSeconds,
+		ForceFileIPC:                            false,
 	}
 	var os = OsInfo{
 		Lang:    "en-US",
