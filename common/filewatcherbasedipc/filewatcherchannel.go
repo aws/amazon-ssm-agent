@@ -1,10 +1,11 @@
-package channel
+package filewatcherbasedipc
 
 import (
 	"fmt"
 	"io/ioutil"
 	"os"
 	"path"
+	"path/filepath"
 	"strings"
 	"time"
 
@@ -12,11 +13,12 @@ import (
 
 	"errors"
 
+	"regexp"
 	"sync"
 
-	"regexp"
-
+	"github.com/aws/amazon-ssm-agent/agent/backoffconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/cenkalti/backoff"
 	"github.com/fsnotify/fsnotify"
 )
 
@@ -26,7 +28,11 @@ const (
 	defaultFileWriteMode = os.ModeExclusive | 0660
 
 	consumeAttemptCount                = 3
-	consumeRetryIntervalInMilliseconds = 10
+	consumeRetryIntervalInMilliseconds = 20
+)
+
+var (
+	osStatFn = os.Stat
 )
 
 //TODO add unittest
@@ -38,11 +44,13 @@ type fileWatcherChannel struct {
 	mode          Mode
 	counter       int
 	//the next expected message
-	recvCounter int
-	startTime   string
-	watcher     *fsnotify.Watcher
-	mu          sync.RWMutex
-	closed      bool
+	recvCounter              int
+	startTime                string
+	watcher                  *fsnotify.Watcher
+	mu                       sync.RWMutex
+	closed                   bool
+	shouldDeleteAfterConsume bool
+	shouldReadRetry          bool
 }
 
 //TODO make this constructor private
@@ -50,8 +58,9 @@ type fileWatcherChannel struct {
 	Create a file channel, a file channel is identified by its unique name
 	name is the path where the watcher directory is created
  	Only Master channel has the privilege to remove the dir at close time
+    shouldReadRetry - is this flag is set to true, it will use fileReadWithRetry function to read
 */
-func NewFileWatcherChannel(logger log.T, mode Mode, name string) (*fileWatcherChannel, error) {
+func NewFileWatcherChannel(logger log.T, mode Mode, name string, shouldReadRetry bool) (*fileWatcherChannel, error) {
 
 	tmpPath := path.Join(name, "tmp")
 	curTime := time.Now()
@@ -87,15 +96,21 @@ func NewFileWatcherChannel(logger log.T, mode Mode, name string) (*fileWatcherCh
 	}
 
 	ch := &fileWatcherChannel{
-		path:          name,
-		tmpPath:       tmpPath,
-		watcher:       watcher,
-		onMessageChan: onMessageChan,
-		logger:        logger,
-		mode:          mode,
-		counter:       0,
-		recvCounter:   0,
-		startTime:     fmt.Sprintf("%04d%02d%02d%02d%02d%02d", curTime.Year(), curTime.Month(), curTime.Day(), curTime.Hour(), curTime.Minute(), curTime.Second()),
+		path:            name,
+		tmpPath:         tmpPath,
+		watcher:         watcher,
+		onMessageChan:   onMessageChan,
+		logger:          logger,
+		mode:            mode,
+		counter:         0,
+		recvCounter:     0,
+		shouldReadRetry: shouldReadRetry,
+		startTime:       fmt.Sprintf("%04d%02d%02d%02d%02d%02d", curTime.Year(), curTime.Month(), curTime.Day(), curTime.Hour(), curTime.Minute(), curTime.Second()),
+	}
+	if ch.mode == ModeRespondent {
+		ch.shouldDeleteAfterConsume = false
+	} else {
+		ch.shouldDeleteAfterConsume = true
 	}
 	go ch.watch()
 	return ch, nil
@@ -146,12 +161,52 @@ func (ch *fileWatcherChannel) GetMessage() <-chan string {
 func (ch *fileWatcherChannel) Destroy() {
 	ch.Close()
 	//only master can remove the dir at close
-	if ch.mode == ModeMaster {
+	if ch.mode == ModeMaster || ch.mode == ModeSurveyor {
 		ch.logger.Debug("master removing directory...")
 		if err := os.RemoveAll(ch.path); err != nil {
 			ch.logger.Errorf("failed to remove directory %v : %v", ch.path, err)
 		}
 	}
+}
+
+// CleanupOwnModeFiles cleans up it own mode files
+func (ch *fileWatcherChannel) CleanupOwnModeFiles() {
+	ch.logger.Debugf("cleaning up all the messages under mode: %v", ch.mode)
+	fileInfos, _ := ioutil.ReadDir(ch.path)
+	if len(fileInfos) > 0 { // not needed in go. just a safety check
+		for _, info := range fileInfos {
+			name := info.Name()
+			if ch.isFileFromSameMode(name) {
+				ch.removeMessage(filepath.Join(ch.path, name))
+			}
+		}
+	}
+}
+
+func (ch *fileWatcherChannel) removeMessage(filePath string) {
+	var err error
+	for attempt := 0; attempt < consumeAttemptCount; attempt++ {
+		err = os.Remove(filePath)
+		if err != nil {
+			ch.logger.Debugf("message %v failed to remove (attempt %v): %v \n", filePath, attempt+1, err)
+			time.Sleep(time.Duration(consumeRetryIntervalInMilliseconds) * time.Millisecond)
+		} else {
+			break
+		}
+	}
+	if err != nil {
+		ch.logger.Error("Error occurred while removing the IPC file: ", err.Error())
+	}
+}
+
+// isFileFromSameMode checks whether file matches the current file mode or not
+// also check for the file pattern mode-startTime-counter
+func (ch *fileWatcherChannel) isFileFromSameMode(filename string) bool {
+	matched, err := regexp.MatchString("[a-zA-Z]+-[0-9]+-[0-9]+", filename)
+	if !matched || err != nil {
+		return false
+	}
+	return strings.Contains(filename, string(ch.mode)) && !strings.Contains(filename, "tmp")
 }
 
 // Close a filechannel
@@ -229,44 +284,86 @@ func (ch *fileWatcherChannel) consume(filepath string) {
 
 	var buf []byte
 	var err error
-
-	for attempt := 0; attempt < consumeAttemptCount; attempt++ {
-		//On windows rename does not guarantee atomic access: https://github.com/golang/go/issues/8914
-		//In exclusive mode we have, this read will for sure fail when it's locked by the other end
-		buf, err = ioutil.ReadFile(filepath)
-		if err != nil {
-			log.Debugf("message %v failed to read (attempt %v): %v \n", filepath, attempt+1, err)
-			time.Sleep(time.Duration(consumeRetryIntervalInMilliseconds) * time.Millisecond)
-		} else {
-			break
-		}
+	if ch.shouldReadRetry {
+		buf, err = fileReadWithRetry(filepath)
+	} else {
+		buf, err = fileRead(log, filepath)
 	}
-
 	if err != nil {
 		log.Errorf("message %v failed to read: %v \n", filepath, err)
 		return
-
 	}
-
-	//remove the consumed IPC file and log error message when there is an exception in os.Remove()
-	for attempt := 0; attempt < consumeAttemptCount; attempt++ {
-		err = os.Remove(filepath)
-		if err != nil {
-			log.Debugf("message %v failed to remove (attempt %v): %v \n", filepath, attempt+1, err)
-			time.Sleep(time.Duration(consumeRetryIntervalInMilliseconds) * time.Millisecond)
-		} else {
-			break
-		}
-	}
-
-	if err != nil {
-		log.Error("Error occurred while removing the IPC file: ", err.Error())
+	if ch.shouldDeleteAfterConsume {
+		//remove the consumed IPC file and log error message when there is an exception in os.Remove()
+		ch.removeMessage(filepath)
 	}
 
 	//update the recvcounter
 	ch.recvCounter = parseSequenceCounter(filepath) + 1
 	//TODO handle buffered channel queue overflow
 	ch.onMessageChan <- string(buf)
+}
+
+func fileRead(logger log.T, filepath string) (buf []byte, err error) {
+	for attempt := 0; attempt < consumeAttemptCount; attempt++ {
+		//On windows rename does not guarantee atomic access: https://github.com/golang/go/issues/8914
+		//In exclusive mode we have, this read will for sure fail when it's locked by the other end
+		buf, err = ioutil.ReadFile(filepath)
+		if err != nil {
+			logger.Debugf("message %v failed to read (attempt %v): %v \n", filepath, attempt+1, err)
+			time.Sleep(time.Duration(consumeRetryIntervalInMilliseconds) * time.Millisecond)
+		} else {
+			break
+		}
+	}
+	return
+}
+
+// TODO - create a new function for read using blocking file locks
+func fileReadWithRetry(filepath string) (buf []byte, err error) {
+	fileSize, err := getFileSize(filepath)
+	if err != nil {
+		return
+	}
+
+	exponentialBackOff, err := backoffconfig.GetExponentialBackoff(consumeRetryIntervalInMilliseconds*time.Millisecond, consumeAttemptCount)
+	if err != nil {
+		return
+	}
+
+	fileRead := func() (fileErr error) {
+		buf, err = ioutil.ReadFile(filepath)
+		if err != nil {
+			fileErr = errors.New(fmt.Sprintf("error while consuming message: %v", err))
+		}
+		fileBufSize := int64(len(buf))
+		if fileSize == 0 || fileBufSize == 0 || fileBufSize != fileSize {
+			fileErr = errors.New(fmt.Sprintf("problem reading file - fileBufSize: %v, fileSize: %v", fileBufSize, fileSize))
+		}
+		return fileErr
+	}
+
+	err = backoff.Retry(fileRead, exponentialBackOff)
+	return
+}
+
+func getFileSize(filepath string) (fileSize int64, err error) {
+	var fileInfo os.FileInfo
+	exponentialBackOff, err := backoffconfig.GetExponentialBackoff(consumeRetryIntervalInMilliseconds*time.Millisecond, consumeAttemptCount)
+	if err != nil {
+		return
+	}
+
+	fileStat := func() (err error) {
+		fileInfo, err = osStatFn(filepath)
+		return
+	}
+	err = backoff.Retry(fileStat, exponentialBackOff)
+	if err != nil {
+		return
+	}
+	fileSize = fileInfo.Size()
+	return fileSize, err
 }
 
 // we need to launch watcher receiver in another go routine, putting watcher.Close() and the receiver in same go routine can

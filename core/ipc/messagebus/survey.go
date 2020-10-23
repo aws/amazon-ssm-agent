@@ -21,6 +21,7 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/common/channel"
+	channelutil "github.com/aws/amazon-ssm-agent/common/channel/utils"
 	"github.com/aws/amazon-ssm-agent/common/message"
 	"github.com/aws/amazon-ssm-agent/core/app/context"
 	"go.nanomsg.org/mangos/v3"
@@ -48,8 +49,9 @@ type MessageBus struct {
 func NewMessageBus(context context.ICoreAgentContext) *MessageBus {
 	log := context.Log()
 	channels := make(map[message.TopicType]channel.IChannel)
-	channels[message.GetWorkerHealthRequest] = channel.NewChannel(log)
-	channels[message.TerminateWorkerRequest] = channel.NewChannel(log)
+	channelCreator := channel.GetChannelCreator(log)
+	channels[message.GetWorkerHealthRequest] = channelCreator(log)
+	channels[message.TerminateWorkerRequest] = channelCreator(log)
 
 	return &MessageBus{
 		context:        context.With("[MessageBus]"),
@@ -165,7 +167,7 @@ func (bus *MessageBus) createMessageChannelWithRetry(topic message.TopicType) er
 
 func (bus *MessageBus) createMessageChannel(topic message.TopicType, address string) error {
 	var err error
-	if err = bus.surveyChannels[topic].Initialize(channel.Surveyor); err != nil {
+	if err = bus.surveyChannels[topic].Initialize(channelutil.Surveyor); err != nil {
 		return fmt.Errorf("failed to create new channel: %s, %v", address, err)
 	}
 

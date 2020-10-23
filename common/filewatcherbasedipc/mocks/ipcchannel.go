@@ -1,4 +1,4 @@
-package channelmock
+package ipcchannelmock
 
 import "github.com/stretchr/testify/mock"
 
@@ -22,6 +22,11 @@ func (m *MockedChannel) Close() {
 }
 
 func (m *MockedChannel) Destroy() {
+	m.Called()
+	return
+}
+
+func (m *MockedChannel) CleanupOwnModeFiles() {
 	m.Called()
 	return
 }

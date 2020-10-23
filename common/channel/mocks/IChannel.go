@@ -3,7 +3,7 @@
 package mocks
 
 import (
-	"github.com/aws/amazon-ssm-agent/common/channel"
+	channelutil "github.com/aws/amazon-ssm-agent/common/channel/utils"
 	"github.com/aws/amazon-ssm-agent/common/message"
 	"github.com/stretchr/testify/mock"
 )
@@ -42,11 +42,11 @@ func (_m *IChannel) Dial(addr string) error {
 }
 
 // Initialize provides a mock function with given fields: socketType
-func (_m *IChannel) Initialize(socketType channel.SocketType) error {
+func (_m *IChannel) Initialize(socketType channelutil.SocketType) error {
 	ret := _m.Called(socketType)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(channel.SocketType) error); ok {
+	if rf, ok := ret.Get(0).(func(channelutil.SocketType) error); ok {
 		r0 = rf(socketType)
 	} else {
 		r0 = ret.Error(0)

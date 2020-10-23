@@ -25,12 +25,12 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	executermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/mock"
-	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/channel"
-	channelmock "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/channel/mock"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/messaging"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/proc"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
+	"github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc"
+	channelmock "github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc/mocks"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -42,7 +42,7 @@ var fakeProcess *FakeProcess
 func setup(t *testing.T) *TestCase {
 	logger.Info("initializing dependencies for integration testing...")
 	testCase := CreateTestCase()
-	channelCreator = func(log log.T, mode channel.Mode, documentID string) (channel.Channel, error, bool) {
+	channelCreator = func(log log.T, mode filewatcherbasedipc.Mode, documentID string) (filewatcherbasedipc.IPCChannel, error, bool) {
 		isFound := channelmock.IsExists(documentID)
 		assert.Equal(t, testDocumentID, documentID)
 		fakeChannel := channelmock.NewFakeChannel(logger, mode, documentID)
@@ -373,7 +373,7 @@ func (p *FakeProcess) fakeWorker(t *testing.T, handle string) {
 	log.Infof("document: %v process started", handle)
 	//make sure the channel name is correct
 	assert.Equal(t, testDocumentID, handle)
-	ipc := channelmock.NewFakeChannel(logger, channel.ModeWorker, handle)
+	ipc := channelmock.NewFakeChannel(logger, filewatcherbasedipc.ModeWorker, handle)
 	pipeline := messaging.NewWorkerBackend(ctx, pluginRunner)
 	stopTimer := make(chan bool)
 	if err := messaging.Messaging(log, ipc, pipeline, stopTimer); err != nil {

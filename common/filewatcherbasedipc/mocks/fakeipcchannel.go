@@ -1,4 +1,4 @@
-package channelmock
+package ipcchannelmock
 
 import (
 	"sync"
@@ -9,8 +9,8 @@ import (
 
 	"fmt"
 
-	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/channel"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc"
 )
 
 type queue []string
@@ -45,18 +45,18 @@ type FakeChannel struct {
 	recvChan chan string
 	closed   bool
 	name     string
-	mode     channel.Mode
+	mode     filewatcherbasedipc.Mode
 }
 
-func getQueue(c ch, mode channel.Mode) (*queue, *queue) {
-	if mode == channel.ModeMaster {
+func getQueue(c ch, mode filewatcherbasedipc.Mode) (*queue, *queue) {
+	if mode == filewatcherbasedipc.ModeMaster || mode == filewatcherbasedipc.ModeSurveyor {
 		return c.q0, c.q1
 	} else {
 		return c.q1, c.q0
 	}
 }
 
-func NewFakeChannel(log log.T, mode channel.Mode, name string) *FakeChannel {
+func NewFakeChannel(log log.T, mode filewatcherbasedipc.Mode, name string) *FakeChannel {
 	log.Infof("creating channel: %v|%v", name, mode)
 	if _, ok := queueMap[name]; !ok {
 		queueMap[name] = ch{
@@ -121,8 +121,18 @@ func (f *FakeChannel) Destroy() {
 	//first, close the channel
 	f.Close()
 	//only master will remove the channel object
-	if f.mode == channel.ModeMaster {
+	if f.mode == filewatcherbasedipc.ModeMaster || f.mode == filewatcherbasedipc.ModeSurveyor {
 		delete(queueMap, f.name)
+	}
+}
+
+func (f *FakeChannel) CleanupOwnModeFiles() {
+	if c, ok := queueMap[f.name]; ok {
+		sendQ, _ := getQueue(c, f.mode)
+		isPresent := true
+		for isPresent {
+			_, isPresent = sendQ.Dequeue()
+		}
 	}
 }
 

@@ -46,10 +46,11 @@ type MessageBus struct {
 // NewMessageBus creates a new instance of MessageBus
 func NewMessageBus(context context.T) *MessageBus {
 	log := context.Log()
+	channelCreator := channel.GetChannelCreator(log)
 	return &MessageBus{
 		context:            context,
-		healthChannel:      channel.NewChannel(log),
-		terminationChannel: channel.NewChannel(log),
+		healthChannel:      channelCreator(log),
+		terminationChannel: channelCreator(log),
 		rebootRequest:      make(chan bool, 1),
 	}
 }

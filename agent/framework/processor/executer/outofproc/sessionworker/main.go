@@ -20,7 +20,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/channel"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/messaging"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/proc"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/plugin"
@@ -28,6 +27,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/version"
+	"github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc"
 )
 
 const (
@@ -101,7 +101,7 @@ func createFileChannelAndExecutePlugin(context context.T, channelName string) {
 	log := context.Log()
 	log.Infof("document: %v worker started", channelName)
 	//create channel from the given handle identifier by master
-	ipc, err, _ := channel.CreateFileChannel(log, channel.ModeWorker, channelName)
+	ipc, err, _ := filewatcherbasedipc.CreateFileWatcherChannel(log, filewatcherbasedipc.ModeWorker, channelName, false)
 	if err != nil {
 		log.Errorf("failed to create channel: %v", err)
 		return
