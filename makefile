@@ -1,7 +1,7 @@
 BUILDFILE_PATH := ./build/private/bgo_exports.makefile
 COPY := cp -p
-GO_BUILD := CGO_ENABLED=0 go build -ldflags "-s -w"
-GO_BUILD_PIE := go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie
+GO_BUILD := CGO_ENABLED=0 go build -ldflags "-s -w" -trimpath
+GO_BUILD_PIE := go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -trimpath
 BRAZIL_BUILD := false
 
 # Using the wildcard function to check if file exists
