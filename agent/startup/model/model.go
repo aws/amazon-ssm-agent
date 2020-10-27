@@ -60,6 +60,12 @@ type OperatingSystemInfo struct {
 	OperatingSystemSKU int    `json:"OperatingSystemSKU"`
 }
 
+// PvEntity contains Version from HKLM:\SOFTWARE\Amazon\PVDriver.
+type PvPackageInfo struct {
+	Name    string `json:"PSChildName"`
+	Version string `json:"Version"`
+}
+
 // PnpEntity contains DeviceId, Service, Name from Win32_PnpEntity.
 type PnpEntity struct {
 	DeviceID string `json:"DeviceID"`
