@@ -187,8 +187,8 @@ func TestSSMDocResource_DownloadNoDestination(t *testing.T) {
 	dir := appconfig.DownloadRoot
 	depMock.On("GetDocument", logMock, "AWS-ExecuteCommand", "10").Return(&docOutput, nil)
 
-	fileMock.On("Exists", "/var/log/amazon/ssm/download/").Return(true)
-	fileMock.On("IsDirectory", "/var/log/amazon/ssm/download/").Return(true)
+	fileMock.On("Exists", appconfig.DownloadRoot).Return(true)
+	fileMock.On("IsDirectory", appconfig.DownloadRoot).Return(true)
 	fileMock.On("MakeDirs", strings.TrimSuffix(dir, "/")).Return(nil)
 	fileMock.On("WriteFile", filepath.Join(dir, "AWS-ExecuteCommand.json"), content).Return(fmt.Errorf("Error"))
 

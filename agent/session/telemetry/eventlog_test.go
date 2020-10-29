@@ -94,7 +94,6 @@ func (suite *TelemetrySchedulerTestSuite) TestWrite_SendEventToMGSWithAuditSucce
 	timeStamp := "22:59:59"
 	nextTimeStamp := "23:00:00"
 
-	suite.TelemetryScheduler.SendAuditMessage()
 	file1 := filepath.Join(suite.EventLog.GetAuditFilePath(), suite.EventLog.GetAuditFileName()+"-2020-03-01")
 	file2 := filepath.Join(suite.EventLog.GetAuditFilePath(), suite.EventLog.GetAuditFileName()+"-2020-03-02")
 	file3 := filepath.Join(suite.EventLog.GetAuditFilePath(), suite.EventLog.GetTodayAuditFileName())
@@ -112,6 +111,7 @@ func (suite *TelemetrySchedulerTestSuite) TestWrite_SendEventToMGSWithAuditSucce
 	suite.FileSystem.AppendToFile(file2, fileInput2, 0600)
 	suite.FileSystem.AppendToFile(file3, fileInput3, 0600)
 
+	suite.TelemetryScheduler.SendAuditMessage()
 	time.Sleep(2 * time.Second)
 
 	firstFileOutput := fileInput1 + logger.AuditSentSuccessFooter + byteMarker
