@@ -11,29 +11,19 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// +build freebsd linux netbsd openbsd
+// +build darwin
 
 package executor
 
 import (
-	"bytes"
-	"io/ioutil"
 	"os"
 	"os/exec"
-	"path"
 	"strconv"
 	"strings"
 	"syscall"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 )
-
-// Collect processes in these states when querying from /Proc
-var accepted_process_states = map[string]bool{
-	"R": true, // Running/Runnable
-	"S": true, // Interruptible sleep
-	"D": true, // uninterruptible sleep
-}
 
 func prepareProcess(command *exec.Cmd) {
 	// make the process the leader of its process group
@@ -86,83 +76,10 @@ var listProcessPs = func() ([]byte, error) {
 	return exec.Command("ps", "-e", "-o", "pid,ppid,command").CombinedOutput()
 }
 
-// Unix man: http://man7.org/linux/man-pages/man5/proc.5.html
-// listProcessProc is a fallback function for when listProcessPs fails, it reads the /proc folder for process information
-var listProcessProc = func() ([]OsProcess, error) {
-	var procFolder = "/proc"
-	var currProcUid = uint32(os.Geteuid())
-	var results []OsProcess
-
-	// Get files in proc dir
-	files, err := ioutil.ReadDir(procFolder)
-
-	if err != nil {
-		return results, err
-	}
-
-	for _, f := range files {
-		// Only look at folders in /proc
-		if f.IsDir() {
-			// Cast folder name to int to only include pid folders
-			if pid, err := strconv.Atoi(f.Name()); err == nil {
-				// Read the cmdline file to extract the command used to start the process
-				cmd, err := ioutil.ReadFile(path.Join(procFolder, f.Name(), "cmdline"))
-				if err != nil || len(cmd) == 0 {
-					// Failed to read or is empty cmdline file, skip process
-					continue
-				}
-
-				// Check owner of process, ignore check if cast fails
-				if stat, ok := f.Sys().(*syscall.Stat_t); ok {
-					if stat.Uid != currProcUid {
-						// Owner of process is not uid of agent process
-						continue
-					}
-				}
-
-				// Read the stat file for process state
-				stat, err := ioutil.ReadFile(path.Join(procFolder, f.Name(), "stat"))
-				if err != nil {
-					// Failed to read stat file, skip process
-					continue
-				}
-
-				// Split the file and make sure there are at least 4 entries
-				splitStat := strings.SplitN(string(stat), " ", 5)
-				if len(splitStat) < 4 {
-					// Failed to split stat file, skip process
-					continue
-				}
-
-				// Check if process state is valid
-				state := splitStat[2]
-				if !accepted_process_states[state] {
-					// State of process is not valid, skip process
-					continue
-				}
-
-				// Get process parent
-				ppid := -1
-				if ppid, err = strconv.Atoi(splitStat[3]); err != nil {
-					// Failed to convert ppid to int
-					continue
-				}
-
-				// split at null character
-				cmdString := string(bytes.SplitN(cmd, []byte{0}, 2)[0])
-
-				results = append(results, OsProcess{Pid: pid, PPid: ppid, Executable: cmdString})
-			}
-		}
-	}
-	return results, err
-}
-
 func getProcess() ([]OsProcess, error) {
 	output, err := listProcessPs()
 	if err != nil {
-		// Default to Proc if ps fails
-		return listProcessProc()
+		return nil, err
 	}
 
 	var results []OsProcess
@@ -176,12 +93,10 @@ func getProcess() ([]OsProcess, error) {
 		if err != nil {
 			continue
 		}
-
 		ppid, err := strconv.Atoi(parts[1])
 		if err != nil {
 			continue
 		}
-
 		results = append(results, OsProcess{Pid: pid, PPid: ppid, Executable: parts[2]})
 	}
 	return results, nil
