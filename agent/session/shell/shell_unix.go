@@ -212,8 +212,8 @@ func getUserCredentials(log log.T, sessionUser string) (uint32, uint32, []uint32
 		}
 	}
 
-	// Make sure they are non-zero valid positive ids
-	if uid > 0 && gid > 0 {
+	// Make sure they are valid positive ids
+	if uid >= 0 && gid >= 0 {
 		return uint32(uid), uint32(gid), groupIds, nil
 	}
 
