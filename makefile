@@ -457,11 +457,11 @@ create-source-archive:
 
 .PHONY: package-rpm
 package-rpm: create-package-folder
-	$(BGO_SPACE)/Tools/src/create_rpm.sh
+	$(BGO_SPACE)/Tools/src/create_rpm.sh linux_amd64
 
 .PHONY: package-deb
 package-deb: create-package-folder
-	$(BGO_SPACE)/Tools/src/create_deb.sh
+	$(BGO_SPACE)/Tools/src/create_deb.sh amd64
 
 .PHONY: package-win
 package-win: create-package-folder
@@ -473,11 +473,11 @@ package-darwin:
 
 .PHONY: package-rpm-386
 package-rpm-386: create-package-folder
-	$(BGO_SPACE)/Tools/src/create_rpm_386.sh
+	$(BGO_SPACE)/Tools/src/create_rpm.sh linux_386
 
 .PHONY: package-deb-386
 package-deb-386: create-package-folder
-	$(BGO_SPACE)/Tools/src/create_deb_386.sh
+	$(BGO_SPACE)/Tools/src/create_deb.sh 386
 
 .PHONY: package-win-386
 package-win-386: create-package-folder
@@ -485,15 +485,15 @@ package-win-386: create-package-folder
 
 .PHONY: package-deb-arm
 package-deb-arm: create-package-folder
-	$(BGO_SPACE)/Tools/src/create_deb_arm.sh
+	$(BGO_SPACE)/Tools/src/create_deb.sh arm
 
 .PHONY: package-deb-arm64
 package-deb-arm64: create-package-folder
-	$(BGO_SPACE)/Tools/src/create_deb_arm64.sh
+	$(BGO_SPACE)/Tools/src/create_deb.sh arm64
 
 .PHONY: package-rpm-arm64
 package-rpm-arm64: create-package-folder
-	$(BGO_SPACE)/Tools/src/create_rpm_arm64.sh
+	$(BGO_SPACE)/Tools/src/create_rpm.sh linux_arm64
 
 .PHONY: get-tools
 get-tools:
