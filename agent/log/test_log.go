@@ -33,6 +33,7 @@ func NewMockLog() *Mock {
 	log.On("Flush").Return()
 	log.On("Debug", mock.Anything).Return()
 	log.On("Error", mock.Anything).Return(mock.AnythingOfType("error"))
+	log.On("Warn", mock.Anything).Return(mock.AnythingOfType("error"))
 	log.On("Trace", mock.Anything).Return()
 	log.On("Info", mock.Anything).Return()
 	log.On("WriteEvent", mock.AnythingOfType("string"), mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return()
@@ -51,6 +52,7 @@ func NewMockLogWithContext(ctx string) *Mock {
 	log.On("Flush").Return()
 	log.On("Debug", mock.Anything).Return()
 	log.On("Error", mock.Anything).Return(mock.AnythingOfType("error"))
+	log.On("Warn", mock.Anything).Return(mock.AnythingOfType("error"))
 	log.On("Trace", mock.Anything).Return()
 	log.On("Info", mock.Anything).Return()
 	log.On("WriteEvent", mock.AnythingOfType("string"), mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return()
@@ -156,10 +158,11 @@ func (_m *Mock) Info(v ...interface{}) {
 // Warn mocks the Warn function.
 func (_m *Mock) Warn(v ...interface{}) error {
 	fmt.Print(_m.context)
-	fmt.Print("Warn: ")
-	fmt.Println(v...)
-	ret := _m.Called(v)
-	return ret.Error(0)
+	msg := "Warn: " + fmt.Sprint(v...)
+	fmt.Print(msg)
+	fmt.Println()
+	_m.Called(v)
+	return errors.New(msg)
 }
 
 // Error mocks the Error function.

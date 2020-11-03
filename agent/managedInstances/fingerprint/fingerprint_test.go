@@ -15,11 +15,12 @@ package fingerprint
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
+	"strings"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
-
 	"github.com/stretchr/testify/assert"
 )
 
@@ -28,7 +29,10 @@ const (
 	invalidUTF8String = "\xbd\xb2\x3d\xbc\x20\xe2\x8c\x98"
 )
 
+/*
 func ExampleInstanceFingerprint() {
+	setLogger(log.NewMockLog())
+
 	currentHwHash = func() (map[string]string, error) {
 		hwHash := make(map[string]string)
 		hwHash[hardwareID] = "original"
@@ -56,6 +60,7 @@ func ExampleInstanceFingerprint() {
 	// Output:
 	// 979b554b-0d67-42c6-9730-48443b3016dd
 }
+*/
 
 type isSimilarHashTestData struct {
 	saved     map[string]string
@@ -110,6 +115,59 @@ func TestIsSimilarHardwareHash(t *testing.T) {
 
 }
 
+func TestIsSimilarHardwareHash_WritesFingerprintDiagnosticsInLog(t *testing.T) {
+
+	logger := NewFakeLog(1)
+
+	originalFingerprint := map[string]string{
+		hardwareID:  "myHardwareID",
+		ipAddressID: "myIpAddress",
+		"key1":      "originalValue1",
+		"key2":      "originalValue2",
+		"key3":      "originalValue3",
+		"key4":      "originalValue4",
+	}
+
+	currentFingerprint := map[string]string{
+		hardwareID:  "myHardwareID",
+		ipAddressID: "newIpAddress",
+		"key1":      "newValue1",
+		"key2":      "newValue2",
+		"key3":      "originalValue3",
+		"key4":      "newValue4",
+	}
+
+	assert.False(
+		t,
+		isSimilarHardwareHash(logger, originalFingerprint, currentFingerprint, 100),
+		"isSimilarHardwareHash returned true when current and original are different")
+
+	assert.True(
+		t,
+		arrayContainsSubstring(logger.errorMessages, "Cannot connect to AWS Systems Manager"),
+		"isSimilarHardwareHash did not log an error saying it couldn't connect")
+
+	assert.True(
+		t,
+		arrayContainsSubstring(logger.warnMessages, "key1"),
+		"isSimilarHardwareHash did not log a warning saying that key1 was changed")
+
+	assert.True(
+		t,
+		arrayContainsSubstring(logger.warnMessages, "key2"),
+		"isSimilarHardwareHash did not log a warning saying that key2 was changed")
+
+	assert.True(
+		t,
+		arrayContainsSubstring(logger.warnMessages, "key4"),
+		"isSimilarHardwareHash did not log a warning saying that key4 was changed")
+
+	assert.False(
+		t,
+		arrayContainsSubstring(logger.warnMessages, "key3"),
+		"isSimilarHardwareHash logged a false warning saying that key3 was changed")
+}
+
 func deepCopy(original map[string]string) (copied map[string]string) {
 	copied = make(map[string]string)
 	for k, v := range original {
@@ -120,6 +178,7 @@ func deepCopy(original map[string]string) (copied map[string]string) {
 
 func TestGenerateFingerprint_FailGenerateHwHash(t *testing.T) {
 	// Arrange
+	setLogger(log.NewMockLog())
 	failedGenerateHwHashError := "Failed to generate hardware hash"
 	currentHwHash = func() (map[string]string, error) {
 		return make(map[string]string), fmt.Errorf(failedGenerateHwHashError)
@@ -136,6 +195,7 @@ func TestGenerateFingerprint_FailGenerateHwHash(t *testing.T) {
 
 func TestGenerateFingerprint_GenerateNewWhenNoneSaved(t *testing.T) {
 	// Arrange
+	setLogger(log.NewMockLog())
 	currentHwHash = func() (map[string]string, error) {
 		hwHash := make(map[string]string)
 		hwHash[hardwareID] = "original"
@@ -159,6 +219,7 @@ func TestGenerateFingerprint_GenerateNewWhenNoneSaved(t *testing.T) {
 
 func TestGenerateFingerprint_ReturnSavedWhenMatched(t *testing.T) {
 	// Arrange
+	setLogger(log.NewMockLog())
 	currentHwHash = func() (map[string]string, error) {
 		hwHash := make(map[string]string)
 		hwHash[hardwareID] = "original"
@@ -192,6 +253,7 @@ func TestGenerateFingerprint_ReturnSavedWhenMatched(t *testing.T) {
 
 func TestGenerateFingerprint_ReturnUpdated_WhenHardwareHashesDontMatch(t *testing.T) {
 	// Arrange
+	setLogger(log.NewMockLog())
 	currentHwHash = func() (map[string]string, error) {
 		hwHash := make(map[string]string)
 		hwHash[hardwareID] = "changed"
@@ -223,6 +285,7 @@ func TestGenerateFingerprint_ReturnUpdated_WhenHardwareHashesDontMatch(t *testin
 
 func TestGenerateFingerprint_ReturnsError_WhenInvalidCharactersInHardwareHash(t *testing.T) {
 	// Arrange
+	setLogger(log.NewMockLog())
 	currentHwHash = func() (map[string]string, error) {
 		hwHash := make(map[string]string)
 		hwHash[hardwareID] = invalidUTF8String
@@ -242,6 +305,7 @@ func TestGenerateFingerprint_ReturnsError_WhenInvalidCharactersInHardwareHash(t 
 
 func TestGenerateFingerprint_DoesNotSave_WhenHardwareHashesMatch(t *testing.T) {
 	// Arrange
+	setLogger(log.NewMockLog())
 	savedHwHash := getHwHash("original")
 	currentHwHash = func() (map[string]string, error) {
 		return savedHwHash, nil
@@ -264,6 +328,7 @@ func TestGenerateFingerprint_DoesNotSave_WhenHardwareHashesMatch(t *testing.T) {
 
 func TestSave_SavesNewFingerprint(t *testing.T) {
 	// Arrange
+	setLogger(log.NewMockLog())
 	sampleHwHash := getHwHash("backup")
 	sampleHwInfo := hwInfo{
 		HardwareHash:        sampleHwHash,
@@ -284,6 +349,7 @@ func TestSave_SavesNewFingerprint(t *testing.T) {
 
 func TestIsValidHardwareHash_ReturnsHashIsValid(t *testing.T) {
 	// Arrange
+	setLogger(log.NewMockLog())
 	sampleHash := make(map[string]string)
 	sampleHash[hardwareID] = "sample"
 
@@ -296,6 +362,7 @@ func TestIsValidHardwareHash_ReturnsHashIsValid(t *testing.T) {
 
 func TestIsValidHardwareHash_ReturnsHashIsInvalid(t *testing.T) {
 	// Arrange
+	setLogger(log.NewMockLog())
 	sampleHash := make(map[string]string)
 	sampleHash[hardwareID] = invalidUTF8String
 
@@ -325,4 +392,124 @@ func (v vaultStub) Store(key string, data []byte) error {
 
 func (v vaultStub) Retrieve(key string) ([]byte, error) {
 	return v.data, v.retrieveErr
+}
+
+// fakeLog is a test double for the seelog logger to verify that particular strings were written into the log
+// during a test.
+type fakeLog struct {
+	traceMessages    []string
+	debugMessages    []string
+	infoMessages     []string
+	warnMessages     []string
+	errorMessages    []string
+	criticalMessages []string
+}
+
+func (f *fakeLog) Trace(v ...interface{}) {
+	f.traceMessages = append(f.traceMessages, concat(v...))
+}
+
+func (f *fakeLog) Tracef(format string, params ...interface{}) {
+	f.traceMessages = append(f.traceMessages, fmt.Sprintf(format, params...))
+}
+
+func (f *fakeLog) Debug(v ...interface{}) {
+	f.debugMessages = append(f.debugMessages, concat(v...))
+}
+
+func (f *fakeLog) Debugf(format string, params ...interface{}) {
+	f.debugMessages = append(f.debugMessages, fmt.Sprintf(format, params...))
+}
+
+func (f *fakeLog) Info(v ...interface{}) {
+	message := concat(v...)
+	f.infoMessages = append(f.infoMessages, message)
+}
+
+func (f *fakeLog) Infof(format string, params ...interface{}) {
+	message := fmt.Sprintf(format, params...)
+	f.infoMessages = append(f.infoMessages, message)
+}
+
+func (f *fakeLog) Warn(v ...interface{}) error {
+	message := concat(v...)
+	f.warnMessages = append(f.warnMessages, message)
+	return errors.New("Warning: " + message)
+}
+
+func (f *fakeLog) Warnf(format string, params ...interface{}) error {
+	message := fmt.Sprintf(format, params...)
+	f.warnMessages = append(f.warnMessages, message)
+	return errors.New("Warning: " + message)
+}
+
+func (f *fakeLog) Error(v ...interface{}) error {
+	message := concat(v...)
+	f.errorMessages = append(f.errorMessages, message)
+	return errors.New("Error: " + message)
+}
+
+func (f *fakeLog) Errorf(format string, params ...interface{}) error {
+	message := fmt.Sprintf(format, params...)
+	f.errorMessages = append(f.errorMessages, message)
+	return errors.New("Error: " + message)
+}
+
+func (f *fakeLog) Critical(v ...interface{}) error {
+	message := concat(v...)
+	f.criticalMessages = append(f.criticalMessages, message)
+	return errors.New("Critical: " + message)
+}
+
+func (f *fakeLog) Criticalf(format string, params ...interface{}) error {
+	message := fmt.Sprintf(format, params...)
+	f.criticalMessages = append(f.criticalMessages, message)
+	return errors.New("Critical: " + message)
+}
+
+func (f fakeLog) Flush() {}
+
+func (f fakeLog) Close() {}
+
+func (f fakeLog) WithContext(_ ...string) log.T {
+	return nil
+}
+
+func (f fakeLog) WriteEvent(_ string, _ string, _ string) {}
+
+func NewFakeLog(capacity int) *fakeLog {
+	return &fakeLog{
+		traceMessages:    make([]string, 0, capacity),
+		debugMessages:    make([]string, 0, capacity),
+		infoMessages:     make([]string, 0, capacity),
+		warnMessages:     make([]string, 0, capacity),
+		errorMessages:    make([]string, 0, capacity),
+		criticalMessages: make([]string, 0, capacity),
+	}
+}
+
+func concat(v ...interface{}) string {
+	message := ""
+	for _, item := range v {
+		if len(message) != 0 {
+			message += ";"
+		}
+
+		message += fmt.Sprintf("%v", item)
+	}
+
+	return message
+}
+
+func arrayContainsSubstring(haystacks []string, needle string) bool {
+	result := false
+
+	for _, haystack := range haystacks {
+		if strings.Contains(haystack, needle) {
+			result = true
+			break
+		}
+	}
+
+	return result
 }

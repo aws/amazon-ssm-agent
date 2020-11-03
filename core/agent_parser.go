@@ -81,6 +81,8 @@ func flagUsage() {
 	fmt.Fprintln(os.Stderr, "\t\t-code\tSSM activation code\t(REQUIRED)")
 	fmt.Fprintln(os.Stderr, "\t\t-region\tSSM region       \t(REQUIRED)")
 	fmt.Fprintln(os.Stderr, "\n\t\t-clear\tClears the previously saved SSM registration")
+	fmt.Fprintln(os.Stderr, "\t-fingerprint\tWhether to update the machine fingerprint similarity threshold\t(OPTIONAL)")
+	fmt.Fprintln(os.Stderr, "\t\t-similarityThreshold\tThe new required percentage of matching hardware values\t(OPTIONAL)")
 	fmt.Fprintln(os.Stderr, "\n\t-y\tAnswer yes for all questions")
 }
 
@@ -127,7 +129,7 @@ func processFingerprint(log logger.T) (exitCode int) {
 		log.Errorf("Error setting the SimilarityThreshold. %v", err)
 		return 1
 	}
-	log.Infof("Fingerprint SimilarityTHreshold set to %v", similarityThreshold)
+	log.Infof("Fingerprint SimilarityThreshold set to %v", similarityThreshold)
 	return 0
 }
 
