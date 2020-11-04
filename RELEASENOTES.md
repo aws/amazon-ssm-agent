@@ -1,5 +1,17 @@
 Latest
 ===============
+- Fail update document if updater fails to execute
+- Fallback to file-based IPC if named pipes are not available
+- Add support for streaming of logs to CloudWatch for Session Manager
+- Add support for following cross-region redirects from S3
+- Refactor .deb and .rpm packaging scripts
+- Fix intermittent test failures
+- Search full path for valid sc.exe
+- Log PV driver version on Windows instances
+- Add -trimpath to build flags
+
+3.0.284.0
+===============
 - Added steps to the updater to validate IPC functionality
 - Added SSM_COMMAND_ID environment variable to runShellScript plugin
 - Improved retry for S3 and http(s) downloads
