@@ -442,7 +442,7 @@ create-package-folder:
 	mkdir -p $(BGO_SPACE)/bin/updates/amazon-ssm-agent-updater/`cat $(BGO_SPACE)/VERSION`/
 
 .PHONY: package-linux
-package-linux: package-rpm-386 package-deb-386 package-rpm package-deb package-deb-arm package-deb-arm64 package-rpm-arm64
+package-linux: package-rpm-386 package-deb-386 package-rpm package-deb package-deb-arm package-deb-arm64 package-rpm-arm64 package-binaries-linux-amd64 package-binaries-linux-arm64
 	$(BGO_SPACE)/Tools/src/create_linux_package.sh
 
 .PHONY: package-windows
@@ -494,6 +494,14 @@ package-deb-arm64: create-package-folder
 .PHONY: package-rpm-arm64
 package-rpm-arm64: create-package-folder
 	$(BGO_SPACE)/Tools/src/create_rpm.sh linux_arm64
+
+.PHONY: package-binaries-linux-amd64
+package-binaries-linux-amd64: create-package-folder
+	$(BGO_SPACE)/Tools/src/create_binaries_tar.sh linux_amd64
+
+.PHONY: package-binaries-linux-arm64
+package-binaries-linux-arm64: create-package-folder
+	$(BGO_SPACE)/Tools/src/create_binaries_tar.sh linux_arm64
 
 .PHONY: get-tools
 get-tools:
