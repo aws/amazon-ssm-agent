@@ -33,6 +33,7 @@ var accepted_process_states = map[string]bool{
 	"R": true, // Running/Runnable
 	"S": true, // Interruptible sleep
 	"D": true, // uninterruptible sleep
+	"Z": true, // zombie
 }
 
 func prepareProcess(command *exec.Cmd) {
@@ -81,9 +82,9 @@ func validateEnvironmentVariables(command *exec.Cmd) {
 }
 
 //Unix man: http://www.skrenta.com/rt/man/ps.1.html , return the process table of the current user, in agent it'll be root
-//verified on RHEL, Amazon Linux, Ubuntu, Centos, FreeBSD and Darwin
+//verified on RHEL, Amazon Linux, Ubuntu, Centos, and FreeBSD
 var listProcessPs = func() ([]byte, error) {
-	return exec.Command("ps", "-e", "-o", "pid,ppid,command").CombinedOutput()
+	return exec.Command("ps", "-e", "-o", "pid,ppid,state,command").CombinedOutput()
 }
 
 // Unix man: http://man7.org/linux/man-pages/man5/proc.5.html
@@ -151,7 +152,7 @@ var listProcessProc = func() ([]OsProcess, error) {
 				// split at null character
 				cmdString := string(bytes.SplitN(cmd, []byte{0}, 2)[0])
 
-				results = append(results, OsProcess{Pid: pid, PPid: ppid, Executable: cmdString})
+				results = append(results, OsProcess{Pid: pid, PPid: ppid, State: state, Executable: cmdString})
 			}
 		}
 	}
@@ -169,7 +170,7 @@ func getProcess() ([]OsProcess, error) {
 	procList := strings.Split(string(output), "\n")
 	for i := 1; i < len(procList); i++ {
 		parts := strings.Fields(procList[i])
-		if len(parts) < 3 {
+		if len(parts) < 4 {
 			continue
 		}
 		pid, err := strconv.Atoi(parts[0])
@@ -182,7 +183,12 @@ func getProcess() ([]OsProcess, error) {
 			continue
 		}
 
-		results = append(results, OsProcess{Pid: pid, PPid: ppid, Executable: parts[2]})
+		state := parts[2]
+		if len(state) > 1 {
+			state = string(state[0])
+		}
+
+		results = append(results, OsProcess{Pid: pid, PPid: ppid, State: state, Executable: parts[3]})
 	}
 	return results, nil
 }

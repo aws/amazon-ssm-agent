@@ -28,6 +28,7 @@ type OsProcess struct {
 	Pid        int
 	PPid       int
 	Executable string
+	State      string
 }
 
 // IExecutor is the interface type for ProcessExecutor.

@@ -71,9 +71,9 @@ func validateEnvironmentVariables(command *exec.Cmd) {
 }
 
 //Unix man: http://www.skrenta.com/rt/man/ps.1.html , return the process table of the current user, in agent it'll be root
-//verified on RHEL, Amazon Linux, Ubuntu, Centos, FreeBSD and Darwin
+//verified on Darwin
 var listProcessPs = func() ([]byte, error) {
-	return exec.Command("ps", "-e", "-o", "pid,ppid,command").CombinedOutput()
+	return exec.Command("ps", "-e", "-o", "pid,ppid,state,command").CombinedOutput()
 }
 
 func getProcess() ([]OsProcess, error) {
@@ -86,7 +86,7 @@ func getProcess() ([]OsProcess, error) {
 	procList := strings.Split(string(output), "\n")
 	for i := 1; i < len(procList); i++ {
 		parts := strings.Fields(procList[i])
-		if len(parts) < 3 {
+		if len(parts) < 4 {
 			continue
 		}
 		pid, err := strconv.Atoi(parts[0])
@@ -97,7 +97,13 @@ func getProcess() ([]OsProcess, error) {
 		if err != nil {
 			continue
 		}
-		results = append(results, OsProcess{Pid: pid, PPid: ppid, Executable: parts[2]})
+
+		state := parts[2]
+		if len(state) > 1 {
+			state = string(state[0])
+		}
+
+		results = append(results, OsProcess{Pid: pid, PPid: ppid, State: state, Executable: parts[3]})
 	}
 	return results, nil
 }

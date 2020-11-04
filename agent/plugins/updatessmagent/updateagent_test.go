@@ -618,7 +618,15 @@ func (u *fakeUtility) CreateInstanceContext(log log.T) (context *updateutil.Inst
 	return createStubInstanceContext(), nil
 }
 
+func (u *fakeUtility) CleanupCommand(log log.T, pid int) error {
+	return nil
+}
+
 func (u *fakeUtility) IsServiceRunning(log log.T, i *updateutil.InstanceContext) (result bool, err error) {
+	return true, nil
+}
+
+func (u *fakeUtility) IsProcessRunning(log log.T, pid int) (result bool, err error) {
 	return true, nil
 }
 
