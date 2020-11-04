@@ -31,7 +31,7 @@ import (
 
 const (
 	defaultLogFileName              = "AmazonSSMAgent-update.txt"
-	defaultWaitTimeForAgentToFinish = 2
+	defaultWaitTimeForAgentToFinish = 3
 	defaultStdoutFileName           = "stdout"
 	defaultStderrFileName           = "stderr"
 	defaultSSMAgentName             = "amazon-ssm-agent"
@@ -66,7 +66,7 @@ var (
 func init() {
 	log = ssmlog.GetUpdaterLogger(logger.DefaultLogDir, defaultLogFileName)
 
-	// Sleep 2 seconds to allow agent to finishing up it's work
+	// Sleep 3 seconds to allow agent to finishing up it's work
 	time.Sleep(defaultWaitTimeForAgentToFinish * time.Second)
 
 	updater = processor.NewUpdater()

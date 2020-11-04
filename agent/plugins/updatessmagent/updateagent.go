@@ -246,6 +246,24 @@ func runUpdateAgent(
 		return
 	}
 
+	// Sleep for 1 second and verify updater is running
+	time.Sleep(time.Second)
+	isRunning, procErr := util.IsProcessRunning(log, pid)
+	if procErr != nil {
+		log.Warnf("Failed to check if updater process is running: %s", err)
+	} else {
+		if !isRunning {
+			errMsg := "Updater died before updating, make sure your system is supported"
+			log.Error(errMsg)
+			output.MarkAsFailed(fmt.Errorf(errMsg))
+
+			util.CleanupCommand(log, pid)
+			return
+		} else {
+			log.Info("Updater is running")
+		}
+	}
+
 	output.MarkAsInProgress()
 	return
 }
