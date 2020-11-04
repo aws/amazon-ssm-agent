@@ -15,6 +15,7 @@
 package service
 
 import (
+	"crypto/tls"
 	"encoding/xml"
 	"testing"
 
@@ -30,6 +31,7 @@ import (
 var (
 	signer = &v4.Signer{
 		Credentials: credentials.NewStaticCredentials("AKID", "SECRET", "SESSION")}
+	tlsConfig  = &tls.Config{}
 	region     = "us-east-1"
 	instanceId = "i-12345678"
 	sessionId  = "s-12345678"
@@ -62,7 +64,7 @@ func TestCreateControlChannel(t *testing.T) {
 	mgsConfig.GetMgsEndpointFromRip = func(region string) string {
 		return mgsHost
 	}
-	makeRestcall = func(request []byte, methodType string, url string, region string, signer *v4.Signer) ([]byte, error) {
+	makeRestcall = func(request []byte, methodType string, url string, region string, signer *v4.Signer, config *tls.Config) ([]byte, error) {
 		output := &CreateControlChannelOutput{
 			TokenValue:           aws.String(token),
 			MessageSchemaVersion: aws.String(mgsConfig.MessageSchemaVersion),
@@ -85,7 +87,7 @@ func TestCreateDataChannel(t *testing.T) {
 	mgsConfig.GetMgsEndpointFromRip = func(region string) string {
 		return mgsHost
 	}
-	makeRestcall = func(request []byte, methodType string, url string, region string, signer *v4.Signer) ([]byte, error) {
+	makeRestcall = func(request []byte, methodType string, url string, region string, signer *v4.Signer, config *tls.Config) ([]byte, error) {
 		output := &CreateDataChannelOutput{
 			TokenValue:           aws.String(token),
 			MessageSchemaVersion: aws.String(mgsConfig.MessageSchemaVersion),
@@ -120,7 +122,8 @@ func TestGetBaseUrl(t *testing.T) {
 
 func getService() Service {
 	return &MessageGatewayService{
-		region: "us-east-1",
-		signer: signer,
+		region:    "us-east-1",
+		signer:    signer,
+		tlsConfig: tlsConfig,
 	}
 }

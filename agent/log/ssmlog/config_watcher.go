@@ -69,7 +69,7 @@ func (fileWatcher *FileWatcher) Start() {
 	err = fileWatcher.watcher.Add(dirPath)
 	if err != nil {
 		// Error adding the file to watcher
-		fileWatcher.log.Errorf("Error adding the directory to watcher: %v", err)
+		fileWatcher.log.Warnf("Error adding the directory '%s' to watcher: %v", dirPath, err)
 		return
 	}
 }

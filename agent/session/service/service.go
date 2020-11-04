@@ -16,6 +16,7 @@ package service
 
 import (
 	"bytes"
+	"crypto/tls"
 	"encoding/json"
 	"encoding/xml"
 	"errors"
@@ -34,6 +35,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	mgsconfig "github.com/aws/amazon-ssm-agent/agent/session/config"
+	"github.com/aws/amazon-ssm-agent/agent/tlsconfig"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/credentials/ec2rolecreds"
@@ -56,9 +58,10 @@ type Service interface {
 
 // MessageGatewayService is a service wrapper that delegates to the message gateway service sdk.
 type MessageGatewayService struct {
-	region string
-	tr     *http.Transport
-	signer *v4.Signer
+	region    string
+	tr        *http.Transport
+	signer    *v4.Signer
+	tlsConfig *tls.Config
 }
 
 // NewService creates a new service instance.
@@ -110,14 +113,15 @@ func NewService(log log.T, mgsConfig appconfig.MgsConfig, connectionTimeout time
 	}
 
 	return &MessageGatewayService{
-		region: aws.StringValue(region),
-		tr:     tr,
-		signer: v4Signer,
+		region:    aws.StringValue(region),
+		tr:        tr,
+		signer:    v4Signer,
+		tlsConfig: tlsconfig.GetDefaultTLSConfig(log),
 	}
 }
 
 // makeRestcall triggers rest api call.
-var makeRestcall = func(request []byte, methodType string, url string, region string, signer *v4.Signer) ([]byte, error) {
+var makeRestcall = func(request []byte, methodType string, url string, region string, signer *v4.Signer, tlsConfig *tls.Config) ([]byte, error) {
 	httpRequest, err := http.NewRequest(methodType, url, bytes.NewBuffer(request))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create http request: %s", err)
@@ -129,8 +133,10 @@ var makeRestcall = func(request []byte, methodType string, url string, region st
 		return nil, fmt.Errorf("failed to sign the request: %s", err)
 	}
 
+	tr := &http.Transport{TLSClientConfig: tlsConfig}
 	client := &http.Client{
-		Timeout: mgsClientTimeout,
+		Timeout:   mgsClientTimeout,
+		Transport: tr,
 	}
 
 	resp, err := client.Do(httpRequest)
@@ -211,7 +217,7 @@ func (mgsService *MessageGatewayService) CreateControlChannel(log log.T, createC
 		return nil, errors.New("unable to marshal the createControlChannelInput")
 	}
 
-	resp, err := makeRestcall(jsonValue, "POST", url, mgsService.region, mgsService.signer)
+	resp, err := makeRestcall(jsonValue, "POST", url, mgsService.region, mgsService.signer, mgsService.tlsConfig)
 	if err != nil {
 		return nil, fmt.Errorf("createControlChannel request failed: %s", err)
 	}
@@ -243,7 +249,7 @@ func (mgsService *MessageGatewayService) CreateDataChannel(log log.T, createData
 		return nil, errors.New("unable to marshal the createDataChannelInput")
 	}
 
-	resp, err := makeRestcall(jsonValue, "POST", url, mgsService.region, mgsService.signer)
+	resp, err := makeRestcall(jsonValue, "POST", url, mgsService.region, mgsService.signer, mgsService.tlsConfig)
 	if err != nil {
 		return nil, fmt.Errorf("createDataChannel request failed: %s", err)
 	}
