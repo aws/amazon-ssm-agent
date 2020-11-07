@@ -16,6 +16,7 @@ package platform
 
 import (
 	"fmt"
+	"net"
 	"testing"
 
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
@@ -60,4 +61,73 @@ func TestPlatformWithErr(t *testing.T) {
 	name, err := PlatformName(logObj)
 	assert.Equal(t, "Microsoft \xa9 sample R2 Server", name)
 	assert.NotNil(t, err)
+}
+
+func TestSelectIp_NoAddresses_ReturnsError(t *testing.T) {
+	actual, err := selectIp([]net.IP{})
+	assert.NotNil(t, err)
+	assert.Nil(t, actual)
+}
+
+func TestSelectIp_SingleAddress_ReturnsTheAddress(t *testing.T) {
+	candidates := []net.IP{
+		net.IPv4(10, 0, 0, 1),
+	}
+	actual, err := selectIp(candidates)
+	assert.Nil(t, err)
+	assert.Equal(t, candidates[0], actual)
+}
+
+func TestSelectIp_V4AndV6_ReturnsV4(t *testing.T) {
+	candidates := []net.IP{
+		{0x20, 0x01, 0, 0, 0, 0, 0, 0, 0, 0},
+		net.IPv4(10, 0, 0, 1),
+	}
+	actual, err := selectIp(candidates)
+	assert.Nil(t, err)
+	assert.Equal(t, candidates[1], actual)
+}
+
+func TestSelectIp_LinkLocalAndNonLinkLocal_ReturnsNonLinkLocal(t *testing.T) {
+	candidates := []net.IP{
+		net.IPv4(169, 254, 0, 1),
+		net.IPv4(10, 0, 0, 1),
+	}
+	actual, err := selectIp(candidates)
+	assert.Nil(t, err)
+	assert.Equal(t, candidates[1], actual)
+}
+
+func TestSelectIp_LoopbackAndNonLoopback_ReturnsNonLoopback(t *testing.T) {
+	candidates := []net.IP{
+		net.IPv6loopback,
+		{0x20, 0x01, 0, 0, 0, 0, 0, 0, 0, 0},
+		net.IPv4(127, 0, 0, 1),
+	}
+	actual, err := selectIp(candidates)
+	assert.Nil(t, err)
+	assert.Equal(t, candidates[1], actual)
+}
+
+func TestSelectIp_OnlyLinkLocalAndLoopback_ReturnsFirstOne(t *testing.T) {
+	candidates := []net.IP{
+		net.IPv4(169, 254, 0, 1),
+		net.IPv4(169, 254, 0, 2),
+		net.IPv6linklocalallnodes,
+		net.IPv6loopback,
+	}
+	actual, err := selectIp(candidates)
+	assert.Nil(t, err)
+	assert.Equal(t, candidates[0], actual)
+}
+
+func TestSelectIp_IgnoresNils(t *testing.T) {
+	candidates := []net.IP{
+		net.IPv4(169, 254, 0, 1),
+		nil,
+		net.IPv4(10, 0, 0, 1),
+	}
+	actual, err := selectIp(candidates)
+	assert.Nil(t, err)
+	assert.Equal(t, candidates[2], actual)
 }
