@@ -128,59 +128,76 @@ func getServiceEndpoint(region string, service string, endpoint string) string {
 }
 
 // IP of the network interface
-func IP() (ip string, err error) {
-
+func IP() (selected string, err error) {
 	var interfaces []net.Interface
-	if interfaces, err = net.Interfaces(); err != nil {
-		return "", fmt.Errorf("Failed to load network interfaces. %v", err)
+	if interfaces, err = net.Interfaces(); err == nil {
+		interfaces = filterInterface(interfaces)
+		sort.Sort(byIndex(interfaces))
+		candidates := make([]net.IP, 0)
+		for _, i := range interfaces {
+			var addrs []net.Addr
+			if addrs, err = i.Addrs(); err != nil {
+				continue
+			}
+			for _, addr := range addrs {
+				switch v := addr.(type) {
+				case *net.IPAddr:
+					candidates = append(candidates, v.IP.To4())
+					candidates = append(candidates, v.IP.To16())
+				case *net.IPNet:
+					candidates = append(candidates, v.IP.To4())
+					candidates = append(candidates, v.IP.To16())
+				}
+			}
+		}
+		selectedIp, err := selectIp(candidates)
+		if err == nil {
+			selected = selectedIp.String()
+		}
+	} else {
+		err = fmt.Errorf("failed to load network interfaces: %v", err)
 	}
 
-	interfaces = filterInterface(interfaces)
-	sort.Sort(byIndex(interfaces))
+	if err != nil {
+		err = fmt.Errorf("failed to determine IP address: %v", err)
+	}
 
-	var foundIP net.IP
+	return
+}
 
-	// search for IPv4
-	for _, i := range interfaces {
-		var addrs []net.Addr
-		if addrs, err = i.Addrs(); err != nil {
-			continue
-		}
-		for _, addr := range addrs {
-			switch v := addr.(type) {
-			case *net.IPAddr:
-				foundIP = v.IP.To4()
-			case *net.IPNet:
-				foundIP = v.IP.To4()
-			}
-
-			if foundIP != nil {
-				return foundIP.String(), nil
+// Selects a single IP address to be reported for this instance.
+func selectIp(candidates []net.IP) (result net.IP, err error) {
+	for _, ip := range candidates {
+		if ip != nil && !ip.IsUnspecified() {
+			if result == nil {
+				result = ip
+			} else if isLoopbackOrLinkLocal(result) {
+				// Prefer addresses that are not loopbacks or link-local
+				if !isLoopbackOrLinkLocal(ip) {
+					result = ip
+				}
+			} else if !isLoopbackOrLinkLocal(ip) {
+				// Among addresses that are not loopback or link-local, prefer IPv4
+				if !isIpv4(result) && isIpv4(ip) {
+					result = ip
+				}
 			}
 		}
 	}
 
-	// search for IPv6
-	for _, i := range interfaces {
-		var addrs []net.Addr
-		if addrs, err = i.Addrs(); err != nil {
-			continue
-		}
-		for _, addr := range addrs {
-			switch v := addr.(type) {
-			case *net.IPAddr:
-				foundIP = v.IP.To16()
-			case *net.IPNet:
-				foundIP = v.IP.To16()
-			}
-
-			if foundIP != nil {
-				return foundIP.String(), nil
-			}
-		}
+	if result == nil {
+		err = fmt.Errorf("no IP addresses found")
 	}
 
-	return "", fmt.Errorf("No IP addresses found.")
+	return
+}
+
+func isLoopbackOrLinkLocal(ip net.IP) bool {
+	return ip.IsLoopback() || ip.IsLinkLocalUnicast() || ip.IsLinkLocalMulticast()
+}
+
+func isIpv4(ip net.IP) bool {
+	return ip.To4() != nil
 }
 
 // filterInterface removes interface that's not up or is a loopback/p2p
