@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+set -e
+
 echo "****************************************"
 echo "Creating tar file for Mac OS X amd64    "
 echo "****************************************"
@@ -34,7 +36,7 @@ chmod 600 ${ROOTFS}/Library/LaunchDaemons/*
 echo "Creating tar"
 (
 cd ${ROOTFS}
-gtar czf $TAR_NAME * --owner=0 --group=0
+tar czf $TAR_NAME * --owner=0 --group=0
 )
 
 echo "Moving tar"
