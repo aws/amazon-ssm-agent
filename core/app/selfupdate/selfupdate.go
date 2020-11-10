@@ -52,7 +52,7 @@ type UpdateResult struct {
 
 type SelfUpdate struct {
 	updateJob            *scheduler.Job
-	updateFrequency      int
+	updateFrequencyHrs   int
 	context              context.ICoreAgentContext
 	fileManager          artifact.IArtifact
 	filsys               fileutil.IFileutil
@@ -82,7 +82,7 @@ type ISelfUpdate interface {
 
 func NewSelfUpdater(context context.ICoreAgentContext) *SelfUpdate {
 	selfupdateContext := context.With("[" + name + "]")
-	selfupdateContext.Log().Info("Initializing self update ...")
+	selfupdateContext.Log().Debug("Initializing self update ...")
 	fileManager := artifact.NewSelfUpdateArtifact(selfupdateContext.Log(), *context.AppConfig())
 	fileutl := fileutil.NewFileUtil(context.Log())
 
@@ -106,6 +106,7 @@ func (u *SelfUpdate) Start() {
 
 	// start the self update process when customer enable it
 	if appConfig.Agent.SelfUpdate == true {
+		log.Info("Self update is enabled. Starting scheduling ...")
 		// initialize the schedule days
 		u.loadScheduledFrequency(*appConfig)
 
@@ -121,14 +122,14 @@ func (u *SelfUpdate) Start() {
 
 func (u *SelfUpdate) loadScheduledFrequency(config appconfig.SsmagentConfig) {
 	log := u.context.Log()
-	u.updateFrequency = config.Agent.SelfUpdateScheduleDay
-	log.Debugf("%v frequency is: %d day(s).", name, u.updateFrequency)
+	u.updateFrequencyHrs = config.Agent.SelfUpdateScheduleDay * 24 // converting to hours
+	log.Debugf("%v frequency is: %d day(s).", name, config.Agent.SelfUpdateScheduleDay)
 }
 
 // Generate the schedule job for self update via s3  periodically
 func (u *SelfUpdate) scheduleSelfUpdateS3Job(log logger.T) {
 	var err error
-	if u.updateJob, err = scheduler.Every(u.updateFrequency).Day().NotImmediately().Run(u.updateFromS3WithDelay); err != nil {
+	if u.updateJob, err = scheduler.Every(u.updateFrequencyHrs).Hours().NotImmediately().Run(u.updateFromS3WithDelay); err != nil {
 		log.Errorf("unable to schedule self update job. %v", err)
 	}
 	return

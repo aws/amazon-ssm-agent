@@ -73,7 +73,7 @@ func (suite *SelfUpdateTestSuite) SetupTest() {
 
 func (suite *SelfUpdateTestSuite) TestLoadScheduleDaysWithinLimit() {
 
-	assert.EqualValues(suite.T(), suite.selfUpdater.updateFrequency, 0,
+	assert.EqualValues(suite.T(), suite.selfUpdater.updateFrequencyHrs, 0,
 		"Update frequency should 0 before initialization")
 
 	config := suite.contextMock.AppConfig()
@@ -82,7 +82,7 @@ func (suite *SelfUpdateTestSuite) TestLoadScheduleDaysWithinLimit() {
 	config.Agent.SelfUpdateScheduleDay = 4
 	suite.selfUpdater.loadScheduledFrequency(*config)
 
-	assert.Equal(suite.T(), 4, suite.selfUpdater.updateFrequency)
+	assert.Equal(suite.T(), 4, suite.selfUpdater.updateFrequencyHrs/24)
 }
 
 func (suite *SelfUpdateTestSuite) TestGetPlatformNameFailed() {
