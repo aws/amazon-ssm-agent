@@ -53,7 +53,9 @@ prepack:: cpy-plugins copy-win-dep prepack-linux prepack-linux-arm64 prepack-lin
 
 package:: create-package-folder package-linux package-windows package-darwin
 
-release:: clean quick-integtest checkstyle pre-release build prepack package finalize
+build-release:: clean quick-integtest checkstyle pre-release build prepack package finalize
+
+release:: clean quick-integtest checkstyle pre-release cpy-plugins copy-win-dep finalize
 
 package-src:: clean quick-integtest checkstyle pre-release cpy-plugins finalize
 

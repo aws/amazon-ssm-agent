@@ -39,21 +39,30 @@ SSM Agent also enables the Session Manager capability that lets you manage your 
 ## Feedback
 
 Thank you for helping us to improve Systems Manager, Run Command and Session Manager. Please send your questions or comments to [Systems Manager Forums](https://forums.aws.amazon.com/forum.jspa?forumID=185&start=0)
-  
-## Building and Running from source
+
+### Building inside docker container (Recommended)
+* Install docker: [Install CentOS](https://docs.docker.com/engine/install/centos/)
+
+* Build image
+```
+docker build -t ssm-agent-build-image .
+```
+* Build the agent
+```
+docker run -it --rm --name ssm-agent-build-container -v `pwd`:/amazon-ssm-agent ssm-agent-build-image make build-release
+```
+
+### Building on Linux
 
 * Install go [Getting started](https://golang.org/doc/install)
 
-* Install rpm-build
-```
-sudo yum install -y rpmdevtools rpm-build
-```
+* Install rpm-build and rpmdevtools
 
 * [Cross Compile SSM Agent](https://www.ardanlabs.com/blog/2013/10/cross-compile-your-go-programs.html)
 
 * Run `make build` to build the SSM Agent for Linux, Debian, Windows environment.
 
-* Run `make release` to build the agent and also packages it into a RPM, DEB and ZIP package.
+* Run `make build-release` to build the agent and also packages it into a RPM, DEB and ZIP package.
 
 The following folders are generated when the build completes:
 ```
@@ -61,6 +70,8 @@ bin/debian_386
 bin/debian_amd64
 bin/linux_386
 bin/linux_amd64
+bin/linux_arm
+bin/linux_arm64
 bin/windows_386
 bin/windows_amd64
 ```
@@ -68,7 +79,7 @@ bin/windows_amd64
     * Clone the repo from https://github.com/masatma/winpty.git
     * Follow instructions on https://github.com/rprichard/winpty to build winpty 64-bit binaries
     * Copy the winpty.dll and winpty-agent.exe to the bin/SessionManagerShell folder
-For the Windows Operating System, Session Manager is only supported on Windows Server 2008 R2 through Windows Server 2016 64-bit versions.
+For the Windows Operating System, Session Manager is only supported on Windows Server 2008 R2 through Windows Server 2019 64-bit versions.
 
 Please follow the user guide to [copy and install the SSM Agent](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/install-ssm-agent.html)
 
@@ -93,7 +104,8 @@ The following targets are available. Each may be run with `make <target>`.
 | Make Target              | Description |
 |:-------------------------|:------------|
 | `build`                  | *(Default)* `build` builds the agent for Linux, Debian, Darwin and Windows amd64 and 386 environment |
-| `release`                | `release` checks code style and coverage, builds the agent and also packages it into a RPM, DEB and ZIP package |
+| `build-release`          | `build-release` checks code style and coverage, builds the agent and also packages it into a RPM, DEB and ZIP package |
+| `release`                | `release` checks code style and coverage, runs tests, packages all dependencies to the bin folder. |
 | `package`                | `package` packages build result into a RPM, DEB and ZIP package |
 | `pre-build`              | `pre-build` goes through Tools/src folder to make sure all the script files are executable |
 | `checkstyle`             | `checkstyle` runs the checkstyle script |
