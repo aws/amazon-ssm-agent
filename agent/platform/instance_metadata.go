@@ -143,11 +143,11 @@ func (c EC2MetadataClient) ReadResource(path string) ([]byte, error) {
 	var resp []byte
 	var err error
 
-	if resp, err = c.readResourceFromMetaDataV1(endpoint); err == nil {
+	if resp, err = c.readResourceFromMetaDataV2(endpoint); err == nil {
 		return resp, err
 	}
 
-	if resp, err = c.readResourceFromMetaDataV2(endpoint); err == nil {
+	if resp, err = c.readResourceFromMetaDataV1(endpoint); err == nil {
 		return resp, err
 	}
 
