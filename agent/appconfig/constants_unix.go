@@ -27,35 +27,38 @@ import (
 
 const (
 
+	// AgentExtensions specified the root folder for various kinds of downloaded content
+	AgentData = "/var/lib/amazon/ssm/"
+
 	// PackageRoot specifies the directory under which packages will be downloaded and installed
-	PackageRoot = "/var/lib/amazon/ssm/packages"
+	PackageRoot = AgentData + "packages"
 
 	// PackageLockRoot specifies the directory under which package lock files will reside
-	PackageLockRoot = "/var/lib/amazon/ssm/locks/packages"
+	PackageLockRoot = AgentData + "locks/packages"
 
 	// PackagePlatform is the platform name to use when looking for packages
 	PackagePlatform = "linux"
 
 	// DaemonRoot specifies the directory where daemon registration information is stored
-	DaemonRoot = "/var/lib/amazon/ssm/daemons"
+	DaemonRoot = AgentData + "daemons"
 
 	// LocalCommandRoot specifies the directory where users can submit command documents offline
-	LocalCommandRoot = "/var/lib/amazon/ssm/localcommands"
+	LocalCommandRoot = AgentData + "localcommands"
 
 	// LocalCommandRootSubmitted is the directory where locally submitted command documents
 	// are moved when they have been picked up
-	LocalCommandRootSubmitted = "/var/lib/amazon/ssm/localcommands/submitted"
-	LocalCommandRootCompleted = "/var/lib/amazon/ssm/localcommands/completed"
+	LocalCommandRootSubmitted = AgentData + "localcommands/submitted"
+	LocalCommandRootCompleted = AgentData + "localcommands/completed"
 
 	// LocalCommandRootInvalid is the directory where locally submitted command documents
 	// are moved if the service cannot validate the document (generally impossible via cli)
-	LocalCommandRootInvalid = "/var/lib/amazon/ssm/localcommands/invalid"
+	LocalCommandRootInvalid = AgentData + "localcommands/invalid"
 
 	// DownloadRoot specifies the directory under which files will be downloaded
-	DownloadRoot = "/var/log/amazon/ssm/download/"
+	DownloadRoot = AgentData + "download/"
 
 	// DefaultDataStorePath represents the directory for storing system data
-	DefaultDataStorePath = "/var/lib/amazon/ssm/"
+	DefaultDataStorePath = AgentData
 
 	// EC2ConfigDataStorePath represents the directory for storing ec2 config data
 	EC2ConfigDataStorePath = "/var/lib/amazon/ec2config/"
@@ -64,16 +67,16 @@ const (
 	EC2ConfigSettingPath = "/var/lib/amazon/ec2configservice/"
 
 	// UpdaterArtifactsRoot represents the directory for storing update related information
-	UpdaterArtifactsRoot = "/var/lib/amazon/ssm/update/"
+	UpdaterArtifactsRoot = AgentData + "update/"
 
 	// UpdaterPidLockfile represents the location of the updater lockfile
-	UpdaterPidLockfile = DefaultDataStorePath + "update.lock"
+	UpdaterPidLockfile = AgentData + "update.lock"
 
 	// DefaultPluginPath represents the directory for storing plugins in SSM
-	DefaultPluginPath = "/var/lib/amazon/ssm/plugins"
+	DefaultPluginPath = AgentData + "plugins"
 
 	// ManifestCacheDirectory represents the directory for storing all downloaded manifest files
-	ManifestCacheDirectory = "/var/lib/amazon/ssm/manifests"
+	ManifestCacheDirectory = AgentData + "manifests"
 
 	// List all plugin names, unfortunately golang doesn't support const arrays of strings
 
@@ -81,10 +84,10 @@ const (
 	RebootExitCode = 194
 
 	// Default Custom Inventory Inventory Folder
-	DefaultCustomInventoryFolder = DefaultDataStorePath + "inventory/custom"
+	DefaultCustomInventoryFolder = AgentData + "inventory/custom"
 
 	// Default Session files Folder
-	SessionFilesPath = DefaultDataStorePath + "session"
+	SessionFilesPath = AgentData + "session"
 
 	// PowerShellPluginCommandArgs is the arguments of powershell.exe to be used by the runPowerShellScript plugin
 	PowerShellPluginCommandArgs = "-f"
