@@ -3,19 +3,15 @@ echo "****************************************"
 echo "Copying DomainJoin and CloudWatch binaries"
 echo "****************************************"
 
-BIN_FOLDER="$BGO_SPACE/bin/"
+BIN_FOLDER="$GO_SPACE/bin/"
 
 CLOUDWATCH_FOLDER="${BIN_FOLDER}awsCloudwatch/"
 SESSION_MANAGER_SHELL_FOLDER="${BIN_FOLDER}SessionManagerShell/"
 
-PLUGIN_ARTIFACTS="`brazil-path run.configfarm.artifacts`/artifacts"
-PLUGIN_DEPENDENCIES="$BGO_SPACE/packaging/dependencies"
+PLUGIN_DEPENDENCIES="$GO_SPACE/packaging/dependencies"
 
 # Set DomainJoin path
-DJ_DEPENDENCIES=$PLUGIN_ARTIFACTS
-if [ ! -f "$DJ_DEPENDENCIES/AWS.DomainJoin.exe" ]; then
- DJ_DEPENDENCIES=$PLUGIN_DEPENDENCIES
-fi
+DJ_DEPENDENCIES=$PLUGIN_DEPENDENCIES
 
 # Copy DomainJoin dependencies
 cp $DJ_DEPENDENCIES/AWS.DomainJoin.exe $BIN_FOLDER
@@ -23,10 +19,7 @@ cp $DJ_DEPENDENCIES/AWS.DomainJoin.exe.config $BIN_FOLDER
 cp $DJ_DEPENDENCIES/log4net.config $BIN_FOLDER
 
 # Set CloudWatch path
-CW_DEPENDENCIES=$PLUGIN_ARTIFACTS
-if [ ! -f "$CW_DEPENDENCIES/AWS.CloudWatch.exe" ]; then
- CW_DEPENDENCIES="$PLUGIN_DEPENDENCIES/awsCloudwatch"
-fi
+CW_DEPENDENCIES="$PLUGIN_DEPENDENCIES/awsCloudwatch"
 
 # Prepare CloudWatch folder
 if [[ -d "$CLOUDWATCH_FOLDER" ]]; then
@@ -68,10 +61,7 @@ cp $CW_DEPENDENCIES/SmartThreadPool.dll $CLOUDWATCH_FOLDER
 cp $CW_DEPENDENCIES/System.Threading.dll $CLOUDWATCH_FOLDER
 
 # Set Session path
-SESSION_DEPENDENCIES=$PLUGIN_ARTIFACTS
-if [ ! -f "$SESSION_DEPENDENCIES/winpty/winpty.dll" ]; then
- SESSION_DEPENDENCIES="$PLUGIN_DEPENDENCIES"
-fi
+SESSION_DEPENDENCIES="$PLUGIN_DEPENDENCIES"
 
 # Prepare Session folder
 if [[ -d "$SESSION_MANAGER_SHELL_FOLDER" ]]; then

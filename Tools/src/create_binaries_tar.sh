@@ -12,4 +12,4 @@ echo "************************************************************"
 echo "Creating $FOLDER binary tar file"
 echo "************************************************************"
 
-tar --owner=0 --group=0 -zcvf ${BGO_SPACE}/bin/${FOLDER}/amazon-ssm-agent-binaries.tar.gz  -C ${BGO_SPACE}/bin/${FOLDER}/ amazon-ssm-agent ssm-agent-worker ssm-document-worker ssm-session-worker ssm-session-logger ssm-cli
+tar --owner=0 --group=0 -zcvf ${GO_SPACE}/bin/${FOLDER}/amazon-ssm-agent-binaries.tar.gz  -C ${GO_SPACE}/bin/${FOLDER}/ amazon-ssm-agent ssm-agent-worker ssm-document-worker ssm-session-worker ssm-session-logger ssm-cli

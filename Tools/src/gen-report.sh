@@ -7,9 +7,9 @@ go get github.com/alecthomas/gometalinter
 go get github.com/tools/godep
 
 echo "Setup Path"
-BIN_FOLDER=${BGO_SPACE}/vendor/bin
-LOCAL_REPORT_CARD_SRC_OVERRIDE=${BGO_SPACE}/Tools/src/goreportcard/checks.go
-SOURCE_FOLDER=${BGO_SPACE}/vendor/src/github.com/gojp/goreportcard
+BIN_FOLDER=${GO_SPACE}/vendor/bin
+LOCAL_REPORT_CARD_SRC_OVERRIDE=${GO_SPACE}/Tools/src/goreportcard/checks.go
+SOURCE_FOLDER=${GO_SPACE}/vendor/src/github.com/gojp/goreportcard
 REPOS_PACKAGE=${SOURCE_FOLDER}/repos/src/github.com/aws/amazon-ssm-agent
 PATH=${BIN_FOLDER}:${PATH}
 
@@ -23,7 +23,7 @@ ${BIN_FOLDER}/godep save
 echo "Copy amazon-ssm-agent package to the gocardreport repos directory"
 rm -rf ${REPOS_PACKAGE}
 mkdir -p ${REPOS_PACKAGE}
-cp -R ${BGO_SPACE}/agent ${REPOS_PACKAGE}/agent/
+cp -R ${GO_SPACE}/agent ${REPOS_PACKAGE}/agent/
 
 echo "Start up goreportcard"
 cd ${SOURCE_FOLDER}
