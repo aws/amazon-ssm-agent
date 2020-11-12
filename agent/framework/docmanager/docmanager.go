@@ -115,9 +115,29 @@ func (d *DocumentFileMgr) GetDocumentState(log log.T, fileName, instanceID, loca
 	absoluteFileName := path.Join(filepath, fileName)
 
 	var commandState contracts.DocumentState
-	err := jsonutil.UnmarshalFile(absoluteFileName, &commandState)
-	if err != nil {
-		log.Errorf("encountered error with message %v while reading Interim state of command from file - %v", err, fileName)
+	var count, retryLimit int = 0, 3
+
+	// retry to avoid sync problem, which arises when OfflineService and MessageDeliveryService try to access the file at the same time
+	for count < retryLimit {
+		err := jsonutil.UnmarshalFile(absoluteFileName, &commandState)
+		if err != nil {
+			log.Errorf("encountered error with message %v while reading Interim state of command from file - %v", err, fileName)
+			count += 1
+			time.Sleep(500 * time.Millisecond)
+			continue
+		} else {
+			//logging interim state as read from the file
+			jsonString, err := jsonutil.Marshal(commandState)
+			if err != nil {
+				log.Errorf("encountered error with message %v while marshalling %v to string", err, commandState)
+			} else {
+				log.Tracef("interim CommandState read from file-system - %v", jsonutil.Indent(jsonString))
+			}
+			break
+		}
+	}
+
+	if count >= retryLimit {
 		if fileExists, _ := fileutil.LocalFileExist(absoluteFileName); fileExists {
 			if documentContents, err := fileutil.ReadAllText(absoluteFileName); err == nil {
 				log.Infof("Document contents: %v", documentContents)
@@ -126,14 +146,6 @@ func (d *DocumentFileMgr) GetDocumentState(log log.T, fileName, instanceID, loca
 			d.MoveDocumentState(log, fileName, instanceID, locationFolder, appconfig.DefaultLocationOfCorrupt)
 		}
 
-	} else {
-		//logging interim state as read from the file
-		jsonString, err := jsonutil.Marshal(commandState)
-		if err != nil {
-			log.Errorf("encountered error with message %v while marshalling %v to string", err, commandState)
-		} else {
-			log.Tracef("interim CommandState read from file-system - %v", jsonutil.Indent(jsonString))
-		}
 	}
 
 	return commandState
