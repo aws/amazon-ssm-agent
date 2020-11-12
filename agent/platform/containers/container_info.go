@@ -145,7 +145,7 @@ func (container *Container) TargetID() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return clusterName + "_" + taskId + "_" + containerId, nil
+	return "ecs:" + clusterName + "_" + taskId + "_" + containerId, nil
 }
 
 // ContainerID returns the current container identifier
