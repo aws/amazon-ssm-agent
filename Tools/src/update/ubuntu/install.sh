@@ -8,16 +8,53 @@ function error_exit
   exit 1
 }
 
+function get_installed_agent_version {
+  dpkg-query -f='${Status}\t${version}\n' -W amazon-ssm-agent | grep "^install ok installed" | awk -F'\t' '{print $2}'
+}
+
+# helper function to check if agent is installed
+function is_agent_installed {
+  INSTALLED_AGENT_VERSION=`get_installed_agent_version`
+  DEB_AGENT_VERSION=`dpkg -I amazon-ssm-agent.deb | grep '^ Version: ' | awk '{print $2}'`
+
+  if [ -z "$INSTALLED_AGENT_VERSION" ]
+  then
+    echo "Failed to get installed agent version"
+    # 1 == false
+    return 1
+  fi
+
+  if [ -z "$DEB_AGENT_VERSION" ]
+  then
+    echo "Failed to get deb agent version"
+    # 1 == false
+    return 1
+  fi
+
+  if [ "$INSTALLED_AGENT_VERSION" == "$DEB_AGENT_VERSION" ]
+  then
+    echo "Correct agent version '$INSTALLED_AGENT_VERSION' is installed"
+    # 0 == true
+    return 0
+  else
+    echo "Incorrect agent version is installed"
+    echo "  Installed agent version: $INSTALLED_AGENT_VERSION"
+    echo "  Requested agent version: $DEB_AGENT_VERSION"
+    # 1 == false
+    return 1
+  fi
+}
+
 # check parameters for registering managed instance
 DO_REGISTER=false
 if [ "$1" == "register-managed-instance" ]; then
   if [ $# -eq 4 ]; then
-		DO_REGISTER=true
-		RMI_CODE=$2
-		RMI_ID=$3
-		RMI_REGION=$4
+    DO_REGISTER=true
+    RMI_CODE=$2
+    RMI_ID=$3
+    RMI_REGION=$4
   else
-		error_exit '[ERROR] Not enough parameters for RegisterManagedInstance.'
+    error_exit '[ERROR] Not enough parameters for RegisterManagedInstance.'
   fi
 fi
 
@@ -38,49 +75,69 @@ if [[ "$(cat /proc/1/comm)" == "init" ]]; then
   dpkg -i amazon-ssm-agent.deb
   pmExit=$?
 
+  agentVersion=$(get_installed_agent_version)
+  echo "Installed version: '$agentVersion'"
+
   if [ "$DO_REGISTER" = true ]; then
     /sbin/stop amazon-ssm-agent
     amazon-ssm-agent -register -code "$RMI_CODE" -id "$RMI_ID" -region "$RMI_REGION"
   fi
 
-  # echo "Starting agent"
+  echo "Starting agent"
   /sbin/start amazon-ssm-agent
-  # echo "Status"
+
+  echo "Status"
   status amazon-ssm-agent
 
   if [ "$pmExit" -ne 0 ]; then
     echo "Package manager failed with exit code '$pmExit'"
+
+    if is_agent_installed; then
+      echo "The agent installed successfully"
+      exit 0
+    fi
+
     exit 125
   fi
 
 elif [[ "$(cat /proc/1/comm)" == "systemd" ]]; then
   if [[ "$(systemctl is-active amazon-ssm-agent)" == "active" ]]; then
-		# echo "-> Agent is running in the instance"
-		systemctl stop amazon-ssm-agent
-		# echo "Agent stopped"
-		systemctl daemon-reload
-		# echo "Reload daemon" 
-			# echo "Installing agent"
+    echo "-> Agent is running in the instance"
+    systemctl stop amazon-ssm-agent
+    echo "Agent stopped"
+    systemctl daemon-reload
+    echo "Reload daemon"
   else
-		echo "-> Agent is not running on the instance."
+    echo "-> Agent is not running on the instance."
   fi
 
-  # echo "Installing agent"
+  echo "Installing agent"
   dpkg -i amazon-ssm-agent.deb
   pmExit=$?
 
   if [ "$DO_REGISTER" = true ]; then
-		systemctl stop amazon-ssm-agent
-		amazon-ssm-agent -register -code "$RMI_CODE" -id "$RMI_ID" -region "$RMI_REGION"
+    systemctl stop amazon-ssm-agent
+    amazon-ssm-agent -register -code "$RMI_CODE" -id "$RMI_ID" -region "$RMI_REGION"
   fi
 
-  # echo "Starting agent"
+  agentVersion=$(get_installed_agent_version)
+  echo "Installed version: '$agentVersion'"
+
+  echo "Starting agent"
   systemctl daemon-reload
   systemctl start amazon-ssm-agent
+
+  echo "Status"
   systemctl status amazon-ssm-agent
 
   if [ "$pmExit" -ne 0 ]; then
     echo "Package manager failed with exit code '$pmExit'"
+
+    if is_agent_installed; then
+      echo "The agent installed successfully"
+      exit 0
+    fi
+
     exit 125
   fi
 
