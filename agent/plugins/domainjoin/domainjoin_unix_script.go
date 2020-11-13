@@ -226,24 +226,6 @@ install_components() {
     return 0
 }
 
-######################################################################
-##### Retrieve Service Account Credentials from Secrets Manager   ####
-######################################################################
-get_servicecreds() {
-    SECRET_ID="${SECRET_ID_PREFIX}/$DIRECTORY_ID/seamless-domain-join"
-    secret=$(/usr/local/bin/aws secretsmanager get-secret-value --secret-id "$SECRET_ID" --region $REGION 2>/dev/null)
-    DOMAIN_USERNAME=$(echo $secret |  python -c 'import sys, json; obj=json.load(sys.stdin); print(obj["SecretString"])' | python -c 'import json,sys; obj=json.load(sys.stdin); print(obj["awsSeamlessDomainUsername"])')
-    if [ $? -ne 0 ]; then
-        echo "***Failed: Cannot find awsSeamlessDomainUsername in $SECRET_ID in Secrets Manager"
-        exit 1
-    fi
-    DOMAIN_PASSWORD=$(echo $secret |  python -c 'import sys, json; obj=json.load(sys.stdin); print(obj["SecretString"])' | python -c 'import json,sys; obj=json.load(sys.stdin); print(obj["awsSeamlessDomainPassword"])')
-    if [ $? -ne 0 ]; then
-        echo "***Failed: aws secretsmanager get-secret-value --secret-id $SECRET_ID --region $REGION"
-        exit 1
-    fi
-}
-
 ##################################################
 ## Setup resolv.conf and also dhclient.conf ######
 ## to prevent overwriting of resolv.conf    ######
@@ -409,10 +391,16 @@ is_directory_reachable() {
 do_domainjoin() {
     MAX_RETRIES=10
     for i in $(seq 1 $MAX_RETRIES)
-    do
+    do	
+    	# Generate randon, one-time password
+    	random_password=$(date +%s | sha256sum | base64 | head -c 15 ; echo)
+	
         if [ -z "$DIRECTORY_OU" ]; then
-            LOG_MSG=$(echo $DOMAIN_PASSWORD | realm join --client-software=winbind -U ${DOMAIN_USERNAME}@${DIRECTORY_NAME} "$DIRECTORY_NAME" -v 2>&1)
+	    # Register computer to AD
+	    LOG_MSG=$(aws --region $REGION ds create-computer --directory-id $DIRECTORY_ID --computer-name $HOSTNAME --password $random_password 2>&1 || continue)
+            LOG_MSG=$(echo $DOMAIN_PASSWORD | realm join --client-software=winbind -U ${DOMAIN_USERNAME}@${DIRECTORY_NAME} "$DIRECTORY_NAME" -v --one-time-password $random_password 2>&1)
         else
+	    LOG_MSG=$(aws --region $REGION ds create-computer --directory-id $DIRECTORY_ID --computer-name $HOSTNAME --password $random_password --organizational-unit-distinguished-name "$DIRECTORY_OU" 2>&1 || continue)
             LOG_MSG=$(echo $DOMAIN_PASSWORD | realm join --client-software=winbind -U ${DOMAIN_USERNAME}@${DIRECTORY_NAME} "$DIRECTORY_NAME" --computer-ou="$DIRECTORY_OU" -v 2>&1)
         fi
         STATUS=$?
