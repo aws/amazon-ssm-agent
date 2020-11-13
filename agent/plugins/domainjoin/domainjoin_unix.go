@@ -289,9 +289,11 @@ func makeArguments(log log.T, scriptPath string, pluginInput DomainJoinPluginInp
 	}
 
 	buffer.WriteString(DnsAddressesArgs)
+	buffer.WriteString(" ")
 	for index := 0; index < len(pluginInput.DnsIpAddresses); index++ {
-		buffer.WriteString(" ")
-
+		if index != 0 {
+			buffer.WriteString(",")
+		}
 		if isShellInjection(pluginInput.DnsIpAddresses[index]) {
 			return "", fmt.Errorf("Shell command injection string " + pluginInput.DnsIpAddresses[index])
 		}

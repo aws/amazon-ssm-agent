@@ -160,7 +160,7 @@ func TestMakeArguments(t *testing.T) {
 
 	domainJoinInput := generateDomainJoinPluginInput(testDirectoryId, testDirectoryName, []string{"172.31.4.141", "172.31.21.240"})
 	commandRes, _ := makeArguments(logger, "./aws_domainjoin.sh", domainJoinInput)
-	expected := "./aws_domainjoin.sh --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --dns-addresses 172.31.4.141 172.31.21.240"
+	expected := "./aws_domainjoin.sh --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --dns-addresses 172.31.4.141,172.31.21.240"
 	assert.Equal(t, expected, commandRes)
 
 	domainJoinInput = generateDomainJoinPluginInput(testDirectoryId, testDirectoryName, []string{"8.8.8.8", "8.8.8.8[[["})
