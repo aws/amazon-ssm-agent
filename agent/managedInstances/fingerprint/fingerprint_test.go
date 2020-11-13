@@ -471,6 +471,10 @@ func (f fakeLog) Flush() {}
 
 func (f fakeLog) Close() {}
 
+func (f fakeLog) Closed() bool {
+	return false
+}
+
 func (f fakeLog) WithContext(_ ...string) log.T {
 	return nil
 }

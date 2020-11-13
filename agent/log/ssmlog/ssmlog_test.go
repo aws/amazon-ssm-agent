@@ -139,9 +139,11 @@ func TestReplaceLogger(t *testing.T) {
 	logger.Debug(msg)
 	logger.Flush()
 	assert.Equal(t, oldOutput, out.String())
+	assert.False(t, logger.Closed())
 
 	// Check for correct type of logger
 	wrapper, ok := logger.(*log.Wrapper)
+	loggerCopy := wrapper.Delegate.BaseLoggerInstance
 	assert.True(t, ok, "withContext did not create a logger of type *Wrapper. Conversion not ok")
 
 	// create new (to be replaced with) seelog logger that outputs to buffer
@@ -161,5 +163,8 @@ func TestReplaceLogger(t *testing.T) {
 	logger.Info(msg)
 	logger.Flush()
 	assert.Equal(t, newOutput, out.String())
+	assert.True(t, loggerCopy.Closed(), "Old logger should be closed")
+	assert.False(t, logger.Closed(), "Replacement logger should be open")
+	logger.Close()
 
 }

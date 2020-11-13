@@ -193,11 +193,19 @@ func (w *Wrapper) Close() {
 	//w.EventLogger.Close()
 }
 
+// Closed checks if logger is closed
+func (w *Wrapper) Closed() bool {
+	w.M.Lock()
+	defer w.M.Unlock()
+	return w.Delegate.BaseLoggerInstance.Closed()
+}
+
 // ReplaceDelegate replaces the delegate logger with a new logger
 func (w *Wrapper) ReplaceDelegate(newLogger BasicT) {
 	w.M.Lock()
 	defer w.M.Unlock()
 	w.Delegate.BaseLoggerInstance.Flush()
+	w.Delegate.BaseLoggerInstance.Close()
 	w.Delegate.BaseLoggerInstance = newLogger
 	w.Delegate.BaseLoggerInstance.Info("Logger Replaced. New Logger Used to log the message")
 }

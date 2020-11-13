@@ -69,6 +69,9 @@ type BasicT interface {
 
 	// Close flushes all the messages in the logger and closes it. The logger cannot be used after this operation.
 	Close()
+
+	// Closed checks if logger is closed
+	Closed() bool
 }
 
 // T represents structs capable of logging messages, and context management.

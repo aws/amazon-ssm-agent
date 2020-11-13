@@ -42,6 +42,7 @@ type consoleConfig struct {
 }
 
 func main() {
+	defer log.Close()
 	defer log.Flush()
 	commandPtr := flag.String("c", "", "a command")
 	scriptFilePtr := flag.String("f", "", "a script file")
@@ -137,10 +138,13 @@ func main() {
 		commands = []string{*commandPtr}
 	} else {
 		f, err := os.Open(*scriptFilePtr)
+
 		if err != nil {
 			log.Error(err)
 			return
 		}
+
+		defer f.Close()
 		scanner := bufio.NewScanner(f)
 		for scanner.Scan() {
 			commands = append(commands, scanner.Text())

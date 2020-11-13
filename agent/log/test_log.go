@@ -42,6 +42,7 @@ func NewMockLog() *Mock {
 	log.On("Warnf", mock.AnythingOfType("string"), mock.Anything).Return(mock.AnythingOfType("error"))
 	log.On("Tracef", mock.Anything, mock.Anything).Return()
 	log.On("Infof", mock.Anything, mock.Anything).Return()
+	log.On("Closed").Return(false)
 	return log
 }
 
@@ -61,6 +62,7 @@ func NewMockLogWithContext(ctx string) *Mock {
 	log.On("Warnf", mock.AnythingOfType("string"), mock.Anything).Return(mock.AnythingOfType("error"))
 	log.On("Tracef", mock.Anything, mock.Anything).Return()
 	log.On("Infof", mock.Anything, mock.Anything).Return()
+	log.On("Closed").Return(false)
 	return log
 }
 
@@ -192,4 +194,9 @@ func (_m *Mock) Flush() {
 // Close mocks the Close function.
 func (_m *Mock) Close() {
 	_m.Called()
+}
+
+func (_m *Mock) Closed() bool {
+	_m.Called()
+	return false
 }
