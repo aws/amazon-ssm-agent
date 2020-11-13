@@ -1,5 +1,20 @@
 Latest
 ===============
+- Add additional checks and logs to install scripts
+- Add retry logic to handle ssm document during reboot
+- Add dockerfile to build agent
+- Add script to package binaries to tar
+- Change default download directory on Linux to /var/lib/amazon/ssm
+- Extend SSM Agent ability to execute from relative path and use custom certificates
+- Fix IP address parsing in domain join plugin
+- Fix self update logging
+- Log fingerprint similarity check failures as ERROR and each changed machine property as WARN
+- Prefix ecs target id with 'ecs:'
+- Prefer non-link-local addresses to show in Console
+- Use IMDSv1 after IMDSv2
+
+3.0.356.0
+===============
 - Fail update document if updater fails to execute
 - Fallback to file-based IPC if named pipes are not available
 - Add support for streaming of logs to CloudWatch for Session Manager
