@@ -398,10 +398,10 @@ do_domainjoin() {
         if [ -z "$DIRECTORY_OU" ]; then
 	    # Register computer to AD
 	    LOG_MSG=$(aws --region $REGION ds create-computer --directory-id $DIRECTORY_ID --computer-name $HOSTNAME --password $random_password 2>&1 || continue)
-            LOG_MSG=$(echo $DOMAIN_PASSWORD | realm join "$DIRECTORY_NAME" -v --one-time-password $random_password 2>&1)
+            LOG_MSG=$(echo $DOMAIN_PASSWORD | realm join "$DIRECTORY_NAME" -v --one-time-password $random_password --computer-name $HOSTNAME  2>&1)
         else
 	    LOG_MSG=$(aws --region $REGION ds create-computer --directory-id $DIRECTORY_ID --computer-name $HOSTNAME --password $random_password --organizational-unit-distinguished-name "$DIRECTORY_OU" 2>&1 || continue)
-            LOG_MSG=$(echo $DOMAIN_PASSWORD | realm join "$DIRECTORY_NAME" --computer-ou="$DIRECTORY_OU" -v 2>&1)
+            LOG_MSG=$(echo $DOMAIN_PASSWORD | realm join "$DIRECTORY_NAME" --computer-ou="$DIRECTORY_OU" -v --computer-name $HOSTNAME  2>&1)
         fi
         STATUS=$?
         if [ $STATUS -eq 0 ]; then
