@@ -587,7 +587,6 @@ print_vars
 is_directory_reachable
 if [ $? -eq 0 ]; then
     config_nsswitch
-    get_servicecreds
     config_samba
     do_domainjoin
     reconfigure_samba
