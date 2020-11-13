@@ -66,7 +66,7 @@ set_hostname() {
     # Naming conventions in Active Directory
     # https://support.microsoft.com/en-us/help/909264/naming-conventions-in-active-directory-for-computers-domains-sites-and
     RANDOM_COMPUTER_NAME=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 6 | head -n 1)
-    COMPUTER_NAME=$(echo EC2AMAZ-$RANDOM_COMPUTER_NAME)
+    COMPUTER_NAME=$(echo EC2AMAZ-${RANDOM_COMPUTER_NAME^^})
     HOSTNAMECTL=$(which hostnamectl)
     if [ ! -z "$HOSTNAMECTL" ]; then
         hostnamectl set-hostname $COMPUTER_NAME.$DIRECTORY_NAME >/dev/null
@@ -396,12 +396,11 @@ do_domainjoin() {
     	random_password=$(date +%s | sha256sum | base64 | head -c 15 ; echo)
 	
         if [ -z "$DIRECTORY_OU" ]; then
-	    # Register computer to AD
-	    LOG_MSG=$(aws --region $REGION ds create-computer --directory-id $DIRECTORY_ID --computer-name $HOSTNAME --password $random_password 2>&1 || continue)
-            LOG_MSG=$(echo $DOMAIN_PASSWORD | realm join "$DIRECTORY_NAME" -v --one-time-password $random_password --computer-name $HOSTNAME  2>&1)
+	    LOG_MSG=$(aws --region $REGION ds create-computer --directory-id $DIRECTORY_ID --computer-name $COMPUTER_NAME --password $random_password 2>&1 || continue)
+            LOG_MSG=$(echo $DOMAIN_PASSWORD | realm join "$DIRECTORY_NAME" -v --one-time-password $random_password --computer-name $COMPUTER_NAME  2>&1)
         else
-	    LOG_MSG=$(aws --region $REGION ds create-computer --directory-id $DIRECTORY_ID --computer-name $HOSTNAME --password $random_password --organizational-unit-distinguished-name "$DIRECTORY_OU" 2>&1 || continue)
-            LOG_MSG=$(echo $DOMAIN_PASSWORD | realm join "$DIRECTORY_NAME" --computer-ou="$DIRECTORY_OU" -v --computer-name $HOSTNAME  2>&1)
+	    LOG_MSG=$(aws --region $REGION ds create-computer --directory-id $DIRECTORY_ID --computer-name $COMPUTER_NAME --password $random_password --organizational-unit-distinguished-name "$DIRECTORY_OU" 2>&1 || continue)
+            LOG_MSG=$(echo $DOMAIN_PASSWORD | realm join "$DIRECTORY_NAME" --computer-ou="$DIRECTORY_OU" -v --computer-name $COMPUTER_NAME  2>&1)
         fi
         STATUS=$?
         if [ $STATUS -eq 0 ]; then
@@ -445,14 +444,9 @@ config_samba() {
         idmap config * : rangesize = 100000000\n\
         idmap config ${AD_INFO} : backend = rid\n\
         idmap config ${AD_INFO} : range = 65536 - 99999999\n\
-        winbind refresh tickets = yes\n\
         kerberos method = secrets and keytab\n\
-        winbind enum groups = no\n\
-        winbind enum users = no
         /^\s*idmap/d;\
-        /^\s*kerberos\s+method/d;\
-        /^\s*winbind\s+refresh/d;\
-        /^\s*winbind\s+enum/d"\
+        /^\s*kerberos\s+method/d"\
         /etc/samba/smb.conf
 
     cp /etc/samba/smb.conf /tmp
@@ -586,7 +580,7 @@ fi
 print_vars
 is_directory_reachable
 if [ $? -eq 0 ]; then
-    config_nsswitch
+    #config_nsswitch
     config_samba
     do_domainjoin
     reconfigure_samba
