@@ -1,4 +1,4 @@
-// Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License"). You may not
 // use this file except in compliance with the License. A copy of the
@@ -11,10 +11,10 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 //
-// +build freebsd linux netbsd openbsd
+// +build windows
 
-// Package interactivecommands implements session shell plugin with interactive commands.
-package interactivecommands
+// Package singlecommand implements session shell plugin with interactive or non-interactive single command.
+package singlecommand
 
 import (
 	"fmt"
@@ -24,8 +24,8 @@ import (
 )
 
 // validateProperties validates whether the commands are not empty.
-func (p *InteractiveCommandsPlugin) validateProperties(shellProps contracts.ShellProperties) error {
-	if strings.TrimSpace(shellProps.Linux.Commands) == "" {
+func (p *SingleCommand) validateProperties(shellProps contracts.ShellProperties) error {
+	if strings.TrimSpace(shellProps.Windows.Commands) == "" {
 		return fmt.Errorf("Commands cannot be empty for session type %s", p.name())
 	}
 	return nil

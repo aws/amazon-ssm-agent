@@ -15,6 +15,8 @@
 package execcmd
 
 import (
+	"fmt"
+	"os"
 	"os/exec"
 )
 
@@ -23,8 +25,12 @@ type IExecCmd interface {
 	Pid() int
 	//kill the attached child process
 	Kill() error
+	//start the command execution process
+	Start() error
 	//wait for the child to finish
 	Wait() error
+	// sends a signal to the command process
+	Signal(sig os.Signal) error
 }
 
 //implementation of IExecCmd with os.Process embed
@@ -52,10 +58,26 @@ func (p *ExecCmd) Kill() error {
 	return nil
 }
 
+// Start starts the command execution process with the Cmd.
+func (p *ExecCmd) Start() error {
+	if p.Cmd != nil {
+		return p.Cmd.Start()
+	}
+	return nil
+}
+
 // Wait releases any resources associated with the Cmd.
 func (p *ExecCmd) Wait() error {
 	if p.Cmd != nil {
 		return p.Cmd.Wait()
 	}
 	return nil
+}
+
+// Signal sends a signal to the command process
+func (p *ExecCmd) Signal(sig os.Signal) error {
+	if p.Cmd == nil || p.Cmd.Process == nil {
+		return fmt.Errorf("the command execution has not started yet")
+	}
+	return p.Cmd.Process.Signal(sig)
 }
