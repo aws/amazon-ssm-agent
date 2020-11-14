@@ -11,6 +11,8 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+// +build darwin freebsd linux netbsd openbsd
+
 // Package shell implements session shell plugin.
 package shell
 
@@ -19,10 +21,12 @@ import (
 	"errors"
 	"io/ioutil"
 	"os"
+	"syscall"
 	"testing"
 	"time"
 
 	cloudwatchlogspublisher_mock "github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher/mock"
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	iohandlermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
@@ -109,6 +113,11 @@ func (suite *ShellTestSuite) TearDownTest() {
 	suite.stdout.Close()
 }
 
+//Execute the test suite
+func TestShellTestSuite(t *testing.T) {
+	suite.Run(t, new(ShellTestSuite))
+}
+
 // Testing Execute
 func (suite *ShellTestSuite) TestExecuteWhenCancelFlagIsShutDown() {
 	suite.mockCancelFlag.On("ShutDown").Return(true)
@@ -158,7 +167,7 @@ func (suite *ShellTestSuite) TestExecute() {
 
 	stdout, stdin, _ := os.Pipe()
 	stdin.Write(payload)
-	startPty = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration, plugin *ShellPlugin) (err error) {
+	getCommandExecutor = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration, plugin *ShellPlugin) (err error) {
 		plugin.stdin = stdin
 		plugin.stdout = stdout
 		plugin.execCmd = suite.mockCmd
@@ -188,6 +197,45 @@ func (suite *ShellTestSuite) TestExecute() {
 	stdout.Close()
 }
 
+// Testing Execute in NonInteractiveCommands uses exec.Cmd to start command execution
+func (suite *ShellTestSuite) TestExecuteNonInteractiveCommands() {
+	suite.mockCancelFlag.On("Canceled").Return(false)
+	suite.mockCancelFlag.On("ShutDown").Return(false)
+	suite.mockCancelFlag.On("Wait").Return(task.Completed)
+	suite.mockIohandler.On("SetExitCode", 0).Return(nil)
+	suite.mockIohandler.On("SetStatus", contracts.ResultStatusSuccess).Return()
+	suite.mockIohandler.On("SetOutput", mock.Anything).Return()
+	suite.mockCmd.On("Start").Return(nil)
+	suite.mockCmd.On("Wait").Return(nil)
+	suite.mockCmd.On("Pid").Return(234)
+
+	getCommandExecutor = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration, plugin *ShellPlugin) (err error) {
+		plugin.execCmd = suite.mockCmd
+		return nil
+	}
+
+	plugin := &ShellPlugin{
+		context:     suite.mockContext,
+		name:        appconfig.PluginNameNonInteractiveCommands,
+		dataChannel: suite.mockDataChannel,
+		execCmd:     suite.mockCmd,
+	}
+
+	plugin.Execute(
+		contracts.Configuration{},
+		suite.mockCancelFlag,
+		suite.mockIohandler,
+		suite.mockDataChannel,
+		mgsContracts.ShellProperties{})
+
+	suite.mockCancelFlag.AssertExpectations(suite.T())
+	suite.mockIohandler.AssertExpectations(suite.T())
+	suite.mockDataChannel.AssertExpectations(suite.T())
+	suite.mockCmd.AssertExpectations(suite.T())
+	// Verify that streaming logs is disabled for NonInteractiveCommands plugin
+	assert.Equal(suite.T(), false, suite.plugin.logger.streamLogsToCloudWatch)
+}
+
 // Testing Execute when CW logging(at the end of the session) is enabled
 func (suite *ShellTestSuite) TestExecuteWithCWLoggingEnabled() {
 	suite.mockCancelFlag.On("Canceled").Return(false)
@@ -202,7 +250,7 @@ func (suite *ShellTestSuite) TestExecuteWithCWLoggingEnabled() {
 
 	stdout, stdin, _ := os.Pipe()
 	stdin.Write(payload)
-	startPty = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration, plugin *ShellPlugin) (err error) {
+	getCommandExecutor = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration, plugin *ShellPlugin) (err error) {
 		plugin.stdin = stdin
 		plugin.stdout = stdout
 		return nil
@@ -248,7 +296,7 @@ func (suite *ShellTestSuite) TestExecuteWithCWLogStreamingEnabled() {
 
 	stdout, stdin, _ := os.Pipe()
 	stdin.Write(payload)
-	startPty = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration, plugin *ShellPlugin) (err error) {
+	getCommandExecutor = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration, plugin *ShellPlugin) (err error) {
 		plugin.stdin = stdin
 		plugin.stdout = stdout
 		return nil
@@ -303,7 +351,7 @@ func (suite *ShellTestSuite) TestExecuteWithCWLoggingDisabledButStreamingEnabled
 
 	stdout, stdin, _ := os.Pipe()
 	stdin.Write(payload)
-	startPty = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration, plugin *ShellPlugin) (err error) {
+	getCommandExecutor = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration, plugin *ShellPlugin) (err error) {
 		plugin.stdin = stdin
 		plugin.stdout = stdout
 		return nil
@@ -347,7 +395,7 @@ func (suite *ShellTestSuite) TestExecuteWithCancelFlag() {
 
 	stdout, stdin, _ := os.Pipe()
 	stdin.Write(payload)
-	startPty = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration, plugin *ShellPlugin) (err error) {
+	getCommandExecutor = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration, plugin *ShellPlugin) (err error) {
 		plugin.stdin = stdin
 		plugin.stdout = stdout
 		plugin.execCmd = suite.mockCmd
@@ -374,6 +422,45 @@ func (suite *ShellTestSuite) TestExecuteWithCancelFlag() {
 
 	stdin.Close()
 	stdout.Close()
+}
+
+// Testing Execute in NonInteractiveCommands when cancel flag is set
+func (suite *ShellTestSuite) TestExecuteNonInteractiveCommandsWithCancelFlag() {
+	suite.mockCancelFlag.On("Canceled").Return(false).Once()
+	suite.mockCancelFlag.On("Canceled").Return(true).Once()
+	suite.mockCancelFlag.On("ShutDown").Return(false)
+	suite.mockCancelFlag.On("Wait").Return(task.Completed)
+	suite.mockIohandler.On("SetExitCode", 0).Return(nil)
+	suite.mockIohandler.On("SetStatus", contracts.ResultStatusSuccess).Return()
+	suite.mockIohandler.On("SetOutput", mock.Anything).Return()
+	suite.mockCmd.On("Start").Return(nil)
+	suite.mockCmd.On("Wait").Return(nil)
+	suite.mockCmd.On("Kill").Return(nil)
+	suite.mockCmd.On("Pid").Return(234)
+
+	getCommandExecutor = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration, plugin *ShellPlugin) (err error) {
+		plugin.execCmd = suite.mockCmd
+		return nil
+	}
+
+	plugin := &ShellPlugin{
+		context:     suite.mockContext,
+		name:        appconfig.PluginNameNonInteractiveCommands,
+		dataChannel: suite.mockDataChannel,
+		execCmd:     suite.mockCmd,
+	}
+
+	plugin.Execute(
+		contracts.Configuration{},
+		suite.mockCancelFlag,
+		suite.mockIohandler,
+		suite.mockDataChannel,
+		mgsContracts.ShellProperties{})
+
+	suite.mockCancelFlag.AssertExpectations(suite.T())
+	suite.mockIohandler.AssertExpectations(suite.T())
+	suite.mockDataChannel.AssertExpectations(suite.T())
+	suite.mockCmd.AssertExpectations(suite.T())
 }
 
 // Testing writepump separately
@@ -471,7 +558,7 @@ func (suite *ShellTestSuite) TestProcessStdoutData() {
 	file, _ := ioutil.TempFile("/tmp", "file")
 	defer os.Remove(file.Name())
 
-	suite.mockDataChannel.On("SendStreamDataMessage", suite.mockContext.Log(), mgsContracts.Output, []byte("Ȁ is a utf8 character.")).Return(nil)
+	suite.mockDataChannel.On("SendStreamDataMessage", suite.mockLog, mgsContracts.Output, []byte("Ȁ is a utf8 character.")).Return(nil)
 	outputBuf, err := suite.plugin.processStdoutData(suite.mockLog, stdoutBytes, len(stdoutBytes), unprocessedBuf, file)
 
 	suite.mockDataChannel.AssertExpectations(suite.T())
@@ -491,11 +578,6 @@ func (suite *ShellTestSuite) TestProcessStreamMessage() {
 
 	stdinFileContent, _ := ioutil.ReadFile(stdinFile.Name())
 	assert.Equal(suite.T(), "testPayload", string(stdinFileContent))
-}
-
-//Execute the test suite
-func TestShellTestSuite(t *testing.T) {
-	suite.Run(t, new(ShellTestSuite))
 }
 
 // getAgentMessage constructs and returns AgentMessage with given sequenceNumber, messageType & payload
@@ -671,4 +753,180 @@ func (suite *ShellTestSuite) TestCommandParser() {
 	assert.Equal(suite.T(), commands[0], "sh")
 	assert.Equal(suite.T(), commands[1], "-c")
 	assert.Equal(suite.T(), commands[2], "echo hello && echo world")
+}
+
+// Testing Execute with exec.Cmd
+func (suite *ShellTestSuite) TestExecuteWithExec() {
+	suite.mockIohandler.On("SetExitCode", 0).Return(nil)
+	suite.mockIohandler.On("SetStatus", contracts.ResultStatusSuccess).Return()
+	suite.mockCmd.On("Start").Return(nil)
+	suite.mockCmd.On("Wait").Return(nil)
+	suite.mockCmd.On("Pid").Return(234)
+	suite.mockDataChannel.On("IsActive").Return(true)
+
+	getCommandExecutor = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration, plugin *ShellPlugin) (err error) {
+		plugin.execCmd = suite.mockCmd
+		return nil
+	}
+
+	plugin := &ShellPlugin{
+		context:     suite.mockContext,
+		name:        appconfig.PluginNameNonInteractiveCommands,
+		dataChannel: suite.mockDataChannel,
+		execCmd:     suite.mockCmd,
+	}
+
+	// Create ipc file
+	ipcFile, _ := os.Create(suite.plugin.logger.ipcFilePath)
+	defer ipcFile.Close()
+
+	cancelled := make(chan bool)
+
+	plugin.executeCommandsWithExec(
+		contracts.Configuration{},
+		cancelled,
+		false,
+		suite.mockIohandler,
+		ipcFile,
+	)
+
+	suite.mockCancelFlag.AssertExpectations(suite.T())
+	suite.mockIohandler.AssertExpectations(suite.T())
+	suite.mockDataChannel.AssertExpectations(suite.T())
+	suite.mockCmd.AssertExpectations(suite.T())
+}
+
+// Testing Execute with exec.Cmd and the command execution failed to start
+func (suite *ShellTestSuite) TestExecuteWithExecAndCommandFailedToStart() {
+	suite.mockIohandler.On("MarkAsFailed", mock.Anything)
+	suite.mockCmd.On("Start").Return(errors.New("failed to start command"))
+
+	getCommandExecutor = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration, plugin *ShellPlugin) (err error) {
+		plugin.execCmd = suite.mockCmd
+		return nil
+	}
+
+	plugin := &ShellPlugin{
+		context:     suite.mockContext,
+		name:        appconfig.PluginNameNonInteractiveCommands,
+		dataChannel: suite.mockDataChannel,
+		execCmd:     suite.mockCmd,
+	}
+
+	// Create ipc file
+	ipcFile, _ := os.Create(suite.plugin.logger.ipcFilePath)
+	defer ipcFile.Close()
+
+	cancelled := make(chan bool)
+
+	plugin.executeCommandsWithExec(
+		contracts.Configuration{},
+		cancelled,
+		false,
+		suite.mockIohandler,
+		ipcFile,
+	)
+
+	suite.mockCancelFlag.AssertExpectations(suite.T())
+	suite.mockIohandler.AssertExpectations(suite.T())
+	suite.mockCmd.AssertExpectations(suite.T())
+}
+
+// Testing Execute with exec.Cmd and the command execution failed to complete
+func (suite *ShellTestSuite) TestExecuteWithExecFailedToWait() {
+	suite.mockIohandler.On("SetExitCode", 1).Return(nil)
+	suite.mockIohandler.On("SetStatus", contracts.ResultStatusFailed).Return()
+	suite.mockCmd.On("Start").Return(nil)
+	suite.mockCmd.On("Wait").Return(errors.New("failed to wait for command to complete"))
+	suite.mockCmd.On("Pid").Return(234)
+
+	getCommandExecutor = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration, plugin *ShellPlugin) (err error) {
+		plugin.execCmd = suite.mockCmd
+		return nil
+	}
+
+	plugin := &ShellPlugin{
+		context:     suite.mockContext,
+		name:        appconfig.PluginNameNonInteractiveCommands,
+		dataChannel: suite.mockDataChannel,
+		execCmd:     suite.mockCmd,
+	}
+
+	// Create ipc file
+	ipcFile, _ := os.Create(suite.plugin.logger.ipcFilePath)
+	defer ipcFile.Close()
+
+	cancelled := make(chan bool)
+
+	plugin.executeCommandsWithExec(
+		contracts.Configuration{},
+		cancelled,
+		false,
+		suite.mockIohandler,
+		ipcFile,
+	)
+
+	suite.mockCancelFlag.AssertExpectations(suite.T())
+	suite.mockIohandler.AssertExpectations(suite.T())
+	suite.mockDataChannel.AssertExpectations(suite.T())
+	suite.mockCmd.AssertExpectations(suite.T())
+}
+
+// Testing InputStreamMessageHandler in NonInteractiveCommands plugin with control signal
+func (suite *ShellTestSuite) TestNonInteractiveInputStreamMessageHandlerWithControlSignal() {
+	suite.mockCmd.On("Signal", syscall.SIGINT).Return(nil)
+	suite.mockCmd.On("Wait").Return(nil)
+
+	plugin := &ShellPlugin{
+		context:     suite.mockContext,
+		name:        appconfig.PluginNameNonInteractiveCommands,
+		dataChannel: suite.mockDataChannel,
+		execCmd:     suite.mockCmd,
+	}
+
+	err := plugin.InputStreamMessageHandler(suite.mockLog, buildAgentMessage(uint32(mgsContracts.Output), []byte{'\003'}))
+
+	suite.mockCmd.AssertExpectations(suite.T())
+	assert.Nil(suite.T(), err)
+}
+
+// Testing InputStreamMessageHandler in NonInteractiveCommands plugin with non-control signal
+func (suite *ShellTestSuite) TestNonInteractiveInputStreamMessageHandlerWithNonControlSignal() {
+	suite.mockCmd.On("Signal", syscall.SIGINT).Return(nil).Times(0)
+
+	plugin := &ShellPlugin{
+		context:     suite.mockContext,
+		name:        appconfig.PluginNameNonInteractiveCommands,
+		dataChannel: suite.mockDataChannel,
+		execCmd:     nil,
+	}
+
+	err := plugin.InputStreamMessageHandler(suite.mockLog, buildAgentMessage(uint32(mgsContracts.Output), payload))
+
+	assert.Nil(suite.T(), err)
+}
+
+// Testing InputStreamMessageHandler in NonInteractiveCommands plugin with terminal resize message
+func (suite *ShellTestSuite) TestNonInteractiveInputStreamMessageHandlerWithTerminalResizeMessage() {
+	plugin := &ShellPlugin{
+		context:     suite.mockContext,
+		name:        appconfig.PluginNameNonInteractiveCommands,
+		dataChannel: suite.mockDataChannel,
+		execCmd:     nil,
+	}
+
+	err := plugin.InputStreamMessageHandler(suite.mockLog, buildAgentMessage(uint32(mgsContracts.Size), payload))
+
+	assert.Nil(suite.T(), err)
+}
+
+// buildAgentMessage constructs and returns AgentMessage with payload type and payload
+func buildAgentMessage(payloadType uint32, payload []byte) mgsContracts.AgentMessage {
+	agentMessage := mgsContracts.AgentMessage{
+		MessageType:    mgsContracts.InputStreamDataMessage,
+		SequenceNumber: 1,
+		PayloadType:    payloadType,
+		Payload:        payload,
+	}
+	return agentMessage
 }

@@ -65,10 +65,11 @@ const (
 	DataChannelRetryInitialDelayMillis = 100
 	DataChannelRetryMaxIntervalMillis  = 5000
 
-	IpcFileName      = "ipcTempFile"
-	LogFileExtension = ".log"
-	ScreenBufferSize = 30000
-	Exit             = "exit"
+	IpcFileName        = "ipcTempFile"
+	ExecOutputFileName = "output"
+	LogFileExtension   = ".log"
+	ScreenBufferSize   = 30000
+	Exit               = "exit"
 
 	// ResumeReadExitCode indicates to resume reading from established connection.
 	ResumeReadExitCode = -1

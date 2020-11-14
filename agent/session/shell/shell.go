@@ -159,21 +159,20 @@ func (p *ShellPlugin) Execute(
 	}
 }
 
-var startPty = func(
+var getCommandExecutor = func(
 	log log.T,
 	shellProps mgsContracts.ShellProperties,
 	isSessionLogger bool,
 	config agentContracts.Configuration,
 	plugin *ShellPlugin) (err error) {
 
-	return StartPty(log, shellProps, isSessionLogger, config, plugin)
+	return StartCommandExecutor(log, shellProps, isSessionLogger, config, plugin)
 }
 
-// execute starts pseudo terminal.
-// It reads incoming message from data channel and writes to pty.stdin.
-// It reads message from pty.stdout and writes to data channel
-func (p *ShellPlugin) execute(
-	config agentContracts.Configuration,
+// execute starts command execution.
+// It reads incoming message from data channel and executes it by either writing to pty.stdin or relying on exec.Cmd.
+// It reads message from pty.stdout and writes to data channel.
+func (p *ShellPlugin) execute(config agentContracts.Configuration,
 	cancelFlag task.CancelFlag,
 	output iohandler.IOHandler,
 	shellProps mgsContracts.ShellProperties) {
@@ -198,17 +197,19 @@ func (p *ShellPlugin) execute(
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGHUP, syscall.SIGTERM, syscall.SIGQUIT)
 
+	var isSessionCancelled = false
 	// Setup cancellation flag for accepting TerminateSession requests and idle session timeout scenarios
 	cancelled := make(chan bool, 1)
 	go func() {
 		sig := <-sigs
 		log.Infof("caught signal to terminate: %v", sig)
 		cancelled <- true
+		isSessionCancelled = true
 	}()
 
-	// Start pseudo terminal
-	if err := startPty(log, shellProps, false, config, p); err != nil {
-		errorString := fmt.Errorf("Unable to start shell: %s", err)
+	// Get the command executor, which is either pseudo terminal or exec.Cmd depending on the plugin type
+	if err := getCommandExecutor(log, shellProps, false, config, p); err != nil {
+		errorString := fmt.Errorf("Unable to start command: %s\n", err)
 		log.Error(errorString)
 		time.Sleep(2 * time.Second)
 		output.MarkAsFailed(errorString)
@@ -229,22 +230,40 @@ func (p *ShellPlugin) execute(
 		cancelState := cancelFlag.Wait()
 		if cancelFlag.Canceled() {
 			cancelled <- true
+			isSessionCancelled = true
 			log.Debug("Cancel flag set to cancelled in session")
 		}
 		log.Debugf("Cancel flag set to %v in session", cancelState)
 	}()
 
-	// Start to read from shell and write to datachannel
-	log.Debugf("Start separate go routine to read from pty stdout and write to data channel")
-	done := make(chan int, 1)
-	go func() {
-		done <- p.writePump(log, ipcFile)
-	}()
+	if appconfig.PluginNameNonInteractiveCommands == p.name {
+		p.executeCommandsWithExec(config, cancelled, isSessionCancelled, output, ipcFile)
+	} else {
+		p.executeCommandsWithPty(config, cancelled, isSessionCancelled, output, ipcFile)
+	}
+
+	// Finish logger activity like uploading logs to S3/CW
+	p.finishLogging(config, output, sessionPluginResultOutput, ipcFile)
+
+	log.Debug("Shell session execution complete")
+}
+
+// Executes command in pseudo terminal with pty
+func (p *ShellPlugin) executeCommandsWithPty(config agentContracts.Configuration,
+	cancelled chan bool,
+	isSessionCancelled bool,
+	output iohandler.IOHandler,
+	ipcFile *os.File) {
+
+	log := p.context.Log()
+
+	writePumpDone := p.setupRoutineToWriteCommandOutput(log, ipcFile)
+
 	log.Infof("Plugin %s started", p.name)
 
 	// Execute shell profile
-	if p.name == appconfig.PluginNameStandardStream {
-		if err = p.runShellProfile(log, config); err != nil {
+	if appconfig.PluginNameStandardStream == p.name {
+		if err := p.runShellProfile(log, config); err != nil {
 			errorString := fmt.Errorf("Encountered an error while executing shell profile: %s", err)
 			log.Error(errorString)
 			output.MarkAsFailed(errorString)
@@ -281,7 +300,7 @@ func (p *ShellPlugin) execute(
 		output.SetStatus(agentContracts.ResultStatusSuccess)
 		log.Info("The session was cancelled")
 
-	case exitCode := <-done:
+	case exitCode := <-writePumpDone:
 		defer func() {
 			if p.execCmd != nil {
 				if err := p.execCmd.Wait(); err != nil {
@@ -299,21 +318,105 @@ func (p *ShellPlugin) execute(
 			p.dataChannel.PrepareToCloseChannel(log)
 
 			// Send session status as Terminating to service on receiving success exit code from pty
-			if err = p.dataChannel.SendAgentSessionStateMessage(log, mgsContracts.Terminating); err != nil {
+			if err := p.dataChannel.SendAgentSessionStateMessage(log, mgsContracts.Terminating); err != nil {
 				log.Errorf("Unable to send AgentSessionState message with session status %s. %v", mgsContracts.Terminating, err)
 			}
 			output.SetExitCode(appconfig.SuccessExitCode)
 			output.SetStatus(agentContracts.ResultStatusSuccess)
 		}
-		if cancelFlag.Canceled() {
+		if isSessionCancelled {
 			log.Errorf("The cancellation failed to stop the session.")
 		}
 	}
+}
 
-	// Finish logger activity like uploading logs to S3/CW
-	p.finishLogging(config, output, sessionPluginResultOutput, ipcFile)
+// Execute single command in non-interactive mode with exec.Cmd
+func (p *ShellPlugin) executeCommandsWithExec(config agentContracts.Configuration,
+	cancelled chan bool,
+	isSessionCancelled bool,
+	output iohandler.IOHandler,
+	ipcFile *os.File) {
 
-	log.Debug("Shell session execution complete")
+	log := p.context.Log()
+
+	log.Infof("Plugin %s started", p.name)
+
+	if err := p.execCmd.Start(); err != nil {
+		errorString := fmt.Errorf("Error occurred starting the command: %s\n", err)
+		log.Error(errorString)
+		output.MarkAsFailed(errorString)
+		return
+	}
+
+	// CW streaming logs is disabled for NonInteractiveCommands plugin, which is by far the only session plugin that uses exec.Cmd.
+	// However, leaving the startStreamingLogs call path here in case future session plugins use exec.Cmd differently and need streaming logs.
+	p.startStreamingLogs(ipcFile, config)
+
+	// Wait for session to be completed/cancelled/interrupted
+	var isCmdWaitSuccess = false
+	cmdWaitDone := make(chan error, 1)
+	go func() {
+		log.Debugf("Start separate go routine to wait for command to complete. Pid: %v", p.execCmd.Pid())
+		err := p.execCmd.Wait()
+		cmdWaitDone <- err
+		isCmdWaitSuccess = err == nil
+	}()
+
+	select {
+	case <-cancelled:
+		log.Debug("Session cancelled. Attempting to stop the command execution.")
+		if err := p.execCmd.Kill(); err != nil {
+			log.Errorf("unable to terminate command execution process %s: %v", p.execCmd.Pid(), err)
+		}
+		errorCode := 0
+		output.SetExitCode(errorCode)
+		output.SetStatus(agentContracts.ResultStatusSuccess)
+		log.Info("The session was cancelled")
+
+	case cmdWaitErr := <-cmdWaitDone:
+		if !isCmdWaitSuccess {
+			log.Errorf("received error when waiting for command to complete: %v", cmdWaitErr)
+		}
+		if isSessionCancelled {
+			log.Errorf("the cancellation failed to stop the session.")
+		}
+	}
+
+	// If session is not cancelled, start go routine to read output from disk and write to data channel
+	if !isSessionCancelled {
+		writePumpDone := p.setupRoutineToWriteCommandOutput(log, ipcFile)
+
+		select {
+		case <-cancelled:
+			log.Debug("Session cancelled. Attempting to stop the command execution.")
+			if err := p.execCmd.Kill(); err != nil {
+				log.Errorf("unable to terminate command execution process %s: %v", p.execCmd.Pid(), err)
+			}
+			errorCode := 0
+			output.SetExitCode(errorCode)
+			output.SetStatus(agentContracts.ResultStatusSuccess)
+			log.Info("The session was cancelled")
+
+		case exitCode := <-writePumpDone:
+			log.Debugf("Writing command output is done. Exit code: %v.", exitCode)
+			if isSessionCancelled {
+				log.Errorf("The cancellation failed to stop the session.")
+			}
+			if exitCode == 1 {
+				output.SetExitCode(appconfig.ErrorExitCode)
+				output.SetStatus(agentContracts.ResultStatusFailed)
+				return
+			}
+			if isCmdWaitSuccess {
+				output.SetExitCode(appconfig.SuccessExitCode)
+				output.SetStatus(agentContracts.ResultStatusSuccess)
+			} else {
+				output.SetExitCode(appconfig.ErrorExitCode)
+				output.SetStatus(agentContracts.ResultStatusFailed)
+			}
+		}
+	}
+	p.cleanupOutputFile(log, config)
 }
 
 // initializeLogger initializes plugin logger to be used for s3/cw logging
@@ -354,6 +457,18 @@ func (p *ShellPlugin) uploadShellSessionLogsToS3(log log.T, s3UploaderUtil s3uti
 	if err := s3UploaderUtil.S3Upload(log, config.OutputS3BucketName, s3KeyPrefix, p.logger.logFilePath); err != nil {
 		log.Errorf("Failed to upload shell session logs to S3: %s", err)
 	}
+}
+
+// Set up go routine to write command output to data channel
+func (p *ShellPlugin) setupRoutineToWriteCommandOutput(log log.T, ipcFile *os.File) chan int {
+	log.Debugf("Start separate go routine to read from command output and write to data channel")
+
+	done := make(chan int, 1)
+	go func() {
+		done <- p.writePump(log, ipcFile)
+	}()
+
+	return done
 }
 
 // writePump reads from pty stdout and writes to data channel.
@@ -559,4 +674,10 @@ func (p *ShellPlugin) finishLogging(
 		sessionPluginResultOutput.CwlStream = config.SessionId
 	}
 	output.SetOutput(sessionPluginResultOutput)
+}
+
+func (p *ShellPlugin) cleanupOutputFile(log log.T, config agentContracts.Configuration) {
+	if err := os.Remove(filepath.Join(config.OrchestrationDirectory, mgsConfig.ExecOutputFileName)); err != nil {
+		log.Debugf("Unable to clean up output file, %v", err)
+	}
 }

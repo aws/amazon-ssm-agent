@@ -14,7 +14,10 @@
 // Package appconfig manages the configuration of the agent.
 package appconfig
 
-import "os"
+import (
+	"os"
+	"syscall"
+)
 
 const (
 	// Agent defaults
@@ -124,8 +127,9 @@ const (
 	ReadWriteExecuteAccess = 0700
 
 	// Common file flags when opening/creating files
-	FileFlagsCreateOrAppend   = os.O_APPEND | os.O_WRONLY | os.O_CREATE
-	FileFlagsCreateOrTruncate = os.O_TRUNC | os.O_WRONLY | os.O_CREATE
+	FileFlagsCreateOrAppend          = os.O_APPEND | os.O_WRONLY | os.O_CREATE
+	FileFlagsCreateOrTruncate        = os.O_TRUNC | os.O_WRONLY | os.O_CREATE
+	FileFlagsCreateOrAppendReadWrite = os.O_APPEND | os.O_RDWR | os.O_CREATE
 
 	// ExitCodes
 	SuccessExitCode = 0
@@ -201,6 +205,9 @@ const (
 	// PluginNameInteractiveCommands is the name for session manager interactive commands plugin.
 	PluginNameInteractiveCommands = "InteractiveCommands"
 
+	// PluginNameNonInteractiveCommands is the name for session manager non-interactive commands plugin.
+	PluginNameNonInteractiveCommands = "NonInteractiveCommands"
+
 	// PluginNamePort is the name for session manager port plugin.
 	PluginNamePort = "Port"
 
@@ -225,4 +232,12 @@ var SupportedDocumentVersions = map[string]struct{}{
 // Session Manager Document versions that are supported by this Agent version.
 var SupportedSessionDocumentVersions = map[string]struct{}{
 	"1.0": {},
+}
+
+// All the control signals to handles interrupt input from SSM CLI
+// SIGINT captures Ctrl+C
+// SIGQUIT captures Ctrl+\
+var ByteControlSignalsLinux = map[byte]os.Signal{
+	'\003': syscall.SIGINT,
+	'\x1c': syscall.SIGQUIT,
 }

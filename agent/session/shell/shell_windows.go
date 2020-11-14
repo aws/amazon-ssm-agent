@@ -70,9 +70,9 @@ var (
 	winptyDllFilePath = filepath.Join(winptyDllDir, winptyDllName)
 )
 
-//StartPty starts winpty agent and provides handles to stdin and stdout.
+//StartCommandExecutor starts winpty agent and provides handles to stdin and stdout.
 // isSessionLogger determines whether its a customer shell or shell used for logging.
-func StartPty(
+func StartCommandExecutor(
 	log log.T,
 	shellProps mgsContracts.ShellProperties,
 	isSessionLogger bool,
@@ -286,7 +286,7 @@ func (p *ShellPlugin) generateTranscriptFile(
 	loggerFile string,
 	enableVirtualTerminalProcessingForWindows bool,
 	config agentContracts.Configuration) error {
-	err := StartPty(log, mgsContracts.ShellProperties{}, true, config, p)
+	err := StartCommandExecutor(log, mgsContracts.ShellProperties{}, true, config, p)
 	if err != nil {
 		return err
 	}
@@ -382,6 +382,9 @@ var checkForLoggingInterruption = func(log log.T, ipcFile *os.File, plugin *Shel
 
 // isLogStreamingSupported checks if streaming of logs is supported since it depends on PowerShell's transcript logging
 func (p *ShellPlugin) isLogStreamingSupported(log log.T) (bool, error) {
+	if appconfig.PluginNameNonInteractiveCommands == p.name {
+		return false, nil
+	}
 	if powerShellVersionSupportedForLogStreaming, err := isPowerShellVersionSupportedForLogStreaming(log); err != nil {
 		return false, fmt.Errorf("PowerShell version can't be verified on the instance. No logs will be streamed to CloudWatch. The error is: %v", err)
 	} else if !powerShellVersionSupportedForLogStreaming {

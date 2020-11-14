@@ -78,9 +78,10 @@ var allPlugins = map[string]struct{}{
 
 // allSessionPlugins is the list of all known session plugins.
 var allSessionPlugins = map[string]struct{}{
-	appconfig.PluginNameStandardStream:      {},
-	appconfig.PluginNameInteractiveCommands: {},
-	appconfig.PluginNamePort:                {},
+	appconfig.PluginNameStandardStream:         {},
+	appconfig.PluginNameInteractiveCommands:    {},
+	appconfig.PluginNamePort:                   {},
+	appconfig.PluginNameNonInteractiveCommands: {},
 }
 
 // Assign method to global variables to allow unittest to override
