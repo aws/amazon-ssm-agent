@@ -329,7 +329,7 @@ func TestHttpHandlerImpl_requestContent(t *testing.T) {
 			"any-weird-url",
 			&http.Request{URL: nil},
 			true,
-			errors.New("Cannot execute request: Get : http: nil Request.URL"),
+			errors.New("Cannot execute request: Get \"\": http: nil Request.URL"),
 		},
 	}
 

@@ -102,7 +102,7 @@ func TestNewGitResource(t *testing.T) {
 					"repository": "http:// test"
 				}`,
 			nil,
-			errors.New("Invalid repository url format: parse http:// test: invalid character \" \" in host name"),
+			errors.New("Invalid repository url format: parse \"http:// test\": invalid character \" \" in host name"),
 		},
 		{
 			`{
