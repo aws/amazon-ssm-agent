@@ -135,7 +135,7 @@ func TestNewGitHandlerURLParsing(t *testing.T) {
 		{
 			"http:// example.com",
 			nil,
-			errors.New("Invalid repository url format: parse http:// example.com: invalid character \" \" in host name"),
+			errors.New("Invalid repository url format: parse \"http:// example.com\": invalid character \" \" in host name"),
 		},
 	}
 

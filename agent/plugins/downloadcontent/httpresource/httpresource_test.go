@@ -101,7 +101,7 @@ func TestNewHTTPResource(t *testing.T) {
 			}`,
 			nil,
 			errors.New("Invalid URL format: " +
-				"parse http:// invalid-url: invalid character \" \" in host name"),
+				"parse \"http:// invalid-url\": invalid character \" \" in host name"),
 		},
 	}
 
