@@ -17,6 +17,7 @@ package port
 import (
 	"errors"
 	"testing"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -198,8 +199,6 @@ func (suite *PortTestSuite) TestExecuteWhenInitializeSessionReturnsError() {
 	suite.mockIohandler.AssertExpectations(suite.T())
 }
 
-// todo: this unit test fails intermittently and need to be fixed
-/*
 func (suite *PortTestSuite) TestExecute() {
 	suite.mockCancelFlag.On("Canceled").Return(false)
 	suite.mockCancelFlag.On("ShutDown").Return(false)
@@ -208,18 +207,11 @@ func (suite *PortTestSuite) TestExecute() {
 	suite.mockIohandler.On("SetStatus", contracts.ResultStatusSuccess).Return()
 	suite.mockDataChannel.On("GetClientVersion").Return(clientVersion)
 	suite.mockPortSession.On("InitializeSession", mock.Anything).Return(nil)
-	suite.mockPortSession.On("WritePump", mock.Anything, suite.mockDataChannel).Return(0)
+	suite.mockPortSession.On("WritePump", mock.Anything, suite.mockDataChannel).WaitUntil(time.After(time.Second)).Return(0)
 	suite.mockPortSession.On("Stop").Return()
 
 	GetSession = func(parameters PortParameters, cancelled chan struct{}, clientVersion string, sessionId string) (IPortSession, error) {
 		return suite.mockPortSession, nil
-	}
-
-	out, in := net.Pipe()
-	defer in.Close()
-	defer out.Close()
-	DialCall = func(network string, address string) (net.Conn, error) {
-		return out, nil
 	}
 
 	suite.plugin.Execute(suite.mockContext,
@@ -233,7 +225,6 @@ func (suite *PortTestSuite) TestExecute() {
 	suite.mockDataChannel.AssertExpectations(suite.T())
 	suite.mockPortSession.AssertExpectations(suite.T())
 }
-*/
 
 // Testing InputStreamHandler
 func (suite *PortTestSuite) TestInputStreamHandler() {
