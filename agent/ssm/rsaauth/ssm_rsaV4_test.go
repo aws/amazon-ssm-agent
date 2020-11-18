@@ -1,6 +1,7 @@
 package rsaauth
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 	"testing"
@@ -24,7 +25,7 @@ func buildRsaSigner(serviceName string, region string, signTime time.Time, expir
 	req.URL.Opaque = "//example.org/bucket/key-._~,!@#$%^&*()"
 	req.Header.Add("X-Amz-Target", "prefix.Operation")
 	req.Header.Add("Content-Type", "application/x-amz-json-1.0")
-	req.Header.Add("Content-Length", string(len(body)))
+	req.Header.Add("Content-Length", fmt.Sprint(len(body)))
 	req.Header.Add("X-Amz-Meta-Other-Header", "some-value=!@#$%^&* (+)")
 	return signer{
 		Request:     req,
