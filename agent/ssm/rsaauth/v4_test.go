@@ -4,6 +4,7 @@
 package rsaauth
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 	"testing"
@@ -24,7 +25,7 @@ func buildSigner(serviceName string, region string, signTime time.Time, expireTi
 	req.URL.Opaque = "//example.org/bucket/key-._~,!@#$%^&*()"
 	req.Header.Add("X-Amz-Target", "prefix.Operation")
 	req.Header.Add("Content-Type", "application/x-amz-json-1.0")
-	req.Header.Add("Content-Length", string(len(body)))
+	req.Header.Add("Content-Length", fmt.Sprint(len(body)))
 	req.Header.Add("X-Amz-Meta-Other-Header", "some-value=!@#$%^&* (+)")
 	req.Header.Add("X-Amz-Meta-Other-Header_With_Underscore", "some-value=!@#$%^&* (+)")
 	req.Header.Add("X-amz-Meta-Other-Header_With_Underscore", "some-value=!@#$%^&* (+)")
@@ -60,7 +61,7 @@ func TestPresignRequest(t *testing.T) {
 
 	expectedDate := "19700101T000000Z"
 	expectedHeaders := "content-length;content-type;host;x-amz-meta-other-header;x-amz-meta-other-header_with_underscore"
-	expectedSig := "ea7856749041f727690c580569738282e99c79355fe0d8f125d3b5535d2ece83"
+	expectedSig := "122f0b9e091e4ba84286097e2b3404a1f1f4c4aad479adda95b7dff0ccbe5581"
 	expectedCred := "AKID/19700101/us-east-1/dynamodb/aws4_request"
 	expectedTarget := "prefix.Operation"
 
@@ -78,7 +79,7 @@ func TestSignRequest(t *testing.T) {
 	signer.sign()
 
 	expectedDate := "19700101T000000Z"
-	expectedSig := "AWS4-HMAC-SHA256 Credential=AKID/19700101/us-east-1/dynamodb/aws4_request, SignedHeaders=content-length;content-type;host;x-amz-date;x-amz-meta-other-header;x-amz-meta-other-header_with_underscore;x-amz-security-token;x-amz-target, Signature=ea766cabd2ec977d955a3c2bae1ae54f4515d70752f2207618396f20aa85bd21"
+	expectedSig := "AWS4-HMAC-SHA256 Credential=AKID/19700101/us-east-1/dynamodb/aws4_request, SignedHeaders=content-length;content-type;host;x-amz-date;x-amz-meta-other-header;x-amz-meta-other-header_with_underscore;x-amz-security-token;x-amz-target, Signature=a518299330494908a70222cec6899f6f32f297f8595f6df1776d998936652ad9"
 
 	q := signer.Request.Header
 	assert.Equal(t, expectedSig, q.Get("Authorization"))
