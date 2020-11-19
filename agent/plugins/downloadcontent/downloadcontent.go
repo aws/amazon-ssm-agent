@@ -16,10 +16,12 @@
 package downloadcontent
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"os"
 	"path/filepath"
+	"reflect"
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -205,8 +207,23 @@ func Name() string {
 func parseAndValidateInput(rawPluginInput interface{}) (*DownloadContentPlugin, error) {
 	var input DownloadContentPlugin
 	var err error
-	if err = jsonutil.Remarshal(rawPluginInput, &input); err != nil {
-		return nil, fmt.Errorf("invalid format in plugin properties %v; \nerror %v", rawPluginInput, err)
+
+	// the below code is added to fix the issue when sourceInfo json is parsed as map instead of string
+	pluginInputMap := make(map[string]interface{})
+	if err = jsonutil.Remarshal(rawPluginInput, &pluginInputMap); err != nil {
+		return nil, fmt.Errorf("problem while remarshalling %v; \nerror %v", rawPluginInput, err)
+	}
+	sourceInfo := "SourceInfo"
+	if info, ok := pluginInputMap[sourceInfo]; ok {
+		if reflect.ValueOf(info).Kind() == reflect.Map {
+			if sourceInfoBytes, err := json.Marshal(info); err == nil {
+				pluginInputMap[sourceInfo] = string(sourceInfoBytes)
+			}
+		}
+	}
+
+	if err = jsonutil.Remarshal(pluginInputMap, &input); err != nil {
+		return nil, fmt.Errorf("invalid format in plugin properties %v; \nerror %v", pluginInputMap, err)
 	}
 
 	if valid, err := validateInput(&input); !valid {

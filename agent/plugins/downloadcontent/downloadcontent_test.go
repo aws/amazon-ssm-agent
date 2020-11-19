@@ -16,6 +16,7 @@
 package downloadcontent
 
 import (
+	"encoding/json"
 	"errors"
 	"os"
 	"testing"
@@ -378,6 +379,34 @@ func TestParseAndValidateInput_NoInput(t *testing.T) {
 	_, err := parseAndValidateInput(rawPluginInput)
 
 	assert.Error(t, err)
+}
+
+func TestParseAndValidateInput_SourceInfoStringInput(t *testing.T) {
+	sourceInfoOutput := "{'Path': 'test://test.com'}"
+	sourceTypeTest := "S3"
+	destinationPathTest := "destinationPathTest"
+	var rawPluginInput interface{}
+	rawPluginInputBytes := "{\"SourceType\":\"" + sourceTypeTest + "\", \"DestinationPath\" : \"" + destinationPathTest + "\", \"SourceInfo\": \"" + sourceInfoOutput + "\"}"
+	_ = json.Unmarshal([]byte(rawPluginInputBytes), &rawPluginInput)
+	downloadContent, err := parseAndValidateInput(rawPluginInput)
+	assert.NoError(t, err)
+	assert.Equal(t, downloadContent.SourceInfo, sourceInfoOutput)
+	assert.Equal(t, downloadContent.DestinationPath, destinationPathTest)
+	assert.Equal(t, downloadContent.SourceType, sourceTypeTest)
+}
+
+func TestParseAndValidateInput_SourceInfoJsonInput(t *testing.T) {
+	sourceInfoOutput := "{\"Path\":\"test://test.com\"}"
+	sourceTypeTest := "S3"
+	destinationPathTest := "destinationPathTest"
+	var rawPluginInput interface{}
+	rawPluginInputBytes := "{\"SourceType\":\"" + sourceTypeTest + "\", \"DestinationPath\" : \"" + destinationPathTest + "\", \"SourceInfo\": " + sourceInfoOutput + "}"
+	_ = json.Unmarshal([]byte(rawPluginInputBytes), &rawPluginInput)
+	downloadContent, err := parseAndValidateInput(rawPluginInput)
+	assert.NoError(t, err)
+	assert.Equal(t, downloadContent.SourceInfo, sourceInfoOutput)
+	assert.Equal(t, downloadContent.DestinationPath, destinationPathTest)
+	assert.Equal(t, downloadContent.SourceType, sourceTypeTest)
 }
 
 // Mock and stub functions
