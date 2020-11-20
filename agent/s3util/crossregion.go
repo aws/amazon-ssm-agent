@@ -24,6 +24,8 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
+
 	"github.com/Workiva/go-datastructures/cache"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -382,7 +384,7 @@ type s3BucketRegionHeaderCapturingTransport struct {
 // Create a new s3BucketRegionHeaderCapturingTransport
 func newS3BucketRegionHeaderCapturingTransport(log log.T) *s3BucketRegionHeaderCapturingTransport {
 	return &s3BucketRegionHeaderCapturingTransport{
-		delegate: &http.Transport{},
+		delegate: sdkutil.GetDefaultTransport(log),
 		logger:   log,
 	}
 }
