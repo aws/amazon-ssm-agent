@@ -22,6 +22,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/core/executor"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -118,7 +120,8 @@ func runUpdateAgent(
 	rawPluginInput interface{},
 	cancelFlag task.CancelFlag,
 	output iohandler.IOHandler,
-	startTime time.Time) (pid int) {
+	startTime time.Time,
+	exec executor.IExecutor) (pid int) {
 	var pluginInput UpdatePluginInput
 	var err error
 	var context *updateutil.InstanceContext
@@ -249,7 +252,7 @@ func runUpdateAgent(
 
 	// Sleep for 1 second and verify updater is running
 	time.Sleep(time.Second)
-	isRunning, procErr := util.IsProcessRunning(log, pid)
+	isRunning, procErr := exec.IsPidRunning(pid)
 	if procErr != nil {
 		log.Warnf("Failed to check if updater process is running: %s", err)
 	} else {
@@ -258,7 +261,7 @@ func runUpdateAgent(
 			log.Error(errMsg)
 			output.MarkAsFailed(fmt.Errorf(errMsg))
 
-			util.CleanupCommand(log, pid)
+			exec.Kill(pid)
 			return
 		} else {
 			log.Info("Updater is running")
@@ -463,6 +466,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 		updateUtilRef = new(updateutil.Utility)
 	}
 	manager := new(updateManager)
+	executor := executor.NewProcessExecutor(log)
 
 	if cancelFlag.ShutDown() {
 		output.MarkAsShutdown()
@@ -508,7 +512,8 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 			config.Properties,
 			cancelFlag,
 			output,
-			time.Now())
+			time.Now(),
+			executor)
 
 		// If starting update fails, we unlock
 		if output.GetStatus() != contracts.ResultStatusInProgress {

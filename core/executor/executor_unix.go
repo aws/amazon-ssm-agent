@@ -159,7 +159,7 @@ var listProcessProc = func() ([]OsProcess, error) {
 	return results, err
 }
 
-func getProcess() ([]OsProcess, error) {
+var getProcess = func() ([]OsProcess, error) {
 	output, err := listProcessPs()
 	if err != nil {
 		// Default to Proc if ps fails

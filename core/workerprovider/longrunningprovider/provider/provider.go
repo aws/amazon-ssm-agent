@@ -22,7 +22,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/common/message"
 	"github.com/aws/amazon-ssm-agent/core/app/context"
-	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/executor"
+	"github.com/aws/amazon-ssm-agent/core/executor"
 	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/model"
 )
 

@@ -19,6 +19,11 @@ import (
 	"testing"
 	"time"
 
+	executormocks "github.com/aws/amazon-ssm-agent/core/executor/mocks"
+	"github.com/stretchr/testify/mock"
+
+	"github.com/aws/amazon-ssm-agent/core/executor"
+
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
@@ -273,7 +278,9 @@ func TestUpdateAgent_InvalidPluginRaw(t *testing.T) {
 	util := &fakeUtility{}
 	rawPluginInput := "invalid value" // string value will failed the Remarshal as it's not PluginInput
 	out := iohandler.DefaultIOHandler{}
-	updateAgent(plugin, config, logger, manager, util, rawPluginInput, mockCancelFlag, &out, time.Now())
+	execMock := &executormocks.IExecutor{}
+
+	updateAgent(plugin, config, logger, manager, util, rawPluginInput, mockCancelFlag, &out, time.Now(), execMock)
 
 	assert.Contains(t, out.GetStderr(), "invalid format in plugin properties")
 }
@@ -287,7 +294,9 @@ func TestUpdateAgent_UpdaterRetry(t *testing.T) {
 	out := iohandler.DefaultIOHandler{}
 	pluginInput := createStubPluginInput()
 	pluginInput.TargetVersion = ""
-	updateAgent(plugin, config, logger, manager, util, pluginInput, mockCancelFlag, &out, time.Now())
+	execMock := &executormocks.IExecutor{}
+
+	updateAgent(plugin, config, logger, manager, util, pluginInput, mockCancelFlag, &out, time.Now(), execMock)
 	assert.Equal(t, util.retryCounter, 2)
 }
 
@@ -318,9 +327,44 @@ func TestUpdateAgent(t *testing.T) {
 
 	for _, manager := range testCases {
 		out := iohandler.DefaultIOHandler{}
-		updateAgent(plugin, config, logger, &manager, &util, pluginInput, mockCancelFlag, &out, time.Now())
+		execMock := &executormocks.IExecutor{}
+
+		execMock.On("IsPidRunning", mock.Anything).Return(true, nil)
+		updateAgent(plugin, config, logger, &manager, &util, pluginInput, mockCancelFlag, &out, time.Now(), execMock)
 		assert.Empty(t, out.GetStderr())
 	}
+}
+
+func TestUpdateAgentUpdaterFailedToStart(t *testing.T) {
+	pluginInput := createStubPluginInput()
+	pluginInput.TargetVersion = ""
+	context := createStubInstanceContext()
+	manifest := createStubManifest(pluginInput, context, true, true)
+	config := contracts.Configuration{}
+	plugin := &Plugin{}
+
+	manager := fakeUpdateManager{
+		generateUpdateCmdResult: "-updater -message id value",
+		generateUpdateCmdError:  nil,
+		downloadManifestResult:  manifest,
+		downloadManifestError:   nil,
+		downloadUpdaterResult:   "updater",
+		downloadUpdaterError:    nil,
+		validateUpdateResult:    false,
+		validateUpdateError:     nil,
+	}
+
+	pluginInput.TargetVersion = ""
+	mockCancelFlag := new(task.MockCancelFlag)
+	util := fakeUtility{}
+
+	out := iohandler.DefaultIOHandler{}
+	execMock := &executormocks.IExecutor{}
+
+	execMock.On("IsPidRunning", mock.Anything).Return(false, nil)
+	execMock.On("Kill", mock.Anything).Return(nil)
+	updateAgent(plugin, config, logger, &manager, &util, pluginInput, mockCancelFlag, &out, time.Now(), execMock)
+	assert.Equal(t, out.GetStderr(), "Updater died before updating, make sure your system is supported")
 }
 
 func TestUpdateAgent_NegativeTestCases(t *testing.T) {
@@ -368,7 +412,9 @@ func TestUpdateAgent_NegativeTestCases(t *testing.T) {
 
 	for _, manager := range testCases {
 		out := iohandler.DefaultIOHandler{}
-		updateAgent(plugin, config, logger, &manager, &util, pluginInput, mockCancelFlag, &out, time.Now())
+		execMock := &executormocks.IExecutor{}
+
+		updateAgent(plugin, config, logger, &manager, &util, pluginInput, mockCancelFlag, &out, time.Now(), execMock)
 		assert.NotEmpty(t, out.GetStderr())
 	}
 }
@@ -399,7 +445,8 @@ func TestExecute(t *testing.T) {
 		rawPluginInput interface{},
 		cancelFlag task.CancelFlag,
 		output iohandler.IOHandler,
-		startTime time.Time) int {
+		startTime time.Time,
+		exec executor.IExecutor) int {
 		methodCalled = true
 		output.MarkAsInProgress()
 		return 1
@@ -486,7 +533,8 @@ func TestExecutePanicDuringUpdate(t *testing.T) {
 		rawPluginInput interface{},
 		cancelFlag task.CancelFlag,
 		output iohandler.IOHandler,
-		startTime time.Time) int {
+		startTime time.Time,
+		exec executor.IExecutor) int {
 		methodCalled = true
 		panic(fmt.Errorf("Some Random Panic"))
 		return 1
@@ -542,7 +590,8 @@ func TestExecuteFailureDuringUpdate(t *testing.T) {
 		rawPluginInput interface{},
 		cancelFlag task.CancelFlag,
 		output iohandler.IOHandler,
-		startTime time.Time) int {
+		startTime time.Time,
+		exec executor.IExecutor) int {
 		methodCalled = true
 		output.MarkAsFailed(fmt.Errorf("Some Random Failure"))
 		return 1
@@ -628,15 +677,7 @@ func (u *fakeUtility) CreateInstanceContext(log log.T) (context *updateutil.Inst
 	return createStubInstanceContext(), nil
 }
 
-func (u *fakeUtility) CleanupCommand(log log.T, pid int) error {
-	return nil
-}
-
 func (u *fakeUtility) IsServiceRunning(log log.T, i *updateutil.InstanceContext) (result bool, err error) {
-	return true, nil
-}
-
-func (u *fakeUtility) IsProcessRunning(log log.T, pid int) (result bool, err error) {
 	return true, nil
 }
 

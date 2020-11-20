@@ -18,9 +18,8 @@ package processor
 import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/updateutil"
-
 	testCommon "github.com/aws/amazon-ssm-agent/agent/update/tester/common"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 )
 
 // T represents the interface for agent update

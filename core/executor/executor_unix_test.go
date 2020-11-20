@@ -51,9 +51,11 @@ func TestIsProcessPsExists(t *testing.T) {
 }
 
 func TestIsProcessProcExists(t *testing.T) {
+	oldListProcessPs := listProcessPs
 	listProcessPs = func() ([]byte, error) {
 		return nil, fmt.Errorf("SomeRandomError")
 	}
+	defer func() { listProcessPs = oldListProcessPs }()
 	cmdString := "sleep"
 	cmd := exec.Command(cmdString, "5")
 	err := cmd.Start()

@@ -31,6 +31,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc"
 	channelmock "github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc/mocks"
+	"github.com/aws/amazon-ssm-agent/core/executor"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -68,7 +69,7 @@ func setup(t *testing.T) *TestCase {
 		go fakeProcess.fakeWorker(fakeProcess.t, docID)
 		return fakeProcess, nil
 	}
-	processFinder = func(log log.T, procinfo contracts.OSProcInfo) bool {
+	processFinder = func(log log.T, procinfo contracts.OSProcInfo, executor executor.IExecutor) bool {
 		assert.Equal(t, testPid, procinfo.Pid)
 		return fakeProcess != nil && fakeProcess.live
 	}

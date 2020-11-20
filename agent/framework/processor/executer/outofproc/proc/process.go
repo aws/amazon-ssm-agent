@@ -22,7 +22,6 @@ import (
 	"os/exec"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
 //OSProcess is an abstracted interface of os.Process
@@ -74,16 +73,6 @@ func StartProcess(name string, argv []string) (OSProcess, error) {
 	}
 
 	return &p, err
-}
-
-//os.FindProcess() doesn't work on Linux: https://groups.google.com/forum/#!topic/golang-nuts/hqrp0UHBK9k
-//what we can only do is check whether it exists
-func IsProcessExists(log log.T, pid int, createTime time.Time) bool {
-	found, err := find_process(pid, createTime)
-	if err != nil {
-		log.Errorf("encountered error when finding process: %v", err)
-	}
-	return found
 }
 
 //TODO figure out why sometimes argv does not contain program name

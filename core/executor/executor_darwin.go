@@ -76,7 +76,7 @@ var listProcessPs = func() ([]byte, error) {
 	return exec.Command("ps", "-e", "-o", "pid,ppid,state,command").CombinedOutput()
 }
 
-func getProcess() ([]OsProcess, error) {
+var getProcess = func() ([]OsProcess, error) {
 	output, err := listProcessPs()
 	if err != nil {
 		return nil, err

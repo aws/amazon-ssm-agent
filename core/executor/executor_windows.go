@@ -46,7 +46,7 @@ func killProcess(process *os.Process) error {
 func validateEnvironmentVariables(command *exec.Cmd) {
 }
 
-func getProcess() ([]OsProcess, error) {
+var getProcess = func() ([]OsProcess, error) {
 	processes, err := ps.Processes()
 	if err != nil {
 		return nil, err

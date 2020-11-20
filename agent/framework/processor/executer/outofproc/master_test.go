@@ -4,6 +4,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/core/executor"
+
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	executermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/mock"
@@ -306,7 +308,7 @@ func TestInitializeConnectOldOrphan(t *testing.T) {
 	}
 	//make sure the finder is called
 	isFinderCalled := false
-	processFinder = func(log log.T, procinfo contracts.OSProcInfo) bool {
+	processFinder = func(log log.T, procinfo contracts.OSProcInfo, executor executor.IExecutor) bool {
 		isFinderCalled = true
 		return true
 	}
