@@ -64,7 +64,7 @@ func TestCreateControlChannel(t *testing.T) {
 	mgsConfig.GetMgsEndpointFromRip = func(region string) string {
 		return mgsHost
 	}
-	makeRestcall = func(request []byte, methodType string, url string, region string, signer *v4.Signer, config *tls.Config) ([]byte, error) {
+	makeRestcall = func(log log.T, request []byte, methodType string, url string, region string, signer *v4.Signer) ([]byte, error) {
 		output := &CreateControlChannelOutput{
 			TokenValue:           aws.String(token),
 			MessageSchemaVersion: aws.String(mgsConfig.MessageSchemaVersion),
@@ -87,7 +87,7 @@ func TestCreateDataChannel(t *testing.T) {
 	mgsConfig.GetMgsEndpointFromRip = func(region string) string {
 		return mgsHost
 	}
-	makeRestcall = func(request []byte, methodType string, url string, region string, signer *v4.Signer, config *tls.Config) ([]byte, error) {
+	makeRestcall = func(log log.T, request []byte, methodType string, url string, region string, signer *v4.Signer) ([]byte, error) {
 		output := &CreateDataChannelOutput{
 			TokenValue:           aws.String(token),
 			MessageSchemaVersion: aws.String(mgsConfig.MessageSchemaVersion),
@@ -122,8 +122,7 @@ func TestGetBaseUrl(t *testing.T) {
 
 func getService() Service {
 	return &MessageGatewayService{
-		region:    "us-east-1",
-		signer:    signer,
-		tlsConfig: tlsConfig,
+		region: "us-east-1",
+		signer: signer,
 	}
 }
