@@ -1,5 +1,9 @@
 Latest
 ===============
+- Use DefaultTransport as underlying RoundTripper for S3 access
+
+3.0.413.0
+===============
 - Add additional checks and logs to install scripts
 - Add retry logic to handle ssm document during reboot
 - Add dockerfile to build agent
