@@ -35,6 +35,7 @@ type OsProcess struct {
 type IExecutor interface {
 	Start(*model.WorkerConfig) (*model.Process, error)
 	Processes() ([]OsProcess, error)
+	IsPidRunning(pid int) (bool, error)
 	Kill(pid int) error
 }
 
@@ -80,6 +81,26 @@ func (exc *ProcessExecutor) Start(workerConfig *model.WorkerConfig) (*model.Proc
 // Processes returns running processes on the instance
 func (exc *ProcessExecutor) Processes() ([]OsProcess, error) {
 	return getProcess()
+}
+
+// IsPidRunning returns true if process with pid is running
+func (exc *ProcessExecutor) IsPidRunning(pid int) (bool, error) {
+	processes, err := getProcess()
+
+	if err != nil {
+		return false, err
+	}
+
+	for _, process := range processes {
+		if process.Pid == pid {
+			if process.State == "Z" {
+				return false, nil
+			}
+			return true, nil
+		}
+	}
+
+	return false, nil
 }
 
 func (exc *ProcessExecutor) Kill(pid int) error {

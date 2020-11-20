@@ -27,7 +27,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/executor"
+	"github.com/aws/amazon-ssm-agent/core/executor"
 	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/model"
 	"github.com/stretchr/testify/assert"
 )
@@ -412,14 +412,6 @@ func TestIsServiceRunning(t *testing.T) {
 		result, _ := util.IsServiceRunning(logger, &test.context)
 		assert.Equal(t, result, test.result)
 	}
-}
-
-func TestIsWorkerRunning(t *testing.T) {
-	util := Utility{}
-	util.ProcessExecutor = &testProcess{}
-	result, err := util.IsWorkerRunning(logger)
-	assert.Equal(t, result, true)
-	assert.Nil(t, err)
 }
 
 func TestIsServiceRunningWithErrorMessageFromCommandExec(t *testing.T) {

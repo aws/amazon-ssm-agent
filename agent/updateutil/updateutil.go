@@ -38,7 +38,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
-	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/executor"
+	"github.com/aws/amazon-ssm-agent/core/executor"
 	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/model"
 )
 
@@ -352,10 +352,8 @@ type T interface {
 	CreateInstanceContext(log log.T) (context *InstanceContext, err error)
 	CreateUpdateDownloadFolder() (folder string, err error)
 	ExeCommand(log log.T, cmd string, workingDir string, updaterRoot string, stdOut string, stdErr string, isAsync bool) (pid int, exitCode UpdateScriptExitCode, err error)
-	CleanupCommand(log log.T, pid int) error
 	IsServiceRunning(log log.T, i *InstanceContext) (result bool, err error)
 	IsWorkerRunning(log log.T) (result bool, err error)
-	IsProcessRunning(log log.T, pid int) (result bool, err error)
 	WaitForServiceToStart(log log.T, i *InstanceContext, targetVersion string) (result bool, err error)
 	SaveUpdatePluginResult(log log.T, updaterRoot string, updateResult *UpdatePluginResult) (err error)
 	IsDiskSpaceSufficientForUpdate(log log.T) (bool, error)
@@ -593,16 +591,6 @@ func (util *Utility) ExeCommand(
 	return pid, updateExitCode, nil
 }
 
-// CleanupCommand cleans up command executed
-func (util *Utility) CleanupCommand(log log.T, pid int) error {
-
-	if util.ProcessExecutor == nil {
-		util.ProcessExecutor = executor.NewProcessExecutor(log)
-	}
-
-	return util.ProcessExecutor.Kill(pid)
-}
-
 // TODO move to commandUtil
 // ExeCommandOutput executes shell command and returns the stdout
 func (util *Utility) ExeCommandOutput(
@@ -718,28 +706,7 @@ func (util *Utility) IsServiceRunning(log log.T, i *InstanceContext) (result boo
 	return false, nil
 }
 
-func (util *Utility) IsProcessRunning(log log.T, pid int) (result bool, err error) {
-	var allProcesses []executor.OsProcess
-	if util.ProcessExecutor == nil {
-		util.ProcessExecutor = executor.NewProcessExecutor(log)
-	}
-
-	if allProcesses, err = util.ProcessExecutor.Processes(); err != nil {
-		return false, err
-	}
-
-	for _, process := range allProcesses {
-		if process.Pid == pid {
-			if process.State == "Z" {
-				return false, nil
-			}
-			return true, nil
-		}
-	}
-
-	return false, nil
-}
-
+// IsWorkerRunning returns true if ssm-agent-worker running
 func (util *Utility) IsWorkerRunning(log log.T) (result bool, err error) {
 	var allProcesses []executor.OsProcess
 	if util.ProcessExecutor == nil {
@@ -786,7 +753,7 @@ func (util *Utility) IsWorkerRunning(log log.T) (result bool, err error) {
 		}
 	}
 
-	return false, fmt.Errorf("ssm agent worker failed to start")
+	return false, nil
 }
 
 // WaitForServiceToStart wait for service to start and returns is service started
@@ -813,7 +780,11 @@ func (util *Utility) WaitForServiceToStart(log log.T, i *InstanceContext, target
 			if isWorkerRunning {
 				log.Infof("health check: %s is running", model.SSMAgentWorkerName)
 			} else {
-				log.Infof("health check: %s is not running", model.SSMAgentWorkerName)
+				if workRunningErr != nil {
+					log.Warnf("health check: failed to get state of %s: %v", model.SSMAgentWorkerName, workRunningErr)
+				} else {
+					log.Infof("health check: %s is not running", model.SSMAgentWorkerName)
+				}
 			}
 		}
 

@@ -18,52 +18,10 @@ package proc
 
 import (
 	"os/exec"
-	"strconv"
-	"strings"
 	"syscall"
-	"time"
 )
-
-//Unix man: http://www.skrenta.com/rt/man/ps.1.html , return the process table of the current user, in agent it'll be root
-//verified on RHEL, Amazon Linux, Ubuntu, Centos, FreeBSD and Darwin
-//TODO optimize this, do not print all processes; what we need is the process belongs to a specific user and no tty attached
-var ps = func() ([]byte, error) {
-	return exec.Command("ps", "-e", "-o", "pid,lstart").CombinedOutput()
-}
 
 func prepareProcess(command *exec.Cmd) {
 	// set pgid to new pid, so that the process can survive when upstart/systemd kill the original process group
 	command.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
-}
-
-//given the pid and the unix process startTime format string, return whether the process is still alive
-func find_process(pid int, startTime time.Time) (bool, error) {
-	output, err := ps()
-	if err != nil {
-		return false, err
-	}
-	proc_list := strings.Split(string(output), "\n")
-
-	for i := 1; i < len(proc_list); i++ {
-		parts := strings.Fields(proc_list[i])
-		if len(parts) < 2 {
-			continue
-		}
-		_pid, err := strconv.ParseInt(parts[0], 10, 64)
-		if err != nil {
-			return false, err
-		}
-		if pid == int(_pid) {
-			return true, nil
-		}
-	}
-	return false, nil
-}
-
-//TODO add time comparison
-//compare the 2 UTC date time, whether the startTime is within one sec
-func compareTimes(startTime time.Time, timeRaw string) bool {
-	startTime = startTime.UTC()
-	parsedTime, _ := time.Parse(time.ANSIC, timeRaw)
-	return startTime.Before(parsedTime.Add(time.Second)) && startTime.After(parsedTime.Add(-time.Second))
 }

@@ -15,6 +15,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc"
+	"github.com/aws/amazon-ssm-agent/core/executor"
 )
 
 type Backend messaging.MessagingBackend
@@ -32,20 +33,28 @@ type OutOfProcExecuter struct {
 	docState   *contracts.DocumentState
 	ctx        context.T
 	cancelFlag task.CancelFlag
+	executor   executor.IExecutor
 }
 
 var channelCreator = func(log log.T, mode filewatcherbasedipc.Mode, documentID string) (filewatcherbasedipc.IPCChannel, error, bool) {
 	return filewatcherbasedipc.CreateFileWatcherChannel(log, mode, documentID, false)
 }
 
-var processFinder = func(log log.T, procinfo contracts.OSProcInfo) bool {
+var processFinder = func(log log.T, procinfo contracts.OSProcInfo, executor executor.IExecutor) bool {
 	//If ProcInfo is not initailized
 	//pid 0 is reserved for kernel on both linux and windows, so the assumption is safe here
 	if procinfo.Pid == 0 {
 		return false
 	}
 
-	return proc.IsProcessExists(log, procinfo.Pid, procinfo.StartTime)
+	isRunning, err := executor.IsPidRunning(procinfo.Pid)
+
+	if err != nil {
+		log.Errorf("Failed to query for running process: %v", err)
+		return false
+	}
+
+	return isRunning
 }
 
 var processCreator = func(name string, argv []string) (proc.OSProcess, error) {
@@ -53,9 +62,11 @@ var processCreator = func(name string, argv []string) (proc.OSProcess, error) {
 }
 
 func NewOutOfProcExecuter(ctx context.T) *OutOfProcExecuter {
+	newContext := ctx.With("[OutOfProcExecuter]")
 	return &OutOfProcExecuter{
 		BasicExecuter: *basicexecuter.NewBasicExecuter(ctx),
-		ctx:           ctx.With("[OutOfProcExecuter]"),
+		ctx:           newContext,
+		executor:      executor.NewProcessExecutor(newContext.Log()),
 	}
 }
 
@@ -170,7 +181,7 @@ func (e *OutOfProcExecuter) initialize(stopTimer chan bool) (ipc filewatcherbase
 		log.Info("discovered old channel object, trying to find detached process...")
 		var stopTime time.Duration
 		procInfo := e.docState.DocumentInformation.ProcInfo
-		if processFinder(log, procInfo) {
+		if processFinder(log, procInfo, e.executor) {
 			log.Infof("found orphan process: %v, start time: %v", procInfo.Pid, procInfo.StartTime)
 			stopTime = defaultOrphanProcessTimeout
 		} else {

@@ -17,10 +17,7 @@
 package proc
 
 import (
-	"errors"
-	"fmt"
 	"os/exec"
-	"syscall"
 	"time"
 )
 
@@ -31,31 +28,4 @@ var (
 
 func prepareProcess(command *exec.Cmd) {
 	// nothing to do on windows
-}
-
-//given the pid and the high order filetime, look up the process
-func find_process(pid int, startTime time.Time) (bool, error) {
-	const da = syscall.STANDARD_RIGHTS_READ |
-		syscall.PROCESS_QUERY_INFORMATION | syscall.SYNCHRONIZE
-	handle, err := syscall.OpenProcess(da, false, uint32(pid))
-	defer syscall.CloseHandle(handle)
-	if err != nil {
-		return false, fmt.Errorf("open process error: ", err)
-	}
-	//process exists, check whether the creation time matches
-	var u syscall.Rusage
-	err = syscall.GetProcessTimes(syscall.Handle(handle), &u.CreationTime, &u.ExitTime, &u.KernelTime, &u.UserTime)
-
-	if err != nil {
-		return false, errors.New("unable to get process time")
-	}
-	//TODO add start time comparison
-	return true, nil
-}
-
-//TODO add date comparison
-//compare the filetime and Date time, whether they are within 1sec range
-func compare(ftime syscall.Filetime, startTime time.Time) bool {
-	parsedTime := windowsBaseTime.Add(time.Duration(ftime.Nanoseconds()))
-	return startTime.Before(parsedTime.Add(time.Second)) && startTime.After(parsedTime.Add(-time.Second))
 }
