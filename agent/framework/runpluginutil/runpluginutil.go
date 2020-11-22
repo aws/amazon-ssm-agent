@@ -127,7 +127,11 @@ func RunPlugins(
 			context.Log().Debugf("plugin - %v just experienced reboot, reset to InProgress...",
 				pluginName)
 			pluginOutput.Status = contracts.ResultStatusInProgress
-
+		case contracts.ResultStatusFailed:
+			context.Log().Debugf("plugin - %v already executed with failed status, skipping...",
+				pluginName)
+			resChan <- *pluginOutputs[pluginID]
+			continue
 		default:
 			context.Log().Debugf("plugin - %v already executed, skipping...",
 				pluginName)
