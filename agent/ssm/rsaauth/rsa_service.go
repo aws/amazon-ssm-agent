@@ -16,6 +16,7 @@ package rsaauth
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/ssm/util"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -36,8 +37,9 @@ type sdkService struct {
 }
 
 // NewRsaService creates a new SSM service instance.
-func NewRsaService(serverId string, region string, encodedPrivateKey string) RsaSignedService {
-	awsConfig := util.AwsConfig()
+func NewRsaService(log log.T, serverId string, region string, encodedPrivateKey string) RsaSignedService {
+
+	awsConfig := util.AwsConfig(log)
 
 	awsConfig.Region = &region
 	awsConfig.Credentials = credentials.NewStaticCredentials(serverId, encodedPrivateKey, "")

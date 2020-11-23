@@ -78,7 +78,7 @@ func NewAssociationProcessor(context context.T) *Processor {
 		OsVersion: config.Os.Version,
 	}
 
-	assocSvc := service.NewAssociationService(name)
+	assocSvc := service.NewAssociationService(context.Log(), name)
 	uploader := complianceUploader.NewComplianceUploader(context)
 
 	//TODO Rename everything to service and move package to framework

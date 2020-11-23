@@ -28,6 +28,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/network"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/aws-sdk-go/aws"
@@ -84,9 +85,9 @@ type sdkService struct {
 var clientBasedErrorMessages, serverBasedErrorMessages []string
 
 // NewService creates a new MDS service instance.
-func NewService(region string, endpoint string, creds *credentials.Credentials, connectionTimeout time.Duration) Service {
+func NewService(log log.T, region string, endpoint string, creds *credentials.Credentials, connectionTimeout time.Duration) Service {
 
-	config := sdkutil.AwsConfig()
+	config := sdkutil.AwsConfig(log)
 
 	if region != "" {
 		config.Region = &region
@@ -114,6 +115,7 @@ func NewService(region string, endpoint string, creds *credentials.Credentials, 
 			KeepAlive: 0,
 		}).Dial,
 		TLSHandshakeTimeout: 10 * time.Second,
+		TLSClientConfig:     network.GetDefaultTLSConfig(log),
 	}
 	config.HTTPClient = &http.Client{Transport: tr, Timeout: connectionTimeout}
 

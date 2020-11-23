@@ -19,7 +19,7 @@ import (
 	"net/http"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/tlsconfig"
+	"github.com/aws/amazon-ssm-agent/agent/network"
 	"github.com/gorilla/websocket"
 )
 
@@ -42,7 +42,7 @@ func NewWebsocketUtil(logger log.T, dialerInput *websocket.Dialer) *WebsocketUti
 
 	if dialerInput == nil {
 		d := &websocket.Dialer{
-			TLSClientConfig: tlsconfig.GetDefaultTLSConfig(logger),
+			TLSClientConfig: network.GetDefaultTLSConfig(logger),
 			Proxy:           http.ProxyFromEnvironment,
 		}
 		websocketUtil = &WebsocketUtil{

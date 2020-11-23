@@ -22,7 +22,7 @@ import (
 	"path/filepath"
 	"syscall"
 
-	"github.com/aws/amazon-ssm-agent/agent/tlsconfig/certreader"
+	"github.com/aws/amazon-ssm-agent/agent/network/certreader"
 )
 
 const (

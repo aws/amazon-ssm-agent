@@ -31,6 +31,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/rolecreds"
+	"github.com/aws/amazon-ssm-agent/agent/network"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	mgsconfig "github.com/aws/amazon-ssm-agent/agent/session/config"
@@ -84,7 +85,7 @@ func NewService(log log.T, mgsConfig appconfig.MgsConfig, connectionTimeout time
 		config, _ := appconfig.Config(false)
 		if config.Agent.ContainerMode {
 			log.Debug("Getting credentials for v4 signatures from the task role credentials.")
-			config := sdkutil.AwsConfig()
+			config := sdkutil.AwsConfig(log)
 			v4Signer = v4.NewSigner(config.Credentials)
 		} else {
 			log.Debug("Getting credentials for v4 signatures from the metadata service.")
@@ -100,7 +101,7 @@ func NewService(log log.T, mgsConfig appconfig.MgsConfig, connectionTimeout time
 	}
 
 	// capture Transport so we can use it to cancel requests
-	tr := sdkutil.GetDefaultTransport(log)
+	tr := network.GetDefaultTransport(log)
 	tr.DialContext = (&net.Dialer{
 		Timeout:   connectionTimeout,
 		KeepAlive: 0,
@@ -126,7 +127,7 @@ var makeRestcall = func(log log.T, request []byte, methodType string, url string
 		return nil, fmt.Errorf("failed to sign the request: %s", err)
 	}
 
-	tr := sdkutil.GetDefaultTransport(log)
+	tr := network.GetDefaultTransport(log)
 	client := &http.Client{
 		Timeout:   mgsClientTimeout,
 		Transport: tr,

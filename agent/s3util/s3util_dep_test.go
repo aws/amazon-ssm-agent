@@ -19,7 +19,7 @@ func TestHttpProviderImpl_Head_Handles301WithNoLocation(t *testing.T) {
 	}
 	trans := newMockTransport()
 	trans.AddResponse(bucketUrl, resp)
-	getHeadBucketTransportDelegate = func() http.RoundTripper {
+	getHeadBucketTransportDelegate = func(log.T) http.RoundTripper {
 		return trans
 	}
 

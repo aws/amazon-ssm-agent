@@ -34,8 +34,8 @@ type SsmParameterService struct {
 }
 
 // NewService creates an instance of the SsmParameterService.
-func NewService() (service ISsmParameterService) {
-	return &SsmParameterService{sdk: ssm.NewService()}
+func NewService(log log.T) (service ISsmParameterService) {
+	return &SsmParameterService{sdk: ssm.NewService(log)}
 }
 
 // This function takes a list of at most maxParametersRetrievedFromSsm(=10) ssm parameter name references like (ssm:name).

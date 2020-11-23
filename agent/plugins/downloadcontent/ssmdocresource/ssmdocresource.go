@@ -44,7 +44,7 @@ type SSMDocInfo struct {
 }
 
 // NewS3Resource is a constructor of type GitResource
-func NewSSMDocResource(info string) (*SSMDocResource, error) {
+func NewSSMDocResource(log log.T, info string) (*SSMDocResource, error) {
 	ssmDocInfo, err := parseSourceInfo(info)
 	if err != nil {
 		return nil, fmt.Errorf("SSMDocument SourceInfo parsing failed. %v", err)
@@ -53,7 +53,7 @@ func NewSSMDocResource(info string) (*SSMDocResource, error) {
 	return &SSMDocResource{
 		Info: ssmDocInfo,
 		ssmdocdep: &ssmDocDepImpl{
-			ssmSvc: ssmsvc.NewService(),
+			ssmSvc: ssmsvc.NewService(log),
 		},
 	}, nil
 }

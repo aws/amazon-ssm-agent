@@ -41,7 +41,7 @@ func RegisteredCoreModules(context context.T) *ModuleRegistry {
 // register core modules here
 func loadCoreModules(context context.T) {
 	if !context.AppConfig().Agent.ContainerMode {
-		registeredCoreModules = append(registeredCoreModules, health.NewHealthCheck(context, ssm.NewService()))
+		registeredCoreModules = append(registeredCoreModules, health.NewHealthCheck(context, ssm.NewService(context.Log())))
 		registeredCoreModules = append(registeredCoreModules, runcommand.NewMDSService(context))
 	}
 	sessionCoreModule := session.NewSession(context)

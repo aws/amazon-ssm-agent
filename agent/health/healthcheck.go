@@ -99,7 +99,7 @@ func (h *HealthCheck) updateHealth() {
 	}
 
 	if !h.healthCheckStopPolicy.IsHealthy() {
-		h.service = ssm.NewService()
+		h.service = ssm.NewService(log)
 		h.healthCheckStopPolicy.ResetErrorCount()
 	}
 
@@ -170,7 +170,7 @@ func (h *HealthCheck) ModuleRequestStop(stopType contracts.StopType) (err error)
 //ping sends an empty ping to the health service to identify if the service exists
 func (h *HealthCheck) ping() (err error) {
 	if h.healthCheckStopPolicy.HasError() {
-		h.service = ssm.NewService()
+		h.service = ssm.NewService(h.context.Log())
 		h.healthCheckStopPolicy.ResetErrorCount()
 	}
 

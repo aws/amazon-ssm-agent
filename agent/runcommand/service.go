@@ -116,7 +116,7 @@ func NewOfflineService(context context.T) (*RunCommandService, error) {
 // NewMdsProcessor initializes a new mds processor with the given parameters.
 func NewMDSService(context context.T) *RunCommandService {
 	messageContext := context.With("[" + mdsName + "]")
-	mdsService := newMdsService(context.AppConfig())
+	mdsService := newMdsService(messageContext.Log(), context.AppConfig())
 	config := context.AppConfig()
 
 	return NewService(messageContext, mdsName, mdsService, config.Mds.CommandWorkersLimit, CancelWorkersLimit, true, []contracts.DocumentType{contracts.SendCommand, contracts.CancelCommand})
@@ -217,10 +217,11 @@ var newOfflineService = func(log log.T) (mdsService.Service, error) {
 	return mdsService.NewOfflineService(log, string(SendCommandTopicPrefixOffline))
 }
 
-var newMdsService = func(config appconfig.SsmagentConfig) mdsService.Service {
+var newMdsService = func(log log.T, config appconfig.SsmagentConfig) mdsService.Service {
 	connectionTimeout := time.Duration(config.Mds.StopTimeoutMillis) * time.Millisecond
 
 	return mdsService.NewService(
+		log,
 		config.Agent.Region,
 		config.Mds.Endpoint,
 		nil,

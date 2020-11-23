@@ -87,7 +87,7 @@ type ExecutePluginDepth struct {
 // res.Output will contain a slice of RunCommandPluginOutput.
 func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
 	p.filesys = filemanager.FileSystemImpl{}
-	p.ssmSvc = ssmsvc.NewService()
+	p.ssmSvc = ssmsvc.NewService(context.Log())
 	exec := basicexecuter.NewBasicExecuter(context)
 	p.execDoc = ExecDocumentImpl{
 		DocExecutor: exec,

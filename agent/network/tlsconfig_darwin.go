@@ -13,7 +13,7 @@
 
 // +build darwin
 
-package tlsconfig
+package network
 
 import (
 	"crypto/x509"

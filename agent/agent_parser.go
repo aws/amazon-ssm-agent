@@ -115,7 +115,7 @@ func processRegistration(log logger.T) (exitCode int) {
 		}
 	}
 
-	managedInstanceID, err := registerManagedInstance()
+	managedInstanceID, err := registerManagedInstance(log)
 	if err != nil {
 		log.Errorf("Registration failed due to %v", err)
 		return 1
@@ -136,7 +136,7 @@ func processFingerprint(log logger.T) (exitCode int) {
 }
 
 // registerManagedInstance checks for activation credentials and performs managed instance registration when present
-func registerManagedInstance() (managedInstanceID string, err error) {
+func registerManagedInstance(log logger.T) (managedInstanceID string, err error) {
 	// try to activate the instance with the activation credentials
 	publicKey, privateKey, keyType, err := registration.GenerateKeyPair()
 	if err != nil {
@@ -156,7 +156,7 @@ func registerManagedInstance() (managedInstanceID string, err error) {
 		return managedInstanceID, fmt.Errorf("error generating instance fingerprint. %v", err)
 	}
 
-	service := anonauth.NewAnonymousService(region)
+	service := anonauth.NewAnonymousService(log, region)
 	managedInstanceID, err = service.RegisterManagedInstance(
 		activationCode,
 		activationID,

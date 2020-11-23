@@ -17,6 +17,7 @@ package facade
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	retry "github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade/retryer"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
@@ -32,8 +33,8 @@ const (
 	maxRetries = 3
 )
 
-func NewBirdwatcherFacade() BirdwatcherFacade {
-	awsConfig := sdkutil.AwsConfig()
+func NewBirdwatcherFacade(log log.T) BirdwatcherFacade {
+	awsConfig := sdkutil.AwsConfig(log)
 	// overriding the retry strategy
 	retryer := retry.BirdwatcherRetryer{
 		DefaultRetryer: client.DefaultRetryer{

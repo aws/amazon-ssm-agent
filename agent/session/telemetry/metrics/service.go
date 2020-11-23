@@ -157,7 +157,7 @@ func createCloudWatchStopPolicy() *sdkutil.StopPolicy {
 // createCloudWatchClient creates a client to call CloudWatchLogs APIs
 func (c *CloudWatchService) createCloudWatchClient() *cloudwatch.CloudWatch {
 	log := c.context.Log()
-	config := sdkutil.AwsConfig()
+	config := sdkutil.AwsConfig(log)
 
 	config = request.WithRetryer(config, client.DefaultRetryer{
 		NumMaxRetries: maxRetries,

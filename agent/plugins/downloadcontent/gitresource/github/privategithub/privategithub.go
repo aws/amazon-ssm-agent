@@ -113,8 +113,8 @@ func validateTokenParameter(tokenInfo string) (valid bool, err error) {
 }
 
 // NewTokenInfoImpl returns an object of type TokenInfoImpl
-func NewTokenInfoImpl() TokenInfoImpl {
-	parameterService := ssmparameterresolver.NewService()
+func NewTokenInfoImpl(log log.T) TokenInfoImpl {
+	parameterService := ssmparameterresolver.NewService(log)
 	return TokenInfoImpl{
 		SsmParameter:   getSSMParameter,
 		paramAccess:    parameterService,

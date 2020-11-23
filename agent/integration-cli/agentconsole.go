@@ -108,7 +108,7 @@ func main() {
 		}
 	}
 
-	ssmSvc := ssm.NewService()
+	ssmSvc := ssm.NewService(log)
 	if ssmSvc == nil {
 		log.Error("couldn't create ssm service.")
 		return

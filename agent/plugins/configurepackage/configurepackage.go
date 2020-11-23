@@ -28,6 +28,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/birdwatcherservice"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade"
@@ -37,7 +38,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/ssms3"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 	"github.com/aws/amazon-ssm-agent/agent/task"
-
 	"github.com/aws/aws-sdk-go/service/ssm"
 )
 
@@ -79,10 +79,10 @@ type ConfigurePackagePluginInput struct {
 }
 
 // NewPlugin returns a new instance of the plugin.
-func NewPlugin() (*Plugin, error) {
+func NewPlugin(log log.T) (*Plugin, error) {
 	var plugin Plugin
 
-	plugin.birdwatcherfacade = facade.NewBirdwatcherFacade()
+	plugin.birdwatcherfacade = facade.NewBirdwatcherFacade(log)
 	plugin.localRepository = localpackages.NewRepository()
 	plugin.packageServiceSelector = selectService
 	plugin.isDocumentArchive = false

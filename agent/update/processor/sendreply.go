@@ -59,7 +59,7 @@ func (s *svcManager) SendReply(log log.T, update *UpdateDetail) (err error) {
 	if payloadB, err = json.Marshal(value); err != nil {
 		return fmt.Errorf("could not marshal reply payload %v", err.Error())
 	}
-	if svc, err = getMsgSvc(config); err != nil {
+	if svc, err = getMsgSvc(log, config); err != nil {
 		return fmt.Errorf("could not load message service %v", err.Error())
 	}
 
@@ -75,7 +75,7 @@ func (s *svcManager) DeleteMessage(log log.T, update *UpdateDetail) (err error) 
 	if config, err = getAppConfig(false); err != nil {
 		return fmt.Errorf("could not load config file %v", err.Error())
 	}
-	if svc, err = getMsgSvc(config); err != nil {
+	if svc, err = getMsgSvc(log, config); err != nil {
 		return fmt.Errorf("could not load message service %v", err)
 	}
 
@@ -83,10 +83,11 @@ func (s *svcManager) DeleteMessage(log log.T, update *UpdateDetail) (err error) 
 }
 
 // getMsgSvc gets cached message service
-func getMsgSvc(config appconfig.SsmagentConfig) (svc messageService.Service, err error) {
+func getMsgSvc(log log.T, config appconfig.SsmagentConfig) (svc messageService.Service, err error) {
 	msgSvcOnce.Do(func() {
 		connectionTimeout := time.Duration(config.Mds.StopTimeoutMillis) * time.Millisecond
 		msgSvc = newMsgSvc(
+			log,
 			config.Agent.Region,
 			config.Mds.Endpoint,
 			nil,

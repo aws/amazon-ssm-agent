@@ -87,8 +87,8 @@ type AssociationService struct {
 }
 
 // NewAssociationService returns a new association service
-func NewAssociationService(name string) *AssociationService {
-	ssmService := ssmsvc.NewService()
+func NewAssociationService(log log.T, name string) *AssociationService {
+	ssmService := ssmsvc.NewService(log)
 	policy := sdkutil.NewStopPolicy(name, stopPolicyErrorThreshold)
 	svc := AssociationService{
 		ssmSvc:     ssmService,
@@ -112,7 +112,7 @@ func (s *AssociationService) CreateNewServiceIfUnHealthy(log log.T) {
 
 		// reset stop policy and let the scheduler start the polling after pollMessageFrequencyMinutes timeout
 		s.stopPolicy.ResetErrorCount()
-		s.ssmSvc = ssmsvc.NewService()
+		s.ssmSvc = ssmsvc.NewService(log)
 		return
 	}
 }

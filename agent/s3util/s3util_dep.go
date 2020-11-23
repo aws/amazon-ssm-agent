@@ -19,6 +19,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/backoffconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/network"
 	"github.com/cenkalti/backoff"
 )
 
@@ -31,8 +32,8 @@ type HttpProviderImpl struct {
 	logger log.T
 }
 
-var getHeadBucketTransportDelegate = func() http.RoundTripper {
-	return http.DefaultTransport
+var getHeadBucketTransportDelegate = func(log log.T) http.RoundTripper {
+	return network.GetDefaultTransport(log)
 }
 
 func (p HttpProviderImpl) Head(url string) (resp *http.Response, err error) {
@@ -42,7 +43,7 @@ func (p HttpProviderImpl) Head(url string) (resp *http.Response, err error) {
 	}
 
 	httpClient := &http.Client{
-		Transport: makeHeadBucketTransport(p.logger, getHeadBucketTransportDelegate()),
+		Transport: makeHeadBucketTransport(p.logger, getHeadBucketTransportDelegate(p.logger)),
 	}
 
 	op := func() error {

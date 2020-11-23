@@ -18,6 +18,7 @@ import (
 	"log"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/ssm/util"
 	"github.com/aws/aws-sdk-go/aws"
@@ -38,9 +39,10 @@ type sdkService struct {
 }
 
 // NewAnonymousService creates a new SSM service instance.
-func NewAnonymousService(region string) AnonymousService {
+func NewAnonymousService(logger logger.T, region string) AnonymousService {
+
 	log.SetFlags(0)
-	awsConfig := util.AwsConfig().WithLogLevel(aws.LogOff)
+	awsConfig := util.AwsConfig(logger).WithLogLevel(aws.LogOff)
 
 	awsConfig.Region = &region
 	awsConfig.Credentials = credentials.AnonymousCredentials

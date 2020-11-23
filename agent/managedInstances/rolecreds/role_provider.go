@@ -80,19 +80,19 @@ func ManagedInstanceCredentialsInstance() *credentials.Credentials {
 	}
 
 	if credentialsSingleton == nil {
-		credentialsSingleton = newManagedInstanceCredentials()
+		credentialsSingleton = newManagedInstanceCredentials(logger)
 	}
 	return credentialsSingleton
 }
 
 // newManagedInstanceCredentials returns a pointer to a new Credentials object wrapping
 // the managedInstancesRoleProvider.
-func newManagedInstanceCredentials() *credentials.Credentials {
+func newManagedInstanceCredentials(log log.T) *credentials.Credentials {
 	instanceID := managedInstance.InstanceID()
 	region := managedInstance.Region()
 	privateKey := managedInstance.PrivateKey()
 	p := &managedInstancesRoleProvider{
-		Client:       rsaauth.NewRsaService(instanceID, region, privateKey),
+		Client:       rsaauth.NewRsaService(log, instanceID, region, privateKey),
 		ExpiryWindow: EarlyExpiryTimeWindow,
 	}
 

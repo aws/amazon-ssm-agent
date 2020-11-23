@@ -70,7 +70,7 @@ func (s *stubSdkService) SendReplyWithInput(log log.T, sendReply *ssmmds.SendRep
 	return nil
 }
 
-func stubNewMsgSvc(region string, endpoint string, creds *credentials.Credentials, connectionTimeout time.Duration) messageService.Service {
+func stubNewMsgSvc(log log.T, region string, endpoint string, creds *credentials.Credentials, connectionTimeout time.Duration) messageService.Service {
 	return &stubSdkService{}
 }
 

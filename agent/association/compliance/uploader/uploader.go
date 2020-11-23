@@ -64,7 +64,7 @@ type ComplianceUploader struct {
 func NewComplianceUploader(context context.T) *ComplianceUploader {
 	var err error
 
-	ssmService := ssmSvc.NewService()
+	ssmService := ssmSvc.NewService(context.Log())
 	policy := sdkutil.NewStopPolicy(Name, stopPolicyErrorThreshold)
 	uploader := &ComplianceUploader{
 		ssmSvc:     ssmService,
@@ -96,7 +96,7 @@ func (u *ComplianceUploader) CreateNewServiceIfUnHealthy(log log.T) {
 
 		// reset stop policy and let the scheduler start the polling after pollMessageFrequencyMinutes timeout
 		u.stopPolicy.ResetErrorCount()
-		u.ssmSvc = ssmSvc.NewService()
+		u.ssmSvc = ssmSvc.NewService(u.context.Log())
 	}
 }
 

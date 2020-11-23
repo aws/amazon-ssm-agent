@@ -165,7 +165,7 @@ func setupMocksForGetS3CrossRegionCapableSession(instanceRegion, bucketName, hea
 		}
 		return cfg, nil
 	}
-	makeAwsConfig = func(region string) *aws.Config {
+	makeAwsConfig = func(log log.T, region string) *aws.Config {
 		result := aws.NewConfig()
 		result.Region = aws.String(region)
 		result.Credentials = credentials.NewCredentials(&mockCredentialsProvider{})

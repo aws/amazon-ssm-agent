@@ -68,7 +68,7 @@ func NewInventoryUploader(context context.T) (*InventoryUploader, error) {
 	log := c.Log()
 
 	// setting ssm client config
-	cfg := sdkutil.AwsConfig()
+	cfg := sdkutil.AwsConfig(log)
 
 	// overrides ssm client config from appconfig if applicable
 	if appCfg, err = appconfig.Config(false); err == nil {

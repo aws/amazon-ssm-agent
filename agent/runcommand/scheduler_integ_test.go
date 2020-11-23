@@ -24,7 +24,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	mds "github.com/aws/amazon-ssm-agent/agent/runcommand/mds"
 	runcommandmock "github.com/aws/amazon-ssm-agent/agent/runcommand/mock"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
@@ -50,7 +50,7 @@ var (
 // NewMockDefault returns an instance of Mock with default expectations set.
 func MockContext() *context.Mock {
 	ctx := new(context.Mock)
-	log := log.NewMockLog()
+	log := logger.NewMockLog()
 	config := appconfig.SsmagentConfig{}
 	ctx.On("Log").Return(log)
 	ctx.On("AppConfig").Return(config)
@@ -72,7 +72,7 @@ func TestLoop_Once(t *testing.T) {
 	// create mocked service and set expectations
 	mdsMock := new(runcommandmock.MockedMDS)
 	mdsMock.On("GetMessages", log, sampleInstanceID).Return(&ssmmds.GetMessagesOutput{}, nil)
-	newMdsService = func(appconfig.SsmagentConfig) mds.Service {
+	newMdsService = func(logger.T, appconfig.SsmagentConfig) mds.Service {
 		return mdsMock
 	}
 	called := 0
@@ -103,7 +103,7 @@ func TestLoop_Multiple_Serial(t *testing.T) {
 	// create mocked service and set expectations
 	mdsMock := new(runcommandmock.MockedMDS)
 	mdsMock.On("GetMessages", log, sampleInstanceID).Return(&ssmmds.GetMessagesOutput{}, nil)
-	newMdsService = func(appconfig.SsmagentConfig) mds.Service {
+	newMdsService = func(logger.T, appconfig.SsmagentConfig) mds.Service {
 		return mdsMock
 	}
 	called := 0
@@ -143,7 +143,7 @@ func TestLoop_Multiple_Parallel(t *testing.T) {
 	// create mocked service and set expectations
 	mdsMock := new(runcommandmock.MockedMDS)
 	mdsMock.On("GetMessages", log, sampleInstanceID).Return(&ssmmds.GetMessagesOutput{}, nil)
-	newMdsService = func(appconfig.SsmagentConfig) mds.Service {
+	newMdsService = func(logger.T, appconfig.SsmagentConfig) mds.Service {
 		return mdsMock
 	}
 	called := 0
@@ -176,7 +176,7 @@ func TestLoop_Once_Error(t *testing.T) {
 	// create mocked service and set expectations
 	mdsMock := new(runcommandmock.MockedMDS)
 	mdsMock.On("GetMessages", log, sampleInstanceID).Return(&ssmmds.GetMessagesOutput{}, errSample)
-	newMdsService = func(appconfig.SsmagentConfig) mds.Service {
+	newMdsService = func(logger.T, appconfig.SsmagentConfig) mds.Service {
 		return mdsMock
 	}
 	called := 0
@@ -207,7 +207,7 @@ func TestLoop_Multiple_Serial_Error(t *testing.T) {
 	// create mocked service and set expectations
 	mdsMock := new(runcommandmock.MockedMDS)
 	mdsMock.On("GetMessages", log, sampleInstanceID).Return(&ssmmds.GetMessagesOutput{}, errSample)
-	newMdsService = func(appconfig.SsmagentConfig) mds.Service {
+	newMdsService = func(logger.T, appconfig.SsmagentConfig) mds.Service {
 		return mdsMock
 	}
 	called := 0
@@ -249,7 +249,7 @@ func TestSendReplyLoop_Multiple_Serial_Error(t *testing.T) {
 	mdsMock.On("SendReplyWithInput", mock.AnythingOfType("*log.Mock"), &ssmmds.SendReplyInput{}).Return(errSample)
 	mdsMock.On("LoadFailedReplies", mock.AnythingOfType("*log.Mock")).Return(replies)
 	mdsMock.On("GetFailedReply", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return(&ssmmds.SendReplyInput{}, nil)
-	newMdsService = func(appconfig.SsmagentConfig) mds.Service {
+	newMdsService = func(logger.T, appconfig.SsmagentConfig) mds.Service {
 		return mdsMock
 	}
 	proc := RunCommandService{
@@ -277,7 +277,7 @@ func TestLoop_Multiple_Parallel_Error(t *testing.T) {
 	// create mocked service and set expectations
 	mdsMock := new(runcommandmock.MockedMDS)
 	mdsMock.On("GetMessages", log, sampleInstanceID).Return(&ssmmds.GetMessagesOutput{}, errSample)
-	newMdsService = func(appconfig.SsmagentConfig) mds.Service {
+	newMdsService = func(logger.T, appconfig.SsmagentConfig) mds.Service {
 		return mdsMock
 	}
 	called := 0

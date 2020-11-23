@@ -94,13 +94,13 @@ func createCloudWatchStopPolicy() *sdkutil.StopPolicy {
 
 // createCloudWatchClient creates a client to call CloudWatchLogs APIs
 func createCloudWatchClient(log log.T) cloudwatchlogsinterface.CloudWatchLogsClient {
-	config := sdkutil.AwsConfig()
+	config := sdkutil.AwsConfig(log)
 	return createCloudWatchClientWithConfig(log, config)
 }
 
 // createCloudWatchClientWithCredentials creates a client to call CloudWatchLogs APIs using credentials from the id and secret passed
 func createCloudWatchClientWithCredentials(log log.T, id, secret string) cloudwatchlogsinterface.CloudWatchLogsClient {
-	config := sdkutil.AwsConfig().WithCredentials(credentials.NewStaticCredentials(id, secret, ""))
+	config := sdkutil.AwsConfig(log).WithCredentials(credentials.NewStaticCredentials(id, secret, ""))
 	return createCloudWatchClientWithConfig(log, config)
 }
 

@@ -111,7 +111,7 @@ type ConfigurePackageFactory struct {
 }
 
 func (f ConfigurePackageFactory) Create(context context.T) (runpluginutil.T, error) {
-	return configurepackage.NewPlugin()
+	return configurepackage.NewPlugin(context.Log())
 }
 
 type RefreshAssociationFactory struct {

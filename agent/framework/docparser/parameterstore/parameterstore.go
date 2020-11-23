@@ -267,7 +267,7 @@ func getSSMParameterValues(log log.T, ssmParams []string) (map[string]Parameter,
 func callGetParameters(log log.T, paramNames []string) (*GetParametersResponse, error) {
 	finalResult := GetParametersResponse{}
 
-	ssmSvc := ssm.NewService()
+	ssmSvc := ssm.NewService(log)
 
 	for i := 0; i < len(paramNames); i = i + MaxParametersPerCall {
 		limit := i + MaxParametersPerCall

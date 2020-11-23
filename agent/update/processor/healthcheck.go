@@ -54,7 +54,7 @@ var newSsmSvc = ssm.NewService
 // UpdateHealthCheck sends the health check information back to the service
 func (s *svcManager) UpdateHealthCheck(log log.T, update *UpdateDetail, errorCode string) (err error) {
 	var svc ssm.Service
-	if svc, err = getSsmSvc(); err != nil {
+	if svc, err = getSsmSvc(log); err != nil {
 		return fmt.Errorf("Failed to load ssm service, %v", err)
 	}
 	status := PrepareHealthStatus(update, errorCode, update.TargetVersion)
@@ -66,9 +66,9 @@ func (s *svcManager) UpdateHealthCheck(log log.T, update *UpdateDetail, errorCod
 }
 
 // getSsmSvc loads ssm service
-func getSsmSvc() (ssm.Service, error) {
+func getSsmSvc(log log.T) (ssm.Service, error) {
 	ssmSvcOnce.Do(func() {
-		ssmSvc = newSsmSvc()
+		ssmSvc = newSsmSvc(log)
 	})
 
 	if ssmSvc == nil {

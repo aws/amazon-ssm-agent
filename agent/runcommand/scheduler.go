@@ -120,7 +120,7 @@ func (s *RunCommandService) reset() {
 	// this is extra insurance to avoid service object getting corrupted - adding resiliency
 	config := s.context.AppConfig()
 	if s.name == mdsName {
-		s.service = newMdsService(config)
+		s.service = newMdsService(log, config)
 	}
 }
 

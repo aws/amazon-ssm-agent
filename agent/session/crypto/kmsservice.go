@@ -48,7 +48,7 @@ func NewKMSService(log log.T) (kmsService *KMSService, err error) {
 		agentName        string
 		agentVersion     string
 	)
-	awsConfig = sdkutil.AwsConfig()
+	awsConfig = sdkutil.AwsConfig(log)
 	if appConfig, err = appconfig.Config(false); err != nil {
 		log.Warnf("Failed to load appconfig: %s. Using default config.", err)
 	} else if appConfig.Kms.Endpoint != "" {

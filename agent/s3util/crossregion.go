@@ -24,11 +24,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
-
 	"github.com/Workiva/go-datastructures/cache"
-
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/network"
 	"github.com/aws/aws-sdk-go/aws/endpoints"
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -78,7 +76,7 @@ func GetS3CrossRegionCapableSession(log log.T, bucketName string) (*session.Sess
 		log.Infof("using instance region %v for bucket %v", initialRegion, bucketName)
 	}
 
-	config := makeAwsConfig(initialRegion)
+	config := makeAwsConfig(log, initialRegion)
 
 	var agentName, agentVersion string
 	if appConfig, cfgErr := getAppConfig(); cfgErr == nil {
@@ -384,7 +382,7 @@ type s3BucketRegionHeaderCapturingTransport struct {
 // Create a new s3BucketRegionHeaderCapturingTransport
 func newS3BucketRegionHeaderCapturingTransport(log log.T) *s3BucketRegionHeaderCapturingTransport {
 	return &s3BucketRegionHeaderCapturingTransport{
-		delegate: sdkutil.GetDefaultTransport(log),
+		delegate: network.GetDefaultTransport(log),
 		logger:   log,
 	}
 }

@@ -13,14 +13,14 @@
 
 // +build freebsd linux netbsd openbsd
 
-package tlsconfig
+package network
 
 import (
 	"crypto/x509"
 	"fmt"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/tlsconfig/certreader"
+	"github.com/aws/amazon-ssm-agent/agent/network/certreader"
 )
 
 func getSystemCertPool() (*x509.CertPool, error) {

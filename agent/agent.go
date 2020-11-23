@@ -73,7 +73,7 @@ func start(log logger.T, instanceIDPtr *string, regionPtr *string, shouldCheckHi
 	}
 
 	//Initializing the health module to send empty health pings to the service.
-	healthModule := health.NewHealthCheck(context, ssm.NewService())
+	healthModule := health.NewHealthCheck(context, ssm.NewService(log))
 	hibernateState := hibernation.NewHibernateMode(healthModule, context)
 	messageBusClient = messagebus.NewMessageBus(context)
 

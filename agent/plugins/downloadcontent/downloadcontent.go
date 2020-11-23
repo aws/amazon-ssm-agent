@@ -93,17 +93,17 @@ func newRemoteResource(log log.T, SourceType string, SourceInfo string) (resourc
 	case GitHub:
 		// TODO: meloniam@ 08/24/2017 Replace string type to map[string]inteface{} type once Runcommand supports string maps
 		// TODO: https://amazon.awsapps.com/workdocs/index.html#/document/7d56a42ea5b040a7c33548d77dc98040f0fb380bbbfb2fd580c861225e2ee1c7
-		token := privategithub.NewTokenInfoImpl()
+		token := privategithub.NewTokenInfoImpl(log)
 		return github.NewGitHubResource(log, SourceInfo, token)
 	case S3:
 		return s3resource.NewS3Resource(log, SourceInfo)
 	case SSMDocument:
-		return ssmdocresource.NewSSMDocResource(SourceInfo)
+		return ssmdocresource.NewSSMDocResource(log, SourceInfo)
 	case HTTP:
-		ssmParameterResolverBridge := ssmparameterresolver.NewSsmParameterResolverBridge(ssmparameterresolver.NewService())
+		ssmParameterResolverBridge := ssmparameterresolver.NewSsmParameterResolverBridge(ssmparameterresolver.NewService(log))
 		return httpresource.NewHTTPResource(log, SourceInfo, ssmParameterResolverBridge)
 	case Git:
-		ssmParameterResolverBridge := ssmparameterresolver.NewSsmParameterResolverBridge(ssmparameterresolver.NewService())
+		ssmParameterResolverBridge := ssmparameterresolver.NewSsmParameterResolverBridge(ssmparameterresolver.NewService(log))
 		return privategit.NewGitResource(log, SourceInfo, ssmParameterResolverBridge)
 	default:
 		return nil, fmt.Errorf("Invalid SourceType - %v", SourceType)

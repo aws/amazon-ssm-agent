@@ -15,17 +15,18 @@
 package util
 
 import (
-	"crypto/tls"
 	"net/http"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/network"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil/retryer"
 	"github.com/aws/aws-sdk-go/aws"
 )
 
-func AwsConfig() *aws.Config {
+func AwsConfig(log log.T) *aws.Config {
 	// create default config
 	awsConfig := &aws.Config{
 		Retryer:    newRetryer(),
@@ -49,13 +50,13 @@ func AwsConfig() *aws.Config {
 	if appConfig.Agent.Region != "" {
 		awsConfig.Region = &appConfig.Agent.Region
 	}
+
 	// TODO: test hook, can be removed before release
 	// this is to skip ssl verification for the beta self signed certs
+	awsConfig.HTTPClient = &http.Client{Transport: network.GetDefaultTransport(log)}
 	if appConfig.Ssm.InsecureSkipVerify {
-		tr := &http.Transport{
-			TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-		}
-		awsConfig.HTTPClient = &http.Client{Transport: tr}
+		tlsConfig := awsConfig.HTTPClient.Transport.(*http.Transport).TLSClientConfig
+		tlsConfig.InsecureSkipVerify = true
 	}
 
 	return awsConfig

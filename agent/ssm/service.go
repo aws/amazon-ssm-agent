@@ -14,7 +14,6 @@
 package ssm
 
 import (
-	"crypto/tls"
 	"fmt"
 	"net/http"
 	"runtime"
@@ -82,13 +81,13 @@ type sdkService struct {
 }
 
 // NewService creates a new SSM service instance.
-func NewService() Service {
+func NewService(log log.T) Service {
 	if ssmStopPolicy == nil {
 		// create a stop policy where we will stop after 10 consecutive errors and if time period expires.
 		ssmStopPolicy = sdkutil.NewStopPolicy("ssmService", 10)
 	}
 
-	awsConfig := sdkutil.AwsConfig()
+	awsConfig := sdkutil.AwsConfig(log)
 	// parse appConfig overrides
 	appConfig, err := appconfig.Config(false)
 	if err == nil {
@@ -108,10 +107,8 @@ func NewService() Service {
 		// TODO: test hook, can be removed before release
 		// this is to skip ssl verification for the beta self signed certs
 		if appConfig.Ssm.InsecureSkipVerify {
-			tr := &http.Transport{
-				TLSClientConfig: &tls.Config{InsecureSkipVerify: true},
-			}
-			awsConfig.HTTPClient = &http.Client{Transport: tr}
+			tlsConfig := awsConfig.HTTPClient.Transport.(*http.Transport).TLSClientConfig
+			tlsConfig.InsecureSkipVerify = true
 		}
 	}
 	sess := session.New(awsConfig)

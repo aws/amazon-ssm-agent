@@ -15,11 +15,14 @@
 package sdkutil
 
 import (
+	"net/http"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/rolecreds"
+	"github.com/aws/amazon-ssm-agent/agent/network"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil/retryer"
 
@@ -31,15 +34,15 @@ import (
 // AwsConfig returns the default aws.Config object with the appropriate
 // credentials. Callers should override returned config properties with any
 // values they want for service specific overrides.
-func AwsConfig() (awsConfig *aws.Config) {
+func AwsConfig(log log.T) (awsConfig *aws.Config) {
 	region, _ := platform.Region()
-	return AwsConfigForRegion(region)
+	return AwsConfigForRegion(log, region)
 }
 
 // AwsConfigForRegion returns the default aws.Config object with the appropriate
 // credentials and the specified region. Callers should override returned config
 // properties with any values they want for service specific overrides.
-func AwsConfigForRegion(region string) (awsConfig *aws.Config) {
+func AwsConfigForRegion(log log.T, region string) (awsConfig *aws.Config) {
 	// create default config
 	awsConfig = &aws.Config{
 		Retryer:    newRetryer(),
@@ -49,6 +52,11 @@ func AwsConfigForRegion(region string) (awsConfig *aws.Config) {
 	// update region if given
 	if region != "" {
 		awsConfig.Region = &region
+	}
+
+	// set Http Client
+	awsConfig.HTTPClient = &http.Client{
+		Transport: network.GetDefaultTransport(log),
 	}
 
 	//load Task IAM credentials if applicable
