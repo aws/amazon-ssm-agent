@@ -210,6 +210,7 @@ func (p *ShellPlugin) execute(context context.T,
 	if err := startPty(log, shellProps, false, config, p); err != nil {
 		errorString := fmt.Errorf("Unable to start shell: %s", err)
 		log.Error(errorString)
+		time.Sleep(2 * time.Second)
 		output.MarkAsFailed(errorString)
 		return
 	}
