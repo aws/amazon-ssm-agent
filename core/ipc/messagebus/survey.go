@@ -154,8 +154,6 @@ func (bus *MessageBus) createMessageChannelWithRetry(topic message.TopicType) er
 
 	for i := 0; i < 3; i++ {
 		if err = bus.createMessageChannel(topic, address); err == nil {
-			//wait for the client to connect
-			time.Sleep(time.Second)
 			return nil
 		}
 
@@ -175,7 +173,7 @@ func (bus *MessageBus) createMessageChannel(topic message.TopicType, address str
 		return fmt.Errorf("failed to listen on the channel: %s, %v", address, err)
 	}
 
-	if err = bus.surveyChannels[topic].SetOption(mangos.OptionSurveyTime, time.Second*2); err != nil {
+	if err = bus.surveyChannels[topic].SetOption(mangos.OptionSurveyTime, time.Second*1); err != nil {
 		return fmt.Errorf("setOption(): %v", err)
 	}
 
