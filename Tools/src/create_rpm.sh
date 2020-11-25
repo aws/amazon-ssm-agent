@@ -61,6 +61,6 @@ echo "Creating the rpm package $FOLDER"
 SPEC_FILE="${GO_SPACE}/packaging/linux/amazon-ssm-agent.spec"
 BUILD_ROOT="${GO_SPACE}/bin/$FOLDER/linux"
 
-rpmbuild -bb --target $TARGET --define "rpmversion `cat ${GO_SPACE}/VERSION`" --define "_topdir bin/$FOLDER/linux/rpmbuild" --buildroot ${BUILD_ROOT} ${SPEC_FILE}
+rpmbuild -bb --target $TARGET --define "rpmversion `cat ${GO_SPACE}/VERSION`" --define "_topdir bin/$FOLDER/linux/rpmbuild" --define "_source_filedigest_algorithm 8" --define "_binary_filedigest_algorithm 8" --buildroot ${BUILD_ROOT} ${SPEC_FILE}
 cp ${GO_SPACE}/bin/$FOLDER/linux/rpmbuild/RPMS/$TARGET/*.rpm ${GO_SPACE}/bin/$FOLDER/amazon-ssm-agent.rpm
 rm -rf ${GO_SPACE}/bin/$FOLDER/linux/rpmbuild/RPMS/$TARGET/*
