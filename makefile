@@ -371,37 +371,37 @@ get-tools:
 
 .PHONY: --quick-integtest
 --quick-integtest:
-	# if you want to restrict to some specific package, sample below
-	# go test -v -gcflags "-N -l" -timeout 20m -tags=integration github.com/aws/amazon-ssm-agent/agent/fileutil/...
+# if you want to restrict to some specific package, sample below
+# go test -v -gcflags "-N -l" -timeout 20m -tags=integration github.com/aws/amazon-ssm-agent/agent/fileutil/...
 	go test -gcflags "-N -l" -timeout 20m -tags=integration github.com/aws/amazon-ssm-agent/agent/...
 
 .PHONY: --quick-integtest-core
 --quick-integtest-core:
-	# if you want to restrict to some specific package, sample below
-	# go test -v -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/agent/fileutil/...
+# if you want to restrict to some specific package, sample below
+# go test -v -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/agent/fileutil/...
 	go test -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/core/...
 
 
 .PHONY: --quick-test
 --quick-test:
-	# if you want to test a specific package, you can add the package name instead of the dots. Sample below
-	# go test -gcflags "-N -l" -timeout 20m github.com/aws/amazon-ssm-agent/agent/task
+# if you want to test a specific package, you can add the package name instead of the dots. Sample below
+# go test -gcflags "-N -l" -timeout 20m github.com/aws/amazon-ssm-agent/agent/task
 	go test -gcflags "-N -l" -timeout 20m github.com/aws/amazon-ssm-agent/agent/...
 
 --quick-test-core:
-	# if you want to test a specific package, you can add the package name instead of the dots. Sample below
-	# go test -gcflags "-N -l" github.com/aws/amazon-ssm-agent/agent/task
+# if you want to test a specific package, you can add the package name instead of the dots. Sample below
+# go test -gcflags "-N -l" github.com/aws/amazon-ssm-agent/agent/task
 	go test -gcflags "-N -l" github.com/aws/amazon-ssm-agent/core/...
 
 .PHONY: --quick-e2e
 --quick-e2e:
-	# if you want to restrict to some specific package, sample below
-	# go test -v -gcflags "-N -l" -timeout 20m -tags=integration github.com/aws/amazon-ssm-agent/agent/fileutil/...
+# if you want to restrict to some specific package, sample below
+# go test -v -gcflags "-N -l" -timeout 20m -tags=integration github.com/aws/amazon-ssm-agent/agent/fileutil/...
 	go test -gcflags "-N -l" -timeout 20m -tags=e2e github.com/aws/amazon-ssm-agent/agent/...
 
 --quick-e2e-core:
-	# if you want to restrict to some specific package, sample below
-	# go test -v -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/agent/fileutil/...
+# if you want to restrict to some specific package, sample below
+# go test -v -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/agent/fileutil/...
 	go test -gcflags "-N -l" -tags=e2e github.com/aws/amazon-ssm-agent/core/...
 
 .PHONY: gen-report
