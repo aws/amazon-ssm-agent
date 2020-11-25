@@ -1,8 +1,12 @@
 COPY := cp -p
-GO_BUILD := CGO_ENABLED=0 go build -ldflags "-s -w" -trimpath
+GO_BUILD_NOPIE := CGO_ENABLED=0 go build -ldflags "-s -w" -trimpath
 GO_BUILD_PIE := go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -trimpath
 
-
+# Default build configuration, can be overridden at build time.
+GOARCH?=$(shell go env GOARCH)
+GOOS?=$(shell go env GOOS)
+GO_SRC_TYPE?=unix
+GO_BUILD?=$(GO_BUILD_NOPIE)
 
 # Initailize workspace if it's empty
 ifeq ($(WORKSPACE),)
@@ -10,7 +14,7 @@ ifeq ($(WORKSPACE),)
 endif
 
 # Initailize GO_SPACE
-export GO_SPACE=$(shell pwd)
+export GO_SPACE=$(CURDIR)
 GOTEMPPATH := $(GO_SPACE)/build/private
 GOTEMPCOPYPATH := $(GOTEMPPATH)/src/github.com/aws/amazon-ssm-agent
 
@@ -68,7 +72,6 @@ clean:: remove-prepacked-folder
 	rm -rf build/* bin/ pkg/ vendor/bin/ vendor/pkg/ .cover/
 	find . -type f -name '*.log' -delete
 
-
 .PHONY: cpy-plugins
 cpy-plugins: copy-src pre-build
 	$(GO_SPACE)/Tools/src/copy_plugin_binaries.sh
@@ -111,162 +114,91 @@ pre-build:
 	$(COPY) $(GO_SPACE)/agent/integration-cli/integration-cli.json $(GO_SPACE)/bin/
 
 	@echo "Regenerate version file during pre-release"
-	go run $(GO_SPACE)/agent/version/versiongenerator/version-gen.go
+# Remove overrides for GOARCH and GOOS when invoking 'go run', since we want the local host's settings
+	GOARCH= GOOS= go run $(GO_SPACE)/agent/version/versiongenerator/version-gen.go
 	$(COPY) $(GO_SPACE)/VERSION $(GO_SPACE)/bin/
 
 
-.PHONY: build-linux
-build-linux: checkstyle copy-src pre-build
-	@echo "Build for linux agent"
-	GOOS=linux GOARCH=amd64 $(GO_BUILD_PIE) -o $(GO_SPACE)/bin/linux_amd64/amazon-ssm-agent -v \
-					$(GO_SPACE)/core/agent.go $(GO_SPACE)/core/agent_unix.go $(GO_SPACE)/core/agent_parser.go
-	GOOS=linux GOARCH=amd64 $(GO_BUILD_PIE) -o $(GO_SPACE)/bin/linux_amd64/ssm-agent-worker -v \
-					$(GO_SPACE)/agent/agent.go $(GO_SPACE)/agent/agent_unix.go $(GO_SPACE)/agent/agent_parser.go
-	GOOS=linux GOARCH=amd64 $(GO_BUILD_PIE) -o $(GO_SPACE)/bin/linux_amd64/updater -v \
-					$(GO_SPACE)/agent/update/updater/updater.go $(GO_SPACE)/agent/update/updater/updater_unix.go
-	GOOS=linux GOARCH=amd64 $(GO_BUILD_PIE) -o $(GO_SPACE)/bin/linux_amd64/ssm-cli -v \
-					$(GO_SPACE)/agent/cli-main/cli-main.go
-	GOOS=linux GOARCH=amd64 $(GO_BUILD_PIE) -o $(GO_SPACE)/bin/linux_amd64/ssm-document-worker -v \
-					$(GO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
-	GOOS=linux GOARCH=amd64 $(GO_BUILD_PIE) -o $(GO_SPACE)/bin/linux_amd64/ssm-session-logger -v \
-					$(GO_SPACE)/agent/session/logging/main.go
-	GOOS=linux GOARCH=amd64 $(GO_BUILD_PIE) -o $(GO_SPACE)/bin/linux_amd64/ssm-session-worker -v \
-					$(GO_SPACE)/agent/framework/processor/executer/outofproc/sessionworker/main.go
+# General build recipe. Defaults to generating a linux/amd64 non-PIE build, but can be overriden
+# by setting appropriate variables.
+.PHONY: build-any-%
+build-any-%: checkstyle copy-src pre-build
+	@echo "Build for $(GOARCH) $(GOOS) agent"
+	GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO_BUILD) -o $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/amazon-ssm-agent$(EXE_EXT) -v \
+	    $(GO_SPACE)/core/agent.go $(GO_SPACE)/core/agent_$(GO_SRC_TYPE).go $(GO_SPACE)/core/agent_parser.go
+	GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO_BUILD) -o $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/ssm-agent-worker$(EXE_EXT) -v \
+	    $(GO_SPACE)/agent/agent.go $(GO_SPACE)/agent/agent_$(GO_SRC_TYPE).go $(GO_SPACE)/agent/agent_parser.go
+	GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO_BUILD) -o $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/updater$(EXE_EXT) -v \
+	    $(GO_SPACE)/agent/update/updater/updater.go $(GO_SPACE)/agent/update/updater/updater_$(GO_SRC_TYPE).go
+	GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO_BUILD) -o $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/ssm-cli$(EXE_EXT) -v \
+	    $(GO_SPACE)/agent/cli-main/cli-main.go
+	GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO_BUILD) -o $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/ssm-document-worker$(EXE_EXT) -v \
+	    $(GO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
+	GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO_BUILD) -o $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/ssm-session-logger$(EXE_EXT) -v \
+	    $(GO_SPACE)/agent/session/logging/main.go
+	GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO_BUILD) -o $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/ssm-session-worker$(EXE_EXT) -v \
+	    $(GO_SPACE)/agent/framework/processor/executer/outofproc/sessionworker/main.go
 
-.PHONY: build-freebsd
-build-freebsd: checkstyle copy-src pre-build
-	@echo "Build for freebsd agent"
-	GOOS=freebsd GOARCH=amd64 $(GO_BUILD) -o $(GO_SPACE)/bin/freebsd_amd64/amazon-ssm-agent -v \
-                        $(GO_SPACE)/core/agent.go $(GO_SPACE)/core/agent_unix.go $(GO_SPACE)/core/agent_parser.go
-	GOOS=freebsd GOARCH=amd64 $(GO_BUILD) -o $(GO_SPACE)/bin/freebsd_amd64/ssm-agent-worker -v \
-					$(GO_SPACE)/agent/agent.go $(GO_SPACE)/agent/agent_unix.go $(GO_SPACE)/agent/agent_parser.go
-	GOOS=freebsd GOARCH=amd64 $(GO_BUILD) -o $(GO_SPACE)/bin/freebsd_amd64/ssm-cli -v \
-					$(GO_SPACE)/agent/cli-main/cli-main.go
-	GOOS=freebsd GOARCH=amd64 $(GO_BUILD) -o $(GO_SPACE)/bin/freebsd_amd64/ssm-document-worker -v \
-					$(GO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
-	GOOS=freebsd GOARCH=amd64 $(GO_BUILD) -o $(GO_SPACE)/bin/freebsd_amd64/ssm-session-logger -v \
-					$(GO_SPACE)/agent/session/logging/main.go
-	GOOS=freebsd GOARCH=amd64 $(GO_BUILD) -o $(GO_SPACE)/bin/freebsd_amd64/ssm-session-worker -v \
-					$(GO_SPACE)/agent/framework/processor/executer/outofproc/sessionworker/main.go
-
-.PHONY: build-darwin
-build-darwin: checkstyle copy-src pre-build
-	@echo "Build for darwin agent"
-	GOOS=darwin GOARCH=amd64 $(GO_BUILD) -o $(GO_SPACE)/bin/darwin_amd64/amazon-ssm-agent -v \
-                    $(GO_SPACE)/core/agent.go $(GO_SPACE)/core/agent_unix.go $(GO_SPACE)/core/agent_parser.go
-	GOOS=darwin GOARCH=amd64 $(GO_BUILD) -o $(GO_SPACE)/bin/darwin_amd64/ssm-agent-worker -v \
-					$(GO_SPACE)/agent/agent.go $(GO_SPACE)/agent/agent_unix.go $(GO_SPACE)/agent/agent_parser.go
-	GOOS=darwin GOARCH=amd64 $(GO_BUILD) -o $(GO_SPACE)/bin/darwin_amd64/updater -v \
-					$(GO_SPACE)/agent/update/updater/updater.go $(GO_SPACE)/agent/update/updater/updater_unix.go
-	GOOS=darwin GOARCH=amd64 $(GO_BUILD) -o $(GO_SPACE)/bin/darwin_amd64/ssm-cli -v \
-					$(GO_SPACE)/agent/cli-main/cli-main.go
-	GOOS=darwin GOARCH=amd64 $(GO_BUILD) -o $(GO_SPACE)/bin/darwin_amd64/ssm-document-worker -v \
-					$(GO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
-
-.PHONY: build-windows
-build-windows: checkstyle copy-src pre-build
-	@echo "Rebuild for windows agent"
-	GOOS=windows GOARCH=amd64 $(GO_BUILD) -o $(GO_SPACE)/bin/windows_amd64/amazon-ssm-agent.exe -v \
-					$(GO_SPACE)/core/agent.go $(GO_SPACE)/core/agent_windows.go $(GO_SPACE)/core/agent_parser.go
-	GOOS=windows GOARCH=amd64 $(GO_BUILD) -o $(GO_SPACE)/bin/windows_amd64/ssm-agent-worker.exe -v \
-					$(GO_SPACE)/agent/agent.go $(GO_SPACE)/agent/agent_windows.go $(GO_SPACE)/agent/agent_parser.go
-	GOOS=windows GOARCH=amd64 $(GO_BUILD) -o $(GO_SPACE)/bin/windows_amd64/updater.exe -v \
-					$(GO_SPACE)/agent/update/updater/updater.go $(GO_SPACE)/agent/update/updater/updater_windows.go
-	GOOS=windows GOARCH=amd64 $(GO_BUILD) -o $(GO_SPACE)/bin/windows_amd64/ssm-cli.exe -v \
-					$(GO_SPACE)/agent/cli-main/cli-main.go
-	GOOS=windows GOARCH=amd64 $(GO_BUILD) -o $(GO_SPACE)/bin/windows_amd64/ssm-document-worker.exe -v \
-					$(GO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
-	GOOS=windows GOARCH=amd64 $(GO_BUILD) -o $(GO_SPACE)/bin/windows_amd64/ssm-session-logger.exe -v \
-					$(GO_SPACE)/agent/session/logging/main.go
-	GOOS=windows GOARCH=amd64 $(GO_BUILD) -o $(GO_SPACE)/bin/windows_amd64/ssm-session-worker.exe -v \
-					$(GO_SPACE)/agent/framework/processor/executer/outofproc/sessionworker/main.go
-
-.PHONY: build-linux-386
-build-linux-386: checkstyle copy-src pre-build
-	@echo "Build for linux agent"
-	GOOS=linux GOARCH=386 $(GO_BUILD) -o $(GO_SPACE)/bin/linux_386/amazon-ssm-agent -v \
-                        $(GO_SPACE)/core/agent.go $(GO_SPACE)/core/agent_unix.go $(GO_SPACE)/core/agent_parser.go
-	GOOS=linux GOARCH=386 $(GO_BUILD) -o $(GO_SPACE)/bin/linux_386/ssm-agent-worker -v \
-					$(GO_SPACE)/agent/agent.go $(GO_SPACE)/agent/agent_unix.go $(GO_SPACE)/agent/agent_parser.go
-	GOOS=linux GOARCH=386 $(GO_BUILD) -o $(GO_SPACE)/bin/linux_386/updater -v \
-					$(GO_SPACE)/agent/update/updater/updater.go $(GO_SPACE)/agent/update/updater/updater_unix.go
-	GOOS=linux GOARCH=386 $(GO_BUILD) -o $(GO_SPACE)/bin/linux_386/ssm-cli -v \
-					$(GO_SPACE)/agent/cli-main/cli-main.go
-	GOOS=linux GOARCH=386 $(GO_BUILD) -o $(GO_SPACE)/bin/linux_386/ssm-document-worker -v \
-					$(GO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
-	GOOS=linux GOARCH=386 $(GO_BUILD) -o $(GO_SPACE)/bin/linux_386/ssm-session-logger -v \
-					$(GO_SPACE)/agent/session/logging/main.go
-	GOOS=linux GOARCH=386 $(GO_BUILD) -o $(GO_SPACE)/bin/linux_386/ssm-session-worker -v \
-					$(GO_SPACE)/agent/framework/processor/executer/outofproc/sessionworker/main.go
-
-.PHONY: build-darwin-386
-build-darwin-386: checkstyle copy-src pre-build
-	@echo "Build for darwin agent"
-	GOOS=darwin GOARCH=386 $(GO_BUILD) -o $(GO_SPACE)/bin/darwin_386/amazon-ssm-agent -v \
-                    $(GO_SPACE)/core/agent.go $(GO_SPACE)/core/agent_unix.go $(GO_SPACE)/core/agent_parser.go
-	GOOS=darwin GOARCH=386 $(GO_BUILD) -o $(GO_SPACE)/bin/darwin_386/ssm-agent-worker -v \
-					$(GO_SPACE)/agent/agent.go $(GO_SPACE)/agent/agent_unix.go $(GO_SPACE)/agent/agent_parser.go
-	GOOS=darwin GOARCH=386 $(GO_BUILD) -o $(GO_SPACE)/bin/darwin_386/updater -v \
-					$(GO_SPACE)/agent/update/updater/updater.go $(GO_SPACE)/agent/update/updater/updater_unix.go
-	GOOS=darwin GOARCH=386 $(GO_BUILD) -o $(GO_SPACE)/bin/darwin_386/ssm-cli -v \
-					$(GO_SPACE)/agent/cli-main/cli-main.go
-	GOOS=darwin GOARCH=386 $(GO_BUILD) -o $(GO_SPACE)/bin/darwin_386/ssm-document-worker -v \
-					$(GO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
-
-.PHONY: build-windows-386
-build-windows-386: checkstyle copy-src pre-build
-	@echo "Rebuild for windows agent"
-	GOOS=windows GOARCH=386 $(GO_BUILD) -o $(GO_SPACE)/bin/windows_386/amazon-ssm-agent.exe -v \
-					$(GO_SPACE)/core/agent.go $(GO_SPACE)/core/agent_windows.go $(GO_SPACE)/core/agent_parser.go
-	GOOS=windows GOARCH=386 $(GO_BUILD) -o $(GO_SPACE)/bin/windows_386/ssm-agent-worker.exe -v \
-					$(GO_SPACE)/agent/agent.go $(GO_SPACE)/agent/agent_windows.go $(GO_SPACE)/agent/agent_parser.go
-	GOOS=windows GOARCH=386 $(GO_BUILD) -o $(GO_SPACE)/bin/windows_386/updater.exe -v \
-					$(GO_SPACE)/agent/update/updater/updater.go $(GO_SPACE)/agent/update/updater/updater_windows.go
-	GOOS=windows GOARCH=386 $(GO_BUILD) -o $(GO_SPACE)/bin/windows_386/ssm-cli.exe -v \
-					$(GO_SPACE)/agent/cli-main/cli-main.go
-	GOOS=windows GOARCH=386 $(GO_BUILD) -o $(GO_SPACE)/bin/windows_386/ssm-document-worker.exe -v \
-					$(GO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
-	GOOS=windows GOARCH=386 $(GO_BUILD) -o $(GO_SPACE)/bin/windows_386/ssm-session-logger.exe -v \
-					$(GO_SPACE)/agent/session/logging/main.go
-	GOOS=windows GOARCH=386 $(GO_BUILD) -o $(GO_SPACE)/bin/windows_386/ssm-session-worker.exe -v \
-					$(GO_SPACE)/agent/framework/processor/executer/outofproc/sessionworker/main.go
-
-.PHONY: build-arm
-build-arm: checkstyle copy-src pre-build
-	@echo "Build for ARM platforms"
-	GOOS=linux GOARCH=arm GOARM=6 $(GO_BUILD) -o $(GO_SPACE)/bin/linux_arm/amazon-ssm-agent -v \
-                        $(GO_SPACE)/core/agent.go $(GO_SPACE)/core/agent_unix.go $(GO_SPACE)/core/agent_parser.go
-	GOOS=linux GOARCH=arm GOARM=6 $(GO_BUILD) -o $(GO_SPACE)/bin/linux_arm/ssm-agent-worker -v \
-						$(GO_SPACE)/agent/agent.go $(GO_SPACE)/agent/agent_unix.go $(GO_SPACE)/agent/agent_parser.go
-	GOOS=linux GOARCH=arm GOARM=6 $(GO_BUILD) -o $(GO_SPACE)/bin/linux_arm/updater -v \
-						$(GO_SPACE)/agent/update/updater/updater.go $(GO_SPACE)/agent/update/updater/updater_unix.go
-	GOOS=linux GOARCH=arm GOARM=6 $(GO_BUILD) -o $(GO_SPACE)/bin/linux_arm/ssm-cli -v \
-						$(GO_SPACE)/agent/cli-main/cli-main.go
-	GOOS=linux GOARCH=arm GOARM=6 $(GO_BUILD) -o $(GO_SPACE)/bin/linux_arm/ssm-document-worker -v \
-						$(GO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
-	GOOS=linux GOARCH=arm GOARM=6 $(GO_BUILD) -o $(GO_SPACE)/bin/linux_arm/ssm-session-logger -v \
-						$(GO_SPACE)/agent/session/logging/main.go
-	GOOS=linux GOARCH=arm GOARM=6 $(GO_BUILD) -o $(GO_SPACE)/bin/linux_arm/ssm-session-worker -v \
-						$(GO_SPACE)/agent/framework/processor/executer/outofproc/sessionworker/main.go
+# Pre-defined recipes for various supported builds:
 
 # Production binaries are built using GO_BUILD_PIE
+.PHONY: build-linux
+build-linux: GOARCH=amd64
+build-linux: GOOS=linux
+build-linux: GO_BUILD=$(GO_BUILD_PIE)
+build-linux: build-any-amd64-linux
+
+.PHONY: build-freebsd
+build-freebsd: GOARCH=amd64
+build-freebsd: GOOS=freebsd
+build-freebsd: GO_BUILD=$(GO_BUILD_NOPIE)
+build-freebsd: build-any-amd64-freebsd
+
+.PHONY: build-darwin
+build-darwin: GOARCH=amd64
+build-darwin: GOOS=darwin
+build-darwin: GO_BUILD=$(GO_BUILD_NOPIE)
+build-darwin: build-any-darwin-amd64
+
+.PHONY: build-windows
+build-windows: GOOS=windows
+build-windows: GOARCH=amd64
+build-windows: GO_BUILD=$(GO_BUILD_NOPIE)
+build-windows: EXE_EXT=.exe
+build-windows: GO_SRC_TYPE=windows
+build-windows: build-any-windows-amd64
+
+.PHONY: build-linux-386
+build-linux-386: GOOS=linux
+build-linux-386: GOARCH=386
+build-linux-386: GO_BUILD=$(GO_BUILD_NOPIE)
+build-linux-386: build-any-linux-386
+
+.PHONY: build-darwin-386
+build-darwin-386: GOOS=darwin
+build-darwin-386: GOARCH=386
+build-darwin-386: GO_BUILD=$(GO_BUILD_NOPIE)
+build-darwin-386: build-any-darwin-386
+
+.PHONY: build-windows-386
+build-windows-386: GOOS=windows
+build-windows-386: GOARCH=386
+build-windows-386: GO_BUILD=$(GO_BUILD_NOPIE)
+build-windows-386: EXE_EXT=.exe
+build-windows-386: GO_SRC_TYPE=windows
+build-windows-386: build-any-windows-386
+
+.PHONY: build-arm
+build-arm: GOOS=linux
+build-arm: GOARCH=arm
+build-arm: GO_BUILD=GOARM=6 $(GO_BUILD_NOPIE)
+build-arm: build-any-arm
+
 .PHONY: build-arm64
-build-arm64: checkstyle copy-src pre-build
-	@echo "Build for ARM64 platforms"
-	GOOS=linux GOARCH=arm64 $(GO_BUILD) -o $(GO_SPACE)/bin/linux_arm64/amazon-ssm-agent -v \
-                    $(GO_SPACE)/core/agent.go $(GO_SPACE)/core/agent_unix.go $(GO_SPACE)/core/agent_parser.go
-	GOOS=linux GOARCH=arm64 $(GO_BUILD) -o $(GO_SPACE)/bin/linux_arm64/ssm-agent-worker -v \
-					$(GO_SPACE)/agent/agent.go $(GO_SPACE)/agent/agent_unix.go $(GO_SPACE)/agent/agent_parser.go
-	GOOS=linux GOARCH=arm64 $(GO_BUILD) -o $(GO_SPACE)/bin/linux_arm64/updater -v \
-					$(GO_SPACE)/agent/update/updater/updater.go $(GO_SPACE)/agent/update/updater/updater_unix.go
-	GOOS=linux GOARCH=arm64 $(GO_BUILD) -o $(GO_SPACE)/bin/linux_arm64/ssm-cli -v \
-					$(GO_SPACE)/agent/cli-main/cli-main.go
-	GOOS=linux GOARCH=arm64 $(GO_BUILD) -o $(GO_SPACE)/bin/linux_arm64/ssm-document-worker -v \
-					$(GO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
-	GOOS=linux GOARCH=arm64 $(GO_BUILD) -o $(GO_SPACE)/bin/linux_arm64/ssm-session-logger -v \
-					$(GO_SPACE)/agent/session/logging/main.go
-	GOOS=linux GOARCH=arm64 $(GO_BUILD) -o $(GO_SPACE)/bin/linux_arm64/ssm-session-worker -v \
-					$(GO_SPACE)/agent/framework/processor/executer/outofproc/sessionworker/main.go
+build-arm64: GOOS=linux
+build-arm64: GOARCH=arm64
+build-arm64: GO_BUILD=$(GO_BUILD_NOPIE)
+build-arm64: build-any-linux-arm64
 
 .PHONY: copy-src
 copy-src:
@@ -310,80 +242,58 @@ copy-package-dep: copy-src pre-build
 remove-prepacked-folder:
 	rm -rf $(GO_SPACE)/bin/prepacked
 
+# General prepack recipe. Details can be overridden by setting appropriate variables.
+.PHONY: prepack-any-%
+prepack-any-%: GOOS?=linux
+prepack-any-%: GOARCH?=amd64
+prepack-any-%:
+	mkdir -p $(GO_SPACE)/bin/prepacked/$(GOOS)_$(GOARCH)
+	$(COPY) $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/amazon-ssm-agent$(EXE_EXT) \
+	    $(GO_SPACE)/bin/prepacked/$(GOOS)_$(GOARCH)/amazon-ssm-agent$(EXE_EXT)
+	$(COPY) $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/ssm-agent-worker$(EXE_EXT) \
+	    $(GO_SPACE)/bin/prepacked/$(GOOS)_$(GOARCH)/ssm-agent-worker$(EXE_EXT)
+	$(COPY) $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/updater$(EXE_EXT) \
+	    $(GO_SPACE)/bin/prepacked/$(GOOS)_$(GOARCH)/updater$(EXE_EXT)
+	$(COPY) $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/ssm-cli$(EXE_EXT) \
+	    $(GO_SPACE)/bin/prepacked/$(GOOS)_$(GOARCH)/ssm-cli$(EXE_EXT)
+	$(COPY) $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/ssm-document-worker$(EXE_EXT) \
+	    $(GO_SPACE)/bin/prepacked/$(GOOS)_$(GOARCH)/ssm-document-worker$(EXE_EXT)
+	$(COPY) $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/ssm-session-worker$(EXE_EXT) \
+	    $(GO_SPACE)/bin/prepacked/$(GOOS)_$(GOARCH)/ssm-session-worker$(EXE_EXT)
+	$(COPY) $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/ssm-session-logger$(EXE_EXT) \
+	    $(GO_SPACE)/bin/prepacked/$(GOOS)_$(GOARCH)/ssm-session-logger$(EXE_EXT)
+	$(COPY) $(GO_SPACE)/bin/amazon-ssm-agent.json.template $(GO_SPACE)/bin/prepacked/$(GOOS)_$(GOARCH)/amazon-ssm-agent.json.template
+	$(COPY) $(GO_SPACE)/bin/seelog_unix.xml $(GO_SPACE)/bin/prepacked/$(GOOS)_$(GOARCH)/seelog.xml.template
+	$(COPY) $(GO_SPACE)/bin/LICENSE $(GO_SPACE)/bin/prepacked/$(GOOS)_$(GOARCH)/LICENSE
+	$(COPY) $(GO_SPACE)/bin/NOTICE.md $(GO_SPACE)/bin/prepacked/$(GOOS)_$(GOARCH)/NOTICE.md
+
+# Predefined prepack recipes for various supported builds
 .PHONY: prepack-linux
-prepack-linux:
-	mkdir -p $(GO_SPACE)/bin/prepacked/linux_amd64
-	$(COPY) $(GO_SPACE)/bin/linux_amd64/amazon-ssm-agent $(GO_SPACE)/bin/prepacked/linux_amd64/amazon-ssm-agent
-	$(COPY) $(GO_SPACE)/bin/linux_amd64/ssm-agent-worker $(GO_SPACE)/bin/prepacked/linux_amd64/ssm-agent-worker
-	$(COPY) $(GO_SPACE)/bin/linux_amd64/updater $(GO_SPACE)/bin/prepacked/linux_amd64/updater
-	$(COPY) $(GO_SPACE)/bin/linux_amd64/ssm-cli $(GO_SPACE)/bin/prepacked/linux_amd64/ssm-cli
-	$(COPY) $(GO_SPACE)/bin/linux_amd64/ssm-document-worker $(GO_SPACE)/bin/prepacked/linux_amd64/ssm-document-worker
-	$(COPY) $(GO_SPACE)/bin/linux_amd64/ssm-session-worker $(GO_SPACE)/bin/prepacked/linux_amd64/ssm-session-worker
-	$(COPY) $(GO_SPACE)/bin/linux_amd64/ssm-session-logger $(GO_SPACE)/bin/prepacked/linux_amd64/ssm-session-logger
-	$(COPY) $(GO_SPACE)/bin/amazon-ssm-agent.json.template $(GO_SPACE)/bin/prepacked/linux_amd64/amazon-ssm-agent.json.template
-	$(COPY) $(GO_SPACE)/bin/seelog_unix.xml $(GO_SPACE)/bin/prepacked/linux_amd64/seelog.xml.template
-	$(COPY) $(GO_SPACE)/bin/LICENSE $(GO_SPACE)/bin/prepacked/linux_amd64/LICENSE
-	$(COPY) $(GO_SPACE)/bin/NOTICE.md $(GO_SPACE)/bin/prepacked/linux_amd64/NOTICE.md
+prepack-linux: GOOS=linux
+prepack-linux: GOARCH=amd64
+prepack-linux: prepack-any-linux-amd64
 
 .PHONY: prepack-linux-arm64
-prepack-linux-arm64:
-	mkdir -p $(GO_SPACE)/bin/prepacked/linux_arm64
-	$(COPY) $(GO_SPACE)/bin/linux_arm64/amazon-ssm-agent $(GO_SPACE)/bin/prepacked/linux_arm64/amazon-ssm-agent
-	$(COPY) $(GO_SPACE)/bin/linux_arm64/ssm-agent-worker $(GO_SPACE)/bin/prepacked/linux_arm64/ssm-agent-worker
-	$(COPY) $(GO_SPACE)/bin/linux_arm64/updater $(GO_SPACE)/bin/prepacked/linux_arm64/updater
-	$(COPY) $(GO_SPACE)/bin/linux_arm64/ssm-cli $(GO_SPACE)/bin/prepacked/linux_arm64/ssm-cli
-	$(COPY) $(GO_SPACE)/bin/linux_arm64/ssm-document-worker $(GO_SPACE)/bin/prepacked/linux_arm64/ssm-document-worker
-	$(COPY) $(GO_SPACE)/bin/linux_arm64/ssm-session-worker $(GO_SPACE)/bin/prepacked/linux_arm64/ssm-session-worker
-	$(COPY) $(GO_SPACE)/bin/linux_arm64/ssm-session-logger $(GO_SPACE)/bin/prepacked/linux_arm64/ssm-session-logger
-	$(COPY) $(GO_SPACE)/bin/amazon-ssm-agent.json.template $(GO_SPACE)/bin/prepacked/linux_arm64/amazon-ssm-agent.json.template
-	$(COPY) $(GO_SPACE)/bin/seelog_unix.xml $(GO_SPACE)/bin/prepacked/linux_arm64/seelog.xml.template
-	$(COPY) $(GO_SPACE)/bin/LICENSE $(GO_SPACE)/bin/prepacked/linux_arm64/LICENSE
-	$(COPY) $(GO_SPACE)/bin/NOTICE.md $(GO_SPACE)/bin/prepacked/linux_arm64/NOTICE.md
+prepack-linux-arm64: GOOS=linux
+prepack-linux-arm64: GOARCH=arm64
+prepack-linux-arm64: prepack-any-linux-arm64
 
 .PHONY: prepack-windows
-prepack-windows:
-	mkdir -p $(GO_SPACE)/bin/prepacked/windows_amd64
-	$(COPY) $(GO_SPACE)/bin/windows_amd64/amazon-ssm-agent.exe $(GO_SPACE)/bin/prepacked/windows_amd64/amazon-ssm-agent.exe
-	$(COPY) $(GO_SPACE)/bin/windows_amd64/ssm-agent-worker.exe $(GO_SPACE)/bin/prepacked/windows_amd64/ssm-agent-worker.exe
-	$(COPY) $(GO_SPACE)/bin/windows_amd64/updater.exe $(GO_SPACE)/bin/prepacked/windows_amd64/updater.exe
-	$(COPY) $(GO_SPACE)/bin/windows_amd64/ssm-cli.exe $(GO_SPACE)/bin/prepacked/windows_amd64/ssm-cli.exe
-	$(COPY) $(GO_SPACE)/bin/windows_amd64/ssm-document-worker.exe $(GO_SPACE)/bin/prepacked/windows_amd64/ssm-document-worker.exe
-	$(COPY) $(GO_SPACE)/bin/windows_amd64/ssm-session-worker.exe $(GO_SPACE)/bin/prepacked/windows_amd64/ssm-session-worker.exe
-	$(COPY) $(GO_SPACE)/bin/windows_amd64/ssm-session-logger.exe $(GO_SPACE)/bin/prepacked/windows_amd64/ssm-session-logger.exe
-	$(COPY) $(GO_SPACE)/bin/amazon-ssm-agent.json.template $(GO_SPACE)/bin/prepacked/windows_amd64/amazon-ssm-agent.json.template
-	$(COPY) $(GO_SPACE)/bin/seelog_windows.xml.template $(GO_SPACE)/bin/prepacked/windows_amd64/seelog.xml.template
-	$(COPY) $(GO_SPACE)/bin/LICENSE $(GO_SPACE)/bin/prepacked/windows_amd64/LICENSE
-	$(COPY) $(GO_SPACE)/bin/NOTICE.md $(GO_SPACE)/bin/prepacked/windows_amd64/NOTICE.md
+prepack-windows: GOOS=windows
+prepack-windows: GOARCH=amd64
+prepack-windows: EXE_EXT=.exe
+prepack-windows: prepack-any-windows-amd64
 
 .PHONY: prepack-linux-386
-prepack-linux-386:
-	mkdir -p $(GO_SPACE)/bin/prepacked/linux_386
-	$(COPY) $(GO_SPACE)/bin/linux_386/amazon-ssm-agent $(GO_SPACE)/bin/prepacked/linux_386/amazon-ssm-agent
-	$(COPY) $(GO_SPACE)/bin/linux_386/ssm-agent-worker $(GO_SPACE)/bin/prepacked/linux_386/ssm-agent-worker
-	$(COPY) $(GO_SPACE)/bin/linux_386/updater $(GO_SPACE)/bin/prepacked/linux_386/updater
-	$(COPY) $(GO_SPACE)/bin/linux_386/ssm-cli $(GO_SPACE)/bin/prepacked/linux_386/ssm-cli
-	$(COPY) $(GO_SPACE)/bin/linux_386/ssm-document-worker $(GO_SPACE)/bin/prepacked/linux_386/ssm-document-worker
-	$(COPY) $(GO_SPACE)/bin/linux_386/ssm-session-worker $(GO_SPACE)/bin/prepacked/linux_386/ssm-session-worker
-	$(COPY) $(GO_SPACE)/bin/linux_386/ssm-session-logger $(GO_SPACE)/bin/prepacked/linux_386/ssm-session-logger
-	$(COPY) $(GO_SPACE)/bin/amazon-ssm-agent.json.template $(GO_SPACE)/bin/prepacked/linux_386/amazon-ssm-agent.json.template
-	$(COPY) $(GO_SPACE)/bin/seelog_unix.xml $(GO_SPACE)/bin/prepacked/linux_386/seelog.xml.template
-	$(COPY) $(GO_SPACE)/bin/LICENSE $(GO_SPACE)/bin/prepacked/linux_386/LICENSE
-	$(COPY) $(GO_SPACE)/bin/NOTICE.md $(GO_SPACE)/bin/prepacked/linux_386/NOTICE.md
+prepack-linux-386: GOOS=linux
+prepack-linux-386: GOARCH=386
+prepack-linux-386: prepack-any-linux-386
 
 .PHONY: prepack-windows-386
-prepack-windows-386:
-	mkdir -p $(GO_SPACE)/bin/prepacked/windows_386
-	$(COPY) $(GO_SPACE)/bin/windows_386/amazon-ssm-agent.exe $(GO_SPACE)/bin/prepacked/windows_386/amazon-ssm-agent.exe
-	$(COPY) $(GO_SPACE)/bin/windows_386/ssm-agent-worker.exe $(GO_SPACE)/bin/prepacked/windows_386/ssm-agent-worker.exe
-	$(COPY) $(GO_SPACE)/bin/windows_386/updater.exe $(GO_SPACE)/bin/prepacked/windows_386/updater.exe
-	$(COPY) $(GO_SPACE)/bin/windows_386/ssm-cli.exe $(GO_SPACE)/bin/prepacked/windows_386/ssm-cli.exe
-	$(COPY) $(GO_SPACE)/bin/windows_386/ssm-document-worker.exe $(GO_SPACE)/bin/prepacked/windows_386/ssm-document-worker.exe
-	$(COPY) $(GO_SPACE)/bin/windows_386/ssm-session-worker.exe $(GO_SPACE)/bin/prepacked/windows_386/ssm-session-worker.exe
-	$(COPY) $(GO_SPACE)/bin/windows_386/ssm-session-logger.exe $(GO_SPACE)/bin/prepacked/windows_386/ssm-session-logger.exe
-	$(COPY) $(GO_SPACE)/bin/amazon-ssm-agent.json.template $(GO_SPACE)/bin/prepacked/windows_386/amazon-ssm-agent.json.template
-	$(COPY) $(GO_SPACE)/bin/seelog_windows.xml.template $(GO_SPACE)/bin/prepacked/windows_386/seelog.xml.template
-	$(COPY) $(GO_SPACE)/bin/LICENSE $(GO_SPACE)/bin/prepacked/windows_386/LICENSE
-	$(COPY) $(GO_SPACE)/bin/NOTICE.md $(GO_SPACE)/bin/prepacked/windows_386/NOTICE.md
+prepack-windows-386: GOOS=windows
+prepack-windows-386: GOARCH=386
+prepack-windows-386: EXE_EXT=.exe
+prepack-windows-386: prepack-any-windows-386
 
 .PHONY: create-package-folder
 create-package-folder:
