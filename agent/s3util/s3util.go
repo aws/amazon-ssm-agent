@@ -80,6 +80,16 @@ func (u *AmazonS3Util) S3Upload(log log.T, bucketName string, objectKey string, 
 		ACL:         aws.String("bucket-owner-full-control"),
 	}
 
+	if bucketEncrypted, sseAlgortihm, encryptionKey := getSSEAlgorithm(log, u, bucketName); bucketEncrypted == true {
+		switch sseAlgortihm {
+		case s3.ServerSideEncryptionAes256:
+			params.ServerSideEncryption = aws.String(sseAlgortihm)
+		case s3.ServerSideEncryptionAwsKms:
+			params.ServerSideEncryption = aws.String(sseAlgortihm)
+			params.SSEKMSKeyId = aws.String(encryptionKey)
+		}
+	}
+
 	for attempt := 1; attempt <= 4; attempt++ {
 		var result *s3manager.UploadOutput
 		if result, err = u.myUploader.Upload(params); err == nil {
@@ -114,4 +124,33 @@ func (u *AmazonS3Util) IsBucketEncrypted(log log.T, bucketName string) (bool, er
 
 	log.Errorf("S3 bucket %s is not encrypted", bucketName)
 	return false, nil
+}
+
+func getSSEAlgorithm(log log.T, u *AmazonS3Util, bucketName string) (bucketEncrypted bool, sseAlgortihm string, encryptionKey string) {
+	input := &s3.GetBucketEncryptionInput{
+		Bucket: aws.String(bucketName),
+	}
+
+	output, err := u.myUploader.S3.GetBucketEncryption(input)
+	if err != nil {
+		log.Infof("Bucket is not encrypted")
+		return false, "", ""
+	}
+
+	bucketEncryption := *output.ServerSideEncryptionConfiguration.Rules[0].ApplyServerSideEncryptionByDefault
+	switch bucketEncryptionType := *bucketEncryption.SSEAlgorithm; bucketEncryptionType {
+
+	case s3.ServerSideEncryptionAwsKms:
+		// If bucket is KMS encrypted
+		kmsKeyId := *bucketEncryption.KMSMasterKeyID
+		log.Infof("Bucket %v has been encrypted with KMS", bucketName)
+		return true, s3.ServerSideEncryptionAwsKms, kmsKeyId
+	case s3.ServerSideEncryptionAes256:
+		// If bucket is Aes256 encrypted
+		log.Infof("Bucket %v has been encrypted with AES256", bucketName)
+		return true, s3.ServerSideEncryptionAes256, ""
+	default:
+		log.Infof("Bucket is not encrypted")
+		return false, "", ""
+	}
 }
