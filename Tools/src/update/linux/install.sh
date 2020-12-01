@@ -27,8 +27,8 @@ if [[ $(/sbin/init --version 2> /dev/null) =~ upstart ]]; then
   echo "upstart detected"
   echo "Installing agent"
   pmOutput=$(rpm -U amazon-ssm-agent.rpm 2>&1)
-  echo "RPM Output: $pmOutput"
   pmExit=$?
+  echo "RPM Output: $pmOutput"
 
   if [ "$DO_REGISTER" = true ]; then
 		/sbin/stop amazon-ssm-agent
@@ -66,8 +66,8 @@ elif [[ $(systemctl 2> /dev/null) =~ -\.mount ]]; then
 
   echo "Installing agent"
   pmOutput=$(rpm -U amazon-ssm-agent.rpm 2>&1)
-  echo "RPM Output: $pmOutput"
   pmExit=$?
+  echo "RPM Output: $pmOutput"
 
   if [ "$DO_REGISTER" = true ]; then
     systemctl stop amazon-ssm-agent
