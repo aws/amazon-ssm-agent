@@ -11,7 +11,7 @@ an issue to discuss it.
 
 ### Making the request
 
-Development takes place against the `master` branch of this repository and pull
+Development takes place against the `mainline` branch of this repository and pull
 requests should be opened against that branch.
 
 ### Testing
