@@ -222,9 +222,13 @@ func (p *ShellPlugin) runShellProfile(log log.T, config agentContracts.Configura
 		return nil
 	}
 
-	if _, err := p.stdin.Write([]byte(config.ShellProfile.Windows + shellProfileNewLineCharacter)); err != nil {
-		log.Errorf("Unable to write to stdin, err: %v.", err)
-		return err
+	commands := strings.Split(config.ShellProfile.Windows, "\n")
+
+	for _, command := range commands {
+		if _, err := p.stdin.Write([]byte(command + shellProfileNewLineCharacter)); err != nil {
+			log.Errorf("Unable to write to stdin, err: %v.", err)
+			return err
+		}
 	}
 	return nil
 }
