@@ -114,6 +114,12 @@ func SetProxySettings(log log.T) {
 	var bypass string
 	var v = []string{}
 
+	defer func() {
+		if err := recover(); err != nil {
+			log.Errorf("Failed while setting proxy settings: %v", err)
+		}
+	}()
+
 	for _, value := range ProxyEnvVariables {
 		v = append(v, value+":"+os.Getenv(value))
 	}
