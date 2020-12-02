@@ -87,9 +87,6 @@ func Store(accessKeyID, secretAccessKey, sessionToken, profile string) error {
 	}
 
 	iniProfile := config.Section(profile)
-	if err != nil {
-		return awserr.New("SharedCredentialsStore", "failed to get profile", err)
-	}
 
 	// Default to empty string if not found
 	iniProfile.Key(awsAccessKeyID).SetValue(accessKeyID)
