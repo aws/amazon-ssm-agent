@@ -261,13 +261,16 @@ func (p *ShellPlugin) execute(context context.T,
 		log.Debug("Session cancelled. Attempting to stop pty.")
 
 		defer func() {
-			if err := p.execCmd.Wait(); err != nil {
-				log.Errorf("unable to wait pty: %s", err)
+			if p.execCmd != nil {
+				if err := p.execCmd.Wait(); err != nil {
+					log.Errorf("unable to wait pty: %s", err)
+				}
 			}
 		}()
-
-		if err := p.execCmd.Kill(); err != nil {
-			log.Errorf("unable to terminate pty: %s", err)
+		if p.execCmd != nil {
+			if err := p.execCmd.Kill(); err != nil {
+				log.Errorf("unable to terminate pty: %s", err)
+			}
 		}
 
 		if err := p.stop(log); err != nil {
