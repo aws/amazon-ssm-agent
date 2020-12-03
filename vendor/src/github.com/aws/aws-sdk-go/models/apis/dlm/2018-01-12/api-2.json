@@ -141,7 +141,14 @@
       "max":10,
       "min":1
     },
+    "CmkArn":{
+      "type":"string",
+      "max":2048,
+      "min":0,
+      "pattern":"arn:aws(-[a-z]{1,3}){0,2}:kms:([a-z]+-){2,3}\\d:\\d+:key/.*"
+    },
     "CopyTags":{"type":"boolean"},
+    "CopyTagsNullable":{"type":"boolean"},
     "Count":{
       "type":"integer",
       "max":1000,
@@ -171,15 +178,45 @@
     },
     "CreateRule":{
       "type":"structure",
-      "required":[
-        "Interval",
-        "IntervalUnit"
-      ],
       "members":{
         "Interval":{"shape":"Interval"},
         "IntervalUnit":{"shape":"IntervalUnitValues"},
-        "Times":{"shape":"TimesList"}
+        "Times":{"shape":"TimesList"},
+        "CronExpression":{"shape":"CronExpression"}
       }
+    },
+    "CronExpression":{
+      "type":"string",
+      "max":106,
+      "min":17,
+      "pattern":"cron\\([^\\n]{11,100}\\)"
+    },
+    "CrossRegionCopyRetainRule":{
+      "type":"structure",
+      "members":{
+        "Interval":{"shape":"Interval"},
+        "IntervalUnit":{"shape":"RetentionIntervalUnitValues"}
+      }
+    },
+    "CrossRegionCopyRule":{
+      "type":"structure",
+      "required":[
+        "TargetRegion",
+        "Encrypted"
+      ],
+      "members":{
+        "TargetRegion":{"shape":"TargetRegion"},
+        "Encrypted":{"shape":"Encrypted"},
+        "CmkArn":{"shape":"CmkArn"},
+        "CopyTags":{"shape":"CopyTagsNullable"},
+        "RetainRule":{"shape":"CrossRegionCopyRetainRule"}
+      }
+    },
+    "CrossRegionCopyRules":{
+      "type":"list",
+      "member":{"shape":"CrossRegionCopyRule"},
+      "max":3,
+      "min":0
     },
     "DeleteLifecyclePolicyRequest":{
       "type":"structure",
@@ -197,6 +234,7 @@
       "members":{
       }
     },
+    "Encrypted":{"type":"boolean"},
     "ErrorCode":{"type":"string"},
     "ErrorMessage":{"type":"string"},
     "ExcludeBootVolume":{"type":"boolean"},
@@ -204,16 +242,15 @@
       "type":"string",
       "max":2048,
       "min":0,
-      "pattern":"arn:aws:iam::\\d+:role/.*"
+      "pattern":"arn:aws(-[a-z]{1,3}){0,2}:iam::\\d+:role/.*"
     },
     "FastRestoreRule":{
       "type":"structure",
-      "required":[
-        "Count",
-        "AvailabilityZones"
-      ],
+      "required":["AvailabilityZones"],
       "members":{
         "Count":{"shape":"Count"},
+        "Interval":{"shape":"Interval"},
+        "IntervalUnit":{"shape":"RetentionIntervalUnitValues"},
         "AvailabilityZones":{"shape":"AvailabilityZoneList"}
       }
     },
@@ -327,7 +364,8 @@
         "PolicyId":{"shape":"PolicyId"},
         "Description":{"shape":"PolicyDescription"},
         "State":{"shape":"GettablePolicyStateValues"},
-        "Tags":{"shape":"TagMap"}
+        "Tags":{"shape":"TagMap"},
+        "PolicyType":{"shape":"PolicyTypeValues"}
       }
     },
     "LifecyclePolicySummaryList":{
@@ -361,6 +399,7 @@
         "Tags":{"shape":"TagMap"}
       }
     },
+    "NoReboot":{"type":"boolean"},
     "Parameter":{"type":"string"},
     "ParameterList":{
       "type":"list",
@@ -369,12 +408,15 @@
     "Parameters":{
       "type":"structure",
       "members":{
-        "ExcludeBootVolume":{"shape":"ExcludeBootVolume"}
+        "ExcludeBootVolume":{"shape":"ExcludeBootVolume"},
+        "NoReboot":{"shape":"NoReboot"}
       }
     },
     "PolicyArn":{
       "type":"string",
-      "pattern":"^arn:aws:dlm:[A-Za-z0-9_/.-]{0,63}:\\d+:policy/[0-9A-Za-z_-]{1,128}$"
+      "max":2048,
+      "min":0,
+      "pattern":"^arn:aws(-[a-z]{1,3}){0,2}:dlm:[A-Za-z0-9_/.-]{0,63}:\\d+:policy/[0-9A-Za-z_-]{1,128}$"
     },
     "PolicyDescription":{
       "type":"string",
@@ -404,7 +446,10 @@
     },
     "PolicyTypeValues":{
       "type":"string",
-      "enum":["EBS_SNAPSHOT_MANAGEMENT"]
+      "enum":[
+        "EBS_SNAPSHOT_MANAGEMENT",
+        "IMAGE_MANAGEMENT"
+      ]
     },
     "ResourceNotFoundException":{
       "type":"structure",
@@ -432,10 +477,20 @@
     },
     "RetainRule":{
       "type":"structure",
-      "required":["Count"],
       "members":{
-        "Count":{"shape":"Count"}
+        "Count":{"shape":"Count"},
+        "Interval":{"shape":"Interval"},
+        "IntervalUnit":{"shape":"RetentionIntervalUnitValues"}
       }
+    },
+    "RetentionIntervalUnitValues":{
+      "type":"string",
+      "enum":[
+        "DAYS",
+        "WEEKS",
+        "MONTHS",
+        "YEARS"
+      ]
     },
     "Schedule":{
       "type":"structure",
@@ -446,18 +501,19 @@
         "VariableTags":{"shape":"VariableTagsList"},
         "CreateRule":{"shape":"CreateRule"},
         "RetainRule":{"shape":"RetainRule"},
-        "FastRestoreRule":{"shape":"FastRestoreRule"}
+        "FastRestoreRule":{"shape":"FastRestoreRule"},
+        "CrossRegionCopyRules":{"shape":"CrossRegionCopyRules"}
       }
     },
     "ScheduleList":{
       "type":"list",
       "member":{"shape":"Schedule"},
-      "max":1,
+      "max":4,
       "min":1
     },
     "ScheduleName":{
       "type":"string",
-      "max":500,
+      "max":120,
       "min":0,
       "pattern":"[\\p{all}]*"
     },
@@ -538,7 +594,8 @@
     },
     "TagValue":{
       "type":"string",
-      "max":256
+      "max":256,
+      "pattern":"[\\p{all}]*"
     },
     "TagsToAddFilterList":{
       "type":"list",
@@ -549,8 +606,14 @@
     "TagsToAddList":{
       "type":"list",
       "member":{"shape":"Tag"},
-      "max":50,
+      "max":45,
       "min":0
+    },
+    "TargetRegion":{
+      "type":"string",
+      "max":16,
+      "min":0,
+      "pattern":"([a-z]+-){2,3}\\d"
     },
     "TargetTagList":{
       "type":"list",
@@ -626,7 +689,7 @@
     "VariableTagsList":{
       "type":"list",
       "member":{"shape":"Tag"},
-      "max":50,
+      "max":45,
       "min":0
     }
   }

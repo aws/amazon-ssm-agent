@@ -24,6 +24,26 @@ import (
 	"github.com/aws/aws-sdk-go/service/sts"
 )
 
+func newEc2MetadataServer(key, secret string, closeAfterGetCreds bool) *httptest.Server {
+	var server *httptest.Server
+	server = httptest.NewServer(http.HandlerFunc(
+		func(w http.ResponseWriter, r *http.Request) {
+			if r.URL.Path == "/latest/meta-data/iam/security-credentials/RoleName" {
+				w.Write([]byte(fmt.Sprintf(ec2MetadataResponse, key, secret)))
+
+				if closeAfterGetCreds {
+					go server.Close()
+				}
+			} else if r.URL.Path == "/latest/meta-data/iam/security-credentials/" {
+				w.Write([]byte("RoleName"))
+			} else {
+				w.Write([]byte(""))
+			}
+		}))
+
+	return server
+}
+
 func setupCredentialsEndpoints(t *testing.T) (endpoints.Resolver, func()) {
 	origECSEndpoint := shareddefaults.ECSContainerCredentialsURI
 
@@ -37,16 +57,7 @@ func setupCredentialsEndpoints(t *testing.T) (endpoints.Resolver, func()) {
 		}))
 	shareddefaults.ECSContainerCredentialsURI = ecsMetadataServer.URL
 
-	ec2MetadataServer := httptest.NewServer(http.HandlerFunc(
-		func(w http.ResponseWriter, r *http.Request) {
-			if r.URL.Path == "/meta-data/iam/security-credentials/RoleName" {
-				w.Write([]byte(ec2MetadataResponse))
-			} else if r.URL.Path == "/meta-data/iam/security-credentials/" {
-				w.Write([]byte("RoleName"))
-			} else {
-				w.Write([]byte(""))
-			}
-		}))
+	ec2MetadataServer := newEc2MetadataServer("ec2_key", "ec2_secret", false)
 
 	stsServer := httptest.NewServer(http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
@@ -87,15 +98,16 @@ func TestSharedConfigCredentialSource(t *testing.T) {
 	const configFile = "testdata/credential_source_config"
 
 	cases := []struct {
-		name              string
-		profile           string
-		sessOptProfile    string
-		expectedError     error
-		expectedAccessKey string
-		expectedSecretKey string
-		expectedChain     []string
-		init              func()
-		dependentOnOS     bool
+		name                   string
+		profile                string
+		sessOptProfile         string
+		sessOptEC2IMDSEndpoint string
+		expectedError          error
+		expectedAccessKey      string
+		expectedSecretKey      string
+		expectedChain          []string
+		init                   func()
+		dependentOnOS          bool
 	}{
 		{
 			name:          "credential source and source profile",
@@ -127,6 +139,16 @@ func TestSharedConfigCredentialSource(t *testing.T) {
 			},
 			expectedAccessKey: "AKID",
 			expectedSecretKey: "SECRET",
+		},
+		{
+			name:              "ec2metadata custom EC2 IMDS endpoint, env var",
+			profile:           "not-exists-profile",
+			expectedAccessKey: "ec2_custom_key",
+			expectedSecretKey: "ec2_custom_secret",
+			init: func() {
+				altServer := newEc2MetadataServer("ec2_custom_key", "ec2_custom_secret", true)
+				os.Setenv("AWS_EC2_METADATA_SERVICE_ENDPOINT", altServer.URL)
+			},
 		},
 		{
 			name:              "ecs container credential source",
@@ -219,7 +241,8 @@ func TestSharedConfigCredentialSource(t *testing.T) {
 					Logger:           t,
 					EndpointResolver: endpointResolver,
 				},
-				Handlers: handlers,
+				Handlers:        handlers,
+				EC2IMDSEndpoint: c.sessOptEC2IMDSEndpoint,
 			})
 			if e, a := c.expectedError, err; e != a {
 				t.Fatalf("expected %v, but received %v", e, a)
@@ -262,8 +285,8 @@ const ecsResponse = `{
 const ec2MetadataResponse = `{
 	  "Code": "Success",
 	  "Type": "AWS-HMAC",
-	  "AccessKeyId" : "ec2-access-key",
-	  "SecretAccessKey" : "ec2-secret-key",
+	  "AccessKeyId" : "%s",
+	  "SecretAccessKey" : "%s",
 	  "Token" : "token",
 	  "Expiration" : "2100-01-01T00:00:00Z",
 	  "LastUpdated" : "2009-11-23T0:00:00Z"
@@ -476,50 +499,84 @@ func TestSessionAssumeRole_ExtendedDuration(t *testing.T) {
 	restoreEnvFn := initSessionTestEnv()
 	defer restoreEnvFn()
 
-	os.Setenv("AWS_REGION", "us-east-1")
-	os.Setenv("AWS_SDK_LOAD_CONFIG", "1")
-	os.Setenv("AWS_SHARED_CREDENTIALS_FILE", testConfigFilename)
-	os.Setenv("AWS_PROFILE", "assume_role_w_creds")
+	cases := []struct {
+		profile          string
+		optionDuration   time.Duration
+		expectedDuration string
+	}{
+		{
+			profile:          "assume_role_w_creds",
+			expectedDuration: "900",
+		},
+		{
+			profile:          "assume_role_w_creds",
+			optionDuration:   30 * time.Minute,
+			expectedDuration: "1800",
+		},
+		{
+			profile:          "assume_role_w_creds_w_duration",
+			expectedDuration: "1800",
+		},
+		{
+			profile:          "assume_role_w_creds_w_invalid_duration",
+			expectedDuration: "900",
+		},
+	}
 
-	server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if e, a := "1800", r.FormValue("DurationSeconds"); e != a {
-			t.Errorf("expect %v, got %v", e, a)
+	for _, tt := range cases {
+		server := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+			if e, a := tt.expectedDuration, r.FormValue("DurationSeconds"); e != a {
+				t.Errorf("expect %v, got %v", e, a)
+			}
+
+			w.Write([]byte(fmt.Sprintf(
+				assumeRoleRespMsg,
+				time.Now().Add(15*time.Minute).Format("2006-01-02T15:04:05Z"))))
+		}))
+
+		os.Setenv("AWS_REGION", "us-east-1")
+		os.Setenv("AWS_SDK_LOAD_CONFIG", "1")
+		os.Setenv("AWS_SHARED_CREDENTIALS_FILE", testConfigFilename)
+		os.Setenv("AWS_PROFILE", "assume_role_w_creds")
+
+		opts := Options{
+			Profile: tt.profile,
+			Config: aws.Config{
+				Endpoint:   aws.String(server.URL),
+				DisableSSL: aws.Bool(true),
+			},
+			SharedConfigState: SharedConfigEnable,
+		}
+		if tt.optionDuration != 0 {
+			opts.AssumeRoleDuration = tt.optionDuration
 		}
 
-		w.Write([]byte(fmt.Sprintf(
-			assumeRoleRespMsg,
-			time.Now().Add(15*time.Minute).Format("2006-01-02T15:04:05Z"))))
-	}))
-	defer server.Close()
+		s, err := NewSessionWithOptions(opts)
+		if err != nil {
+			server.Close()
+			t.Fatalf("expect no error, got %v", err)
+		}
 
-	s, err := NewSessionWithOptions(Options{
-		Profile: "assume_role_w_creds",
-		Config: aws.Config{
-			Endpoint:   aws.String(server.URL),
-			DisableSSL: aws.Bool(true),
-		},
-		SharedConfigState:  SharedConfigEnable,
-		AssumeRoleDuration: 30 * time.Minute,
-	})
-	if err != nil {
-		t.Fatalf("expect no error, got %v", err)
-	}
+		creds, err := s.Config.Credentials.Get()
+		if err != nil {
+			server.Close()
+			t.Fatalf("expect no error, got %v", err)
+		}
 
-	creds, err := s.Config.Credentials.Get()
-	if err != nil {
-		t.Fatalf("expect no error, got %v", err)
-	}
-	if e, a := "AKID", creds.AccessKeyID; e != a {
-		t.Errorf("expect %v, got %v", e, a)
-	}
-	if e, a := "SECRET", creds.SecretAccessKey; e != a {
-		t.Errorf("expect %v, got %v", e, a)
-	}
-	if e, a := "SESSION_TOKEN", creds.SessionToken; e != a {
-		t.Errorf("expect %v, got %v", e, a)
-	}
-	if e, a := "AssumeRoleProvider", creds.ProviderName; !strings.Contains(a, e) {
-		t.Errorf("expect %v, to be in %v", e, a)
+		if e, a := "AKID", creds.AccessKeyID; e != a {
+			t.Errorf("expect %v, got %v", e, a)
+		}
+		if e, a := "SECRET", creds.SecretAccessKey; e != a {
+			t.Errorf("expect %v, got %v", e, a)
+		}
+		if e, a := "SESSION_TOKEN", creds.SessionToken; e != a {
+			t.Errorf("expect %v, got %v", e, a)
+		}
+		if e, a := "AssumeRoleProvider", creds.ProviderName; !strings.Contains(a, e) {
+			t.Errorf("expect %v, to be in %v", e, a)
+		}
+
+		server.Close()
 	}
 }
 

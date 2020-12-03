@@ -137,14 +137,20 @@ func Name(name string) NameBuilder {
 	}
 }
 
-// Value creates a ValueBuilder. The argument should represent the desired item
-// attribute. The value is marshalled using the dynamodbattribute package by the
-// Build() method for type Builder.
+// Value creates a ValueBuilder and sets its value to the argument. The value
+// will be marshalled using the dynamodbattribute package, unless it is of
+// type dynamodb.AttributeValue, where it will be used directly.
+//
+// Empty slices and maps will be converted to NULL dynamodb.AttributeValue
+// values. If an empty value is required, pass a dynamodb.AttributeValue, e.g.:
+// emptyList := (&dynamodb.AttributeValue{}).SetL([]*dynamodb.AttributeValue{})
 //
 // Example:
 //
 //     // Use Value() to create a condition expression
 //     condition := expression.Name("foo").Equal(expression.Value(10))
+//     // Use Value() to set the value of a set expression.
+//     update := Set(expression.Name("greets"), expression.Value((&dynamodb.AttributeValue{}).SetS("hello")))
 func Value(value interface{}) ValueBuilder {
 	return ValueBuilder{
 		value: value,
@@ -519,9 +525,21 @@ func (nb NameBuilder) BuildOperand() (Operand, error) {
 // words.
 // More information on reserved words at http://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ReservedWords.html
 func (vb ValueBuilder) BuildOperand() (Operand, error) {
-	expr, err := dynamodbattribute.Marshal(vb.value)
-	if err != nil {
-		return Operand{}, newInvalidParameterError("BuildOperand", "ValueBuilder")
+	var (
+		expr *dynamodb.AttributeValue
+		err  error
+	)
+
+	switch v := vb.value.(type) {
+	case *dynamodb.AttributeValue:
+		expr = v
+	case dynamodb.AttributeValue:
+		expr = &v
+	default:
+		expr, err = dynamodbattribute.Marshal(vb.value)
+		if err != nil {
+			return Operand{}, newInvalidParameterError("BuildOperand", "ValueBuilder")
+		}
 	}
 
 	// Create a string with special characters that can be substituted later: $v

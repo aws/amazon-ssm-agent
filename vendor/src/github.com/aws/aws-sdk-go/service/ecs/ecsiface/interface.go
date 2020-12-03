@@ -26,7 +26,7 @@ import (
 //    // myFunc uses an SDK service client to make a request to
 //    // Amazon EC2 Container Service.
 //    func myFunc(svc ecsiface.ECSAPI) bool {
-//        // Make svc.CreateCluster request
+//        // Make svc.CreateCapacityProvider request
 //    }
 //
 //    func main() {
@@ -42,7 +42,7 @@ import (
 //    type mockECSClient struct {
 //        ecsiface.ECSAPI
 //    }
-//    func (m *mockECSClient) CreateCluster(input *ecs.CreateClusterInput) (*ecs.CreateClusterOutput, error) {
+//    func (m *mockECSClient) CreateCapacityProvider(input *ecs.CreateCapacityProviderInput) (*ecs.CreateCapacityProviderOutput, error) {
 //        // mock response/functionality
 //    }
 //
@@ -60,6 +60,10 @@ import (
 // and waiters. Its suggested to use the pattern above for testing, or using
 // tooling to generate mocks to satisfy the interfaces.
 type ECSAPI interface {
+	CreateCapacityProvider(*ecs.CreateCapacityProviderInput) (*ecs.CreateCapacityProviderOutput, error)
+	CreateCapacityProviderWithContext(aws.Context, *ecs.CreateCapacityProviderInput, ...request.Option) (*ecs.CreateCapacityProviderOutput, error)
+	CreateCapacityProviderRequest(*ecs.CreateCapacityProviderInput) (*request.Request, *ecs.CreateCapacityProviderOutput)
+
 	CreateCluster(*ecs.CreateClusterInput) (*ecs.CreateClusterOutput, error)
 	CreateClusterWithContext(aws.Context, *ecs.CreateClusterInput, ...request.Option) (*ecs.CreateClusterOutput, error)
 	CreateClusterRequest(*ecs.CreateClusterInput) (*request.Request, *ecs.CreateClusterOutput)
@@ -80,6 +84,10 @@ type ECSAPI interface {
 	DeleteAttributesWithContext(aws.Context, *ecs.DeleteAttributesInput, ...request.Option) (*ecs.DeleteAttributesOutput, error)
 	DeleteAttributesRequest(*ecs.DeleteAttributesInput) (*request.Request, *ecs.DeleteAttributesOutput)
 
+	DeleteCapacityProvider(*ecs.DeleteCapacityProviderInput) (*ecs.DeleteCapacityProviderOutput, error)
+	DeleteCapacityProviderWithContext(aws.Context, *ecs.DeleteCapacityProviderInput, ...request.Option) (*ecs.DeleteCapacityProviderOutput, error)
+	DeleteCapacityProviderRequest(*ecs.DeleteCapacityProviderInput) (*request.Request, *ecs.DeleteCapacityProviderOutput)
+
 	DeleteCluster(*ecs.DeleteClusterInput) (*ecs.DeleteClusterOutput, error)
 	DeleteClusterWithContext(aws.Context, *ecs.DeleteClusterInput, ...request.Option) (*ecs.DeleteClusterOutput, error)
 	DeleteClusterRequest(*ecs.DeleteClusterInput) (*request.Request, *ecs.DeleteClusterOutput)
@@ -99,6 +107,10 @@ type ECSAPI interface {
 	DeregisterTaskDefinition(*ecs.DeregisterTaskDefinitionInput) (*ecs.DeregisterTaskDefinitionOutput, error)
 	DeregisterTaskDefinitionWithContext(aws.Context, *ecs.DeregisterTaskDefinitionInput, ...request.Option) (*ecs.DeregisterTaskDefinitionOutput, error)
 	DeregisterTaskDefinitionRequest(*ecs.DeregisterTaskDefinitionInput) (*request.Request, *ecs.DeregisterTaskDefinitionOutput)
+
+	DescribeCapacityProviders(*ecs.DescribeCapacityProvidersInput) (*ecs.DescribeCapacityProvidersOutput, error)
+	DescribeCapacityProvidersWithContext(aws.Context, *ecs.DescribeCapacityProvidersInput, ...request.Option) (*ecs.DescribeCapacityProvidersOutput, error)
+	DescribeCapacityProvidersRequest(*ecs.DescribeCapacityProvidersInput) (*request.Request, *ecs.DescribeCapacityProvidersOutput)
 
 	DescribeClusters(*ecs.DescribeClustersInput) (*ecs.DescribeClustersOutput, error)
 	DescribeClustersWithContext(aws.Context, *ecs.DescribeClustersInput, ...request.Option) (*ecs.DescribeClustersOutput, error)
@@ -132,9 +144,15 @@ type ECSAPI interface {
 	ListAccountSettingsWithContext(aws.Context, *ecs.ListAccountSettingsInput, ...request.Option) (*ecs.ListAccountSettingsOutput, error)
 	ListAccountSettingsRequest(*ecs.ListAccountSettingsInput) (*request.Request, *ecs.ListAccountSettingsOutput)
 
+	ListAccountSettingsPages(*ecs.ListAccountSettingsInput, func(*ecs.ListAccountSettingsOutput, bool) bool) error
+	ListAccountSettingsPagesWithContext(aws.Context, *ecs.ListAccountSettingsInput, func(*ecs.ListAccountSettingsOutput, bool) bool, ...request.Option) error
+
 	ListAttributes(*ecs.ListAttributesInput) (*ecs.ListAttributesOutput, error)
 	ListAttributesWithContext(aws.Context, *ecs.ListAttributesInput, ...request.Option) (*ecs.ListAttributesOutput, error)
 	ListAttributesRequest(*ecs.ListAttributesInput) (*request.Request, *ecs.ListAttributesOutput)
+
+	ListAttributesPages(*ecs.ListAttributesInput, func(*ecs.ListAttributesOutput, bool) bool) error
+	ListAttributesPagesWithContext(aws.Context, *ecs.ListAttributesInput, func(*ecs.ListAttributesOutput, bool) bool, ...request.Option) error
 
 	ListClusters(*ecs.ListClustersInput) (*ecs.ListClustersOutput, error)
 	ListClustersWithContext(aws.Context, *ecs.ListClustersInput, ...request.Option) (*ecs.ListClustersOutput, error)
@@ -193,6 +211,10 @@ type ECSAPI interface {
 	PutAttributes(*ecs.PutAttributesInput) (*ecs.PutAttributesOutput, error)
 	PutAttributesWithContext(aws.Context, *ecs.PutAttributesInput, ...request.Option) (*ecs.PutAttributesOutput, error)
 	PutAttributesRequest(*ecs.PutAttributesInput) (*request.Request, *ecs.PutAttributesOutput)
+
+	PutClusterCapacityProviders(*ecs.PutClusterCapacityProvidersInput) (*ecs.PutClusterCapacityProvidersOutput, error)
+	PutClusterCapacityProvidersWithContext(aws.Context, *ecs.PutClusterCapacityProvidersInput, ...request.Option) (*ecs.PutClusterCapacityProvidersOutput, error)
+	PutClusterCapacityProvidersRequest(*ecs.PutClusterCapacityProvidersInput) (*request.Request, *ecs.PutClusterCapacityProvidersOutput)
 
 	RegisterContainerInstance(*ecs.RegisterContainerInstanceInput) (*ecs.RegisterContainerInstanceOutput, error)
 	RegisterContainerInstanceWithContext(aws.Context, *ecs.RegisterContainerInstanceInput, ...request.Option) (*ecs.RegisterContainerInstanceOutput, error)

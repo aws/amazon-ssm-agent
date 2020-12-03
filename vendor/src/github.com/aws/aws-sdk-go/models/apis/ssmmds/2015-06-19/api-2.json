@@ -256,7 +256,7 @@
     },
     "Payload":{
       "type":"string",
-      "max":65536,
+      "max":120000,
       "min":0
     },
     "PayloadDigest":{

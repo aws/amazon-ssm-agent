@@ -589,7 +589,8 @@
     "AccessToken":{
       "type":"string",
       "max":255,
-      "min":1
+      "min":1,
+      "sensitive":true
     },
     "ActiveJobId":{
       "type":"string",
@@ -625,6 +626,7 @@
         "environmentVariables":{"shape":"EnvironmentVariables"},
         "defaultDomain":{"shape":"DefaultDomain"},
         "enableBranchAutoBuild":{"shape":"EnableBranchAutoBuild"},
+        "enableBranchAutoDeletion":{"shape":"EnableBranchAutoDeletion"},
         "enableBasicAuth":{"shape":"EnableBasicAuth"},
         "basicAuthCredentials":{"shape":"BasicAuthCredentials"},
         "customRules":{"shape":"CustomRules"},
@@ -697,6 +699,7 @@
         "environmentVariables":{"shape":"EnvironmentVariables"},
         "basicAuthCredentials":{"shape":"BasicAuthCredentials"},
         "enableBasicAuth":{"shape":"EnableBasicAuth"},
+        "enablePerformanceMode":{"shape":"EnablePerformanceMode"},
         "buildSpec":{"shape":"BuildSpec"},
         "enablePullRequestPreview":{"shape":"EnablePullRequestPreview"},
         "pullRequestEnvironmentName":{"shape":"PullRequestEnvironmentName"}
@@ -710,6 +713,20 @@
     "AutoBranchCreationPatterns":{
       "type":"list",
       "member":{"shape":"AutoBranchCreationPattern"}
+    },
+    "AutoSubDomainCreationPattern":{
+      "type":"string",
+      "max":2048,
+      "min":1
+    },
+    "AutoSubDomainCreationPatterns":{
+      "type":"list",
+      "member":{"shape":"AutoSubDomainCreationPattern"}
+    },
+    "AutoSubDomainIAMRole":{
+      "type":"string",
+      "max":1000,
+      "pattern":"^$|^arn:aws:iam::\\d{12}:role.+"
     },
     "BackendEnvironment":{
       "type":"structure",
@@ -747,7 +764,8 @@
     },
     "BasicAuthCredentials":{
       "type":"string",
-      "max":2000
+      "max":2000,
+      "sensitive":true
     },
     "Branch":{
       "type":"structure",
@@ -787,6 +805,7 @@
         "activeJobId":{"shape":"ActiveJobId"},
         "totalNumberOfJobs":{"shape":"TotalNumberOfJobs"},
         "enableBasicAuth":{"shape":"EnableBasicAuth"},
+        "enablePerformanceMode":{"shape":"EnablePerformanceMode"},
         "thumbnailUrl":{"shape":"ThumbnailUrl"},
         "basicAuthCredentials":{"shape":"BasicAuthCredentials"},
         "buildSpec":{"shape":"BuildSpec"},
@@ -851,6 +870,7 @@
         "accessToken":{"shape":"AccessToken"},
         "environmentVariables":{"shape":"EnvironmentVariables"},
         "enableBranchAutoBuild":{"shape":"EnableBranchAutoBuild"},
+        "enableBranchAutoDeletion":{"shape":"EnableBranchAutoDeletion"},
         "enableBasicAuth":{"shape":"EnableBasicAuth"},
         "basicAuthCredentials":{"shape":"BasicAuthCredentials"},
         "customRules":{"shape":"CustomRules"},
@@ -913,6 +933,7 @@
         "environmentVariables":{"shape":"EnvironmentVariables"},
         "basicAuthCredentials":{"shape":"BasicAuthCredentials"},
         "enableBasicAuth":{"shape":"EnableBasicAuth"},
+        "enablePerformanceMode":{"shape":"EnablePerformanceMode"},
         "tags":{"shape":"TagMap"},
         "buildSpec":{"shape":"BuildSpec"},
         "ttl":{"shape":"TTL"},
@@ -976,7 +997,9 @@
         },
         "domainName":{"shape":"DomainName"},
         "enableAutoSubDomain":{"shape":"EnableAutoSubDomain"},
-        "subDomainSettings":{"shape":"SubDomainSettings"}
+        "subDomainSettings":{"shape":"SubDomainSettings"},
+        "autoSubDomainCreationPatterns":{"shape":"AutoSubDomainCreationPatterns"},
+        "autoSubDomainIAMRole":{"shape":"AutoSubDomainIAMRole"}
       }
     },
     "CreateDomainAssociationResult":{
@@ -1226,6 +1249,8 @@
         "domainAssociationArn":{"shape":"DomainAssociationArn"},
         "domainName":{"shape":"DomainName"},
         "enableAutoSubDomain":{"shape":"EnableAutoSubDomain"},
+        "autoSubDomainCreationPatterns":{"shape":"AutoSubDomainCreationPatterns"},
+        "autoSubDomainIAMRole":{"shape":"AutoSubDomainIAMRole"},
         "domainStatus":{"shape":"DomainStatus"},
         "statusReason":{"shape":"StatusReason"},
         "certificateVerificationDNSRecord":{"shape":"CertificateVerificationDNSRecord"},
@@ -1267,7 +1292,9 @@
     "EnableAutoSubDomain":{"type":"boolean"},
     "EnableBasicAuth":{"type":"boolean"},
     "EnableBranchAutoBuild":{"type":"boolean"},
+    "EnableBranchAutoDeletion":{"type":"boolean"},
     "EnableNotification":{"type":"boolean"},
+    "EnablePerformanceMode":{"type":"boolean"},
     "EnablePullRequestPreview":{"type":"boolean"},
     "EndTime":{"type":"timestamp"},
     "EnvKey":{
@@ -1667,7 +1694,11 @@
           "location":"uri",
           "locationName":"appId"
         },
-        "environmentName":{"shape":"EnvironmentName"},
+        "environmentName":{
+          "shape":"EnvironmentName",
+          "location":"querystring",
+          "locationName":"environmentName"
+        },
         "nextToken":{
           "shape":"NextToken",
           "location":"querystring",
@@ -1861,7 +1892,8 @@
     },
     "OauthToken":{
       "type":"string",
-      "max":100
+      "max":1000,
+      "sensitive":true
     },
     "Platform":{
       "type":"string",
@@ -2219,6 +2251,7 @@
         "iamServiceRoleArn":{"shape":"ServiceRoleArn"},
         "environmentVariables":{"shape":"EnvironmentVariables"},
         "enableBranchAutoBuild":{"shape":"EnableAutoBuild"},
+        "enableBranchAutoDeletion":{"shape":"EnableBranchAutoDeletion"},
         "enableBasicAuth":{"shape":"EnableBasicAuth"},
         "basicAuthCredentials":{"shape":"BasicAuthCredentials"},
         "customRules":{"shape":"CustomRules"},
@@ -2263,6 +2296,7 @@
         "environmentVariables":{"shape":"EnvironmentVariables"},
         "basicAuthCredentials":{"shape":"BasicAuthCredentials"},
         "enableBasicAuth":{"shape":"EnableBasicAuth"},
+        "enablePerformanceMode":{"shape":"EnablePerformanceMode"},
         "buildSpec":{"shape":"BuildSpec"},
         "ttl":{"shape":"TTL"},
         "displayName":{"shape":"DisplayName"},
@@ -2297,7 +2331,9 @@
           "locationName":"domainName"
         },
         "enableAutoSubDomain":{"shape":"EnableAutoSubDomain"},
-        "subDomainSettings":{"shape":"SubDomainSettings"}
+        "subDomainSettings":{"shape":"SubDomainSettings"},
+        "autoSubDomainCreationPatterns":{"shape":"AutoSubDomainCreationPatterns"},
+        "autoSubDomainIAMRole":{"shape":"AutoSubDomainIAMRole"}
       }
     },
     "UpdateDomainAssociationResult":{

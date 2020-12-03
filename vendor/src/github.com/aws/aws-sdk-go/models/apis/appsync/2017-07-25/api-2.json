@@ -711,7 +711,15 @@
         "R4_XLARGE",
         "R4_2XLARGE",
         "R4_4XLARGE",
-        "R4_8XLARGE"
+        "R4_8XLARGE",
+        "SMALL",
+        "MEDIUM",
+        "LARGE",
+        "XLARGE",
+        "LARGE_2X",
+        "LARGE_4X",
+        "LARGE_8X",
+        "LARGE_12X"
       ]
     },
     "ApiCachingBehavior":{
@@ -726,7 +734,8 @@
       "members":{
         "id":{"shape":"String"},
         "description":{"shape":"String"},
-        "expires":{"shape":"Long"}
+        "expires":{"shape":"Long"},
+        "deletes":{"shape":"Long"}
       }
     },
     "ApiKeyLimitExceededException":{
@@ -925,7 +934,6 @@
         "apiId",
         "name",
         "dataSourceName",
-        "requestMappingTemplate",
         "functionVersion"
       ],
       "members":{
@@ -961,7 +969,8 @@
         "userPoolConfig":{"shape":"UserPoolConfig"},
         "openIDConnectConfig":{"shape":"OpenIDConnectConfig"},
         "tags":{"shape":"TagMap"},
-        "additionalAuthenticationProviders":{"shape":"AdditionalAuthenticationProviders"}
+        "additionalAuthenticationProviders":{"shape":"AdditionalAuthenticationProviders"},
+        "xrayEnabled":{"shape":"Boolean"}
       }
     },
     "CreateGraphqlApiResponse":{
@@ -975,8 +984,7 @@
       "required":[
         "apiId",
         "typeName",
-        "fieldName",
-        "requestMappingTemplate"
+        "fieldName"
       ],
       "members":{
         "apiId":{
@@ -1517,7 +1525,9 @@
         "arn":{"shape":"String"},
         "uris":{"shape":"MapOfStringToString"},
         "tags":{"shape":"TagMap"},
-        "additionalAuthenticationProviders":{"shape":"AdditionalAuthenticationProviders"}
+        "additionalAuthenticationProviders":{"shape":"AdditionalAuthenticationProviders"},
+        "xrayEnabled":{"shape":"Boolean"},
+        "wafWebAclArn":{"shape":"String"}
       }
     },
     "GraphqlApis":{
@@ -2146,7 +2156,6 @@
         "name",
         "functionId",
         "dataSourceName",
-        "requestMappingTemplate",
         "functionVersion"
       ],
       "members":{
@@ -2191,7 +2200,8 @@
         "authenticationType":{"shape":"AuthenticationType"},
         "userPoolConfig":{"shape":"UserPoolConfig"},
         "openIDConnectConfig":{"shape":"OpenIDConnectConfig"},
-        "additionalAuthenticationProviders":{"shape":"AdditionalAuthenticationProviders"}
+        "additionalAuthenticationProviders":{"shape":"AdditionalAuthenticationProviders"},
+        "xrayEnabled":{"shape":"Boolean"}
       }
     },
     "UpdateGraphqlApiResponse":{
@@ -2205,8 +2215,7 @@
       "required":[
         "apiId",
         "typeName",
-        "fieldName",
-        "requestMappingTemplate"
+        "fieldName"
       ],
       "members":{
         "apiId":{

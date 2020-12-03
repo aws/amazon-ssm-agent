@@ -92,6 +92,10 @@ type NeptuneAPI interface {
 	CreateDBClusterWithContext(aws.Context, *neptune.CreateDBClusterInput, ...request.Option) (*neptune.CreateDBClusterOutput, error)
 	CreateDBClusterRequest(*neptune.CreateDBClusterInput) (*request.Request, *neptune.CreateDBClusterOutput)
 
+	CreateDBClusterEndpoint(*neptune.CreateDBClusterEndpointInput) (*neptune.CreateDBClusterEndpointOutput, error)
+	CreateDBClusterEndpointWithContext(aws.Context, *neptune.CreateDBClusterEndpointInput, ...request.Option) (*neptune.CreateDBClusterEndpointOutput, error)
+	CreateDBClusterEndpointRequest(*neptune.CreateDBClusterEndpointInput) (*request.Request, *neptune.CreateDBClusterEndpointOutput)
+
 	CreateDBClusterParameterGroup(*neptune.CreateDBClusterParameterGroupInput) (*neptune.CreateDBClusterParameterGroupOutput, error)
 	CreateDBClusterParameterGroupWithContext(aws.Context, *neptune.CreateDBClusterParameterGroupInput, ...request.Option) (*neptune.CreateDBClusterParameterGroupOutput, error)
 	CreateDBClusterParameterGroupRequest(*neptune.CreateDBClusterParameterGroupInput) (*request.Request, *neptune.CreateDBClusterParameterGroupOutput)
@@ -120,6 +124,10 @@ type NeptuneAPI interface {
 	DeleteDBClusterWithContext(aws.Context, *neptune.DeleteDBClusterInput, ...request.Option) (*neptune.DeleteDBClusterOutput, error)
 	DeleteDBClusterRequest(*neptune.DeleteDBClusterInput) (*request.Request, *neptune.DeleteDBClusterOutput)
 
+	DeleteDBClusterEndpoint(*neptune.DeleteDBClusterEndpointInput) (*neptune.DeleteDBClusterEndpointOutput, error)
+	DeleteDBClusterEndpointWithContext(aws.Context, *neptune.DeleteDBClusterEndpointInput, ...request.Option) (*neptune.DeleteDBClusterEndpointOutput, error)
+	DeleteDBClusterEndpointRequest(*neptune.DeleteDBClusterEndpointInput) (*request.Request, *neptune.DeleteDBClusterEndpointOutput)
+
 	DeleteDBClusterParameterGroup(*neptune.DeleteDBClusterParameterGroupInput) (*neptune.DeleteDBClusterParameterGroupOutput, error)
 	DeleteDBClusterParameterGroupWithContext(aws.Context, *neptune.DeleteDBClusterParameterGroupInput, ...request.Option) (*neptune.DeleteDBClusterParameterGroupOutput, error)
 	DeleteDBClusterParameterGroupRequest(*neptune.DeleteDBClusterParameterGroupInput) (*request.Request, *neptune.DeleteDBClusterParameterGroupOutput)
@@ -143,6 +151,13 @@ type NeptuneAPI interface {
 	DeleteEventSubscription(*neptune.DeleteEventSubscriptionInput) (*neptune.DeleteEventSubscriptionOutput, error)
 	DeleteEventSubscriptionWithContext(aws.Context, *neptune.DeleteEventSubscriptionInput, ...request.Option) (*neptune.DeleteEventSubscriptionOutput, error)
 	DeleteEventSubscriptionRequest(*neptune.DeleteEventSubscriptionInput) (*request.Request, *neptune.DeleteEventSubscriptionOutput)
+
+	DescribeDBClusterEndpoints(*neptune.DescribeDBClusterEndpointsInput) (*neptune.DescribeDBClusterEndpointsOutput, error)
+	DescribeDBClusterEndpointsWithContext(aws.Context, *neptune.DescribeDBClusterEndpointsInput, ...request.Option) (*neptune.DescribeDBClusterEndpointsOutput, error)
+	DescribeDBClusterEndpointsRequest(*neptune.DescribeDBClusterEndpointsInput) (*request.Request, *neptune.DescribeDBClusterEndpointsOutput)
+
+	DescribeDBClusterEndpointsPages(*neptune.DescribeDBClusterEndpointsInput, func(*neptune.DescribeDBClusterEndpointsOutput, bool) bool) error
+	DescribeDBClusterEndpointsPagesWithContext(aws.Context, *neptune.DescribeDBClusterEndpointsInput, func(*neptune.DescribeDBClusterEndpointsOutput, bool) bool, ...request.Option) error
 
 	DescribeDBClusterParameterGroups(*neptune.DescribeDBClusterParameterGroupsInput) (*neptune.DescribeDBClusterParameterGroupsOutput, error)
 	DescribeDBClusterParameterGroupsWithContext(aws.Context, *neptune.DescribeDBClusterParameterGroupsInput, ...request.Option) (*neptune.DescribeDBClusterParameterGroupsOutput, error)
@@ -255,6 +270,10 @@ type NeptuneAPI interface {
 	ModifyDBClusterWithContext(aws.Context, *neptune.ModifyDBClusterInput, ...request.Option) (*neptune.ModifyDBClusterOutput, error)
 	ModifyDBClusterRequest(*neptune.ModifyDBClusterInput) (*request.Request, *neptune.ModifyDBClusterOutput)
 
+	ModifyDBClusterEndpoint(*neptune.ModifyDBClusterEndpointInput) (*neptune.ModifyDBClusterEndpointOutput, error)
+	ModifyDBClusterEndpointWithContext(aws.Context, *neptune.ModifyDBClusterEndpointInput, ...request.Option) (*neptune.ModifyDBClusterEndpointOutput, error)
+	ModifyDBClusterEndpointRequest(*neptune.ModifyDBClusterEndpointInput) (*request.Request, *neptune.ModifyDBClusterEndpointOutput)
+
 	ModifyDBClusterParameterGroup(*neptune.ModifyDBClusterParameterGroupInput) (*neptune.ResetDBClusterParameterGroupOutput, error)
 	ModifyDBClusterParameterGroupWithContext(aws.Context, *neptune.ModifyDBClusterParameterGroupInput, ...request.Option) (*neptune.ResetDBClusterParameterGroupOutput, error)
 	ModifyDBClusterParameterGroupRequest(*neptune.ModifyDBClusterParameterGroupInput) (*request.Request, *neptune.ResetDBClusterParameterGroupOutput)
@@ -314,6 +333,14 @@ type NeptuneAPI interface {
 	RestoreDBClusterToPointInTime(*neptune.RestoreDBClusterToPointInTimeInput) (*neptune.RestoreDBClusterToPointInTimeOutput, error)
 	RestoreDBClusterToPointInTimeWithContext(aws.Context, *neptune.RestoreDBClusterToPointInTimeInput, ...request.Option) (*neptune.RestoreDBClusterToPointInTimeOutput, error)
 	RestoreDBClusterToPointInTimeRequest(*neptune.RestoreDBClusterToPointInTimeInput) (*request.Request, *neptune.RestoreDBClusterToPointInTimeOutput)
+
+	StartDBCluster(*neptune.StartDBClusterInput) (*neptune.StartDBClusterOutput, error)
+	StartDBClusterWithContext(aws.Context, *neptune.StartDBClusterInput, ...request.Option) (*neptune.StartDBClusterOutput, error)
+	StartDBClusterRequest(*neptune.StartDBClusterInput) (*request.Request, *neptune.StartDBClusterOutput)
+
+	StopDBCluster(*neptune.StopDBClusterInput) (*neptune.StopDBClusterOutput, error)
+	StopDBClusterWithContext(aws.Context, *neptune.StopDBClusterInput, ...request.Option) (*neptune.StopDBClusterOutput, error)
+	StopDBClusterRequest(*neptune.StopDBClusterInput) (*request.Request, *neptune.StopDBClusterOutput)
 
 	WaitUntilDBInstanceAvailable(*neptune.DescribeDBInstancesInput) error
 	WaitUntilDBInstanceAvailableWithContext(aws.Context, *neptune.DescribeDBInstancesInput, ...request.WaiterOption) error

@@ -2,10 +2,10 @@ package s3manager_test
 
 import (
 	"bytes"
+	"encoding/xml"
 	"fmt"
 	"io"
 	"io/ioutil"
-	"math/rand"
 	"net/http"
 	"reflect"
 	"regexp"
@@ -22,8 +22,8 @@ import (
 	"github.com/aws/aws-sdk-go/awstesting"
 	"github.com/aws/aws-sdk-go/awstesting/unit"
 	"github.com/aws/aws-sdk-go/internal/sdkio"
-	"github.com/aws/aws-sdk-go/internal/sdkrand"
 	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/service/s3/internal/s3testing"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 )
 
@@ -101,9 +101,19 @@ func dlLoggingSvcNoContentRangeLength(data []byte, states []int) (*s3.S3, *[]str
 
 		names = append(names, r.Operation.Name)
 
+		var body io.Reader
+		if states[index] < 400 {
+			body = bytes.NewReader(data[:])
+		} else {
+			var buffer bytes.Buffer
+			encoder := xml.NewEncoder(&buffer)
+			_ = encoder.Encode(&mockErrorResponse)
+			body = &buffer
+		}
+
 		r.HTTPResponse = &http.Response{
 			StatusCode: states[index],
-			Body:       ioutil.NopCloser(bytes.NewReader(data[:])),
+			Body:       ioutil.NopCloser(body),
 			Header:     http.Header{},
 		}
 		index++
@@ -667,7 +677,7 @@ func TestDownloadBufferStrategy(t *testing.T) {
 	for name, tCase := range cases {
 		t.Logf("starting case: %v", name)
 
-		expected := getTestBytes(int(tCase.expectedSize))
+		expected := s3testing.GetTestBytes(int(tCase.expectedSize))
 
 		svc, _, _ := dlLoggingSvc(expected)
 
@@ -704,25 +714,6 @@ func TestDownloadBufferStrategy(t *testing.T) {
 	}
 }
 
-var randBytes = func() []byte {
-	rr := rand.New(rand.NewSource(0))
-	b := make([]byte, 10*sdkio.MebiByte)
-
-	if _, err := sdkrand.Read(rr, b); err != nil {
-		panic(fmt.Sprintf("failed to read random bytes, %v", err))
-	}
-	return b
-}()
-
-func getTestBytes(size int) []byte {
-	if len(randBytes) >= size {
-		return randBytes[:size]
-	}
-
-	b := append(randBytes, getTestBytes(size-len(randBytes))...)
-	return b
-}
-
 type testErrReader struct {
 	Buf []byte
 	Err error
@@ -746,7 +737,7 @@ func (r *testErrReader) Read(p []byte) (int, error) {
 }
 
 func TestDownloadBufferStrategy_Errors(t *testing.T) {
-	expected := getTestBytes(int(10 * sdkio.MebiByte))
+	expected := s3testing.GetTestBytes(int(10 * sdkio.MebiByte))
 
 	svc, _, _ := dlLoggingSvc(expected)
 	strat := &recordedWriterReadFromProvider{
@@ -835,8 +826,17 @@ type badReader struct {
 }
 
 func (b *badReader) Read(p []byte) (int, error) {
-	tb := getTestBytes(len(p))
+	tb := s3testing.GetTestBytes(len(p))
 	copy(p, tb)
 
 	return len(p), b.err
+}
+
+var mockErrorResponse = struct {
+	XMLName xml.Name `xml:"Error"`
+	Code    string   `xml:"Code"`
+	Message string   `xml:"Message"`
+}{
+	Code:    "MOCK_S3_ERROR_CODE",
+	Message: "Mocked S3 Error Message",
 }

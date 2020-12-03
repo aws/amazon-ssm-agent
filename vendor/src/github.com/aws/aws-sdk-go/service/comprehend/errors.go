@@ -2,6 +2,10 @@
 
 package comprehend
 
+import (
+	"github.com/aws/aws-sdk-go/private/protocol"
+)
+
 const (
 
 	// ErrCodeBatchSizeLimitExceededException for service response error code
@@ -52,15 +56,15 @@ const (
 	// ErrCodeResourceInUseException for service response error code
 	// "ResourceInUseException".
 	//
-	// The specified name is already in use. Use a different name and try your request
-	// again.
+	// The specified resource name is already in use. Use a different name and try
+	// your request again.
 	ErrCodeResourceInUseException = "ResourceInUseException"
 
 	// ErrCodeResourceLimitExceededException for service response error code
 	// "ResourceLimitExceededException".
 	//
-	// The maximum number of recognizers per account has been exceeded. Review the
-	// recognizers, perform cleanup, and then try your request again.
+	// The maximum number of resources per account has been exceeded. Review the
+	// resources, and then try your request again.
 	ErrCodeResourceLimitExceededException = "ResourceLimitExceededException"
 
 	// ErrCodeResourceNotFoundException for service response error code
@@ -73,8 +77,8 @@ const (
 	// ErrCodeResourceUnavailableException for service response error code
 	// "ResourceUnavailableException".
 	//
-	// The specified resource is not available. Check to see if the resource is
-	// in the TRAINED state and try your request again.
+	// The specified resource is not available. Check the resource and try your
+	// request again.
 	ErrCodeResourceUnavailableException = "ResourceUnavailableException"
 
 	// ErrCodeTextSizeLimitExceededException for service response error code
@@ -108,9 +112,28 @@ const (
 	// "UnsupportedLanguageException".
 	//
 	// Amazon Comprehend can't process the language of the input text. For all custom
-	// entity recognition APIs (such as CreateEntityRecognizer), only English is
-	// accepted. For most other APIs, such as those for Custom Classification, Amazon
-	// Comprehend accepts text in all supported languages. For a list of supported
-	// languages, see supported-languages.
+	// entity recognition APIs (such as CreateEntityRecognizer), only English, Spanish,
+	// French, Italian, German, or Portuguese are accepted. For most other APIs,
+	// such as those for Custom Classification, Amazon Comprehend accepts text in
+	// all supported languages. For a list of supported languages, see supported-languages.
 	ErrCodeUnsupportedLanguageException = "UnsupportedLanguageException"
 )
+
+var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
+	"BatchSizeLimitExceededException": newErrorBatchSizeLimitExceededException,
+	"ConcurrentModificationException": newErrorConcurrentModificationException,
+	"InternalServerException":         newErrorInternalServerException,
+	"InvalidFilterException":          newErrorInvalidFilterException,
+	"InvalidRequestException":         newErrorInvalidRequestException,
+	"JobNotFoundException":            newErrorJobNotFoundException,
+	"KmsKeyValidationException":       newErrorKmsKeyValidationException,
+	"ResourceInUseException":          newErrorResourceInUseException,
+	"ResourceLimitExceededException":  newErrorResourceLimitExceededException,
+	"ResourceNotFoundException":       newErrorResourceNotFoundException,
+	"ResourceUnavailableException":    newErrorResourceUnavailableException,
+	"TextSizeLimitExceededException":  newErrorTextSizeLimitExceededException,
+	"TooManyRequestsException":        newErrorTooManyRequestsException,
+	"TooManyTagKeysException":         newErrorTooManyTagKeysException,
+	"TooManyTagsException":            newErrorTooManyTagsException,
+	"UnsupportedLanguageException":    newErrorUnsupportedLanguageException,
+}

@@ -2,6 +2,10 @@
 
 package ssmmds
 
+import (
+	"github.com/aws/aws-sdk-go/private/protocol"
+)
+
 const (
 
 	// ErrCodeAuthorizationFailureException for service response error code
@@ -32,3 +36,13 @@ const (
 	// "UnsupportedMessageOperationException".
 	ErrCodeUnsupportedMessageOperationException = "UnsupportedMessageOperationException"
 )
+
+var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
+	"AuthorizationFailureException":        newErrorAuthorizationFailureException,
+	"InternalServerException":              newErrorInternalServerException,
+	"InvalidDestinationException":          newErrorInvalidDestinationException,
+	"InvalidMessageIdException":            newErrorInvalidMessageIdException,
+	"RequestTimeoutException":              newErrorRequestTimeoutException,
+	"TooManyRequestsException":             newErrorTooManyRequestsException,
+	"UnsupportedMessageOperationException": newErrorUnsupportedMessageOperationException,
+}

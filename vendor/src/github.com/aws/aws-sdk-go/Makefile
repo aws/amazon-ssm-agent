@@ -6,6 +6,7 @@ LINTIGNOREINFLECTS3UPLOAD='service/s3/s3manager/upload\.go:.+struct field SSEKMS
 LINTIGNOREENDPOINTS='aws/endpoints/(defaults|dep_service_ids).go:.+(method|const) .+ should be '
 LINTIGNOREDEPS='vendor/.+\.go'
 LINTIGNOREPKGCOMMENT='service/[^/]+/doc_custom.go:.+package comment should be of the form'
+LINTIGNORESINGLEFIGHT='internal/sync/singleflight/singleflight.go:.+error should be the last type'
 UNIT_TEST_TAGS="example codegen awsinclude"
 ALL_TAGS="example codegen awsinclude integration perftest"
 
@@ -107,7 +108,7 @@ cleanup-integ-buckets:
 ###################
 # Sandbox Testing #
 ###################
-sandbox-tests: sandbox-test-go1.5 sandbox-test-go1.6 sandbox-test-go1.7 sandbox-test-go1.8 sandbox-test-go1.9 sandbox-test-go1.10 sandbox-test-go1.11 sandbox-test-go1.12 sandbox-test-gotip
+sandbox-tests: sandbox-test-go1.5 sandbox-test-go1.6 sandbox-test-go1.7 sandbox-test-go1.8 sandbox-test-go1.9 sandbox-test-go1.10 sandbox-test-go1.11 sandbox-test-go1.12 sandbox-test-go1.13 sandbox-test-go1.14 sandbox-test-go1.15 sandbox-test-gotip
 
 sandbox-build-go1.5:
 	docker build -f ./awstesting/sandbox/Dockerfile.test.go1.5 -t "aws-sdk-go-1.5" .
@@ -115,13 +116,6 @@ sandbox-go1.5: sandbox-build-go1.5
 	docker run -i -t aws-sdk-go-1.5 bash
 sandbox-test-go1.5: sandbox-build-go1.5
 	docker run -t aws-sdk-go-1.5
-
-sandbox-build-go1.5-novendorexp:
-	docker build -f ./awstesting/sandbox/Dockerfile.test.go1.5-novendorexp -t "aws-sdk-go-1.5-novendorexp" .
-sandbox-go1.5-novendorexp: sandbox-build-go1.5-novendorexp
-	docker run -i -t aws-sdk-go-1.5-novendorexp bash
-sandbox-test-go1.5-novendorexp: sandbox-build-go1.5-novendorexp
-	docker run -t aws-sdk-go-1.5-novendorexp
 
 sandbox-build-go1.6:
 	docker build -f ./awstesting/sandbox/Dockerfile.test.go1.6 -t "aws-sdk-go-1.6" .
@@ -132,9 +126,9 @@ sandbox-test-go1.6: sandbox-build-go1.6
 
 sandbox-build-go1.7:
 	docker build -f ./awstesting/sandbox/Dockerfile.test.go1.7 -t "aws-sdk-go-1.7" .
-sandbox-go1.7: sandbox-build-go17
+sandbox-go1.7: sandbox-build-go1.7
 	docker run -i -t aws-sdk-go-1.7 bash
-sandbox-test-go1.7: sandbox-build-go17
+sandbox-test-go1.7: sandbox-build-go1.7
 	docker run -t aws-sdk-go-1.7
 
 sandbox-build-go1.8:
@@ -179,6 +173,20 @@ sandbox-go1.13: sandbox-build-go1.13
 sandbox-test-go1.13: sandbox-build-go1.13
 	docker run -t aws-sdk-go-1.13
 
+sandbox-build-go1.14:
+	docker build -f ./awstesting/sandbox/Dockerfile.test.go1.14 -t "aws-sdk-go-1.14" .
+sandbox-go1.14: sandbox-build-go1.14
+	docker run -i -t aws-sdk-go-1.14 bash
+sandbox-test-go1.14: sandbox-build-go1.14
+	docker run -t aws-sdk-go-1.14
+
+sandbox-build-go1.15:
+	docker build -f ./awstesting/sandbox/Dockerfile.test.go1.15 -t "aws-sdk-go-1.15" .
+sandbox-go1.15: sandbox-build-go1.15
+	docker run -i -t aws-sdk-go-1.15 bash
+sandbox-test-go1.15: sandbox-build-go1.15
+	docker run -t aws-sdk-go-1.15
+
 sandbox-build-gotip:
 	@echo "Run make update-aws-golang-tip, if this test fails because missing aws-golang:tip container"
 	docker build -f ./awstesting/sandbox/Dockerfile.test.gotip -t "aws-sdk-go-tip" .
@@ -198,7 +206,7 @@ verify: lint vet
 lint:
 	@echo "go lint SDK and vendor packages"
 	@lint=`golint ./...`; \
-	dolint=`echo "$$lint" | grep -E -v -e ${LINTIGNOREDOC} -e ${LINTIGNORECONST} -e ${LINTIGNORESTUTTER} -e ${LINTIGNOREINFLECT} -e ${LINTIGNOREDEPS} -e ${LINTIGNOREINFLECTS3UPLOAD} -e ${LINTIGNOREPKGCOMMENT} -e ${LINTIGNOREENDPOINTS}`; \
+	dolint=`echo "$$lint" | grep -E -v -e ${LINTIGNOREDOC} -e ${LINTIGNORECONST} -e ${LINTIGNORESTUTTER} -e ${LINTIGNOREINFLECT} -e ${LINTIGNOREDEPS} -e ${LINTIGNOREINFLECTS3UPLOAD} -e ${LINTIGNOREPKGCOMMENT} -e ${LINTIGNOREENDPOINTS} -e ${LINTIGNORESINGLEFIGHT}`; \
 	echo "$$dolint"; \
 	if [ "$$dolint" != "" ]; then exit 1; fi
 
@@ -208,18 +216,13 @@ vet:
 ################
 # Dependencies #
 ################
-get-deps: get-deps-tests get-deps-x-tests get-deps-codegen get-deps-verify
-
-get-deps-tests:
-	@echo "go get SDK testing dependencies"
+get-deps: 
+	@echo "getting pre go module dependnecies"
+	go get github.com/jmespath/go-jmespath
 
 get-deps-x-tests:
 	@echo "go get SDK testing golang.org/x dependencies"
 	go get golang.org/x/net/http2
-
-get-deps-codegen: get-deps-x-tests
-	@echo "go get SDK codegen dependencies"
-	go get golang.org/x/net/html
 
 get-deps-verify:
 	@echo "go get SDK verification utilities"

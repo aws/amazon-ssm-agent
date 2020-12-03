@@ -27,10 +27,19 @@ import (
 	"github.com/aws/aws-sdk-go/awstesting"
 	"github.com/aws/aws-sdk-go/awstesting/unit"
 	"github.com/aws/aws-sdk-go/service/s3"
+	"github.com/aws/aws-sdk-go/service/s3/internal/s3testing"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 )
 
 var emptyList = []string{}
+
+const respMsg = `<?xml version="1.0" encoding="UTF-8"?>
+<CompleteMultipartUploadOutput>
+   <Location>mockValue</Location>
+   <Bucket>mockValue</Bucket>
+   <Key>mockValue</Key>
+   <ETag>mockValue</ETag>
+</CompleteMultipartUploadOutput>`
 
 func val(i interface{}, s string) interface{} {
 	v, err := awsutil.ValuesAtPath(i, s)
@@ -78,7 +87,7 @@ func loggingSvc(ignoreOps []string) (*s3.S3, *[]string, *[]interface{}) {
 
 		r.HTTPResponse = &http.Response{
 			StatusCode: 200,
-			Body:       ioutil.NopCloser(bytes.NewReader([]byte{})),
+			Body:       ioutil.NopCloser(bytes.NewReader([]byte(respMsg))),
 		}
 
 		switch data := r.Data.(type) {
@@ -934,7 +943,7 @@ func TestSSE(t *testing.T) {
 		defer mutex.Unlock()
 		r.HTTPResponse = &http.Response{
 			StatusCode: 200,
-			Body:       ioutil.NopCloser(bytes.NewReader([]byte{})),
+			Body:       ioutil.NopCloser(bytes.NewReader([]byte(respMsg))),
 		}
 		switch data := r.Data.(type) {
 		case *s3.CreateMultipartUploadOutput:
@@ -1189,7 +1198,7 @@ func TestUploadBufferStrategy(t *testing.T) {
 
 				r.HTTPResponse = &http.Response{
 					StatusCode: 200,
-					Body:       ioutil.NopCloser(bytes.NewReader([]byte{})),
+					Body:       ioutil.NopCloser(bytes.NewReader([]byte(respMsg))),
 				}
 
 				switch data := r.Data.(type) {
@@ -1211,7 +1220,7 @@ func TestUploadBufferStrategy(t *testing.T) {
 				u.Concurrency = 1
 			})
 
-			expected := getTestBytes(int(tCase.Size))
+			expected := s3testing.GetTestBytes(int(tCase.Size))
 			_, err := uploader.Upload(&s3manager.UploadInput{
 				Bucket: aws.String("bucket"),
 				Key:    aws.String("key"),

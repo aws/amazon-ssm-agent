@@ -26,7 +26,7 @@ import (
 //    // myFunc uses an SDK service client to make a request to
 //    // Amazon CloudFront.
 //    func myFunc(svc cloudfrontiface.CloudFrontAPI) bool {
-//        // Make svc.CreateCloudFrontOriginAccessIdentity request
+//        // Make svc.CreateCachePolicy request
 //    }
 //
 //    func main() {
@@ -42,7 +42,7 @@ import (
 //    type mockCloudFrontClient struct {
 //        cloudfrontiface.CloudFrontAPI
 //    }
-//    func (m *mockCloudFrontClient) CreateCloudFrontOriginAccessIdentity(input *cloudfront.CreateCloudFrontOriginAccessIdentityInput) (*cloudfront.CreateCloudFrontOriginAccessIdentityOutput, error) {
+//    func (m *mockCloudFrontClient) CreateCachePolicy(input *cloudfront.CreateCachePolicyInput) (*cloudfront.CreateCachePolicyOutput, error) {
 //        // mock response/functionality
 //    }
 //
@@ -60,6 +60,10 @@ import (
 // and waiters. Its suggested to use the pattern above for testing, or using
 // tooling to generate mocks to satisfy the interfaces.
 type CloudFrontAPI interface {
+	CreateCachePolicy(*cloudfront.CreateCachePolicyInput) (*cloudfront.CreateCachePolicyOutput, error)
+	CreateCachePolicyWithContext(aws.Context, *cloudfront.CreateCachePolicyInput, ...request.Option) (*cloudfront.CreateCachePolicyOutput, error)
+	CreateCachePolicyRequest(*cloudfront.CreateCachePolicyInput) (*request.Request, *cloudfront.CreateCachePolicyOutput)
+
 	CreateCloudFrontOriginAccessIdentity(*cloudfront.CreateCloudFrontOriginAccessIdentityInput) (*cloudfront.CreateCloudFrontOriginAccessIdentityOutput, error)
 	CreateCloudFrontOriginAccessIdentityWithContext(aws.Context, *cloudfront.CreateCloudFrontOriginAccessIdentityInput, ...request.Option) (*cloudfront.CreateCloudFrontOriginAccessIdentityOutput, error)
 	CreateCloudFrontOriginAccessIdentityRequest(*cloudfront.CreateCloudFrontOriginAccessIdentityInput) (*request.Request, *cloudfront.CreateCloudFrontOriginAccessIdentityOutput)
@@ -84,9 +88,25 @@ type CloudFrontAPI interface {
 	CreateInvalidationWithContext(aws.Context, *cloudfront.CreateInvalidationInput, ...request.Option) (*cloudfront.CreateInvalidationOutput, error)
 	CreateInvalidationRequest(*cloudfront.CreateInvalidationInput) (*request.Request, *cloudfront.CreateInvalidationOutput)
 
+	CreateKeyGroup(*cloudfront.CreateKeyGroupInput) (*cloudfront.CreateKeyGroupOutput, error)
+	CreateKeyGroupWithContext(aws.Context, *cloudfront.CreateKeyGroupInput, ...request.Option) (*cloudfront.CreateKeyGroupOutput, error)
+	CreateKeyGroupRequest(*cloudfront.CreateKeyGroupInput) (*request.Request, *cloudfront.CreateKeyGroupOutput)
+
+	CreateMonitoringSubscription(*cloudfront.CreateMonitoringSubscriptionInput) (*cloudfront.CreateMonitoringSubscriptionOutput, error)
+	CreateMonitoringSubscriptionWithContext(aws.Context, *cloudfront.CreateMonitoringSubscriptionInput, ...request.Option) (*cloudfront.CreateMonitoringSubscriptionOutput, error)
+	CreateMonitoringSubscriptionRequest(*cloudfront.CreateMonitoringSubscriptionInput) (*request.Request, *cloudfront.CreateMonitoringSubscriptionOutput)
+
+	CreateOriginRequestPolicy(*cloudfront.CreateOriginRequestPolicyInput) (*cloudfront.CreateOriginRequestPolicyOutput, error)
+	CreateOriginRequestPolicyWithContext(aws.Context, *cloudfront.CreateOriginRequestPolicyInput, ...request.Option) (*cloudfront.CreateOriginRequestPolicyOutput, error)
+	CreateOriginRequestPolicyRequest(*cloudfront.CreateOriginRequestPolicyInput) (*request.Request, *cloudfront.CreateOriginRequestPolicyOutput)
+
 	CreatePublicKey(*cloudfront.CreatePublicKeyInput) (*cloudfront.CreatePublicKeyOutput, error)
 	CreatePublicKeyWithContext(aws.Context, *cloudfront.CreatePublicKeyInput, ...request.Option) (*cloudfront.CreatePublicKeyOutput, error)
 	CreatePublicKeyRequest(*cloudfront.CreatePublicKeyInput) (*request.Request, *cloudfront.CreatePublicKeyOutput)
+
+	CreateRealtimeLogConfig(*cloudfront.CreateRealtimeLogConfigInput) (*cloudfront.CreateRealtimeLogConfigOutput, error)
+	CreateRealtimeLogConfigWithContext(aws.Context, *cloudfront.CreateRealtimeLogConfigInput, ...request.Option) (*cloudfront.CreateRealtimeLogConfigOutput, error)
+	CreateRealtimeLogConfigRequest(*cloudfront.CreateRealtimeLogConfigInput) (*request.Request, *cloudfront.CreateRealtimeLogConfigOutput)
 
 	CreateStreamingDistribution(*cloudfront.CreateStreamingDistributionInput) (*cloudfront.CreateStreamingDistributionOutput, error)
 	CreateStreamingDistributionWithContext(aws.Context, *cloudfront.CreateStreamingDistributionInput, ...request.Option) (*cloudfront.CreateStreamingDistributionOutput, error)
@@ -95,6 +115,10 @@ type CloudFrontAPI interface {
 	CreateStreamingDistributionWithTags(*cloudfront.CreateStreamingDistributionWithTagsInput) (*cloudfront.CreateStreamingDistributionWithTagsOutput, error)
 	CreateStreamingDistributionWithTagsWithContext(aws.Context, *cloudfront.CreateStreamingDistributionWithTagsInput, ...request.Option) (*cloudfront.CreateStreamingDistributionWithTagsOutput, error)
 	CreateStreamingDistributionWithTagsRequest(*cloudfront.CreateStreamingDistributionWithTagsInput) (*request.Request, *cloudfront.CreateStreamingDistributionWithTagsOutput)
+
+	DeleteCachePolicy(*cloudfront.DeleteCachePolicyInput) (*cloudfront.DeleteCachePolicyOutput, error)
+	DeleteCachePolicyWithContext(aws.Context, *cloudfront.DeleteCachePolicyInput, ...request.Option) (*cloudfront.DeleteCachePolicyOutput, error)
+	DeleteCachePolicyRequest(*cloudfront.DeleteCachePolicyInput) (*request.Request, *cloudfront.DeleteCachePolicyOutput)
 
 	DeleteCloudFrontOriginAccessIdentity(*cloudfront.DeleteCloudFrontOriginAccessIdentityInput) (*cloudfront.DeleteCloudFrontOriginAccessIdentityOutput, error)
 	DeleteCloudFrontOriginAccessIdentityWithContext(aws.Context, *cloudfront.DeleteCloudFrontOriginAccessIdentityInput, ...request.Option) (*cloudfront.DeleteCloudFrontOriginAccessIdentityOutput, error)
@@ -112,13 +136,37 @@ type CloudFrontAPI interface {
 	DeleteFieldLevelEncryptionProfileWithContext(aws.Context, *cloudfront.DeleteFieldLevelEncryptionProfileInput, ...request.Option) (*cloudfront.DeleteFieldLevelEncryptionProfileOutput, error)
 	DeleteFieldLevelEncryptionProfileRequest(*cloudfront.DeleteFieldLevelEncryptionProfileInput) (*request.Request, *cloudfront.DeleteFieldLevelEncryptionProfileOutput)
 
+	DeleteKeyGroup(*cloudfront.DeleteKeyGroupInput) (*cloudfront.DeleteKeyGroupOutput, error)
+	DeleteKeyGroupWithContext(aws.Context, *cloudfront.DeleteKeyGroupInput, ...request.Option) (*cloudfront.DeleteKeyGroupOutput, error)
+	DeleteKeyGroupRequest(*cloudfront.DeleteKeyGroupInput) (*request.Request, *cloudfront.DeleteKeyGroupOutput)
+
+	DeleteMonitoringSubscription(*cloudfront.DeleteMonitoringSubscriptionInput) (*cloudfront.DeleteMonitoringSubscriptionOutput, error)
+	DeleteMonitoringSubscriptionWithContext(aws.Context, *cloudfront.DeleteMonitoringSubscriptionInput, ...request.Option) (*cloudfront.DeleteMonitoringSubscriptionOutput, error)
+	DeleteMonitoringSubscriptionRequest(*cloudfront.DeleteMonitoringSubscriptionInput) (*request.Request, *cloudfront.DeleteMonitoringSubscriptionOutput)
+
+	DeleteOriginRequestPolicy(*cloudfront.DeleteOriginRequestPolicyInput) (*cloudfront.DeleteOriginRequestPolicyOutput, error)
+	DeleteOriginRequestPolicyWithContext(aws.Context, *cloudfront.DeleteOriginRequestPolicyInput, ...request.Option) (*cloudfront.DeleteOriginRequestPolicyOutput, error)
+	DeleteOriginRequestPolicyRequest(*cloudfront.DeleteOriginRequestPolicyInput) (*request.Request, *cloudfront.DeleteOriginRequestPolicyOutput)
+
 	DeletePublicKey(*cloudfront.DeletePublicKeyInput) (*cloudfront.DeletePublicKeyOutput, error)
 	DeletePublicKeyWithContext(aws.Context, *cloudfront.DeletePublicKeyInput, ...request.Option) (*cloudfront.DeletePublicKeyOutput, error)
 	DeletePublicKeyRequest(*cloudfront.DeletePublicKeyInput) (*request.Request, *cloudfront.DeletePublicKeyOutput)
 
+	DeleteRealtimeLogConfig(*cloudfront.DeleteRealtimeLogConfigInput) (*cloudfront.DeleteRealtimeLogConfigOutput, error)
+	DeleteRealtimeLogConfigWithContext(aws.Context, *cloudfront.DeleteRealtimeLogConfigInput, ...request.Option) (*cloudfront.DeleteRealtimeLogConfigOutput, error)
+	DeleteRealtimeLogConfigRequest(*cloudfront.DeleteRealtimeLogConfigInput) (*request.Request, *cloudfront.DeleteRealtimeLogConfigOutput)
+
 	DeleteStreamingDistribution(*cloudfront.DeleteStreamingDistributionInput) (*cloudfront.DeleteStreamingDistributionOutput, error)
 	DeleteStreamingDistributionWithContext(aws.Context, *cloudfront.DeleteStreamingDistributionInput, ...request.Option) (*cloudfront.DeleteStreamingDistributionOutput, error)
 	DeleteStreamingDistributionRequest(*cloudfront.DeleteStreamingDistributionInput) (*request.Request, *cloudfront.DeleteStreamingDistributionOutput)
+
+	GetCachePolicy(*cloudfront.GetCachePolicyInput) (*cloudfront.GetCachePolicyOutput, error)
+	GetCachePolicyWithContext(aws.Context, *cloudfront.GetCachePolicyInput, ...request.Option) (*cloudfront.GetCachePolicyOutput, error)
+	GetCachePolicyRequest(*cloudfront.GetCachePolicyInput) (*request.Request, *cloudfront.GetCachePolicyOutput)
+
+	GetCachePolicyConfig(*cloudfront.GetCachePolicyConfigInput) (*cloudfront.GetCachePolicyConfigOutput, error)
+	GetCachePolicyConfigWithContext(aws.Context, *cloudfront.GetCachePolicyConfigInput, ...request.Option) (*cloudfront.GetCachePolicyConfigOutput, error)
+	GetCachePolicyConfigRequest(*cloudfront.GetCachePolicyConfigInput) (*request.Request, *cloudfront.GetCachePolicyConfigOutput)
 
 	GetCloudFrontOriginAccessIdentity(*cloudfront.GetCloudFrontOriginAccessIdentityInput) (*cloudfront.GetCloudFrontOriginAccessIdentityOutput, error)
 	GetCloudFrontOriginAccessIdentityWithContext(aws.Context, *cloudfront.GetCloudFrontOriginAccessIdentityInput, ...request.Option) (*cloudfront.GetCloudFrontOriginAccessIdentityOutput, error)
@@ -156,6 +204,26 @@ type CloudFrontAPI interface {
 	GetInvalidationWithContext(aws.Context, *cloudfront.GetInvalidationInput, ...request.Option) (*cloudfront.GetInvalidationOutput, error)
 	GetInvalidationRequest(*cloudfront.GetInvalidationInput) (*request.Request, *cloudfront.GetInvalidationOutput)
 
+	GetKeyGroup(*cloudfront.GetKeyGroupInput) (*cloudfront.GetKeyGroupOutput, error)
+	GetKeyGroupWithContext(aws.Context, *cloudfront.GetKeyGroupInput, ...request.Option) (*cloudfront.GetKeyGroupOutput, error)
+	GetKeyGroupRequest(*cloudfront.GetKeyGroupInput) (*request.Request, *cloudfront.GetKeyGroupOutput)
+
+	GetKeyGroupConfig(*cloudfront.GetKeyGroupConfigInput) (*cloudfront.GetKeyGroupConfigOutput, error)
+	GetKeyGroupConfigWithContext(aws.Context, *cloudfront.GetKeyGroupConfigInput, ...request.Option) (*cloudfront.GetKeyGroupConfigOutput, error)
+	GetKeyGroupConfigRequest(*cloudfront.GetKeyGroupConfigInput) (*request.Request, *cloudfront.GetKeyGroupConfigOutput)
+
+	GetMonitoringSubscription(*cloudfront.GetMonitoringSubscriptionInput) (*cloudfront.GetMonitoringSubscriptionOutput, error)
+	GetMonitoringSubscriptionWithContext(aws.Context, *cloudfront.GetMonitoringSubscriptionInput, ...request.Option) (*cloudfront.GetMonitoringSubscriptionOutput, error)
+	GetMonitoringSubscriptionRequest(*cloudfront.GetMonitoringSubscriptionInput) (*request.Request, *cloudfront.GetMonitoringSubscriptionOutput)
+
+	GetOriginRequestPolicy(*cloudfront.GetOriginRequestPolicyInput) (*cloudfront.GetOriginRequestPolicyOutput, error)
+	GetOriginRequestPolicyWithContext(aws.Context, *cloudfront.GetOriginRequestPolicyInput, ...request.Option) (*cloudfront.GetOriginRequestPolicyOutput, error)
+	GetOriginRequestPolicyRequest(*cloudfront.GetOriginRequestPolicyInput) (*request.Request, *cloudfront.GetOriginRequestPolicyOutput)
+
+	GetOriginRequestPolicyConfig(*cloudfront.GetOriginRequestPolicyConfigInput) (*cloudfront.GetOriginRequestPolicyConfigOutput, error)
+	GetOriginRequestPolicyConfigWithContext(aws.Context, *cloudfront.GetOriginRequestPolicyConfigInput, ...request.Option) (*cloudfront.GetOriginRequestPolicyConfigOutput, error)
+	GetOriginRequestPolicyConfigRequest(*cloudfront.GetOriginRequestPolicyConfigInput) (*request.Request, *cloudfront.GetOriginRequestPolicyConfigOutput)
+
 	GetPublicKey(*cloudfront.GetPublicKeyInput) (*cloudfront.GetPublicKeyOutput, error)
 	GetPublicKeyWithContext(aws.Context, *cloudfront.GetPublicKeyInput, ...request.Option) (*cloudfront.GetPublicKeyOutput, error)
 	GetPublicKeyRequest(*cloudfront.GetPublicKeyInput) (*request.Request, *cloudfront.GetPublicKeyOutput)
@@ -164,6 +232,10 @@ type CloudFrontAPI interface {
 	GetPublicKeyConfigWithContext(aws.Context, *cloudfront.GetPublicKeyConfigInput, ...request.Option) (*cloudfront.GetPublicKeyConfigOutput, error)
 	GetPublicKeyConfigRequest(*cloudfront.GetPublicKeyConfigInput) (*request.Request, *cloudfront.GetPublicKeyConfigOutput)
 
+	GetRealtimeLogConfig(*cloudfront.GetRealtimeLogConfigInput) (*cloudfront.GetRealtimeLogConfigOutput, error)
+	GetRealtimeLogConfigWithContext(aws.Context, *cloudfront.GetRealtimeLogConfigInput, ...request.Option) (*cloudfront.GetRealtimeLogConfigOutput, error)
+	GetRealtimeLogConfigRequest(*cloudfront.GetRealtimeLogConfigInput) (*request.Request, *cloudfront.GetRealtimeLogConfigOutput)
+
 	GetStreamingDistribution(*cloudfront.GetStreamingDistributionInput) (*cloudfront.GetStreamingDistributionOutput, error)
 	GetStreamingDistributionWithContext(aws.Context, *cloudfront.GetStreamingDistributionInput, ...request.Option) (*cloudfront.GetStreamingDistributionOutput, error)
 	GetStreamingDistributionRequest(*cloudfront.GetStreamingDistributionInput) (*request.Request, *cloudfront.GetStreamingDistributionOutput)
@@ -171,6 +243,10 @@ type CloudFrontAPI interface {
 	GetStreamingDistributionConfig(*cloudfront.GetStreamingDistributionConfigInput) (*cloudfront.GetStreamingDistributionConfigOutput, error)
 	GetStreamingDistributionConfigWithContext(aws.Context, *cloudfront.GetStreamingDistributionConfigInput, ...request.Option) (*cloudfront.GetStreamingDistributionConfigOutput, error)
 	GetStreamingDistributionConfigRequest(*cloudfront.GetStreamingDistributionConfigInput) (*request.Request, *cloudfront.GetStreamingDistributionConfigOutput)
+
+	ListCachePolicies(*cloudfront.ListCachePoliciesInput) (*cloudfront.ListCachePoliciesOutput, error)
+	ListCachePoliciesWithContext(aws.Context, *cloudfront.ListCachePoliciesInput, ...request.Option) (*cloudfront.ListCachePoliciesOutput, error)
+	ListCachePoliciesRequest(*cloudfront.ListCachePoliciesInput) (*request.Request, *cloudfront.ListCachePoliciesOutput)
 
 	ListCloudFrontOriginAccessIdentities(*cloudfront.ListCloudFrontOriginAccessIdentitiesInput) (*cloudfront.ListCloudFrontOriginAccessIdentitiesOutput, error)
 	ListCloudFrontOriginAccessIdentitiesWithContext(aws.Context, *cloudfront.ListCloudFrontOriginAccessIdentitiesInput, ...request.Option) (*cloudfront.ListCloudFrontOriginAccessIdentitiesOutput, error)
@@ -185,6 +261,22 @@ type CloudFrontAPI interface {
 
 	ListDistributionsPages(*cloudfront.ListDistributionsInput, func(*cloudfront.ListDistributionsOutput, bool) bool) error
 	ListDistributionsPagesWithContext(aws.Context, *cloudfront.ListDistributionsInput, func(*cloudfront.ListDistributionsOutput, bool) bool, ...request.Option) error
+
+	ListDistributionsByCachePolicyId(*cloudfront.ListDistributionsByCachePolicyIdInput) (*cloudfront.ListDistributionsByCachePolicyIdOutput, error)
+	ListDistributionsByCachePolicyIdWithContext(aws.Context, *cloudfront.ListDistributionsByCachePolicyIdInput, ...request.Option) (*cloudfront.ListDistributionsByCachePolicyIdOutput, error)
+	ListDistributionsByCachePolicyIdRequest(*cloudfront.ListDistributionsByCachePolicyIdInput) (*request.Request, *cloudfront.ListDistributionsByCachePolicyIdOutput)
+
+	ListDistributionsByKeyGroup(*cloudfront.ListDistributionsByKeyGroupInput) (*cloudfront.ListDistributionsByKeyGroupOutput, error)
+	ListDistributionsByKeyGroupWithContext(aws.Context, *cloudfront.ListDistributionsByKeyGroupInput, ...request.Option) (*cloudfront.ListDistributionsByKeyGroupOutput, error)
+	ListDistributionsByKeyGroupRequest(*cloudfront.ListDistributionsByKeyGroupInput) (*request.Request, *cloudfront.ListDistributionsByKeyGroupOutput)
+
+	ListDistributionsByOriginRequestPolicyId(*cloudfront.ListDistributionsByOriginRequestPolicyIdInput) (*cloudfront.ListDistributionsByOriginRequestPolicyIdOutput, error)
+	ListDistributionsByOriginRequestPolicyIdWithContext(aws.Context, *cloudfront.ListDistributionsByOriginRequestPolicyIdInput, ...request.Option) (*cloudfront.ListDistributionsByOriginRequestPolicyIdOutput, error)
+	ListDistributionsByOriginRequestPolicyIdRequest(*cloudfront.ListDistributionsByOriginRequestPolicyIdInput) (*request.Request, *cloudfront.ListDistributionsByOriginRequestPolicyIdOutput)
+
+	ListDistributionsByRealtimeLogConfig(*cloudfront.ListDistributionsByRealtimeLogConfigInput) (*cloudfront.ListDistributionsByRealtimeLogConfigOutput, error)
+	ListDistributionsByRealtimeLogConfigWithContext(aws.Context, *cloudfront.ListDistributionsByRealtimeLogConfigInput, ...request.Option) (*cloudfront.ListDistributionsByRealtimeLogConfigOutput, error)
+	ListDistributionsByRealtimeLogConfigRequest(*cloudfront.ListDistributionsByRealtimeLogConfigInput) (*request.Request, *cloudfront.ListDistributionsByRealtimeLogConfigOutput)
 
 	ListDistributionsByWebACLId(*cloudfront.ListDistributionsByWebACLIdInput) (*cloudfront.ListDistributionsByWebACLIdOutput, error)
 	ListDistributionsByWebACLIdWithContext(aws.Context, *cloudfront.ListDistributionsByWebACLIdInput, ...request.Option) (*cloudfront.ListDistributionsByWebACLIdOutput, error)
@@ -205,9 +297,21 @@ type CloudFrontAPI interface {
 	ListInvalidationsPages(*cloudfront.ListInvalidationsInput, func(*cloudfront.ListInvalidationsOutput, bool) bool) error
 	ListInvalidationsPagesWithContext(aws.Context, *cloudfront.ListInvalidationsInput, func(*cloudfront.ListInvalidationsOutput, bool) bool, ...request.Option) error
 
+	ListKeyGroups(*cloudfront.ListKeyGroupsInput) (*cloudfront.ListKeyGroupsOutput, error)
+	ListKeyGroupsWithContext(aws.Context, *cloudfront.ListKeyGroupsInput, ...request.Option) (*cloudfront.ListKeyGroupsOutput, error)
+	ListKeyGroupsRequest(*cloudfront.ListKeyGroupsInput) (*request.Request, *cloudfront.ListKeyGroupsOutput)
+
+	ListOriginRequestPolicies(*cloudfront.ListOriginRequestPoliciesInput) (*cloudfront.ListOriginRequestPoliciesOutput, error)
+	ListOriginRequestPoliciesWithContext(aws.Context, *cloudfront.ListOriginRequestPoliciesInput, ...request.Option) (*cloudfront.ListOriginRequestPoliciesOutput, error)
+	ListOriginRequestPoliciesRequest(*cloudfront.ListOriginRequestPoliciesInput) (*request.Request, *cloudfront.ListOriginRequestPoliciesOutput)
+
 	ListPublicKeys(*cloudfront.ListPublicKeysInput) (*cloudfront.ListPublicKeysOutput, error)
 	ListPublicKeysWithContext(aws.Context, *cloudfront.ListPublicKeysInput, ...request.Option) (*cloudfront.ListPublicKeysOutput, error)
 	ListPublicKeysRequest(*cloudfront.ListPublicKeysInput) (*request.Request, *cloudfront.ListPublicKeysOutput)
+
+	ListRealtimeLogConfigs(*cloudfront.ListRealtimeLogConfigsInput) (*cloudfront.ListRealtimeLogConfigsOutput, error)
+	ListRealtimeLogConfigsWithContext(aws.Context, *cloudfront.ListRealtimeLogConfigsInput, ...request.Option) (*cloudfront.ListRealtimeLogConfigsOutput, error)
+	ListRealtimeLogConfigsRequest(*cloudfront.ListRealtimeLogConfigsInput) (*request.Request, *cloudfront.ListRealtimeLogConfigsOutput)
 
 	ListStreamingDistributions(*cloudfront.ListStreamingDistributionsInput) (*cloudfront.ListStreamingDistributionsOutput, error)
 	ListStreamingDistributionsWithContext(aws.Context, *cloudfront.ListStreamingDistributionsInput, ...request.Option) (*cloudfront.ListStreamingDistributionsOutput, error)
@@ -228,6 +332,10 @@ type CloudFrontAPI interface {
 	UntagResourceWithContext(aws.Context, *cloudfront.UntagResourceInput, ...request.Option) (*cloudfront.UntagResourceOutput, error)
 	UntagResourceRequest(*cloudfront.UntagResourceInput) (*request.Request, *cloudfront.UntagResourceOutput)
 
+	UpdateCachePolicy(*cloudfront.UpdateCachePolicyInput) (*cloudfront.UpdateCachePolicyOutput, error)
+	UpdateCachePolicyWithContext(aws.Context, *cloudfront.UpdateCachePolicyInput, ...request.Option) (*cloudfront.UpdateCachePolicyOutput, error)
+	UpdateCachePolicyRequest(*cloudfront.UpdateCachePolicyInput) (*request.Request, *cloudfront.UpdateCachePolicyOutput)
+
 	UpdateCloudFrontOriginAccessIdentity(*cloudfront.UpdateCloudFrontOriginAccessIdentityInput) (*cloudfront.UpdateCloudFrontOriginAccessIdentityOutput, error)
 	UpdateCloudFrontOriginAccessIdentityWithContext(aws.Context, *cloudfront.UpdateCloudFrontOriginAccessIdentityInput, ...request.Option) (*cloudfront.UpdateCloudFrontOriginAccessIdentityOutput, error)
 	UpdateCloudFrontOriginAccessIdentityRequest(*cloudfront.UpdateCloudFrontOriginAccessIdentityInput) (*request.Request, *cloudfront.UpdateCloudFrontOriginAccessIdentityOutput)
@@ -244,9 +352,21 @@ type CloudFrontAPI interface {
 	UpdateFieldLevelEncryptionProfileWithContext(aws.Context, *cloudfront.UpdateFieldLevelEncryptionProfileInput, ...request.Option) (*cloudfront.UpdateFieldLevelEncryptionProfileOutput, error)
 	UpdateFieldLevelEncryptionProfileRequest(*cloudfront.UpdateFieldLevelEncryptionProfileInput) (*request.Request, *cloudfront.UpdateFieldLevelEncryptionProfileOutput)
 
+	UpdateKeyGroup(*cloudfront.UpdateKeyGroupInput) (*cloudfront.UpdateKeyGroupOutput, error)
+	UpdateKeyGroupWithContext(aws.Context, *cloudfront.UpdateKeyGroupInput, ...request.Option) (*cloudfront.UpdateKeyGroupOutput, error)
+	UpdateKeyGroupRequest(*cloudfront.UpdateKeyGroupInput) (*request.Request, *cloudfront.UpdateKeyGroupOutput)
+
+	UpdateOriginRequestPolicy(*cloudfront.UpdateOriginRequestPolicyInput) (*cloudfront.UpdateOriginRequestPolicyOutput, error)
+	UpdateOriginRequestPolicyWithContext(aws.Context, *cloudfront.UpdateOriginRequestPolicyInput, ...request.Option) (*cloudfront.UpdateOriginRequestPolicyOutput, error)
+	UpdateOriginRequestPolicyRequest(*cloudfront.UpdateOriginRequestPolicyInput) (*request.Request, *cloudfront.UpdateOriginRequestPolicyOutput)
+
 	UpdatePublicKey(*cloudfront.UpdatePublicKeyInput) (*cloudfront.UpdatePublicKeyOutput, error)
 	UpdatePublicKeyWithContext(aws.Context, *cloudfront.UpdatePublicKeyInput, ...request.Option) (*cloudfront.UpdatePublicKeyOutput, error)
 	UpdatePublicKeyRequest(*cloudfront.UpdatePublicKeyInput) (*request.Request, *cloudfront.UpdatePublicKeyOutput)
+
+	UpdateRealtimeLogConfig(*cloudfront.UpdateRealtimeLogConfigInput) (*cloudfront.UpdateRealtimeLogConfigOutput, error)
+	UpdateRealtimeLogConfigWithContext(aws.Context, *cloudfront.UpdateRealtimeLogConfigInput, ...request.Option) (*cloudfront.UpdateRealtimeLogConfigOutput, error)
+	UpdateRealtimeLogConfigRequest(*cloudfront.UpdateRealtimeLogConfigInput) (*request.Request, *cloudfront.UpdateRealtimeLogConfigOutput)
 
 	UpdateStreamingDistribution(*cloudfront.UpdateStreamingDistributionInput) (*cloudfront.UpdateStreamingDistributionOutput, error)
 	UpdateStreamingDistributionWithContext(aws.Context, *cloudfront.UpdateStreamingDistributionInput, ...request.Option) (*cloudfront.UpdateStreamingDistributionOutput, error)

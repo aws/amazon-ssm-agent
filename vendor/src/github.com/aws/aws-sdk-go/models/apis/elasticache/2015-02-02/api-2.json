@@ -197,7 +197,27 @@
         {"shape":"CacheSubnetGroupAlreadyExistsFault"},
         {"shape":"CacheSubnetGroupQuotaExceededFault"},
         {"shape":"CacheSubnetQuotaExceededFault"},
-        {"shape":"InvalidSubnet"}
+        {"shape":"InvalidSubnet"},
+        {"shape":"SubnetNotAllowedFault"}
+      ]
+    },
+    "CreateGlobalReplicationGroup":{
+      "name":"CreateGlobalReplicationGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateGlobalReplicationGroupMessage"},
+      "output":{
+        "shape":"CreateGlobalReplicationGroupResult",
+        "resultWrapper":"CreateGlobalReplicationGroupResult"
+      },
+      "errors":[
+        {"shape":"ReplicationGroupNotFoundFault"},
+        {"shape":"InvalidReplicationGroupStateFault"},
+        {"shape":"GlobalReplicationGroupAlreadyExistsFault"},
+        {"shape":"ServiceLinkedRoleNotFoundFault"},
+        {"shape":"InvalidParameterValueException"}
       ]
     },
     "CreateReplicationGroup":{
@@ -215,6 +235,8 @@
         {"shape":"CacheClusterNotFoundFault"},
         {"shape":"InvalidCacheClusterStateFault"},
         {"shape":"ReplicationGroupAlreadyExistsFault"},
+        {"shape":"InvalidUserGroupStateFault"},
+        {"shape":"UserGroupNotFoundFault"},
         {"shape":"InsufficientCacheClusterCapacityFault"},
         {"shape":"CacheSecurityGroupNotFoundFault"},
         {"shape":"CacheSubnetGroupNotFoundFault"},
@@ -225,6 +247,8 @@
         {"shape":"InvalidVPCNetworkStateFault"},
         {"shape":"TagQuotaPerResourceExceeded"},
         {"shape":"NodeGroupsPerReplicationGroupQuotaExceededFault"},
+        {"shape":"GlobalReplicationGroupNotFoundFault"},
+        {"shape":"InvalidGlobalReplicationGroupStateFault"},
         {"shape":"InvalidParameterValueException"},
         {"shape":"InvalidParameterCombinationException"}
       ]
@@ -250,6 +274,63 @@
         {"shape":"SnapshotFeatureNotSupportedFault"},
         {"shape":"InvalidParameterCombinationException"},
         {"shape":"InvalidParameterValueException"}
+      ]
+    },
+    "CreateUser":{
+      "name":"CreateUser",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateUserMessage"},
+      "output":{
+        "shape":"User",
+        "resultWrapper":"CreateUserResult"
+      },
+      "errors":[
+        {"shape":"UserAlreadyExistsFault"},
+        {"shape":"UserQuotaExceededFault"},
+        {"shape":"DuplicateUserNameFault"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"InvalidParameterCombinationException"}
+      ]
+    },
+    "CreateUserGroup":{
+      "name":"CreateUserGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateUserGroupMessage"},
+      "output":{
+        "shape":"UserGroup",
+        "resultWrapper":"CreateUserGroupResult"
+      },
+      "errors":[
+        {"shape":"UserNotFoundFault"},
+        {"shape":"DuplicateUserNameFault"},
+        {"shape":"UserGroupAlreadyExistsFault"},
+        {"shape":"DefaultUserRequired"},
+        {"shape":"UserGroupQuotaExceededFault"},
+        {"shape":"InvalidParameterValueException"}
+      ]
+    },
+    "DecreaseNodeGroupsInGlobalReplicationGroup":{
+      "name":"DecreaseNodeGroupsInGlobalReplicationGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DecreaseNodeGroupsInGlobalReplicationGroupMessage"},
+      "output":{
+        "shape":"DecreaseNodeGroupsInGlobalReplicationGroupResult",
+        "resultWrapper":"DecreaseNodeGroupsInGlobalReplicationGroupResult"
+      },
+      "errors":[
+        {"shape":"GlobalReplicationGroupNotFoundFault"},
+        {"shape":"InvalidGlobalReplicationGroupStateFault"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"InvalidParameterCombinationException"}
       ]
     },
     "DecreaseReplicaCount":{
@@ -339,6 +420,23 @@
         {"shape":"CacheSubnetGroupNotFoundFault"}
       ]
     },
+    "DeleteGlobalReplicationGroup":{
+      "name":"DeleteGlobalReplicationGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteGlobalReplicationGroupMessage"},
+      "output":{
+        "shape":"DeleteGlobalReplicationGroupResult",
+        "resultWrapper":"DeleteGlobalReplicationGroupResult"
+      },
+      "errors":[
+        {"shape":"GlobalReplicationGroupNotFoundFault"},
+        {"shape":"InvalidGlobalReplicationGroupStateFault"},
+        {"shape":"InvalidParameterValueException"}
+      ]
+    },
     "DeleteReplicationGroup":{
       "name":"DeleteReplicationGroup",
       "http":{
@@ -376,6 +474,41 @@
         {"shape":"InvalidSnapshotStateFault"},
         {"shape":"InvalidParameterValueException"},
         {"shape":"InvalidParameterCombinationException"}
+      ]
+    },
+    "DeleteUser":{
+      "name":"DeleteUser",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteUserMessage"},
+      "output":{
+        "shape":"User",
+        "resultWrapper":"DeleteUserResult"
+      },
+      "errors":[
+        {"shape":"InvalidUserStateFault"},
+        {"shape":"UserNotFoundFault"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"DefaultUserAssociatedToUserGroupFault"}
+      ]
+    },
+    "DeleteUserGroup":{
+      "name":"DeleteUserGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteUserGroupMessage"},
+      "output":{
+        "shape":"UserGroup",
+        "resultWrapper":"DeleteUserGroupResult"
+      },
+      "errors":[
+        {"shape":"UserGroupNotFoundFault"},
+        {"shape":"InvalidUserGroupStateFault"},
+        {"shape":"InvalidParameterValueException"}
       ]
     },
     "DescribeCacheClusters":{
@@ -505,6 +638,23 @@
         {"shape":"InvalidParameterCombinationException"}
       ]
     },
+    "DescribeGlobalReplicationGroups":{
+      "name":"DescribeGlobalReplicationGroups",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeGlobalReplicationGroupsMessage"},
+      "output":{
+        "shape":"DescribeGlobalReplicationGroupsResult",
+        "resultWrapper":"DescribeGlobalReplicationGroupsResult"
+      },
+      "errors":[
+        {"shape":"GlobalReplicationGroupNotFoundFault"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"InvalidParameterCombinationException"}
+      ]
+    },
     "DescribeReplicationGroups":{
       "name":"DescribeReplicationGroups",
       "http":{
@@ -605,6 +755,91 @@
       "errors":[
         {"shape":"InvalidParameterValueException"},
         {"shape":"InvalidParameterCombinationException"}
+      ]
+    },
+    "DescribeUserGroups":{
+      "name":"DescribeUserGroups",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeUserGroupsMessage"},
+      "output":{
+        "shape":"DescribeUserGroupsResult",
+        "resultWrapper":"DescribeUserGroupsResult"
+      },
+      "errors":[
+        {"shape":"UserGroupNotFoundFault"},
+        {"shape":"InvalidParameterCombinationException"}
+      ]
+    },
+    "DescribeUsers":{
+      "name":"DescribeUsers",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeUsersMessage"},
+      "output":{
+        "shape":"DescribeUsersResult",
+        "resultWrapper":"DescribeUsersResult"
+      },
+      "errors":[
+        {"shape":"UserNotFoundFault"},
+        {"shape":"InvalidParameterCombinationException"}
+      ]
+    },
+    "DisassociateGlobalReplicationGroup":{
+      "name":"DisassociateGlobalReplicationGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DisassociateGlobalReplicationGroupMessage"},
+      "output":{
+        "shape":"DisassociateGlobalReplicationGroupResult",
+        "resultWrapper":"DisassociateGlobalReplicationGroupResult"
+      },
+      "errors":[
+        {"shape":"GlobalReplicationGroupNotFoundFault"},
+        {"shape":"InvalidGlobalReplicationGroupStateFault"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"InvalidParameterCombinationException"}
+      ]
+    },
+    "FailoverGlobalReplicationGroup":{
+      "name":"FailoverGlobalReplicationGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"FailoverGlobalReplicationGroupMessage"},
+      "output":{
+        "shape":"FailoverGlobalReplicationGroupResult",
+        "resultWrapper":"FailoverGlobalReplicationGroupResult"
+      },
+      "errors":[
+        {"shape":"GlobalReplicationGroupNotFoundFault"},
+        {"shape":"InvalidGlobalReplicationGroupStateFault"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"InvalidParameterCombinationException"}
+      ]
+    },
+    "IncreaseNodeGroupsInGlobalReplicationGroup":{
+      "name":"IncreaseNodeGroupsInGlobalReplicationGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"IncreaseNodeGroupsInGlobalReplicationGroupMessage"},
+      "output":{
+        "shape":"IncreaseNodeGroupsInGlobalReplicationGroupResult",
+        "resultWrapper":"IncreaseNodeGroupsInGlobalReplicationGroupResult"
+      },
+      "errors":[
+        {"shape":"GlobalReplicationGroupNotFoundFault"},
+        {"shape":"InvalidGlobalReplicationGroupStateFault"},
+        {"shape":"InvalidParameterValueException"}
       ]
     },
     "IncreaseReplicaCount":{
@@ -708,7 +943,8 @@
         {"shape":"CacheParameterGroupNotFoundFault"},
         {"shape":"InvalidCacheParameterGroupStateFault"},
         {"shape":"InvalidParameterValueException"},
-        {"shape":"InvalidParameterCombinationException"}
+        {"shape":"InvalidParameterCombinationException"},
+        {"shape":"InvalidGlobalReplicationGroupStateFault"}
       ]
     },
     "ModifyCacheSubnetGroup":{
@@ -726,7 +962,25 @@
         {"shape":"CacheSubnetGroupNotFoundFault"},
         {"shape":"CacheSubnetQuotaExceededFault"},
         {"shape":"SubnetInUse"},
-        {"shape":"InvalidSubnet"}
+        {"shape":"InvalidSubnet"},
+        {"shape":"SubnetNotAllowedFault"}
+      ]
+    },
+    "ModifyGlobalReplicationGroup":{
+      "name":"ModifyGlobalReplicationGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ModifyGlobalReplicationGroupMessage"},
+      "output":{
+        "shape":"ModifyGlobalReplicationGroupResult",
+        "resultWrapper":"ModifyGlobalReplicationGroupResult"
+      },
+      "errors":[
+        {"shape":"GlobalReplicationGroupNotFoundFault"},
+        {"shape":"InvalidGlobalReplicationGroupStateFault"},
+        {"shape":"InvalidParameterValueException"}
       ]
     },
     "ModifyReplicationGroup":{
@@ -743,6 +997,8 @@
       "errors":[
         {"shape":"ReplicationGroupNotFoundFault"},
         {"shape":"InvalidReplicationGroupStateFault"},
+        {"shape":"InvalidUserGroupStateFault"},
+        {"shape":"UserGroupNotFoundFault"},
         {"shape":"InvalidCacheClusterStateFault"},
         {"shape":"InvalidCacheSecurityGroupStateFault"},
         {"shape":"InsufficientCacheClusterCapacityFault"},
@@ -781,6 +1037,45 @@
         {"shape":"InvalidParameterCombinationException"}
       ]
     },
+    "ModifyUser":{
+      "name":"ModifyUser",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ModifyUserMessage"},
+      "output":{
+        "shape":"User",
+        "resultWrapper":"ModifyUserResult"
+      },
+      "errors":[
+        {"shape":"UserNotFoundFault"},
+        {"shape":"InvalidUserStateFault"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"InvalidParameterCombinationException"}
+      ]
+    },
+    "ModifyUserGroup":{
+      "name":"ModifyUserGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ModifyUserGroupMessage"},
+      "output":{
+        "shape":"UserGroup",
+        "resultWrapper":"ModifyUserGroupResult"
+      },
+      "errors":[
+        {"shape":"UserGroupNotFoundFault"},
+        {"shape":"UserNotFoundFault"},
+        {"shape":"DuplicateUserNameFault"},
+        {"shape":"DefaultUserRequired"},
+        {"shape":"InvalidUserGroupStateFault"},
+        {"shape":"InvalidParameterValueException"},
+        {"shape":"InvalidParameterCombinationException"}
+      ]
+    },
     "PurchaseReservedCacheNodesOffering":{
       "name":"PurchaseReservedCacheNodesOffering",
       "http":{
@@ -798,6 +1093,23 @@
         {"shape":"ReservedCacheNodeQuotaExceededFault"},
         {"shape":"InvalidParameterValueException"},
         {"shape":"InvalidParameterCombinationException"}
+      ]
+    },
+    "RebalanceSlotsInGlobalReplicationGroup":{
+      "name":"RebalanceSlotsInGlobalReplicationGroup",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"RebalanceSlotsInGlobalReplicationGroupMessage"},
+      "output":{
+        "shape":"RebalanceSlotsInGlobalReplicationGroupResult",
+        "resultWrapper":"RebalanceSlotsInGlobalReplicationGroupResult"
+      },
+      "errors":[
+        {"shape":"GlobalReplicationGroupNotFoundFault"},
+        {"shape":"InvalidGlobalReplicationGroupStateFault"},
+        {"shape":"InvalidParameterValueException"}
       ]
     },
     "RebootCacheCluster":{
@@ -849,7 +1161,8 @@
         {"shape":"InvalidCacheParameterGroupStateFault"},
         {"shape":"CacheParameterGroupNotFoundFault"},
         {"shape":"InvalidParameterValueException"},
-        {"shape":"InvalidParameterCombinationException"}
+        {"shape":"InvalidParameterCombinationException"},
+        {"shape":"InvalidGlobalReplicationGroupStateFault"}
       ]
     },
     "RevokeCacheSecurityGroupIngress":{
@@ -932,6 +1245,10 @@
         "cross-az"
       ]
     },
+    "AccessString":{
+      "type":"string",
+      "pattern":".*\\S.*"
+    },
     "AddTagsToResourceMessage":{
       "type":"structure",
       "required":[
@@ -967,7 +1284,22 @@
       "type":"string",
       "enum":[
         "SET",
-        "ROTATE"
+        "ROTATE",
+        "DELETE"
+      ]
+    },
+    "Authentication":{
+      "type":"structure",
+      "members":{
+        "Type":{"shape":"AuthenticationType"},
+        "PasswordCount":{"shape":"IntegerOptional"}
+      }
+    },
+    "AuthenticationType":{
+      "type":"string",
+      "enum":[
+        "password",
+        "no-password"
       ]
     },
     "AuthorizationAlreadyExistsFault":{
@@ -1067,6 +1399,7 @@
         "CacheClusterStatus":{"shape":"String"},
         "NumCacheNodes":{"shape":"IntegerOptional"},
         "PreferredAvailabilityZone":{"shape":"String"},
+        "PreferredOutpostArn":{"shape":"String"},
         "CacheClusterCreateTime":{"shape":"TStamp"},
         "PreferredMaintenanceWindow":{"shape":"String"},
         "PendingModifiedValues":{"shape":"PendingModifiedValues"},
@@ -1083,7 +1416,8 @@
         "AuthTokenEnabled":{"shape":"BooleanOptional"},
         "AuthTokenLastModifiedDate":{"shape":"TStamp"},
         "TransitEncryptionEnabled":{"shape":"BooleanOptional"},
-        "AtRestEncryptionEnabled":{"shape":"BooleanOptional"}
+        "AtRestEncryptionEnabled":{"shape":"BooleanOptional"},
+        "ARN":{"shape":"String"}
       },
       "wrapper":true
     },
@@ -1161,7 +1495,8 @@
         "Endpoint":{"shape":"Endpoint"},
         "ParameterGroupStatus":{"shape":"String"},
         "SourceCacheNodeId":{"shape":"String"},
-        "CustomerAvailabilityZone":{"shape":"String"}
+        "CustomerAvailabilityZone":{"shape":"String"},
+        "CustomerOutpostArn":{"shape":"String"}
       }
     },
     "CacheNodeIdsList":{
@@ -1238,7 +1573,9 @@
       "members":{
         "CacheParameterGroupName":{"shape":"String"},
         "CacheParameterGroupFamily":{"shape":"String"},
-        "Description":{"shape":"String"}
+        "Description":{"shape":"String"},
+        "IsGlobal":{"shape":"Boolean"},
+        "ARN":{"shape":"String"}
       },
       "wrapper":true
     },
@@ -1317,7 +1654,8 @@
         "OwnerId":{"shape":"String"},
         "CacheSecurityGroupName":{"shape":"String"},
         "Description":{"shape":"String"},
-        "EC2SecurityGroups":{"shape":"EC2SecurityGroupList"}
+        "EC2SecurityGroups":{"shape":"EC2SecurityGroupList"},
+        "ARN":{"shape":"String"}
       },
       "wrapper":true
     },
@@ -1395,7 +1733,8 @@
         "CacheSubnetGroupName":{"shape":"String"},
         "CacheSubnetGroupDescription":{"shape":"String"},
         "VpcId":{"shape":"String"},
-        "Subnets":{"shape":"SubnetList"}
+        "Subnets":{"shape":"SubnetList"},
+        "ARN":{"shape":"String"}
       },
       "wrapper":true
     },
@@ -1516,7 +1855,8 @@
       "members":{
         "NodeGroupId":{"shape":"AllowedNodeGroupId"},
         "NewReplicaCount":{"shape":"Integer"},
-        "PreferredAvailabilityZones":{"shape":"PreferredAvailabilityZoneList"}
+        "PreferredAvailabilityZones":{"shape":"PreferredAvailabilityZoneList"},
+        "PreferredOutpostArns":{"shape":"PreferredOutpostArnList"}
       }
     },
     "CopySnapshotMessage":{
@@ -1564,7 +1904,10 @@
         "AutoMinorVersionUpgrade":{"shape":"BooleanOptional"},
         "SnapshotRetentionLimit":{"shape":"IntegerOptional"},
         "SnapshotWindow":{"shape":"String"},
-        "AuthToken":{"shape":"String"}
+        "AuthToken":{"shape":"String"},
+        "OutpostMode":{"shape":"OutpostMode"},
+        "PreferredOutpostArn":{"shape":"String"},
+        "PreferredOutpostArns":{"shape":"PreferredOutpostArnList"}
       }
     },
     "CreateCacheClusterResult":{
@@ -1628,6 +1971,24 @@
         "CacheSubnetGroup":{"shape":"CacheSubnetGroup"}
       }
     },
+    "CreateGlobalReplicationGroupMessage":{
+      "type":"structure",
+      "required":[
+        "GlobalReplicationGroupIdSuffix",
+        "PrimaryReplicationGroupId"
+      ],
+      "members":{
+        "GlobalReplicationGroupIdSuffix":{"shape":"String"},
+        "GlobalReplicationGroupDescription":{"shape":"String"},
+        "PrimaryReplicationGroupId":{"shape":"String"}
+      }
+    },
+    "CreateGlobalReplicationGroupResult":{
+      "type":"structure",
+      "members":{
+        "GlobalReplicationGroup":{"shape":"GlobalReplicationGroup"}
+      }
+    },
     "CreateReplicationGroupMessage":{
       "type":"structure",
       "required":[
@@ -1637,8 +1998,10 @@
       "members":{
         "ReplicationGroupId":{"shape":"String"},
         "ReplicationGroupDescription":{"shape":"String"},
+        "GlobalReplicationGroupId":{"shape":"String"},
         "PrimaryClusterId":{"shape":"String"},
         "AutomaticFailoverEnabled":{"shape":"BooleanOptional"},
+        "MultiAZEnabled":{"shape":"BooleanOptional"},
         "NumCacheClusters":{"shape":"IntegerOptional"},
         "PreferredCacheClusterAZs":{"shape":"AvailabilityZonesList"},
         "NumNodeGroups":{"shape":"IntegerOptional"},
@@ -1663,7 +2026,8 @@
         "AuthToken":{"shape":"String"},
         "TransitEncryptionEnabled":{"shape":"BooleanOptional"},
         "AtRestEncryptionEnabled":{"shape":"BooleanOptional"},
-        "KmsKeyId":{"shape":"String"}
+        "KmsKeyId":{"shape":"String"},
+        "UserGroupIds":{"shape":"UserGroupIdListInput"}
       }
     },
     "CreateReplicationGroupResult":{
@@ -1688,6 +2052,35 @@
         "Snapshot":{"shape":"Snapshot"}
       }
     },
+    "CreateUserGroupMessage":{
+      "type":"structure",
+      "required":[
+        "UserGroupId",
+        "Engine"
+      ],
+      "members":{
+        "UserGroupId":{"shape":"String"},
+        "Engine":{"shape":"EngineType"},
+        "UserIds":{"shape":"UserIdListInput"}
+      }
+    },
+    "CreateUserMessage":{
+      "type":"structure",
+      "required":[
+        "UserId",
+        "UserName",
+        "Engine",
+        "AccessString"
+      ],
+      "members":{
+        "UserId":{"shape":"UserId"},
+        "UserName":{"shape":"UserName"},
+        "Engine":{"shape":"EngineType"},
+        "Passwords":{"shape":"PasswordListInput"},
+        "AccessString":{"shape":"AccessString"},
+        "NoPasswordRequired":{"shape":"BooleanOptional"}
+      }
+    },
     "CustomerNodeEndpoint":{
       "type":"structure",
       "members":{
@@ -1698,6 +2091,27 @@
     "CustomerNodeEndpointList":{
       "type":"list",
       "member":{"shape":"CustomerNodeEndpoint"}
+    },
+    "DecreaseNodeGroupsInGlobalReplicationGroupMessage":{
+      "type":"structure",
+      "required":[
+        "GlobalReplicationGroupId",
+        "NodeGroupCount",
+        "ApplyImmediately"
+      ],
+      "members":{
+        "GlobalReplicationGroupId":{"shape":"String"},
+        "NodeGroupCount":{"shape":"Integer"},
+        "GlobalNodeGroupsToRemove":{"shape":"GlobalNodeGroupIdList"},
+        "GlobalNodeGroupsToRetain":{"shape":"GlobalNodeGroupIdList"},
+        "ApplyImmediately":{"shape":"Boolean"}
+      }
+    },
+    "DecreaseNodeGroupsInGlobalReplicationGroupResult":{
+      "type":"structure",
+      "members":{
+        "GlobalReplicationGroup":{"shape":"GlobalReplicationGroup"}
+      }
     },
     "DecreaseReplicaCountMessage":{
       "type":"structure",
@@ -1718,6 +2132,28 @@
       "members":{
         "ReplicationGroup":{"shape":"ReplicationGroup"}
       }
+    },
+    "DefaultUserAssociatedToUserGroupFault":{
+      "type":"structure",
+      "members":{
+      },
+      "error":{
+        "code":"DefaultUserAssociatedToUserGroup",
+        "httpStatusCode":400,
+        "senderFault":true
+      },
+      "exception":true
+    },
+    "DefaultUserRequired":{
+      "type":"structure",
+      "members":{
+      },
+      "error":{
+        "code":"DefaultUserRequired",
+        "httpStatusCode":400,
+        "senderFault":true
+      },
+      "exception":true
     },
     "DeleteCacheClusterMessage":{
       "type":"structure",
@@ -1754,6 +2190,23 @@
         "CacheSubnetGroupName":{"shape":"String"}
       }
     },
+    "DeleteGlobalReplicationGroupMessage":{
+      "type":"structure",
+      "required":[
+        "GlobalReplicationGroupId",
+        "RetainPrimaryReplicationGroup"
+      ],
+      "members":{
+        "GlobalReplicationGroupId":{"shape":"String"},
+        "RetainPrimaryReplicationGroup":{"shape":"Boolean"}
+      }
+    },
+    "DeleteGlobalReplicationGroupResult":{
+      "type":"structure",
+      "members":{
+        "GlobalReplicationGroup":{"shape":"GlobalReplicationGroup"}
+      }
+    },
     "DeleteReplicationGroupMessage":{
       "type":"structure",
       "required":["ReplicationGroupId"],
@@ -1780,6 +2233,20 @@
       "type":"structure",
       "members":{
         "Snapshot":{"shape":"Snapshot"}
+      }
+    },
+    "DeleteUserGroupMessage":{
+      "type":"structure",
+      "required":["UserGroupId"],
+      "members":{
+        "UserGroupId":{"shape":"String"}
+      }
+    },
+    "DeleteUserMessage":{
+      "type":"structure",
+      "required":["UserId"],
+      "members":{
+        "UserId":{"shape":"UserId"}
       }
     },
     "DescribeCacheClustersMessage":{
@@ -1864,6 +2331,22 @@
         "Marker":{"shape":"String"}
       }
     },
+    "DescribeGlobalReplicationGroupsMessage":{
+      "type":"structure",
+      "members":{
+        "GlobalReplicationGroupId":{"shape":"String"},
+        "MaxRecords":{"shape":"IntegerOptional"},
+        "Marker":{"shape":"String"},
+        "ShowMemberInfo":{"shape":"BooleanOptional"}
+      }
+    },
+    "DescribeGlobalReplicationGroupsResult":{
+      "type":"structure",
+      "members":{
+        "Marker":{"shape":"String"},
+        "GlobalReplicationGroups":{"shape":"GlobalReplicationGroupList"}
+      }
+    },
     "DescribeReplicationGroupsMessage":{
       "type":"structure",
       "members":{
@@ -1940,7 +2423,69 @@
         "Marker":{"shape":"String"}
       }
     },
+    "DescribeUserGroupsMessage":{
+      "type":"structure",
+      "members":{
+        "UserGroupId":{"shape":"String"},
+        "MaxRecords":{"shape":"IntegerOptional"},
+        "Marker":{"shape":"String"}
+      }
+    },
+    "DescribeUserGroupsResult":{
+      "type":"structure",
+      "members":{
+        "UserGroups":{"shape":"UserGroupList"},
+        "Marker":{"shape":"String"}
+      }
+    },
+    "DescribeUsersMessage":{
+      "type":"structure",
+      "members":{
+        "Engine":{"shape":"EngineType"},
+        "UserId":{"shape":"UserId"},
+        "Filters":{"shape":"FilterList"},
+        "MaxRecords":{"shape":"IntegerOptional"},
+        "Marker":{"shape":"String"}
+      }
+    },
+    "DescribeUsersResult":{
+      "type":"structure",
+      "members":{
+        "Users":{"shape":"UserList"},
+        "Marker":{"shape":"String"}
+      }
+    },
+    "DisassociateGlobalReplicationGroupMessage":{
+      "type":"structure",
+      "required":[
+        "GlobalReplicationGroupId",
+        "ReplicationGroupId",
+        "ReplicationGroupRegion"
+      ],
+      "members":{
+        "GlobalReplicationGroupId":{"shape":"String"},
+        "ReplicationGroupId":{"shape":"String"},
+        "ReplicationGroupRegion":{"shape":"String"}
+      }
+    },
+    "DisassociateGlobalReplicationGroupResult":{
+      "type":"structure",
+      "members":{
+        "GlobalReplicationGroup":{"shape":"GlobalReplicationGroup"}
+      }
+    },
     "Double":{"type":"double"},
+    "DuplicateUserNameFault":{
+      "type":"structure",
+      "members":{
+      },
+      "error":{
+        "code":"DuplicateUserName",
+        "httpStatusCode":400,
+        "senderFault":true
+      },
+      "exception":true
+    },
     "EC2SecurityGroup":{
       "type":"structure",
       "members":{
@@ -1973,6 +2518,10 @@
       },
       "wrapper":true
     },
+    "EngineType":{
+      "type":"string",
+      "pattern":"[a-zA-Z]*"
+    },
     "Event":{
       "type":"structure",
       "members":{
@@ -1994,6 +2543,167 @@
       "members":{
         "Marker":{"shape":"String"},
         "Events":{"shape":"EventList"}
+      }
+    },
+    "FailoverGlobalReplicationGroupMessage":{
+      "type":"structure",
+      "required":[
+        "GlobalReplicationGroupId",
+        "PrimaryRegion",
+        "PrimaryReplicationGroupId"
+      ],
+      "members":{
+        "GlobalReplicationGroupId":{"shape":"String"},
+        "PrimaryRegion":{"shape":"String"},
+        "PrimaryReplicationGroupId":{"shape":"String"}
+      }
+    },
+    "FailoverGlobalReplicationGroupResult":{
+      "type":"structure",
+      "members":{
+        "GlobalReplicationGroup":{"shape":"GlobalReplicationGroup"}
+      }
+    },
+    "Filter":{
+      "type":"structure",
+      "required":[
+        "Name",
+        "Values"
+      ],
+      "members":{
+        "Name":{"shape":"FilterName"},
+        "Values":{"shape":"FilterValueList"}
+      }
+    },
+    "FilterList":{
+      "type":"list",
+      "member":{"shape":"Filter"}
+    },
+    "FilterName":{
+      "type":"string",
+      "pattern":".*\\S.*"
+    },
+    "FilterValue":{
+      "type":"string",
+      "pattern":".*\\S.*"
+    },
+    "FilterValueList":{
+      "type":"list",
+      "member":{"shape":"FilterValue"},
+      "min":1
+    },
+    "GlobalNodeGroup":{
+      "type":"structure",
+      "members":{
+        "GlobalNodeGroupId":{"shape":"String"},
+        "Slots":{"shape":"String"}
+      }
+    },
+    "GlobalNodeGroupIdList":{
+      "type":"list",
+      "member":{
+        "shape":"String",
+        "locationName":"GlobalNodeGroupId"
+      }
+    },
+    "GlobalNodeGroupList":{
+      "type":"list",
+      "member":{
+        "shape":"GlobalNodeGroup",
+        "locationName":"GlobalNodeGroup"
+      }
+    },
+    "GlobalReplicationGroup":{
+      "type":"structure",
+      "members":{
+        "GlobalReplicationGroupId":{"shape":"String"},
+        "GlobalReplicationGroupDescription":{"shape":"String"},
+        "Status":{"shape":"String"},
+        "CacheNodeType":{"shape":"String"},
+        "Engine":{"shape":"String"},
+        "EngineVersion":{"shape":"String"},
+        "Members":{"shape":"GlobalReplicationGroupMemberList"},
+        "ClusterEnabled":{"shape":"BooleanOptional"},
+        "GlobalNodeGroups":{"shape":"GlobalNodeGroupList"},
+        "AuthTokenEnabled":{"shape":"BooleanOptional"},
+        "TransitEncryptionEnabled":{"shape":"BooleanOptional"},
+        "AtRestEncryptionEnabled":{"shape":"BooleanOptional"},
+        "ARN":{"shape":"String"}
+      },
+      "wrapper":true
+    },
+    "GlobalReplicationGroupAlreadyExistsFault":{
+      "type":"structure",
+      "members":{
+      },
+      "error":{
+        "code":"GlobalReplicationGroupAlreadyExistsFault",
+        "httpStatusCode":400,
+        "senderFault":true
+      },
+      "exception":true
+    },
+    "GlobalReplicationGroupInfo":{
+      "type":"structure",
+      "members":{
+        "GlobalReplicationGroupId":{"shape":"String"},
+        "GlobalReplicationGroupMemberRole":{"shape":"String"}
+      }
+    },
+    "GlobalReplicationGroupList":{
+      "type":"list",
+      "member":{
+        "shape":"GlobalReplicationGroup",
+        "locationName":"GlobalReplicationGroup"
+      }
+    },
+    "GlobalReplicationGroupMember":{
+      "type":"structure",
+      "members":{
+        "ReplicationGroupId":{"shape":"String"},
+        "ReplicationGroupRegion":{"shape":"String"},
+        "Role":{"shape":"String"},
+        "AutomaticFailover":{"shape":"AutomaticFailoverStatus"},
+        "Status":{"shape":"String"}
+      },
+      "wrapper":true
+    },
+    "GlobalReplicationGroupMemberList":{
+      "type":"list",
+      "member":{
+        "shape":"GlobalReplicationGroupMember",
+        "locationName":"GlobalReplicationGroupMember"
+      }
+    },
+    "GlobalReplicationGroupNotFoundFault":{
+      "type":"structure",
+      "members":{
+      },
+      "error":{
+        "code":"GlobalReplicationGroupNotFoundFault",
+        "httpStatusCode":404,
+        "senderFault":true
+      },
+      "exception":true
+    },
+    "IncreaseNodeGroupsInGlobalReplicationGroupMessage":{
+      "type":"structure",
+      "required":[
+        "GlobalReplicationGroupId",
+        "NodeGroupCount",
+        "ApplyImmediately"
+      ],
+      "members":{
+        "GlobalReplicationGroupId":{"shape":"String"},
+        "NodeGroupCount":{"shape":"Integer"},
+        "RegionalConfigurations":{"shape":"RegionalConfigurationList"},
+        "ApplyImmediately":{"shape":"Boolean"}
+      }
+    },
+    "IncreaseNodeGroupsInGlobalReplicationGroupResult":{
+      "type":"structure",
+      "members":{
+        "GlobalReplicationGroup":{"shape":"GlobalReplicationGroup"}
       }
     },
     "IncreaseReplicaCountMessage":{
@@ -2072,6 +2782,17 @@
       },
       "exception":true
     },
+    "InvalidGlobalReplicationGroupStateFault":{
+      "type":"structure",
+      "members":{
+      },
+      "error":{
+        "code":"InvalidGlobalReplicationGroupState",
+        "httpStatusCode":400,
+        "senderFault":true
+      },
+      "exception":true
+    },
     "InvalidKMSKeyFault":{
       "type":"structure",
       "members":{
@@ -2137,6 +2858,28 @@
       },
       "error":{
         "code":"InvalidSubnet",
+        "httpStatusCode":400,
+        "senderFault":true
+      },
+      "exception":true
+    },
+    "InvalidUserGroupStateFault":{
+      "type":"structure",
+      "members":{
+      },
+      "error":{
+        "code":"InvalidUserGroupState",
+        "httpStatusCode":400,
+        "senderFault":true
+      },
+      "exception":true
+    },
+    "InvalidUserStateFault":{
+      "type":"structure",
+      "members":{
+      },
+      "error":{
+        "code":"InvalidUserState",
         "httpStatusCode":400,
         "senderFault":true
       },
@@ -2228,6 +2971,27 @@
         "CacheSubnetGroup":{"shape":"CacheSubnetGroup"}
       }
     },
+    "ModifyGlobalReplicationGroupMessage":{
+      "type":"structure",
+      "required":[
+        "GlobalReplicationGroupId",
+        "ApplyImmediately"
+      ],
+      "members":{
+        "GlobalReplicationGroupId":{"shape":"String"},
+        "ApplyImmediately":{"shape":"Boolean"},
+        "CacheNodeType":{"shape":"String"},
+        "EngineVersion":{"shape":"String"},
+        "GlobalReplicationGroupDescription":{"shape":"String"},
+        "AutomaticFailoverEnabled":{"shape":"BooleanOptional"}
+      }
+    },
+    "ModifyGlobalReplicationGroupResult":{
+      "type":"structure",
+      "members":{
+        "GlobalReplicationGroup":{"shape":"GlobalReplicationGroup"}
+      }
+    },
     "ModifyReplicationGroupMessage":{
       "type":"structure",
       "required":["ReplicationGroupId"],
@@ -2237,6 +3001,7 @@
         "PrimaryClusterId":{"shape":"String"},
         "SnapshottingClusterId":{"shape":"String"},
         "AutomaticFailoverEnabled":{"shape":"BooleanOptional"},
+        "MultiAZEnabled":{"shape":"BooleanOptional"},
         "NodeGroupId":{
           "shape":"String",
           "deprecated":true
@@ -2254,7 +3019,10 @@
         "SnapshotWindow":{"shape":"String"},
         "CacheNodeType":{"shape":"String"},
         "AuthToken":{"shape":"String"},
-        "AuthTokenUpdateStrategy":{"shape":"AuthTokenUpdateStrategyType"}
+        "AuthTokenUpdateStrategy":{"shape":"AuthTokenUpdateStrategyType"},
+        "UserGroupIdsToAdd":{"shape":"UserGroupIdList"},
+        "UserGroupIdsToRemove":{"shape":"UserGroupIdList"},
+        "RemoveUserGroups":{"shape":"BooleanOptional"}
       }
     },
     "ModifyReplicationGroupResult":{
@@ -2285,6 +3053,33 @@
         "ReplicationGroup":{"shape":"ReplicationGroup"}
       }
     },
+    "ModifyUserGroupMessage":{
+      "type":"structure",
+      "required":["UserGroupId"],
+      "members":{
+        "UserGroupId":{"shape":"String"},
+        "UserIdsToAdd":{"shape":"UserIdListInput"},
+        "UserIdsToRemove":{"shape":"UserIdListInput"}
+      }
+    },
+    "ModifyUserMessage":{
+      "type":"structure",
+      "required":["UserId"],
+      "members":{
+        "UserId":{"shape":"UserId"},
+        "AccessString":{"shape":"AccessString"},
+        "AppendAccessString":{"shape":"AccessString"},
+        "Passwords":{"shape":"PasswordListInput"},
+        "NoPasswordRequired":{"shape":"BooleanOptional"}
+      }
+    },
+    "MultiAZStatus":{
+      "type":"string",
+      "enum":[
+        "enabled",
+        "disabled"
+      ]
+    },
     "NoOperationFault":{
       "type":"structure",
       "members":{
@@ -2314,7 +3109,9 @@
         "Slots":{"shape":"String"},
         "ReplicaCount":{"shape":"IntegerOptional"},
         "PrimaryAvailabilityZone":{"shape":"String"},
-        "ReplicaAvailabilityZones":{"shape":"AvailabilityZonesList"}
+        "ReplicaAvailabilityZones":{"shape":"AvailabilityZonesList"},
+        "PrimaryOutpostArn":{"shape":"String"},
+        "ReplicaOutpostArns":{"shape":"OutpostArnsList"}
       }
     },
     "NodeGroupConfigurationList":{
@@ -2338,6 +3135,7 @@
         "CacheNodeId":{"shape":"String"},
         "ReadEndpoint":{"shape":"Endpoint"},
         "PreferredAvailabilityZone":{"shape":"String"},
+        "PreferredOutpostArn":{"shape":"String"},
         "CurrentRole":{"shape":"String"}
       }
     },
@@ -2490,6 +3288,20 @@
         "TopicStatus":{"shape":"String"}
       }
     },
+    "OutpostArnsList":{
+      "type":"list",
+      "member":{
+        "shape":"String",
+        "locationName":"OutpostArn"
+      }
+    },
+    "OutpostMode":{
+      "type":"string",
+      "enum":[
+        "single-outpost",
+        "cross-outpost"
+      ]
+    },
     "Parameter":{
       "type":"structure",
       "members":{
@@ -2525,6 +3337,11 @@
         "locationName":"Parameter"
       }
     },
+    "PasswordListInput":{
+      "type":"list",
+      "member":{"shape":"String"},
+      "min":1
+    },
     "PendingAutomaticFailoverStatus":{
       "type":"string",
       "enum":[
@@ -2547,6 +3364,13 @@
       "member":{
         "shape":"String",
         "locationName":"PreferredAvailabilityZone"
+      }
+    },
+    "PreferredOutpostArnList":{
+      "type":"list",
+      "member":{
+        "shape":"String",
+        "locationName":"PreferredOutpostArn"
       }
     },
     "ProcessedUpdateAction":{
@@ -2578,6 +3402,23 @@
       "type":"structure",
       "members":{
         "ReservedCacheNode":{"shape":"ReservedCacheNode"}
+      }
+    },
+    "RebalanceSlotsInGlobalReplicationGroupMessage":{
+      "type":"structure",
+      "required":[
+        "GlobalReplicationGroupId",
+        "ApplyImmediately"
+      ],
+      "members":{
+        "GlobalReplicationGroupId":{"shape":"String"},
+        "ApplyImmediately":{"shape":"Boolean"}
+      }
+    },
+    "RebalanceSlotsInGlobalReplicationGroupResult":{
+      "type":"structure",
+      "members":{
+        "GlobalReplicationGroup":{"shape":"GlobalReplicationGroup"}
       }
     },
     "RebootCacheClusterMessage":{
@@ -2612,6 +3453,26 @@
         "locationName":"RecurringCharge"
       }
     },
+    "RegionalConfiguration":{
+      "type":"structure",
+      "required":[
+        "ReplicationGroupId",
+        "ReplicationGroupRegion",
+        "ReshardingConfiguration"
+      ],
+      "members":{
+        "ReplicationGroupId":{"shape":"String"},
+        "ReplicationGroupRegion":{"shape":"String"},
+        "ReshardingConfiguration":{"shape":"ReshardingConfigurationList"}
+      }
+    },
+    "RegionalConfigurationList":{
+      "type":"list",
+      "member":{
+        "shape":"RegionalConfiguration",
+        "locationName":"RegionalConfiguration"
+      }
+    },
     "RemoveReplicasList":{
       "type":"list",
       "member":{"shape":"String"}
@@ -2639,12 +3500,14 @@
       "members":{
         "ReplicationGroupId":{"shape":"String"},
         "Description":{"shape":"String"},
+        "GlobalReplicationGroupInfo":{"shape":"GlobalReplicationGroupInfo"},
         "Status":{"shape":"String"},
         "PendingModifiedValues":{"shape":"ReplicationGroupPendingModifiedValues"},
         "MemberClusters":{"shape":"ClusterIdList"},
         "NodeGroups":{"shape":"NodeGroupList"},
         "SnapshottingClusterId":{"shape":"String"},
         "AutomaticFailover":{"shape":"AutomaticFailoverStatus"},
+        "MultiAZ":{"shape":"MultiAZStatus"},
         "ConfigurationEndpoint":{"shape":"Endpoint"},
         "SnapshotRetentionLimit":{"shape":"IntegerOptional"},
         "SnapshotWindow":{"shape":"String"},
@@ -2654,7 +3517,10 @@
         "AuthTokenLastModifiedDate":{"shape":"TStamp"},
         "TransitEncryptionEnabled":{"shape":"BooleanOptional"},
         "AtRestEncryptionEnabled":{"shape":"BooleanOptional"},
-        "KmsKeyId":{"shape":"String"}
+        "MemberClustersOutpostArns":{"shape":"ReplicationGroupOutpostArnList"},
+        "KmsKeyId":{"shape":"String"},
+        "ARN":{"shape":"String"},
+        "UserGroupIds":{"shape":"UserGroupIdList"}
       },
       "wrapper":true
     },
@@ -2721,13 +3587,21 @@
       },
       "exception":true
     },
+    "ReplicationGroupOutpostArnList":{
+      "type":"list",
+      "member":{
+        "shape":"String",
+        "locationName":"ReplicationGroupOutpostArn"
+      }
+    },
     "ReplicationGroupPendingModifiedValues":{
       "type":"structure",
       "members":{
         "PrimaryClusterId":{"shape":"String"},
         "AutomaticFailoverStatus":{"shape":"PendingAutomaticFailoverStatus"},
         "Resharding":{"shape":"ReshardingStatus"},
-        "AuthTokenStatus":{"shape":"AuthTokenUpdateStatus"}
+        "AuthTokenStatus":{"shape":"AuthTokenUpdateStatus"},
+        "UserGroups":{"shape":"UserGroupsUpdateStatus"}
       }
     },
     "ReservedCacheNode":{
@@ -3008,6 +3882,7 @@
         "EngineVersion":{"shape":"String"},
         "NumCacheNodes":{"shape":"IntegerOptional"},
         "PreferredAvailabilityZone":{"shape":"String"},
+        "PreferredOutpostArn":{"shape":"String"},
         "CacheClusterCreateTime":{"shape":"TStamp"},
         "PreferredMaintenanceWindow":{"shape":"String"},
         "TopicArn":{"shape":"String"},
@@ -3021,7 +3896,8 @@
         "NumNodeGroups":{"shape":"IntegerOptional"},
         "AutomaticFailover":{"shape":"AutomaticFailoverStatus"},
         "NodeSnapshots":{"shape":"NodeSnapshotList"},
-        "KmsKeyId":{"shape":"String"}
+        "KmsKeyId":{"shape":"String"},
+        "ARN":{"shape":"String"}
       },
       "wrapper":true
     },
@@ -3090,7 +3966,9 @@
         "cache-parameter-group",
         "cache-security-group",
         "cache-subnet-group",
-        "replication-group"
+        "replication-group",
+        "user",
+        "user-group"
       ]
     },
     "StartMigrationMessage":{
@@ -3115,7 +3993,8 @@
       "type":"structure",
       "members":{
         "SubnetIdentifier":{"shape":"String"},
-        "SubnetAvailabilityZone":{"shape":"AvailabilityZone"}
+        "SubnetAvailabilityZone":{"shape":"AvailabilityZone"},
+        "SubnetOutpost":{"shape":"SubnetOutpost"}
       }
     },
     "SubnetIdentifierList":{
@@ -3141,6 +4020,23 @@
       "member":{
         "shape":"Subnet",
         "locationName":"Subnet"
+      }
+    },
+    "SubnetNotAllowedFault":{
+      "type":"structure",
+      "members":{
+      },
+      "error":{
+        "code":"SubnetNotAllowedFault",
+        "httpStatusCode":400,
+        "senderFault":true
+      },
+      "exception":true
+    },
+    "SubnetOutpost":{
+      "type":"structure",
+      "members":{
+        "SubnetOutpostArn":{"shape":"String"}
       }
     },
     "TStamp":{"type":"timestamp"},
@@ -3221,6 +4117,10 @@
         "EndTime":{"shape":"TStamp"}
       }
     },
+    "UGReplicationGroupIdList":{
+      "type":"list",
+      "member":{"shape":"String"}
+    },
     "UnprocessedUpdateAction":{
       "type":"structure",
       "members":{
@@ -3282,13 +4182,16 @@
         "in-progress",
         "stopping",
         "stopped",
-        "complete"
+        "complete",
+        "scheduling",
+        "scheduled",
+        "not-applicable"
       ]
     },
     "UpdateActionStatusList":{
       "type":"list",
       "member":{"shape":"UpdateActionStatus"},
-      "max":6
+      "max":9
     },
     "UpdateActionsMessage":{
       "type":"structure",
@@ -3296,6 +4199,151 @@
         "Marker":{"shape":"String"},
         "UpdateActions":{"shape":"UpdateActionList"}
       }
+    },
+    "User":{
+      "type":"structure",
+      "members":{
+        "UserId":{"shape":"String"},
+        "UserName":{"shape":"String"},
+        "Status":{"shape":"String"},
+        "Engine":{"shape":"EngineType"},
+        "AccessString":{"shape":"String"},
+        "UserGroupIds":{"shape":"UserGroupIdList"},
+        "Authentication":{"shape":"Authentication"},
+        "ARN":{"shape":"String"}
+      }
+    },
+    "UserAlreadyExistsFault":{
+      "type":"structure",
+      "members":{
+      },
+      "error":{
+        "code":"UserAlreadyExists",
+        "httpStatusCode":400,
+        "senderFault":true
+      },
+      "exception":true
+    },
+    "UserGroup":{
+      "type":"structure",
+      "members":{
+        "UserGroupId":{"shape":"String"},
+        "Status":{"shape":"String"},
+        "Engine":{"shape":"EngineType"},
+        "UserIds":{"shape":"UserIdList"},
+        "PendingChanges":{"shape":"UserGroupPendingChanges"},
+        "ReplicationGroups":{"shape":"UGReplicationGroupIdList"},
+        "ARN":{"shape":"String"}
+      }
+    },
+    "UserGroupAlreadyExistsFault":{
+      "type":"structure",
+      "members":{
+      },
+      "error":{
+        "code":"UserGroupAlreadyExists",
+        "httpStatusCode":400,
+        "senderFault":true
+      },
+      "exception":true
+    },
+    "UserGroupId":{
+      "type":"string",
+      "min":1,
+      "pattern":"[a-zA-Z][a-zA-Z0-9\\-]*"
+    },
+    "UserGroupIdList":{
+      "type":"list",
+      "member":{"shape":"UserGroupId"}
+    },
+    "UserGroupIdListInput":{
+      "type":"list",
+      "member":{"shape":"UserGroupId"},
+      "min":1
+    },
+    "UserGroupList":{
+      "type":"list",
+      "member":{"shape":"UserGroup"}
+    },
+    "UserGroupNotFoundFault":{
+      "type":"structure",
+      "members":{
+      },
+      "error":{
+        "code":"UserGroupNotFound",
+        "httpStatusCode":404,
+        "senderFault":true
+      },
+      "exception":true
+    },
+    "UserGroupPendingChanges":{
+      "type":"structure",
+      "members":{
+        "UserIdsToRemove":{"shape":"UserIdList"},
+        "UserIdsToAdd":{"shape":"UserIdList"}
+      }
+    },
+    "UserGroupQuotaExceededFault":{
+      "type":"structure",
+      "members":{
+      },
+      "error":{
+        "code":"UserGroupQuotaExceeded",
+        "httpStatusCode":400,
+        "senderFault":true
+      },
+      "exception":true
+    },
+    "UserGroupsUpdateStatus":{
+      "type":"structure",
+      "members":{
+        "UserGroupIdsToAdd":{"shape":"UserGroupIdList"},
+        "UserGroupIdsToRemove":{"shape":"UserGroupIdList"}
+      }
+    },
+    "UserId":{
+      "type":"string",
+      "min":1,
+      "pattern":"[a-zA-Z][a-zA-Z0-9\\-]*"
+    },
+    "UserIdList":{
+      "type":"list",
+      "member":{"shape":"UserId"}
+    },
+    "UserIdListInput":{
+      "type":"list",
+      "member":{"shape":"UserId"},
+      "min":1
+    },
+    "UserList":{
+      "type":"list",
+      "member":{"shape":"User"}
+    },
+    "UserName":{
+      "type":"string",
+      "min":1
+    },
+    "UserNotFoundFault":{
+      "type":"structure",
+      "members":{
+      },
+      "error":{
+        "code":"UserNotFound",
+        "httpStatusCode":404,
+        "senderFault":true
+      },
+      "exception":true
+    },
+    "UserQuotaExceededFault":{
+      "type":"structure",
+      "members":{
+      },
+      "error":{
+        "code":"UserQuotaExceeded",
+        "httpStatusCode":400,
+        "senderFault":true
+      },
+      "exception":true
     }
   }
 }

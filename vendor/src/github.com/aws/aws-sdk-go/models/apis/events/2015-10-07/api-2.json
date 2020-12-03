@@ -21,8 +21,42 @@
       "input":{"shape":"ActivateEventSourceRequest"},
       "errors":[
         {"shape":"ResourceNotFoundException"},
+        {"shape":"ConcurrentModificationException"},
         {"shape":"InvalidStateException"},
+        {"shape":"InternalException"},
+        {"shape":"OperationDisabledException"}
+      ]
+    },
+    "CancelReplay":{
+      "name":"CancelReplay",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CancelReplayRequest"},
+      "output":{"shape":"CancelReplayResponse"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"ConcurrentModificationException"},
+        {"shape":"IllegalStatusException"},
         {"shape":"InternalException"}
+      ]
+    },
+    "CreateArchive":{
+      "name":"CreateArchive",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateArchiveRequest"},
+      "output":{"shape":"CreateArchiveResponse"},
+      "errors":[
+        {"shape":"ConcurrentModificationException"},
+        {"shape":"ResourceAlreadyExistsException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InternalException"},
+        {"shape":"LimitExceededException"},
+        {"shape":"InvalidEventPatternException"}
       ]
     },
     "CreateEventBus":{
@@ -39,7 +73,8 @@
         {"shape":"InvalidStateException"},
         {"shape":"InternalException"},
         {"shape":"ConcurrentModificationException"},
-        {"shape":"LimitExceededException"}
+        {"shape":"LimitExceededException"},
+        {"shape":"OperationDisabledException"}
       ]
     },
     "CreatePartnerEventSource":{
@@ -54,7 +89,8 @@
         {"shape":"ResourceAlreadyExistsException"},
         {"shape":"InternalException"},
         {"shape":"ConcurrentModificationException"},
-        {"shape":"LimitExceededException"}
+        {"shape":"LimitExceededException"},
+        {"shape":"OperationDisabledException"}
       ]
     },
     "DeactivateEventSource":{
@@ -66,7 +102,23 @@
       "input":{"shape":"DeactivateEventSourceRequest"},
       "errors":[
         {"shape":"ResourceNotFoundException"},
+        {"shape":"ConcurrentModificationException"},
         {"shape":"InvalidStateException"},
+        {"shape":"InternalException"},
+        {"shape":"OperationDisabledException"}
+      ]
+    },
+    "DeleteArchive":{
+      "name":"DeleteArchive",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteArchiveRequest"},
+      "output":{"shape":"DeleteArchiveResponse"},
+      "errors":[
+        {"shape":"ConcurrentModificationException"},
+        {"shape":"ResourceNotFoundException"},
         {"shape":"InternalException"}
       ]
     },
@@ -78,7 +130,8 @@
       },
       "input":{"shape":"DeleteEventBusRequest"},
       "errors":[
-        {"shape":"InternalException"}
+        {"shape":"InternalException"},
+        {"shape":"ConcurrentModificationException"}
       ]
     },
     "DeletePartnerEventSource":{
@@ -89,7 +142,9 @@
       },
       "input":{"shape":"DeletePartnerEventSourceRequest"},
       "errors":[
-        {"shape":"InternalException"}
+        {"shape":"InternalException"},
+        {"shape":"ConcurrentModificationException"},
+        {"shape":"OperationDisabledException"}
       ]
     },
     "DeleteRule":{
@@ -104,6 +159,20 @@
         {"shape":"ManagedRuleException"},
         {"shape":"InternalException"},
         {"shape":"ResourceNotFoundException"}
+      ]
+    },
+    "DescribeArchive":{
+      "name":"DescribeArchive",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeArchiveRequest"},
+      "output":{"shape":"DescribeArchiveResponse"},
+      "errors":[
+        {"shape":"ResourceAlreadyExistsException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InternalException"}
       ]
     },
     "DescribeEventBus":{
@@ -129,7 +198,8 @@
       "output":{"shape":"DescribeEventSourceResponse"},
       "errors":[
         {"shape":"ResourceNotFoundException"},
-        {"shape":"InternalException"}
+        {"shape":"InternalException"},
+        {"shape":"OperationDisabledException"}
       ]
     },
     "DescribePartnerEventSource":{
@@ -140,6 +210,20 @@
       },
       "input":{"shape":"DescribePartnerEventSourceRequest"},
       "output":{"shape":"DescribePartnerEventSourceResponse"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InternalException"},
+        {"shape":"OperationDisabledException"}
+      ]
+    },
+    "DescribeReplay":{
+      "name":"DescribeReplay",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeReplayRequest"},
+      "output":{"shape":"DescribeReplayResponse"},
       "errors":[
         {"shape":"ResourceNotFoundException"},
         {"shape":"InternalException"}
@@ -186,6 +270,19 @@
         {"shape":"InternalException"}
       ]
     },
+    "ListArchives":{
+      "name":"ListArchives",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListArchivesRequest"},
+      "output":{"shape":"ListArchivesResponse"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InternalException"}
+      ]
+    },
     "ListEventBuses":{
       "name":"ListEventBuses",
       "http":{
@@ -207,7 +304,8 @@
       "input":{"shape":"ListEventSourcesRequest"},
       "output":{"shape":"ListEventSourcesResponse"},
       "errors":[
-        {"shape":"InternalException"}
+        {"shape":"InternalException"},
+        {"shape":"OperationDisabledException"}
       ]
     },
     "ListPartnerEventSourceAccounts":{
@@ -220,7 +318,8 @@
       "output":{"shape":"ListPartnerEventSourceAccountsResponse"},
       "errors":[
         {"shape":"ResourceNotFoundException"},
-        {"shape":"InternalException"}
+        {"shape":"InternalException"},
+        {"shape":"OperationDisabledException"}
       ]
     },
     "ListPartnerEventSources":{
@@ -231,6 +330,19 @@
       },
       "input":{"shape":"ListPartnerEventSourcesRequest"},
       "output":{"shape":"ListPartnerEventSourcesResponse"},
+      "errors":[
+        {"shape":"InternalException"},
+        {"shape":"OperationDisabledException"}
+      ]
+    },
+    "ListReplays":{
+      "name":"ListReplays",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListReplaysRequest"},
+      "output":{"shape":"ListReplaysResponse"},
       "errors":[
         {"shape":"InternalException"}
       ]
@@ -308,7 +420,8 @@
       "input":{"shape":"PutPartnerEventsRequest"},
       "output":{"shape":"PutPartnerEventsResponse"},
       "errors":[
-        {"shape":"InternalException"}
+        {"shape":"InternalException"},
+        {"shape":"OperationDisabledException"}
       ]
     },
     "PutPermission":{
@@ -386,6 +499,22 @@
         {"shape":"InternalException"}
       ]
     },
+    "StartReplay":{
+      "name":"StartReplay",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"StartReplayRequest"},
+      "output":{"shape":"StartReplayResponse"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"ResourceAlreadyExistsException"},
+        {"shape":"InvalidEventPatternException"},
+        {"shape":"LimitExceededException"},
+        {"shape":"InternalException"}
+      ]
+    },
     "TagResource":{
       "name":"TagResource",
       "http":{
@@ -428,6 +557,22 @@
         {"shape":"ConcurrentModificationException"},
         {"shape":"ManagedRuleException"}
       ]
+    },
+    "UpdateArchive":{
+      "name":"UpdateArchive",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UpdateArchiveRequest"},
+      "output":{"shape":"UpdateArchiveResponse"},
+      "errors":[
+        {"shape":"ConcurrentModificationException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"InternalException"},
+        {"shape":"LimitExceededException"},
+        {"shape":"InvalidEventPatternException"}
+      ]
     }
   },
   "shapes":{
@@ -449,6 +594,56 @@
       "members":{
         "Name":{"shape":"EventSourceName"}
       }
+    },
+    "Archive":{
+      "type":"structure",
+      "members":{
+        "ArchiveName":{"shape":"ArchiveName"},
+        "EventSourceArn":{"shape":"Arn"},
+        "State":{"shape":"ArchiveState"},
+        "StateReason":{"shape":"ArchiveStateReason"},
+        "RetentionDays":{"shape":"RetentionDays"},
+        "SizeBytes":{"shape":"Long"},
+        "EventCount":{"shape":"Long"},
+        "CreationTime":{"shape":"Timestamp"}
+      }
+    },
+    "ArchiveArn":{
+      "type":"string",
+      "max":1600,
+      "min":1,
+      "pattern":"^arn:aws([a-z]|\\-)*:events:([a-z]|\\d|\\-)*:([0-9]{12})?:.+\\/.+$"
+    },
+    "ArchiveDescription":{
+      "type":"string",
+      "max":512,
+      "pattern":".*"
+    },
+    "ArchiveName":{
+      "type":"string",
+      "max":48,
+      "min":1,
+      "pattern":"[\\.\\-_A-Za-z0-9]+"
+    },
+    "ArchiveResponseList":{
+      "type":"list",
+      "member":{"shape":"Archive"}
+    },
+    "ArchiveState":{
+      "type":"string",
+      "enum":[
+        "ENABLED",
+        "DISABLED",
+        "CREATING",
+        "UPDATING",
+        "CREATE_FAILED",
+        "UPDATE_FAILED"
+      ]
+    },
+    "ArchiveStateReason":{
+      "type":"string",
+      "max":512,
+      "pattern":".*"
     },
     "Arn":{
       "type":"string",
@@ -497,6 +692,21 @@
       }
     },
     "Boolean":{"type":"boolean"},
+    "CancelReplayRequest":{
+      "type":"structure",
+      "required":["ReplayName"],
+      "members":{
+        "ReplayName":{"shape":"ReplayName"}
+      }
+    },
+    "CancelReplayResponse":{
+      "type":"structure",
+      "members":{
+        "ReplayArn":{"shape":"ReplayArn"},
+        "State":{"shape":"ReplayState"},
+        "StateReason":{"shape":"ReplayStateReason"}
+      }
+    },
     "ConcurrentModificationException":{
       "type":"structure",
       "members":{
@@ -516,12 +726,36 @@
         "Value":{"shape":"String"}
       }
     },
+    "CreateArchiveRequest":{
+      "type":"structure",
+      "required":[
+        "ArchiveName",
+        "EventSourceArn"
+      ],
+      "members":{
+        "ArchiveName":{"shape":"ArchiveName"},
+        "EventSourceArn":{"shape":"Arn"},
+        "Description":{"shape":"ArchiveDescription"},
+        "EventPattern":{"shape":"EventPattern"},
+        "RetentionDays":{"shape":"RetentionDays"}
+      }
+    },
+    "CreateArchiveResponse":{
+      "type":"structure",
+      "members":{
+        "ArchiveArn":{"shape":"ArchiveArn"},
+        "State":{"shape":"ArchiveState"},
+        "StateReason":{"shape":"ArchiveStateReason"},
+        "CreationTime":{"shape":"Timestamp"}
+      }
+    },
     "CreateEventBusRequest":{
       "type":"structure",
       "required":["Name"],
       "members":{
         "Name":{"shape":"EventBusName"},
-        "EventSourceName":{"shape":"EventSourceName"}
+        "EventSourceName":{"shape":"EventSourceName"},
+        "Tags":{"shape":"TagList"}
       }
     },
     "CreateEventBusResponse":{
@@ -547,11 +781,41 @@
         "EventSourceArn":{"shape":"String"}
       }
     },
+    "Database":{
+      "type":"string",
+      "max":64,
+      "min":1,
+      "pattern":"([a-zA-Z0-9]+)|(\\$(\\.[\\w_-]+(\\[(\\d+|\\*)\\])*)*)"
+    },
+    "DbUser":{
+      "type":"string",
+      "max":128,
+      "min":1,
+      "pattern":"([a-zA-Z0-9]+)|(\\$(\\.[\\w_-]+(\\[(\\d+|\\*)\\])*)*)"
+    },
     "DeactivateEventSourceRequest":{
       "type":"structure",
       "required":["Name"],
       "members":{
         "Name":{"shape":"EventSourceName"}
+      }
+    },
+    "DeadLetterConfig":{
+      "type":"structure",
+      "members":{
+        "Arn":{"shape":"ResourceArn"}
+      }
+    },
+    "DeleteArchiveRequest":{
+      "type":"structure",
+      "required":["ArchiveName"],
+      "members":{
+        "ArchiveName":{"shape":"ArchiveName"}
+      }
+    },
+    "DeleteArchiveResponse":{
+      "type":"structure",
+      "members":{
       }
     },
     "DeleteEventBusRequest":{
@@ -579,6 +843,29 @@
         "Name":{"shape":"RuleName"},
         "EventBusName":{"shape":"EventBusName"},
         "Force":{"shape":"Boolean"}
+      }
+    },
+    "DescribeArchiveRequest":{
+      "type":"structure",
+      "required":["ArchiveName"],
+      "members":{
+        "ArchiveName":{"shape":"ArchiveName"}
+      }
+    },
+    "DescribeArchiveResponse":{
+      "type":"structure",
+      "members":{
+        "ArchiveArn":{"shape":"ArchiveArn"},
+        "ArchiveName":{"shape":"ArchiveName"},
+        "EventSourceArn":{"shape":"Arn"},
+        "Description":{"shape":"ArchiveDescription"},
+        "EventPattern":{"shape":"EventPattern"},
+        "State":{"shape":"ArchiveState"},
+        "StateReason":{"shape":"ArchiveStateReason"},
+        "RetentionDays":{"shape":"RetentionDays"},
+        "SizeBytes":{"shape":"Long"},
+        "EventCount":{"shape":"Long"},
+        "CreationTime":{"shape":"Timestamp"}
       }
     },
     "DescribeEventBusRequest":{
@@ -625,6 +912,30 @@
       "members":{
         "Arn":{"shape":"String"},
         "Name":{"shape":"String"}
+      }
+    },
+    "DescribeReplayRequest":{
+      "type":"structure",
+      "required":["ReplayName"],
+      "members":{
+        "ReplayName":{"shape":"ReplayName"}
+      }
+    },
+    "DescribeReplayResponse":{
+      "type":"structure",
+      "members":{
+        "ReplayName":{"shape":"ReplayName"},
+        "ReplayArn":{"shape":"ReplayArn"},
+        "Description":{"shape":"ReplayDescription"},
+        "State":{"shape":"ReplayState"},
+        "StateReason":{"shape":"ReplayStateReason"},
+        "EventSourceArn":{"shape":"Arn"},
+        "Destination":{"shape":"ReplayDestination"},
+        "EventStartTime":{"shape":"Timestamp"},
+        "EventEndTime":{"shape":"Timestamp"},
+        "EventLastReplayedTime":{"shape":"Timestamp"},
+        "ReplayStartTime":{"shape":"Timestamp"},
+        "ReplayEndTime":{"shape":"Timestamp"}
       }
     },
     "DescribeRuleRequest":{
@@ -740,6 +1051,35 @@
       ]
     },
     "EventTime":{"type":"timestamp"},
+    "HeaderKey":{
+      "type":"string",
+      "max":512,
+      "pattern":"^[!#$%&'*+-.^_`|~0-9a-zA-Z]+$"
+    },
+    "HeaderParametersMap":{
+      "type":"map",
+      "key":{"shape":"HeaderKey"},
+      "value":{"shape":"HeaderValue"}
+    },
+    "HeaderValue":{
+      "type":"string",
+      "max":512,
+      "pattern":"^[ \\t]*[\\x20-\\x7E]+([ \\t]+[\\x20-\\x7E]+)*[ \\t]*$"
+    },
+    "HttpParameters":{
+      "type":"structure",
+      "members":{
+        "PathParameterValues":{"shape":"PathParameterList"},
+        "HeaderParameters":{"shape":"HeaderParametersMap"},
+        "QueryStringParameters":{"shape":"QueryStringParametersMap"}
+      }
+    },
+    "IllegalStatusException":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true
+    },
     "InputTransformer":{
       "type":"structure",
       "required":["InputTemplate"],
@@ -803,6 +1143,23 @@
       "type":"integer",
       "min":1
     },
+    "ListArchivesRequest":{
+      "type":"structure",
+      "members":{
+        "NamePrefix":{"shape":"ArchiveName"},
+        "EventSourceArn":{"shape":"Arn"},
+        "State":{"shape":"ArchiveState"},
+        "NextToken":{"shape":"NextToken"},
+        "Limit":{"shape":"LimitMax100"}
+      }
+    },
+    "ListArchivesResponse":{
+      "type":"structure",
+      "members":{
+        "Archives":{"shape":"ArchiveResponseList"},
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
     "ListEventBusesRequest":{
       "type":"structure",
       "members":{
@@ -862,6 +1219,23 @@
       "type":"structure",
       "members":{
         "PartnerEventSources":{"shape":"PartnerEventSourceList"},
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
+    "ListReplaysRequest":{
+      "type":"structure",
+      "members":{
+        "NamePrefix":{"shape":"ReplayName"},
+        "State":{"shape":"ReplayState"},
+        "EventSourceArn":{"shape":"Arn"},
+        "NextToken":{"shape":"NextToken"},
+        "Limit":{"shape":"LimitMax100"}
+      }
+    },
+    "ListReplaysResponse":{
+      "type":"structure",
+      "members":{
+        "Replays":{"shape":"ReplayList"},
         "NextToken":{"shape":"NextToken"}
       }
     },
@@ -928,6 +1302,7 @@
         "NextToken":{"shape":"NextToken"}
       }
     },
+    "Long":{"type":"long"},
     "ManagedBy":{
       "type":"string",
       "max":128,
@@ -938,6 +1313,16 @@
       "members":{
       },
       "exception":true
+    },
+    "MaximumEventAgeInSeconds":{
+      "type":"integer",
+      "max":86400,
+      "min":60
+    },
+    "MaximumRetryAttempts":{
+      "type":"integer",
+      "max":185,
+      "min":0
     },
     "MessageGroupId":{"type":"string"},
     "NetworkConfiguration":{
@@ -956,6 +1341,12 @@
       "max":256,
       "min":1,
       "pattern":"[\\.\\-_A-Za-z0-9]+"
+    },
+    "OperationDisabledException":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true
     },
     "PartnerEventSource":{
       "type":"structure",
@@ -986,6 +1377,14 @@
       "max":256,
       "min":1,
       "pattern":"aws\\.partner/[\\.\\-_A-Za-z0-9]+/[/\\.\\-_A-Za-z0-9]*"
+    },
+    "PathParameter":{
+      "type":"string",
+      "pattern":"^(?!\\s*$).+"
+    },
+    "PathParameterList":{
+      "type":"list",
+      "member":{"shape":"PathParameter"}
     },
     "PolicyLengthExceededException":{
       "type":"structure",
@@ -1053,7 +1452,7 @@
       "type":"structure",
       "members":{
         "Time":{"shape":"EventTime"},
-        "Source":{"shape":"String"},
+        "Source":{"shape":"EventSourceName"},
         "Resources":{"shape":"EventResourceList"},
         "DetailType":{"shape":"String"},
         "Detail":{"shape":"String"}
@@ -1150,6 +1549,42 @@
       "type":"list",
       "member":{"shape":"PutTargetsResultEntry"}
     },
+    "QueryStringKey":{
+      "type":"string",
+      "max":512,
+      "pattern":"[^\\x00-\\x1F\\x7F]+"
+    },
+    "QueryStringParametersMap":{
+      "type":"map",
+      "key":{"shape":"QueryStringKey"},
+      "value":{"shape":"QueryStringValue"}
+    },
+    "QueryStringValue":{
+      "type":"string",
+      "max":512,
+      "pattern":"[^\\x00-\\x09\\x0B\\x0C\\x0E-\\x1F\\x7F]+"
+    },
+    "RedshiftDataParameters":{
+      "type":"structure",
+      "required":[
+        "Database",
+        "Sql"
+      ],
+      "members":{
+        "SecretManagerArn":{"shape":"RedshiftSecretManagerArn"},
+        "Database":{"shape":"Database"},
+        "DbUser":{"shape":"DbUser"},
+        "Sql":{"shape":"Sql"},
+        "StatementName":{"shape":"StatementName"},
+        "WithEvent":{"shape":"Boolean"}
+      }
+    },
+    "RedshiftSecretManagerArn":{
+      "type":"string",
+      "max":1600,
+      "min":1,
+      "pattern":"(^arn:aws([a-z]|\\-)*:secretsmanager:[a-z0-9-.]+:.*)|(\\$(\\.[\\w_-]+(\\[(\\d+|\\*)\\])*)*)"
+    },
     "RemovePermissionRequest":{
       "type":"structure",
       "required":["StatementId"],
@@ -1190,17 +1625,96 @@
       "type":"list",
       "member":{"shape":"RemoveTargetsResultEntry"}
     },
+    "Replay":{
+      "type":"structure",
+      "members":{
+        "ReplayName":{"shape":"ReplayName"},
+        "EventSourceArn":{"shape":"Arn"},
+        "State":{"shape":"ReplayState"},
+        "StateReason":{"shape":"ReplayStateReason"},
+        "EventStartTime":{"shape":"Timestamp"},
+        "EventEndTime":{"shape":"Timestamp"},
+        "EventLastReplayedTime":{"shape":"Timestamp"},
+        "ReplayStartTime":{"shape":"Timestamp"},
+        "ReplayEndTime":{"shape":"Timestamp"}
+      }
+    },
+    "ReplayArn":{
+      "type":"string",
+      "max":1600,
+      "min":1,
+      "pattern":"^arn:aws([a-z]|\\-)*:events:([a-z]|\\d|\\-)*:([0-9]{12})?:.+\\/[\\.\\-_A-Za-z0-9]+$"
+    },
+    "ReplayDescription":{
+      "type":"string",
+      "max":512,
+      "pattern":".*"
+    },
+    "ReplayDestination":{
+      "type":"structure",
+      "required":["Arn"],
+      "members":{
+        "Arn":{"shape":"Arn"},
+        "FilterArns":{"shape":"ReplayDestinationFilters"}
+      }
+    },
+    "ReplayDestinationFilters":{
+      "type":"list",
+      "member":{"shape":"Arn"}
+    },
+    "ReplayList":{
+      "type":"list",
+      "member":{"shape":"Replay"}
+    },
+    "ReplayName":{
+      "type":"string",
+      "max":64,
+      "min":1,
+      "pattern":"[\\.\\-_A-Za-z0-9]+"
+    },
+    "ReplayState":{
+      "type":"string",
+      "enum":[
+        "STARTING",
+        "RUNNING",
+        "CANCELLING",
+        "COMPLETED",
+        "CANCELLED",
+        "FAILED"
+      ]
+    },
+    "ReplayStateReason":{
+      "type":"string",
+      "max":512,
+      "pattern":".*"
+    },
     "ResourceAlreadyExistsException":{
       "type":"structure",
       "members":{
       },
       "exception":true
     },
+    "ResourceArn":{
+      "type":"string",
+      "max":1600,
+      "min":1
+    },
     "ResourceNotFoundException":{
       "type":"structure",
       "members":{
       },
       "exception":true
+    },
+    "RetentionDays":{
+      "type":"integer",
+      "min":0
+    },
+    "RetryPolicy":{
+      "type":"structure",
+      "members":{
+        "MaximumRetryAttempts":{"shape":"MaximumRetryAttempts"},
+        "MaximumEventAgeInSeconds":{"shape":"MaximumEventAgeInSeconds"}
+      }
     },
     "RoleArn":{
       "type":"string",
@@ -1296,10 +1810,42 @@
       "type":"string",
       "max":256
     },
+    "Sql":{
+      "type":"string",
+      "max":100000,
+      "min":1
+    },
     "SqsParameters":{
       "type":"structure",
       "members":{
         "MessageGroupId":{"shape":"MessageGroupId"}
+      }
+    },
+    "StartReplayRequest":{
+      "type":"structure",
+      "required":[
+        "ReplayName",
+        "EventSourceArn",
+        "EventStartTime",
+        "EventEndTime",
+        "Destination"
+      ],
+      "members":{
+        "ReplayName":{"shape":"ReplayName"},
+        "Description":{"shape":"ReplayDescription"},
+        "EventSourceArn":{"shape":"Arn"},
+        "EventStartTime":{"shape":"Timestamp"},
+        "EventEndTime":{"shape":"Timestamp"},
+        "Destination":{"shape":"ReplayDestination"}
+      }
+    },
+    "StartReplayResponse":{
+      "type":"structure",
+      "members":{
+        "ReplayArn":{"shape":"ReplayArn"},
+        "State":{"shape":"ReplayState"},
+        "StateReason":{"shape":"ReplayStateReason"},
+        "ReplayStartTime":{"shape":"Timestamp"}
       }
     },
     "StatementId":{
@@ -1307,6 +1853,11 @@
       "max":64,
       "min":1,
       "pattern":"[a-zA-Z0-9-_]+"
+    },
+    "StatementName":{
+      "type":"string",
+      "max":500,
+      "min":1
     },
     "String":{"type":"string"},
     "StringList":{
@@ -1375,7 +1926,11 @@
         "RunCommandParameters":{"shape":"RunCommandParameters"},
         "EcsParameters":{"shape":"EcsParameters"},
         "BatchParameters":{"shape":"BatchParameters"},
-        "SqsParameters":{"shape":"SqsParameters"}
+        "SqsParameters":{"shape":"SqsParameters"},
+        "HttpParameters":{"shape":"HttpParameters"},
+        "RedshiftDataParameters":{"shape":"RedshiftDataParameters"},
+        "DeadLetterConfig":{"shape":"DeadLetterConfig"},
+        "RetryPolicy":{"shape":"RetryPolicy"}
       }
     },
     "TargetArn":{
@@ -1456,6 +2011,25 @@
     "UntagResourceResponse":{
       "type":"structure",
       "members":{
+      }
+    },
+    "UpdateArchiveRequest":{
+      "type":"structure",
+      "required":["ArchiveName"],
+      "members":{
+        "ArchiveName":{"shape":"ArchiveName"},
+        "Description":{"shape":"ArchiveDescription"},
+        "EventPattern":{"shape":"EventPattern"},
+        "RetentionDays":{"shape":"RetentionDays"}
+      }
+    },
+    "UpdateArchiveResponse":{
+      "type":"structure",
+      "members":{
+        "ArchiveArn":{"shape":"ArchiveArn"},
+        "State":{"shape":"ArchiveState"},
+        "StateReason":{"shape":"ArchiveStateReason"},
+        "CreationTime":{"shape":"Timestamp"}
       }
     }
   }

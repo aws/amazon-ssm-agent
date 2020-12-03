@@ -10,7 +10,28 @@
       "base": null,
       "refs": {
         "GetPersonalizedRankingRequest$campaignArn": "<p>The Amazon Resource Name (ARN) of the campaign to use for generating the personalized ranking.</p>",
-        "GetRecommendationsRequest$campaignArn": "<p>The Amazon Resource Name (ARN) of the campaign to use for getting recommendations.</p>"
+        "GetPersonalizedRankingRequest$filterArn": "<p>The Amazon Resource Name (ARN) of a filter you created to include or exclude items from recommendations for a given user.</p>",
+        "GetRecommendationsRequest$campaignArn": "<p>The Amazon Resource Name (ARN) of the campaign to use for getting recommendations.</p>",
+        "GetRecommendationsRequest$filterArn": "<p>The ARN of the filter to apply to the returned recommendations. For more information, see <a href=\"https://docs.aws.amazon.com/personalize/latest/dg/filters.html\">Using Filters with Amazon Personalize</a>.</p> <p>When using this parameter, be sure the filter resource is <code>ACTIVE</code>.</p>"
+      }
+    },
+    "AttributeName": {
+      "base": null,
+      "refs": {
+        "Context$key": null
+      }
+    },
+    "AttributeValue": {
+      "base": null,
+      "refs": {
+        "Context$value": null
+      }
+    },
+    "Context": {
+      "base": null,
+      "refs": {
+        "GetPersonalizedRankingRequest$context": "<p>The contextual metadata to use when getting recommendations. Contextual metadata includes any interaction information that might be relevant when getting a user's recommendations, such as the user's current location or device type.</p>",
+        "GetRecommendationsRequest$context": "<p>The contextual metadata to use when getting recommendations. Contextual metadata includes any interaction information that might be relevant when getting a user's recommendations, such as the user's current location or device type.</p>"
       }
     },
     "ErrorMessage": {
@@ -43,7 +64,7 @@
     "InputList": {
       "base": null,
       "refs": {
-        "GetPersonalizedRankingRequest$inputList": "<p>A list of items (itemId's) to rank. If an item was not included in the training dataset, the item is appended to the end of the reranked list.</p>"
+        "GetPersonalizedRankingRequest$inputList": "<p>A list of items (by <code>itemId</code>) to rank. If an item was not included in the training dataset, the item is appended to the end of the reranked list. The maximum is 500.</p>"
       }
     },
     "InvalidInputException": {
@@ -62,14 +83,14 @@
     "ItemList": {
       "base": null,
       "refs": {
-        "GetPersonalizedRankingResponse$personalizedRanking": "<p>A list of items in order of most likely interest to the user.</p>",
-        "GetRecommendationsResponse$itemList": "<p>A list of recommendations.</p>"
+        "GetPersonalizedRankingResponse$personalizedRanking": "<p>A list of items in order of most likely interest to the user. The maximum is 500.</p>",
+        "GetRecommendationsResponse$itemList": "<p>A list of recommendations sorted in ascending order by prediction score. There can be a maximum of 500 items in the list.</p>"
       }
     },
     "NumResults": {
       "base": null,
       "refs": {
-        "GetRecommendationsRequest$numResults": "<p>The number of results to return. The default is 25. The maximum is 100.</p>"
+        "GetRecommendationsRequest$numResults": "<p>The number of results to return. The default is 25. The maximum is 500.</p>"
       }
     },
     "PredictedItem": {
@@ -78,9 +99,22 @@
         "ItemList$member": null
       }
     },
+    "RecommendationID": {
+      "base": null,
+      "refs": {
+        "GetPersonalizedRankingResponse$recommendationId": "<p>The ID of the recommendation.</p>",
+        "GetRecommendationsResponse$recommendationId": "<p>The ID of the recommendation.</p>"
+      }
+    },
     "ResourceNotFoundException": {
       "base": "<p>The specified resource does not exist.</p>",
       "refs": {
+      }
+    },
+    "Score": {
+      "base": null,
+      "refs": {
+        "PredictedItem$score": "<p>A numeric representation of the model's certainty that the item will be the next user selection. For more information on scoring logic, see <a>how-scores-work</a>.</p>"
       }
     },
     "UserID": {

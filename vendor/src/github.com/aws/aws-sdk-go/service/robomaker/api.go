@@ -13,6 +13,93 @@ import (
 	"github.com/aws/aws-sdk-go/private/protocol/restjson"
 )
 
+const opBatchDeleteWorlds = "BatchDeleteWorlds"
+
+// BatchDeleteWorldsRequest generates a "aws/request.Request" representing the
+// client's request for the BatchDeleteWorlds operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See BatchDeleteWorlds for more information on using the BatchDeleteWorlds
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the BatchDeleteWorldsRequest method.
+//    req, resp := client.BatchDeleteWorldsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/BatchDeleteWorlds
+func (c *RoboMaker) BatchDeleteWorldsRequest(input *BatchDeleteWorldsInput) (req *request.Request, output *BatchDeleteWorldsOutput) {
+	op := &request.Operation{
+		Name:       opBatchDeleteWorlds,
+		HTTPMethod: "POST",
+		HTTPPath:   "/batchDeleteWorlds",
+	}
+
+	if input == nil {
+		input = &BatchDeleteWorldsInput{}
+	}
+
+	output = &BatchDeleteWorldsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// BatchDeleteWorlds API operation for AWS RoboMaker.
+//
+// Deletes one or more worlds in a batch operation.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS RoboMaker's
+// API operation BatchDeleteWorlds for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterException
+//   A parameter specified in a request is not valid, is unsupported, or cannot
+//   be used. The returned message provides an explanation of the error value.
+//
+//   * ThrottlingException
+//   AWS RoboMaker is temporarily unable to process the request. Try your call
+//   again.
+//
+//   * InternalServerException
+//   AWS RoboMaker experienced a service issue. Try your call again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/BatchDeleteWorlds
+func (c *RoboMaker) BatchDeleteWorlds(input *BatchDeleteWorldsInput) (*BatchDeleteWorldsOutput, error) {
+	req, out := c.BatchDeleteWorldsRequest(input)
+	return out, req.Send()
+}
+
+// BatchDeleteWorldsWithContext is the same as BatchDeleteWorlds with the addition of
+// the ability to pass a context and additional request options.
+//
+// See BatchDeleteWorlds for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RoboMaker) BatchDeleteWorldsWithContext(ctx aws.Context, input *BatchDeleteWorldsInput, opts ...request.Option) (*BatchDeleteWorldsOutput, error) {
+	req, out := c.BatchDeleteWorldsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opBatchDescribeSimulationJob = "BatchDescribeSimulationJob"
 
 // BatchDescribeSimulationJobRequest generates a "aws/request.Request" representing the
@@ -66,18 +153,18 @@ func (c *RoboMaker) BatchDescribeSimulationJobRequest(input *BatchDescribeSimula
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation BatchDescribeSimulationJob for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+// Returned Error Types:
+//   * ResourceNotFoundException
 //   The specified resource does not exist.
 //
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
@@ -157,18 +244,18 @@ func (c *RoboMaker) CancelDeploymentJobRequest(input *CancelDeploymentJobInput) 
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation CancelDeploymentJob for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+// Returned Error Types:
+//   * ResourceNotFoundException
 //   The specified resource does not exist.
 //
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
@@ -248,18 +335,18 @@ func (c *RoboMaker) CancelSimulationJobRequest(input *CancelSimulationJobInput) 
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation CancelSimulationJob for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+// Returned Error Types:
+//   * ResourceNotFoundException
 //   The specified resource does not exist.
 //
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
@@ -280,6 +367,281 @@ func (c *RoboMaker) CancelSimulationJob(input *CancelSimulationJobInput) (*Cance
 // for more information on using Contexts.
 func (c *RoboMaker) CancelSimulationJobWithContext(ctx aws.Context, input *CancelSimulationJobInput, opts ...request.Option) (*CancelSimulationJobOutput, error) {
 	req, out := c.CancelSimulationJobRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCancelSimulationJobBatch = "CancelSimulationJobBatch"
+
+// CancelSimulationJobBatchRequest generates a "aws/request.Request" representing the
+// client's request for the CancelSimulationJobBatch operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CancelSimulationJobBatch for more information on using the CancelSimulationJobBatch
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CancelSimulationJobBatchRequest method.
+//    req, resp := client.CancelSimulationJobBatchRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/CancelSimulationJobBatch
+func (c *RoboMaker) CancelSimulationJobBatchRequest(input *CancelSimulationJobBatchInput) (req *request.Request, output *CancelSimulationJobBatchOutput) {
+	op := &request.Operation{
+		Name:       opCancelSimulationJobBatch,
+		HTTPMethod: "POST",
+		HTTPPath:   "/cancelSimulationJobBatch",
+	}
+
+	if input == nil {
+		input = &CancelSimulationJobBatchInput{}
+	}
+
+	output = &CancelSimulationJobBatchOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// CancelSimulationJobBatch API operation for AWS RoboMaker.
+//
+// Cancels a simulation job batch. When you cancel a simulation job batch, you
+// are also cancelling all of the active simulation jobs created as part of
+// the batch.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS RoboMaker's
+// API operation CancelSimulationJobBatch for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   The specified resource does not exist.
+//
+//   * InvalidParameterException
+//   A parameter specified in a request is not valid, is unsupported, or cannot
+//   be used. The returned message provides an explanation of the error value.
+//
+//   * InternalServerException
+//   AWS RoboMaker experienced a service issue. Try your call again.
+//
+//   * ThrottlingException
+//   AWS RoboMaker is temporarily unable to process the request. Try your call
+//   again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/CancelSimulationJobBatch
+func (c *RoboMaker) CancelSimulationJobBatch(input *CancelSimulationJobBatchInput) (*CancelSimulationJobBatchOutput, error) {
+	req, out := c.CancelSimulationJobBatchRequest(input)
+	return out, req.Send()
+}
+
+// CancelSimulationJobBatchWithContext is the same as CancelSimulationJobBatch with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CancelSimulationJobBatch for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RoboMaker) CancelSimulationJobBatchWithContext(ctx aws.Context, input *CancelSimulationJobBatchInput, opts ...request.Option) (*CancelSimulationJobBatchOutput, error) {
+	req, out := c.CancelSimulationJobBatchRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCancelWorldExportJob = "CancelWorldExportJob"
+
+// CancelWorldExportJobRequest generates a "aws/request.Request" representing the
+// client's request for the CancelWorldExportJob operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CancelWorldExportJob for more information on using the CancelWorldExportJob
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CancelWorldExportJobRequest method.
+//    req, resp := client.CancelWorldExportJobRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/CancelWorldExportJob
+func (c *RoboMaker) CancelWorldExportJobRequest(input *CancelWorldExportJobInput) (req *request.Request, output *CancelWorldExportJobOutput) {
+	op := &request.Operation{
+		Name:       opCancelWorldExportJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/cancelWorldExportJob",
+	}
+
+	if input == nil {
+		input = &CancelWorldExportJobInput{}
+	}
+
+	output = &CancelWorldExportJobOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// CancelWorldExportJob API operation for AWS RoboMaker.
+//
+// Cancels the specified export job.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS RoboMaker's
+// API operation CancelWorldExportJob for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   The specified resource does not exist.
+//
+//   * InvalidParameterException
+//   A parameter specified in a request is not valid, is unsupported, or cannot
+//   be used. The returned message provides an explanation of the error value.
+//
+//   * InternalServerException
+//   AWS RoboMaker experienced a service issue. Try your call again.
+//
+//   * ThrottlingException
+//   AWS RoboMaker is temporarily unable to process the request. Try your call
+//   again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/CancelWorldExportJob
+func (c *RoboMaker) CancelWorldExportJob(input *CancelWorldExportJobInput) (*CancelWorldExportJobOutput, error) {
+	req, out := c.CancelWorldExportJobRequest(input)
+	return out, req.Send()
+}
+
+// CancelWorldExportJobWithContext is the same as CancelWorldExportJob with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CancelWorldExportJob for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RoboMaker) CancelWorldExportJobWithContext(ctx aws.Context, input *CancelWorldExportJobInput, opts ...request.Option) (*CancelWorldExportJobOutput, error) {
+	req, out := c.CancelWorldExportJobRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCancelWorldGenerationJob = "CancelWorldGenerationJob"
+
+// CancelWorldGenerationJobRequest generates a "aws/request.Request" representing the
+// client's request for the CancelWorldGenerationJob operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CancelWorldGenerationJob for more information on using the CancelWorldGenerationJob
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CancelWorldGenerationJobRequest method.
+//    req, resp := client.CancelWorldGenerationJobRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/CancelWorldGenerationJob
+func (c *RoboMaker) CancelWorldGenerationJobRequest(input *CancelWorldGenerationJobInput) (req *request.Request, output *CancelWorldGenerationJobOutput) {
+	op := &request.Operation{
+		Name:       opCancelWorldGenerationJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/cancelWorldGenerationJob",
+	}
+
+	if input == nil {
+		input = &CancelWorldGenerationJobInput{}
+	}
+
+	output = &CancelWorldGenerationJobOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// CancelWorldGenerationJob API operation for AWS RoboMaker.
+//
+// Cancels the specified world generator job.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS RoboMaker's
+// API operation CancelWorldGenerationJob for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   The specified resource does not exist.
+//
+//   * InvalidParameterException
+//   A parameter specified in a request is not valid, is unsupported, or cannot
+//   be used. The returned message provides an explanation of the error value.
+//
+//   * InternalServerException
+//   AWS RoboMaker experienced a service issue. Try your call again.
+//
+//   * ThrottlingException
+//   AWS RoboMaker is temporarily unable to process the request. Try your call
+//   again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/CancelWorldGenerationJob
+func (c *RoboMaker) CancelWorldGenerationJob(input *CancelWorldGenerationJobInput) (*CancelWorldGenerationJobOutput, error) {
+	req, out := c.CancelWorldGenerationJobRequest(input)
+	return out, req.Send()
+}
+
+// CancelWorldGenerationJobWithContext is the same as CancelWorldGenerationJob with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CancelWorldGenerationJob for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RoboMaker) CancelWorldGenerationJobWithContext(ctx aws.Context, input *CancelWorldGenerationJobInput, opts ...request.Option) (*CancelWorldGenerationJobOutput, error) {
+	req, out := c.CancelWorldGenerationJobRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -345,29 +707,29 @@ func (c *RoboMaker) CreateDeploymentJobRequest(input *CreateDeploymentJobInput) 
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation CreateDeploymentJob for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+// Returned Error Types:
+//   * ResourceNotFoundException
 //   The specified resource does not exist.
 //
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
-//   * ErrCodeLimitExceededException "LimitExceededException"
+//   * LimitExceededException
 //   The requested resource exceeds the maximum number allowed, or the number
 //   of concurrent stream requests exceeds the maximum number allowed.
 //
-//   * ErrCodeConcurrentDeploymentException "ConcurrentDeploymentException"
+//   * ConcurrentDeploymentException
 //   The failure percentage threshold percentage was met.
 //
-//   * ErrCodeIdempotentParameterMismatchException "IdempotentParameterMismatchException"
+//   * IdempotentParameterMismatchException
 //   The request uses the same client token as a previous, but non-identical request.
 //   Do not reuse a client token with different requests, unless the requests
 //   are identical.
@@ -447,19 +809,19 @@ func (c *RoboMaker) CreateFleetRequest(input *CreateFleetInput) (req *request.Re
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation CreateFleet for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+// Returned Error Types:
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
-//   * ErrCodeLimitExceededException "LimitExceededException"
+//   * LimitExceededException
 //   The requested resource exceeds the maximum number allowed, or the number
 //   of concurrent stream requests exceeds the maximum number allowed.
 //
@@ -538,23 +900,23 @@ func (c *RoboMaker) CreateRobotRequest(input *CreateRobotInput) (req *request.Re
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation CreateRobot for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+// Returned Error Types:
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
-//   * ErrCodeLimitExceededException "LimitExceededException"
+//   * LimitExceededException
 //   The requested resource exceeds the maximum number allowed, or the number
 //   of concurrent stream requests exceeds the maximum number allowed.
 //
-//   * ErrCodeResourceAlreadyExistsException "ResourceAlreadyExistsException"
+//   * ResourceAlreadyExistsException
 //   The specified resource already exists.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/CreateRobot
@@ -632,26 +994,26 @@ func (c *RoboMaker) CreateRobotApplicationRequest(input *CreateRobotApplicationI
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation CreateRobotApplication for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+// Returned Error Types:
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeResourceAlreadyExistsException "ResourceAlreadyExistsException"
+//   * ResourceAlreadyExistsException
 //   The specified resource already exists.
 //
-//   * ErrCodeLimitExceededException "LimitExceededException"
+//   * LimitExceededException
 //   The requested resource exceeds the maximum number allowed, or the number
 //   of concurrent stream requests exceeds the maximum number allowed.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
-//   * ErrCodeIdempotentParameterMismatchException "IdempotentParameterMismatchException"
+//   * IdempotentParameterMismatchException
 //   The request uses the same client token as a previous, but non-identical request.
 //   Do not reuse a client token with different requests, unless the requests
 //   are identical.
@@ -731,25 +1093,25 @@ func (c *RoboMaker) CreateRobotApplicationVersionRequest(input *CreateRobotAppli
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation CreateRobotApplicationVersion for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+// Returned Error Types:
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeIdempotentParameterMismatchException "IdempotentParameterMismatchException"
+//   * IdempotentParameterMismatchException
 //   The request uses the same client token as a previous, but non-identical request.
 //   Do not reuse a client token with different requests, unless the requests
 //   are identical.
 //
-//   * ErrCodeLimitExceededException "LimitExceededException"
+//   * LimitExceededException
 //   The requested resource exceeds the maximum number allowed, or the number
 //   of concurrent stream requests exceeds the maximum number allowed.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/CreateRobotApplicationVersion
@@ -827,26 +1189,26 @@ func (c *RoboMaker) CreateSimulationApplicationRequest(input *CreateSimulationAp
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation CreateSimulationApplication for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+// Returned Error Types:
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeResourceAlreadyExistsException "ResourceAlreadyExistsException"
+//   * ResourceAlreadyExistsException
 //   The specified resource already exists.
 //
-//   * ErrCodeLimitExceededException "LimitExceededException"
+//   * LimitExceededException
 //   The requested resource exceeds the maximum number allowed, or the number
 //   of concurrent stream requests exceeds the maximum number allowed.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
-//   * ErrCodeIdempotentParameterMismatchException "IdempotentParameterMismatchException"
+//   * IdempotentParameterMismatchException
 //   The request uses the same client token as a previous, but non-identical request.
 //   Do not reuse a client token with different requests, unless the requests
 //   are identical.
@@ -926,25 +1288,25 @@ func (c *RoboMaker) CreateSimulationApplicationVersionRequest(input *CreateSimul
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation CreateSimulationApplicationVersion for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+// Returned Error Types:
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeIdempotentParameterMismatchException "IdempotentParameterMismatchException"
+//   * IdempotentParameterMismatchException
 //   The request uses the same client token as a previous, but non-identical request.
 //   Do not reuse a client token with different requests, unless the requests
 //   are identical.
 //
-//   * ErrCodeLimitExceededException "LimitExceededException"
+//   * LimitExceededException
 //   The requested resource exceeds the maximum number allowed, or the number
 //   of concurrent stream requests exceeds the maximum number allowed.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/CreateSimulationApplicationVersion
@@ -1025,31 +1387,31 @@ func (c *RoboMaker) CreateSimulationJobRequest(input *CreateSimulationJobInput) 
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation CreateSimulationJob for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+// Returned Error Types:
+//   * ResourceNotFoundException
 //   The specified resource does not exist.
 //
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
-//   * ErrCodeLimitExceededException "LimitExceededException"
+//   * LimitExceededException
 //   The requested resource exceeds the maximum number allowed, or the number
 //   of concurrent stream requests exceeds the maximum number allowed.
 //
-//   * ErrCodeIdempotentParameterMismatchException "IdempotentParameterMismatchException"
+//   * IdempotentParameterMismatchException
 //   The request uses the same client token as a previous, but non-identical request.
 //   Do not reuse a client token with different requests, unless the requests
 //   are identical.
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //   The request has failed due to a temporary failure of the server.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/CreateSimulationJob
@@ -1069,6 +1431,303 @@ func (c *RoboMaker) CreateSimulationJob(input *CreateSimulationJobInput) (*Creat
 // for more information on using Contexts.
 func (c *RoboMaker) CreateSimulationJobWithContext(ctx aws.Context, input *CreateSimulationJobInput, opts ...request.Option) (*CreateSimulationJobOutput, error) {
 	req, out := c.CreateSimulationJobRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateWorldExportJob = "CreateWorldExportJob"
+
+// CreateWorldExportJobRequest generates a "aws/request.Request" representing the
+// client's request for the CreateWorldExportJob operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateWorldExportJob for more information on using the CreateWorldExportJob
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateWorldExportJobRequest method.
+//    req, resp := client.CreateWorldExportJobRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/CreateWorldExportJob
+func (c *RoboMaker) CreateWorldExportJobRequest(input *CreateWorldExportJobInput) (req *request.Request, output *CreateWorldExportJobOutput) {
+	op := &request.Operation{
+		Name:       opCreateWorldExportJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/createWorldExportJob",
+	}
+
+	if input == nil {
+		input = &CreateWorldExportJobInput{}
+	}
+
+	output = &CreateWorldExportJobOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateWorldExportJob API operation for AWS RoboMaker.
+//
+// Creates a world export job.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS RoboMaker's
+// API operation CreateWorldExportJob for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   The specified resource does not exist.
+//
+//   * InvalidParameterException
+//   A parameter specified in a request is not valid, is unsupported, or cannot
+//   be used. The returned message provides an explanation of the error value.
+//
+//   * InternalServerException
+//   AWS RoboMaker experienced a service issue. Try your call again.
+//
+//   * ThrottlingException
+//   AWS RoboMaker is temporarily unable to process the request. Try your call
+//   again.
+//
+//   * IdempotentParameterMismatchException
+//   The request uses the same client token as a previous, but non-identical request.
+//   Do not reuse a client token with different requests, unless the requests
+//   are identical.
+//
+//   * ServiceUnavailableException
+//   The request has failed due to a temporary failure of the server.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/CreateWorldExportJob
+func (c *RoboMaker) CreateWorldExportJob(input *CreateWorldExportJobInput) (*CreateWorldExportJobOutput, error) {
+	req, out := c.CreateWorldExportJobRequest(input)
+	return out, req.Send()
+}
+
+// CreateWorldExportJobWithContext is the same as CreateWorldExportJob with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateWorldExportJob for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RoboMaker) CreateWorldExportJobWithContext(ctx aws.Context, input *CreateWorldExportJobInput, opts ...request.Option) (*CreateWorldExportJobOutput, error) {
+	req, out := c.CreateWorldExportJobRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateWorldGenerationJob = "CreateWorldGenerationJob"
+
+// CreateWorldGenerationJobRequest generates a "aws/request.Request" representing the
+// client's request for the CreateWorldGenerationJob operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateWorldGenerationJob for more information on using the CreateWorldGenerationJob
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateWorldGenerationJobRequest method.
+//    req, resp := client.CreateWorldGenerationJobRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/CreateWorldGenerationJob
+func (c *RoboMaker) CreateWorldGenerationJobRequest(input *CreateWorldGenerationJobInput) (req *request.Request, output *CreateWorldGenerationJobOutput) {
+	op := &request.Operation{
+		Name:       opCreateWorldGenerationJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/createWorldGenerationJob",
+	}
+
+	if input == nil {
+		input = &CreateWorldGenerationJobInput{}
+	}
+
+	output = &CreateWorldGenerationJobOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateWorldGenerationJob API operation for AWS RoboMaker.
+//
+// Creates worlds using the specified template.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS RoboMaker's
+// API operation CreateWorldGenerationJob for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   The specified resource does not exist.
+//
+//   * InvalidParameterException
+//   A parameter specified in a request is not valid, is unsupported, or cannot
+//   be used. The returned message provides an explanation of the error value.
+//
+//   * InternalServerException
+//   AWS RoboMaker experienced a service issue. Try your call again.
+//
+//   * ThrottlingException
+//   AWS RoboMaker is temporarily unable to process the request. Try your call
+//   again.
+//
+//   * LimitExceededException
+//   The requested resource exceeds the maximum number allowed, or the number
+//   of concurrent stream requests exceeds the maximum number allowed.
+//
+//   * IdempotentParameterMismatchException
+//   The request uses the same client token as a previous, but non-identical request.
+//   Do not reuse a client token with different requests, unless the requests
+//   are identical.
+//
+//   * ServiceUnavailableException
+//   The request has failed due to a temporary failure of the server.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/CreateWorldGenerationJob
+func (c *RoboMaker) CreateWorldGenerationJob(input *CreateWorldGenerationJobInput) (*CreateWorldGenerationJobOutput, error) {
+	req, out := c.CreateWorldGenerationJobRequest(input)
+	return out, req.Send()
+}
+
+// CreateWorldGenerationJobWithContext is the same as CreateWorldGenerationJob with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateWorldGenerationJob for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RoboMaker) CreateWorldGenerationJobWithContext(ctx aws.Context, input *CreateWorldGenerationJobInput, opts ...request.Option) (*CreateWorldGenerationJobOutput, error) {
+	req, out := c.CreateWorldGenerationJobRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateWorldTemplate = "CreateWorldTemplate"
+
+// CreateWorldTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the CreateWorldTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateWorldTemplate for more information on using the CreateWorldTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateWorldTemplateRequest method.
+//    req, resp := client.CreateWorldTemplateRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/CreateWorldTemplate
+func (c *RoboMaker) CreateWorldTemplateRequest(input *CreateWorldTemplateInput) (req *request.Request, output *CreateWorldTemplateOutput) {
+	op := &request.Operation{
+		Name:       opCreateWorldTemplate,
+		HTTPMethod: "POST",
+		HTTPPath:   "/createWorldTemplate",
+	}
+
+	if input == nil {
+		input = &CreateWorldTemplateInput{}
+	}
+
+	output = &CreateWorldTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateWorldTemplate API operation for AWS RoboMaker.
+//
+// Creates a world template.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS RoboMaker's
+// API operation CreateWorldTemplate for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterException
+//   A parameter specified in a request is not valid, is unsupported, or cannot
+//   be used. The returned message provides an explanation of the error value.
+//
+//   * ResourceAlreadyExistsException
+//   The specified resource already exists.
+//
+//   * ResourceNotFoundException
+//   The specified resource does not exist.
+//
+//   * LimitExceededException
+//   The requested resource exceeds the maximum number allowed, or the number
+//   of concurrent stream requests exceeds the maximum number allowed.
+//
+//   * ThrottlingException
+//   AWS RoboMaker is temporarily unable to process the request. Try your call
+//   again.
+//
+//   * InternalServerException
+//   AWS RoboMaker experienced a service issue. Try your call again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/CreateWorldTemplate
+func (c *RoboMaker) CreateWorldTemplate(input *CreateWorldTemplateInput) (*CreateWorldTemplateOutput, error) {
+	req, out := c.CreateWorldTemplateRequest(input)
+	return out, req.Send()
+}
+
+// CreateWorldTemplateWithContext is the same as CreateWorldTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateWorldTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RoboMaker) CreateWorldTemplateWithContext(ctx aws.Context, input *CreateWorldTemplateInput, opts ...request.Option) (*CreateWorldTemplateOutput, error) {
+	req, out := c.CreateWorldTemplateRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1128,15 +1787,15 @@ func (c *RoboMaker) DeleteFleetRequest(input *DeleteFleetInput) (req *request.Re
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation DeleteFleet for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+// Returned Error Types:
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
@@ -1216,15 +1875,15 @@ func (c *RoboMaker) DeleteRobotRequest(input *DeleteRobotInput) (req *request.Re
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation DeleteRobot for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+// Returned Error Types:
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
@@ -1304,16 +1963,16 @@ func (c *RoboMaker) DeleteRobotApplicationRequest(input *DeleteRobotApplicationI
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation DeleteRobotApplication for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+// Returned Error Types:
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/DeleteRobotApplication
@@ -1392,16 +2051,16 @@ func (c *RoboMaker) DeleteSimulationApplicationRequest(input *DeleteSimulationAp
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation DeleteSimulationApplication for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+// Returned Error Types:
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/DeleteSimulationApplication
@@ -1421,6 +2080,97 @@ func (c *RoboMaker) DeleteSimulationApplication(input *DeleteSimulationApplicati
 // for more information on using Contexts.
 func (c *RoboMaker) DeleteSimulationApplicationWithContext(ctx aws.Context, input *DeleteSimulationApplicationInput, opts ...request.Option) (*DeleteSimulationApplicationOutput, error) {
 	req, out := c.DeleteSimulationApplicationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteWorldTemplate = "DeleteWorldTemplate"
+
+// DeleteWorldTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteWorldTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteWorldTemplate for more information on using the DeleteWorldTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteWorldTemplateRequest method.
+//    req, resp := client.DeleteWorldTemplateRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/DeleteWorldTemplate
+func (c *RoboMaker) DeleteWorldTemplateRequest(input *DeleteWorldTemplateInput) (req *request.Request, output *DeleteWorldTemplateOutput) {
+	op := &request.Operation{
+		Name:       opDeleteWorldTemplate,
+		HTTPMethod: "POST",
+		HTTPPath:   "/deleteWorldTemplate",
+	}
+
+	if input == nil {
+		input = &DeleteWorldTemplateInput{}
+	}
+
+	output = &DeleteWorldTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteWorldTemplate API operation for AWS RoboMaker.
+//
+// Deletes a world template.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS RoboMaker's
+// API operation DeleteWorldTemplate for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterException
+//   A parameter specified in a request is not valid, is unsupported, or cannot
+//   be used. The returned message provides an explanation of the error value.
+//
+//   * ResourceNotFoundException
+//   The specified resource does not exist.
+//
+//   * ThrottlingException
+//   AWS RoboMaker is temporarily unable to process the request. Try your call
+//   again.
+//
+//   * InternalServerException
+//   AWS RoboMaker experienced a service issue. Try your call again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/DeleteWorldTemplate
+func (c *RoboMaker) DeleteWorldTemplate(input *DeleteWorldTemplateInput) (*DeleteWorldTemplateOutput, error) {
+	req, out := c.DeleteWorldTemplateRequest(input)
+	return out, req.Send()
+}
+
+// DeleteWorldTemplateWithContext is the same as DeleteWorldTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteWorldTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RoboMaker) DeleteWorldTemplateWithContext(ctx aws.Context, input *DeleteWorldTemplateInput, opts ...request.Option) (*DeleteWorldTemplateOutput, error) {
+	req, out := c.DeleteWorldTemplateRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1479,19 +2229,19 @@ func (c *RoboMaker) DeregisterRobotRequest(input *DeregisterRobotInput) (req *re
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation DeregisterRobot for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+// Returned Error Types:
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   * ResourceNotFoundException
 //   The specified resource does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/DeregisterRobot
@@ -1569,18 +2319,18 @@ func (c *RoboMaker) DescribeDeploymentJobRequest(input *DescribeDeploymentJobInp
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation DescribeDeploymentJob for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+// Returned Error Types:
+//   * ResourceNotFoundException
 //   The specified resource does not exist.
 //
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
@@ -1659,18 +2409,18 @@ func (c *RoboMaker) DescribeFleetRequest(input *DescribeFleetInput) (req *reques
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation DescribeFleet for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+// Returned Error Types:
+//   * ResourceNotFoundException
 //   The specified resource does not exist.
 //
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
@@ -1749,18 +2499,18 @@ func (c *RoboMaker) DescribeRobotRequest(input *DescribeRobotInput) (req *reques
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation DescribeRobot for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+// Returned Error Types:
+//   * ResourceNotFoundException
 //   The specified resource does not exist.
 //
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
@@ -1839,19 +2589,19 @@ func (c *RoboMaker) DescribeRobotApplicationRequest(input *DescribeRobotApplicat
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation DescribeRobotApplication for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+// Returned Error Types:
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   * ResourceNotFoundException
 //   The specified resource does not exist.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/DescribeRobotApplication
@@ -1929,19 +2679,19 @@ func (c *RoboMaker) DescribeSimulationApplicationRequest(input *DescribeSimulati
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation DescribeSimulationApplication for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+// Returned Error Types:
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   * ResourceNotFoundException
 //   The specified resource does not exist.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/DescribeSimulationApplication
@@ -2019,18 +2769,18 @@ func (c *RoboMaker) DescribeSimulationJobRequest(input *DescribeSimulationJobInp
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation DescribeSimulationJob for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+// Returned Error Types:
+//   * ResourceNotFoundException
 //   The specified resource does not exist.
 //
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
@@ -2051,6 +2801,542 @@ func (c *RoboMaker) DescribeSimulationJob(input *DescribeSimulationJobInput) (*D
 // for more information on using Contexts.
 func (c *RoboMaker) DescribeSimulationJobWithContext(ctx aws.Context, input *DescribeSimulationJobInput, opts ...request.Option) (*DescribeSimulationJobOutput, error) {
 	req, out := c.DescribeSimulationJobRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeSimulationJobBatch = "DescribeSimulationJobBatch"
+
+// DescribeSimulationJobBatchRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeSimulationJobBatch operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeSimulationJobBatch for more information on using the DescribeSimulationJobBatch
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeSimulationJobBatchRequest method.
+//    req, resp := client.DescribeSimulationJobBatchRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/DescribeSimulationJobBatch
+func (c *RoboMaker) DescribeSimulationJobBatchRequest(input *DescribeSimulationJobBatchInput) (req *request.Request, output *DescribeSimulationJobBatchOutput) {
+	op := &request.Operation{
+		Name:       opDescribeSimulationJobBatch,
+		HTTPMethod: "POST",
+		HTTPPath:   "/describeSimulationJobBatch",
+	}
+
+	if input == nil {
+		input = &DescribeSimulationJobBatchInput{}
+	}
+
+	output = &DescribeSimulationJobBatchOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeSimulationJobBatch API operation for AWS RoboMaker.
+//
+// Describes a simulation job batch.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS RoboMaker's
+// API operation DescribeSimulationJobBatch for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   The specified resource does not exist.
+//
+//   * InvalidParameterException
+//   A parameter specified in a request is not valid, is unsupported, or cannot
+//   be used. The returned message provides an explanation of the error value.
+//
+//   * InternalServerException
+//   AWS RoboMaker experienced a service issue. Try your call again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/DescribeSimulationJobBatch
+func (c *RoboMaker) DescribeSimulationJobBatch(input *DescribeSimulationJobBatchInput) (*DescribeSimulationJobBatchOutput, error) {
+	req, out := c.DescribeSimulationJobBatchRequest(input)
+	return out, req.Send()
+}
+
+// DescribeSimulationJobBatchWithContext is the same as DescribeSimulationJobBatch with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeSimulationJobBatch for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RoboMaker) DescribeSimulationJobBatchWithContext(ctx aws.Context, input *DescribeSimulationJobBatchInput, opts ...request.Option) (*DescribeSimulationJobBatchOutput, error) {
+	req, out := c.DescribeSimulationJobBatchRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeWorld = "DescribeWorld"
+
+// DescribeWorldRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeWorld operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeWorld for more information on using the DescribeWorld
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeWorldRequest method.
+//    req, resp := client.DescribeWorldRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/DescribeWorld
+func (c *RoboMaker) DescribeWorldRequest(input *DescribeWorldInput) (req *request.Request, output *DescribeWorldOutput) {
+	op := &request.Operation{
+		Name:       opDescribeWorld,
+		HTTPMethod: "POST",
+		HTTPPath:   "/describeWorld",
+	}
+
+	if input == nil {
+		input = &DescribeWorldInput{}
+	}
+
+	output = &DescribeWorldOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeWorld API operation for AWS RoboMaker.
+//
+// Describes a world.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS RoboMaker's
+// API operation DescribeWorld for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterException
+//   A parameter specified in a request is not valid, is unsupported, or cannot
+//   be used. The returned message provides an explanation of the error value.
+//
+//   * ResourceNotFoundException
+//   The specified resource does not exist.
+//
+//   * ThrottlingException
+//   AWS RoboMaker is temporarily unable to process the request. Try your call
+//   again.
+//
+//   * InternalServerException
+//   AWS RoboMaker experienced a service issue. Try your call again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/DescribeWorld
+func (c *RoboMaker) DescribeWorld(input *DescribeWorldInput) (*DescribeWorldOutput, error) {
+	req, out := c.DescribeWorldRequest(input)
+	return out, req.Send()
+}
+
+// DescribeWorldWithContext is the same as DescribeWorld with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeWorld for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RoboMaker) DescribeWorldWithContext(ctx aws.Context, input *DescribeWorldInput, opts ...request.Option) (*DescribeWorldOutput, error) {
+	req, out := c.DescribeWorldRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeWorldExportJob = "DescribeWorldExportJob"
+
+// DescribeWorldExportJobRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeWorldExportJob operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeWorldExportJob for more information on using the DescribeWorldExportJob
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeWorldExportJobRequest method.
+//    req, resp := client.DescribeWorldExportJobRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/DescribeWorldExportJob
+func (c *RoboMaker) DescribeWorldExportJobRequest(input *DescribeWorldExportJobInput) (req *request.Request, output *DescribeWorldExportJobOutput) {
+	op := &request.Operation{
+		Name:       opDescribeWorldExportJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/describeWorldExportJob",
+	}
+
+	if input == nil {
+		input = &DescribeWorldExportJobInput{}
+	}
+
+	output = &DescribeWorldExportJobOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeWorldExportJob API operation for AWS RoboMaker.
+//
+// Describes a world export job.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS RoboMaker's
+// API operation DescribeWorldExportJob for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   The specified resource does not exist.
+//
+//   * InvalidParameterException
+//   A parameter specified in a request is not valid, is unsupported, or cannot
+//   be used. The returned message provides an explanation of the error value.
+//
+//   * InternalServerException
+//   AWS RoboMaker experienced a service issue. Try your call again.
+//
+//   * ThrottlingException
+//   AWS RoboMaker is temporarily unable to process the request. Try your call
+//   again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/DescribeWorldExportJob
+func (c *RoboMaker) DescribeWorldExportJob(input *DescribeWorldExportJobInput) (*DescribeWorldExportJobOutput, error) {
+	req, out := c.DescribeWorldExportJobRequest(input)
+	return out, req.Send()
+}
+
+// DescribeWorldExportJobWithContext is the same as DescribeWorldExportJob with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeWorldExportJob for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RoboMaker) DescribeWorldExportJobWithContext(ctx aws.Context, input *DescribeWorldExportJobInput, opts ...request.Option) (*DescribeWorldExportJobOutput, error) {
+	req, out := c.DescribeWorldExportJobRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeWorldGenerationJob = "DescribeWorldGenerationJob"
+
+// DescribeWorldGenerationJobRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeWorldGenerationJob operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeWorldGenerationJob for more information on using the DescribeWorldGenerationJob
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeWorldGenerationJobRequest method.
+//    req, resp := client.DescribeWorldGenerationJobRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/DescribeWorldGenerationJob
+func (c *RoboMaker) DescribeWorldGenerationJobRequest(input *DescribeWorldGenerationJobInput) (req *request.Request, output *DescribeWorldGenerationJobOutput) {
+	op := &request.Operation{
+		Name:       opDescribeWorldGenerationJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/describeWorldGenerationJob",
+	}
+
+	if input == nil {
+		input = &DescribeWorldGenerationJobInput{}
+	}
+
+	output = &DescribeWorldGenerationJobOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeWorldGenerationJob API operation for AWS RoboMaker.
+//
+// Describes a world generation job.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS RoboMaker's
+// API operation DescribeWorldGenerationJob for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   The specified resource does not exist.
+//
+//   * InvalidParameterException
+//   A parameter specified in a request is not valid, is unsupported, or cannot
+//   be used. The returned message provides an explanation of the error value.
+//
+//   * InternalServerException
+//   AWS RoboMaker experienced a service issue. Try your call again.
+//
+//   * ThrottlingException
+//   AWS RoboMaker is temporarily unable to process the request. Try your call
+//   again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/DescribeWorldGenerationJob
+func (c *RoboMaker) DescribeWorldGenerationJob(input *DescribeWorldGenerationJobInput) (*DescribeWorldGenerationJobOutput, error) {
+	req, out := c.DescribeWorldGenerationJobRequest(input)
+	return out, req.Send()
+}
+
+// DescribeWorldGenerationJobWithContext is the same as DescribeWorldGenerationJob with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeWorldGenerationJob for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RoboMaker) DescribeWorldGenerationJobWithContext(ctx aws.Context, input *DescribeWorldGenerationJobInput, opts ...request.Option) (*DescribeWorldGenerationJobOutput, error) {
+	req, out := c.DescribeWorldGenerationJobRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeWorldTemplate = "DescribeWorldTemplate"
+
+// DescribeWorldTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeWorldTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeWorldTemplate for more information on using the DescribeWorldTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeWorldTemplateRequest method.
+//    req, resp := client.DescribeWorldTemplateRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/DescribeWorldTemplate
+func (c *RoboMaker) DescribeWorldTemplateRequest(input *DescribeWorldTemplateInput) (req *request.Request, output *DescribeWorldTemplateOutput) {
+	op := &request.Operation{
+		Name:       opDescribeWorldTemplate,
+		HTTPMethod: "POST",
+		HTTPPath:   "/describeWorldTemplate",
+	}
+
+	if input == nil {
+		input = &DescribeWorldTemplateInput{}
+	}
+
+	output = &DescribeWorldTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeWorldTemplate API operation for AWS RoboMaker.
+//
+// Describes a world template.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS RoboMaker's
+// API operation DescribeWorldTemplate for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterException
+//   A parameter specified in a request is not valid, is unsupported, or cannot
+//   be used. The returned message provides an explanation of the error value.
+//
+//   * ResourceNotFoundException
+//   The specified resource does not exist.
+//
+//   * ThrottlingException
+//   AWS RoboMaker is temporarily unable to process the request. Try your call
+//   again.
+//
+//   * InternalServerException
+//   AWS RoboMaker experienced a service issue. Try your call again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/DescribeWorldTemplate
+func (c *RoboMaker) DescribeWorldTemplate(input *DescribeWorldTemplateInput) (*DescribeWorldTemplateOutput, error) {
+	req, out := c.DescribeWorldTemplateRequest(input)
+	return out, req.Send()
+}
+
+// DescribeWorldTemplateWithContext is the same as DescribeWorldTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeWorldTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RoboMaker) DescribeWorldTemplateWithContext(ctx aws.Context, input *DescribeWorldTemplateInput, opts ...request.Option) (*DescribeWorldTemplateOutput, error) {
+	req, out := c.DescribeWorldTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetWorldTemplateBody = "GetWorldTemplateBody"
+
+// GetWorldTemplateBodyRequest generates a "aws/request.Request" representing the
+// client's request for the GetWorldTemplateBody operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetWorldTemplateBody for more information on using the GetWorldTemplateBody
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetWorldTemplateBodyRequest method.
+//    req, resp := client.GetWorldTemplateBodyRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/GetWorldTemplateBody
+func (c *RoboMaker) GetWorldTemplateBodyRequest(input *GetWorldTemplateBodyInput) (req *request.Request, output *GetWorldTemplateBodyOutput) {
+	op := &request.Operation{
+		Name:       opGetWorldTemplateBody,
+		HTTPMethod: "POST",
+		HTTPPath:   "/getWorldTemplateBody",
+	}
+
+	if input == nil {
+		input = &GetWorldTemplateBodyInput{}
+	}
+
+	output = &GetWorldTemplateBodyOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetWorldTemplateBody API operation for AWS RoboMaker.
+//
+// Gets the world template body.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS RoboMaker's
+// API operation GetWorldTemplateBody for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterException
+//   A parameter specified in a request is not valid, is unsupported, or cannot
+//   be used. The returned message provides an explanation of the error value.
+//
+//   * ResourceNotFoundException
+//   The specified resource does not exist.
+//
+//   * ThrottlingException
+//   AWS RoboMaker is temporarily unable to process the request. Try your call
+//   again.
+//
+//   * InternalServerException
+//   AWS RoboMaker experienced a service issue. Try your call again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/GetWorldTemplateBody
+func (c *RoboMaker) GetWorldTemplateBody(input *GetWorldTemplateBodyInput) (*GetWorldTemplateBodyOutput, error) {
+	req, out := c.GetWorldTemplateBodyRequest(input)
+	return out, req.Send()
+}
+
+// GetWorldTemplateBodyWithContext is the same as GetWorldTemplateBody with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetWorldTemplateBody for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RoboMaker) GetWorldTemplateBodyWithContext(ctx aws.Context, input *GetWorldTemplateBodyInput, opts ...request.Option) (*GetWorldTemplateBodyOutput, error) {
+	req, out := c.GetWorldTemplateBodyRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -2116,18 +3402,18 @@ func (c *RoboMaker) ListDeploymentJobsRequest(input *ListDeploymentJobsInput) (r
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation ListDeploymentJobs for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+// Returned Error Types:
+//   * ResourceNotFoundException
 //   The specified resource does not exist.
 //
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
@@ -2265,18 +3551,18 @@ func (c *RoboMaker) ListFleetsRequest(input *ListFleetsInput) (req *request.Requ
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation ListFleets for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+// Returned Error Types:
+//   * ResourceNotFoundException
 //   The specified resource does not exist.
 //
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
@@ -2414,16 +3700,16 @@ func (c *RoboMaker) ListRobotApplicationsRequest(input *ListRobotApplicationsInp
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation ListRobotApplications for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+// Returned Error Types:
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/ListRobotApplications
@@ -2560,18 +3846,18 @@ func (c *RoboMaker) ListRobotsRequest(input *ListRobotsInput) (req *request.Requ
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation ListRobots for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+// Returned Error Types:
+//   * ResourceNotFoundException
 //   The specified resource does not exist.
 //
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
@@ -2709,16 +3995,16 @@ func (c *RoboMaker) ListSimulationApplicationsRequest(input *ListSimulationAppli
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation ListSimulationApplications for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+// Returned Error Types:
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/ListSimulationApplications
@@ -2795,6 +4081,148 @@ func (c *RoboMaker) ListSimulationApplicationsPagesWithContext(ctx aws.Context, 
 	return p.Err()
 }
 
+const opListSimulationJobBatches = "ListSimulationJobBatches"
+
+// ListSimulationJobBatchesRequest generates a "aws/request.Request" representing the
+// client's request for the ListSimulationJobBatches operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListSimulationJobBatches for more information on using the ListSimulationJobBatches
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListSimulationJobBatchesRequest method.
+//    req, resp := client.ListSimulationJobBatchesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/ListSimulationJobBatches
+func (c *RoboMaker) ListSimulationJobBatchesRequest(input *ListSimulationJobBatchesInput) (req *request.Request, output *ListSimulationJobBatchesOutput) {
+	op := &request.Operation{
+		Name:       opListSimulationJobBatches,
+		HTTPMethod: "POST",
+		HTTPPath:   "/listSimulationJobBatches",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListSimulationJobBatchesInput{}
+	}
+
+	output = &ListSimulationJobBatchesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListSimulationJobBatches API operation for AWS RoboMaker.
+//
+// Returns a list simulation job batches. You can optionally provide filters
+// to retrieve specific simulation batch jobs.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS RoboMaker's
+// API operation ListSimulationJobBatches for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterException
+//   A parameter specified in a request is not valid, is unsupported, or cannot
+//   be used. The returned message provides an explanation of the error value.
+//
+//   * InternalServerException
+//   AWS RoboMaker experienced a service issue. Try your call again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/ListSimulationJobBatches
+func (c *RoboMaker) ListSimulationJobBatches(input *ListSimulationJobBatchesInput) (*ListSimulationJobBatchesOutput, error) {
+	req, out := c.ListSimulationJobBatchesRequest(input)
+	return out, req.Send()
+}
+
+// ListSimulationJobBatchesWithContext is the same as ListSimulationJobBatches with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListSimulationJobBatches for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RoboMaker) ListSimulationJobBatchesWithContext(ctx aws.Context, input *ListSimulationJobBatchesInput, opts ...request.Option) (*ListSimulationJobBatchesOutput, error) {
+	req, out := c.ListSimulationJobBatchesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListSimulationJobBatchesPages iterates over the pages of a ListSimulationJobBatches operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListSimulationJobBatches method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListSimulationJobBatches operation.
+//    pageNum := 0
+//    err := client.ListSimulationJobBatchesPages(params,
+//        func(page *robomaker.ListSimulationJobBatchesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *RoboMaker) ListSimulationJobBatchesPages(input *ListSimulationJobBatchesInput, fn func(*ListSimulationJobBatchesOutput, bool) bool) error {
+	return c.ListSimulationJobBatchesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListSimulationJobBatchesPagesWithContext same as ListSimulationJobBatchesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RoboMaker) ListSimulationJobBatchesPagesWithContext(ctx aws.Context, input *ListSimulationJobBatchesInput, fn func(*ListSimulationJobBatchesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListSimulationJobBatchesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListSimulationJobBatchesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListSimulationJobBatchesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListSimulationJobs = "ListSimulationJobs"
 
 // ListSimulationJobsRequest generates a "aws/request.Request" representing the
@@ -2855,15 +4283,15 @@ func (c *RoboMaker) ListSimulationJobsRequest(input *ListSimulationJobsInput) (r
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation ListSimulationJobs for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+// Returned Error Types:
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
@@ -2994,18 +4422,18 @@ func (c *RoboMaker) ListTagsForResourceRequest(input *ListTagsForResourceInput) 
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation ListTagsForResource for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInternalServerException "InternalServerException"
+// Returned Error Types:
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   * ResourceNotFoundException
 //   The specified resource does not exist.
 //
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
@@ -3029,6 +4457,586 @@ func (c *RoboMaker) ListTagsForResourceWithContext(ctx aws.Context, input *ListT
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+const opListWorldExportJobs = "ListWorldExportJobs"
+
+// ListWorldExportJobsRequest generates a "aws/request.Request" representing the
+// client's request for the ListWorldExportJobs operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListWorldExportJobs for more information on using the ListWorldExportJobs
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListWorldExportJobsRequest method.
+//    req, resp := client.ListWorldExportJobsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/ListWorldExportJobs
+func (c *RoboMaker) ListWorldExportJobsRequest(input *ListWorldExportJobsInput) (req *request.Request, output *ListWorldExportJobsOutput) {
+	op := &request.Operation{
+		Name:       opListWorldExportJobs,
+		HTTPMethod: "POST",
+		HTTPPath:   "/listWorldExportJobs",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListWorldExportJobsInput{}
+	}
+
+	output = &ListWorldExportJobsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListWorldExportJobs API operation for AWS RoboMaker.
+//
+// Lists world export jobs.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS RoboMaker's
+// API operation ListWorldExportJobs for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterException
+//   A parameter specified in a request is not valid, is unsupported, or cannot
+//   be used. The returned message provides an explanation of the error value.
+//
+//   * InternalServerException
+//   AWS RoboMaker experienced a service issue. Try your call again.
+//
+//   * ThrottlingException
+//   AWS RoboMaker is temporarily unable to process the request. Try your call
+//   again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/ListWorldExportJobs
+func (c *RoboMaker) ListWorldExportJobs(input *ListWorldExportJobsInput) (*ListWorldExportJobsOutput, error) {
+	req, out := c.ListWorldExportJobsRequest(input)
+	return out, req.Send()
+}
+
+// ListWorldExportJobsWithContext is the same as ListWorldExportJobs with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListWorldExportJobs for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RoboMaker) ListWorldExportJobsWithContext(ctx aws.Context, input *ListWorldExportJobsInput, opts ...request.Option) (*ListWorldExportJobsOutput, error) {
+	req, out := c.ListWorldExportJobsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListWorldExportJobsPages iterates over the pages of a ListWorldExportJobs operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListWorldExportJobs method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListWorldExportJobs operation.
+//    pageNum := 0
+//    err := client.ListWorldExportJobsPages(params,
+//        func(page *robomaker.ListWorldExportJobsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *RoboMaker) ListWorldExportJobsPages(input *ListWorldExportJobsInput, fn func(*ListWorldExportJobsOutput, bool) bool) error {
+	return c.ListWorldExportJobsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListWorldExportJobsPagesWithContext same as ListWorldExportJobsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RoboMaker) ListWorldExportJobsPagesWithContext(ctx aws.Context, input *ListWorldExportJobsInput, fn func(*ListWorldExportJobsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListWorldExportJobsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListWorldExportJobsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListWorldExportJobsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListWorldGenerationJobs = "ListWorldGenerationJobs"
+
+// ListWorldGenerationJobsRequest generates a "aws/request.Request" representing the
+// client's request for the ListWorldGenerationJobs operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListWorldGenerationJobs for more information on using the ListWorldGenerationJobs
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListWorldGenerationJobsRequest method.
+//    req, resp := client.ListWorldGenerationJobsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/ListWorldGenerationJobs
+func (c *RoboMaker) ListWorldGenerationJobsRequest(input *ListWorldGenerationJobsInput) (req *request.Request, output *ListWorldGenerationJobsOutput) {
+	op := &request.Operation{
+		Name:       opListWorldGenerationJobs,
+		HTTPMethod: "POST",
+		HTTPPath:   "/listWorldGenerationJobs",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListWorldGenerationJobsInput{}
+	}
+
+	output = &ListWorldGenerationJobsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListWorldGenerationJobs API operation for AWS RoboMaker.
+//
+// Lists world generator jobs.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS RoboMaker's
+// API operation ListWorldGenerationJobs for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterException
+//   A parameter specified in a request is not valid, is unsupported, or cannot
+//   be used. The returned message provides an explanation of the error value.
+//
+//   * InternalServerException
+//   AWS RoboMaker experienced a service issue. Try your call again.
+//
+//   * ThrottlingException
+//   AWS RoboMaker is temporarily unable to process the request. Try your call
+//   again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/ListWorldGenerationJobs
+func (c *RoboMaker) ListWorldGenerationJobs(input *ListWorldGenerationJobsInput) (*ListWorldGenerationJobsOutput, error) {
+	req, out := c.ListWorldGenerationJobsRequest(input)
+	return out, req.Send()
+}
+
+// ListWorldGenerationJobsWithContext is the same as ListWorldGenerationJobs with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListWorldGenerationJobs for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RoboMaker) ListWorldGenerationJobsWithContext(ctx aws.Context, input *ListWorldGenerationJobsInput, opts ...request.Option) (*ListWorldGenerationJobsOutput, error) {
+	req, out := c.ListWorldGenerationJobsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListWorldGenerationJobsPages iterates over the pages of a ListWorldGenerationJobs operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListWorldGenerationJobs method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListWorldGenerationJobs operation.
+//    pageNum := 0
+//    err := client.ListWorldGenerationJobsPages(params,
+//        func(page *robomaker.ListWorldGenerationJobsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *RoboMaker) ListWorldGenerationJobsPages(input *ListWorldGenerationJobsInput, fn func(*ListWorldGenerationJobsOutput, bool) bool) error {
+	return c.ListWorldGenerationJobsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListWorldGenerationJobsPagesWithContext same as ListWorldGenerationJobsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RoboMaker) ListWorldGenerationJobsPagesWithContext(ctx aws.Context, input *ListWorldGenerationJobsInput, fn func(*ListWorldGenerationJobsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListWorldGenerationJobsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListWorldGenerationJobsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListWorldGenerationJobsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListWorldTemplates = "ListWorldTemplates"
+
+// ListWorldTemplatesRequest generates a "aws/request.Request" representing the
+// client's request for the ListWorldTemplates operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListWorldTemplates for more information on using the ListWorldTemplates
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListWorldTemplatesRequest method.
+//    req, resp := client.ListWorldTemplatesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/ListWorldTemplates
+func (c *RoboMaker) ListWorldTemplatesRequest(input *ListWorldTemplatesInput) (req *request.Request, output *ListWorldTemplatesOutput) {
+	op := &request.Operation{
+		Name:       opListWorldTemplates,
+		HTTPMethod: "POST",
+		HTTPPath:   "/listWorldTemplates",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListWorldTemplatesInput{}
+	}
+
+	output = &ListWorldTemplatesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListWorldTemplates API operation for AWS RoboMaker.
+//
+// Lists world templates.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS RoboMaker's
+// API operation ListWorldTemplates for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterException
+//   A parameter specified in a request is not valid, is unsupported, or cannot
+//   be used. The returned message provides an explanation of the error value.
+//
+//   * ThrottlingException
+//   AWS RoboMaker is temporarily unable to process the request. Try your call
+//   again.
+//
+//   * InternalServerException
+//   AWS RoboMaker experienced a service issue. Try your call again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/ListWorldTemplates
+func (c *RoboMaker) ListWorldTemplates(input *ListWorldTemplatesInput) (*ListWorldTemplatesOutput, error) {
+	req, out := c.ListWorldTemplatesRequest(input)
+	return out, req.Send()
+}
+
+// ListWorldTemplatesWithContext is the same as ListWorldTemplates with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListWorldTemplates for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RoboMaker) ListWorldTemplatesWithContext(ctx aws.Context, input *ListWorldTemplatesInput, opts ...request.Option) (*ListWorldTemplatesOutput, error) {
+	req, out := c.ListWorldTemplatesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListWorldTemplatesPages iterates over the pages of a ListWorldTemplates operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListWorldTemplates method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListWorldTemplates operation.
+//    pageNum := 0
+//    err := client.ListWorldTemplatesPages(params,
+//        func(page *robomaker.ListWorldTemplatesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *RoboMaker) ListWorldTemplatesPages(input *ListWorldTemplatesInput, fn func(*ListWorldTemplatesOutput, bool) bool) error {
+	return c.ListWorldTemplatesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListWorldTemplatesPagesWithContext same as ListWorldTemplatesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RoboMaker) ListWorldTemplatesPagesWithContext(ctx aws.Context, input *ListWorldTemplatesInput, fn func(*ListWorldTemplatesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListWorldTemplatesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListWorldTemplatesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListWorldTemplatesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListWorlds = "ListWorlds"
+
+// ListWorldsRequest generates a "aws/request.Request" representing the
+// client's request for the ListWorlds operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListWorlds for more information on using the ListWorlds
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListWorldsRequest method.
+//    req, resp := client.ListWorldsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/ListWorlds
+func (c *RoboMaker) ListWorldsRequest(input *ListWorldsInput) (req *request.Request, output *ListWorldsOutput) {
+	op := &request.Operation{
+		Name:       opListWorlds,
+		HTTPMethod: "POST",
+		HTTPPath:   "/listWorlds",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"nextToken"},
+			OutputTokens:    []string{"nextToken"},
+			LimitToken:      "maxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListWorldsInput{}
+	}
+
+	output = &ListWorldsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListWorlds API operation for AWS RoboMaker.
+//
+// Lists worlds.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS RoboMaker's
+// API operation ListWorlds for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterException
+//   A parameter specified in a request is not valid, is unsupported, or cannot
+//   be used. The returned message provides an explanation of the error value.
+//
+//   * ThrottlingException
+//   AWS RoboMaker is temporarily unable to process the request. Try your call
+//   again.
+//
+//   * InternalServerException
+//   AWS RoboMaker experienced a service issue. Try your call again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/ListWorlds
+func (c *RoboMaker) ListWorlds(input *ListWorldsInput) (*ListWorldsOutput, error) {
+	req, out := c.ListWorldsRequest(input)
+	return out, req.Send()
+}
+
+// ListWorldsWithContext is the same as ListWorlds with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListWorlds for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RoboMaker) ListWorldsWithContext(ctx aws.Context, input *ListWorldsInput, opts ...request.Option) (*ListWorldsOutput, error) {
+	req, out := c.ListWorldsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListWorldsPages iterates over the pages of a ListWorlds operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListWorlds method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListWorlds operation.
+//    pageNum := 0
+//    err := client.ListWorldsPages(params,
+//        func(page *robomaker.ListWorldsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *RoboMaker) ListWorldsPages(input *ListWorldsInput, fn func(*ListWorldsOutput, bool) bool) error {
+	return c.ListWorldsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListWorldsPagesWithContext same as ListWorldsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RoboMaker) ListWorldsPagesWithContext(ctx aws.Context, input *ListWorldsInput, fn func(*ListWorldsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListWorldsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListWorldsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListWorldsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
 }
 
 const opRegisterRobot = "RegisterRobot"
@@ -3084,23 +5092,23 @@ func (c *RoboMaker) RegisterRobotRequest(input *RegisterRobotInput) (req *reques
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation RegisterRobot for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+// Returned Error Types:
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
-//   * ErrCodeLimitExceededException "LimitExceededException"
+//   * LimitExceededException
 //   The requested resource exceeds the maximum number allowed, or the number
 //   of concurrent stream requests exceeds the maximum number allowed.
 //
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   * ResourceNotFoundException
 //   The specified resource does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/RegisterRobot
@@ -3179,23 +5187,23 @@ func (c *RoboMaker) RestartSimulationJobRequest(input *RestartSimulationJobInput
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation RestartSimulationJob for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+// Returned Error Types:
+//   * ResourceNotFoundException
 //   The specified resource does not exist.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
-//   * ErrCodeLimitExceededException "LimitExceededException"
+//   * LimitExceededException
 //   The requested resource exceeds the maximum number allowed, or the number
 //   of concurrent stream requests exceeds the maximum number allowed.
 //
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/RestartSimulationJob
@@ -3215,6 +5223,103 @@ func (c *RoboMaker) RestartSimulationJob(input *RestartSimulationJobInput) (*Res
 // for more information on using Contexts.
 func (c *RoboMaker) RestartSimulationJobWithContext(ctx aws.Context, input *RestartSimulationJobInput, opts ...request.Option) (*RestartSimulationJobOutput, error) {
 	req, out := c.RestartSimulationJobRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opStartSimulationJobBatch = "StartSimulationJobBatch"
+
+// StartSimulationJobBatchRequest generates a "aws/request.Request" representing the
+// client's request for the StartSimulationJobBatch operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StartSimulationJobBatch for more information on using the StartSimulationJobBatch
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StartSimulationJobBatchRequest method.
+//    req, resp := client.StartSimulationJobBatchRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/StartSimulationJobBatch
+func (c *RoboMaker) StartSimulationJobBatchRequest(input *StartSimulationJobBatchInput) (req *request.Request, output *StartSimulationJobBatchOutput) {
+	op := &request.Operation{
+		Name:       opStartSimulationJobBatch,
+		HTTPMethod: "POST",
+		HTTPPath:   "/startSimulationJobBatch",
+	}
+
+	if input == nil {
+		input = &StartSimulationJobBatchInput{}
+	}
+
+	output = &StartSimulationJobBatchOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StartSimulationJobBatch API operation for AWS RoboMaker.
+//
+// Starts a new simulation job batch. The batch is defined using one or more
+// SimulationJobRequest objects.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS RoboMaker's
+// API operation StartSimulationJobBatch for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterException
+//   A parameter specified in a request is not valid, is unsupported, or cannot
+//   be used. The returned message provides an explanation of the error value.
+//
+//   * LimitExceededException
+//   The requested resource exceeds the maximum number allowed, or the number
+//   of concurrent stream requests exceeds the maximum number allowed.
+//
+//   * ThrottlingException
+//   AWS RoboMaker is temporarily unable to process the request. Try your call
+//   again.
+//
+//   * IdempotentParameterMismatchException
+//   The request uses the same client token as a previous, but non-identical request.
+//   Do not reuse a client token with different requests, unless the requests
+//   are identical.
+//
+//   * InternalServerException
+//   AWS RoboMaker experienced a service issue. Try your call again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/StartSimulationJobBatch
+func (c *RoboMaker) StartSimulationJobBatch(input *StartSimulationJobBatchInput) (*StartSimulationJobBatchOutput, error) {
+	req, out := c.StartSimulationJobBatchRequest(input)
+	return out, req.Send()
+}
+
+// StartSimulationJobBatchWithContext is the same as StartSimulationJobBatch with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StartSimulationJobBatch for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RoboMaker) StartSimulationJobBatchWithContext(ctx aws.Context, input *StartSimulationJobBatchInput, opts ...request.Option) (*StartSimulationJobBatchOutput, error) {
+	req, out := c.StartSimulationJobBatchRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -3274,29 +5379,29 @@ func (c *RoboMaker) SyncDeploymentJobRequest(input *SyncDeploymentJobInput) (req
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation SyncDeploymentJob for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+// Returned Error Types:
+//   * ResourceNotFoundException
 //   The specified resource does not exist.
 //
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
-//   * ErrCodeLimitExceededException "LimitExceededException"
+//   * LimitExceededException
 //   The requested resource exceeds the maximum number allowed, or the number
 //   of concurrent stream requests exceeds the maximum number allowed.
 //
-//   * ErrCodeConcurrentDeploymentException "ConcurrentDeploymentException"
+//   * ConcurrentDeploymentException
 //   The failure percentage threshold percentage was met.
 //
-//   * ErrCodeIdempotentParameterMismatchException "IdempotentParameterMismatchException"
+//   * IdempotentParameterMismatchException
 //   The request uses the same client token as a previous, but non-identical request.
 //   Do not reuse a client token with different requests, unless the requests
 //   are identical.
@@ -3384,18 +5489,18 @@ func (c *RoboMaker) TagResourceRequest(input *TagResourceInput) (req *request.Re
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation TagResource for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInternalServerException "InternalServerException"
+// Returned Error Types:
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   * ResourceNotFoundException
 //   The specified resource does not exist.
 //
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
@@ -3478,18 +5583,18 @@ func (c *RoboMaker) UntagResourceRequest(input *UntagResourceInput) (req *reques
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation UntagResource for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInternalServerException "InternalServerException"
+// Returned Error Types:
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   * ResourceNotFoundException
 //   The specified resource does not exist.
 //
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
@@ -3568,23 +5673,23 @@ func (c *RoboMaker) UpdateRobotApplicationRequest(input *UpdateRobotApplicationI
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation UpdateRobotApplication for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+// Returned Error Types:
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   * ResourceNotFoundException
 //   The specified resource does not exist.
 //
-//   * ErrCodeLimitExceededException "LimitExceededException"
+//   * LimitExceededException
 //   The requested resource exceeds the maximum number allowed, or the number
 //   of concurrent stream requests exceeds the maximum number allowed.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/UpdateRobotApplication
@@ -3662,23 +5767,23 @@ func (c *RoboMaker) UpdateSimulationApplicationRequest(input *UpdateSimulationAp
 // See the AWS API reference guide for AWS RoboMaker's
 // API operation UpdateSimulationApplication for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInvalidParameterException "InvalidParameterException"
+// Returned Error Types:
+//   * InvalidParameterException
 //   A parameter specified in a request is not valid, is unsupported, or cannot
 //   be used. The returned message provides an explanation of the error value.
 //
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   * ResourceNotFoundException
 //   The specified resource does not exist.
 //
-//   * ErrCodeLimitExceededException "LimitExceededException"
+//   * LimitExceededException
 //   The requested resource exceeds the maximum number allowed, or the number
 //   of concurrent stream requests exceeds the maximum number allowed.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   AWS RoboMaker is temporarily unable to process the request. Try your call
 //   again.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   AWS RoboMaker experienced a service issue. Try your call again.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/UpdateSimulationApplication
@@ -3701,6 +5806,161 @@ func (c *RoboMaker) UpdateSimulationApplicationWithContext(ctx aws.Context, inpu
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+const opUpdateWorldTemplate = "UpdateWorldTemplate"
+
+// UpdateWorldTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateWorldTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateWorldTemplate for more information on using the UpdateWorldTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateWorldTemplateRequest method.
+//    req, resp := client.UpdateWorldTemplateRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/UpdateWorldTemplate
+func (c *RoboMaker) UpdateWorldTemplateRequest(input *UpdateWorldTemplateInput) (req *request.Request, output *UpdateWorldTemplateOutput) {
+	op := &request.Operation{
+		Name:       opUpdateWorldTemplate,
+		HTTPMethod: "POST",
+		HTTPPath:   "/updateWorldTemplate",
+	}
+
+	if input == nil {
+		input = &UpdateWorldTemplateInput{}
+	}
+
+	output = &UpdateWorldTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateWorldTemplate API operation for AWS RoboMaker.
+//
+// Updates a world template.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS RoboMaker's
+// API operation UpdateWorldTemplate for usage and error information.
+//
+// Returned Error Types:
+//   * InvalidParameterException
+//   A parameter specified in a request is not valid, is unsupported, or cannot
+//   be used. The returned message provides an explanation of the error value.
+//
+//   * ResourceNotFoundException
+//   The specified resource does not exist.
+//
+//   * ThrottlingException
+//   AWS RoboMaker is temporarily unable to process the request. Try your call
+//   again.
+//
+//   * InternalServerException
+//   AWS RoboMaker experienced a service issue. Try your call again.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/robomaker-2018-06-29/UpdateWorldTemplate
+func (c *RoboMaker) UpdateWorldTemplate(input *UpdateWorldTemplateInput) (*UpdateWorldTemplateOutput, error) {
+	req, out := c.UpdateWorldTemplateRequest(input)
+	return out, req.Send()
+}
+
+// UpdateWorldTemplateWithContext is the same as UpdateWorldTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateWorldTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *RoboMaker) UpdateWorldTemplateWithContext(ctx aws.Context, input *UpdateWorldTemplateInput, opts ...request.Option) (*UpdateWorldTemplateOutput, error) {
+	req, out := c.UpdateWorldTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+type BatchDeleteWorldsInput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of Amazon Resource Names (arns) that correspond to worlds to delete.
+	//
+	// Worlds is a required field
+	Worlds []*string `locationName:"worlds" min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s BatchDeleteWorldsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BatchDeleteWorldsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BatchDeleteWorldsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "BatchDeleteWorldsInput"}
+	if s.Worlds == nil {
+		invalidParams.Add(request.NewErrParamRequired("Worlds"))
+	}
+	if s.Worlds != nil && len(s.Worlds) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Worlds", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetWorlds sets the Worlds field's value.
+func (s *BatchDeleteWorldsInput) SetWorlds(v []*string) *BatchDeleteWorldsInput {
+	s.Worlds = v
+	return s
+}
+
+type BatchDeleteWorldsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of unprocessed worlds associated with the call. These worlds were
+	// not deleted.
+	UnprocessedWorlds []*string `locationName:"unprocessedWorlds" min:"1" type:"list"`
+}
+
+// String returns the string representation
+func (s BatchDeleteWorldsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BatchDeleteWorldsOutput) GoString() string {
+	return s.String()
+}
+
+// SetUnprocessedWorlds sets the UnprocessedWorlds field's value.
+func (s *BatchDeleteWorldsOutput) SetUnprocessedWorlds(v []*string) *BatchDeleteWorldsOutput {
+	s.UnprocessedWorlds = v
+	return s
 }
 
 type BatchDescribeSimulationJobInput struct {
@@ -3776,6 +6036,49 @@ func (s *BatchDescribeSimulationJobOutput) SetUnprocessedJobs(v []*string) *Batc
 	return s
 }
 
+// Information about the batch policy.
+type BatchPolicy struct {
+	_ struct{} `type:"structure"`
+
+	// The number of active simulation jobs create as part of the batch that can
+	// be in an active state at the same time.
+	//
+	// Active states include: Pending,Preparing, Running, Restarting, RunningFailed
+	// and Terminating. All other states are terminal states.
+	MaxConcurrency *int64 `locationName:"maxConcurrency" type:"integer"`
+
+	// The amount of time, in seconds, to wait for the batch to complete.
+	//
+	// If a batch times out, and there are pending requests that were failing due
+	// to an internal failure (like InternalServiceError), they will be moved to
+	// the failed list and the batch status will be Failed. If the pending requests
+	// were failing for any other reason, the failed pending requests will be moved
+	// to the failed list and the batch status will be TimedOut.
+	TimeoutInSeconds *int64 `locationName:"timeoutInSeconds" type:"long"`
+}
+
+// String returns the string representation
+func (s BatchPolicy) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BatchPolicy) GoString() string {
+	return s.String()
+}
+
+// SetMaxConcurrency sets the MaxConcurrency field's value.
+func (s *BatchPolicy) SetMaxConcurrency(v int64) *BatchPolicy {
+	s.MaxConcurrency = &v
+	return s
+}
+
+// SetTimeoutInSeconds sets the TimeoutInSeconds field's value.
+func (s *BatchPolicy) SetTimeoutInSeconds(v int64) *BatchPolicy {
+	s.TimeoutInSeconds = &v
+	return s
+}
+
 type CancelDeploymentJobInput struct {
 	_ struct{} `type:"structure"`
 
@@ -3828,6 +6131,61 @@ func (s CancelDeploymentJobOutput) String() string {
 
 // GoString returns the string representation
 func (s CancelDeploymentJobOutput) GoString() string {
+	return s.String()
+}
+
+type CancelSimulationJobBatchInput struct {
+	_ struct{} `type:"structure"`
+
+	// The id of the batch to cancel.
+	//
+	// Batch is a required field
+	Batch *string `locationName:"batch" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s CancelSimulationJobBatchInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CancelSimulationJobBatchInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CancelSimulationJobBatchInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CancelSimulationJobBatchInput"}
+	if s.Batch == nil {
+		invalidParams.Add(request.NewErrParamRequired("Batch"))
+	}
+	if s.Batch != nil && len(*s.Batch) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Batch", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBatch sets the Batch field's value.
+func (s *CancelSimulationJobBatchInput) SetBatch(v string) *CancelSimulationJobBatchInput {
+	s.Batch = &v
+	return s
+}
+
+type CancelSimulationJobBatchOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s CancelSimulationJobBatchOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CancelSimulationJobBatchOutput) GoString() string {
 	return s.String()
 }
 
@@ -3884,6 +6242,239 @@ func (s CancelSimulationJobOutput) String() string {
 // GoString returns the string representation
 func (s CancelSimulationJobOutput) GoString() string {
 	return s.String()
+}
+
+type CancelWorldExportJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (arn) of the world export job to cancel.
+	//
+	// Job is a required field
+	Job *string `locationName:"job" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s CancelWorldExportJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CancelWorldExportJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CancelWorldExportJobInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CancelWorldExportJobInput"}
+	if s.Job == nil {
+		invalidParams.Add(request.NewErrParamRequired("Job"))
+	}
+	if s.Job != nil && len(*s.Job) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Job", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetJob sets the Job field's value.
+func (s *CancelWorldExportJobInput) SetJob(v string) *CancelWorldExportJobInput {
+	s.Job = &v
+	return s
+}
+
+type CancelWorldExportJobOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s CancelWorldExportJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CancelWorldExportJobOutput) GoString() string {
+	return s.String()
+}
+
+type CancelWorldGenerationJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (arn) of the world generator job to cancel.
+	//
+	// Job is a required field
+	Job *string `locationName:"job" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s CancelWorldGenerationJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CancelWorldGenerationJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CancelWorldGenerationJobInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CancelWorldGenerationJobInput"}
+	if s.Job == nil {
+		invalidParams.Add(request.NewErrParamRequired("Job"))
+	}
+	if s.Job != nil && len(*s.Job) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Job", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetJob sets the Job field's value.
+func (s *CancelWorldGenerationJobInput) SetJob(v string) *CancelWorldGenerationJobInput {
+	s.Job = &v
+	return s
+}
+
+type CancelWorldGenerationJobOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s CancelWorldGenerationJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CancelWorldGenerationJobOutput) GoString() string {
+	return s.String()
+}
+
+// Compute information for the simulation job.
+type Compute struct {
+	_ struct{} `type:"structure"`
+
+	// The simulation unit limit. Your simulation is allocated CPU and memory proportional
+	// to the supplied simulation unit limit. A simulation unit is 1 vcpu and 2GB
+	// of memory. You are only billed for the SU utilization you consume up to the
+	// maximim value provided. The default is 15.
+	SimulationUnitLimit *int64 `locationName:"simulationUnitLimit" min:"1" type:"integer"`
+}
+
+// String returns the string representation
+func (s Compute) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Compute) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Compute) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Compute"}
+	if s.SimulationUnitLimit != nil && *s.SimulationUnitLimit < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("SimulationUnitLimit", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetSimulationUnitLimit sets the SimulationUnitLimit field's value.
+func (s *Compute) SetSimulationUnitLimit(v int64) *Compute {
+	s.SimulationUnitLimit = &v
+	return s
+}
+
+// Compute information for the simulation job
+type ComputeResponse struct {
+	_ struct{} `type:"structure"`
+
+	// The simulation unit limit. Your simulation is allocated CPU and memory proportional
+	// to the supplied simulation unit limit. A simulation unit is 1 vcpu and 2GB
+	// of memory. You are only billed for the SU utilization you consume up to the
+	// maximim value provided. The default is 15.
+	SimulationUnitLimit *int64 `locationName:"simulationUnitLimit" min:"1" type:"integer"`
+}
+
+// String returns the string representation
+func (s ComputeResponse) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ComputeResponse) GoString() string {
+	return s.String()
+}
+
+// SetSimulationUnitLimit sets the SimulationUnitLimit field's value.
+func (s *ComputeResponse) SetSimulationUnitLimit(v int64) *ComputeResponse {
+	s.SimulationUnitLimit = &v
+	return s
+}
+
+// The failure percentage threshold percentage was met.
+type ConcurrentDeploymentException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s ConcurrentDeploymentException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ConcurrentDeploymentException) GoString() string {
+	return s.String()
+}
+
+func newErrorConcurrentDeploymentException(v protocol.ResponseMetadata) error {
+	return &ConcurrentDeploymentException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ConcurrentDeploymentException) Code() string {
+	return "ConcurrentDeploymentException"
+}
+
+// Message returns the exception's message.
+func (s *ConcurrentDeploymentException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ConcurrentDeploymentException) OrigErr() error {
+	return nil
+}
+
+func (s *ConcurrentDeploymentException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ConcurrentDeploymentException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ConcurrentDeploymentException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 type CreateDeploymentJobInput struct {
@@ -4251,7 +6842,7 @@ type CreateRobotApplicationInput struct {
 	// Name is a required field
 	Name *string `locationName:"name" min:"1" type:"string" required:"true"`
 
-	// The robot software suite used by the robot application.
+	// The robot software suite (ROS distribuition) used by the robot application.
 	//
 	// RobotSoftwareSuite is a required field
 	RobotSoftwareSuite *RobotSoftwareSuite `locationName:"robotSoftwareSuite" type:"structure" required:"true"`
@@ -4348,7 +6939,7 @@ type CreateRobotApplicationOutput struct {
 	// The revision id of the robot application.
 	RevisionId *string `locationName:"revisionId" min:"1" type:"string"`
 
-	// The robot software suite used by the robot application.
+	// The robot software suite (ROS distribution) used by the robot application.
 	RobotSoftwareSuite *RobotSoftwareSuite `locationName:"robotSoftwareSuite" type:"structure"`
 
 	// The sources of the robot application.
@@ -4489,7 +7080,7 @@ type CreateRobotApplicationVersionOutput struct {
 	// The revision id of the robot application.
 	RevisionId *string `locationName:"revisionId" min:"1" type:"string"`
 
-	// The robot software suite used by the robot application.
+	// The robot software suite (ROS distribution) used by the robot application.
 	RobotSoftwareSuite *RobotSoftwareSuite `locationName:"robotSoftwareSuite" type:"structure"`
 
 	// The sources of the robot application.
@@ -4712,7 +7303,7 @@ type CreateSimulationApplicationInput struct {
 	// The rendering engine for the simulation application.
 	RenderingEngine *RenderingEngine `locationName:"renderingEngine" type:"structure"`
 
-	// The robot software suite of the simulation application.
+	// The robot software suite (ROS distribution) used by the simulation application.
 	//
 	// RobotSoftwareSuite is a required field
 	RobotSoftwareSuite *RobotSoftwareSuite `locationName:"robotSoftwareSuite" type:"structure" required:"true"`
@@ -4759,6 +7350,11 @@ func (s *CreateSimulationApplicationInput) Validate() error {
 	}
 	if s.Sources == nil {
 		invalidParams.Add(request.NewErrParamRequired("Sources"))
+	}
+	if s.RenderingEngine != nil {
+		if err := s.RenderingEngine.Validate(); err != nil {
+			invalidParams.AddNested("RenderingEngine", err.(request.ErrInvalidParams))
+		}
 	}
 	if s.Sources != nil {
 		for i, v := range s.Sources {
@@ -4832,7 +7428,7 @@ type CreateSimulationApplicationOutput struct {
 	// The revision id of the simulation application.
 	RevisionId *string `locationName:"revisionId" min:"1" type:"string"`
 
-	// Information about the robot software suite.
+	// Information about the robot software suite (ROS distribution).
 	RobotSoftwareSuite *RobotSoftwareSuite `locationName:"robotSoftwareSuite" type:"structure"`
 
 	// The simulation software suite used by the simulation application.
@@ -4991,7 +7587,7 @@ type CreateSimulationApplicationVersionOutput struct {
 	// The revision ID of the simulation application.
 	RevisionId *string `locationName:"revisionId" min:"1" type:"string"`
 
-	// Information about the robot software suite.
+	// Information about the robot software suite (ROS distribution).
 	RobotSoftwareSuite *RobotSoftwareSuite `locationName:"robotSoftwareSuite" type:"structure"`
 
 	// The simulation software suite used by the simulation application.
@@ -5075,7 +7671,11 @@ type CreateSimulationJobInput struct {
 	// of the request.
 	ClientRequestToken *string `locationName:"clientRequestToken" min:"1" type:"string" idempotencyToken:"true"`
 
-	// The data sources for the simulation job.
+	// Compute information for the simulation job.
+	Compute *Compute `locationName:"compute" type:"structure"`
+
+	// Specify data sources to mount read-only files from S3 into your simulation.
+	// These files are available under /opt/robomaker/datasources/data_source_name.
 	//
 	// There is a limit of 100 files and a combined size of 25GB for all DataSourceConfig
 	// objects.
@@ -5163,6 +7763,11 @@ func (s *CreateSimulationJobInput) Validate() error {
 	if s.SimulationApplications != nil && len(s.SimulationApplications) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("SimulationApplications", 1))
 	}
+	if s.Compute != nil {
+		if err := s.Compute.Validate(); err != nil {
+			invalidParams.AddNested("Compute", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.DataSources != nil {
 		for i, v := range s.DataSources {
 			if v == nil {
@@ -5218,6 +7823,12 @@ func (s *CreateSimulationJobInput) Validate() error {
 // SetClientRequestToken sets the ClientRequestToken field's value.
 func (s *CreateSimulationJobInput) SetClientRequestToken(v string) *CreateSimulationJobInput {
 	s.ClientRequestToken = &v
+	return s
+}
+
+// SetCompute sets the Compute field's value.
+func (s *CreateSimulationJobInput) SetCompute(v *Compute) *CreateSimulationJobInput {
+	s.Compute = v
 	return s
 }
 
@@ -5290,6 +7901,9 @@ type CreateSimulationJobOutput struct {
 	// Unique, case-sensitive identifier that you provide to ensure the idempotency
 	// of the request.
 	ClientRequestToken *string `locationName:"clientRequestToken" min:"1" type:"string"`
+
+	// Compute information for the simulation job.
+	Compute *ComputeResponse `locationName:"compute" type:"structure"`
 
 	// The data sources for the simulation job.
 	DataSources []*DataSource `locationName:"dataSources" type:"list"`
@@ -5420,6 +8034,12 @@ func (s *CreateSimulationJobOutput) SetClientRequestToken(v string) *CreateSimul
 	return s
 }
 
+// SetCompute sets the Compute field's value.
+func (s *CreateSimulationJobOutput) SetCompute(v *ComputeResponse) *CreateSimulationJobOutput {
+	s.Compute = v
+	return s
+}
+
 // SetDataSources sets the DataSources field's value.
 func (s *CreateSimulationJobOutput) SetDataSources(v []*DataSource) *CreateSimulationJobOutput {
 	s.DataSources = v
@@ -5507,6 +8127,602 @@ func (s *CreateSimulationJobOutput) SetTags(v map[string]*string) *CreateSimulat
 // SetVpcConfig sets the VpcConfig field's value.
 func (s *CreateSimulationJobOutput) SetVpcConfig(v *VPCConfigResponse) *CreateSimulationJobOutput {
 	s.VpcConfig = v
+	return s
+}
+
+type CreateWorldExportJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// Unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	ClientRequestToken *string `locationName:"clientRequestToken" min:"1" type:"string" idempotencyToken:"true"`
+
+	// The IAM role that the world export process uses to access the Amazon S3 bucket
+	// and put the export.
+	//
+	// IamRole is a required field
+	IamRole *string `locationName:"iamRole" min:"1" type:"string" required:"true"`
+
+	// The output location.
+	//
+	// OutputLocation is a required field
+	OutputLocation *OutputLocation `locationName:"outputLocation" type:"structure" required:"true"`
+
+	// A map that contains tag keys and tag values that are attached to the world
+	// export job.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// A list of Amazon Resource Names (arns) that correspond to worlds to export.
+	//
+	// Worlds is a required field
+	Worlds []*string `locationName:"worlds" min:"1" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s CreateWorldExportJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateWorldExportJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateWorldExportJobInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateWorldExportJobInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
+	if s.IamRole == nil {
+		invalidParams.Add(request.NewErrParamRequired("IamRole"))
+	}
+	if s.IamRole != nil && len(*s.IamRole) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IamRole", 1))
+	}
+	if s.OutputLocation == nil {
+		invalidParams.Add(request.NewErrParamRequired("OutputLocation"))
+	}
+	if s.Worlds == nil {
+		invalidParams.Add(request.NewErrParamRequired("Worlds"))
+	}
+	if s.Worlds != nil && len(s.Worlds) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Worlds", 1))
+	}
+	if s.OutputLocation != nil {
+		if err := s.OutputLocation.Validate(); err != nil {
+			invalidParams.AddNested("OutputLocation", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *CreateWorldExportJobInput) SetClientRequestToken(v string) *CreateWorldExportJobInput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetIamRole sets the IamRole field's value.
+func (s *CreateWorldExportJobInput) SetIamRole(v string) *CreateWorldExportJobInput {
+	s.IamRole = &v
+	return s
+}
+
+// SetOutputLocation sets the OutputLocation field's value.
+func (s *CreateWorldExportJobInput) SetOutputLocation(v *OutputLocation) *CreateWorldExportJobInput {
+	s.OutputLocation = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateWorldExportJobInput) SetTags(v map[string]*string) *CreateWorldExportJobInput {
+	s.Tags = v
+	return s
+}
+
+// SetWorlds sets the Worlds field's value.
+func (s *CreateWorldExportJobInput) SetWorlds(v []*string) *CreateWorldExportJobInput {
+	s.Worlds = v
+	return s
+}
+
+type CreateWorldExportJobOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the world export job.
+	Arn *string `locationName:"arn" min:"1" type:"string"`
+
+	// Unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	ClientRequestToken *string `locationName:"clientRequestToken" min:"1" type:"string"`
+
+	// The time, in milliseconds since the epoch, when the world export job was
+	// created.
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
+
+	// The failure code of the world export job if it failed:
+	//
+	// InternalServiceError
+	//
+	// Internal service error.
+	//
+	// LimitExceeded
+	//
+	// The requested resource exceeds the maximum number allowed, or the number
+	// of concurrent stream requests exceeds the maximum number allowed.
+	//
+	// ResourceNotFound
+	//
+	// The specified resource could not be found.
+	//
+	// RequestThrottled
+	//
+	// The request was throttled.
+	//
+	// InvalidInput
+	//
+	// An input parameter in the request is not valid.
+	FailureCode *string `locationName:"failureCode" type:"string" enum:"WorldExportJobErrorCode"`
+
+	// The IAM role that the world export process uses to access the Amazon S3 bucket
+	// and put the export.
+	IamRole *string `locationName:"iamRole" min:"1" type:"string"`
+
+	// The output location.
+	OutputLocation *OutputLocation `locationName:"outputLocation" type:"structure"`
+
+	// The status of the world export job.
+	//
+	// Pending
+	//
+	// The world export job request is pending.
+	//
+	// Running
+	//
+	// The world export job is running.
+	//
+	// Completed
+	//
+	// The world export job completed.
+	//
+	// Failed
+	//
+	// The world export job failed. See failureCode for more information.
+	//
+	// Canceled
+	//
+	// The world export job was cancelled.
+	//
+	// Canceling
+	//
+	// The world export job is being cancelled.
+	Status *string `locationName:"status" type:"string" enum:"WorldExportJobStatus"`
+
+	// A map that contains tag keys and tag values that are attached to the world
+	// export job.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation
+func (s CreateWorldExportJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateWorldExportJobOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *CreateWorldExportJobOutput) SetArn(v string) *CreateWorldExportJobOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *CreateWorldExportJobOutput) SetClientRequestToken(v string) *CreateWorldExportJobOutput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *CreateWorldExportJobOutput) SetCreatedAt(v time.Time) *CreateWorldExportJobOutput {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetFailureCode sets the FailureCode field's value.
+func (s *CreateWorldExportJobOutput) SetFailureCode(v string) *CreateWorldExportJobOutput {
+	s.FailureCode = &v
+	return s
+}
+
+// SetIamRole sets the IamRole field's value.
+func (s *CreateWorldExportJobOutput) SetIamRole(v string) *CreateWorldExportJobOutput {
+	s.IamRole = &v
+	return s
+}
+
+// SetOutputLocation sets the OutputLocation field's value.
+func (s *CreateWorldExportJobOutput) SetOutputLocation(v *OutputLocation) *CreateWorldExportJobOutput {
+	s.OutputLocation = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *CreateWorldExportJobOutput) SetStatus(v string) *CreateWorldExportJobOutput {
+	s.Status = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateWorldExportJobOutput) SetTags(v map[string]*string) *CreateWorldExportJobOutput {
+	s.Tags = v
+	return s
+}
+
+type CreateWorldGenerationJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// Unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	ClientRequestToken *string `locationName:"clientRequestToken" min:"1" type:"string" idempotencyToken:"true"`
+
+	// A map that contains tag keys and tag values that are attached to the world
+	// generator job.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// The Amazon Resource Name (arn) of the world template describing the worlds
+	// you want to create.
+	//
+	// Template is a required field
+	Template *string `locationName:"template" min:"1" type:"string" required:"true"`
+
+	// Information about the world count.
+	//
+	// WorldCount is a required field
+	WorldCount *WorldCount `locationName:"worldCount" type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s CreateWorldGenerationJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateWorldGenerationJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateWorldGenerationJobInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateWorldGenerationJobInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
+	if s.Template == nil {
+		invalidParams.Add(request.NewErrParamRequired("Template"))
+	}
+	if s.Template != nil && len(*s.Template) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Template", 1))
+	}
+	if s.WorldCount == nil {
+		invalidParams.Add(request.NewErrParamRequired("WorldCount"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *CreateWorldGenerationJobInput) SetClientRequestToken(v string) *CreateWorldGenerationJobInput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateWorldGenerationJobInput) SetTags(v map[string]*string) *CreateWorldGenerationJobInput {
+	s.Tags = v
+	return s
+}
+
+// SetTemplate sets the Template field's value.
+func (s *CreateWorldGenerationJobInput) SetTemplate(v string) *CreateWorldGenerationJobInput {
+	s.Template = &v
+	return s
+}
+
+// SetWorldCount sets the WorldCount field's value.
+func (s *CreateWorldGenerationJobInput) SetWorldCount(v *WorldCount) *CreateWorldGenerationJobInput {
+	s.WorldCount = v
+	return s
+}
+
+type CreateWorldGenerationJobOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the world generator job.
+	Arn *string `locationName:"arn" min:"1" type:"string"`
+
+	// Unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	ClientRequestToken *string `locationName:"clientRequestToken" min:"1" type:"string"`
+
+	// The time, in milliseconds since the epoch, when the world generator job was
+	// created.
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
+
+	// The failure code of the world generator job if it failed:
+	//
+	// InternalServiceError
+	//
+	// Internal service error.
+	//
+	// LimitExceeded
+	//
+	// The requested resource exceeds the maximum number allowed, or the number
+	// of concurrent stream requests exceeds the maximum number allowed.
+	//
+	// ResourceNotFound
+	//
+	// The specified resource could not be found.
+	//
+	// RequestThrottled
+	//
+	// The request was throttled.
+	//
+	// InvalidInput
+	//
+	// An input parameter in the request is not valid.
+	FailureCode *string `locationName:"failureCode" type:"string" enum:"WorldGenerationJobErrorCode"`
+
+	// The status of the world generator job.
+	//
+	// Pending
+	//
+	// The world generator job request is pending.
+	//
+	// Running
+	//
+	// The world generator job is running.
+	//
+	// Completed
+	//
+	// The world generator job completed.
+	//
+	// Failed
+	//
+	// The world generator job failed. See failureCode for more information.
+	//
+	// PartialFailed
+	//
+	// Some worlds did not generate.
+	//
+	// Canceled
+	//
+	// The world generator job was cancelled.
+	//
+	// Canceling
+	//
+	// The world generator job is being cancelled.
+	Status *string `locationName:"status" type:"string" enum:"WorldGenerationJobStatus"`
+
+	// A map that contains tag keys and tag values that are attached to the world
+	// generator job.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// The Amazon Resource Name (arn) of the world template.
+	Template *string `locationName:"template" min:"1" type:"string"`
+
+	// Information about the world count.
+	WorldCount *WorldCount `locationName:"worldCount" type:"structure"`
+}
+
+// String returns the string representation
+func (s CreateWorldGenerationJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateWorldGenerationJobOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *CreateWorldGenerationJobOutput) SetArn(v string) *CreateWorldGenerationJobOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *CreateWorldGenerationJobOutput) SetClientRequestToken(v string) *CreateWorldGenerationJobOutput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *CreateWorldGenerationJobOutput) SetCreatedAt(v time.Time) *CreateWorldGenerationJobOutput {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetFailureCode sets the FailureCode field's value.
+func (s *CreateWorldGenerationJobOutput) SetFailureCode(v string) *CreateWorldGenerationJobOutput {
+	s.FailureCode = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *CreateWorldGenerationJobOutput) SetStatus(v string) *CreateWorldGenerationJobOutput {
+	s.Status = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateWorldGenerationJobOutput) SetTags(v map[string]*string) *CreateWorldGenerationJobOutput {
+	s.Tags = v
+	return s
+}
+
+// SetTemplate sets the Template field's value.
+func (s *CreateWorldGenerationJobOutput) SetTemplate(v string) *CreateWorldGenerationJobOutput {
+	s.Template = &v
+	return s
+}
+
+// SetWorldCount sets the WorldCount field's value.
+func (s *CreateWorldGenerationJobOutput) SetWorldCount(v *WorldCount) *CreateWorldGenerationJobOutput {
+	s.WorldCount = v
+	return s
+}
+
+type CreateWorldTemplateInput struct {
+	_ struct{} `type:"structure"`
+
+	// Unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	ClientRequestToken *string `locationName:"clientRequestToken" min:"1" type:"string"`
+
+	// The name of the world template.
+	Name *string `locationName:"name" type:"string"`
+
+	// A map that contains tag keys and tag values that are attached to the world
+	// template.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// The world template body.
+	TemplateBody *string `locationName:"templateBody" min:"1" type:"string"`
+
+	// The location of the world template.
+	TemplateLocation *TemplateLocation `locationName:"templateLocation" type:"structure"`
+}
+
+// String returns the string representation
+func (s CreateWorldTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateWorldTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateWorldTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateWorldTemplateInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
+	if s.TemplateBody != nil && len(*s.TemplateBody) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TemplateBody", 1))
+	}
+	if s.TemplateLocation != nil {
+		if err := s.TemplateLocation.Validate(); err != nil {
+			invalidParams.AddNested("TemplateLocation", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *CreateWorldTemplateInput) SetClientRequestToken(v string) *CreateWorldTemplateInput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateWorldTemplateInput) SetName(v string) *CreateWorldTemplateInput {
+	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateWorldTemplateInput) SetTags(v map[string]*string) *CreateWorldTemplateInput {
+	s.Tags = v
+	return s
+}
+
+// SetTemplateBody sets the TemplateBody field's value.
+func (s *CreateWorldTemplateInput) SetTemplateBody(v string) *CreateWorldTemplateInput {
+	s.TemplateBody = &v
+	return s
+}
+
+// SetTemplateLocation sets the TemplateLocation field's value.
+func (s *CreateWorldTemplateInput) SetTemplateLocation(v *TemplateLocation) *CreateWorldTemplateInput {
+	s.TemplateLocation = v
+	return s
+}
+
+type CreateWorldTemplateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the world template.
+	Arn *string `locationName:"arn" min:"1" type:"string"`
+
+	// Unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	ClientRequestToken *string `locationName:"clientRequestToken" min:"1" type:"string"`
+
+	// The time, in milliseconds since the epoch, when the world template was created.
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
+
+	// The name of the world template.
+	Name *string `locationName:"name" type:"string"`
+
+	// A map that contains tag keys and tag values that are attached to the world
+	// template.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation
+func (s CreateWorldTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateWorldTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *CreateWorldTemplateOutput) SetArn(v string) *CreateWorldTemplateOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *CreateWorldTemplateOutput) SetClientRequestToken(v string) *CreateWorldTemplateOutput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *CreateWorldTemplateOutput) SetCreatedAt(v time.Time) *CreateWorldTemplateOutput {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *CreateWorldTemplateOutput) SetName(v string) *CreateWorldTemplateOutput {
+	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateWorldTemplateOutput) SetTags(v map[string]*string) *CreateWorldTemplateOutput {
+	s.Tags = v
 	return s
 }
 
@@ -5869,6 +9085,61 @@ func (s DeleteSimulationApplicationOutput) String() string {
 
 // GoString returns the string representation
 func (s DeleteSimulationApplicationOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteWorldTemplateInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (arn) of the world template you want to delete.
+	//
+	// Template is a required field
+	Template *string `locationName:"template" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteWorldTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteWorldTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteWorldTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteWorldTemplateInput"}
+	if s.Template == nil {
+		invalidParams.Add(request.NewErrParamRequired("Template"))
+	}
+	if s.Template != nil && len(*s.Template) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Template", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetTemplate sets the Template field's value.
+func (s *DeleteWorldTemplateInput) SetTemplate(v string) *DeleteWorldTemplateInput {
+	s.Template = &v
+	return s
+}
+
+type DeleteWorldTemplateOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteWorldTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteWorldTemplateOutput) GoString() string {
 	return s.String()
 }
 
@@ -6637,7 +9908,7 @@ type DescribeRobotApplicationOutput struct {
 	// The revision id of the robot application.
 	RevisionId *string `locationName:"revisionId" min:"1" type:"string"`
 
-	// The robot software suite used by the robot application.
+	// The robot software suite (ROS distribution) used by the robot application.
 	RobotSoftwareSuite *RobotSoftwareSuite `locationName:"robotSoftwareSuite" type:"structure"`
 
 	// The sources of the robot application.
@@ -6925,7 +10196,7 @@ type DescribeSimulationApplicationOutput struct {
 	// The revision id of the simulation application.
 	RevisionId *string `locationName:"revisionId" min:"1" type:"string"`
 
-	// Information about the robot software suite.
+	// Information about the robot software suite (ROS distribution).
 	RobotSoftwareSuite *RobotSoftwareSuite `locationName:"robotSoftwareSuite" type:"structure"`
 
 	// The simulation software suite used by the simulation application.
@@ -7011,6 +10282,222 @@ func (s *DescribeSimulationApplicationOutput) SetVersion(v string) *DescribeSimu
 	return s
 }
 
+type DescribeSimulationJobBatchInput struct {
+	_ struct{} `type:"structure"`
+
+	// The id of the batch to describe.
+	//
+	// Batch is a required field
+	Batch *string `locationName:"batch" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeSimulationJobBatchInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeSimulationJobBatchInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeSimulationJobBatchInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeSimulationJobBatchInput"}
+	if s.Batch == nil {
+		invalidParams.Add(request.NewErrParamRequired("Batch"))
+	}
+	if s.Batch != nil && len(*s.Batch) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Batch", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBatch sets the Batch field's value.
+func (s *DescribeSimulationJobBatchInput) SetBatch(v string) *DescribeSimulationJobBatchInput {
+	s.Batch = &v
+	return s
+}
+
+type DescribeSimulationJobBatchOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the batch.
+	Arn *string `locationName:"arn" min:"1" type:"string"`
+
+	// The batch policy.
+	BatchPolicy *BatchPolicy `locationName:"batchPolicy" type:"structure"`
+
+	// Unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	ClientRequestToken *string `locationName:"clientRequestToken" min:"1" type:"string"`
+
+	// The time, in milliseconds since the epoch, when the simulation job batch
+	// was created.
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
+
+	// A list of created simulation job summaries.
+	CreatedRequests []*SimulationJobSummary `locationName:"createdRequests" type:"list"`
+
+	// A list of failed create simulation job requests. The request failed to be
+	// created into a simulation job. Failed requests do not have a simulation job
+	// ID.
+	FailedRequests []*FailedCreateSimulationJobRequest `locationName:"failedRequests" type:"list"`
+
+	// The failure code of the simulation job batch.
+	FailureCode *string `locationName:"failureCode" type:"string" enum:"SimulationJobBatchErrorCode"`
+
+	// The reason the simulation job batch failed.
+	FailureReason *string `locationName:"failureReason" type:"string"`
+
+	// The time, in milliseconds since the epoch, when the simulation job batch
+	// was last updated.
+	LastUpdatedAt *time.Time `locationName:"lastUpdatedAt" type:"timestamp"`
+
+	// A list of pending simulation job requests. These requests have not yet been
+	// created into simulation jobs.
+	PendingRequests []*SimulationJobRequest `locationName:"pendingRequests" min:"1" type:"list"`
+
+	// The status of the batch.
+	//
+	// Pending
+	//
+	// The simulation job batch request is pending.
+	//
+	// InProgress
+	//
+	// The simulation job batch is in progress.
+	//
+	// Failed
+	//
+	// The simulation job batch failed. One or more simulation job requests could
+	// not be completed due to an internal failure (like InternalServiceError).
+	// See failureCode and failureReason for more information.
+	//
+	// Completed
+	//
+	// The simulation batch job completed. A batch is complete when (1) there are
+	// no pending simulation job requests in the batch and none of the failed simulation
+	// job requests are due to InternalServiceError and (2) when all created simulation
+	// jobs have reached a terminal state (for example, Completed or Failed).
+	//
+	// Canceled
+	//
+	// The simulation batch job was cancelled.
+	//
+	// Canceling
+	//
+	// The simulation batch job is being cancelled.
+	//
+	// Completing
+	//
+	// The simulation batch job is completing.
+	//
+	// TimingOut
+	//
+	// The simulation job batch is timing out.
+	//
+	// If a batch timing out, and there are pending requests that were failing due
+	// to an internal failure (like InternalServiceError), the batch status will
+	// be Failed. If there are no such failing request, the batch status will be
+	// TimedOut.
+	//
+	// TimedOut
+	//
+	// The simulation batch job timed out.
+	Status *string `locationName:"status" type:"string" enum:"SimulationJobBatchStatus"`
+
+	// A map that contains tag keys and tag values that are attached to the simulation
+	// job batch.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation
+func (s DescribeSimulationJobBatchOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeSimulationJobBatchOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *DescribeSimulationJobBatchOutput) SetArn(v string) *DescribeSimulationJobBatchOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetBatchPolicy sets the BatchPolicy field's value.
+func (s *DescribeSimulationJobBatchOutput) SetBatchPolicy(v *BatchPolicy) *DescribeSimulationJobBatchOutput {
+	s.BatchPolicy = v
+	return s
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *DescribeSimulationJobBatchOutput) SetClientRequestToken(v string) *DescribeSimulationJobBatchOutput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *DescribeSimulationJobBatchOutput) SetCreatedAt(v time.Time) *DescribeSimulationJobBatchOutput {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetCreatedRequests sets the CreatedRequests field's value.
+func (s *DescribeSimulationJobBatchOutput) SetCreatedRequests(v []*SimulationJobSummary) *DescribeSimulationJobBatchOutput {
+	s.CreatedRequests = v
+	return s
+}
+
+// SetFailedRequests sets the FailedRequests field's value.
+func (s *DescribeSimulationJobBatchOutput) SetFailedRequests(v []*FailedCreateSimulationJobRequest) *DescribeSimulationJobBatchOutput {
+	s.FailedRequests = v
+	return s
+}
+
+// SetFailureCode sets the FailureCode field's value.
+func (s *DescribeSimulationJobBatchOutput) SetFailureCode(v string) *DescribeSimulationJobBatchOutput {
+	s.FailureCode = &v
+	return s
+}
+
+// SetFailureReason sets the FailureReason field's value.
+func (s *DescribeSimulationJobBatchOutput) SetFailureReason(v string) *DescribeSimulationJobBatchOutput {
+	s.FailureReason = &v
+	return s
+}
+
+// SetLastUpdatedAt sets the LastUpdatedAt field's value.
+func (s *DescribeSimulationJobBatchOutput) SetLastUpdatedAt(v time.Time) *DescribeSimulationJobBatchOutput {
+	s.LastUpdatedAt = &v
+	return s
+}
+
+// SetPendingRequests sets the PendingRequests field's value.
+func (s *DescribeSimulationJobBatchOutput) SetPendingRequests(v []*SimulationJobRequest) *DescribeSimulationJobBatchOutput {
+	s.PendingRequests = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *DescribeSimulationJobBatchOutput) SetStatus(v string) *DescribeSimulationJobBatchOutput {
+	s.Status = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *DescribeSimulationJobBatchOutput) SetTags(v map[string]*string) *DescribeSimulationJobBatchOutput {
+	s.Tags = v
+	return s
+}
+
 type DescribeSimulationJobInput struct {
 	_ struct{} `type:"structure"`
 
@@ -7061,6 +10548,9 @@ type DescribeSimulationJobOutput struct {
 	// Unique, case-sensitive identifier that you provide to ensure the idempotency
 	// of the request.
 	ClientRequestToken *string `locationName:"clientRequestToken" min:"1" type:"string"`
+
+	// Compute information for the simulation job.
+	Compute *ComputeResponse `locationName:"compute" type:"structure"`
 
 	// The data sources for the simulation job.
 	DataSources []*DataSource `locationName:"dataSources" type:"list"`
@@ -7202,6 +10692,12 @@ func (s *DescribeSimulationJobOutput) SetClientRequestToken(v string) *DescribeS
 	return s
 }
 
+// SetCompute sets the Compute field's value.
+func (s *DescribeSimulationJobOutput) SetCompute(v *ComputeResponse) *DescribeSimulationJobOutput {
+	s.Compute = v
+	return s
+}
+
 // SetDataSources sets the DataSources field's value.
 func (s *DescribeSimulationJobOutput) SetDataSources(v []*DataSource) *DescribeSimulationJobOutput {
 	s.DataSources = v
@@ -7310,6 +10806,695 @@ func (s *DescribeSimulationJobOutput) SetVpcConfig(v *VPCConfigResponse) *Descri
 	return s
 }
 
+type DescribeWorldExportJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (arn) of the world export job to describe.
+	//
+	// Job is a required field
+	Job *string `locationName:"job" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeWorldExportJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeWorldExportJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeWorldExportJobInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeWorldExportJobInput"}
+	if s.Job == nil {
+		invalidParams.Add(request.NewErrParamRequired("Job"))
+	}
+	if s.Job != nil && len(*s.Job) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Job", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetJob sets the Job field's value.
+func (s *DescribeWorldExportJobInput) SetJob(v string) *DescribeWorldExportJobInput {
+	s.Job = &v
+	return s
+}
+
+type DescribeWorldExportJobOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the world export job.
+	Arn *string `locationName:"arn" min:"1" type:"string"`
+
+	// Unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	ClientRequestToken *string `locationName:"clientRequestToken" min:"1" type:"string"`
+
+	// The time, in milliseconds since the epoch, when the world export job was
+	// created.
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
+
+	// The failure code of the world export job if it failed:
+	//
+	// InternalServiceError
+	//
+	// Internal service error.
+	//
+	// LimitExceeded
+	//
+	// The requested resource exceeds the maximum number allowed, or the number
+	// of concurrent stream requests exceeds the maximum number allowed.
+	//
+	// ResourceNotFound
+	//
+	// The specified resource could not be found.
+	//
+	// RequestThrottled
+	//
+	// The request was throttled.
+	//
+	// InvalidInput
+	//
+	// An input parameter in the request is not valid.
+	FailureCode *string `locationName:"failureCode" type:"string" enum:"WorldExportJobErrorCode"`
+
+	// The reason why the world export job failed.
+	FailureReason *string `locationName:"failureReason" type:"string"`
+
+	// The IAM role that the world export process uses to access the Amazon S3 bucket
+	// and put the export.
+	IamRole *string `locationName:"iamRole" min:"1" type:"string"`
+
+	// The output location.
+	OutputLocation *OutputLocation `locationName:"outputLocation" type:"structure"`
+
+	// The status of the world export job.
+	//
+	// Pending
+	//
+	// The world export job request is pending.
+	//
+	// Running
+	//
+	// The world export job is running.
+	//
+	// Completed
+	//
+	// The world export job completed.
+	//
+	// Failed
+	//
+	// The world export job failed. See failureCode and failureReason for more information.
+	//
+	// Canceled
+	//
+	// The world export job was cancelled.
+	//
+	// Canceling
+	//
+	// The world export job is being cancelled.
+	Status *string `locationName:"status" type:"string" enum:"WorldExportJobStatus"`
+
+	// A map that contains tag keys and tag values that are attached to the world
+	// export job.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// A list of Amazon Resource Names (arns) that correspond to worlds to be exported.
+	Worlds []*string `locationName:"worlds" min:"1" type:"list"`
+}
+
+// String returns the string representation
+func (s DescribeWorldExportJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeWorldExportJobOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *DescribeWorldExportJobOutput) SetArn(v string) *DescribeWorldExportJobOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *DescribeWorldExportJobOutput) SetClientRequestToken(v string) *DescribeWorldExportJobOutput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *DescribeWorldExportJobOutput) SetCreatedAt(v time.Time) *DescribeWorldExportJobOutput {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetFailureCode sets the FailureCode field's value.
+func (s *DescribeWorldExportJobOutput) SetFailureCode(v string) *DescribeWorldExportJobOutput {
+	s.FailureCode = &v
+	return s
+}
+
+// SetFailureReason sets the FailureReason field's value.
+func (s *DescribeWorldExportJobOutput) SetFailureReason(v string) *DescribeWorldExportJobOutput {
+	s.FailureReason = &v
+	return s
+}
+
+// SetIamRole sets the IamRole field's value.
+func (s *DescribeWorldExportJobOutput) SetIamRole(v string) *DescribeWorldExportJobOutput {
+	s.IamRole = &v
+	return s
+}
+
+// SetOutputLocation sets the OutputLocation field's value.
+func (s *DescribeWorldExportJobOutput) SetOutputLocation(v *OutputLocation) *DescribeWorldExportJobOutput {
+	s.OutputLocation = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *DescribeWorldExportJobOutput) SetStatus(v string) *DescribeWorldExportJobOutput {
+	s.Status = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *DescribeWorldExportJobOutput) SetTags(v map[string]*string) *DescribeWorldExportJobOutput {
+	s.Tags = v
+	return s
+}
+
+// SetWorlds sets the Worlds field's value.
+func (s *DescribeWorldExportJobOutput) SetWorlds(v []*string) *DescribeWorldExportJobOutput {
+	s.Worlds = v
+	return s
+}
+
+type DescribeWorldGenerationJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (arn) of the world generation job to describe.
+	//
+	// Job is a required field
+	Job *string `locationName:"job" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeWorldGenerationJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeWorldGenerationJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeWorldGenerationJobInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeWorldGenerationJobInput"}
+	if s.Job == nil {
+		invalidParams.Add(request.NewErrParamRequired("Job"))
+	}
+	if s.Job != nil && len(*s.Job) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Job", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetJob sets the Job field's value.
+func (s *DescribeWorldGenerationJobInput) SetJob(v string) *DescribeWorldGenerationJobInput {
+	s.Job = &v
+	return s
+}
+
+type DescribeWorldGenerationJobOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the world generation job.
+	Arn *string `locationName:"arn" min:"1" type:"string"`
+
+	// Unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	ClientRequestToken *string `locationName:"clientRequestToken" min:"1" type:"string"`
+
+	// The time, in milliseconds since the epoch, when the world generation job
+	// was created.
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
+
+	// The failure code of the world generation job if it failed:
+	//
+	// InternalServiceError
+	//
+	// Internal service error.
+	//
+	// LimitExceeded
+	//
+	// The requested resource exceeds the maximum number allowed, or the number
+	// of concurrent stream requests exceeds the maximum number allowed.
+	//
+	// ResourceNotFound
+	//
+	// The specified resource could not be found.
+	//
+	// RequestThrottled
+	//
+	// The request was throttled.
+	//
+	// InvalidInput
+	//
+	// An input parameter in the request is not valid.
+	FailureCode *string `locationName:"failureCode" type:"string" enum:"WorldGenerationJobErrorCode"`
+
+	// The reason why the world generation job failed.
+	FailureReason *string `locationName:"failureReason" type:"string"`
+
+	// Summary information about finished worlds.
+	FinishedWorldsSummary *FinishedWorldsSummary `locationName:"finishedWorldsSummary" type:"structure"`
+
+	// The status of the world generation job:
+	//
+	// Pending
+	//
+	// The world generation job request is pending.
+	//
+	// Running
+	//
+	// The world generation job is running.
+	//
+	// Completed
+	//
+	// The world generation job completed.
+	//
+	// Failed
+	//
+	// The world generation job failed. See failureCode for more information.
+	//
+	// PartialFailed
+	//
+	// Some worlds did not generate.
+	//
+	// Canceled
+	//
+	// The world generation job was cancelled.
+	//
+	// Canceling
+	//
+	// The world generation job is being cancelled.
+	Status *string `locationName:"status" type:"string" enum:"WorldGenerationJobStatus"`
+
+	// A map that contains tag keys and tag values that are attached to the world
+	// generation job.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// The Amazon Resource Name (arn) of the world template.
+	Template *string `locationName:"template" min:"1" type:"string"`
+
+	// Information about the world count.
+	WorldCount *WorldCount `locationName:"worldCount" type:"structure"`
+}
+
+// String returns the string representation
+func (s DescribeWorldGenerationJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeWorldGenerationJobOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *DescribeWorldGenerationJobOutput) SetArn(v string) *DescribeWorldGenerationJobOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *DescribeWorldGenerationJobOutput) SetClientRequestToken(v string) *DescribeWorldGenerationJobOutput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *DescribeWorldGenerationJobOutput) SetCreatedAt(v time.Time) *DescribeWorldGenerationJobOutput {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetFailureCode sets the FailureCode field's value.
+func (s *DescribeWorldGenerationJobOutput) SetFailureCode(v string) *DescribeWorldGenerationJobOutput {
+	s.FailureCode = &v
+	return s
+}
+
+// SetFailureReason sets the FailureReason field's value.
+func (s *DescribeWorldGenerationJobOutput) SetFailureReason(v string) *DescribeWorldGenerationJobOutput {
+	s.FailureReason = &v
+	return s
+}
+
+// SetFinishedWorldsSummary sets the FinishedWorldsSummary field's value.
+func (s *DescribeWorldGenerationJobOutput) SetFinishedWorldsSummary(v *FinishedWorldsSummary) *DescribeWorldGenerationJobOutput {
+	s.FinishedWorldsSummary = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *DescribeWorldGenerationJobOutput) SetStatus(v string) *DescribeWorldGenerationJobOutput {
+	s.Status = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *DescribeWorldGenerationJobOutput) SetTags(v map[string]*string) *DescribeWorldGenerationJobOutput {
+	s.Tags = v
+	return s
+}
+
+// SetTemplate sets the Template field's value.
+func (s *DescribeWorldGenerationJobOutput) SetTemplate(v string) *DescribeWorldGenerationJobOutput {
+	s.Template = &v
+	return s
+}
+
+// SetWorldCount sets the WorldCount field's value.
+func (s *DescribeWorldGenerationJobOutput) SetWorldCount(v *WorldCount) *DescribeWorldGenerationJobOutput {
+	s.WorldCount = v
+	return s
+}
+
+type DescribeWorldInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (arn) of the world you want to describe.
+	//
+	// World is a required field
+	World *string `locationName:"world" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeWorldInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeWorldInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeWorldInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeWorldInput"}
+	if s.World == nil {
+		invalidParams.Add(request.NewErrParamRequired("World"))
+	}
+	if s.World != nil && len(*s.World) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("World", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetWorld sets the World field's value.
+func (s *DescribeWorldInput) SetWorld(v string) *DescribeWorldInput {
+	s.World = &v
+	return s
+}
+
+type DescribeWorldOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (arn) of the world.
+	Arn *string `locationName:"arn" min:"1" type:"string"`
+
+	// The time, in milliseconds since the epoch, when the world was created.
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
+
+	// The Amazon Resource Name (arn) of the world generation job that generated
+	// the world.
+	GenerationJob *string `locationName:"generationJob" min:"1" type:"string"`
+
+	// A map that contains tag keys and tag values that are attached to the world.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// The world template.
+	Template *string `locationName:"template" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeWorldOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeWorldOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *DescribeWorldOutput) SetArn(v string) *DescribeWorldOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *DescribeWorldOutput) SetCreatedAt(v time.Time) *DescribeWorldOutput {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetGenerationJob sets the GenerationJob field's value.
+func (s *DescribeWorldOutput) SetGenerationJob(v string) *DescribeWorldOutput {
+	s.GenerationJob = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *DescribeWorldOutput) SetTags(v map[string]*string) *DescribeWorldOutput {
+	s.Tags = v
+	return s
+}
+
+// SetTemplate sets the Template field's value.
+func (s *DescribeWorldOutput) SetTemplate(v string) *DescribeWorldOutput {
+	s.Template = &v
+	return s
+}
+
+type DescribeWorldTemplateInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (arn) of the world template you want to describe.
+	//
+	// Template is a required field
+	Template *string `locationName:"template" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeWorldTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeWorldTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeWorldTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeWorldTemplateInput"}
+	if s.Template == nil {
+		invalidParams.Add(request.NewErrParamRequired("Template"))
+	}
+	if s.Template != nil && len(*s.Template) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Template", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetTemplate sets the Template field's value.
+func (s *DescribeWorldTemplateInput) SetTemplate(v string) *DescribeWorldTemplateInput {
+	s.Template = &v
+	return s
+}
+
+type DescribeWorldTemplateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the world template.
+	Arn *string `locationName:"arn" min:"1" type:"string"`
+
+	// Unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	ClientRequestToken *string `locationName:"clientRequestToken" min:"1" type:"string"`
+
+	// The time, in milliseconds since the epoch, when the world template was created.
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
+
+	// The time, in milliseconds since the epoch, when the world template was last
+	// updated.
+	LastUpdatedAt *time.Time `locationName:"lastUpdatedAt" type:"timestamp"`
+
+	// The name of the world template.
+	Name *string `locationName:"name" type:"string"`
+
+	// A map that contains tag keys and tag values that are attached to the world
+	// template.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation
+func (s DescribeWorldTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeWorldTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *DescribeWorldTemplateOutput) SetArn(v string) *DescribeWorldTemplateOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *DescribeWorldTemplateOutput) SetClientRequestToken(v string) *DescribeWorldTemplateOutput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *DescribeWorldTemplateOutput) SetCreatedAt(v time.Time) *DescribeWorldTemplateOutput {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetLastUpdatedAt sets the LastUpdatedAt field's value.
+func (s *DescribeWorldTemplateOutput) SetLastUpdatedAt(v time.Time) *DescribeWorldTemplateOutput {
+	s.LastUpdatedAt = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *DescribeWorldTemplateOutput) SetName(v string) *DescribeWorldTemplateOutput {
+	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *DescribeWorldTemplateOutput) SetTags(v map[string]*string) *DescribeWorldTemplateOutput {
+	s.Tags = v
+	return s
+}
+
+// Information about a failed create simulation job request.
+type FailedCreateSimulationJobRequest struct {
+	_ struct{} `type:"structure"`
+
+	// The time, in milliseconds since the epoch, when the simulation job batch
+	// failed.
+	FailedAt *time.Time `locationName:"failedAt" type:"timestamp"`
+
+	// The failure code.
+	FailureCode *string `locationName:"failureCode" type:"string" enum:"SimulationJobErrorCode"`
+
+	// The failure reason of the simulation job request.
+	FailureReason *string `locationName:"failureReason" type:"string"`
+
+	// The simulation job request.
+	Request *SimulationJobRequest `locationName:"request" type:"structure"`
+}
+
+// String returns the string representation
+func (s FailedCreateSimulationJobRequest) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s FailedCreateSimulationJobRequest) GoString() string {
+	return s.String()
+}
+
+// SetFailedAt sets the FailedAt field's value.
+func (s *FailedCreateSimulationJobRequest) SetFailedAt(v time.Time) *FailedCreateSimulationJobRequest {
+	s.FailedAt = &v
+	return s
+}
+
+// SetFailureCode sets the FailureCode field's value.
+func (s *FailedCreateSimulationJobRequest) SetFailureCode(v string) *FailedCreateSimulationJobRequest {
+	s.FailureCode = &v
+	return s
+}
+
+// SetFailureReason sets the FailureReason field's value.
+func (s *FailedCreateSimulationJobRequest) SetFailureReason(v string) *FailedCreateSimulationJobRequest {
+	s.FailureReason = &v
+	return s
+}
+
+// SetRequest sets the Request field's value.
+func (s *FailedCreateSimulationJobRequest) SetRequest(v *SimulationJobRequest) *FailedCreateSimulationJobRequest {
+	s.Request = v
+	return s
+}
+
+// Information about worlds that failed.
+type FailureSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The worlds that failed.
+	Failures []*WorldFailure `locationName:"failures" type:"list"`
+
+	// The total number of failures.
+	TotalFailureCount *int64 `locationName:"totalFailureCount" type:"integer"`
+}
+
+// String returns the string representation
+func (s FailureSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s FailureSummary) GoString() string {
+	return s.String()
+}
+
+// SetFailures sets the Failures field's value.
+func (s *FailureSummary) SetFailures(v []*WorldFailure) *FailureSummary {
+	s.Failures = v
+	return s
+}
+
+// SetTotalFailureCount sets the TotalFailureCount field's value.
+func (s *FailureSummary) SetTotalFailureCount(v int64) *FailureSummary {
+	s.TotalFailureCount = &v
+	return s
+}
+
 // Information about a filter.
 type Filter struct {
 	_ struct{} `type:"structure"`
@@ -7356,6 +11541,48 @@ func (s *Filter) SetName(v string) *Filter {
 // SetValues sets the Values field's value.
 func (s *Filter) SetValues(v []*string) *Filter {
 	s.Values = v
+	return s
+}
+
+// Information about worlds that finished.
+type FinishedWorldsSummary struct {
+	_ struct{} `type:"structure"`
+
+	// Information about worlds that failed.
+	FailureSummary *FailureSummary `locationName:"failureSummary" type:"structure"`
+
+	// The total number of finished worlds.
+	FinishedCount *int64 `locationName:"finishedCount" type:"integer"`
+
+	// A list of worlds that succeeded.
+	SucceededWorlds []*string `locationName:"succeededWorlds" min:"1" type:"list"`
+}
+
+// String returns the string representation
+func (s FinishedWorldsSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s FinishedWorldsSummary) GoString() string {
+	return s.String()
+}
+
+// SetFailureSummary sets the FailureSummary field's value.
+func (s *FinishedWorldsSummary) SetFailureSummary(v *FailureSummary) *FinishedWorldsSummary {
+	s.FailureSummary = v
+	return s
+}
+
+// SetFinishedCount sets the FinishedCount field's value.
+func (s *FinishedWorldsSummary) SetFinishedCount(v int64) *FinishedWorldsSummary {
+	s.FinishedCount = &v
+	return s
+}
+
+// SetSucceededWorlds sets the SucceededWorlds field's value.
+func (s *FinishedWorldsSummary) SetSucceededWorlds(v []*string) *FinishedWorldsSummary {
+	s.SucceededWorlds = v
 	return s
 }
 
@@ -7428,6 +11655,248 @@ func (s *Fleet) SetName(v string) *Fleet {
 	return s
 }
 
+type GetWorldTemplateBodyInput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (arn) of the world generator job.
+	GenerationJob *string `locationName:"generationJob" min:"1" type:"string"`
+
+	// The Amazon Resource Name (arn) of the world template.
+	Template *string `locationName:"template" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s GetWorldTemplateBodyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetWorldTemplateBodyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetWorldTemplateBodyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetWorldTemplateBodyInput"}
+	if s.GenerationJob != nil && len(*s.GenerationJob) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("GenerationJob", 1))
+	}
+	if s.Template != nil && len(*s.Template) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Template", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetGenerationJob sets the GenerationJob field's value.
+func (s *GetWorldTemplateBodyInput) SetGenerationJob(v string) *GetWorldTemplateBodyInput {
+	s.GenerationJob = &v
+	return s
+}
+
+// SetTemplate sets the Template field's value.
+func (s *GetWorldTemplateBodyInput) SetTemplate(v string) *GetWorldTemplateBodyInput {
+	s.Template = &v
+	return s
+}
+
+type GetWorldTemplateBodyOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The world template body.
+	TemplateBody *string `locationName:"templateBody" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s GetWorldTemplateBodyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetWorldTemplateBodyOutput) GoString() string {
+	return s.String()
+}
+
+// SetTemplateBody sets the TemplateBody field's value.
+func (s *GetWorldTemplateBodyOutput) SetTemplateBody(v string) *GetWorldTemplateBodyOutput {
+	s.TemplateBody = &v
+	return s
+}
+
+// The request uses the same client token as a previous, but non-identical request.
+// Do not reuse a client token with different requests, unless the requests
+// are identical.
+type IdempotentParameterMismatchException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s IdempotentParameterMismatchException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s IdempotentParameterMismatchException) GoString() string {
+	return s.String()
+}
+
+func newErrorIdempotentParameterMismatchException(v protocol.ResponseMetadata) error {
+	return &IdempotentParameterMismatchException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *IdempotentParameterMismatchException) Code() string {
+	return "IdempotentParameterMismatchException"
+}
+
+// Message returns the exception's message.
+func (s *IdempotentParameterMismatchException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *IdempotentParameterMismatchException) OrigErr() error {
+	return nil
+}
+
+func (s *IdempotentParameterMismatchException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *IdempotentParameterMismatchException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *IdempotentParameterMismatchException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// AWS RoboMaker experienced a service issue. Try your call again.
+type InternalServerException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s InternalServerException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InternalServerException) GoString() string {
+	return s.String()
+}
+
+func newErrorInternalServerException(v protocol.ResponseMetadata) error {
+	return &InternalServerException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *InternalServerException) Code() string {
+	return "InternalServerException"
+}
+
+// Message returns the exception's message.
+func (s *InternalServerException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *InternalServerException) OrigErr() error {
+	return nil
+}
+
+func (s *InternalServerException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *InternalServerException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *InternalServerException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// A parameter specified in a request is not valid, is unsupported, or cannot
+// be used. The returned message provides an explanation of the error value.
+type InvalidParameterException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s InvalidParameterException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InvalidParameterException) GoString() string {
+	return s.String()
+}
+
+func newErrorInvalidParameterException(v protocol.ResponseMetadata) error {
+	return &InvalidParameterException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *InvalidParameterException) Code() string {
+	return "InvalidParameterException"
+}
+
+// Message returns the exception's message.
+func (s *InvalidParameterException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *InvalidParameterException) OrigErr() error {
+	return nil
+}
+
+func (s *InvalidParameterException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *InvalidParameterException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *InvalidParameterException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // Information about a launch configuration.
 type LaunchConfig struct {
 	_ struct{} `type:"structure"`
@@ -7447,6 +11916,12 @@ type LaunchConfig struct {
 
 	// The port forwarding configuration.
 	PortForwardingConfig *PortForwardingConfig `locationName:"portForwardingConfig" type:"structure"`
+
+	// Boolean indicating whether a streaming session will be configured for the
+	// application. If True, AWS RoboMaker will configure a connection so you can
+	// interact with your application as it is running in the simulation. You must
+	// configure and luanch the component. It must have a graphical user interface.
+	StreamUI *bool `locationName:"streamUI" type:"boolean"`
 }
 
 // String returns the string representation
@@ -7510,6 +11985,69 @@ func (s *LaunchConfig) SetPortForwardingConfig(v *PortForwardingConfig) *LaunchC
 	return s
 }
 
+// SetStreamUI sets the StreamUI field's value.
+func (s *LaunchConfig) SetStreamUI(v bool) *LaunchConfig {
+	s.StreamUI = &v
+	return s
+}
+
+// The requested resource exceeds the maximum number allowed, or the number
+// of concurrent stream requests exceeds the maximum number allowed.
+type LimitExceededException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s LimitExceededException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s LimitExceededException) GoString() string {
+	return s.String()
+}
+
+func newErrorLimitExceededException(v protocol.ResponseMetadata) error {
+	return &LimitExceededException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *LimitExceededException) Code() string {
+	return "LimitExceededException"
+}
+
+// Message returns the exception's message.
+func (s *LimitExceededException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *LimitExceededException) OrigErr() error {
+	return nil
+}
+
+func (s *LimitExceededException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *LimitExceededException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *LimitExceededException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 type ListDeploymentJobsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -7521,22 +12059,19 @@ type ListDeploymentJobsInput struct {
 	// looking for items with the status InProgress or the status Pending.
 	Filters []*Filter `locationName:"filters" min:"1" type:"list"`
 
-	// The maximum number of deployment job results returned by ListDeploymentJobs
-	// in paginated output. When this parameter is used, ListDeploymentJobs only
-	// returns maxResults results in a single page along with a nextToken response
-	// element. The remaining results of the initial request can be seen by sending
-	// another ListDeploymentJobs request with the returned nextToken value. This
-	// value can be between 1 and 100. If this parameter is not used, then ListDeploymentJobs
-	// returns up to 100 results and a nextToken value if applicable.
+	// When this parameter is used, ListDeploymentJobs only returns maxResults results
+	// in a single page along with a nextToken response element. The remaining results
+	// of the initial request can be seen by sending another ListDeploymentJobs
+	// request with the returned nextToken value. This value can be between 1 and
+	// 200. If this parameter is not used, then ListDeploymentJobs returns up to
+	// 200 results and a nextToken value if applicable.
 	MaxResults *int64 `locationName:"maxResults" type:"integer"`
 
-	// The nextToken value returned from a previous paginated ListDeploymentJobs
-	// request where maxResults was used and the results exceeded the value of that
-	// parameter. Pagination continues from the end of the previous results that
-	// returned the nextToken value.
-	//
-	// This token should be treated as an opaque identifier that is only used to
-	// retrieve the next items in a list and not for other programmatic purposes.
+	// If the previous paginated request did not return all of the remaining results,
+	// the response object's nextToken parameter value is set to a token. To retrieve
+	// the next set of results, call ListDeploymentJobs again and assign that token
+	// to the request object's nextToken parameter. If there are no remaining results,
+	// the previous response object's NextToken parameter is set to null.
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
 }
 
@@ -7600,10 +12135,11 @@ type ListDeploymentJobsOutput struct {
 	// A list of deployment jobs that meet the criteria of the request.
 	DeploymentJobs []*DeploymentJob `locationName:"deploymentJobs" type:"list"`
 
-	// The nextToken value to include in a future ListDeploymentJobs request. When
-	// the results of a ListDeploymentJobs request exceed maxResults, this value
-	// can be used to retrieve the next page of results. This value is null when
-	// there are no more results to return.
+	// If the previous paginated request did not return all of the remaining results,
+	// the response object's nextToken parameter value is set to a token. To retrieve
+	// the next set of results, call ListDeploymentJobs again and assign that token
+	// to the request object's nextToken parameter. If there are no remaining results,
+	// the previous response object's NextToken parameter is set to null.
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
 }
 
@@ -7638,19 +12174,19 @@ type ListFleetsInput struct {
 	// value of the filtered item. You can use up to three filters.
 	Filters []*Filter `locationName:"filters" min:"1" type:"list"`
 
-	// The maximum number of deployment job results returned by ListFleets in paginated
-	// output. When this parameter is used, ListFleets only returns maxResults results
-	// in a single page along with a nextToken response element. The remaining results
+	// When this parameter is used, ListFleets only returns maxResults results in
+	// a single page along with a nextToken response element. The remaining results
 	// of the initial request can be seen by sending another ListFleets request
-	// with the returned nextToken value. This value can be between 1 and 100. If
-	// this parameter is not used, then ListFleets returns up to 100 results and
+	// with the returned nextToken value. This value can be between 1 and 200. If
+	// this parameter is not used, then ListFleets returns up to 200 results and
 	// a nextToken value if applicable.
 	MaxResults *int64 `locationName:"maxResults" type:"integer"`
 
-	// The nextToken value returned from a previous paginated ListFleets request
-	// where maxResults was used and the results exceeded the value of that parameter.
-	// Pagination continues from the end of the previous results that returned the
-	// nextToken value.
+	// If the previous paginated request did not return all of the remaining results,
+	// the response object's nextToken parameter value is set to a token. To retrieve
+	// the next set of results, call ListFleets again and assign that token to the
+	// request object's nextToken parameter. If there are no remaining results,
+	// the previous response object's NextToken parameter is set to null.
 	//
 	// This token should be treated as an opaque identifier that is only used to
 	// retrieve the next items in a list and not for other programmatic purposes.
@@ -7717,10 +12253,11 @@ type ListFleetsOutput struct {
 	// A list of fleet details meeting the request criteria.
 	FleetDetails []*Fleet `locationName:"fleetDetails" type:"list"`
 
-	// The nextToken value to include in a future ListDeploymentJobs request. When
-	// the results of a ListFleets request exceed maxResults, this value can be
-	// used to retrieve the next page of results. This value is null when there
-	// are no more results to return.
+	// If the previous paginated request did not return all of the remaining results,
+	// the response object's nextToken parameter value is set to a token. To retrieve
+	// the next set of results, call ListFleets again and assign that token to the
+	// request object's nextToken parameter. If there are no remaining results,
+	// the previous response object's NextToken parameter is set to null.
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
 }
 
@@ -7755,27 +12292,23 @@ type ListRobotApplicationsInput struct {
 	// value of the filtered item. You can use up to three filters.
 	Filters []*Filter `locationName:"filters" min:"1" type:"list"`
 
-	// The maximum number of deployment job results returned by ListRobotApplications
-	// in paginated output. When this parameter is used, ListRobotApplications only
-	// returns maxResults results in a single page along with a nextToken response
-	// element. The remaining results of the initial request can be seen by sending
-	// another ListRobotApplications request with the returned nextToken value.
-	// This value can be between 1 and 100. If this parameter is not used, then
-	// ListRobotApplications returns up to 100 results and a nextToken value if
-	// applicable.
+	// When this parameter is used, ListRobotApplications only returns maxResults
+	// results in a single page along with a nextToken response element. The remaining
+	// results of the initial request can be seen by sending another ListRobotApplications
+	// request with the returned nextToken value. This value can be between 1 and
+	// 100. If this parameter is not used, then ListRobotApplications returns up
+	// to 100 results and a nextToken value if applicable.
 	MaxResults *int64 `locationName:"maxResults" type:"integer"`
 
-	// The nextToken value returned from a previous paginated ListRobotApplications
-	// request where maxResults was used and the results exceeded the value of that
-	// parameter. Pagination continues from the end of the previous results that
-	// returned the nextToken value.
-	//
-	// This token should be treated as an opaque identifier that is only used to
-	// retrieve the next items in a list and not for other programmatic purposes.
+	// If the previous paginated request did not return all of the remaining results,
+	// the response object's nextToken parameter value is set to a token. To retrieve
+	// the next set of results, call ListRobotApplications again and assign that
+	// token to the request object's nextToken parameter. If there are no remaining
+	// results, the previous response object's NextToken parameter is set to null.
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
 
 	// The version qualifier of the robot application.
-	VersionQualifier *string `locationName:"versionQualifier" type:"string"`
+	VersionQualifier *string `locationName:"versionQualifier" min:"1" type:"string"`
 }
 
 // String returns the string representation
@@ -7796,6 +12329,9 @@ func (s *ListRobotApplicationsInput) Validate() error {
 	}
 	if s.NextToken != nil && len(*s.NextToken) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+	if s.VersionQualifier != nil && len(*s.VersionQualifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("VersionQualifier", 1))
 	}
 	if s.Filters != nil {
 		for i, v := range s.Filters {
@@ -7841,10 +12377,11 @@ func (s *ListRobotApplicationsInput) SetVersionQualifier(v string) *ListRobotApp
 type ListRobotApplicationsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The nextToken value to include in a future ListRobotApplications request.
-	// When the results of a ListRobotApplications request exceed maxResults, this
-	// value can be used to retrieve the next page of results. This value is null
-	// when there are no more results to return.
+	// If the previous paginated request did not return all of the remaining results,
+	// the response object's nextToken parameter value is set to a token. To retrieve
+	// the next set of results, call ListRobotApplications again and assign that
+	// token to the request object's nextToken parameter. If there are no remaining
+	// results, the previous response object's NextToken parameter is set to null.
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
 
 	// A list of robot application summaries that meet the criteria of the request.
@@ -7884,22 +12421,19 @@ type ListRobotsInput struct {
 	// looking for items with the status Registered or the status Available.
 	Filters []*Filter `locationName:"filters" min:"1" type:"list"`
 
-	// The maximum number of deployment job results returned by ListRobots in paginated
-	// output. When this parameter is used, ListRobots only returns maxResults results
-	// in a single page along with a nextToken response element. The remaining results
+	// When this parameter is used, ListRobots only returns maxResults results in
+	// a single page along with a nextToken response element. The remaining results
 	// of the initial request can be seen by sending another ListRobots request
-	// with the returned nextToken value. This value can be between 1 and 100. If
-	// this parameter is not used, then ListRobots returns up to 100 results and
+	// with the returned nextToken value. This value can be between 1 and 200. If
+	// this parameter is not used, then ListRobots returns up to 200 results and
 	// a nextToken value if applicable.
 	MaxResults *int64 `locationName:"maxResults" type:"integer"`
 
-	// The nextToken value returned from a previous paginated ListRobots request
-	// where maxResults was used and the results exceeded the value of that parameter.
-	// Pagination continues from the end of the previous results that returned the
-	// nextToken value.
-	//
-	// This token should be treated as an opaque identifier that is only used to
-	// retrieve the next items in a list and not for other programmatic purposes.
+	// If the previous paginated request did not return all of the remaining results,
+	// the response object's nextToken parameter value is set to a token. To retrieve
+	// the next set of results, call ListRobots again and assign that token to the
+	// request object's nextToken parameter. If there are no remaining results,
+	// the previous response object's NextToken parameter is set to null.
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
 }
 
@@ -7960,10 +12494,11 @@ func (s *ListRobotsInput) SetNextToken(v string) *ListRobotsInput {
 type ListRobotsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The nextToken value to include in a future ListRobots request. When the results
-	// of a ListRobot request exceed maxResults, this value can be used to retrieve
-	// the next page of results. This value is null when there are no more results
-	// to return.
+	// If the previous paginated request did not return all of the remaining results,
+	// the response object's nextToken parameter value is set to a token. To retrieve
+	// the next set of results, call ListRobots again and assign that token to the
+	// request object's nextToken parameter. If there are no remaining results,
+	// the previous response object's NextToken parameter is set to null.
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
 
 	// A list of robots that meet the criteria of the request.
@@ -8001,27 +12536,23 @@ type ListSimulationApplicationsInput struct {
 	// value of the filtered item. You can use up to three filters.
 	Filters []*Filter `locationName:"filters" min:"1" type:"list"`
 
-	// The maximum number of deployment job results returned by ListSimulationApplications
-	// in paginated output. When this parameter is used, ListSimulationApplications
-	// only returns maxResults results in a single page along with a nextToken response
-	// element. The remaining results of the initial request can be seen by sending
-	// another ListSimulationApplications request with the returned nextToken value.
-	// This value can be between 1 and 100. If this parameter is not used, then
-	// ListSimulationApplications returns up to 100 results and a nextToken value
-	// if applicable.
+	// When this parameter is used, ListSimulationApplications only returns maxResults
+	// results in a single page along with a nextToken response element. The remaining
+	// results of the initial request can be seen by sending another ListSimulationApplications
+	// request with the returned nextToken value. This value can be between 1 and
+	// 100. If this parameter is not used, then ListSimulationApplications returns
+	// up to 100 results and a nextToken value if applicable.
 	MaxResults *int64 `locationName:"maxResults" type:"integer"`
 
-	// The nextToken value returned from a previous paginated ListSimulationApplications
-	// request where maxResults was used and the results exceeded the value of that
-	// parameter. Pagination continues from the end of the previous results that
-	// returned the nextToken value.
-	//
-	// This token should be treated as an opaque identifier that is only used to
-	// retrieve the next items in a list and not for other programmatic purposes.
+	// If the previous paginated request did not return all of the remaining results,
+	// the response object's nextToken parameter value is set to a token. To retrieve
+	// the next set of results, call ListSimulationApplications again and assign
+	// that token to the request object's nextToken parameter. If there are no remaining
+	// results, the previous response object's NextToken parameter is set to null.
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
 
 	// The version qualifier of the simulation application.
-	VersionQualifier *string `locationName:"versionQualifier" type:"string"`
+	VersionQualifier *string `locationName:"versionQualifier" min:"1" type:"string"`
 }
 
 // String returns the string representation
@@ -8042,6 +12573,9 @@ func (s *ListSimulationApplicationsInput) Validate() error {
 	}
 	if s.NextToken != nil && len(*s.NextToken) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+	if s.VersionQualifier != nil && len(*s.VersionQualifier) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("VersionQualifier", 1))
 	}
 	if s.Filters != nil {
 		for i, v := range s.Filters {
@@ -8087,10 +12621,11 @@ func (s *ListSimulationApplicationsInput) SetVersionQualifier(v string) *ListSim
 type ListSimulationApplicationsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The nextToken value to include in a future ListSimulationApplications request.
-	// When the results of a ListRobot request exceed maxResults, this value can
-	// be used to retrieve the next page of results. This value is null when there
-	// are no more results to return.
+	// If the previous paginated request did not return all of the remaining results,
+	// the response object's nextToken parameter value is set to a token. To retrieve
+	// the next set of results, call ListSimulationApplications again and assign
+	// that token to the request object's nextToken parameter. If there are no remaining
+	// results, the previous response object's NextToken parameter is set to null.
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
 
 	// A list of simulation application summaries that meet the criteria of the
@@ -8120,6 +12655,116 @@ func (s *ListSimulationApplicationsOutput) SetSimulationApplicationSummaries(v [
 	return s
 }
 
+type ListSimulationJobBatchesInput struct {
+	_ struct{} `type:"structure"`
+
+	// Optional filters to limit results.
+	Filters []*Filter `locationName:"filters" min:"1" type:"list"`
+
+	// When this parameter is used, ListSimulationJobBatches only returns maxResults
+	// results in a single page along with a nextToken response element. The remaining
+	// results of the initial request can be seen by sending another ListSimulationJobBatches
+	// request with the returned nextToken value.
+	MaxResults *int64 `locationName:"maxResults" type:"integer"`
+
+	// If the previous paginated request did not return all of the remaining results,
+	// the response object's nextToken parameter value is set to a token. To retrieve
+	// the next set of results, call ListSimulationJobBatches again and assign that
+	// token to the request object's nextToken parameter. If there are no remaining
+	// results, the previous response object's NextToken parameter is set to null.
+	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListSimulationJobBatchesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListSimulationJobBatchesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListSimulationJobBatchesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListSimulationJobBatchesInput"}
+	if s.Filters != nil && len(s.Filters) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Filters", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilters sets the Filters field's value.
+func (s *ListSimulationJobBatchesInput) SetFilters(v []*Filter) *ListSimulationJobBatchesInput {
+	s.Filters = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListSimulationJobBatchesInput) SetMaxResults(v int64) *ListSimulationJobBatchesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListSimulationJobBatchesInput) SetNextToken(v string) *ListSimulationJobBatchesInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListSimulationJobBatchesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// If the previous paginated request did not return all of the remaining results,
+	// the response object's nextToken parameter value is set to a token. To retrieve
+	// the next set of results, call ListSimulationJobBatches again and assign that
+	// token to the request object's nextToken parameter. If there are no remaining
+	// results, the previous response object's NextToken parameter is set to null.
+	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
+
+	// A list of simulation job batch summaries.
+	SimulationJobBatchSummaries []*SimulationJobBatchSummary `locationName:"simulationJobBatchSummaries" type:"list"`
+}
+
+// String returns the string representation
+func (s ListSimulationJobBatchesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListSimulationJobBatchesOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListSimulationJobBatchesOutput) SetNextToken(v string) *ListSimulationJobBatchesOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSimulationJobBatchSummaries sets the SimulationJobBatchSummaries field's value.
+func (s *ListSimulationJobBatchesOutput) SetSimulationJobBatchSummaries(v []*SimulationJobBatchSummary) *ListSimulationJobBatchesOutput {
+	s.SimulationJobBatchSummaries = v
+	return s
+}
+
 type ListSimulationJobsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -8132,22 +12777,19 @@ type ListSimulationJobsInput struct {
 	// or the status Running.
 	Filters []*Filter `locationName:"filters" min:"1" type:"list"`
 
-	// The maximum number of deployment job results returned by ListSimulationJobs
-	// in paginated output. When this parameter is used, ListSimulationJobs only
-	// returns maxResults results in a single page along with a nextToken response
-	// element. The remaining results of the initial request can be seen by sending
-	// another ListSimulationJobs request with the returned nextToken value. This
-	// value can be between 1 and 100. If this parameter is not used, then ListSimulationJobs
-	// returns up to 100 results and a nextToken value if applicable.
+	// When this parameter is used, ListSimulationJobs only returns maxResults results
+	// in a single page along with a nextToken response element. The remaining results
+	// of the initial request can be seen by sending another ListSimulationJobs
+	// request with the returned nextToken value. This value can be between 1 and
+	// 1000. If this parameter is not used, then ListSimulationJobs returns up to
+	// 1000 results and a nextToken value if applicable.
 	MaxResults *int64 `locationName:"maxResults" type:"integer"`
 
-	// The nextToken value returned from a previous paginated ListSimulationJobs
-	// request where maxResults was used and the results exceeded the value of that
-	// parameter. Pagination continues from the end of the previous results that
-	// returned the nextToken value.
-	//
-	// This token should be treated as an opaque identifier that is only used to
-	// retrieve the next items in a list and not for other programmatic purposes.
+	// If the previous paginated request did not return all of the remaining results,
+	// the response object's nextToken parameter value is set to a token. To retrieve
+	// the next set of results, call ListSimulationJobs again and assign that token
+	// to the request object's nextToken parameter. If there are no remaining results,
+	// the previous response object's NextToken parameter is set to null.
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
 }
 
@@ -8208,10 +12850,11 @@ func (s *ListSimulationJobsInput) SetNextToken(v string) *ListSimulationJobsInpu
 type ListSimulationJobsOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The nextToken value to include in a future ListSimulationJobs request. When
-	// the results of a ListRobot request exceed maxResults, this value can be used
-	// to retrieve the next page of results. This value is null when there are no
-	// more results to return.
+	// If the previous paginated request did not return all of the remaining results,
+	// the response object's nextToken parameter value is set to a token. To retrieve
+	// the next set of results, call ListSimulationJobs again and assign that token
+	// to the request object's nextToken parameter. If there are no remaining results,
+	// the previous response object's NextToken parameter is set to null.
 	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
 
 	// A list of simulation job summaries that meet the criteria of the request.
@@ -8303,6 +12946,436 @@ func (s ListTagsForResourceOutput) GoString() string {
 // SetTags sets the Tags field's value.
 func (s *ListTagsForResourceOutput) SetTags(v map[string]*string) *ListTagsForResourceOutput {
 	s.Tags = v
+	return s
+}
+
+type ListWorldExportJobsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Optional filters to limit results. You can use generationJobId and templateId.
+	Filters []*Filter `locationName:"filters" min:"1" type:"list"`
+
+	// When this parameter is used, ListWorldExportJobs only returns maxResults
+	// results in a single page along with a nextToken response element. The remaining
+	// results of the initial request can be seen by sending another ListWorldExportJobs
+	// request with the returned nextToken value. This value can be between 1 and
+	// 100. If this parameter is not used, then ListWorldExportJobs returns up to
+	// 100 results and a nextToken value if applicable.
+	MaxResults *int64 `locationName:"maxResults" type:"integer"`
+
+	// If the previous paginated request did not return all of the remaining results,
+	// the response object's nextToken parameter value is set to a token. To retrieve
+	// the next set of results, call ListWorldExportJobs again and assign that token
+	// to the request object's nextToken parameter. If there are no remaining results,
+	// the previous response object's NextToken parameter is set to null.
+	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListWorldExportJobsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListWorldExportJobsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListWorldExportJobsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListWorldExportJobsInput"}
+	if s.Filters != nil && len(s.Filters) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Filters", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilters sets the Filters field's value.
+func (s *ListWorldExportJobsInput) SetFilters(v []*Filter) *ListWorldExportJobsInput {
+	s.Filters = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListWorldExportJobsInput) SetMaxResults(v int64) *ListWorldExportJobsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListWorldExportJobsInput) SetNextToken(v string) *ListWorldExportJobsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListWorldExportJobsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// If the previous paginated request did not return all of the remaining results,
+	// the response object's nextToken parameter value is set to a token. To retrieve
+	// the next set of results, call ListWorldExportJobsRequest again and assign
+	// that token to the request object's nextToken parameter. If there are no remaining
+	// results, the previous response object's NextToken parameter is set to null.
+	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
+
+	// Summary information for world export jobs.
+	//
+	// WorldExportJobSummaries is a required field
+	WorldExportJobSummaries []*WorldExportJobSummary `locationName:"worldExportJobSummaries" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s ListWorldExportJobsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListWorldExportJobsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListWorldExportJobsOutput) SetNextToken(v string) *ListWorldExportJobsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetWorldExportJobSummaries sets the WorldExportJobSummaries field's value.
+func (s *ListWorldExportJobsOutput) SetWorldExportJobSummaries(v []*WorldExportJobSummary) *ListWorldExportJobsOutput {
+	s.WorldExportJobSummaries = v
+	return s
+}
+
+type ListWorldGenerationJobsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Optional filters to limit results. You can use status and templateId.
+	Filters []*Filter `locationName:"filters" min:"1" type:"list"`
+
+	// When this parameter is used, ListWorldGeneratorJobs only returns maxResults
+	// results in a single page along with a nextToken response element. The remaining
+	// results of the initial request can be seen by sending another ListWorldGeneratorJobs
+	// request with the returned nextToken value. This value can be between 1 and
+	// 100. If this parameter is not used, then ListWorldGeneratorJobs returns up
+	// to 100 results and a nextToken value if applicable.
+	MaxResults *int64 `locationName:"maxResults" type:"integer"`
+
+	// If the previous paginated request did not return all of the remaining results,
+	// the response object's nextToken parameter value is set to a token. To retrieve
+	// the next set of results, call ListWorldGenerationJobsRequest again and assign
+	// that token to the request object's nextToken parameter. If there are no remaining
+	// results, the previous response object's NextToken parameter is set to null.
+	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListWorldGenerationJobsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListWorldGenerationJobsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListWorldGenerationJobsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListWorldGenerationJobsInput"}
+	if s.Filters != nil && len(s.Filters) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Filters", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilters sets the Filters field's value.
+func (s *ListWorldGenerationJobsInput) SetFilters(v []*Filter) *ListWorldGenerationJobsInput {
+	s.Filters = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListWorldGenerationJobsInput) SetMaxResults(v int64) *ListWorldGenerationJobsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListWorldGenerationJobsInput) SetNextToken(v string) *ListWorldGenerationJobsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListWorldGenerationJobsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// If the previous paginated request did not return all of the remaining results,
+	// the response object's nextToken parameter value is set to a token. To retrieve
+	// the next set of results, call ListWorldGeneratorJobsRequest again and assign
+	// that token to the request object's nextToken parameter. If there are no remaining
+	// results, the previous response object's NextToken parameter is set to null.
+	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
+
+	// Summary information for world generator jobs.
+	//
+	// WorldGenerationJobSummaries is a required field
+	WorldGenerationJobSummaries []*WorldGenerationJobSummary `locationName:"worldGenerationJobSummaries" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s ListWorldGenerationJobsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListWorldGenerationJobsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListWorldGenerationJobsOutput) SetNextToken(v string) *ListWorldGenerationJobsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetWorldGenerationJobSummaries sets the WorldGenerationJobSummaries field's value.
+func (s *ListWorldGenerationJobsOutput) SetWorldGenerationJobSummaries(v []*WorldGenerationJobSummary) *ListWorldGenerationJobsOutput {
+	s.WorldGenerationJobSummaries = v
+	return s
+}
+
+type ListWorldTemplatesInput struct {
+	_ struct{} `type:"structure"`
+
+	// When this parameter is used, ListWorldTemplates only returns maxResults results
+	// in a single page along with a nextToken response element. The remaining results
+	// of the initial request can be seen by sending another ListWorldTemplates
+	// request with the returned nextToken value. This value can be between 1 and
+	// 100. If this parameter is not used, then ListWorldTemplates returns up to
+	// 100 results and a nextToken value if applicable.
+	MaxResults *int64 `locationName:"maxResults" type:"integer"`
+
+	// If the previous paginated request did not return all of the remaining results,
+	// the response object's nextToken parameter value is set to a token. To retrieve
+	// the next set of results, call ListWorldTemplates again and assign that token
+	// to the request object's nextToken parameter. If there are no remaining results,
+	// the previous response object's NextToken parameter is set to null.
+	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListWorldTemplatesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListWorldTemplatesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListWorldTemplatesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListWorldTemplatesInput"}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListWorldTemplatesInput) SetMaxResults(v int64) *ListWorldTemplatesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListWorldTemplatesInput) SetNextToken(v string) *ListWorldTemplatesInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListWorldTemplatesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// If the previous paginated request did not return all of the remaining results,
+	// the response object's nextToken parameter value is set to a token. To retrieve
+	// the next set of results, call ListWorldTemplates again and assign that token
+	// to the request object's nextToken parameter. If there are no remaining results,
+	// the previous response object's NextToken parameter is set to null.
+	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
+
+	// Summary information for templates.
+	TemplateSummaries []*TemplateSummary `locationName:"templateSummaries" type:"list"`
+}
+
+// String returns the string representation
+func (s ListWorldTemplatesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListWorldTemplatesOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListWorldTemplatesOutput) SetNextToken(v string) *ListWorldTemplatesOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetTemplateSummaries sets the TemplateSummaries field's value.
+func (s *ListWorldTemplatesOutput) SetTemplateSummaries(v []*TemplateSummary) *ListWorldTemplatesOutput {
+	s.TemplateSummaries = v
+	return s
+}
+
+type ListWorldsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Optional filters to limit results. You can use status.
+	Filters []*Filter `locationName:"filters" min:"1" type:"list"`
+
+	// When this parameter is used, ListWorlds only returns maxResults results in
+	// a single page along with a nextToken response element. The remaining results
+	// of the initial request can be seen by sending another ListWorlds request
+	// with the returned nextToken value. This value can be between 1 and 100. If
+	// this parameter is not used, then ListWorlds returns up to 100 results and
+	// a nextToken value if applicable.
+	MaxResults *int64 `locationName:"maxResults" type:"integer"`
+
+	// If the previous paginated request did not return all of the remaining results,
+	// the response object's nextToken parameter value is set to a token. To retrieve
+	// the next set of results, call ListWorlds again and assign that token to the
+	// request object's nextToken parameter. If there are no remaining results,
+	// the previous response object's NextToken parameter is set to null.
+	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListWorldsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListWorldsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListWorldsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListWorldsInput"}
+	if s.Filters != nil && len(s.Filters) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Filters", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+	if s.Filters != nil {
+		for i, v := range s.Filters {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Filters", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFilters sets the Filters field's value.
+func (s *ListWorldsInput) SetFilters(v []*Filter) *ListWorldsInput {
+	s.Filters = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListWorldsInput) SetMaxResults(v int64) *ListWorldsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListWorldsInput) SetNextToken(v string) *ListWorldsInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListWorldsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// If the previous paginated request did not return all of the remaining results,
+	// the response object's nextToken parameter value is set to a token. To retrieve
+	// the next set of results, call ListWorlds again and assign that token to the
+	// request object's nextToken parameter. If there are no remaining results,
+	// the previous response object's NextToken parameter is set to null.
+	NextToken *string `locationName:"nextToken" min:"1" type:"string"`
+
+	// Summary information for worlds.
+	WorldSummaries []*WorldSummary `locationName:"worldSummaries" type:"list"`
+}
+
+// String returns the string representation
+func (s ListWorldsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListWorldsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListWorldsOutput) SetNextToken(v string) *ListWorldsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetWorldSummaries sets the WorldSummaries field's value.
+func (s *ListWorldsOutput) SetWorldSummaries(v []*WorldSummary) *ListWorldsOutput {
+	s.WorldSummaries = v
 	return s
 }
 
@@ -8725,7 +13798,7 @@ type RenderingEngine struct {
 	Name *string `locationName:"name" type:"string" enum:"RenderingEngineType"`
 
 	// The version of the rendering engine.
-	Version *string `locationName:"version" type:"string"`
+	Version *string `locationName:"version" min:"1" type:"string"`
 }
 
 // String returns the string representation
@@ -8738,6 +13811,19 @@ func (s RenderingEngine) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RenderingEngine) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RenderingEngine"}
+	if s.Version != nil && len(*s.Version) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Version", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // SetName sets the Name field's value.
 func (s *RenderingEngine) SetName(v string) *RenderingEngine {
 	s.Name = &v
@@ -8748,6 +13834,118 @@ func (s *RenderingEngine) SetName(v string) *RenderingEngine {
 func (s *RenderingEngine) SetVersion(v string) *RenderingEngine {
 	s.Version = &v
 	return s
+}
+
+// The specified resource already exists.
+type ResourceAlreadyExistsException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s ResourceAlreadyExistsException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ResourceAlreadyExistsException) GoString() string {
+	return s.String()
+}
+
+func newErrorResourceAlreadyExistsException(v protocol.ResponseMetadata) error {
+	return &ResourceAlreadyExistsException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ResourceAlreadyExistsException) Code() string {
+	return "ResourceAlreadyExistsException"
+}
+
+// Message returns the exception's message.
+func (s *ResourceAlreadyExistsException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ResourceAlreadyExistsException) OrigErr() error {
+	return nil
+}
+
+func (s *ResourceAlreadyExistsException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ResourceAlreadyExistsException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ResourceAlreadyExistsException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// The specified resource does not exist.
+type ResourceNotFoundException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s ResourceNotFoundException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ResourceNotFoundException) GoString() string {
+	return s.String()
+}
+
+func newErrorResourceNotFoundException(v protocol.ResponseMetadata) error {
+	return &ResourceNotFoundException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ResourceNotFoundException) Code() string {
+	return "ResourceNotFoundException"
+}
+
+// Message returns the exception's message.
+func (s *ResourceNotFoundException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ResourceNotFoundException) OrigErr() error {
+	return nil
+}
+
+func (s *ResourceNotFoundException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ResourceNotFoundException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ResourceNotFoundException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 type RestartSimulationJobInput struct {
@@ -8988,7 +14186,7 @@ type RobotApplicationSummary struct {
 	// The name of the robot application.
 	Name *string `locationName:"name" min:"1" type:"string"`
 
-	// Information about a robot software suite.
+	// Information about a robot software suite (ROS distribution).
 	RobotSoftwareSuite *RobotSoftwareSuite `locationName:"robotSoftwareSuite" type:"structure"`
 
 	// The version of the robot application.
@@ -9113,14 +14311,14 @@ func (s *RobotDeployment) SetStatus(v string) *RobotDeployment {
 	return s
 }
 
-// Information about a robot software suite.
+// Information about a robot software suite (ROS distribution).
 type RobotSoftwareSuite struct {
 	_ struct{} `type:"structure"`
 
-	// The name of the robot software suite.
+	// The name of the robot software suite (ROS distribution).
 	Name *string `locationName:"name" type:"string" enum:"RobotSoftwareSuiteType"`
 
-	// The version of the robot software suite.
+	// The version of the robot software suite (ROS distribution).
 	Version *string `locationName:"version" type:"string" enum:"RobotSoftwareSuiteVersionType"`
 }
 
@@ -9247,6 +14445,62 @@ func (s *S3Object) SetKey(v string) *S3Object {
 	return s
 }
 
+// The request has failed due to a temporary failure of the server.
+type ServiceUnavailableException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s ServiceUnavailableException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ServiceUnavailableException) GoString() string {
+	return s.String()
+}
+
+func newErrorServiceUnavailableException(v protocol.ResponseMetadata) error {
+	return &ServiceUnavailableException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ServiceUnavailableException) Code() string {
+	return "ServiceUnavailableException"
+}
+
+// Message returns the exception's message.
+func (s *ServiceUnavailableException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ServiceUnavailableException) OrigErr() error {
+	return nil
+}
+
+func (s *ServiceUnavailableException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ServiceUnavailableException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ServiceUnavailableException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // Information about a simulation application configuration.
 type SimulationApplicationConfig struct {
 	_ struct{} `type:"structure"`
@@ -9263,6 +14517,9 @@ type SimulationApplicationConfig struct {
 	//
 	// LaunchConfig is a required field
 	LaunchConfig *LaunchConfig `locationName:"launchConfig" type:"structure" required:"true"`
+
+	// A list of world configurations.
+	WorldConfigs []*WorldConfig `locationName:"worldConfigs" type:"list"`
 }
 
 // String returns the string representation
@@ -9295,6 +14552,16 @@ func (s *SimulationApplicationConfig) Validate() error {
 			invalidParams.AddNested("LaunchConfig", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.WorldConfigs != nil {
+		for i, v := range s.WorldConfigs {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "WorldConfigs", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -9320,6 +14587,12 @@ func (s *SimulationApplicationConfig) SetLaunchConfig(v *LaunchConfig) *Simulati
 	return s
 }
 
+// SetWorldConfigs sets the WorldConfigs field's value.
+func (s *SimulationApplicationConfig) SetWorldConfigs(v []*WorldConfig) *SimulationApplicationConfig {
+	s.WorldConfigs = v
+	return s
+}
+
 // Summary information for a simulation application.
 type SimulationApplicationSummary struct {
 	_ struct{} `type:"structure"`
@@ -9334,7 +14607,7 @@ type SimulationApplicationSummary struct {
 	// The name of the simulation application.
 	Name *string `locationName:"name" min:"1" type:"string"`
 
-	// Information about a robot software suite.
+	// Information about a robot software suite (ROS distribution).
 	RobotSoftwareSuite *RobotSoftwareSuite `locationName:"robotSoftwareSuite" type:"structure"`
 
 	// Information about a simulation software suite.
@@ -9399,6 +14672,9 @@ type SimulationJob struct {
 
 	// A unique identifier for this SimulationJob request.
 	ClientRequestToken *string `locationName:"clientRequestToken" min:"1" type:"string"`
+
+	// Compute information for the simulation job
+	Compute *ComputeResponse `locationName:"compute" type:"structure"`
 
 	// The data sources for the simulation job.
 	DataSources []*DataSource `locationName:"dataSources" type:"list"`
@@ -9488,6 +14764,12 @@ func (s *SimulationJob) SetArn(v string) *SimulationJob {
 // SetClientRequestToken sets the ClientRequestToken field's value.
 func (s *SimulationJob) SetClientRequestToken(v string) *SimulationJob {
 	s.ClientRequestToken = &v
+	return s
+}
+
+// SetCompute sets the Compute field's value.
+func (s *SimulationJob) SetCompute(v *ComputeResponse) *SimulationJob {
+	s.Compute = v
 	return s
 }
 
@@ -9595,6 +14877,351 @@ func (s *SimulationJob) SetTags(v map[string]*string) *SimulationJob {
 
 // SetVpcConfig sets the VpcConfig field's value.
 func (s *SimulationJob) SetVpcConfig(v *VPCConfigResponse) *SimulationJob {
+	s.VpcConfig = v
+	return s
+}
+
+// Information about a simulation job batch.
+type SimulationJobBatchSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the batch.
+	Arn *string `locationName:"arn" min:"1" type:"string"`
+
+	// The time, in milliseconds since the epoch, when the simulation job batch
+	// was created.
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
+
+	// The number of created simulation job requests.
+	CreatedRequestCount *int64 `locationName:"createdRequestCount" type:"integer"`
+
+	// The number of failed simulation job requests.
+	FailedRequestCount *int64 `locationName:"failedRequestCount" type:"integer"`
+
+	// The time, in milliseconds since the epoch, when the simulation job batch
+	// was last updated.
+	LastUpdatedAt *time.Time `locationName:"lastUpdatedAt" type:"timestamp"`
+
+	// The number of pending simulation job requests.
+	PendingRequestCount *int64 `locationName:"pendingRequestCount" type:"integer"`
+
+	// The status of the simulation job batch.
+	//
+	// Pending
+	//
+	// The simulation job batch request is pending.
+	//
+	// InProgress
+	//
+	// The simulation job batch is in progress.
+	//
+	// Failed
+	//
+	// The simulation job batch failed. One or more simulation job requests could
+	// not be completed due to an internal failure (like InternalServiceError).
+	// See failureCode and failureReason for more information.
+	//
+	// Completed
+	//
+	// The simulation batch job completed. A batch is complete when (1) there are
+	// no pending simulation job requests in the batch and none of the failed simulation
+	// job requests are due to InternalServiceError and (2) when all created simulation
+	// jobs have reached a terminal state (for example, Completed or Failed).
+	//
+	// Canceled
+	//
+	// The simulation batch job was cancelled.
+	//
+	// Canceling
+	//
+	// The simulation batch job is being cancelled.
+	//
+	// Completing
+	//
+	// The simulation batch job is completing.
+	//
+	// TimingOut
+	//
+	// The simulation job batch is timing out.
+	//
+	// If a batch timing out, and there are pending requests that were failing due
+	// to an internal failure (like InternalServiceError), the batch status will
+	// be Failed. If there are no such failing request, the batch status will be
+	// TimedOut.
+	//
+	// TimedOut
+	//
+	// The simulation batch job timed out.
+	Status *string `locationName:"status" type:"string" enum:"SimulationJobBatchStatus"`
+}
+
+// String returns the string representation
+func (s SimulationJobBatchSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SimulationJobBatchSummary) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *SimulationJobBatchSummary) SetArn(v string) *SimulationJobBatchSummary {
+	s.Arn = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *SimulationJobBatchSummary) SetCreatedAt(v time.Time) *SimulationJobBatchSummary {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetCreatedRequestCount sets the CreatedRequestCount field's value.
+func (s *SimulationJobBatchSummary) SetCreatedRequestCount(v int64) *SimulationJobBatchSummary {
+	s.CreatedRequestCount = &v
+	return s
+}
+
+// SetFailedRequestCount sets the FailedRequestCount field's value.
+func (s *SimulationJobBatchSummary) SetFailedRequestCount(v int64) *SimulationJobBatchSummary {
+	s.FailedRequestCount = &v
+	return s
+}
+
+// SetLastUpdatedAt sets the LastUpdatedAt field's value.
+func (s *SimulationJobBatchSummary) SetLastUpdatedAt(v time.Time) *SimulationJobBatchSummary {
+	s.LastUpdatedAt = &v
+	return s
+}
+
+// SetPendingRequestCount sets the PendingRequestCount field's value.
+func (s *SimulationJobBatchSummary) SetPendingRequestCount(v int64) *SimulationJobBatchSummary {
+	s.PendingRequestCount = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *SimulationJobBatchSummary) SetStatus(v string) *SimulationJobBatchSummary {
+	s.Status = &v
+	return s
+}
+
+// Information about a simulation job request.
+type SimulationJobRequest struct {
+	_ struct{} `type:"structure"`
+
+	// Compute information for the simulation job
+	Compute *Compute `locationName:"compute" type:"structure"`
+
+	// Specify data sources to mount read-only files from S3 into your simulation.
+	// These files are available under /opt/robomaker/datasources/data_source_name.
+	//
+	// There is a limit of 100 files and a combined size of 25GB for all DataSourceConfig
+	// objects.
+	DataSources []*DataSourceConfig `locationName:"dataSources" min:"1" type:"list"`
+
+	// The failure behavior the simulation job.
+	//
+	// Continue
+	//
+	// Restart the simulation job in the same host instance.
+	//
+	// Fail
+	//
+	// Stop the simulation job and terminate the instance.
+	FailureBehavior *string `locationName:"failureBehavior" type:"string" enum:"FailureBehavior"`
+
+	// The IAM role name that allows the simulation instance to call the AWS APIs
+	// that are specified in its associated policies on your behalf. This is how
+	// credentials are passed in to your simulation job.
+	IamRole *string `locationName:"iamRole" min:"1" type:"string"`
+
+	// The logging configuration.
+	LoggingConfig *LoggingConfig `locationName:"loggingConfig" type:"structure"`
+
+	// The maximum simulation job duration in seconds. The value must be 8 days
+	// (691,200 seconds) or less.
+	//
+	// MaxJobDurationInSeconds is a required field
+	MaxJobDurationInSeconds *int64 `locationName:"maxJobDurationInSeconds" type:"long" required:"true"`
+
+	// The output location.
+	OutputLocation *OutputLocation `locationName:"outputLocation" type:"structure"`
+
+	// The robot applications to use in the simulation job.
+	RobotApplications []*RobotApplicationConfig `locationName:"robotApplications" min:"1" type:"list"`
+
+	// The simulation applications to use in the simulation job.
+	SimulationApplications []*SimulationApplicationConfig `locationName:"simulationApplications" min:"1" type:"list"`
+
+	// A map that contains tag keys and tag values that are attached to the simulation
+	// job request.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+
+	// Boolean indicating whether to use default simulation tool applications.
+	UseDefaultApplications *bool `locationName:"useDefaultApplications" type:"boolean"`
+
+	// If your simulation job accesses resources in a VPC, you provide this parameter
+	// identifying the list of security group IDs and subnet IDs. These must belong
+	// to the same VPC. You must provide at least one security group and two subnet
+	// IDs.
+	VpcConfig *VPCConfig `locationName:"vpcConfig" type:"structure"`
+}
+
+// String returns the string representation
+func (s SimulationJobRequest) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SimulationJobRequest) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SimulationJobRequest) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SimulationJobRequest"}
+	if s.DataSources != nil && len(s.DataSources) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DataSources", 1))
+	}
+	if s.IamRole != nil && len(*s.IamRole) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("IamRole", 1))
+	}
+	if s.MaxJobDurationInSeconds == nil {
+		invalidParams.Add(request.NewErrParamRequired("MaxJobDurationInSeconds"))
+	}
+	if s.RobotApplications != nil && len(s.RobotApplications) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("RobotApplications", 1))
+	}
+	if s.SimulationApplications != nil && len(s.SimulationApplications) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SimulationApplications", 1))
+	}
+	if s.Compute != nil {
+		if err := s.Compute.Validate(); err != nil {
+			invalidParams.AddNested("Compute", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.DataSources != nil {
+		for i, v := range s.DataSources {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "DataSources", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.LoggingConfig != nil {
+		if err := s.LoggingConfig.Validate(); err != nil {
+			invalidParams.AddNested("LoggingConfig", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.OutputLocation != nil {
+		if err := s.OutputLocation.Validate(); err != nil {
+			invalidParams.AddNested("OutputLocation", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.RobotApplications != nil {
+		for i, v := range s.RobotApplications {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "RobotApplications", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.SimulationApplications != nil {
+		for i, v := range s.SimulationApplications {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "SimulationApplications", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.VpcConfig != nil {
+		if err := s.VpcConfig.Validate(); err != nil {
+			invalidParams.AddNested("VpcConfig", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCompute sets the Compute field's value.
+func (s *SimulationJobRequest) SetCompute(v *Compute) *SimulationJobRequest {
+	s.Compute = v
+	return s
+}
+
+// SetDataSources sets the DataSources field's value.
+func (s *SimulationJobRequest) SetDataSources(v []*DataSourceConfig) *SimulationJobRequest {
+	s.DataSources = v
+	return s
+}
+
+// SetFailureBehavior sets the FailureBehavior field's value.
+func (s *SimulationJobRequest) SetFailureBehavior(v string) *SimulationJobRequest {
+	s.FailureBehavior = &v
+	return s
+}
+
+// SetIamRole sets the IamRole field's value.
+func (s *SimulationJobRequest) SetIamRole(v string) *SimulationJobRequest {
+	s.IamRole = &v
+	return s
+}
+
+// SetLoggingConfig sets the LoggingConfig field's value.
+func (s *SimulationJobRequest) SetLoggingConfig(v *LoggingConfig) *SimulationJobRequest {
+	s.LoggingConfig = v
+	return s
+}
+
+// SetMaxJobDurationInSeconds sets the MaxJobDurationInSeconds field's value.
+func (s *SimulationJobRequest) SetMaxJobDurationInSeconds(v int64) *SimulationJobRequest {
+	s.MaxJobDurationInSeconds = &v
+	return s
+}
+
+// SetOutputLocation sets the OutputLocation field's value.
+func (s *SimulationJobRequest) SetOutputLocation(v *OutputLocation) *SimulationJobRequest {
+	s.OutputLocation = v
+	return s
+}
+
+// SetRobotApplications sets the RobotApplications field's value.
+func (s *SimulationJobRequest) SetRobotApplications(v []*RobotApplicationConfig) *SimulationJobRequest {
+	s.RobotApplications = v
+	return s
+}
+
+// SetSimulationApplications sets the SimulationApplications field's value.
+func (s *SimulationJobRequest) SetSimulationApplications(v []*SimulationApplicationConfig) *SimulationJobRequest {
+	s.SimulationApplications = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *SimulationJobRequest) SetTags(v map[string]*string) *SimulationJobRequest {
+	s.Tags = v
+	return s
+}
+
+// SetUseDefaultApplications sets the UseDefaultApplications field's value.
+func (s *SimulationJobRequest) SetUseDefaultApplications(v bool) *SimulationJobRequest {
+	s.UseDefaultApplications = &v
+	return s
+}
+
+// SetVpcConfig sets the VpcConfig field's value.
+func (s *SimulationJobRequest) SetVpcConfig(v *VPCConfig) *SimulationJobRequest {
 	s.VpcConfig = v
 	return s
 }
@@ -9817,6 +15444,253 @@ func (s *SourceConfig) SetS3Bucket(v string) *SourceConfig {
 // SetS3Key sets the S3Key field's value.
 func (s *SourceConfig) SetS3Key(v string) *SourceConfig {
 	s.S3Key = &v
+	return s
+}
+
+type StartSimulationJobBatchInput struct {
+	_ struct{} `type:"structure"`
+
+	// The batch policy.
+	BatchPolicy *BatchPolicy `locationName:"batchPolicy" type:"structure"`
+
+	// Unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	ClientRequestToken *string `locationName:"clientRequestToken" min:"1" type:"string" idempotencyToken:"true"`
+
+	// A list of simulation job requests to create in the batch.
+	//
+	// CreateSimulationJobRequests is a required field
+	CreateSimulationJobRequests []*SimulationJobRequest `locationName:"createSimulationJobRequests" min:"1" type:"list" required:"true"`
+
+	// A map that contains tag keys and tag values that are attached to the deployment
+	// job batch.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation
+func (s StartSimulationJobBatchInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartSimulationJobBatchInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartSimulationJobBatchInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartSimulationJobBatchInput"}
+	if s.ClientRequestToken != nil && len(*s.ClientRequestToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ClientRequestToken", 1))
+	}
+	if s.CreateSimulationJobRequests == nil {
+		invalidParams.Add(request.NewErrParamRequired("CreateSimulationJobRequests"))
+	}
+	if s.CreateSimulationJobRequests != nil && len(s.CreateSimulationJobRequests) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("CreateSimulationJobRequests", 1))
+	}
+	if s.CreateSimulationJobRequests != nil {
+		for i, v := range s.CreateSimulationJobRequests {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "CreateSimulationJobRequests", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBatchPolicy sets the BatchPolicy field's value.
+func (s *StartSimulationJobBatchInput) SetBatchPolicy(v *BatchPolicy) *StartSimulationJobBatchInput {
+	s.BatchPolicy = v
+	return s
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *StartSimulationJobBatchInput) SetClientRequestToken(v string) *StartSimulationJobBatchInput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetCreateSimulationJobRequests sets the CreateSimulationJobRequests field's value.
+func (s *StartSimulationJobBatchInput) SetCreateSimulationJobRequests(v []*SimulationJobRequest) *StartSimulationJobBatchInput {
+	s.CreateSimulationJobRequests = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *StartSimulationJobBatchInput) SetTags(v map[string]*string) *StartSimulationJobBatchInput {
+	s.Tags = v
+	return s
+}
+
+type StartSimulationJobBatchOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (arn) of the batch.
+	Arn *string `locationName:"arn" min:"1" type:"string"`
+
+	// The batch policy.
+	BatchPolicy *BatchPolicy `locationName:"batchPolicy" type:"structure"`
+
+	// Unique, case-sensitive identifier that you provide to ensure the idempotency
+	// of the request.
+	ClientRequestToken *string `locationName:"clientRequestToken" min:"1" type:"string"`
+
+	// The time, in milliseconds since the epoch, when the simulation job batch
+	// was created.
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
+
+	// A list of created simulation job request summaries.
+	CreatedRequests []*SimulationJobSummary `locationName:"createdRequests" type:"list"`
+
+	// A list of failed simulation job requests. The request failed to be created
+	// into a simulation job. Failed requests do not have a simulation job ID.
+	FailedRequests []*FailedCreateSimulationJobRequest `locationName:"failedRequests" type:"list"`
+
+	// The failure code if the simulation job batch failed.
+	FailureCode *string `locationName:"failureCode" type:"string" enum:"SimulationJobBatchErrorCode"`
+
+	// The reason the simulation job batch failed.
+	FailureReason *string `locationName:"failureReason" type:"string"`
+
+	// A list of pending simulation job requests. These requests have not yet been
+	// created into simulation jobs.
+	PendingRequests []*SimulationJobRequest `locationName:"pendingRequests" min:"1" type:"list"`
+
+	// The status of the simulation job batch.
+	//
+	// Pending
+	//
+	// The simulation job batch request is pending.
+	//
+	// InProgress
+	//
+	// The simulation job batch is in progress.
+	//
+	// Failed
+	//
+	// The simulation job batch failed. One or more simulation job requests could
+	// not be completed due to an internal failure (like InternalServiceError).
+	// See failureCode and failureReason for more information.
+	//
+	// Completed
+	//
+	// The simulation batch job completed. A batch is complete when (1) there are
+	// no pending simulation job requests in the batch and none of the failed simulation
+	// job requests are due to InternalServiceError and (2) when all created simulation
+	// jobs have reached a terminal state (for example, Completed or Failed).
+	//
+	// Canceled
+	//
+	// The simulation batch job was cancelled.
+	//
+	// Canceling
+	//
+	// The simulation batch job is being cancelled.
+	//
+	// Completing
+	//
+	// The simulation batch job is completing.
+	//
+	// TimingOut
+	//
+	// The simulation job batch is timing out.
+	//
+	// If a batch timing out, and there are pending requests that were failing due
+	// to an internal failure (like InternalServiceError), the batch status will
+	// be Failed. If there are no such failing request, the batch status will be
+	// TimedOut.
+	//
+	// TimedOut
+	//
+	// The simulation batch job timed out.
+	Status *string `locationName:"status" type:"string" enum:"SimulationJobBatchStatus"`
+
+	// A map that contains tag keys and tag values that are attached to the deployment
+	// job batch.
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation
+func (s StartSimulationJobBatchOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartSimulationJobBatchOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *StartSimulationJobBatchOutput) SetArn(v string) *StartSimulationJobBatchOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetBatchPolicy sets the BatchPolicy field's value.
+func (s *StartSimulationJobBatchOutput) SetBatchPolicy(v *BatchPolicy) *StartSimulationJobBatchOutput {
+	s.BatchPolicy = v
+	return s
+}
+
+// SetClientRequestToken sets the ClientRequestToken field's value.
+func (s *StartSimulationJobBatchOutput) SetClientRequestToken(v string) *StartSimulationJobBatchOutput {
+	s.ClientRequestToken = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *StartSimulationJobBatchOutput) SetCreatedAt(v time.Time) *StartSimulationJobBatchOutput {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetCreatedRequests sets the CreatedRequests field's value.
+func (s *StartSimulationJobBatchOutput) SetCreatedRequests(v []*SimulationJobSummary) *StartSimulationJobBatchOutput {
+	s.CreatedRequests = v
+	return s
+}
+
+// SetFailedRequests sets the FailedRequests field's value.
+func (s *StartSimulationJobBatchOutput) SetFailedRequests(v []*FailedCreateSimulationJobRequest) *StartSimulationJobBatchOutput {
+	s.FailedRequests = v
+	return s
+}
+
+// SetFailureCode sets the FailureCode field's value.
+func (s *StartSimulationJobBatchOutput) SetFailureCode(v string) *StartSimulationJobBatchOutput {
+	s.FailureCode = &v
+	return s
+}
+
+// SetFailureReason sets the FailureReason field's value.
+func (s *StartSimulationJobBatchOutput) SetFailureReason(v string) *StartSimulationJobBatchOutput {
+	s.FailureReason = &v
+	return s
+}
+
+// SetPendingRequests sets the PendingRequests field's value.
+func (s *StartSimulationJobBatchOutput) SetPendingRequests(v []*SimulationJobRequest) *StartSimulationJobBatchOutput {
+	s.PendingRequests = v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *StartSimulationJobBatchOutput) SetStatus(v string) *StartSimulationJobBatchOutput {
+	s.Status = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *StartSimulationJobBatchOutput) SetTags(v map[string]*string) *StartSimulationJobBatchOutput {
+	s.Tags = v
 	return s
 }
 
@@ -10087,6 +15961,173 @@ func (s TagResourceOutput) GoString() string {
 	return s.String()
 }
 
+// Information about a template location.
+type TemplateLocation struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon S3 bucket name.
+	//
+	// S3Bucket is a required field
+	S3Bucket *string `locationName:"s3Bucket" min:"3" type:"string" required:"true"`
+
+	// The list of S3 keys identifying the data source files.
+	//
+	// S3Key is a required field
+	S3Key *string `locationName:"s3Key" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s TemplateLocation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TemplateLocation) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TemplateLocation) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TemplateLocation"}
+	if s.S3Bucket == nil {
+		invalidParams.Add(request.NewErrParamRequired("S3Bucket"))
+	}
+	if s.S3Bucket != nil && len(*s.S3Bucket) < 3 {
+		invalidParams.Add(request.NewErrParamMinLen("S3Bucket", 3))
+	}
+	if s.S3Key == nil {
+		invalidParams.Add(request.NewErrParamRequired("S3Key"))
+	}
+	if s.S3Key != nil && len(*s.S3Key) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("S3Key", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetS3Bucket sets the S3Bucket field's value.
+func (s *TemplateLocation) SetS3Bucket(v string) *TemplateLocation {
+	s.S3Bucket = &v
+	return s
+}
+
+// SetS3Key sets the S3Key field's value.
+func (s *TemplateLocation) SetS3Key(v string) *TemplateLocation {
+	s.S3Key = &v
+	return s
+}
+
+// Summary information for a template.
+type TemplateSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the template.
+	Arn *string `locationName:"arn" min:"1" type:"string"`
+
+	// The time, in milliseconds since the epoch, when the template was created.
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
+
+	// The time, in milliseconds since the epoch, when the template was last updated.
+	LastUpdatedAt *time.Time `locationName:"lastUpdatedAt" type:"timestamp"`
+
+	// The name of the template.
+	Name *string `locationName:"name" type:"string"`
+}
+
+// String returns the string representation
+func (s TemplateSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TemplateSummary) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *TemplateSummary) SetArn(v string) *TemplateSummary {
+	s.Arn = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *TemplateSummary) SetCreatedAt(v time.Time) *TemplateSummary {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetLastUpdatedAt sets the LastUpdatedAt field's value.
+func (s *TemplateSummary) SetLastUpdatedAt(v time.Time) *TemplateSummary {
+	s.LastUpdatedAt = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *TemplateSummary) SetName(v string) *TemplateSummary {
+	s.Name = &v
+	return s
+}
+
+// AWS RoboMaker is temporarily unable to process the request. Try your call
+// again.
+type ThrottlingException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s ThrottlingException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ThrottlingException) GoString() string {
+	return s.String()
+}
+
+func newErrorThrottlingException(v protocol.ResponseMetadata) error {
+	return &ThrottlingException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ThrottlingException) Code() string {
+	return "ThrottlingException"
+}
+
+// Message returns the exception's message.
+func (s *ThrottlingException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ThrottlingException) OrigErr() error {
+	return nil
+}
+
+func (s *ThrottlingException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ThrottlingException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ThrottlingException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 type UntagResourceInput struct {
 	_ struct{} `type:"structure"`
 
@@ -10169,7 +16210,7 @@ type UpdateRobotApplicationInput struct {
 	// The revision id for the robot application.
 	CurrentRevisionId *string `locationName:"currentRevisionId" min:"1" type:"string"`
 
-	// The robot software suite used by the robot application.
+	// The robot software suite (ROS distribution) used by the robot application.
 	//
 	// RobotSoftwareSuite is a required field
 	RobotSoftwareSuite *RobotSoftwareSuite `locationName:"robotSoftwareSuite" type:"structure" required:"true"`
@@ -10265,7 +16306,7 @@ type UpdateRobotApplicationOutput struct {
 	// The revision id of the robot application.
 	RevisionId *string `locationName:"revisionId" min:"1" type:"string"`
 
-	// The robot software suite used by the robot application.
+	// The robot software suite (ROS distribution) used by the robot application.
 	RobotSoftwareSuite *RobotSoftwareSuite `locationName:"robotSoftwareSuite" type:"structure"`
 
 	// The sources of the robot application.
@@ -10341,7 +16382,7 @@ type UpdateSimulationApplicationInput struct {
 	// The rendering engine for the simulation application.
 	RenderingEngine *RenderingEngine `locationName:"renderingEngine" type:"structure"`
 
-	// Information about the robot software suite.
+	// Information about the robot software suite (ROS distribution).
 	//
 	// RobotSoftwareSuite is a required field
 	RobotSoftwareSuite *RobotSoftwareSuite `locationName:"robotSoftwareSuite" type:"structure" required:"true"`
@@ -10387,6 +16428,11 @@ func (s *UpdateSimulationApplicationInput) Validate() error {
 	}
 	if s.Sources == nil {
 		invalidParams.Add(request.NewErrParamRequired("Sources"))
+	}
+	if s.RenderingEngine != nil {
+		if err := s.RenderingEngine.Validate(); err != nil {
+			invalidParams.AddNested("RenderingEngine", err.(request.ErrInvalidParams))
+		}
 	}
 	if s.Sources != nil {
 		for i, v := range s.Sources {
@@ -10460,7 +16506,7 @@ type UpdateSimulationApplicationOutput struct {
 	// The revision id of the simulation application.
 	RevisionId *string `locationName:"revisionId" min:"1" type:"string"`
 
-	// Information about the robot software suite.
+	// Information about the robot software suite (ROS distribution).
 	RobotSoftwareSuite *RobotSoftwareSuite `locationName:"robotSoftwareSuite" type:"structure"`
 
 	// The simulation software suite used by the simulation application.
@@ -10534,6 +16580,133 @@ func (s *UpdateSimulationApplicationOutput) SetSources(v []*Source) *UpdateSimul
 // SetVersion sets the Version field's value.
 func (s *UpdateSimulationApplicationOutput) SetVersion(v string) *UpdateSimulationApplicationOutput {
 	s.Version = &v
+	return s
+}
+
+type UpdateWorldTemplateInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the template.
+	Name *string `locationName:"name" type:"string"`
+
+	// The Amazon Resource Name (arn) of the world template to update.
+	//
+	// Template is a required field
+	Template *string `locationName:"template" min:"1" type:"string" required:"true"`
+
+	// The world template body.
+	TemplateBody *string `locationName:"templateBody" min:"1" type:"string"`
+
+	// The location of the world template.
+	TemplateLocation *TemplateLocation `locationName:"templateLocation" type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateWorldTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateWorldTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateWorldTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateWorldTemplateInput"}
+	if s.Template == nil {
+		invalidParams.Add(request.NewErrParamRequired("Template"))
+	}
+	if s.Template != nil && len(*s.Template) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Template", 1))
+	}
+	if s.TemplateBody != nil && len(*s.TemplateBody) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TemplateBody", 1))
+	}
+	if s.TemplateLocation != nil {
+		if err := s.TemplateLocation.Validate(); err != nil {
+			invalidParams.AddNested("TemplateLocation", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateWorldTemplateInput) SetName(v string) *UpdateWorldTemplateInput {
+	s.Name = &v
+	return s
+}
+
+// SetTemplate sets the Template field's value.
+func (s *UpdateWorldTemplateInput) SetTemplate(v string) *UpdateWorldTemplateInput {
+	s.Template = &v
+	return s
+}
+
+// SetTemplateBody sets the TemplateBody field's value.
+func (s *UpdateWorldTemplateInput) SetTemplateBody(v string) *UpdateWorldTemplateInput {
+	s.TemplateBody = &v
+	return s
+}
+
+// SetTemplateLocation sets the TemplateLocation field's value.
+func (s *UpdateWorldTemplateInput) SetTemplateLocation(v *TemplateLocation) *UpdateWorldTemplateInput {
+	s.TemplateLocation = v
+	return s
+}
+
+type UpdateWorldTemplateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (arn) of the world template.
+	Arn *string `locationName:"arn" min:"1" type:"string"`
+
+	// The time, in milliseconds since the epoch, when the world template was created.
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
+
+	// The time, in milliseconds since the epoch, when the world template was last
+	// updated.
+	LastUpdatedAt *time.Time `locationName:"lastUpdatedAt" type:"timestamp"`
+
+	// The name of the world template.
+	Name *string `locationName:"name" type:"string"`
+}
+
+// String returns the string representation
+func (s UpdateWorldTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateWorldTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *UpdateWorldTemplateOutput) SetArn(v string) *UpdateWorldTemplateOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *UpdateWorldTemplateOutput) SetCreatedAt(v time.Time) *UpdateWorldTemplateOutput {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetLastUpdatedAt sets the LastUpdatedAt field's value.
+func (s *UpdateWorldTemplateOutput) SetLastUpdatedAt(v time.Time) *UpdateWorldTemplateOutput {
+	s.LastUpdatedAt = &v
+	return s
+}
+
+// SetName sets the Name field's value.
+func (s *UpdateWorldTemplateOutput) SetName(v string) *UpdateWorldTemplateOutput {
+	s.Name = &v
 	return s
 }
 
@@ -10654,6 +16827,381 @@ func (s *VPCConfigResponse) SetVpcId(v string) *VPCConfigResponse {
 	return s
 }
 
+// Configuration information for a world.
+type WorldConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The world generated by Simulation WorldForge.
+	World *string `locationName:"world" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s WorldConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s WorldConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *WorldConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "WorldConfig"}
+	if s.World != nil && len(*s.World) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("World", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetWorld sets the World field's value.
+func (s *WorldConfig) SetWorld(v string) *WorldConfig {
+	s.World = &v
+	return s
+}
+
+// The number of worlds that will be created. You can configure the number of
+// unique floorplans and the number of unique interiors for each floor plan.
+// For example, if you want 1 world with 20 unique interiors, you set floorplanCount
+// = 1 and interiorCountPerFloorplan = 20. This will result in 20 worlds (floorplanCount
+// * interiorCountPerFloorplan).
+//
+// If you set floorplanCount = 4 and interiorCountPerFloorplan = 5, there will
+// be 20 worlds with 5 unique floor plans.
+type WorldCount struct {
+	_ struct{} `type:"structure"`
+
+	// The number of unique floorplans.
+	FloorplanCount *int64 `locationName:"floorplanCount" type:"integer"`
+
+	// The number of unique interiors per floorplan.
+	InteriorCountPerFloorplan *int64 `locationName:"interiorCountPerFloorplan" type:"integer"`
+}
+
+// String returns the string representation
+func (s WorldCount) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s WorldCount) GoString() string {
+	return s.String()
+}
+
+// SetFloorplanCount sets the FloorplanCount field's value.
+func (s *WorldCount) SetFloorplanCount(v int64) *WorldCount {
+	s.FloorplanCount = &v
+	return s
+}
+
+// SetInteriorCountPerFloorplan sets the InteriorCountPerFloorplan field's value.
+func (s *WorldCount) SetInteriorCountPerFloorplan(v int64) *WorldCount {
+	s.InteriorCountPerFloorplan = &v
+	return s
+}
+
+// Information about a world export job.
+type WorldExportJobSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the world export job.
+	Arn *string `locationName:"arn" min:"1" type:"string"`
+
+	// The time, in milliseconds since the epoch, when the world export job was
+	// created.
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
+
+	// The status of the world export job.
+	//
+	// Pending
+	//
+	// The world export job request is pending.
+	//
+	// Running
+	//
+	// The world export job is running.
+	//
+	// Completed
+	//
+	// The world export job completed.
+	//
+	// Failed
+	//
+	// The world export job failed. See failureCode for more information.
+	//
+	// Canceled
+	//
+	// The world export job was cancelled.
+	//
+	// Canceling
+	//
+	// The world export job is being cancelled.
+	Status *string `locationName:"status" type:"string" enum:"WorldExportJobStatus"`
+
+	// A list of worlds.
+	Worlds []*string `locationName:"worlds" min:"1" type:"list"`
+}
+
+// String returns the string representation
+func (s WorldExportJobSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s WorldExportJobSummary) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *WorldExportJobSummary) SetArn(v string) *WorldExportJobSummary {
+	s.Arn = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *WorldExportJobSummary) SetCreatedAt(v time.Time) *WorldExportJobSummary {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *WorldExportJobSummary) SetStatus(v string) *WorldExportJobSummary {
+	s.Status = &v
+	return s
+}
+
+// SetWorlds sets the Worlds field's value.
+func (s *WorldExportJobSummary) SetWorlds(v []*string) *WorldExportJobSummary {
+	s.Worlds = v
+	return s
+}
+
+// Information about a failed world.
+type WorldFailure struct {
+	_ struct{} `type:"structure"`
+
+	// The failure code of the world export job if it failed:
+	//
+	// InternalServiceError
+	//
+	// Internal service error.
+	//
+	// LimitExceeded
+	//
+	// The requested resource exceeds the maximum number allowed, or the number
+	// of concurrent stream requests exceeds the maximum number allowed.
+	//
+	// ResourceNotFound
+	//
+	// The specified resource could not be found.
+	//
+	// RequestThrottled
+	//
+	// The request was throttled.
+	//
+	// InvalidInput
+	//
+	// An input parameter in the request is not valid.
+	FailureCode *string `locationName:"failureCode" type:"string" enum:"WorldGenerationJobErrorCode"`
+
+	// The number of failed worlds.
+	FailureCount *int64 `locationName:"failureCount" type:"integer"`
+
+	// The sample reason why the world failed. World errors are aggregated. A sample
+	// is used as the sampleFailureReason.
+	SampleFailureReason *string `locationName:"sampleFailureReason" type:"string"`
+}
+
+// String returns the string representation
+func (s WorldFailure) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s WorldFailure) GoString() string {
+	return s.String()
+}
+
+// SetFailureCode sets the FailureCode field's value.
+func (s *WorldFailure) SetFailureCode(v string) *WorldFailure {
+	s.FailureCode = &v
+	return s
+}
+
+// SetFailureCount sets the FailureCount field's value.
+func (s *WorldFailure) SetFailureCount(v int64) *WorldFailure {
+	s.FailureCount = &v
+	return s
+}
+
+// SetSampleFailureReason sets the SampleFailureReason field's value.
+func (s *WorldFailure) SetSampleFailureReason(v string) *WorldFailure {
+	s.SampleFailureReason = &v
+	return s
+}
+
+// Information about a world generator job.
+type WorldGenerationJobSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the world generator job.
+	Arn *string `locationName:"arn" min:"1" type:"string"`
+
+	// The time, in milliseconds since the epoch, when the world generator job was
+	// created.
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
+
+	// The number of worlds that failed.
+	FailedWorldCount *int64 `locationName:"failedWorldCount" type:"integer"`
+
+	// The status of the world generator job:
+	//
+	// Pending
+	//
+	// The world generator job request is pending.
+	//
+	// Running
+	//
+	// The world generator job is running.
+	//
+	// Completed
+	//
+	// The world generator job completed.
+	//
+	// Failed
+	//
+	// The world generator job failed. See failureCode for more information.
+	//
+	// PartialFailed
+	//
+	// Some worlds did not generate.
+	//
+	// Canceled
+	//
+	// The world generator job was cancelled.
+	//
+	// Canceling
+	//
+	// The world generator job is being cancelled.
+	Status *string `locationName:"status" type:"string" enum:"WorldGenerationJobStatus"`
+
+	// The number of worlds that were generated.
+	SucceededWorldCount *int64 `locationName:"succeededWorldCount" type:"integer"`
+
+	// The Amazon Resource Name (arn) of the world template.
+	Template *string `locationName:"template" min:"1" type:"string"`
+
+	// Information about the world count.
+	WorldCount *WorldCount `locationName:"worldCount" type:"structure"`
+}
+
+// String returns the string representation
+func (s WorldGenerationJobSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s WorldGenerationJobSummary) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *WorldGenerationJobSummary) SetArn(v string) *WorldGenerationJobSummary {
+	s.Arn = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *WorldGenerationJobSummary) SetCreatedAt(v time.Time) *WorldGenerationJobSummary {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetFailedWorldCount sets the FailedWorldCount field's value.
+func (s *WorldGenerationJobSummary) SetFailedWorldCount(v int64) *WorldGenerationJobSummary {
+	s.FailedWorldCount = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *WorldGenerationJobSummary) SetStatus(v string) *WorldGenerationJobSummary {
+	s.Status = &v
+	return s
+}
+
+// SetSucceededWorldCount sets the SucceededWorldCount field's value.
+func (s *WorldGenerationJobSummary) SetSucceededWorldCount(v int64) *WorldGenerationJobSummary {
+	s.SucceededWorldCount = &v
+	return s
+}
+
+// SetTemplate sets the Template field's value.
+func (s *WorldGenerationJobSummary) SetTemplate(v string) *WorldGenerationJobSummary {
+	s.Template = &v
+	return s
+}
+
+// SetWorldCount sets the WorldCount field's value.
+func (s *WorldGenerationJobSummary) SetWorldCount(v *WorldCount) *WorldGenerationJobSummary {
+	s.WorldCount = v
+	return s
+}
+
+// Information about a world.
+type WorldSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) of the world.
+	Arn *string `locationName:"arn" min:"1" type:"string"`
+
+	// The time, in milliseconds since the epoch, when the world was created.
+	CreatedAt *time.Time `locationName:"createdAt" type:"timestamp"`
+
+	// The Amazon Resource Name (arn) of the world generation job.
+	GenerationJob *string `locationName:"generationJob" min:"1" type:"string"`
+
+	// The Amazon Resource Name (arn) of the world template.
+	Template *string `locationName:"template" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s WorldSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s WorldSummary) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *WorldSummary) SetArn(v string) *WorldSummary {
+	s.Arn = &v
+	return s
+}
+
+// SetCreatedAt sets the CreatedAt field's value.
+func (s *WorldSummary) SetCreatedAt(v time.Time) *WorldSummary {
+	s.CreatedAt = &v
+	return s
+}
+
+// SetGenerationJob sets the GenerationJob field's value.
+func (s *WorldSummary) SetGenerationJob(v string) *WorldSummary {
+	s.GenerationJob = &v
+	return s
+}
+
+// SetTemplate sets the Template field's value.
+func (s *WorldSummary) SetTemplate(v string) *WorldSummary {
+	s.Template = &v
+	return s
+}
+
 const (
 	// ArchitectureX8664 is a Architecture enum value
 	ArchitectureX8664 = "X86_64"
@@ -10664,6 +17212,15 @@ const (
 	// ArchitectureArmhf is a Architecture enum value
 	ArchitectureArmhf = "ARMHF"
 )
+
+// Architecture_Values returns all elements of the Architecture enum
+func Architecture_Values() []string {
+	return []string{
+		ArchitectureX8664,
+		ArchitectureArm64,
+		ArchitectureArmhf,
+	}
+}
 
 const (
 	// DeploymentJobErrorCodeResourceNotFound is a DeploymentJobErrorCode enum value
@@ -10690,6 +17247,9 @@ const (
 	// DeploymentJobErrorCodeGreengrassDeploymentFailed is a DeploymentJobErrorCode enum value
 	DeploymentJobErrorCodeGreengrassDeploymentFailed = "GreengrassDeploymentFailed"
 
+	// DeploymentJobErrorCodeInvalidGreengrassGroup is a DeploymentJobErrorCode enum value
+	DeploymentJobErrorCodeInvalidGreengrassGroup = "InvalidGreengrassGroup"
+
 	// DeploymentJobErrorCodeMissingRobotArchitecture is a DeploymentJobErrorCode enum value
 	DeploymentJobErrorCodeMissingRobotArchitecture = "MissingRobotArchitecture"
 
@@ -10701,6 +17261,9 @@ const (
 
 	// DeploymentJobErrorCodeGreengrassGroupVersionDoesNotExist is a DeploymentJobErrorCode enum value
 	DeploymentJobErrorCodeGreengrassGroupVersionDoesNotExist = "GreengrassGroupVersionDoesNotExist"
+
+	// DeploymentJobErrorCodeLambdaDeleted is a DeploymentJobErrorCode enum value
+	DeploymentJobErrorCodeLambdaDeleted = "LambdaDeleted"
 
 	// DeploymentJobErrorCodeExtractingBundleFailure is a DeploymentJobErrorCode enum value
 	DeploymentJobErrorCodeExtractingBundleFailure = "ExtractingBundleFailure"
@@ -10720,6 +17283,32 @@ const (
 	// DeploymentJobErrorCodeInternalServerError is a DeploymentJobErrorCode enum value
 	DeploymentJobErrorCodeInternalServerError = "InternalServerError"
 )
+
+// DeploymentJobErrorCode_Values returns all elements of the DeploymentJobErrorCode enum
+func DeploymentJobErrorCode_Values() []string {
+	return []string{
+		DeploymentJobErrorCodeResourceNotFound,
+		DeploymentJobErrorCodeEnvironmentSetupError,
+		DeploymentJobErrorCodeEtagMismatch,
+		DeploymentJobErrorCodeFailureThresholdBreached,
+		DeploymentJobErrorCodeRobotDeploymentAborted,
+		DeploymentJobErrorCodeRobotDeploymentNoResponse,
+		DeploymentJobErrorCodeRobotAgentConnectionTimeout,
+		DeploymentJobErrorCodeGreengrassDeploymentFailed,
+		DeploymentJobErrorCodeInvalidGreengrassGroup,
+		DeploymentJobErrorCodeMissingRobotArchitecture,
+		DeploymentJobErrorCodeMissingRobotApplicationArchitecture,
+		DeploymentJobErrorCodeMissingRobotDeploymentResource,
+		DeploymentJobErrorCodeGreengrassGroupVersionDoesNotExist,
+		DeploymentJobErrorCodeLambdaDeleted,
+		DeploymentJobErrorCodeExtractingBundleFailure,
+		DeploymentJobErrorCodePreLaunchFileFailure,
+		DeploymentJobErrorCodePostLaunchFileFailure,
+		DeploymentJobErrorCodeBadPermissionError,
+		DeploymentJobErrorCodeDownloadConditionFailed,
+		DeploymentJobErrorCodeInternalServerError,
+	}
+}
 
 const (
 	// DeploymentStatusPending is a DeploymentStatus enum value
@@ -10741,6 +17330,18 @@ const (
 	DeploymentStatusCanceled = "Canceled"
 )
 
+// DeploymentStatus_Values returns all elements of the DeploymentStatus enum
+func DeploymentStatus_Values() []string {
+	return []string{
+		DeploymentStatusPending,
+		DeploymentStatusPreparing,
+		DeploymentStatusInProgress,
+		DeploymentStatusFailed,
+		DeploymentStatusSucceeded,
+		DeploymentStatusCanceled,
+	}
+}
+
 const (
 	// FailureBehaviorFail is a FailureBehavior enum value
 	FailureBehaviorFail = "Fail"
@@ -10749,10 +17350,25 @@ const (
 	FailureBehaviorContinue = "Continue"
 )
 
+// FailureBehavior_Values returns all elements of the FailureBehavior enum
+func FailureBehavior_Values() []string {
+	return []string{
+		FailureBehaviorFail,
+		FailureBehaviorContinue,
+	}
+}
+
 const (
 	// RenderingEngineTypeOgre is a RenderingEngineType enum value
 	RenderingEngineTypeOgre = "OGRE"
 )
+
+// RenderingEngineType_Values returns all elements of the RenderingEngineType enum
+func RenderingEngineType_Values() []string {
+	return []string{
+		RenderingEngineTypeOgre,
+	}
+}
 
 const (
 	// RobotDeploymentStepValidating is a RobotDeploymentStep enum value
@@ -10777,6 +17393,19 @@ const (
 	RobotDeploymentStepFinished = "Finished"
 )
 
+// RobotDeploymentStep_Values returns all elements of the RobotDeploymentStep enum
+func RobotDeploymentStep_Values() []string {
+	return []string{
+		RobotDeploymentStepValidating,
+		RobotDeploymentStepDownloadingExtracting,
+		RobotDeploymentStepExecutingDownloadCondition,
+		RobotDeploymentStepExecutingPreLaunch,
+		RobotDeploymentStepLaunching,
+		RobotDeploymentStepExecutingPostLaunch,
+		RobotDeploymentStepFinished,
+	}
+}
+
 const (
 	// RobotSoftwareSuiteTypeRos is a RobotSoftwareSuiteType enum value
 	RobotSoftwareSuiteTypeRos = "ROS"
@@ -10784,6 +17413,14 @@ const (
 	// RobotSoftwareSuiteTypeRos2 is a RobotSoftwareSuiteType enum value
 	RobotSoftwareSuiteTypeRos2 = "ROS2"
 )
+
+// RobotSoftwareSuiteType_Values returns all elements of the RobotSoftwareSuiteType enum
+func RobotSoftwareSuiteType_Values() []string {
+	return []string{
+		RobotSoftwareSuiteTypeRos,
+		RobotSoftwareSuiteTypeRos2,
+	}
+}
 
 const (
 	// RobotSoftwareSuiteVersionTypeKinetic is a RobotSoftwareSuiteVersionType enum value
@@ -10795,6 +17432,15 @@ const (
 	// RobotSoftwareSuiteVersionTypeDashing is a RobotSoftwareSuiteVersionType enum value
 	RobotSoftwareSuiteVersionTypeDashing = "Dashing"
 )
+
+// RobotSoftwareSuiteVersionType_Values returns all elements of the RobotSoftwareSuiteVersionType enum
+func RobotSoftwareSuiteVersionType_Values() []string {
+	return []string{
+		RobotSoftwareSuiteVersionTypeKinetic,
+		RobotSoftwareSuiteVersionTypeMelodic,
+		RobotSoftwareSuiteVersionTypeDashing,
+	}
+}
 
 const (
 	// RobotStatusAvailable is a RobotStatus enum value
@@ -10818,6 +17464,75 @@ const (
 	// RobotStatusNoResponse is a RobotStatus enum value
 	RobotStatusNoResponse = "NoResponse"
 )
+
+// RobotStatus_Values returns all elements of the RobotStatus enum
+func RobotStatus_Values() []string {
+	return []string{
+		RobotStatusAvailable,
+		RobotStatusRegistered,
+		RobotStatusPendingNewDeployment,
+		RobotStatusDeploying,
+		RobotStatusFailed,
+		RobotStatusInSync,
+		RobotStatusNoResponse,
+	}
+}
+
+const (
+	// SimulationJobBatchErrorCodeInternalServiceError is a SimulationJobBatchErrorCode enum value
+	SimulationJobBatchErrorCodeInternalServiceError = "InternalServiceError"
+)
+
+// SimulationJobBatchErrorCode_Values returns all elements of the SimulationJobBatchErrorCode enum
+func SimulationJobBatchErrorCode_Values() []string {
+	return []string{
+		SimulationJobBatchErrorCodeInternalServiceError,
+	}
+}
+
+const (
+	// SimulationJobBatchStatusPending is a SimulationJobBatchStatus enum value
+	SimulationJobBatchStatusPending = "Pending"
+
+	// SimulationJobBatchStatusInProgress is a SimulationJobBatchStatus enum value
+	SimulationJobBatchStatusInProgress = "InProgress"
+
+	// SimulationJobBatchStatusFailed is a SimulationJobBatchStatus enum value
+	SimulationJobBatchStatusFailed = "Failed"
+
+	// SimulationJobBatchStatusCompleted is a SimulationJobBatchStatus enum value
+	SimulationJobBatchStatusCompleted = "Completed"
+
+	// SimulationJobBatchStatusCanceled is a SimulationJobBatchStatus enum value
+	SimulationJobBatchStatusCanceled = "Canceled"
+
+	// SimulationJobBatchStatusCanceling is a SimulationJobBatchStatus enum value
+	SimulationJobBatchStatusCanceling = "Canceling"
+
+	// SimulationJobBatchStatusCompleting is a SimulationJobBatchStatus enum value
+	SimulationJobBatchStatusCompleting = "Completing"
+
+	// SimulationJobBatchStatusTimingOut is a SimulationJobBatchStatus enum value
+	SimulationJobBatchStatusTimingOut = "TimingOut"
+
+	// SimulationJobBatchStatusTimedOut is a SimulationJobBatchStatus enum value
+	SimulationJobBatchStatusTimedOut = "TimedOut"
+)
+
+// SimulationJobBatchStatus_Values returns all elements of the SimulationJobBatchStatus enum
+func SimulationJobBatchStatus_Values() []string {
+	return []string{
+		SimulationJobBatchStatusPending,
+		SimulationJobBatchStatusInProgress,
+		SimulationJobBatchStatusFailed,
+		SimulationJobBatchStatusCompleted,
+		SimulationJobBatchStatusCanceled,
+		SimulationJobBatchStatusCanceling,
+		SimulationJobBatchStatusCompleting,
+		SimulationJobBatchStatusTimingOut,
+		SimulationJobBatchStatusTimedOut,
+	}
+}
 
 const (
 	// SimulationJobErrorCodeInternalServiceError is a SimulationJobErrorCode enum value
@@ -10862,6 +17577,9 @@ const (
 	// SimulationJobErrorCodeInvalidS3resource is a SimulationJobErrorCode enum value
 	SimulationJobErrorCodeInvalidS3resource = "InvalidS3Resource"
 
+	// SimulationJobErrorCodeLimitExceeded is a SimulationJobErrorCode enum value
+	SimulationJobErrorCodeLimitExceeded = "LimitExceeded"
+
 	// SimulationJobErrorCodeMismatchedEtag is a SimulationJobErrorCode enum value
 	SimulationJobErrorCodeMismatchedEtag = "MismatchedEtag"
 
@@ -10873,6 +17591,15 @@ const (
 
 	// SimulationJobErrorCodeResourceNotFound is a SimulationJobErrorCode enum value
 	SimulationJobErrorCodeResourceNotFound = "ResourceNotFound"
+
+	// SimulationJobErrorCodeRequestThrottled is a SimulationJobErrorCode enum value
+	SimulationJobErrorCodeRequestThrottled = "RequestThrottled"
+
+	// SimulationJobErrorCodeBatchTimedOut is a SimulationJobErrorCode enum value
+	SimulationJobErrorCodeBatchTimedOut = "BatchTimedOut"
+
+	// SimulationJobErrorCodeBatchCanceled is a SimulationJobErrorCode enum value
+	SimulationJobErrorCodeBatchCanceled = "BatchCanceled"
 
 	// SimulationJobErrorCodeInvalidInput is a SimulationJobErrorCode enum value
 	SimulationJobErrorCodeInvalidInput = "InvalidInput"
@@ -10889,6 +17616,39 @@ const (
 	// SimulationJobErrorCodeWrongRegionSimulationApplication is a SimulationJobErrorCode enum value
 	SimulationJobErrorCodeWrongRegionSimulationApplication = "WrongRegionSimulationApplication"
 )
+
+// SimulationJobErrorCode_Values returns all elements of the SimulationJobErrorCode enum
+func SimulationJobErrorCode_Values() []string {
+	return []string{
+		SimulationJobErrorCodeInternalServiceError,
+		SimulationJobErrorCodeRobotApplicationCrash,
+		SimulationJobErrorCodeSimulationApplicationCrash,
+		SimulationJobErrorCodeBadPermissionsRobotApplication,
+		SimulationJobErrorCodeBadPermissionsSimulationApplication,
+		SimulationJobErrorCodeBadPermissionsS3object,
+		SimulationJobErrorCodeBadPermissionsS3output,
+		SimulationJobErrorCodeBadPermissionsCloudwatchLogs,
+		SimulationJobErrorCodeSubnetIpLimitExceeded,
+		SimulationJobErrorCodeEnilimitExceeded,
+		SimulationJobErrorCodeBadPermissionsUserCredentials,
+		SimulationJobErrorCodeInvalidBundleRobotApplication,
+		SimulationJobErrorCodeInvalidBundleSimulationApplication,
+		SimulationJobErrorCodeInvalidS3resource,
+		SimulationJobErrorCodeLimitExceeded,
+		SimulationJobErrorCodeMismatchedEtag,
+		SimulationJobErrorCodeRobotApplicationVersionMismatchedEtag,
+		SimulationJobErrorCodeSimulationApplicationVersionMismatchedEtag,
+		SimulationJobErrorCodeResourceNotFound,
+		SimulationJobErrorCodeRequestThrottled,
+		SimulationJobErrorCodeBatchTimedOut,
+		SimulationJobErrorCodeBatchCanceled,
+		SimulationJobErrorCodeInvalidInput,
+		SimulationJobErrorCodeWrongRegionS3bucket,
+		SimulationJobErrorCodeWrongRegionS3output,
+		SimulationJobErrorCodeWrongRegionRobotApplication,
+		SimulationJobErrorCodeWrongRegionSimulationApplication,
+	}
+}
 
 const (
 	// SimulationJobStatusPending is a SimulationJobStatus enum value
@@ -10922,6 +17682,22 @@ const (
 	SimulationJobStatusCanceled = "Canceled"
 )
 
+// SimulationJobStatus_Values returns all elements of the SimulationJobStatus enum
+func SimulationJobStatus_Values() []string {
+	return []string{
+		SimulationJobStatusPending,
+		SimulationJobStatusPreparing,
+		SimulationJobStatusRunning,
+		SimulationJobStatusRestarting,
+		SimulationJobStatusCompleted,
+		SimulationJobStatusFailed,
+		SimulationJobStatusRunningFailed,
+		SimulationJobStatusTerminating,
+		SimulationJobStatusTerminated,
+		SimulationJobStatusCanceled,
+	}
+}
+
 const (
 	// SimulationSoftwareSuiteTypeGazebo is a SimulationSoftwareSuiteType enum value
 	SimulationSoftwareSuiteTypeGazebo = "Gazebo"
@@ -10929,3 +17705,143 @@ const (
 	// SimulationSoftwareSuiteTypeRosbagPlay is a SimulationSoftwareSuiteType enum value
 	SimulationSoftwareSuiteTypeRosbagPlay = "RosbagPlay"
 )
+
+// SimulationSoftwareSuiteType_Values returns all elements of the SimulationSoftwareSuiteType enum
+func SimulationSoftwareSuiteType_Values() []string {
+	return []string{
+		SimulationSoftwareSuiteTypeGazebo,
+		SimulationSoftwareSuiteTypeRosbagPlay,
+	}
+}
+
+const (
+	// WorldExportJobErrorCodeInternalServiceError is a WorldExportJobErrorCode enum value
+	WorldExportJobErrorCodeInternalServiceError = "InternalServiceError"
+
+	// WorldExportJobErrorCodeLimitExceeded is a WorldExportJobErrorCode enum value
+	WorldExportJobErrorCodeLimitExceeded = "LimitExceeded"
+
+	// WorldExportJobErrorCodeResourceNotFound is a WorldExportJobErrorCode enum value
+	WorldExportJobErrorCodeResourceNotFound = "ResourceNotFound"
+
+	// WorldExportJobErrorCodeRequestThrottled is a WorldExportJobErrorCode enum value
+	WorldExportJobErrorCodeRequestThrottled = "RequestThrottled"
+
+	// WorldExportJobErrorCodeInvalidInput is a WorldExportJobErrorCode enum value
+	WorldExportJobErrorCodeInvalidInput = "InvalidInput"
+
+	// WorldExportJobErrorCodeAccessDenied is a WorldExportJobErrorCode enum value
+	WorldExportJobErrorCodeAccessDenied = "AccessDenied"
+)
+
+// WorldExportJobErrorCode_Values returns all elements of the WorldExportJobErrorCode enum
+func WorldExportJobErrorCode_Values() []string {
+	return []string{
+		WorldExportJobErrorCodeInternalServiceError,
+		WorldExportJobErrorCodeLimitExceeded,
+		WorldExportJobErrorCodeResourceNotFound,
+		WorldExportJobErrorCodeRequestThrottled,
+		WorldExportJobErrorCodeInvalidInput,
+		WorldExportJobErrorCodeAccessDenied,
+	}
+}
+
+const (
+	// WorldExportJobStatusPending is a WorldExportJobStatus enum value
+	WorldExportJobStatusPending = "Pending"
+
+	// WorldExportJobStatusRunning is a WorldExportJobStatus enum value
+	WorldExportJobStatusRunning = "Running"
+
+	// WorldExportJobStatusCompleted is a WorldExportJobStatus enum value
+	WorldExportJobStatusCompleted = "Completed"
+
+	// WorldExportJobStatusFailed is a WorldExportJobStatus enum value
+	WorldExportJobStatusFailed = "Failed"
+
+	// WorldExportJobStatusCanceling is a WorldExportJobStatus enum value
+	WorldExportJobStatusCanceling = "Canceling"
+
+	// WorldExportJobStatusCanceled is a WorldExportJobStatus enum value
+	WorldExportJobStatusCanceled = "Canceled"
+)
+
+// WorldExportJobStatus_Values returns all elements of the WorldExportJobStatus enum
+func WorldExportJobStatus_Values() []string {
+	return []string{
+		WorldExportJobStatusPending,
+		WorldExportJobStatusRunning,
+		WorldExportJobStatusCompleted,
+		WorldExportJobStatusFailed,
+		WorldExportJobStatusCanceling,
+		WorldExportJobStatusCanceled,
+	}
+}
+
+const (
+	// WorldGenerationJobErrorCodeInternalServiceError is a WorldGenerationJobErrorCode enum value
+	WorldGenerationJobErrorCodeInternalServiceError = "InternalServiceError"
+
+	// WorldGenerationJobErrorCodeLimitExceeded is a WorldGenerationJobErrorCode enum value
+	WorldGenerationJobErrorCodeLimitExceeded = "LimitExceeded"
+
+	// WorldGenerationJobErrorCodeResourceNotFound is a WorldGenerationJobErrorCode enum value
+	WorldGenerationJobErrorCodeResourceNotFound = "ResourceNotFound"
+
+	// WorldGenerationJobErrorCodeRequestThrottled is a WorldGenerationJobErrorCode enum value
+	WorldGenerationJobErrorCodeRequestThrottled = "RequestThrottled"
+
+	// WorldGenerationJobErrorCodeInvalidInput is a WorldGenerationJobErrorCode enum value
+	WorldGenerationJobErrorCodeInvalidInput = "InvalidInput"
+
+	// WorldGenerationJobErrorCodeAllWorldGenerationFailed is a WorldGenerationJobErrorCode enum value
+	WorldGenerationJobErrorCodeAllWorldGenerationFailed = "AllWorldGenerationFailed"
+)
+
+// WorldGenerationJobErrorCode_Values returns all elements of the WorldGenerationJobErrorCode enum
+func WorldGenerationJobErrorCode_Values() []string {
+	return []string{
+		WorldGenerationJobErrorCodeInternalServiceError,
+		WorldGenerationJobErrorCodeLimitExceeded,
+		WorldGenerationJobErrorCodeResourceNotFound,
+		WorldGenerationJobErrorCodeRequestThrottled,
+		WorldGenerationJobErrorCodeInvalidInput,
+		WorldGenerationJobErrorCodeAllWorldGenerationFailed,
+	}
+}
+
+const (
+	// WorldGenerationJobStatusPending is a WorldGenerationJobStatus enum value
+	WorldGenerationJobStatusPending = "Pending"
+
+	// WorldGenerationJobStatusRunning is a WorldGenerationJobStatus enum value
+	WorldGenerationJobStatusRunning = "Running"
+
+	// WorldGenerationJobStatusCompleted is a WorldGenerationJobStatus enum value
+	WorldGenerationJobStatusCompleted = "Completed"
+
+	// WorldGenerationJobStatusFailed is a WorldGenerationJobStatus enum value
+	WorldGenerationJobStatusFailed = "Failed"
+
+	// WorldGenerationJobStatusPartialFailed is a WorldGenerationJobStatus enum value
+	WorldGenerationJobStatusPartialFailed = "PartialFailed"
+
+	// WorldGenerationJobStatusCanceling is a WorldGenerationJobStatus enum value
+	WorldGenerationJobStatusCanceling = "Canceling"
+
+	// WorldGenerationJobStatusCanceled is a WorldGenerationJobStatus enum value
+	WorldGenerationJobStatusCanceled = "Canceled"
+)
+
+// WorldGenerationJobStatus_Values returns all elements of the WorldGenerationJobStatus enum
+func WorldGenerationJobStatus_Values() []string {
+	return []string{
+		WorldGenerationJobStatusPending,
+		WorldGenerationJobStatusRunning,
+		WorldGenerationJobStatusCompleted,
+		WorldGenerationJobStatusFailed,
+		WorldGenerationJobStatusPartialFailed,
+		WorldGenerationJobStatusCanceling,
+		WorldGenerationJobStatusCanceled,
+	}
+}

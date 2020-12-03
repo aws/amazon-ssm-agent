@@ -71,23 +71,23 @@ func (c *PinpointEmail) CreateConfigurationSetRequest(input *CreateConfiguration
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation CreateConfigurationSet for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeAlreadyExistsException "AlreadyExistsException"
+// Returned Error Types:
+//   * AlreadyExistsException
 //   The resource specified in your request already exists.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeLimitExceededException "LimitExceededException"
+//   * LimitExceededException
 //   There are too many instances of the specified resource type.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
-//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   * ConcurrentModificationException
 //   The resource is being modified by another operation or thread.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/CreateConfigurationSet
@@ -173,20 +173,20 @@ func (c *PinpointEmail) CreateConfigurationSetEventDestinationRequest(input *Cre
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation CreateConfigurationSetEventDestination for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeAlreadyExistsException "AlreadyExistsException"
+//   * AlreadyExistsException
 //   The resource specified in your request already exists.
 //
-//   * ErrCodeLimitExceededException "LimitExceededException"
+//   * LimitExceededException
 //   There are too many instances of the specified resource type.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/CreateConfigurationSetEventDestination
@@ -269,20 +269,20 @@ func (c *PinpointEmail) CreateDedicatedIpPoolRequest(input *CreateDedicatedIpPoo
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation CreateDedicatedIpPool for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeAlreadyExistsException "AlreadyExistsException"
+// Returned Error Types:
+//   * AlreadyExistsException
 //   The resource specified in your request already exists.
 //
-//   * ErrCodeLimitExceededException "LimitExceededException"
+//   * LimitExceededException
 //   There are too many instances of the specified resource type.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
-//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   * ConcurrentModificationException
 //   The resource is being modified by another operation or thread.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/CreateDedicatedIpPool
@@ -367,34 +367,34 @@ func (c *PinpointEmail) CreateDeliverabilityTestReportRequest(input *CreateDeliv
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation CreateDeliverabilityTestReport for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeAccountSuspendedException "AccountSuspendedException"
+// Returned Error Types:
+//   * AccountSuspendedException
 //   The message can't be sent because the account's ability to send email has
 //   been permanently restricted.
 //
-//   * ErrCodeSendingPausedException "SendingPausedException"
+//   * SendingPausedException
 //   The message can't be sent because the account's ability to send email is
 //   currently paused.
 //
-//   * ErrCodeMessageRejected "MessageRejected"
+//   * MessageRejected
 //   The message can't be sent because it contains invalid content.
 //
-//   * ErrCodeMailFromDomainNotVerifiedException "MailFromDomainNotVerifiedException"
+//   * MailFromDomainNotVerifiedException
 //   The message can't be sent because the sending domain isn't verified.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeLimitExceededException "LimitExceededException"
+//   * LimitExceededException
 //   There are too many instances of the specified resource type.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
-//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   * ConcurrentModificationException
 //   The resource is being modified by another operation or thread.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/CreateDeliverabilityTestReport
@@ -487,17 +487,17 @@ func (c *PinpointEmail) CreateEmailIdentityRequest(input *CreateEmailIdentityInp
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation CreateEmailIdentity for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeLimitExceededException "LimitExceededException"
+// Returned Error Types:
+//   * LimitExceededException
 //   There are too many instances of the specified resource type.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
-//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   * ConcurrentModificationException
 //   The resource is being modified by another operation or thread.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/CreateEmailIdentity
@@ -582,17 +582,17 @@ func (c *PinpointEmail) DeleteConfigurationSetRequest(input *DeleteConfiguration
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation DeleteConfigurationSet for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
-//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   * ConcurrentModificationException
 //   The resource is being modified by another operation or thread.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/DeleteConfigurationSet
@@ -678,14 +678,14 @@ func (c *PinpointEmail) DeleteConfigurationSetEventDestinationRequest(input *Del
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation DeleteConfigurationSetEventDestination for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/DeleteConfigurationSetEventDestination
@@ -764,17 +764,17 @@ func (c *PinpointEmail) DeleteDedicatedIpPoolRequest(input *DeleteDedicatedIpPoo
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation DeleteDedicatedIpPool for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
-//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   * ConcurrentModificationException
 //   The resource is being modified by another operation or thread.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/DeleteDedicatedIpPool
@@ -854,17 +854,17 @@ func (c *PinpointEmail) DeleteEmailIdentityRequest(input *DeleteEmailIdentityInp
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation DeleteEmailIdentity for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
-//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   * ConcurrentModificationException
 //   The resource is being modified by another operation or thread.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/DeleteEmailIdentity
@@ -943,11 +943,11 @@ func (c *PinpointEmail) GetAccountRequest(input *GetAccountInput) (req *request.
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation GetAccount for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+// Returned Error Types:
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/GetAccount
@@ -1026,14 +1026,14 @@ func (c *PinpointEmail) GetBlacklistReportsRequest(input *GetBlacklistReportsInp
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation GetBlacklistReports for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+// Returned Error Types:
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/GetBlacklistReports
@@ -1119,14 +1119,14 @@ func (c *PinpointEmail) GetConfigurationSetRequest(input *GetConfigurationSetInp
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation GetConfigurationSet for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/GetConfigurationSet
@@ -1212,14 +1212,14 @@ func (c *PinpointEmail) GetConfigurationSetEventDestinationsRequest(input *GetCo
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation GetConfigurationSetEventDestinations for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/GetConfigurationSetEventDestinations
@@ -1299,14 +1299,14 @@ func (c *PinpointEmail) GetDedicatedIpRequest(input *GetDedicatedIpInput) (req *
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation GetDedicatedIp for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+// Returned Error Types:
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/GetDedicatedIp
@@ -1391,14 +1391,14 @@ func (c *PinpointEmail) GetDedicatedIpsRequest(input *GetDedicatedIpsInput) (req
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation GetDedicatedIps for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+// Returned Error Types:
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/GetDedicatedIps
@@ -1537,14 +1537,14 @@ func (c *PinpointEmail) GetDeliverabilityDashboardOptionsRequest(input *GetDeliv
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation GetDeliverabilityDashboardOptions for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+// Returned Error Types:
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeLimitExceededException "LimitExceededException"
+//   * LimitExceededException
 //   There are too many instances of the specified resource type.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/GetDeliverabilityDashboardOptions
@@ -1622,14 +1622,14 @@ func (c *PinpointEmail) GetDeliverabilityTestReportRequest(input *GetDeliverabil
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation GetDeliverabilityTestReport for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+// Returned Error Types:
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/GetDeliverabilityTestReport
@@ -1710,14 +1710,14 @@ func (c *PinpointEmail) GetDomainDeliverabilityCampaignRequest(input *GetDomainD
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation GetDomainDeliverabilityCampaign for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+// Returned Error Types:
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/GetDomainDeliverabilityCampaign
@@ -1796,14 +1796,14 @@ func (c *PinpointEmail) GetDomainStatisticsReportRequest(input *GetDomainStatist
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation GetDomainStatisticsReport for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+// Returned Error Types:
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/GetDomainStatisticsReport
@@ -1883,14 +1883,14 @@ func (c *PinpointEmail) GetEmailIdentityRequest(input *GetEmailIdentityInput) (r
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation GetEmailIdentity for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/GetEmailIdentity
@@ -1981,11 +1981,11 @@ func (c *PinpointEmail) ListConfigurationSetsRequest(input *ListConfigurationSet
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation ListConfigurationSets for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+// Returned Error Types:
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/ListConfigurationSets
@@ -2122,11 +2122,11 @@ func (c *PinpointEmail) ListDedicatedIpPoolsRequest(input *ListDedicatedIpPoolsI
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation ListDedicatedIpPools for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+// Returned Error Types:
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/ListDedicatedIpPools
@@ -2265,14 +2265,14 @@ func (c *PinpointEmail) ListDeliverabilityTestReportsRequest(input *ListDelivera
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation ListDeliverabilityTestReports for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+// Returned Error Types:
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/ListDeliverabilityTestReports
@@ -2411,14 +2411,14 @@ func (c *PinpointEmail) ListDomainDeliverabilityCampaignsRequest(input *ListDoma
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation ListDomainDeliverabilityCampaigns for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+// Returned Error Types:
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/ListDomainDeliverabilityCampaigns
@@ -2557,11 +2557,11 @@ func (c *PinpointEmail) ListEmailIdentitiesRequest(input *ListEmailIdentitiesInp
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation ListEmailIdentities for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+// Returned Error Types:
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/ListEmailIdentities
@@ -2696,14 +2696,14 @@ func (c *PinpointEmail) ListTagsForResourceRequest(input *ListTagsForResourceInp
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation ListTagsForResource for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   The input you provided is invalid.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/ListTagsForResource
@@ -2782,11 +2782,11 @@ func (c *PinpointEmail) PutAccountDedicatedIpWarmupAttributesRequest(input *PutA
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation PutAccountDedicatedIpWarmupAttributes for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+// Returned Error Types:
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/PutAccountDedicatedIpWarmupAttributes
@@ -2865,11 +2865,11 @@ func (c *PinpointEmail) PutAccountSendingAttributesRequest(input *PutAccountSend
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation PutAccountSendingAttributes for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+// Returned Error Types:
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/PutAccountSendingAttributes
@@ -2950,14 +2950,14 @@ func (c *PinpointEmail) PutConfigurationSetDeliveryOptionsRequest(input *PutConf
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation PutConfigurationSetDeliveryOptions for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/PutConfigurationSetDeliveryOptions
@@ -3037,14 +3037,14 @@ func (c *PinpointEmail) PutConfigurationSetReputationOptionsRequest(input *PutCo
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation PutConfigurationSetReputationOptions for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/PutConfigurationSetReputationOptions
@@ -3124,14 +3124,14 @@ func (c *PinpointEmail) PutConfigurationSetSendingOptionsRequest(input *PutConfi
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation PutConfigurationSetSendingOptions for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/PutConfigurationSetSendingOptions
@@ -3211,14 +3211,14 @@ func (c *PinpointEmail) PutConfigurationSetTrackingOptionsRequest(input *PutConf
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation PutConfigurationSetTrackingOptions for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/PutConfigurationSetTrackingOptions
@@ -3303,14 +3303,14 @@ func (c *PinpointEmail) PutDedicatedIpInPoolRequest(input *PutDedicatedIpInPoolI
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation PutDedicatedIpInPool for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/PutDedicatedIpInPool
@@ -3387,14 +3387,14 @@ func (c *PinpointEmail) PutDedicatedIpWarmupAttributesRequest(input *PutDedicate
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation PutDedicatedIpWarmupAttributes for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/PutDedicatedIpWarmupAttributes
@@ -3482,20 +3482,20 @@ func (c *PinpointEmail) PutDeliverabilityDashboardOptionRequest(input *PutDelive
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation PutDeliverabilityDashboardOption for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeAlreadyExistsException "AlreadyExistsException"
+// Returned Error Types:
+//   * AlreadyExistsException
 //   The resource specified in your request already exists.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeLimitExceededException "LimitExceededException"
+//   * LimitExceededException
 //   There are too many instances of the specified resource type.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/PutDeliverabilityDashboardOption
@@ -3574,14 +3574,14 @@ func (c *PinpointEmail) PutEmailIdentityDkimAttributesRequest(input *PutEmailIde
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation PutEmailIdentityDkimAttributes for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/PutEmailIdentityDkimAttributes
@@ -3674,14 +3674,14 @@ func (c *PinpointEmail) PutEmailIdentityFeedbackAttributesRequest(input *PutEmai
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation PutEmailIdentityFeedbackAttributes for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/PutEmailIdentityFeedbackAttributes
@@ -3761,14 +3761,14 @@ func (c *PinpointEmail) PutEmailIdentityMailFromAttributesRequest(input *PutEmai
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation PutEmailIdentityMailFromAttributes for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/PutEmailIdentityMailFromAttributes
@@ -3856,31 +3856,31 @@ func (c *PinpointEmail) SendEmailRequest(input *SendEmailInput) (req *request.Re
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation SendEmail for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+// Returned Error Types:
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeLimitExceededException "LimitExceededException"
+//   * LimitExceededException
 //   There are too many instances of the specified resource type.
 //
-//   * ErrCodeAccountSuspendedException "AccountSuspendedException"
+//   * AccountSuspendedException
 //   The message can't be sent because the account's ability to send email has
 //   been permanently restricted.
 //
-//   * ErrCodeSendingPausedException "SendingPausedException"
+//   * SendingPausedException
 //   The message can't be sent because the account's ability to send email is
 //   currently paused.
 //
-//   * ErrCodeMessageRejected "MessageRejected"
+//   * MessageRejected
 //   The message can't be sent because it contains invalid content.
 //
-//   * ErrCodeMailFromDomainNotVerifiedException "MailFromDomainNotVerifiedException"
+//   * MailFromDomainNotVerifiedException
 //   The message can't be sent because the sending domain isn't verified.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/SendEmail
@@ -3968,17 +3968,17 @@ func (c *PinpointEmail) TagResourceRequest(input *TagResourceInput) (req *reques
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation TagResource for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   The input you provided is invalid.
 //
-//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   * ConcurrentModificationException
 //   The resource is being modified by another operation or thread.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/TagResource
@@ -4057,17 +4057,17 @@ func (c *PinpointEmail) UntagResourceRequest(input *UntagResourceInput) (req *re
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation UntagResource for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   The input you provided is invalid.
 //
-//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   * ConcurrentModificationException
 //   The resource is being modified by another operation or thread.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/UntagResource
@@ -4153,14 +4153,14 @@ func (c *PinpointEmail) UpdateConfigurationSetEventDestinationRequest(input *Upd
 // See the AWS API reference guide for Amazon Pinpoint Email Service's
 // API operation UpdateConfigurationSetEventDestination for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/pinpoint-email-2018-07-26/UpdateConfigurationSetEventDestination
@@ -4183,6 +4183,175 @@ func (c *PinpointEmail) UpdateConfigurationSetEventDestinationWithContext(ctx aw
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// The message can't be sent because the account's ability to send email has
+// been permanently restricted.
+type AccountSuspendedException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s AccountSuspendedException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AccountSuspendedException) GoString() string {
+	return s.String()
+}
+
+func newErrorAccountSuspendedException(v protocol.ResponseMetadata) error {
+	return &AccountSuspendedException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *AccountSuspendedException) Code() string {
+	return "AccountSuspendedException"
+}
+
+// Message returns the exception's message.
+func (s *AccountSuspendedException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *AccountSuspendedException) OrigErr() error {
+	return nil
+}
+
+func (s *AccountSuspendedException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *AccountSuspendedException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *AccountSuspendedException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// The resource specified in your request already exists.
+type AlreadyExistsException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s AlreadyExistsException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AlreadyExistsException) GoString() string {
+	return s.String()
+}
+
+func newErrorAlreadyExistsException(v protocol.ResponseMetadata) error {
+	return &AlreadyExistsException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *AlreadyExistsException) Code() string {
+	return "AlreadyExistsException"
+}
+
+// Message returns the exception's message.
+func (s *AlreadyExistsException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *AlreadyExistsException) OrigErr() error {
+	return nil
+}
+
+func (s *AlreadyExistsException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *AlreadyExistsException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *AlreadyExistsException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// The input you provided is invalid.
+type BadRequestException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s BadRequestException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BadRequestException) GoString() string {
+	return s.String()
+}
+
+func newErrorBadRequestException(v protocol.ResponseMetadata) error {
+	return &BadRequestException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *BadRequestException) Code() string {
+	return "BadRequestException"
+}
+
+// Message returns the exception's message.
+func (s *BadRequestException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *BadRequestException) OrigErr() error {
+	return nil
+}
+
+func (s *BadRequestException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *BadRequestException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *BadRequestException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 // An object that contains information about a blacklisting event that impacts
@@ -4422,6 +4591,62 @@ func (s *CloudWatchDimensionConfiguration) SetDimensionName(v string) *CloudWatc
 func (s *CloudWatchDimensionConfiguration) SetDimensionValueSource(v string) *CloudWatchDimensionConfiguration {
 	s.DimensionValueSource = &v
 	return s
+}
+
+// The resource is being modified by another operation or thread.
+type ConcurrentModificationException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s ConcurrentModificationException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ConcurrentModificationException) GoString() string {
+	return s.String()
+}
+
+func newErrorConcurrentModificationException(v protocol.ResponseMetadata) error {
+	return &ConcurrentModificationException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ConcurrentModificationException) Code() string {
+	return "ConcurrentModificationException"
+}
+
+// Message returns the exception's message.
+func (s *ConcurrentModificationException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ConcurrentModificationException) OrigErr() error {
+	return nil
+}
+
+func (s *ConcurrentModificationException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ConcurrentModificationException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ConcurrentModificationException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 // An object that represents the content of the email, and optionally a character
@@ -7394,6 +7619,62 @@ func (s *KinesisFirehoseDestination) SetIamRoleArn(v string) *KinesisFirehoseDes
 	return s
 }
 
+// There are too many instances of the specified resource type.
+type LimitExceededException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s LimitExceededException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s LimitExceededException) GoString() string {
+	return s.String()
+}
+
+func newErrorLimitExceededException(v protocol.ResponseMetadata) error {
+	return &LimitExceededException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *LimitExceededException) Code() string {
+	return "LimitExceededException"
+}
+
+// Message returns the exception's message.
+func (s *LimitExceededException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *LimitExceededException) OrigErr() error {
+	return nil
+}
+
+func (s *LimitExceededException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *LimitExceededException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *LimitExceededException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // A request to obtain a list of configuration sets for your Amazon Pinpoint
 // account in the current AWS Region.
 type ListConfigurationSetsInput struct {
@@ -7974,6 +8255,62 @@ func (s *MailFromAttributes) SetMailFromDomainStatus(v string) *MailFromAttribut
 	return s
 }
 
+// The message can't be sent because the sending domain isn't verified.
+type MailFromDomainNotVerifiedException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s MailFromDomainNotVerifiedException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s MailFromDomainNotVerifiedException) GoString() string {
+	return s.String()
+}
+
+func newErrorMailFromDomainNotVerifiedException(v protocol.ResponseMetadata) error {
+	return &MailFromDomainNotVerifiedException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *MailFromDomainNotVerifiedException) Code() string {
+	return "MailFromDomainNotVerifiedException"
+}
+
+// Message returns the exception's message.
+func (s *MailFromDomainNotVerifiedException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *MailFromDomainNotVerifiedException) OrigErr() error {
+	return nil
+}
+
+func (s *MailFromDomainNotVerifiedException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *MailFromDomainNotVerifiedException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *MailFromDomainNotVerifiedException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // Represents the email message that you're sending. The Message object consists
 // of a subject line and a message body.
 type Message struct {
@@ -8041,6 +8378,62 @@ func (s *Message) SetSubject(v *Content) *Message {
 	return s
 }
 
+// The message can't be sent because it contains invalid content.
+type MessageRejected struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s MessageRejected) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s MessageRejected) GoString() string {
+	return s.String()
+}
+
+func newErrorMessageRejected(v protocol.ResponseMetadata) error {
+	return &MessageRejected{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *MessageRejected) Code() string {
+	return "MessageRejected"
+}
+
+// Message returns the exception's message.
+func (s *MessageRejected) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *MessageRejected) OrigErr() error {
+	return nil
+}
+
+func (s *MessageRejected) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *MessageRejected) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *MessageRejected) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // Contains the name and value of a tag that you apply to an email. You can
 // use message tags when you publish email sending events.
 type MessageTag struct {
@@ -8105,6 +8498,62 @@ func (s *MessageTag) SetName(v string) *MessageTag {
 func (s *MessageTag) SetValue(v string) *MessageTag {
 	s.Value = &v
 	return s
+}
+
+// The resource you attempted to access doesn't exist.
+type NotFoundException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s NotFoundException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s NotFoundException) GoString() string {
+	return s.String()
+}
+
+func newErrorNotFoundException(v protocol.ResponseMetadata) error {
+	return &NotFoundException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *NotFoundException) Code() string {
+	return "NotFoundException"
+}
+
+// Message returns the exception's message.
+func (s *NotFoundException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *NotFoundException) OrigErr() error {
+	return nil
+}
+
+func (s *NotFoundException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *NotFoundException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *NotFoundException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 // An object that contains information about email that was sent from the selected
@@ -9412,6 +9861,63 @@ func (s *SendingOptions) SetSendingEnabled(v bool) *SendingOptions {
 	return s
 }
 
+// The message can't be sent because the account's ability to send email is
+// currently paused.
+type SendingPausedException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s SendingPausedException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SendingPausedException) GoString() string {
+	return s.String()
+}
+
+func newErrorSendingPausedException(v protocol.ResponseMetadata) error {
+	return &SendingPausedException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *SendingPausedException) Code() string {
+	return "SendingPausedException"
+}
+
+// Message returns the exception's message.
+func (s *SendingPausedException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *SendingPausedException) OrigErr() error {
+	return nil
+}
+
+func (s *SendingPausedException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *SendingPausedException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *SendingPausedException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // An object that defines an Amazon SNS destination for email events. You can
 // use Amazon SNS to send notification when certain email events occur.
 type SnsDestination struct {
@@ -9652,6 +10158,62 @@ func (s *Template) SetTemplateArn(v string) *Template {
 func (s *Template) SetTemplateData(v string) *Template {
 	s.TemplateData = &v
 	return s
+}
+
+// Too many requests have been made to the operation.
+type TooManyRequestsException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s TooManyRequestsException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TooManyRequestsException) GoString() string {
+	return s.String()
+}
+
+func newErrorTooManyRequestsException(v protocol.ResponseMetadata) error {
+	return &TooManyRequestsException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *TooManyRequestsException) Code() string {
+	return "TooManyRequestsException"
+}
+
+// Message returns the exception's message.
+func (s *TooManyRequestsException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *TooManyRequestsException) OrigErr() error {
+	return nil
+}
+
+func (s *TooManyRequestsException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *TooManyRequestsException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *TooManyRequestsException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 // An object that defines the tracking options for a configuration set. When
@@ -9940,6 +10502,14 @@ const (
 	BehaviorOnMxFailureRejectMessage = "REJECT_MESSAGE"
 )
 
+// BehaviorOnMxFailure_Values returns all elements of the BehaviorOnMxFailure enum
+func BehaviorOnMxFailure_Values() []string {
+	return []string{
+		BehaviorOnMxFailureUseDefaultValue,
+		BehaviorOnMxFailureRejectMessage,
+	}
+}
+
 // The current status of your Deliverability dashboard subscription. If this
 // value is PENDING_EXPIRATION, your subscription is scheduled to expire at
 // the end of the current calendar month.
@@ -9954,6 +10524,15 @@ const (
 	DeliverabilityDashboardAccountStatusDisabled = "DISABLED"
 )
 
+// DeliverabilityDashboardAccountStatus_Values returns all elements of the DeliverabilityDashboardAccountStatus enum
+func DeliverabilityDashboardAccountStatus_Values() []string {
+	return []string{
+		DeliverabilityDashboardAccountStatusActive,
+		DeliverabilityDashboardAccountStatusPendingExpiration,
+		DeliverabilityDashboardAccountStatusDisabled,
+	}
+}
+
 // The status of a predictive inbox placement test. If the status is IN_PROGRESS,
 // then the predictive inbox placement test is currently running. Predictive
 // inbox placement tests are usually complete within 24 hours of creating the
@@ -9966,6 +10545,14 @@ const (
 	// DeliverabilityTestStatusCompleted is a DeliverabilityTestStatus enum value
 	DeliverabilityTestStatusCompleted = "COMPLETED"
 )
+
+// DeliverabilityTestStatus_Values returns all elements of the DeliverabilityTestStatus enum
+func DeliverabilityTestStatus_Values() []string {
+	return []string{
+		DeliverabilityTestStatusInProgress,
+		DeliverabilityTestStatusCompleted,
+	}
+}
 
 // The location where Amazon Pinpoint finds the value of a dimension to publish
 // to Amazon CloudWatch. If you want Amazon Pinpoint to use the message tags
@@ -9983,6 +10570,15 @@ const (
 	// DimensionValueSourceLinkTag is a DimensionValueSource enum value
 	DimensionValueSourceLinkTag = "LINK_TAG"
 )
+
+// DimensionValueSource_Values returns all elements of the DimensionValueSource enum
+func DimensionValueSource_Values() []string {
+	return []string{
+		DimensionValueSourceMessageTag,
+		DimensionValueSourceEmailHeader,
+		DimensionValueSourceLinkTag,
+	}
+}
 
 // The DKIM authentication status of the identity. The status can be one of
 // the following:
@@ -10019,6 +10615,17 @@ const (
 	DkimStatusNotStarted = "NOT_STARTED"
 )
 
+// DkimStatus_Values returns all elements of the DkimStatus enum
+func DkimStatus_Values() []string {
+	return []string{
+		DkimStatusPending,
+		DkimStatusSuccess,
+		DkimStatusFailed,
+		DkimStatusTemporaryFailure,
+		DkimStatusNotStarted,
+	}
+}
+
 // An email sending event type. For example, email sends, opens, and bounces
 // are all email events.
 const (
@@ -10047,6 +10654,20 @@ const (
 	EventTypeRenderingFailure = "RENDERING_FAILURE"
 )
 
+// EventType_Values returns all elements of the EventType enum
+func EventType_Values() []string {
+	return []string{
+		EventTypeSend,
+		EventTypeReject,
+		EventTypeBounce,
+		EventTypeComplaint,
+		EventTypeDelivery,
+		EventTypeOpen,
+		EventTypeClick,
+		EventTypeRenderingFailure,
+	}
+}
+
 // The email identity type. The identity type can be one of the following:
 //
 //    * EMAIL_ADDRESS – The identity is an email address.
@@ -10062,6 +10683,15 @@ const (
 	// IdentityTypeManagedDomain is a IdentityType enum value
 	IdentityTypeManagedDomain = "MANAGED_DOMAIN"
 )
+
+// IdentityType_Values returns all elements of the IdentityType enum
+func IdentityType_Values() []string {
+	return []string{
+		IdentityTypeEmailAddress,
+		IdentityTypeDomain,
+		IdentityTypeManagedDomain,
+	}
+}
 
 // The status of the MAIL FROM domain. This status can have the following values:
 //
@@ -10090,6 +10720,16 @@ const (
 	MailFromDomainStatusTemporaryFailure = "TEMPORARY_FAILURE"
 )
 
+// MailFromDomainStatus_Values returns all elements of the MailFromDomainStatus enum
+func MailFromDomainStatus_Values() []string {
+	return []string{
+		MailFromDomainStatusPending,
+		MailFromDomainStatusSuccess,
+		MailFromDomainStatusFailed,
+		MailFromDomainStatusTemporaryFailure,
+	}
+}
+
 // Specifies whether messages that use the configuration set are required to
 // use Transport Layer Security (TLS). If the value is Require, messages are
 // only delivered if a TLS connection can be established. If the value is Optional,
@@ -10102,6 +10742,14 @@ const (
 	TlsPolicyOptional = "OPTIONAL"
 )
 
+// TlsPolicy_Values returns all elements of the TlsPolicy enum
+func TlsPolicy_Values() []string {
+	return []string{
+		TlsPolicyRequire,
+		TlsPolicyOptional,
+	}
+}
+
 // The warmup status of a dedicated IP.
 const (
 	// WarmupStatusInProgress is a WarmupStatus enum value
@@ -10110,3 +10758,11 @@ const (
 	// WarmupStatusDone is a WarmupStatus enum value
 	WarmupStatusDone = "DONE"
 )
+
+// WarmupStatus_Values returns all elements of the WarmupStatus enum
+func WarmupStatus_Values() []string {
+	return []string{
+		WarmupStatusInProgress,
+		WarmupStatusDone,
+	}
+}

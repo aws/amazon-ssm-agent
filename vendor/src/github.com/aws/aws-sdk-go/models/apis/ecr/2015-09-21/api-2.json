@@ -72,7 +72,8 @@
         {"shape":"InvalidLayerException"},
         {"shape":"LayerPartTooSmallException"},
         {"shape":"LayerAlreadyExistsException"},
-        {"shape":"EmptyUploadException"}
+        {"shape":"EmptyUploadException"},
+        {"shape":"KmsException"}
       ]
     },
     "CreateRepository":{
@@ -89,7 +90,8 @@
         {"shape":"InvalidTagParameterException"},
         {"shape":"TooManyTagsException"},
         {"shape":"RepositoryAlreadyExistsException"},
-        {"shape":"LimitExceededException"}
+        {"shape":"LimitExceededException"},
+        {"shape":"KmsException"}
       ]
     },
     "DeleteLifecyclePolicy":{
@@ -119,7 +121,8 @@
         {"shape":"ServerException"},
         {"shape":"InvalidParameterException"},
         {"shape":"RepositoryNotFoundException"},
-        {"shape":"RepositoryNotEmptyException"}
+        {"shape":"RepositoryNotEmptyException"},
+        {"shape":"KmsException"}
       ]
     },
     "DeleteRepositoryPolicy":{
@@ -267,7 +270,8 @@
       "errors":[
         {"shape":"ServerException"},
         {"shape":"InvalidParameterException"},
-        {"shape":"RepositoryNotFoundException"}
+        {"shape":"RepositoryNotFoundException"},
+        {"shape":"KmsException"}
       ]
     },
     "ListImages":{
@@ -312,8 +316,11 @@
         {"shape":"RepositoryNotFoundException"},
         {"shape":"ImageAlreadyExistsException"},
         {"shape":"LayersNotFoundException"},
+        {"shape":"ReferencedImagesNotFoundException"},
         {"shape":"LimitExceededException"},
-        {"shape":"ImageTagAlreadyExistsException"}
+        {"shape":"ImageTagAlreadyExistsException"},
+        {"shape":"ImageDigestDoesNotMatchException"},
+        {"shape":"KmsException"}
       ]
     },
     "PutImageScanningConfiguration":{
@@ -383,6 +390,8 @@
       "errors":[
         {"shape":"ServerException"},
         {"shape":"InvalidParameterException"},
+        {"shape":"UnsupportedImageTypeException"},
+        {"shape":"LimitExceededException"},
         {"shape":"RepositoryNotFoundException"},
         {"shape":"ImageNotFoundException"}
       ]
@@ -449,7 +458,8 @@
         {"shape":"InvalidLayerPartException"},
         {"shape":"RepositoryNotFoundException"},
         {"shape":"UploadNotFoundException"},
-        {"shape":"LimitExceededException"}
+        {"shape":"LimitExceededException"},
+        {"shape":"KmsException"}
       ]
     }
   },
@@ -594,7 +604,8 @@
         "repositoryName":{"shape":"RepositoryName"},
         "tags":{"shape":"TagList"},
         "imageTagMutability":{"shape":"ImageTagMutability"},
-        "imageScanningConfiguration":{"shape":"ImageScanningConfiguration"}
+        "imageScanningConfiguration":{"shape":"ImageScanningConfiguration"},
+        "encryptionConfiguration":{"shape":"EncryptionConfiguration"}
       }
     },
     "CreateRepositoryResponse":{
@@ -725,6 +736,21 @@
       },
       "exception":true
     },
+    "EncryptionConfiguration":{
+      "type":"structure",
+      "required":["encryptionType"],
+      "members":{
+        "encryptionType":{"shape":"EncryptionType"},
+        "kmsKey":{"shape":"KmsKey"}
+      }
+    },
+    "EncryptionType":{
+      "type":"string",
+      "enum":[
+        "AES256",
+        "KMS"
+      ]
+    },
     "EvaluationTimestamp":{"type":"timestamp"},
     "ExceptionMessage":{"type":"string"},
     "ExpirationTimestamp":{"type":"timestamp"},
@@ -847,7 +873,8 @@
         "registryId":{"shape":"RegistryId"},
         "repositoryName":{"shape":"RepositoryName"},
         "imageId":{"shape":"ImageIdentifier"},
-        "imageManifest":{"shape":"ImageManifest"}
+        "imageManifest":{"shape":"ImageManifest"},
+        "imageManifestMediaType":{"shape":"MediaType"}
       }
     },
     "ImageActionType":{
@@ -875,7 +902,9 @@
         "imageSizeInBytes":{"shape":"ImageSizeInBytes"},
         "imagePushedAt":{"shape":"PushTimestamp"},
         "imageScanStatus":{"shape":"ImageScanStatus"},
-        "imageScanFindingsSummary":{"shape":"ImageScanFindingsSummary"}
+        "imageScanFindingsSummary":{"shape":"ImageScanFindingsSummary"},
+        "imageManifestMediaType":{"shape":"MediaType"},
+        "artifactMediaType":{"shape":"MediaType"}
       }
     },
     "ImageDetailList":{
@@ -883,6 +912,13 @@
       "member":{"shape":"ImageDetail"}
     },
     "ImageDigest":{"type":"string"},
+    "ImageDigestDoesNotMatchException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ExceptionMessage"}
+      },
+      "exception":true
+    },
     "ImageFailure":{
       "type":"structure",
       "members":{
@@ -898,7 +934,9 @@
         "InvalidImageTag",
         "ImageTagDoesNotMatchDigest",
         "ImageNotFound",
-        "MissingDigestAndTag"
+        "MissingDigestAndTag",
+        "ImageReferencedByManifestList",
+        "KmsError"
       ]
     },
     "ImageFailureList":{
@@ -1049,6 +1087,20 @@
         "message":{"shape":"ExceptionMessage"}
       },
       "exception":true
+    },
+    "KmsError":{"type":"string"},
+    "KmsException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ExceptionMessage"},
+        "kmsError":{"shape":"KmsError"}
+      },
+      "exception":true
+    },
+    "KmsKey":{
+      "type":"string",
+      "max":2048,
+      "min":1
     },
     "Layer":{
       "type":"structure",
@@ -1283,7 +1335,9 @@
         "registryId":{"shape":"RegistryId"},
         "repositoryName":{"shape":"RepositoryName"},
         "imageManifest":{"shape":"ImageManifest"},
-        "imageTag":{"shape":"ImageTag"}
+        "imageManifestMediaType":{"shape":"MediaType"},
+        "imageTag":{"shape":"ImageTag"},
+        "imageDigest":{"shape":"ImageDigest"}
       }
     },
     "PutImageResponse":{
@@ -1352,6 +1406,13 @@
         "lifecyclePolicyText":{"shape":"LifecyclePolicyText"}
       }
     },
+    "ReferencedImagesNotFoundException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ExceptionMessage"}
+      },
+      "exception":true
+    },
     "RegistryId":{
       "type":"string",
       "pattern":"[0-9]{12}"
@@ -1365,7 +1426,8 @@
         "repositoryUri":{"shape":"Url"},
         "createdAt":{"shape":"CreationTimestamp"},
         "imageTagMutability":{"shape":"ImageTagMutability"},
-        "imageScanningConfiguration":{"shape":"ImageScanningConfiguration"}
+        "imageScanningConfiguration":{"shape":"ImageScanningConfiguration"},
+        "encryptionConfiguration":{"shape":"EncryptionConfiguration"}
       }
     },
     "RepositoryAlreadyExistsException":{
@@ -1549,6 +1611,13 @@
     },
     "TagValue":{"type":"string"},
     "TooManyTagsException":{
+      "type":"structure",
+      "members":{
+        "message":{"shape":"ExceptionMessage"}
+      },
+      "exception":true
+    },
+    "UnsupportedImageTypeException":{
       "type":"structure",
       "members":{
         "message":{"shape":"ExceptionMessage"}

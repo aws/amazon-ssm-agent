@@ -68,7 +68,7 @@ func (suite *SsmServiceTestSuite) TestUpdateInstanceAssociationStatus() {
 		ExecutionSummary: aws.String("TestExecutionSummary"),
 	}
 	// Test the UpdateInstanceAssociationStatus function, assert the err is nil.
-	res, err := suite.sdkService.UpdateInstanceAssociationStatus(suite.logMock, "associationID", "i-1234567", &executionResult)
+	res, err := suite.sdkService.UpdateInstanceAssociationStatus(suite.logMock, "associationID", "i-12345678", &executionResult)
 	assert.Nil(suite.T(), err, "Err should be nil")
 	assert.NotNil(suite.T(), res, "response shouldn't be nil")
 }

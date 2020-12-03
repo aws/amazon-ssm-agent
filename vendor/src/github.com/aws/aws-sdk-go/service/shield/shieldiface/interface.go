@@ -68,6 +68,14 @@ type ShieldAPI interface {
 	AssociateDRTRoleWithContext(aws.Context, *shield.AssociateDRTRoleInput, ...request.Option) (*shield.AssociateDRTRoleOutput, error)
 	AssociateDRTRoleRequest(*shield.AssociateDRTRoleInput) (*request.Request, *shield.AssociateDRTRoleOutput)
 
+	AssociateHealthCheck(*shield.AssociateHealthCheckInput) (*shield.AssociateHealthCheckOutput, error)
+	AssociateHealthCheckWithContext(aws.Context, *shield.AssociateHealthCheckInput, ...request.Option) (*shield.AssociateHealthCheckOutput, error)
+	AssociateHealthCheckRequest(*shield.AssociateHealthCheckInput) (*request.Request, *shield.AssociateHealthCheckOutput)
+
+	AssociateProactiveEngagementDetails(*shield.AssociateProactiveEngagementDetailsInput) (*shield.AssociateProactiveEngagementDetailsOutput, error)
+	AssociateProactiveEngagementDetailsWithContext(aws.Context, *shield.AssociateProactiveEngagementDetailsInput, ...request.Option) (*shield.AssociateProactiveEngagementDetailsOutput, error)
+	AssociateProactiveEngagementDetailsRequest(*shield.AssociateProactiveEngagementDetailsInput) (*request.Request, *shield.AssociateProactiveEngagementDetailsOutput)
+
 	CreateProtection(*shield.CreateProtectionInput) (*shield.CreateProtectionOutput, error)
 	CreateProtectionWithContext(aws.Context, *shield.CreateProtectionInput, ...request.Option) (*shield.CreateProtectionOutput, error)
 	CreateProtectionRequest(*shield.CreateProtectionInput) (*request.Request, *shield.CreateProtectionOutput)
@@ -104,6 +112,10 @@ type ShieldAPI interface {
 	DescribeSubscriptionWithContext(aws.Context, *shield.DescribeSubscriptionInput, ...request.Option) (*shield.DescribeSubscriptionOutput, error)
 	DescribeSubscriptionRequest(*shield.DescribeSubscriptionInput) (*request.Request, *shield.DescribeSubscriptionOutput)
 
+	DisableProactiveEngagement(*shield.DisableProactiveEngagementInput) (*shield.DisableProactiveEngagementOutput, error)
+	DisableProactiveEngagementWithContext(aws.Context, *shield.DisableProactiveEngagementInput, ...request.Option) (*shield.DisableProactiveEngagementOutput, error)
+	DisableProactiveEngagementRequest(*shield.DisableProactiveEngagementInput) (*request.Request, *shield.DisableProactiveEngagementOutput)
+
 	DisassociateDRTLogBucket(*shield.DisassociateDRTLogBucketInput) (*shield.DisassociateDRTLogBucketOutput, error)
 	DisassociateDRTLogBucketWithContext(aws.Context, *shield.DisassociateDRTLogBucketInput, ...request.Option) (*shield.DisassociateDRTLogBucketOutput, error)
 	DisassociateDRTLogBucketRequest(*shield.DisassociateDRTLogBucketInput) (*request.Request, *shield.DisassociateDRTLogBucketOutput)
@@ -111,6 +123,14 @@ type ShieldAPI interface {
 	DisassociateDRTRole(*shield.DisassociateDRTRoleInput) (*shield.DisassociateDRTRoleOutput, error)
 	DisassociateDRTRoleWithContext(aws.Context, *shield.DisassociateDRTRoleInput, ...request.Option) (*shield.DisassociateDRTRoleOutput, error)
 	DisassociateDRTRoleRequest(*shield.DisassociateDRTRoleInput) (*request.Request, *shield.DisassociateDRTRoleOutput)
+
+	DisassociateHealthCheck(*shield.DisassociateHealthCheckInput) (*shield.DisassociateHealthCheckOutput, error)
+	DisassociateHealthCheckWithContext(aws.Context, *shield.DisassociateHealthCheckInput, ...request.Option) (*shield.DisassociateHealthCheckOutput, error)
+	DisassociateHealthCheckRequest(*shield.DisassociateHealthCheckInput) (*request.Request, *shield.DisassociateHealthCheckOutput)
+
+	EnableProactiveEngagement(*shield.EnableProactiveEngagementInput) (*shield.EnableProactiveEngagementOutput, error)
+	EnableProactiveEngagementWithContext(aws.Context, *shield.EnableProactiveEngagementInput, ...request.Option) (*shield.EnableProactiveEngagementOutput, error)
+	EnableProactiveEngagementRequest(*shield.EnableProactiveEngagementInput) (*request.Request, *shield.EnableProactiveEngagementOutput)
 
 	GetSubscriptionState(*shield.GetSubscriptionStateInput) (*shield.GetSubscriptionStateOutput, error)
 	GetSubscriptionStateWithContext(aws.Context, *shield.GetSubscriptionStateInput, ...request.Option) (*shield.GetSubscriptionStateOutput, error)
@@ -120,9 +140,15 @@ type ShieldAPI interface {
 	ListAttacksWithContext(aws.Context, *shield.ListAttacksInput, ...request.Option) (*shield.ListAttacksOutput, error)
 	ListAttacksRequest(*shield.ListAttacksInput) (*request.Request, *shield.ListAttacksOutput)
 
+	ListAttacksPages(*shield.ListAttacksInput, func(*shield.ListAttacksOutput, bool) bool) error
+	ListAttacksPagesWithContext(aws.Context, *shield.ListAttacksInput, func(*shield.ListAttacksOutput, bool) bool, ...request.Option) error
+
 	ListProtections(*shield.ListProtectionsInput) (*shield.ListProtectionsOutput, error)
 	ListProtectionsWithContext(aws.Context, *shield.ListProtectionsInput, ...request.Option) (*shield.ListProtectionsOutput, error)
 	ListProtectionsRequest(*shield.ListProtectionsInput) (*request.Request, *shield.ListProtectionsOutput)
+
+	ListProtectionsPages(*shield.ListProtectionsInput, func(*shield.ListProtectionsOutput, bool) bool) error
+	ListProtectionsPagesWithContext(aws.Context, *shield.ListProtectionsInput, func(*shield.ListProtectionsOutput, bool) bool, ...request.Option) error
 
 	UpdateEmergencyContactSettings(*shield.UpdateEmergencyContactSettingsInput) (*shield.UpdateEmergencyContactSettingsOutput, error)
 	UpdateEmergencyContactSettingsWithContext(aws.Context, *shield.UpdateEmergencyContactSettingsInput, ...request.Option) (*shield.UpdateEmergencyContactSettingsOutput, error)

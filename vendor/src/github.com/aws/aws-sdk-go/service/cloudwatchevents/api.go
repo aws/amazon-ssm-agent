@@ -61,8 +61,6 @@ func (c *CloudWatchEvents) ActivateEventSourceRequest(input *ActivateEventSource
 // Activates a partner event source that has been deactivated. Once activated,
 // your matching event bus will start receiving events from the event source.
 //
-// This operation is performed by AWS customers, not by SaaS partners.
-//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -70,15 +68,21 @@ func (c *CloudWatchEvents) ActivateEventSourceRequest(input *ActivateEventSource
 // See the AWS API reference guide for Amazon CloudWatch Events's
 // API operation ActivateEventSource for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
-//   An entity that you specified doesn't exist.
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   An entity that you specified does not exist.
 //
-//   * ErrCodeInvalidStateException "InvalidStateException"
-//   The specified state isn't a valid state for an event source.
+//   * ConcurrentModificationException
+//   There is concurrent modification on a rule, target, archive, or replay.
 //
-//   * ErrCodeInternalException "InternalException"
+//   * InvalidStateException
+//   The specified state is not a valid state for an event source.
+//
+//   * InternalException
 //   This exception occurs due to unexpected causes.
+//
+//   * OperationDisabledException
+//   The operation you are attempting is not available in this region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/ActivateEventSource
 func (c *CloudWatchEvents) ActivateEventSource(input *ActivateEventSourceInput) (*ActivateEventSourceOutput, error) {
@@ -97,6 +101,192 @@ func (c *CloudWatchEvents) ActivateEventSource(input *ActivateEventSourceInput) 
 // for more information on using Contexts.
 func (c *CloudWatchEvents) ActivateEventSourceWithContext(ctx aws.Context, input *ActivateEventSourceInput, opts ...request.Option) (*ActivateEventSourceOutput, error) {
 	req, out := c.ActivateEventSourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCancelReplay = "CancelReplay"
+
+// CancelReplayRequest generates a "aws/request.Request" representing the
+// client's request for the CancelReplay operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CancelReplay for more information on using the CancelReplay
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CancelReplayRequest method.
+//    req, resp := client.CancelReplayRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/CancelReplay
+func (c *CloudWatchEvents) CancelReplayRequest(input *CancelReplayInput) (req *request.Request, output *CancelReplayOutput) {
+	op := &request.Operation{
+		Name:       opCancelReplay,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CancelReplayInput{}
+	}
+
+	output = &CancelReplayOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CancelReplay API operation for Amazon CloudWatch Events.
+//
+// Cancels the specified replay.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon CloudWatch Events's
+// API operation CancelReplay for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   An entity that you specified does not exist.
+//
+//   * ConcurrentModificationException
+//   There is concurrent modification on a rule, target, archive, or replay.
+//
+//   * IllegalStatusException
+//   An error occurred because a replay can be canceled only when the state is
+//   Running or Starting.
+//
+//   * InternalException
+//   This exception occurs due to unexpected causes.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/CancelReplay
+func (c *CloudWatchEvents) CancelReplay(input *CancelReplayInput) (*CancelReplayOutput, error) {
+	req, out := c.CancelReplayRequest(input)
+	return out, req.Send()
+}
+
+// CancelReplayWithContext is the same as CancelReplay with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CancelReplay for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CloudWatchEvents) CancelReplayWithContext(ctx aws.Context, input *CancelReplayInput, opts ...request.Option) (*CancelReplayOutput, error) {
+	req, out := c.CancelReplayRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateArchive = "CreateArchive"
+
+// CreateArchiveRequest generates a "aws/request.Request" representing the
+// client's request for the CreateArchive operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateArchive for more information on using the CreateArchive
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateArchiveRequest method.
+//    req, resp := client.CreateArchiveRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/CreateArchive
+func (c *CloudWatchEvents) CreateArchiveRequest(input *CreateArchiveInput) (req *request.Request, output *CreateArchiveOutput) {
+	op := &request.Operation{
+		Name:       opCreateArchive,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &CreateArchiveInput{}
+	}
+
+	output = &CreateArchiveOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateArchive API operation for Amazon CloudWatch Events.
+//
+// Creates an archive of events with the specified settings. When you create
+// an archive, incoming events might not immediately start being sent to the
+// archive. Allow a short period of time for changes to take effect.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon CloudWatch Events's
+// API operation CreateArchive for usage and error information.
+//
+// Returned Error Types:
+//   * ConcurrentModificationException
+//   There is concurrent modification on a rule, target, archive, or replay.
+//
+//   * ResourceAlreadyExistsException
+//   The resource you are trying to create already exists.
+//
+//   * ResourceNotFoundException
+//   An entity that you specified does not exist.
+//
+//   * InternalException
+//   This exception occurs due to unexpected causes.
+//
+//   * LimitExceededException
+//   The request failed because it attempted to create resource beyond the allowed
+//   service quota.
+//
+//   * InvalidEventPatternException
+//   The event pattern is not valid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/CreateArchive
+func (c *CloudWatchEvents) CreateArchive(input *CreateArchiveInput) (*CreateArchiveOutput, error) {
+	req, out := c.CreateArchiveRequest(input)
+	return out, req.Send()
+}
+
+// CreateArchiveWithContext is the same as CreateArchive with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateArchive for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CloudWatchEvents) CreateArchiveWithContext(ctx aws.Context, input *CreateArchiveInput, opts ...request.Option) (*CreateArchiveOutput, error) {
+	req, out := c.CreateArchiveRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -147,11 +337,9 @@ func (c *CloudWatchEvents) CreateEventBusRequest(input *CreateEventBusInput) (re
 // CreateEventBus API operation for Amazon CloudWatch Events.
 //
 // Creates a new event bus within your account. This can be a custom event bus
-// which you can use to receive events from your own custom applications and
-// services, or it can be a partner event bus which can be matched to a partner
-// event source.
-//
-// This operation is used by AWS customers, not by SaaS partners.
+// which you can use to receive events from your custom applications and services,
+// or it can be a partner event bus which can be matched to a partner event
+// source.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -160,24 +348,28 @@ func (c *CloudWatchEvents) CreateEventBusRequest(input *CreateEventBusInput) (re
 // See the AWS API reference guide for Amazon CloudWatch Events's
 // API operation CreateEventBus for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceAlreadyExistsException "ResourceAlreadyExistsException"
-//   The resource that you're trying to create already exists.
+// Returned Error Types:
+//   * ResourceAlreadyExistsException
+//   The resource you are trying to create already exists.
 //
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
-//   An entity that you specified doesn't exist.
+//   * ResourceNotFoundException
+//   An entity that you specified does not exist.
 //
-//   * ErrCodeInvalidStateException "InvalidStateException"
-//   The specified state isn't a valid state for an event source.
+//   * InvalidStateException
+//   The specified state is not a valid state for an event source.
 //
-//   * ErrCodeInternalException "InternalException"
+//   * InternalException
 //   This exception occurs due to unexpected causes.
 //
-//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
-//   There is concurrent modification on a resource.
+//   * ConcurrentModificationException
+//   There is concurrent modification on a rule, target, archive, or replay.
 //
-//   * ErrCodeLimitExceededException "LimitExceededException"
-//   You tried to create more resources than is allowed.
+//   * LimitExceededException
+//   The request failed because it attempted to create resource beyond the allowed
+//   service quota.
+//
+//   * OperationDisabledException
+//   The operation you are attempting is not available in this region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/CreateEventBus
 func (c *CloudWatchEvents) CreateEventBus(input *CreateEventBusInput) (*CreateEventBusOutput, error) {
@@ -245,16 +437,15 @@ func (c *CloudWatchEvents) CreatePartnerEventSourceRequest(input *CreatePartnerE
 
 // CreatePartnerEventSource API operation for Amazon CloudWatch Events.
 //
-// Called by an SaaS partner to create a partner event source.
-//
-// This operation is not used by AWS customers.
+// Called by an SaaS partner to create a partner event source. This operation
+// is not used by AWS customers.
 //
 // Each partner event source can be used by one AWS account to create a matching
 // partner event bus in that AWS account. A SaaS partner must create one partner
 // event source for each AWS account that wants to receive those event types.
 //
-// A partner event source creates events based on resources in the SaaS partner's
-// service or application.
+// A partner event source creates events based on resources within the SaaS
+// partner's service or application.
 //
 // An AWS account that creates a partner event bus that matches the partner
 // event source can use that event bus to receive events from the partner, and
@@ -262,18 +453,15 @@ func (c *CloudWatchEvents) CreatePartnerEventSourceRequest(input *CreatePartnerE
 //
 // Partner event source names follow this format:
 //
-// aws.partner/partner_name/event_namespace/event_name
+// partner_name/event_namespace/event_name
 //
-//    * partner_name is determined during partner registration and identifies
-//    the partner to AWS customers.
-//
-//    * For event_namespace, we recommend that partners use a string that identifies
-//    the AWS customer within the partner's system. This should not be the customer's
-//    AWS account ID.
-//
-//    * event_name is determined by the partner, and should uniquely identify
-//    an event-generating resource within the partner system. This should help
-//    AWS customers decide whether to create an event bus to receive these events.
+// partner_name is determined during partner registration and identifies the
+// partner to AWS customers. event_namespace is determined by the partner and
+// is a way for the partner to categorize their events. event_name is determined
+// by the partner, and should uniquely identify an event-generating resource
+// within the partner system. The combination of event_namespace and event_name
+// should help AWS customers decide whether to create an event bus to receive
+// these events.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -282,18 +470,22 @@ func (c *CloudWatchEvents) CreatePartnerEventSourceRequest(input *CreatePartnerE
 // See the AWS API reference guide for Amazon CloudWatch Events's
 // API operation CreatePartnerEventSource for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceAlreadyExistsException "ResourceAlreadyExistsException"
-//   The resource that you're trying to create already exists.
+// Returned Error Types:
+//   * ResourceAlreadyExistsException
+//   The resource you are trying to create already exists.
 //
-//   * ErrCodeInternalException "InternalException"
+//   * InternalException
 //   This exception occurs due to unexpected causes.
 //
-//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
-//   There is concurrent modification on a resource.
+//   * ConcurrentModificationException
+//   There is concurrent modification on a rule, target, archive, or replay.
 //
-//   * ErrCodeLimitExceededException "LimitExceededException"
-//   You tried to create more resources than is allowed.
+//   * LimitExceededException
+//   The request failed because it attempted to create resource beyond the allowed
+//   service quota.
+//
+//   * OperationDisabledException
+//   The operation you are attempting is not available in this region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/CreatePartnerEventSource
 func (c *CloudWatchEvents) CreatePartnerEventSource(input *CreatePartnerEventSourceInput) (*CreatePartnerEventSourceOutput, error) {
@@ -362,11 +554,11 @@ func (c *CloudWatchEvents) DeactivateEventSourceRequest(input *DeactivateEventSo
 
 // DeactivateEventSource API operation for Amazon CloudWatch Events.
 //
-// An AWS customer uses this operation to temporarily stop receiving events
-// from the specified partner event source. The matching event bus isn't deleted.
+// You can use this operation to temporarily stop receiving events from the
+// specified partner event source. The matching event bus is not deleted.
 //
 // When you deactivate a partner event source, the source goes into PENDING
-// state. If it remains in PENDING state for more than two weeks, it's deleted.
+// state. If it remains in PENDING state for more than two weeks, it is deleted.
 //
 // To activate a deactivated partner event source, use ActivateEventSource.
 //
@@ -377,15 +569,21 @@ func (c *CloudWatchEvents) DeactivateEventSourceRequest(input *DeactivateEventSo
 // See the AWS API reference guide for Amazon CloudWatch Events's
 // API operation DeactivateEventSource for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
-//   An entity that you specified doesn't exist.
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   An entity that you specified does not exist.
 //
-//   * ErrCodeInvalidStateException "InvalidStateException"
-//   The specified state isn't a valid state for an event source.
+//   * ConcurrentModificationException
+//   There is concurrent modification on a rule, target, archive, or replay.
 //
-//   * ErrCodeInternalException "InternalException"
+//   * InvalidStateException
+//   The specified state is not a valid state for an event source.
+//
+//   * InternalException
 //   This exception occurs due to unexpected causes.
+//
+//   * OperationDisabledException
+//   The operation you are attempting is not available in this region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/DeactivateEventSource
 func (c *CloudWatchEvents) DeactivateEventSource(input *DeactivateEventSourceInput) (*DeactivateEventSourceOutput, error) {
@@ -404,6 +602,92 @@ func (c *CloudWatchEvents) DeactivateEventSource(input *DeactivateEventSourceInp
 // for more information on using Contexts.
 func (c *CloudWatchEvents) DeactivateEventSourceWithContext(ctx aws.Context, input *DeactivateEventSourceInput, opts ...request.Option) (*DeactivateEventSourceOutput, error) {
 	req, out := c.DeactivateEventSourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteArchive = "DeleteArchive"
+
+// DeleteArchiveRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteArchive operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteArchive for more information on using the DeleteArchive
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteArchiveRequest method.
+//    req, resp := client.DeleteArchiveRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/DeleteArchive
+func (c *CloudWatchEvents) DeleteArchiveRequest(input *DeleteArchiveInput) (req *request.Request, output *DeleteArchiveOutput) {
+	op := &request.Operation{
+		Name:       opDeleteArchive,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DeleteArchiveInput{}
+	}
+
+	output = &DeleteArchiveOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(jsonrpc.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteArchive API operation for Amazon CloudWatch Events.
+//
+// Deletes the specified archive.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon CloudWatch Events's
+// API operation DeleteArchive for usage and error information.
+//
+// Returned Error Types:
+//   * ConcurrentModificationException
+//   There is concurrent modification on a rule, target, archive, or replay.
+//
+//   * ResourceNotFoundException
+//   An entity that you specified does not exist.
+//
+//   * InternalException
+//   This exception occurs due to unexpected causes.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/DeleteArchive
+func (c *CloudWatchEvents) DeleteArchive(input *DeleteArchiveInput) (*DeleteArchiveOutput, error) {
+	req, out := c.DeleteArchiveRequest(input)
+	return out, req.Send()
+}
+
+// DeleteArchiveWithContext is the same as DeleteArchive with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteArchive for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CloudWatchEvents) DeleteArchiveWithContext(ctx aws.Context, input *DeleteArchiveInput, opts ...request.Option) (*DeleteArchiveOutput, error) {
+	req, out := c.DeleteArchiveRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -455,10 +739,8 @@ func (c *CloudWatchEvents) DeleteEventBusRequest(input *DeleteEventBusInput) (re
 // DeleteEventBus API operation for Amazon CloudWatch Events.
 //
 // Deletes the specified custom event bus or partner event bus. All rules associated
-// with this event bus are also deleted. You can't delete your account's default
+// with this event bus need to be deleted. You can't delete your account's default
 // event bus.
-//
-// This operation is performed by AWS customers, not by SaaS partners.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -467,9 +749,12 @@ func (c *CloudWatchEvents) DeleteEventBusRequest(input *DeleteEventBusInput) (re
 // See the AWS API reference guide for Amazon CloudWatch Events's
 // API operation DeleteEventBus for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInternalException "InternalException"
+// Returned Error Types:
+//   * InternalException
 //   This exception occurs due to unexpected causes.
+//
+//   * ConcurrentModificationException
+//   There is concurrent modification on a rule, target, archive, or replay.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/DeleteEventBus
 func (c *CloudWatchEvents) DeleteEventBus(input *DeleteEventBusInput) (*DeleteEventBusOutput, error) {
@@ -539,7 +824,7 @@ func (c *CloudWatchEvents) DeletePartnerEventSourceRequest(input *DeletePartnerE
 // DeletePartnerEventSource API operation for Amazon CloudWatch Events.
 //
 // This operation is used by SaaS partners to delete a partner event source.
-// AWS customers don't use this operation.
+// This operation is not used by AWS customers.
 //
 // When you delete an event source, the status of the corresponding partner
 // event bus in the AWS customer account becomes DELETED.
@@ -551,9 +836,15 @@ func (c *CloudWatchEvents) DeletePartnerEventSourceRequest(input *DeletePartnerE
 // See the AWS API reference guide for Amazon CloudWatch Events's
 // API operation DeletePartnerEventSource for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInternalException "InternalException"
+// Returned Error Types:
+//   * InternalException
 //   This exception occurs due to unexpected causes.
+//
+//   * ConcurrentModificationException
+//   There is concurrent modification on a rule, target, archive, or replay.
+//
+//   * OperationDisabledException
+//   The operation you are attempting is not available in this region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/DeletePartnerEventSource
 func (c *CloudWatchEvents) DeletePartnerEventSource(input *DeletePartnerEventSourceInput) (*DeletePartnerEventSourceOutput, error) {
@@ -632,7 +923,7 @@ func (c *CloudWatchEvents) DeleteRuleRequest(input *DeleteRuleInput) (req *reque
 // Managed rules are rules created and managed by another AWS service on your
 // behalf. These rules are created by those other AWS services to support functionality
 // in those services. You can delete these rules using the Force option, but
-// you should do so only if you're sure that the other service isn't still using
+// you should do so only if you are sure the other service is not still using
 // that rule.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -642,22 +933,23 @@ func (c *CloudWatchEvents) DeleteRuleRequest(input *DeleteRuleInput) (req *reque
 // See the AWS API reference guide for Amazon CloudWatch Events's
 // API operation DeleteRule for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
-//   There is concurrent modification on a resource.
+// Returned Error Types:
+//   * ConcurrentModificationException
+//   There is concurrent modification on a rule, target, archive, or replay.
 //
-//   * ErrCodeManagedRuleException "ManagedRuleException"
-//   An AWS service created this rule on behalf of your account. That service
-//   manages it. If you see this error in response to DeleteRule or RemoveTargets,
-//   you can use the Force parameter in those calls to delete the rule or remove
-//   targets from the rule. You can't modify these managed rules by using DisableRule,
-//   EnableRule, PutTargets, PutRule, TagResource, or UntagResource.
+//   * ManagedRuleException
+//   This rule was created by an AWS service on behalf of your account. It is
+//   managed by that service. If you see this error in response to DeleteRule
+//   or RemoveTargets, you can use the Force parameter in those calls to delete
+//   the rule or remove targets from the rule. You cannot modify these managed
+//   rules by using DisableRule, EnableRule, PutTargets, PutRule, TagResource,
+//   or UntagResource.
 //
-//   * ErrCodeInternalException "InternalException"
+//   * InternalException
 //   This exception occurs due to unexpected causes.
 //
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
-//   An entity that you specified doesn't exist.
+//   * ResourceNotFoundException
+//   An entity that you specified does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/DeleteRule
 func (c *CloudWatchEvents) DeleteRule(input *DeleteRuleInput) (*DeleteRuleOutput, error) {
@@ -676,6 +968,91 @@ func (c *CloudWatchEvents) DeleteRule(input *DeleteRuleInput) (*DeleteRuleOutput
 // for more information on using Contexts.
 func (c *CloudWatchEvents) DeleteRuleWithContext(ctx aws.Context, input *DeleteRuleInput, opts ...request.Option) (*DeleteRuleOutput, error) {
 	req, out := c.DeleteRuleRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeArchive = "DescribeArchive"
+
+// DescribeArchiveRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeArchive operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeArchive for more information on using the DescribeArchive
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeArchiveRequest method.
+//    req, resp := client.DescribeArchiveRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/DescribeArchive
+func (c *CloudWatchEvents) DescribeArchiveRequest(input *DescribeArchiveInput) (req *request.Request, output *DescribeArchiveOutput) {
+	op := &request.Operation{
+		Name:       opDescribeArchive,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeArchiveInput{}
+	}
+
+	output = &DescribeArchiveOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeArchive API operation for Amazon CloudWatch Events.
+//
+// Retrieves details about an archive.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon CloudWatch Events's
+// API operation DescribeArchive for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceAlreadyExistsException
+//   The resource you are trying to create already exists.
+//
+//   * ResourceNotFoundException
+//   An entity that you specified does not exist.
+//
+//   * InternalException
+//   This exception occurs due to unexpected causes.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/DescribeArchive
+func (c *CloudWatchEvents) DescribeArchive(input *DescribeArchiveInput) (*DescribeArchiveOutput, error) {
+	req, out := c.DescribeArchiveRequest(input)
+	return out, req.Send()
+}
+
+// DescribeArchiveWithContext is the same as DescribeArchive with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeArchive for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CloudWatchEvents) DescribeArchiveWithContext(ctx aws.Context, input *DescribeArchiveInput, opts ...request.Option) (*DescribeArchiveOutput, error) {
+	req, out := c.DescribeArchiveRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -742,11 +1119,11 @@ func (c *CloudWatchEvents) DescribeEventBusRequest(input *DescribeEventBusInput)
 // See the AWS API reference guide for Amazon CloudWatch Events's
 // API operation DescribeEventBus for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
-//   An entity that you specified doesn't exist.
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   An entity that you specified does not exist.
 //
-//   * ErrCodeInternalException "InternalException"
+//   * InternalException
 //   This exception occurs due to unexpected causes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/DescribeEventBus
@@ -818,8 +1195,6 @@ func (c *CloudWatchEvents) DescribeEventSourceRequest(input *DescribeEventSource
 // This operation lists details about a partner event source that is shared
 // with your account.
 //
-// This operation is run by AWS customers, not by SaaS partners.
-//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -827,12 +1202,15 @@ func (c *CloudWatchEvents) DescribeEventSourceRequest(input *DescribeEventSource
 // See the AWS API reference guide for Amazon CloudWatch Events's
 // API operation DescribeEventSource for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
-//   An entity that you specified doesn't exist.
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   An entity that you specified does not exist.
 //
-//   * ErrCodeInternalException "InternalException"
+//   * InternalException
 //   This exception occurs due to unexpected causes.
+//
+//   * OperationDisabledException
+//   The operation you are attempting is not available in this region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/DescribeEventSource
 func (c *CloudWatchEvents) DescribeEventSource(input *DescribeEventSourceInput) (*DescribeEventSourceOutput, error) {
@@ -901,10 +1279,9 @@ func (c *CloudWatchEvents) DescribePartnerEventSourceRequest(input *DescribePart
 // DescribePartnerEventSource API operation for Amazon CloudWatch Events.
 //
 // An SaaS partner can use this operation to list details about a partner event
-// source that they have created.
-//
-// AWS customers do not use this operation. Instead, AWS customers can use DescribeEventSource
-// to see details about a partner event source that is shared with them.
+// source that they have created. AWS customers do not use this operation. Instead,
+// AWS customers can use DescribeEventSource to see details about a partner
+// event source that is shared with them.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -913,12 +1290,15 @@ func (c *CloudWatchEvents) DescribePartnerEventSourceRequest(input *DescribePart
 // See the AWS API reference guide for Amazon CloudWatch Events's
 // API operation DescribePartnerEventSource for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
-//   An entity that you specified doesn't exist.
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   An entity that you specified does not exist.
 //
-//   * ErrCodeInternalException "InternalException"
+//   * InternalException
 //   This exception occurs due to unexpected causes.
+//
+//   * OperationDisabledException
+//   The operation you are attempting is not available in this region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/DescribePartnerEventSource
 func (c *CloudWatchEvents) DescribePartnerEventSource(input *DescribePartnerEventSourceInput) (*DescribePartnerEventSourceOutput, error) {
@@ -937,6 +1317,96 @@ func (c *CloudWatchEvents) DescribePartnerEventSource(input *DescribePartnerEven
 // for more information on using Contexts.
 func (c *CloudWatchEvents) DescribePartnerEventSourceWithContext(ctx aws.Context, input *DescribePartnerEventSourceInput, opts ...request.Option) (*DescribePartnerEventSourceOutput, error) {
 	req, out := c.DescribePartnerEventSourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeReplay = "DescribeReplay"
+
+// DescribeReplayRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeReplay operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeReplay for more information on using the DescribeReplay
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeReplayRequest method.
+//    req, resp := client.DescribeReplayRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/DescribeReplay
+func (c *CloudWatchEvents) DescribeReplayRequest(input *DescribeReplayInput) (req *request.Request, output *DescribeReplayOutput) {
+	op := &request.Operation{
+		Name:       opDescribeReplay,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &DescribeReplayInput{}
+	}
+
+	output = &DescribeReplayOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeReplay API operation for Amazon CloudWatch Events.
+//
+// Retrieves details about a replay. Use DescribeReplay to determine the progress
+// of a running replay. A replay processes events to replay based on the time
+// in the event, and replays them using 1 minute intervals. If you use StartReplay
+// and specify an EventStartTime and an EventEndTime that covers a 20 minute
+// time range, the events are replayed from the first minute of that 20 minute
+// range first. Then the events from the second minute are replayed. You can
+// use DescribeReplay to determine the progress of a replay. The value returned
+// for EventLastReplayedTime indicates the time within the specified time range
+// associated with the last event replayed.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon CloudWatch Events's
+// API operation DescribeReplay for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   An entity that you specified does not exist.
+//
+//   * InternalException
+//   This exception occurs due to unexpected causes.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/DescribeReplay
+func (c *CloudWatchEvents) DescribeReplay(input *DescribeReplayInput) (*DescribeReplayOutput, error) {
+	req, out := c.DescribeReplayRequest(input)
+	return out, req.Send()
+}
+
+// DescribeReplayWithContext is the same as DescribeReplay with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeReplay for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CloudWatchEvents) DescribeReplayWithContext(ctx aws.Context, input *DescribeReplayInput, opts ...request.Option) (*DescribeReplayOutput, error) {
+	req, out := c.DescribeReplayRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -988,7 +1458,7 @@ func (c *CloudWatchEvents) DescribeRuleRequest(input *DescribeRuleInput) (req *r
 //
 // Describes the specified rule.
 //
-// DescribeRule doesn't list the targets of a rule. To see the targets associated
+// DescribeRule does not list the targets of a rule. To see the targets associated
 // with a rule, use ListTargetsByRule.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -998,11 +1468,11 @@ func (c *CloudWatchEvents) DescribeRuleRequest(input *DescribeRuleInput) (req *r
 // See the AWS API reference guide for Amazon CloudWatch Events's
 // API operation DescribeRule for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
-//   An entity that you specified doesn't exist.
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   An entity that you specified does not exist.
 //
-//   * ErrCodeInternalException "InternalException"
+//   * InternalException
 //   This exception occurs due to unexpected causes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/DescribeRule
@@ -1072,8 +1542,8 @@ func (c *CloudWatchEvents) DisableRuleRequest(input *DisableRuleInput) (req *req
 
 // DisableRule API operation for Amazon CloudWatch Events.
 //
-// Disables the specified rule. A disabled rule won't match any events and won't
-// self-trigger if it has a schedule expression.
+// Disables the specified rule. A disabled rule won't match any events, and
+// won't self-trigger if it has a schedule expression.
 //
 // When you disable a rule, incoming events might continue to match to the disabled
 // rule. Allow a short period of time for changes to take effect.
@@ -1085,21 +1555,22 @@ func (c *CloudWatchEvents) DisableRuleRequest(input *DisableRuleInput) (req *req
 // See the AWS API reference guide for Amazon CloudWatch Events's
 // API operation DisableRule for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
-//   An entity that you specified doesn't exist.
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   An entity that you specified does not exist.
 //
-//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
-//   There is concurrent modification on a resource.
+//   * ConcurrentModificationException
+//   There is concurrent modification on a rule, target, archive, or replay.
 //
-//   * ErrCodeManagedRuleException "ManagedRuleException"
-//   An AWS service created this rule on behalf of your account. That service
-//   manages it. If you see this error in response to DeleteRule or RemoveTargets,
-//   you can use the Force parameter in those calls to delete the rule or remove
-//   targets from the rule. You can't modify these managed rules by using DisableRule,
-//   EnableRule, PutTargets, PutRule, TagResource, or UntagResource.
+//   * ManagedRuleException
+//   This rule was created by an AWS service on behalf of your account. It is
+//   managed by that service. If you see this error in response to DeleteRule
+//   or RemoveTargets, you can use the Force parameter in those calls to delete
+//   the rule or remove targets from the rule. You cannot modify these managed
+//   rules by using DisableRule, EnableRule, PutTargets, PutRule, TagResource,
+//   or UntagResource.
 //
-//   * ErrCodeInternalException "InternalException"
+//   * InternalException
 //   This exception occurs due to unexpected causes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/DisableRule
@@ -1169,7 +1640,7 @@ func (c *CloudWatchEvents) EnableRuleRequest(input *EnableRuleInput) (req *reque
 
 // EnableRule API operation for Amazon CloudWatch Events.
 //
-// Enables the specified rule. If the rule doesn't exist, the operation fails.
+// Enables the specified rule. If the rule does not exist, the operation fails.
 //
 // When you enable a rule, incoming events might not immediately start matching
 // to a newly enabled rule. Allow a short period of time for changes to take
@@ -1182,21 +1653,22 @@ func (c *CloudWatchEvents) EnableRuleRequest(input *EnableRuleInput) (req *reque
 // See the AWS API reference guide for Amazon CloudWatch Events's
 // API operation EnableRule for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
-//   An entity that you specified doesn't exist.
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   An entity that you specified does not exist.
 //
-//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
-//   There is concurrent modification on a resource.
+//   * ConcurrentModificationException
+//   There is concurrent modification on a rule, target, archive, or replay.
 //
-//   * ErrCodeManagedRuleException "ManagedRuleException"
-//   An AWS service created this rule on behalf of your account. That service
-//   manages it. If you see this error in response to DeleteRule or RemoveTargets,
-//   you can use the Force parameter in those calls to delete the rule or remove
-//   targets from the rule. You can't modify these managed rules by using DisableRule,
-//   EnableRule, PutTargets, PutRule, TagResource, or UntagResource.
+//   * ManagedRuleException
+//   This rule was created by an AWS service on behalf of your account. It is
+//   managed by that service. If you see this error in response to DeleteRule
+//   or RemoveTargets, you can use the Force parameter in those calls to delete
+//   the rule or remove targets from the rule. You cannot modify these managed
+//   rules by using DisableRule, EnableRule, PutTargets, PutRule, TagResource,
+//   or UntagResource.
 //
-//   * ErrCodeInternalException "InternalException"
+//   * InternalException
 //   This exception occurs due to unexpected causes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/EnableRule
@@ -1216,6 +1688,89 @@ func (c *CloudWatchEvents) EnableRule(input *EnableRuleInput) (*EnableRuleOutput
 // for more information on using Contexts.
 func (c *CloudWatchEvents) EnableRuleWithContext(ctx aws.Context, input *EnableRuleInput, opts ...request.Option) (*EnableRuleOutput, error) {
 	req, out := c.EnableRuleRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opListArchives = "ListArchives"
+
+// ListArchivesRequest generates a "aws/request.Request" representing the
+// client's request for the ListArchives operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListArchives for more information on using the ListArchives
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListArchivesRequest method.
+//    req, resp := client.ListArchivesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/ListArchives
+func (c *CloudWatchEvents) ListArchivesRequest(input *ListArchivesInput) (req *request.Request, output *ListArchivesOutput) {
+	op := &request.Operation{
+		Name:       opListArchives,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListArchivesInput{}
+	}
+
+	output = &ListArchivesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListArchives API operation for Amazon CloudWatch Events.
+//
+// Lists your archives. You can either list all the archives or you can provide
+// a prefix to match to the archive names. Filter parameters are exclusive.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon CloudWatch Events's
+// API operation ListArchives for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   An entity that you specified does not exist.
+//
+//   * InternalException
+//   This exception occurs due to unexpected causes.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/ListArchives
+func (c *CloudWatchEvents) ListArchives(input *ListArchivesInput) (*ListArchivesOutput, error) {
+	req, out := c.ListArchivesRequest(input)
+	return out, req.Send()
+}
+
+// ListArchivesWithContext is the same as ListArchives with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListArchives for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CloudWatchEvents) ListArchivesWithContext(ctx aws.Context, input *ListArchivesInput, opts ...request.Option) (*ListArchivesOutput, error) {
+	req, out := c.ListArchivesRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1268,8 +1823,6 @@ func (c *CloudWatchEvents) ListEventBusesRequest(input *ListEventBusesInput) (re
 // Lists all the event buses in your account, including the default event bus,
 // custom event buses, and partner event buses.
 //
-// This operation is run by AWS customers, not by SaaS partners.
-//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -1277,8 +1830,8 @@ func (c *CloudWatchEvents) ListEventBusesRequest(input *ListEventBusesInput) (re
 // See the AWS API reference guide for Amazon CloudWatch Events's
 // API operation ListEventBuses for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInternalException "InternalException"
+// Returned Error Types:
+//   * InternalException
 //   This exception occurs due to unexpected causes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/ListEventBuses
@@ -1351,8 +1904,6 @@ func (c *CloudWatchEvents) ListEventSourcesRequest(input *ListEventSourcesInput)
 // with your AWS account. For more information about partner event sources,
 // see CreateEventBus.
 //
-// This operation is run by AWS customers, not by SaaS partners.
-//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -1360,9 +1911,12 @@ func (c *CloudWatchEvents) ListEventSourcesRequest(input *ListEventSourcesInput)
 // See the AWS API reference guide for Amazon CloudWatch Events's
 // API operation ListEventSources for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInternalException "InternalException"
+// Returned Error Types:
+//   * InternalException
 //   This exception occurs due to unexpected causes.
+//
+//   * OperationDisabledException
+//   The operation you are attempting is not available in this region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/ListEventSources
 func (c *CloudWatchEvents) ListEventSources(input *ListEventSourcesInput) (*ListEventSourcesOutput, error) {
@@ -1431,9 +1985,8 @@ func (c *CloudWatchEvents) ListPartnerEventSourceAccountsRequest(input *ListPart
 // ListPartnerEventSourceAccounts API operation for Amazon CloudWatch Events.
 //
 // An SaaS partner can use this operation to display the AWS account ID that
-// a particular partner event source name is associated with.
-//
-// This operation is used by SaaS partners, not by AWS customers.
+// a particular partner event source name is associated with. This operation
+// is not used by AWS customers.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1442,12 +1995,15 @@ func (c *CloudWatchEvents) ListPartnerEventSourceAccountsRequest(input *ListPart
 // See the AWS API reference guide for Amazon CloudWatch Events's
 // API operation ListPartnerEventSourceAccounts for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
-//   An entity that you specified doesn't exist.
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   An entity that you specified does not exist.
 //
-//   * ErrCodeInternalException "InternalException"
+//   * InternalException
 //   This exception occurs due to unexpected causes.
+//
+//   * OperationDisabledException
+//   The operation you are attempting is not available in this region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/ListPartnerEventSourceAccounts
 func (c *CloudWatchEvents) ListPartnerEventSourceAccounts(input *ListPartnerEventSourceAccountsInput) (*ListPartnerEventSourceAccountsOutput, error) {
@@ -1516,9 +2072,7 @@ func (c *CloudWatchEvents) ListPartnerEventSourcesRequest(input *ListPartnerEven
 // ListPartnerEventSources API operation for Amazon CloudWatch Events.
 //
 // An SaaS partner can use this operation to list all the partner event source
-// names that they have created.
-//
-// This operation is not used by AWS customers.
+// names that they have created. This operation is not used by AWS customers.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1527,9 +2081,12 @@ func (c *CloudWatchEvents) ListPartnerEventSourcesRequest(input *ListPartnerEven
 // See the AWS API reference guide for Amazon CloudWatch Events's
 // API operation ListPartnerEventSources for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInternalException "InternalException"
+// Returned Error Types:
+//   * InternalException
 //   This exception occurs due to unexpected causes.
+//
+//   * OperationDisabledException
+//   The operation you are attempting is not available in this region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/ListPartnerEventSources
 func (c *CloudWatchEvents) ListPartnerEventSources(input *ListPartnerEventSourcesInput) (*ListPartnerEventSourcesOutput, error) {
@@ -1548,6 +2105,86 @@ func (c *CloudWatchEvents) ListPartnerEventSources(input *ListPartnerEventSource
 // for more information on using Contexts.
 func (c *CloudWatchEvents) ListPartnerEventSourcesWithContext(ctx aws.Context, input *ListPartnerEventSourcesInput, opts ...request.Option) (*ListPartnerEventSourcesOutput, error) {
 	req, out := c.ListPartnerEventSourcesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opListReplays = "ListReplays"
+
+// ListReplaysRequest generates a "aws/request.Request" representing the
+// client's request for the ListReplays operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListReplays for more information on using the ListReplays
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListReplaysRequest method.
+//    req, resp := client.ListReplaysRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/ListReplays
+func (c *CloudWatchEvents) ListReplaysRequest(input *ListReplaysInput) (req *request.Request, output *ListReplaysOutput) {
+	op := &request.Operation{
+		Name:       opListReplays,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListReplaysInput{}
+	}
+
+	output = &ListReplaysOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListReplays API operation for Amazon CloudWatch Events.
+//
+// Lists your replays. You can either list all the replays or you can provide
+// a prefix to match to the replay names. Filter parameters are exclusive.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon CloudWatch Events's
+// API operation ListReplays for usage and error information.
+//
+// Returned Error Types:
+//   * InternalException
+//   This exception occurs due to unexpected causes.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/ListReplays
+func (c *CloudWatchEvents) ListReplays(input *ListReplaysInput) (*ListReplaysOutput, error) {
+	req, out := c.ListReplaysRequest(input)
+	return out, req.Send()
+}
+
+// ListReplaysWithContext is the same as ListReplays with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListReplays for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CloudWatchEvents) ListReplaysWithContext(ctx aws.Context, input *ListReplaysInput, opts ...request.Option) (*ListReplaysOutput, error) {
+	req, out := c.ListReplaysRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1597,8 +2234,8 @@ func (c *CloudWatchEvents) ListRuleNamesByTargetRequest(input *ListRuleNamesByTa
 
 // ListRuleNamesByTarget API operation for Amazon CloudWatch Events.
 //
-// Lists the rules for the specified target. You can see which rules can invoke
-// a specific target in your account.
+// Lists the rules for the specified target. You can see which of the rules
+// in Amazon EventBridge can invoke a specific target in your account.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1607,12 +2244,12 @@ func (c *CloudWatchEvents) ListRuleNamesByTargetRequest(input *ListRuleNamesByTa
 // See the AWS API reference guide for Amazon CloudWatch Events's
 // API operation ListRuleNamesByTarget for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInternalException "InternalException"
+// Returned Error Types:
+//   * InternalException
 //   This exception occurs due to unexpected causes.
 //
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
-//   An entity that you specified doesn't exist.
+//   * ResourceNotFoundException
+//   An entity that you specified does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/ListRuleNamesByTarget
 func (c *CloudWatchEvents) ListRuleNamesByTarget(input *ListRuleNamesByTargetInput) (*ListRuleNamesByTargetOutput, error) {
@@ -1680,10 +2317,10 @@ func (c *CloudWatchEvents) ListRulesRequest(input *ListRulesInput) (req *request
 
 // ListRules API operation for Amazon CloudWatch Events.
 //
-// Lists your EventBridge rules. You can either list all the rules or provide
-// a prefix to match to the rule names.
+// Lists your Amazon EventBridge rules. You can either list all the rules or
+// you can provide a prefix to match to the rule names.
 //
-// ListRules doesn't list the targets of a rule. To see the targets associated
+// ListRules does not list the targets of a rule. To see the targets associated
 // with a rule, use ListTargetsByRule.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
@@ -1693,12 +2330,12 @@ func (c *CloudWatchEvents) ListRulesRequest(input *ListRulesInput) (req *request
 // See the AWS API reference guide for Amazon CloudWatch Events's
 // API operation ListRules for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInternalException "InternalException"
+// Returned Error Types:
+//   * InternalException
 //   This exception occurs due to unexpected causes.
 //
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
-//   An entity that you specified doesn't exist.
+//   * ResourceNotFoundException
+//   An entity that you specified does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/ListRules
 func (c *CloudWatchEvents) ListRules(input *ListRulesInput) (*ListRulesOutput, error) {
@@ -1767,7 +2404,7 @@ func (c *CloudWatchEvents) ListTagsForResourceRequest(input *ListTagsForResource
 // ListTagsForResource API operation for Amazon CloudWatch Events.
 //
 // Displays the tags associated with an EventBridge resource. In EventBridge,
-// rules can be tagged.
+// rules and event buses can be tagged.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1776,11 +2413,11 @@ func (c *CloudWatchEvents) ListTagsForResourceRequest(input *ListTagsForResource
 // See the AWS API reference guide for Amazon CloudWatch Events's
 // API operation ListTagsForResource for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
-//   An entity that you specified doesn't exist.
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   An entity that you specified does not exist.
 //
-//   * ErrCodeInternalException "InternalException"
+//   * InternalException
 //   This exception occurs due to unexpected causes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/ListTagsForResource
@@ -1858,11 +2495,11 @@ func (c *CloudWatchEvents) ListTargetsByRuleRequest(input *ListTargetsByRuleInpu
 // See the AWS API reference guide for Amazon CloudWatch Events's
 // API operation ListTargetsByRule for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
-//   An entity that you specified doesn't exist.
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   An entity that you specified does not exist.
 //
-//   * ErrCodeInternalException "InternalException"
+//   * InternalException
 //   This exception occurs due to unexpected causes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/ListTargetsByRule
@@ -1931,8 +2568,8 @@ func (c *CloudWatchEvents) PutEventsRequest(input *PutEventsInput) (req *request
 
 // PutEvents API operation for Amazon CloudWatch Events.
 //
-// Sends custom events to EventBridge so that they can be matched to rules.
-// These events can be from your custom applications and services.
+// Sends custom events to Amazon EventBridge so that they can be matched to
+// rules.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1941,8 +2578,8 @@ func (c *CloudWatchEvents) PutEventsRequest(input *PutEventsInput) (req *request
 // See the AWS API reference guide for Amazon CloudWatch Events's
 // API operation PutEvents for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInternalException "InternalException"
+// Returned Error Types:
+//   * InternalException
 //   This exception occurs due to unexpected causes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/PutEvents
@@ -2012,10 +2649,7 @@ func (c *CloudWatchEvents) PutPartnerEventsRequest(input *PutPartnerEventsInput)
 // PutPartnerEvents API operation for Amazon CloudWatch Events.
 //
 // This is used by SaaS partners to write events to a customer's partner event
-// bus.
-//
-// AWS customers do not use this operation. Instead, AWS customers can use PutEvents
-// to write custom events from their own applications to an event bus.
+// bus. AWS customers do not use this operation.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2024,9 +2658,12 @@ func (c *CloudWatchEvents) PutPartnerEventsRequest(input *PutPartnerEventsInput)
 // See the AWS API reference guide for Amazon CloudWatch Events's
 // API operation PutPartnerEvents for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInternalException "InternalException"
+// Returned Error Types:
+//   * InternalException
 //   This exception occurs due to unexpected causes.
+//
+//   * OperationDisabledException
+//   The operation you are attempting is not available in this region.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/PutPartnerEvents
 func (c *CloudWatchEvents) PutPartnerEvents(input *PutPartnerEventsInput) (*PutPartnerEventsOutput, error) {
@@ -2096,13 +2733,14 @@ func (c *CloudWatchEvents) PutPermissionRequest(input *PutPermissionInput) (req 
 // PutPermission API operation for Amazon CloudWatch Events.
 //
 // Running PutPermission permits the specified AWS account or AWS organization
-// to put events to the specified event bus. Rules in your account are triggered
-// by these events arriving to an event bus in your account.
+// to put events to the specified event bus. Amazon EventBridge (CloudWatch
+// Events) rules in your account are triggered by these events arriving to an
+// event bus in your account.
 //
 // For another account to send events to your account, that external account
-// must have a rule with your account's event bus as a target.
+// must have an EventBridge rule with your account's event bus as a target.
 //
-// To enable multiple AWS accounts to put events to an event bus, run PutPermission
+// To enable multiple AWS accounts to put events to your event bus, run PutPermission
 // once for each of these accounts. Or, if all the accounts are members of the
 // same AWS organization, you can run PutPermission once specifying Principal
 // as "*" and specifying the AWS organization ID in Condition, to grant permissions
@@ -2114,7 +2752,7 @@ func (c *CloudWatchEvents) PutPermissionRequest(input *PutPermissionInput) (req 
 // and Receiving Events Between AWS Accounts (https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-cross-account-event-delivery.html)
 // in the Amazon EventBridge User Guide.
 //
-// The permission policy on an event bus can't exceed 10 KB in size.
+// The permission policy on the default event bus cannot exceed 10 KB in size.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2123,18 +2761,18 @@ func (c *CloudWatchEvents) PutPermissionRequest(input *PutPermissionInput) (req 
 // See the AWS API reference guide for Amazon CloudWatch Events's
 // API operation PutPermission for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
-//   An entity that you specified doesn't exist.
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   An entity that you specified does not exist.
 //
-//   * ErrCodePolicyLengthExceededException "PolicyLengthExceededException"
+//   * PolicyLengthExceededException
 //   The event bus policy is too long. For more information, see the limits.
 //
-//   * ErrCodeInternalException "InternalException"
+//   * InternalException
 //   This exception occurs due to unexpected causes.
 //
-//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
-//   There is concurrent modification on a resource.
+//   * ConcurrentModificationException
+//   There is concurrent modification on a rule, target, archive, or replay.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/PutPermission
 func (c *CloudWatchEvents) PutPermission(input *PutPermissionInput) (*PutPermissionOutput, error) {
@@ -2202,7 +2840,7 @@ func (c *CloudWatchEvents) PutRuleRequest(input *PutRuleInput) (req *request.Req
 
 // PutRule API operation for Amazon CloudWatch Events.
 //
-// Creates or updates the specified rule. Rules are enabled by default or based
+// Creates or updates the specified rule. Rules are enabled by default, or based
 // on value of the state. You can disable a rule using DisableRule.
 //
 // A single rule watches for events from a single event bus. Events generated
@@ -2212,9 +2850,10 @@ func (c *CloudWatchEvents) PutRuleRequest(input *PutRuleInput) (req *request.Req
 // their events go to your default event bus or a custom event bus that you
 // have created. For more information, see CreateEventBus.
 //
-// If you're updating an existing rule, the rule is replaced with what you specify
-// in this PutRule command. If you omit arguments in PutRule, the old values
-// for those arguments aren't kept. Instead, they're replaced with null values.
+// If you are updating an existing rule, the rule is replaced with what you
+// specify in this PutRule command. If you omit arguments in PutRule, the old
+// values for those arguments are not kept. Instead, they are replaced with
+// null values.
 //
 // When you create or update a rule, incoming events might not immediately start
 // matching to new or updated rules. Allow a short period of time for changes
@@ -2240,16 +2879,15 @@ func (c *CloudWatchEvents) PutRuleRequest(input *PutRuleInput) (req *request.Req
 // Most services in AWS treat : or / as the same character in Amazon Resource
 // Names (ARNs). However, EventBridge uses an exact match in event patterns
 // and rules. Be sure to use the correct ARN characters when creating event
-// patterns so that they match the ARN syntax in the event that you want to
-// match.
+// patterns so that they match the ARN syntax in the event you want to match.
 //
-// In EventBridge, you could create rules that lead to infinite loops, where
-// a rule is fired repeatedly. For example, a rule might detect that ACLs have
-// changed on an S3 bucket, and trigger software to change them to the desired
-// state. If you don't write the rule carefully, the subsequent change to the
-// ACLs fires the rule again, creating an infinite loop.
+// In EventBridge, it is possible to create rules that lead to infinite loops,
+// where a rule is fired repeatedly. For example, a rule might detect that ACLs
+// have changed on an S3 bucket, and trigger software to change them to the
+// desired state. If the rule is not written carefully, the subsequent change
+// to the ACLs fires the rule again, creating an infinite loop.
 //
-// To prevent this, write the rules so that the triggered actions don't refire
+// To prevent this, write the rules so that the triggered actions do not re-fire
 // the same rule. For example, your rule could fire only if ACLs are found to
 // be in a bad state, instead of after any change.
 //
@@ -2264,28 +2902,30 @@ func (c *CloudWatchEvents) PutRuleRequest(input *PutRuleInput) (req *request.Req
 // See the AWS API reference guide for Amazon CloudWatch Events's
 // API operation PutRule for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInvalidEventPatternException "InvalidEventPatternException"
-//   The event pattern isn't valid.
+// Returned Error Types:
+//   * InvalidEventPatternException
+//   The event pattern is not valid.
 //
-//   * ErrCodeLimitExceededException "LimitExceededException"
-//   You tried to create more resources than is allowed.
+//   * LimitExceededException
+//   The request failed because it attempted to create resource beyond the allowed
+//   service quota.
 //
-//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
-//   There is concurrent modification on a resource.
+//   * ConcurrentModificationException
+//   There is concurrent modification on a rule, target, archive, or replay.
 //
-//   * ErrCodeManagedRuleException "ManagedRuleException"
-//   An AWS service created this rule on behalf of your account. That service
-//   manages it. If you see this error in response to DeleteRule or RemoveTargets,
-//   you can use the Force parameter in those calls to delete the rule or remove
-//   targets from the rule. You can't modify these managed rules by using DisableRule,
-//   EnableRule, PutTargets, PutRule, TagResource, or UntagResource.
+//   * ManagedRuleException
+//   This rule was created by an AWS service on behalf of your account. It is
+//   managed by that service. If you see this error in response to DeleteRule
+//   or RemoveTargets, you can use the Force parameter in those calls to delete
+//   the rule or remove targets from the rule. You cannot modify these managed
+//   rules by using DisableRule, EnableRule, PutTargets, PutRule, TagResource,
+//   or UntagResource.
 //
-//   * ErrCodeInternalException "InternalException"
+//   * InternalException
 //   This exception occurs due to unexpected causes.
 //
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
-//   An entity that you specified doesn't exist.
+//   * ResourceNotFoundException
+//   An entity that you specified does not exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/PutRule
 func (c *CloudWatchEvents) PutRule(input *PutRuleInput) (*PutRuleOutput, error) {
@@ -2354,11 +2994,11 @@ func (c *CloudWatchEvents) PutTargetsRequest(input *PutTargetsInput) (req *reque
 // PutTargets API operation for Amazon CloudWatch Events.
 //
 // Adds the specified targets to the specified rule, or updates the targets
-// if they're already associated with the rule.
+// if they are already associated with the rule.
 //
 // Targets are the resources that are invoked when a rule is triggered.
 //
-// You can configure the following as targets in EventBridge:
+// You can configure the following as targets for Events:
 //
 //    * EC2 instances
 //
@@ -2390,7 +3030,11 @@ func (c *CloudWatchEvents) PutTargetsRequest(input *PutTargetsInput) (req *reque
 //
 //    * The default event bus of another AWS account
 //
-// Creating rules with built-in targets is supported only on the AWS Management
+//    * Amazon API Gateway REST APIs
+//
+//    * Redshift Clusters to invoke Data API ExecuteStatement on
+//
+// Creating rules with built-in targets is supported only in the AWS Management
 // Console. The built-in targets are EC2 CreateSnapshot API call, EC2 RebootInstances
 // API call, EC2 StopInstances API call, and EC2 TerminateInstances API call.
 //
@@ -2401,27 +3045,32 @@ func (c *CloudWatchEvents) PutTargetsRequest(input *PutTargetsInput) (req *reque
 // field.
 //
 // To be able to make API calls against the resources that you own, Amazon EventBridge
-// needs the appropriate permissions. For AWS Lambda and Amazon SNS resources,
-// EventBridge relies on resource-based policies. For EC2 instances, Kinesis
-// data streams, and AWS Step Functions state machines, EventBridge relies on
-// IAM roles that you specify in the RoleARN argument in PutTargets. For more
-// information, see Authentication and Access Control (https://docs.aws.amazon.com/eventbridge/latest/userguide/auth-and-access-control-eventbridge.html)
+// (CloudWatch Events) needs the appropriate permissions. For AWS Lambda and
+// Amazon SNS resources, EventBridge relies on resource-based policies. For
+// EC2 instances, Kinesis data streams, AWS Step Functions state machines and
+// API Gateway REST APIs, EventBridge relies on IAM roles that you specify in
+// the RoleARN argument in PutTargets. For more information, see Authentication
+// and Access Control (https://docs.aws.amazon.com/eventbridge/latest/userguide/auth-and-access-control-eventbridge.html)
 // in the Amazon EventBridge User Guide.
 //
-// If another AWS account is in the same Region and has granted you permission
+// If another AWS account is in the same region and has granted you permission
 // (using PutPermission), you can send events to that account. Set that account's
 // event bus as a target of the rules in your account. To send the matched events
 // to the other account, specify that account's event bus as the Arn value when
 // you run PutTargets. If your account sends events to another account, your
 // account is charged for each sent event. Each event sent to another account
-// is charged as a custom event. The account receiving the event isn't charged.
-// For more information, see Amazon EventBridge Pricing (https://aws.amazon.com/eventbridge/pricing/).
+// is charged as a custom event. The account receiving the event is not charged.
+// For more information, see Amazon EventBridge (CloudWatch Events) Pricing
+// (https://aws.amazon.com/eventbridge/pricing/).
 //
-// If you're setting an event bus in another account as the target and that
+// Input, InputPath, and InputTransformer are not available with PutTarget if
+// the target is an event bus of a different AWS account.
+//
+// If you are setting the event bus of another account as the target, and that
 // account granted permission to your account through an organization instead
-// of directly by the account ID, you must specify a RoleArn with proper permissions
-// in the Target structure. For more information, see Sending and Receiving
-// Events Between AWS Accounts (https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-cross-account-event-delivery.html)
+// of directly by the account ID, then you must specify a RoleArn with proper
+// permissions in the Target structure. For more information, see Sending and
+// Receiving Events Between AWS Accounts (https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-cross-account-event-delivery.html)
 // in the Amazon EventBridge User Guide.
 //
 // For more information about enabling cross-account events, see PutPermission.
@@ -2429,21 +3078,21 @@ func (c *CloudWatchEvents) PutTargetsRequest(input *PutTargetsInput) (req *reque
 // Input, InputPath, and InputTransformer are mutually exclusive and optional
 // parameters of a target. When a rule is triggered due to a matched event:
 //
-//    * If none of the following arguments are specified for a target, the entire
-//    event is passed to the target in JSON format (unless the target is Amazon
-//    EC2 Run Command or Amazon ECS task, in which case nothing from the event
-//    is passed to the target).
+//    * If none of the following arguments are specified for a target, then
+//    the entire event is passed to the target in JSON format (unless the target
+//    is Amazon EC2 Run Command or Amazon ECS task, in which case nothing from
+//    the event is passed to the target).
 //
 //    * If Input is specified in the form of valid JSON, then the matched event
 //    is overridden with this constant.
 //
 //    * If InputPath is specified in the form of JSONPath (for example, $.detail),
-//    only the part of the event specified in the path is passed to the target
-//    (for example, only the detail part of the event is passed).
+//    then only the part of the event specified in the path is passed to the
+//    target (for example, only the detail part of the event is passed).
 //
-//    * If InputTransformer is specified, one or more specified JSONPaths are
-//    extracted from the event and used as values in a template that you specify
-//    as the input to the target.
+//    * If InputTransformer is specified, then one or more specified JSONPaths
+//    are extracted from the event and used as values in a template that you
+//    specify as the input to the target.
 //
 // When you specify InputPath or InputTransformer, you must use JSON dot notation,
 // not bracket notation.
@@ -2453,7 +3102,7 @@ func (c *CloudWatchEvents) PutTargetsRequest(input *PutTargetsInput) (req *reque
 // of time for changes to take effect.
 //
 // This action can partially fail if too many requests are made at the same
-// time. If that happens, FailedEntryCount is nonzero in the response, and each
+// time. If that happens, FailedEntryCount is non-zero in the response and each
 // entry in FailedEntries provides the ID of the failed target and the error
 // code.
 //
@@ -2464,24 +3113,26 @@ func (c *CloudWatchEvents) PutTargetsRequest(input *PutTargetsInput) (req *reque
 // See the AWS API reference guide for Amazon CloudWatch Events's
 // API operation PutTargets for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
-//   An entity that you specified doesn't exist.
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   An entity that you specified does not exist.
 //
-//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
-//   There is concurrent modification on a resource.
+//   * ConcurrentModificationException
+//   There is concurrent modification on a rule, target, archive, or replay.
 //
-//   * ErrCodeLimitExceededException "LimitExceededException"
-//   You tried to create more resources than is allowed.
+//   * LimitExceededException
+//   The request failed because it attempted to create resource beyond the allowed
+//   service quota.
 //
-//   * ErrCodeManagedRuleException "ManagedRuleException"
-//   An AWS service created this rule on behalf of your account. That service
-//   manages it. If you see this error in response to DeleteRule or RemoveTargets,
-//   you can use the Force parameter in those calls to delete the rule or remove
-//   targets from the rule. You can't modify these managed rules by using DisableRule,
-//   EnableRule, PutTargets, PutRule, TagResource, or UntagResource.
+//   * ManagedRuleException
+//   This rule was created by an AWS service on behalf of your account. It is
+//   managed by that service. If you see this error in response to DeleteRule
+//   or RemoveTargets, you can use the Force parameter in those calls to delete
+//   the rule or remove targets from the rule. You cannot modify these managed
+//   rules by using DisableRule, EnableRule, PutTargets, PutRule, TagResource,
+//   or UntagResource.
 //
-//   * ErrCodeInternalException "InternalException"
+//   * InternalException
 //   This exception occurs due to unexpected causes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/PutTargets
@@ -2563,15 +3214,15 @@ func (c *CloudWatchEvents) RemovePermissionRequest(input *RemovePermissionInput)
 // See the AWS API reference guide for Amazon CloudWatch Events's
 // API operation RemovePermission for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
-//   An entity that you specified doesn't exist.
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   An entity that you specified does not exist.
 //
-//   * ErrCodeInternalException "InternalException"
+//   * InternalException
 //   This exception occurs due to unexpected causes.
 //
-//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
-//   There is concurrent modification on a resource.
+//   * ConcurrentModificationException
+//   There is concurrent modification on a rule, target, archive, or replay.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/RemovePermission
 func (c *CloudWatchEvents) RemovePermission(input *RemovePermissionInput) (*RemovePermissionOutput, error) {
@@ -2658,21 +3309,22 @@ func (c *CloudWatchEvents) RemoveTargetsRequest(input *RemoveTargetsInput) (req 
 // See the AWS API reference guide for Amazon CloudWatch Events's
 // API operation RemoveTargets for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
-//   An entity that you specified doesn't exist.
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   An entity that you specified does not exist.
 //
-//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
-//   There is concurrent modification on a resource.
+//   * ConcurrentModificationException
+//   There is concurrent modification on a rule, target, archive, or replay.
 //
-//   * ErrCodeManagedRuleException "ManagedRuleException"
-//   An AWS service created this rule on behalf of your account. That service
-//   manages it. If you see this error in response to DeleteRule or RemoveTargets,
-//   you can use the Force parameter in those calls to delete the rule or remove
-//   targets from the rule. You can't modify these managed rules by using DisableRule,
-//   EnableRule, PutTargets, PutRule, TagResource, or UntagResource.
+//   * ManagedRuleException
+//   This rule was created by an AWS service on behalf of your account. It is
+//   managed by that service. If you see this error in response to DeleteRule
+//   or RemoveTargets, you can use the Force parameter in those calls to delete
+//   the rule or remove targets from the rule. You cannot modify these managed
+//   rules by using DisableRule, EnableRule, PutTargets, PutRule, TagResource,
+//   or UntagResource.
 //
-//   * ErrCodeInternalException "InternalException"
+//   * InternalException
 //   This exception occurs due to unexpected causes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/RemoveTargets
@@ -2692,6 +3344,106 @@ func (c *CloudWatchEvents) RemoveTargets(input *RemoveTargetsInput) (*RemoveTarg
 // for more information on using Contexts.
 func (c *CloudWatchEvents) RemoveTargetsWithContext(ctx aws.Context, input *RemoveTargetsInput, opts ...request.Option) (*RemoveTargetsOutput, error) {
 	req, out := c.RemoveTargetsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opStartReplay = "StartReplay"
+
+// StartReplayRequest generates a "aws/request.Request" representing the
+// client's request for the StartReplay operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StartReplay for more information on using the StartReplay
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StartReplayRequest method.
+//    req, resp := client.StartReplayRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/StartReplay
+func (c *CloudWatchEvents) StartReplayRequest(input *StartReplayInput) (req *request.Request, output *StartReplayOutput) {
+	op := &request.Operation{
+		Name:       opStartReplay,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StartReplayInput{}
+	}
+
+	output = &StartReplayOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StartReplay API operation for Amazon CloudWatch Events.
+//
+// Starts the specified replay. Events are not necessarily replayed in the exact
+// same order that they were added to the archive. A replay processes events
+// to replay based on the time in the event, and replays them using 1 minute
+// intervals. If you specify an EventStartTime and an EventEndTime that covers
+// a 20 minute time range, the events are replayed from the first minute of
+// that 20 minute range first. Then the events from the second minute are replayed.
+// You can use DescribeReplay to determine the progress of a replay. The value
+// returned for EventLastReplayedTime indicates the time within the specified
+// time range associated with the last event replayed.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon CloudWatch Events's
+// API operation StartReplay for usage and error information.
+//
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   An entity that you specified does not exist.
+//
+//   * ResourceAlreadyExistsException
+//   The resource you are trying to create already exists.
+//
+//   * InvalidEventPatternException
+//   The event pattern is not valid.
+//
+//   * LimitExceededException
+//   The request failed because it attempted to create resource beyond the allowed
+//   service quota.
+//
+//   * InternalException
+//   This exception occurs due to unexpected causes.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/StartReplay
+func (c *CloudWatchEvents) StartReplay(input *StartReplayInput) (*StartReplayOutput, error) {
+	req, out := c.StartReplayRequest(input)
+	return out, req.Send()
+}
+
+// StartReplayWithContext is the same as StartReplay with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StartReplay for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CloudWatchEvents) StartReplayWithContext(ctx aws.Context, input *StartReplayInput, opts ...request.Option) (*StartReplayOutput, error) {
+	req, out := c.StartReplayRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -2745,17 +3497,17 @@ func (c *CloudWatchEvents) TagResourceRequest(input *TagResourceInput) (req *req
 // Assigns one or more tags (key-value pairs) to the specified EventBridge resource.
 // Tags can help you organize and categorize your resources. You can also use
 // them to scope user permissions by granting a user permission to access or
-// change only resources with certain tag values. In EventBridge, rules can
-// be tagged.
+// change only resources with certain tag values. In EventBridge, rules and
+// event buses can be tagged.
 //
 // Tags don't have any semantic meaning to AWS and are interpreted strictly
 // as strings of characters.
 //
-// You can use the TagResource action with a rule that already has tags. If
-// you specify a new tag key for the rule, this tag is appended to the list
-// of tags associated with the rule. If you specify a tag key that is already
-// associated with the rule, the new tag value that you specify replaces the
-// previous value for that tag.
+// You can use the TagResource action with a resource that already has tags.
+// If you specify a new tag key, this tag is appended to the list of tags associated
+// with the resource. If you specify a tag key that is already associated with
+// the resource, the new tag value that you specify replaces the previous value
+// for that tag.
 //
 // You can associate as many as 50 tags with a resource.
 //
@@ -2766,22 +3518,23 @@ func (c *CloudWatchEvents) TagResourceRequest(input *TagResourceInput) (req *req
 // See the AWS API reference guide for Amazon CloudWatch Events's
 // API operation TagResource for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
-//   An entity that you specified doesn't exist.
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   An entity that you specified does not exist.
 //
-//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
-//   There is concurrent modification on a resource.
+//   * ConcurrentModificationException
+//   There is concurrent modification on a rule, target, archive, or replay.
 //
-//   * ErrCodeInternalException "InternalException"
+//   * InternalException
 //   This exception occurs due to unexpected causes.
 //
-//   * ErrCodeManagedRuleException "ManagedRuleException"
-//   An AWS service created this rule on behalf of your account. That service
-//   manages it. If you see this error in response to DeleteRule or RemoveTargets,
-//   you can use the Force parameter in those calls to delete the rule or remove
-//   targets from the rule. You can't modify these managed rules by using DisableRule,
-//   EnableRule, PutTargets, PutRule, TagResource, or UntagResource.
+//   * ManagedRuleException
+//   This rule was created by an AWS service on behalf of your account. It is
+//   managed by that service. If you see this error in response to DeleteRule
+//   or RemoveTargets, you can use the Force parameter in those calls to delete
+//   the rule or remove targets from the rule. You cannot modify these managed
+//   rules by using DisableRule, EnableRule, PutTargets, PutRule, TagResource,
+//   or UntagResource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/TagResource
 func (c *CloudWatchEvents) TagResource(input *TagResourceInput) (*TagResourceOutput, error) {
@@ -2854,8 +3607,7 @@ func (c *CloudWatchEvents) TestEventPatternRequest(input *TestEventPatternInput)
 // Most services in AWS treat : or / as the same character in Amazon Resource
 // Names (ARNs). However, EventBridge uses an exact match in event patterns
 // and rules. Be sure to use the correct ARN characters when creating event
-// patterns so that they match the ARN syntax in the event that you want to
-// match.
+// patterns so that they match the ARN syntax in the event you want to match.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2864,11 +3616,11 @@ func (c *CloudWatchEvents) TestEventPatternRequest(input *TestEventPatternInput)
 // See the AWS API reference guide for Amazon CloudWatch Events's
 // API operation TestEventPattern for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInvalidEventPatternException "InvalidEventPatternException"
-//   The event pattern isn't valid.
+// Returned Error Types:
+//   * InvalidEventPatternException
+//   The event pattern is not valid.
 //
-//   * ErrCodeInternalException "InternalException"
+//   * InternalException
 //   This exception occurs due to unexpected causes.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/TestEventPattern
@@ -2938,8 +3690,8 @@ func (c *CloudWatchEvents) UntagResourceRequest(input *UntagResourceInput) (req 
 
 // UntagResource API operation for Amazon CloudWatch Events.
 //
-// Removes one or more tags from the specified EventBridge resource. In EventBridge,
-// rules can be tagged.
+// Removes one or more tags from the specified EventBridge resource. In Amazon
+// EventBridge (CloudWatch Events, rules and event buses can be tagged.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -2948,22 +3700,23 @@ func (c *CloudWatchEvents) UntagResourceRequest(input *UntagResourceInput) (req 
 // See the AWS API reference guide for Amazon CloudWatch Events's
 // API operation UntagResource for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
-//   An entity that you specified doesn't exist.
+// Returned Error Types:
+//   * ResourceNotFoundException
+//   An entity that you specified does not exist.
 //
-//   * ErrCodeInternalException "InternalException"
+//   * InternalException
 //   This exception occurs due to unexpected causes.
 //
-//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
-//   There is concurrent modification on a resource.
+//   * ConcurrentModificationException
+//   There is concurrent modification on a rule, target, archive, or replay.
 //
-//   * ErrCodeManagedRuleException "ManagedRuleException"
-//   An AWS service created this rule on behalf of your account. That service
-//   manages it. If you see this error in response to DeleteRule or RemoveTargets,
-//   you can use the Force parameter in those calls to delete the rule or remove
-//   targets from the rule. You can't modify these managed rules by using DisableRule,
-//   EnableRule, PutTargets, PutRule, TagResource, or UntagResource.
+//   * ManagedRuleException
+//   This rule was created by an AWS service on behalf of your account. It is
+//   managed by that service. If you see this error in response to DeleteRule
+//   or RemoveTargets, you can use the Force parameter in those calls to delete
+//   the rule or remove targets from the rule. You cannot modify these managed
+//   rules by using DisableRule, EnableRule, PutTargets, PutRule, TagResource,
+//   or UntagResource.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/UntagResource
 func (c *CloudWatchEvents) UntagResource(input *UntagResourceInput) (*UntagResourceOutput, error) {
@@ -2982,6 +3735,98 @@ func (c *CloudWatchEvents) UntagResource(input *UntagResourceInput) (*UntagResou
 // for more information on using Contexts.
 func (c *CloudWatchEvents) UntagResourceWithContext(ctx aws.Context, input *UntagResourceInput, opts ...request.Option) (*UntagResourceOutput, error) {
 	req, out := c.UntagResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateArchive = "UpdateArchive"
+
+// UpdateArchiveRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateArchive operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateArchive for more information on using the UpdateArchive
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateArchiveRequest method.
+//    req, resp := client.UpdateArchiveRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/UpdateArchive
+func (c *CloudWatchEvents) UpdateArchiveRequest(input *UpdateArchiveInput) (req *request.Request, output *UpdateArchiveOutput) {
+	op := &request.Operation{
+		Name:       opUpdateArchive,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &UpdateArchiveInput{}
+	}
+
+	output = &UpdateArchiveOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateArchive API operation for Amazon CloudWatch Events.
+//
+// Updates the specified archive.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon CloudWatch Events's
+// API operation UpdateArchive for usage and error information.
+//
+// Returned Error Types:
+//   * ConcurrentModificationException
+//   There is concurrent modification on a rule, target, archive, or replay.
+//
+//   * ResourceNotFoundException
+//   An entity that you specified does not exist.
+//
+//   * InternalException
+//   This exception occurs due to unexpected causes.
+//
+//   * LimitExceededException
+//   The request failed because it attempted to create resource beyond the allowed
+//   service quota.
+//
+//   * InvalidEventPatternException
+//   The event pattern is not valid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/events-2015-10-07/UpdateArchive
+func (c *CloudWatchEvents) UpdateArchive(input *UpdateArchiveInput) (*UpdateArchiveOutput, error) {
+	req, out := c.UpdateArchiveRequest(input)
+	return out, req.Send()
+}
+
+// UpdateArchiveWithContext is the same as UpdateArchive with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateArchive for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *CloudWatchEvents) UpdateArchiveWithContext(ctx aws.Context, input *UpdateArchiveInput, opts ...request.Option) (*UpdateArchiveOutput, error) {
+	req, out := c.UpdateArchiveRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -3042,7 +3887,95 @@ func (s ActivateEventSourceOutput) GoString() string {
 	return s.String()
 }
 
-// This structure specifies the VPC subnets and security groups for the task
+// An Archive object that contains details about an archive.
+type Archive struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the archive.
+	ArchiveName *string `min:"1" type:"string"`
+
+	// The time stamp for the time that the archive was created.
+	CreationTime *time.Time `type:"timestamp"`
+
+	// The number of events in the archive.
+	EventCount *int64 `type:"long"`
+
+	// The ARN of the event bus associated with the archive. Only events from this
+	// event bus are sent to the archive.
+	EventSourceArn *string `min:"1" type:"string"`
+
+	// The number of days to retain events in the archive before they are deleted.
+	RetentionDays *int64 `type:"integer"`
+
+	// The size of the archive, in bytes.
+	SizeBytes *int64 `type:"long"`
+
+	// The current state of the archive.
+	State *string `type:"string" enum:"ArchiveState"`
+
+	// A description for the reason that the archive is in the current state.
+	StateReason *string `type:"string"`
+}
+
+// String returns the string representation
+func (s Archive) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Archive) GoString() string {
+	return s.String()
+}
+
+// SetArchiveName sets the ArchiveName field's value.
+func (s *Archive) SetArchiveName(v string) *Archive {
+	s.ArchiveName = &v
+	return s
+}
+
+// SetCreationTime sets the CreationTime field's value.
+func (s *Archive) SetCreationTime(v time.Time) *Archive {
+	s.CreationTime = &v
+	return s
+}
+
+// SetEventCount sets the EventCount field's value.
+func (s *Archive) SetEventCount(v int64) *Archive {
+	s.EventCount = &v
+	return s
+}
+
+// SetEventSourceArn sets the EventSourceArn field's value.
+func (s *Archive) SetEventSourceArn(v string) *Archive {
+	s.EventSourceArn = &v
+	return s
+}
+
+// SetRetentionDays sets the RetentionDays field's value.
+func (s *Archive) SetRetentionDays(v int64) *Archive {
+	s.RetentionDays = &v
+	return s
+}
+
+// SetSizeBytes sets the SizeBytes field's value.
+func (s *Archive) SetSizeBytes(v int64) *Archive {
+	s.SizeBytes = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *Archive) SetState(v string) *Archive {
+	s.State = &v
+	return s
+}
+
+// SetStateReason sets the StateReason field's value.
+func (s *Archive) SetStateReason(v string) *Archive {
+	s.StateReason = &v
+	return s
+}
+
+// This structure specifies the VPC subnets and security groups for the task,
 // and whether a public IP address is to be used. This structure is relevant
 // only for ECS tasks that use the awsvpc network mode.
 type AwsVpcConfiguration struct {
@@ -3055,7 +3988,7 @@ type AwsVpcConfiguration struct {
 
 	// Specifies the security groups associated with the task. These security groups
 	// must all be in the same VPC. You can specify as many as five security groups.
-	// If you don't specify a security group, the default security group for the
+	// If you do not specify a security group, the default security group for the
 	// VPC is used.
 	SecurityGroups []*string `type:"list"`
 
@@ -3157,8 +4090,8 @@ type BatchParameters struct {
 	// JobName is a required field
 	JobName *string `type:"string" required:"true"`
 
-	// The retry strategy to use for failed jobs if the target is an AWS Batch job.
-	// The retry strategy is the number of times to retry the failed job execution.
+	// The retry strategy to use for failed jobs, if the target is an AWS Batch
+	// job. The retry strategy is the number of times to retry the failed job execution.
 	// Valid values are 1–10. When you specify a retry strategy here, it overrides
 	// the retry strategy defined in the job definition.
 	RetryStrategy *BatchRetryStrategy `type:"structure"`
@@ -3214,9 +4147,9 @@ func (s *BatchParameters) SetRetryStrategy(v *BatchRetryStrategy) *BatchParamete
 	return s
 }
 
-// The retry strategy to use for failed jobs if the target is an AWS Batch job.
-// If you specify a retry strategy here, it overrides the retry strategy defined
-// in the job definition.
+// The retry strategy to use for failed jobs, if the target is an AWS Batch
+// job. If you specify a retry strategy here, it overrides the retry strategy
+// defined in the job definition.
 type BatchRetryStrategy struct {
 	_ struct{} `type:"structure"`
 
@@ -3241,27 +4174,166 @@ func (s *BatchRetryStrategy) SetAttempts(v int64) *BatchRetryStrategy {
 	return s
 }
 
-// A JSON string that you can use to limit the event bus permissions that you're
+type CancelReplayInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the replay to cancel.
+	//
+	// ReplayName is a required field
+	ReplayName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s CancelReplayInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CancelReplayInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CancelReplayInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CancelReplayInput"}
+	if s.ReplayName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ReplayName"))
+	}
+	if s.ReplayName != nil && len(*s.ReplayName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ReplayName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetReplayName sets the ReplayName field's value.
+func (s *CancelReplayInput) SetReplayName(v string) *CancelReplayInput {
+	s.ReplayName = &v
+	return s
+}
+
+type CancelReplayOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the replay to cancel.
+	ReplayArn *string `min:"1" type:"string"`
+
+	// The current state of the replay.
+	State *string `type:"string" enum:"ReplayState"`
+
+	// The reason that the replay is in the current state.
+	StateReason *string `type:"string"`
+}
+
+// String returns the string representation
+func (s CancelReplayOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CancelReplayOutput) GoString() string {
+	return s.String()
+}
+
+// SetReplayArn sets the ReplayArn field's value.
+func (s *CancelReplayOutput) SetReplayArn(v string) *CancelReplayOutput {
+	s.ReplayArn = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *CancelReplayOutput) SetState(v string) *CancelReplayOutput {
+	s.State = &v
+	return s
+}
+
+// SetStateReason sets the StateReason field's value.
+func (s *CancelReplayOutput) SetStateReason(v string) *CancelReplayOutput {
+	s.StateReason = &v
+	return s
+}
+
+// There is concurrent modification on a rule, target, archive, or replay.
+type ConcurrentModificationException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s ConcurrentModificationException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ConcurrentModificationException) GoString() string {
+	return s.String()
+}
+
+func newErrorConcurrentModificationException(v protocol.ResponseMetadata) error {
+	return &ConcurrentModificationException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ConcurrentModificationException) Code() string {
+	return "ConcurrentModificationException"
+}
+
+// Message returns the exception's message.
+func (s *ConcurrentModificationException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ConcurrentModificationException) OrigErr() error {
+	return nil
+}
+
+func (s *ConcurrentModificationException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ConcurrentModificationException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ConcurrentModificationException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// A JSON string which you can use to limit the event bus permissions you are
 // granting to only accounts that fulfill the condition. Currently, the only
 // supported condition is membership in a certain AWS organization. The string
 // must contain Type, Key, and Value fields. The Value field specifies the ID
-// of the AWS organization. The following is an example value for Condition:
+// of the AWS organization. Following is an example value for Condition:
 //
 // '{"Type" : "StringEquals", "Key": "aws:PrincipalOrgID", "Value": "o-1234567890"}'
 type Condition struct {
 	_ struct{} `type:"structure"`
 
-	// The key for the condition. Currently, the only supported key is aws:PrincipalOrgID.
+	// Specifies the key for the condition. Currently the only supported key is
+	// aws:PrincipalOrgID.
 	//
 	// Key is a required field
 	Key *string `type:"string" required:"true"`
 
-	// The type of condition. Currently, the only supported value is StringEquals.
+	// Specifies the type of condition. Currently the only supported value is StringEquals.
 	//
 	// Type is a required field
 	Type *string `type:"string" required:"true"`
 
-	// The value for the key. Currently, this must be the ID of the organization.
+	// Specifies the value for the key. Currently, this must be the ID of the organization.
 	//
 	// Value is a required field
 	Value *string `type:"string" required:"true"`
@@ -3314,25 +4386,163 @@ func (s *Condition) SetValue(v string) *Condition {
 	return s
 }
 
+type CreateArchiveInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name for the archive to create.
+	//
+	// ArchiveName is a required field
+	ArchiveName *string `min:"1" type:"string" required:"true"`
+
+	// A description for the archive.
+	Description *string `type:"string"`
+
+	// An event pattern to use to filter events sent to the archive.
+	EventPattern *string `type:"string"`
+
+	// The ARN of the event source associated with the archive.
+	//
+	// EventSourceArn is a required field
+	EventSourceArn *string `min:"1" type:"string" required:"true"`
+
+	// The number of days to retain events for. Default value is 0. If set to 0,
+	// events are retained indefinitely
+	RetentionDays *int64 `type:"integer"`
+}
+
+// String returns the string representation
+func (s CreateArchiveInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateArchiveInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateArchiveInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateArchiveInput"}
+	if s.ArchiveName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ArchiveName"))
+	}
+	if s.ArchiveName != nil && len(*s.ArchiveName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ArchiveName", 1))
+	}
+	if s.EventSourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("EventSourceArn"))
+	}
+	if s.EventSourceArn != nil && len(*s.EventSourceArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EventSourceArn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetArchiveName sets the ArchiveName field's value.
+func (s *CreateArchiveInput) SetArchiveName(v string) *CreateArchiveInput {
+	s.ArchiveName = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateArchiveInput) SetDescription(v string) *CreateArchiveInput {
+	s.Description = &v
+	return s
+}
+
+// SetEventPattern sets the EventPattern field's value.
+func (s *CreateArchiveInput) SetEventPattern(v string) *CreateArchiveInput {
+	s.EventPattern = &v
+	return s
+}
+
+// SetEventSourceArn sets the EventSourceArn field's value.
+func (s *CreateArchiveInput) SetEventSourceArn(v string) *CreateArchiveInput {
+	s.EventSourceArn = &v
+	return s
+}
+
+// SetRetentionDays sets the RetentionDays field's value.
+func (s *CreateArchiveInput) SetRetentionDays(v int64) *CreateArchiveInput {
+	s.RetentionDays = &v
+	return s
+}
+
+type CreateArchiveOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the archive that was created.
+	ArchiveArn *string `min:"1" type:"string"`
+
+	// The time at which the archive was created.
+	CreationTime *time.Time `type:"timestamp"`
+
+	// The state of the archive that was created.
+	State *string `type:"string" enum:"ArchiveState"`
+
+	// The reason that the archive is in the state.
+	StateReason *string `type:"string"`
+}
+
+// String returns the string representation
+func (s CreateArchiveOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateArchiveOutput) GoString() string {
+	return s.String()
+}
+
+// SetArchiveArn sets the ArchiveArn field's value.
+func (s *CreateArchiveOutput) SetArchiveArn(v string) *CreateArchiveOutput {
+	s.ArchiveArn = &v
+	return s
+}
+
+// SetCreationTime sets the CreationTime field's value.
+func (s *CreateArchiveOutput) SetCreationTime(v time.Time) *CreateArchiveOutput {
+	s.CreationTime = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *CreateArchiveOutput) SetState(v string) *CreateArchiveOutput {
+	s.State = &v
+	return s
+}
+
+// SetStateReason sets the StateReason field's value.
+func (s *CreateArchiveOutput) SetStateReason(v string) *CreateArchiveOutput {
+	s.StateReason = &v
+	return s
+}
+
 type CreateEventBusInput struct {
 	_ struct{} `type:"structure"`
 
-	// If you're creating a partner event bus, this specifies the partner event
+	// If you are creating a partner event bus, this specifies the partner event
 	// source that the new event bus will be matched with.
 	EventSourceName *string `min:"1" type:"string"`
 
 	// The name of the new event bus.
 	//
-	// The names of custom event buses can't contain the / character. You can't
-	// use the name default for a custom event bus because this name is already
-	// used for your account's default event bus.
+	// Event bus names cannot contain the / character. You can't use the name default
+	// for a custom event bus, as this name is already used for your account's default
+	// event bus.
 	//
 	// If this is a partner event bus, the name must exactly match the name of the
-	// partner event source that this event bus is matched to. This name will include
-	// the / character.
+	// partner event source that this event bus is matched to.
 	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
+
+	// Tags to associate with the event bus.
+	Tags []*Tag `type:"list"`
 }
 
 // String returns the string representation
@@ -3357,6 +4567,16 @@ func (s *CreateEventBusInput) Validate() error {
 	if s.Name != nil && len(*s.Name) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Name", 1))
 	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -3373,6 +4593,12 @@ func (s *CreateEventBusInput) SetEventSourceName(v string) *CreateEventBusInput 
 // SetName sets the Name field's value.
 func (s *CreateEventBusInput) SetName(v string) *CreateEventBusInput {
 	s.Name = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateEventBusInput) SetTags(v []*Tag) *CreateEventBusInput {
+	s.Tags = v
 	return s
 }
 
@@ -3402,8 +4628,8 @@ func (s *CreateEventBusOutput) SetEventBusArn(v string) *CreateEventBusOutput {
 type CreatePartnerEventSourceInput struct {
 	_ struct{} `type:"structure"`
 
-	// The AWS account ID of the customer who is permitted to create a matching
-	// partner event bus for this partner event source.
+	// The AWS account ID that is permitted to create a matching partner event bus
+	// for this partner event source.
 	//
 	// Account is a required field
 	Account *string `min:"12" type:"string" required:"true"`
@@ -3536,6 +4762,99 @@ func (s DeactivateEventSourceOutput) String() string {
 
 // GoString returns the string representation
 func (s DeactivateEventSourceOutput) GoString() string {
+	return s.String()
+}
+
+// A DeadLetterConfig object that contains information about a dead-letter queue
+// configuration.
+type DeadLetterConfig struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the SQS queue specified as the target for the dead-letter queue.
+	Arn *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s DeadLetterConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeadLetterConfig) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeadLetterConfig) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeadLetterConfig"}
+	if s.Arn != nil && len(*s.Arn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Arn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetArn sets the Arn field's value.
+func (s *DeadLetterConfig) SetArn(v string) *DeadLetterConfig {
+	s.Arn = &v
+	return s
+}
+
+type DeleteArchiveInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the archive to delete.
+	//
+	// ArchiveName is a required field
+	ArchiveName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteArchiveInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteArchiveInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteArchiveInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteArchiveInput"}
+	if s.ArchiveName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ArchiveName"))
+	}
+	if s.ArchiveName != nil && len(*s.ArchiveName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ArchiveName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetArchiveName sets the ArchiveName field's value.
+func (s *DeleteArchiveInput) SetArchiveName(v string) *DeleteArchiveInput {
+	s.ArchiveName = &v
+	return s
+}
+
+type DeleteArchiveOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteArchiveOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteArchiveOutput) GoString() string {
 	return s.String()
 }
 
@@ -3748,6 +5067,160 @@ func (s DeleteRuleOutput) GoString() string {
 	return s.String()
 }
 
+type DescribeArchiveInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the archive to retrieve.
+	//
+	// ArchiveName is a required field
+	ArchiveName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeArchiveInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeArchiveInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeArchiveInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeArchiveInput"}
+	if s.ArchiveName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ArchiveName"))
+	}
+	if s.ArchiveName != nil && len(*s.ArchiveName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ArchiveName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetArchiveName sets the ArchiveName field's value.
+func (s *DescribeArchiveInput) SetArchiveName(v string) *DescribeArchiveInput {
+	s.ArchiveName = &v
+	return s
+}
+
+type DescribeArchiveOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the archive.
+	ArchiveArn *string `min:"1" type:"string"`
+
+	// The name of the archive.
+	ArchiveName *string `min:"1" type:"string"`
+
+	// The time at which the archive was created.
+	CreationTime *time.Time `type:"timestamp"`
+
+	// The description of the archive.
+	Description *string `type:"string"`
+
+	// The number of events in the archive.
+	EventCount *int64 `type:"long"`
+
+	// The event pattern used to filter events sent to the archive.
+	EventPattern *string `type:"string"`
+
+	// The ARN of the event source associated with the archive.
+	EventSourceArn *string `min:"1" type:"string"`
+
+	// The number of days to retain events for in the archive.
+	RetentionDays *int64 `type:"integer"`
+
+	// The size of the archive in bytes.
+	SizeBytes *int64 `type:"long"`
+
+	// The state of the archive.
+	State *string `type:"string" enum:"ArchiveState"`
+
+	// The reason that the archive is in the state.
+	StateReason *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeArchiveOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeArchiveOutput) GoString() string {
+	return s.String()
+}
+
+// SetArchiveArn sets the ArchiveArn field's value.
+func (s *DescribeArchiveOutput) SetArchiveArn(v string) *DescribeArchiveOutput {
+	s.ArchiveArn = &v
+	return s
+}
+
+// SetArchiveName sets the ArchiveName field's value.
+func (s *DescribeArchiveOutput) SetArchiveName(v string) *DescribeArchiveOutput {
+	s.ArchiveName = &v
+	return s
+}
+
+// SetCreationTime sets the CreationTime field's value.
+func (s *DescribeArchiveOutput) SetCreationTime(v time.Time) *DescribeArchiveOutput {
+	s.CreationTime = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *DescribeArchiveOutput) SetDescription(v string) *DescribeArchiveOutput {
+	s.Description = &v
+	return s
+}
+
+// SetEventCount sets the EventCount field's value.
+func (s *DescribeArchiveOutput) SetEventCount(v int64) *DescribeArchiveOutput {
+	s.EventCount = &v
+	return s
+}
+
+// SetEventPattern sets the EventPattern field's value.
+func (s *DescribeArchiveOutput) SetEventPattern(v string) *DescribeArchiveOutput {
+	s.EventPattern = &v
+	return s
+}
+
+// SetEventSourceArn sets the EventSourceArn field's value.
+func (s *DescribeArchiveOutput) SetEventSourceArn(v string) *DescribeArchiveOutput {
+	s.EventSourceArn = &v
+	return s
+}
+
+// SetRetentionDays sets the RetentionDays field's value.
+func (s *DescribeArchiveOutput) SetRetentionDays(v int64) *DescribeArchiveOutput {
+	s.RetentionDays = &v
+	return s
+}
+
+// SetSizeBytes sets the SizeBytes field's value.
+func (s *DescribeArchiveOutput) SetSizeBytes(v int64) *DescribeArchiveOutput {
+	s.SizeBytes = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *DescribeArchiveOutput) SetState(v string) *DescribeArchiveOutput {
+	s.State = &v
+	return s
+}
+
+// SetStateReason sets the StateReason field's value.
+func (s *DescribeArchiveOutput) SetStateReason(v string) *DescribeArchiveOutput {
+	s.StateReason = &v
+	return s
+}
+
 type DescribeEventBusInput struct {
 	_ struct{} `type:"structure"`
 
@@ -3880,18 +5353,18 @@ type DescribeEventSourceOutput struct {
 	// The date and time that the event source was created.
 	CreationTime *time.Time `type:"timestamp"`
 
-	// The date and time that the event source will expire if you don't create a
-	// matching event bus.
+	// The date and time that the event source will expire if you do not create
+	// a matching event bus.
 	ExpirationTime *time.Time `type:"timestamp"`
 
 	// The name of the partner event source.
 	Name *string `type:"string"`
 
-	// The state of the event source. If it's ACTIVE, you have already created a
-	// matching event bus for this event source, and that event bus is active. If
-	// it's PENDING, either you haven't yet created a matching event bus, or that
-	// event bus is deactivated. If it's DELETED, you have created a matching event
-	// bus, but the event source has since been deleted.
+	// The state of the event source. If it is ACTIVE, you have already created
+	// a matching event bus for this event source, and that event bus is active.
+	// If it is PENDING, either you haven't yet created a matching event bus, or
+	// that event bus is deactivated. If it is DELETED, you have created a matching
+	// event bus, but the event source has since been deleted.
 	State *string `type:"string" enum:"EventSourceState"`
 }
 
@@ -4014,6 +5487,169 @@ func (s *DescribePartnerEventSourceOutput) SetName(v string) *DescribePartnerEve
 	return s
 }
 
+type DescribeReplayInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the replay to retrieve.
+	//
+	// ReplayName is a required field
+	ReplayName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeReplayInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeReplayInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeReplayInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeReplayInput"}
+	if s.ReplayName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ReplayName"))
+	}
+	if s.ReplayName != nil && len(*s.ReplayName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ReplayName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetReplayName sets the ReplayName field's value.
+func (s *DescribeReplayInput) SetReplayName(v string) *DescribeReplayInput {
+	s.ReplayName = &v
+	return s
+}
+
+type DescribeReplayOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The description of the replay.
+	Description *string `type:"string"`
+
+	// A ReplayDestination object that contains details about the replay.
+	Destination *ReplayDestination `type:"structure"`
+
+	// The time stamp for the last event that was replayed from the archive.
+	EventEndTime *time.Time `type:"timestamp"`
+
+	// The time that the event was last replayed.
+	EventLastReplayedTime *time.Time `type:"timestamp"`
+
+	// The ARN of the archive events were replayed from.
+	EventSourceArn *string `min:"1" type:"string"`
+
+	// The time stamp of the first event that was last replayed from the archive.
+	EventStartTime *time.Time `type:"timestamp"`
+
+	// The ARN of the replay.
+	ReplayArn *string `min:"1" type:"string"`
+
+	// A time stamp for the time that the replay stopped.
+	ReplayEndTime *time.Time `type:"timestamp"`
+
+	// The name of the replay.
+	ReplayName *string `min:"1" type:"string"`
+
+	// A time stamp for the time that the replay started.
+	ReplayStartTime *time.Time `type:"timestamp"`
+
+	// The current state of the replay.
+	State *string `type:"string" enum:"ReplayState"`
+
+	// The reason that the replay is in the current state.
+	StateReason *string `type:"string"`
+}
+
+// String returns the string representation
+func (s DescribeReplayOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeReplayOutput) GoString() string {
+	return s.String()
+}
+
+// SetDescription sets the Description field's value.
+func (s *DescribeReplayOutput) SetDescription(v string) *DescribeReplayOutput {
+	s.Description = &v
+	return s
+}
+
+// SetDestination sets the Destination field's value.
+func (s *DescribeReplayOutput) SetDestination(v *ReplayDestination) *DescribeReplayOutput {
+	s.Destination = v
+	return s
+}
+
+// SetEventEndTime sets the EventEndTime field's value.
+func (s *DescribeReplayOutput) SetEventEndTime(v time.Time) *DescribeReplayOutput {
+	s.EventEndTime = &v
+	return s
+}
+
+// SetEventLastReplayedTime sets the EventLastReplayedTime field's value.
+func (s *DescribeReplayOutput) SetEventLastReplayedTime(v time.Time) *DescribeReplayOutput {
+	s.EventLastReplayedTime = &v
+	return s
+}
+
+// SetEventSourceArn sets the EventSourceArn field's value.
+func (s *DescribeReplayOutput) SetEventSourceArn(v string) *DescribeReplayOutput {
+	s.EventSourceArn = &v
+	return s
+}
+
+// SetEventStartTime sets the EventStartTime field's value.
+func (s *DescribeReplayOutput) SetEventStartTime(v time.Time) *DescribeReplayOutput {
+	s.EventStartTime = &v
+	return s
+}
+
+// SetReplayArn sets the ReplayArn field's value.
+func (s *DescribeReplayOutput) SetReplayArn(v string) *DescribeReplayOutput {
+	s.ReplayArn = &v
+	return s
+}
+
+// SetReplayEndTime sets the ReplayEndTime field's value.
+func (s *DescribeReplayOutput) SetReplayEndTime(v time.Time) *DescribeReplayOutput {
+	s.ReplayEndTime = &v
+	return s
+}
+
+// SetReplayName sets the ReplayName field's value.
+func (s *DescribeReplayOutput) SetReplayName(v string) *DescribeReplayOutput {
+	s.ReplayName = &v
+	return s
+}
+
+// SetReplayStartTime sets the ReplayStartTime field's value.
+func (s *DescribeReplayOutput) SetReplayStartTime(v time.Time) *DescribeReplayOutput {
+	s.ReplayStartTime = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *DescribeReplayOutput) SetState(v string) *DescribeReplayOutput {
+	s.State = &v
+	return s
+}
+
+// SetStateReason sets the StateReason field's value.
+func (s *DescribeReplayOutput) SetStateReason(v string) *DescribeReplayOutput {
+	s.StateReason = &v
+	return s
+}
+
 type DescribeRuleInput struct {
 	_ struct{} `type:"structure"`
 
@@ -4080,7 +5716,7 @@ type DescribeRuleOutput struct {
 	// The event bus associated with the rule.
 	EventBusName *string `min:"1" type:"string"`
 
-	// The event pattern. For more information, see Event Patterns (https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-and-event-patterns.html)
+	// The event pattern. For more information, see Events and Event Patterns (https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-and-event-patterns.html)
 	// in the Amazon EventBridge User Guide.
 	EventPattern *string `type:"string"`
 
@@ -4094,7 +5730,7 @@ type DescribeRuleOutput struct {
 	// The Amazon Resource Name (ARN) of the IAM role associated with the rule.
 	RoleArn *string `min:"1" type:"string"`
 
-	// The scheduling expression: for example, "cron(0 20 * * ? *)" or "rate(5 minutes)".
+	// The scheduling expression. For example, "cron(0 20 * * ? *)", "rate(5 minutes)".
 	ScheduleExpression *string `type:"string"`
 
 	// Specifies whether the rule is enabled or disabled.
@@ -4249,11 +5885,11 @@ type EcsParameters struct {
 	LaunchType *string `type:"string" enum:"LaunchType"`
 
 	// Use this structure if the ECS task uses the awsvpc network mode. This structure
-	// specifies the VPC subnets and security groups associated with the task and
+	// specifies the VPC subnets and security groups associated with the task, and
 	// whether a public IP address is to be used. This structure is required if
 	// LaunchType is FARGATE because the awsvpc mode is required for Fargate tasks.
 	//
-	// If you specify NetworkConfiguration when the target ECS task doesn't use
+	// If you specify NetworkConfiguration when the target ECS task does not use
 	// the awsvpc network mode, the task fails.
 	NetworkConfiguration *NetworkConfiguration `type:"structure"`
 
@@ -4473,21 +6109,21 @@ type EventSource struct {
 	// The name of the partner that created the event source.
 	CreatedBy *string `type:"string"`
 
-	// The date and time when the event source was created.
+	// The date and time the event source was created.
 	CreationTime *time.Time `type:"timestamp"`
 
-	// The date and time when the event source will expire if the AWS account doesn't
+	// The date and time that the event source will expire, if the AWS account doesn't
 	// create a matching event bus for it.
 	ExpirationTime *time.Time `type:"timestamp"`
 
 	// The name of the event source.
 	Name *string `type:"string"`
 
-	// The state of the event source. If it's ACTIVE, you have already created a
-	// matching event bus for this event source, and that event bus is active. If
-	// it's PENDING, either you haven't yet created a matching event bus, or that
-	// event bus is deactivated. If it's DELETED, you have created a matching event
-	// bus, but the event source has since been deleted.
+	// The state of the event source. If it is ACTIVE, you have already created
+	// a matching event bus for this event source, and that event bus is active.
+	// If it is PENDING, either you haven't yet created a matching event bus, or
+	// that event bus is deactivated. If it is DELETED, you have created a matching
+	// event bus, but the event source has since been deleted.
 	State *string `type:"string" enum:"EventSourceState"`
 }
 
@@ -4537,33 +6173,136 @@ func (s *EventSource) SetState(v string) *EventSource {
 	return s
 }
 
+// These are custom parameter to be used when the target is an API Gateway REST
+// APIs.
+type HttpParameters struct {
+	_ struct{} `type:"structure"`
+
+	// The headers that need to be sent as part of request invoking the API Gateway
+	// REST API.
+	HeaderParameters map[string]*string `type:"map"`
+
+	// The path parameter values to be used to populate API Gateway REST API path
+	// wildcards ("*").
+	PathParameterValues []*string `type:"list"`
+
+	// The query string keys/values that need to be sent as part of request invoking
+	// the API Gateway REST API.
+	QueryStringParameters map[string]*string `type:"map"`
+}
+
+// String returns the string representation
+func (s HttpParameters) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s HttpParameters) GoString() string {
+	return s.String()
+}
+
+// SetHeaderParameters sets the HeaderParameters field's value.
+func (s *HttpParameters) SetHeaderParameters(v map[string]*string) *HttpParameters {
+	s.HeaderParameters = v
+	return s
+}
+
+// SetPathParameterValues sets the PathParameterValues field's value.
+func (s *HttpParameters) SetPathParameterValues(v []*string) *HttpParameters {
+	s.PathParameterValues = v
+	return s
+}
+
+// SetQueryStringParameters sets the QueryStringParameters field's value.
+func (s *HttpParameters) SetQueryStringParameters(v map[string]*string) *HttpParameters {
+	s.QueryStringParameters = v
+	return s
+}
+
+// An error occurred because a replay can be canceled only when the state is
+// Running or Starting.
+type IllegalStatusException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s IllegalStatusException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s IllegalStatusException) GoString() string {
+	return s.String()
+}
+
+func newErrorIllegalStatusException(v protocol.ResponseMetadata) error {
+	return &IllegalStatusException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *IllegalStatusException) Code() string {
+	return "IllegalStatusException"
+}
+
+// Message returns the exception's message.
+func (s *IllegalStatusException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *IllegalStatusException) OrigErr() error {
+	return nil
+}
+
+func (s *IllegalStatusException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *IllegalStatusException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *IllegalStatusException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // Contains the parameters needed for you to provide custom input to a target
 // based on one or more pieces of data extracted from the event.
 type InputTransformer struct {
 	_ struct{} `type:"structure"`
 
 	// Map of JSON paths to be extracted from the event. You can then insert these
-	// in the template in InputTemplate to produce the output to be sent to the
-	// target.
+	// in the template in InputTemplate to produce the output you want to be sent
+	// to the target.
 	//
 	// InputPathsMap is an array key-value pairs, where each value is a valid JSON
 	// path. You can have as many as 10 key-value pairs. You must use JSON dot notation,
 	// not bracket notation.
 	//
-	// The keys can't start with "AWS".
+	// The keys cannot start with "AWS."
 	InputPathsMap map[string]*string `type:"map"`
 
 	// Input template where you specify placeholders that will be filled with the
 	// values of the keys from InputPathsMap to customize the data sent to the target.
-	// Enclose each InputPathsMaps value in brackets: <value>. The InputTemplate
+	// Enclose each InputPathsMaps value in brackets: <value> The InputTemplate
 	// must be valid JSON.
 	//
 	// If InputTemplate is a JSON object (surrounded by curly braces), the following
 	// restrictions apply:
 	//
-	//    * The placeholder can't be used as an object key
+	//    * The placeholder cannot be used as an object key.
 	//
-	//    * Object values can't include quote marks
+	//    * Object values cannot include quote marks.
 	//
 	// The following example shows the syntax for using InputPathsMap and InputTemplate.
 	//
@@ -4632,10 +6371,178 @@ func (s *InputTransformer) SetInputTemplate(v string) *InputTransformer {
 	return s
 }
 
+// This exception occurs due to unexpected causes.
+type InternalException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s InternalException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InternalException) GoString() string {
+	return s.String()
+}
+
+func newErrorInternalException(v protocol.ResponseMetadata) error {
+	return &InternalException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *InternalException) Code() string {
+	return "InternalException"
+}
+
+// Message returns the exception's message.
+func (s *InternalException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *InternalException) OrigErr() error {
+	return nil
+}
+
+func (s *InternalException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *InternalException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *InternalException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// The event pattern is not valid.
+type InvalidEventPatternException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s InvalidEventPatternException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InvalidEventPatternException) GoString() string {
+	return s.String()
+}
+
+func newErrorInvalidEventPatternException(v protocol.ResponseMetadata) error {
+	return &InvalidEventPatternException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *InvalidEventPatternException) Code() string {
+	return "InvalidEventPatternException"
+}
+
+// Message returns the exception's message.
+func (s *InvalidEventPatternException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *InvalidEventPatternException) OrigErr() error {
+	return nil
+}
+
+func (s *InvalidEventPatternException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *InvalidEventPatternException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *InvalidEventPatternException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// The specified state is not a valid state for an event source.
+type InvalidStateException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s InvalidStateException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InvalidStateException) GoString() string {
+	return s.String()
+}
+
+func newErrorInvalidStateException(v protocol.ResponseMetadata) error {
+	return &InvalidStateException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *InvalidStateException) Code() string {
+	return "InvalidStateException"
+}
+
+// Message returns the exception's message.
+func (s *InvalidStateException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *InvalidStateException) OrigErr() error {
+	return nil
+}
+
+func (s *InvalidStateException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *InvalidStateException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *InvalidStateException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // This object enables you to specify a JSON path to extract from the event
-// and use as the partition key for the Amazon Kinesis data stream so that you
-// can control the shard that the event goes to. If you don't include this parameter,
-// the default is to use the eventId as the partition key.
+// and use as the partition key for the Amazon Kinesis data stream, so that
+// you can control the shard to which the event goes. If you do not include
+// this parameter, the default is to use the eventId as the partition key.
 type KinesisParameters struct {
 	_ struct{} `type:"structure"`
 
@@ -4676,12 +6583,183 @@ func (s *KinesisParameters) SetPartitionKeyPath(v string) *KinesisParameters {
 	return s
 }
 
+// The request failed because it attempted to create resource beyond the allowed
+// service quota.
+type LimitExceededException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s LimitExceededException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s LimitExceededException) GoString() string {
+	return s.String()
+}
+
+func newErrorLimitExceededException(v protocol.ResponseMetadata) error {
+	return &LimitExceededException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *LimitExceededException) Code() string {
+	return "LimitExceededException"
+}
+
+// Message returns the exception's message.
+func (s *LimitExceededException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *LimitExceededException) OrigErr() error {
+	return nil
+}
+
+func (s *LimitExceededException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *LimitExceededException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *LimitExceededException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+type ListArchivesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the event source associated with the archive.
+	EventSourceArn *string `min:"1" type:"string"`
+
+	// The maximum number of results to return.
+	Limit *int64 `min:"1" type:"integer"`
+
+	// A name prefix to filter the archives returned. Only archives with name that
+	// match the prefix are returned.
+	NamePrefix *string `min:"1" type:"string"`
+
+	// The token returned by a previous call to retrieve the next set of results.
+	NextToken *string `min:"1" type:"string"`
+
+	// The state of the archive.
+	State *string `type:"string" enum:"ArchiveState"`
+}
+
+// String returns the string representation
+func (s ListArchivesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListArchivesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListArchivesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListArchivesInput"}
+	if s.EventSourceArn != nil && len(*s.EventSourceArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EventSourceArn", 1))
+	}
+	if s.Limit != nil && *s.Limit < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("Limit", 1))
+	}
+	if s.NamePrefix != nil && len(*s.NamePrefix) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NamePrefix", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEventSourceArn sets the EventSourceArn field's value.
+func (s *ListArchivesInput) SetEventSourceArn(v string) *ListArchivesInput {
+	s.EventSourceArn = &v
+	return s
+}
+
+// SetLimit sets the Limit field's value.
+func (s *ListArchivesInput) SetLimit(v int64) *ListArchivesInput {
+	s.Limit = &v
+	return s
+}
+
+// SetNamePrefix sets the NamePrefix field's value.
+func (s *ListArchivesInput) SetNamePrefix(v string) *ListArchivesInput {
+	s.NamePrefix = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListArchivesInput) SetNextToken(v string) *ListArchivesInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *ListArchivesInput) SetState(v string) *ListArchivesInput {
+	s.State = &v
+	return s
+}
+
+type ListArchivesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An array of Archive objects that include details about an archive.
+	Archives []*Archive `type:"list"`
+
+	// The token returned by a previous call to retrieve the next set of results.
+	NextToken *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ListArchivesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListArchivesOutput) GoString() string {
+	return s.String()
+}
+
+// SetArchives sets the Archives field's value.
+func (s *ListArchivesOutput) SetArchives(v []*Archive) *ListArchivesOutput {
+	s.Archives = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListArchivesOutput) SetNextToken(v string) *ListArchivesOutput {
+	s.NextToken = &v
+	return s
+}
+
 type ListEventBusesInput struct {
 	_ struct{} `type:"structure"`
 
 	// Specifying this limits the number of results returned by this operation.
-	// The operation also returns a NextToken that you can use in a subsequent operation
-	// to retrieve the next set of results.
+	// The operation also returns a NextToken which you can use in a subsequent
+	// operation to retrieve the next set of results.
 	Limit *int64 `min:"1" type:"integer"`
 
 	// Specifying this limits the results to only those event buses with names that
@@ -4776,8 +6854,8 @@ type ListEventSourcesInput struct {
 	_ struct{} `type:"structure"`
 
 	// Specifying this limits the number of results returned by this operation.
-	// The operation also returns a NextToken that you can use in a subsequent operation
-	// to retrieve the next set of results.
+	// The operation also returns a NextToken which you can use in a subsequent
+	// operation to retrieve the next set of results.
 	Limit *int64 `min:"1" type:"integer"`
 
 	// Specifying this limits the results to only those partner event sources with
@@ -4877,8 +6955,8 @@ type ListPartnerEventSourceAccountsInput struct {
 	EventSourceName *string `min:"1" type:"string" required:"true"`
 
 	// Specifying this limits the number of results returned by this operation.
-	// The operation also returns a NextToken that you can use in a subsequent operation
-	// to retrieve the next set of results.
+	// The operation also returns a NextToken which you can use in a subsequent
+	// operation to retrieve the next set of results.
 	Limit *int64 `min:"1" type:"integer"`
 
 	// The token returned by a previous call to this operation. Specifying this
@@ -4973,7 +7051,7 @@ type ListPartnerEventSourcesInput struct {
 	_ struct{} `type:"structure"`
 
 	// pecifying this limits the number of results returned by this operation. The
-	// operation also returns a NextToken that you can use in a subsequent operation
+	// operation also returns a NextToken which you can use in a subsequent operation
 	// to retrieve the next set of results.
 	Limit *int64 `min:"1" type:"integer"`
 
@@ -5068,6 +7146,120 @@ func (s *ListPartnerEventSourcesOutput) SetNextToken(v string) *ListPartnerEvent
 // SetPartnerEventSources sets the PartnerEventSources field's value.
 func (s *ListPartnerEventSourcesOutput) SetPartnerEventSources(v []*PartnerEventSource) *ListPartnerEventSourcesOutput {
 	s.PartnerEventSources = v
+	return s
+}
+
+type ListReplaysInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the event source associated with the replay.
+	EventSourceArn *string `min:"1" type:"string"`
+
+	// The maximum number of replays to retrieve.
+	Limit *int64 `min:"1" type:"integer"`
+
+	// A name prefix to filter the archives returned. Only archives with name that
+	// match the prefix are returned.
+	NamePrefix *string `min:"1" type:"string"`
+
+	// The token returned by a previous call to retrieve the next set of results.
+	NextToken *string `min:"1" type:"string"`
+
+	// The state of the replay.
+	State *string `type:"string" enum:"ReplayState"`
+}
+
+// String returns the string representation
+func (s ListReplaysInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListReplaysInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListReplaysInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListReplaysInput"}
+	if s.EventSourceArn != nil && len(*s.EventSourceArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EventSourceArn", 1))
+	}
+	if s.Limit != nil && *s.Limit < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("Limit", 1))
+	}
+	if s.NamePrefix != nil && len(*s.NamePrefix) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NamePrefix", 1))
+	}
+	if s.NextToken != nil && len(*s.NextToken) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("NextToken", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEventSourceArn sets the EventSourceArn field's value.
+func (s *ListReplaysInput) SetEventSourceArn(v string) *ListReplaysInput {
+	s.EventSourceArn = &v
+	return s
+}
+
+// SetLimit sets the Limit field's value.
+func (s *ListReplaysInput) SetLimit(v int64) *ListReplaysInput {
+	s.Limit = &v
+	return s
+}
+
+// SetNamePrefix sets the NamePrefix field's value.
+func (s *ListReplaysInput) SetNamePrefix(v string) *ListReplaysInput {
+	s.NamePrefix = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListReplaysInput) SetNextToken(v string) *ListReplaysInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *ListReplaysInput) SetState(v string) *ListReplaysInput {
+	s.State = &v
+	return s
+}
+
+type ListReplaysOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The token returned by a previous call to retrieve the next set of results.
+	NextToken *string `min:"1" type:"string"`
+
+	// An array of Replay objects that contain information about the replay.
+	Replays []*Replay `type:"list"`
+}
+
+// String returns the string representation
+func (s ListReplaysOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListReplaysOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListReplaysOutput) SetNextToken(v string) *ListReplaysOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetReplays sets the Replays field's value.
+func (s *ListReplaysOutput) SetReplays(v []*Replay) *ListReplaysOutput {
+	s.Replays = v
 	return s
 }
 
@@ -5291,7 +7483,7 @@ func (s *ListRulesOutput) SetRules(v []*Rule) *ListRulesOutput {
 type ListTagsForResourceInput struct {
 	_ struct{} `type:"structure"`
 
-	// The ARN of the rule for which you want to view tags.
+	// The ARN of the EventBridge resource for which you want to view tags.
 	//
 	// ResourceARN is a required field
 	ResourceARN *string `min:"1" type:"string" required:"true"`
@@ -5332,7 +7524,7 @@ func (s *ListTagsForResourceInput) SetResourceARN(v string) *ListTagsForResource
 type ListTagsForResourceOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The list of tag keys and values associated with the rule that you specified.
+	// The list of tag keys and values associated with the resource you specified
 	Tags []*Tag `type:"list"`
 }
 
@@ -5463,12 +7655,73 @@ func (s *ListTargetsByRuleOutput) SetTargets(v []*Target) *ListTargetsByRuleOutp
 	return s
 }
 
+// This rule was created by an AWS service on behalf of your account. It is
+// managed by that service. If you see this error in response to DeleteRule
+// or RemoveTargets, you can use the Force parameter in those calls to delete
+// the rule or remove targets from the rule. You cannot modify these managed
+// rules by using DisableRule, EnableRule, PutTargets, PutRule, TagResource,
+// or UntagResource.
+type ManagedRuleException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s ManagedRuleException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ManagedRuleException) GoString() string {
+	return s.String()
+}
+
+func newErrorManagedRuleException(v protocol.ResponseMetadata) error {
+	return &ManagedRuleException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ManagedRuleException) Code() string {
+	return "ManagedRuleException"
+}
+
+// Message returns the exception's message.
+func (s *ManagedRuleException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ManagedRuleException) OrigErr() error {
+	return nil
+}
+
+func (s *ManagedRuleException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ManagedRuleException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ManagedRuleException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // This structure specifies the network configuration for an ECS task.
 type NetworkConfiguration struct {
 	_ struct{} `type:"structure"`
 
 	// Use this structure to specify the VPC subnets and security groups for the
-	// task and whether a public IP address is to be used. This structure is relevant
+	// task, and whether a public IP address is to be used. This structure is relevant
 	// only for ECS tasks that use the awsvpc network mode.
 	AwsvpcConfiguration *AwsVpcConfiguration `locationName:"awsvpcConfiguration" type:"structure"`
 }
@@ -5502,6 +7755,62 @@ func (s *NetworkConfiguration) Validate() error {
 func (s *NetworkConfiguration) SetAwsvpcConfiguration(v *AwsVpcConfiguration) *NetworkConfiguration {
 	s.AwsvpcConfiguration = v
 	return s
+}
+
+// The operation you are attempting is not available in this region.
+type OperationDisabledException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s OperationDisabledException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s OperationDisabledException) GoString() string {
+	return s.String()
+}
+
+func newErrorOperationDisabledException(v protocol.ResponseMetadata) error {
+	return &OperationDisabledException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *OperationDisabledException) Code() string {
+	return "OperationDisabledException"
+}
+
+// Message returns the exception's message.
+func (s *OperationDisabledException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *OperationDisabledException) OrigErr() error {
+	return nil
+}
+
+func (s *OperationDisabledException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *OperationDisabledException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *OperationDisabledException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 // A partner event source is created by an SaaS partner. If a customer creates
@@ -5546,18 +7855,18 @@ type PartnerEventSourceAccount struct {
 	// The AWS account ID that the partner event source was offered to.
 	Account *string `min:"12" type:"string"`
 
-	// The date and time when the event source was created.
+	// The date and time the event source was created.
 	CreationTime *time.Time `type:"timestamp"`
 
-	// The date and time when the event source will expire if the AWS account doesn't
+	// The date and time that the event source will expire, if the AWS account doesn't
 	// create a matching event bus for it.
 	ExpirationTime *time.Time `type:"timestamp"`
 
-	// The state of the event source. If it's ACTIVE, you have already created a
-	// matching event bus for this event source, and that event bus is active. If
-	// it's PENDING, either you haven't yet created a matching event bus, or that
-	// event bus is deactivated. If it's DELETED, you have created a matching event
-	// bus, but the event source has since been deleted.
+	// The state of the event source. If it is ACTIVE, you have already created
+	// a matching event bus for this event source, and that event bus is active.
+	// If it is PENDING, either you haven't yet created a matching event bus, or
+	// that event bus is deactivated. If it is DELETED, you have created a matching
+	// event bus, but the event source has since been deleted.
 	State *string `type:"string" enum:"EventSourceState"`
 }
 
@@ -5593,6 +7902,62 @@ func (s *PartnerEventSourceAccount) SetExpirationTime(v time.Time) *PartnerEvent
 func (s *PartnerEventSourceAccount) SetState(v string) *PartnerEventSourceAccount {
 	s.State = &v
 	return s
+}
+
+// The event bus policy is too long. For more information, see the limits.
+type PolicyLengthExceededException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s PolicyLengthExceededException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PolicyLengthExceededException) GoString() string {
+	return s.String()
+}
+
+func newErrorPolicyLengthExceededException(v protocol.ResponseMetadata) error {
+	return &PolicyLengthExceededException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *PolicyLengthExceededException) Code() string {
+	return "PolicyLengthExceededException"
+}
+
+// Message returns the exception's message.
+func (s *PolicyLengthExceededException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *PolicyLengthExceededException) OrigErr() error {
+	return nil
+}
+
+func (s *PolicyLengthExceededException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *PolicyLengthExceededException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *PolicyLengthExceededException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 type PutEventsInput struct {
@@ -5686,26 +8051,26 @@ func (s *PutEventsOutput) SetFailedEntryCount(v int64) *PutEventsOutput {
 type PutEventsRequestEntry struct {
 	_ struct{} `type:"structure"`
 
-	// A valid JSON string. There is no other schema imposed. The JSON string can
+	// A valid JSON string. There is no other schema imposed. The JSON string may
 	// contain fields and nested subobjects.
 	Detail *string `type:"string"`
 
-	// Free-form string used to decide which fields to expect in the event detail.
+	// Free-form string used to decide what fields to expect in the event detail.
 	DetailType *string `type:"string"`
 
 	// The event bus that will receive the event. Only the rules that are associated
-	// with this event bus can match the event.
+	// with this event bus will be able to match the event.
 	EventBusName *string `min:"1" type:"string"`
 
-	// AWS resources, identified by Amazon Resource Name (ARN), that the event primarily
-	// concerns. Any number, including zero, can be present.
+	// AWS resources, identified by Amazon Resource Name (ARN), which the event
+	// primarily concerns. Any number, including zero, may be present.
 	Resources []*string `type:"list"`
 
-	// The source of the event. This field is required.
+	// The source of the event.
 	Source *string `type:"string"`
 
-	// The timestamp of the event, per RFC3339 (https://www.rfc-editor.org/rfc/rfc3339.txt).
-	// If no timestamp is provided, the timestamp of the PutEvents call is used.
+	// The time stamp of the event, per RFC3339 (https://www.rfc-editor.org/rfc/rfc3339.txt).
+	// If no time stamp is provided, the time stamp of the PutEvents call is used.
 	Time *time.Time `type:"timestamp"`
 }
 
@@ -5838,6 +8203,16 @@ func (s *PutPartnerEventsInput) Validate() error {
 	if s.Entries != nil && len(s.Entries) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Entries", 1))
 	}
+	if s.Entries != nil {
+		for i, v := range s.Entries {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Entries", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -5858,7 +8233,7 @@ type PutPartnerEventsOutput struct {
 	// the partner event bus.
 	Entries []*PutPartnerEventsResultEntry `type:"list"`
 
-	// The number of events from this operation that couldn't be written to the
+	// The number of events from this operation that could not be written to the
 	// partner event bus.
 	FailedEntryCount *int64 `type:"integer"`
 }
@@ -5889,19 +8264,19 @@ func (s *PutPartnerEventsOutput) SetFailedEntryCount(v int64) *PutPartnerEventsO
 type PutPartnerEventsRequestEntry struct {
 	_ struct{} `type:"structure"`
 
-	// A valid JSON string. There is no other schema imposed. The JSON string can
+	// A valid JSON string. There is no other schema imposed. The JSON string may
 	// contain fields and nested subobjects.
 	Detail *string `type:"string"`
 
-	// A free-form string used to decide which fields to expect in the event detail.
+	// A free-form string used to decide what fields to expect in the event detail.
 	DetailType *string `type:"string"`
 
-	// AWS resources, identified by Amazon Resource Name (ARN), that the event primarily
-	// concerns. Any number, including zero, can be present.
+	// AWS resources, identified by Amazon Resource Name (ARN), which the event
+	// primarily concerns. Any number, including zero, may be present.
 	Resources []*string `type:"list"`
 
 	// The event source that is generating the evntry.
-	Source *string `type:"string"`
+	Source *string `min:"1" type:"string"`
 
 	// The date and time of the event.
 	Time *time.Time `type:"timestamp"`
@@ -5915,6 +8290,19 @@ func (s PutPartnerEventsRequestEntry) String() string {
 // GoString returns the string representation
 func (s PutPartnerEventsRequestEntry) GoString() string {
 	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutPartnerEventsRequestEntry) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PutPartnerEventsRequestEntry"}
+	if s.Source != nil && len(*s.Source) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Source", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
 }
 
 // SetDetail sets the Detail field's value.
@@ -5947,7 +8335,7 @@ func (s *PutPartnerEventsRequestEntry) SetTime(v time.Time) *PutPartnerEventsReq
 	return s
 }
 
-// Represents an event that a partner tried to generate but failed.
+// Represents an event that a partner tried to generate, but failed.
 type PutPartnerEventsResultEntry struct {
 	_ struct{} `type:"structure"`
 
@@ -5992,7 +8380,7 @@ func (s *PutPartnerEventsResultEntry) SetEventId(v string) *PutPartnerEventsResu
 type PutPermissionInput struct {
 	_ struct{} `type:"structure"`
 
-	// The action that you're enabling the other account to perform. Currently,
+	// The action that you are enabling the other account to perform. Currently,
 	// this must be events:PutEvents.
 	//
 	// Action is a required field
@@ -6000,15 +8388,15 @@ type PutPermissionInput struct {
 
 	// This parameter enables you to limit the permission to accounts that fulfill
 	// a certain condition, such as being a member of a certain AWS organization.
-	// For more information about AWS Organizations, see What Is AWS Organizations?
+	// For more information about AWS Organizations, see What Is AWS Organizations
 	// (https://docs.aws.amazon.com/organizations/latest/userguide/orgs_introduction.html)
 	// in the AWS Organizations User Guide.
 	//
-	// If you specify Condition with an AWS organization ID and specify "*" as the
-	// value for Principal, you grant permission to all the accounts in the named
-	// organization.
+	// If you specify Condition with an AWS organization ID, and specify "*" as
+	// the value for Principal, you grant permission to all the accounts in the
+	// named organization.
 	//
-	// The Condition is a JSON string that must contain Type, Key, and Value fields.
+	// The Condition is a JSON string which must contain Type, Key, and Value fields.
 	Condition *Condition `type:"structure"`
 
 	// The event bus associated with the rule. If you omit this, the default event
@@ -6020,15 +8408,15 @@ type PutPermissionInput struct {
 	// default event bus.
 	//
 	// If you specify "*" without specifying Condition, avoid creating rules that
-	// might match undesirable events. To create more secure rules, make sure that
+	// may match undesirable events. To create more secure rules, make sure that
 	// the event pattern for each rule contains an account field with a specific
-	// account ID to receive events from. Rules with an account field don't match
-	// any events sent from other accounts.
+	// account ID from which to receive events. Rules with an account field do not
+	// match any events sent from other accounts.
 	//
 	// Principal is a required field
 	Principal *string `min:"1" type:"string" required:"true"`
 
-	// An identifier string for the external account that you're granting permissions
+	// An identifier string for the external account that you are granting permissions
 	// to. If you later want to revoke the permission for this external account,
 	// specify this StatementId when you run RemovePermission.
 	//
@@ -6136,11 +8524,11 @@ type PutRuleInput struct {
 	// event bus is used.
 	EventBusName *string `min:"1" type:"string"`
 
-	// The event pattern. For more information, see Event Patterns (https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-and-event-patterns.html)
+	// The event pattern. For more information, see Events and Event Patterns (https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-and-event-patterns.html)
 	// in the Amazon EventBridge User Guide.
 	EventPattern *string `type:"string"`
 
-	// The name of the rule that you're creating or updating.
+	// The name of the rule that you are creating or updating.
 	//
 	// Name is a required field
 	Name *string `min:"1" type:"string" required:"true"`
@@ -6148,7 +8536,7 @@ type PutRuleInput struct {
 	// The Amazon Resource Name (ARN) of the IAM role associated with the rule.
 	RoleArn *string `min:"1" type:"string"`
 
-	// The scheduling expression: for example, "cron(0 20 * * ? *)" or "rate(5 minutes)".
+	// The scheduling expression. For example, "cron(0 20 * * ? *)" or "rate(5 minutes)".
 	ScheduleExpression *string `type:"string"`
 
 	// Indicates whether the rule is enabled or disabled.
@@ -6428,6 +8816,114 @@ func (s *PutTargetsResultEntry) SetTargetId(v string) *PutTargetsResultEntry {
 	return s
 }
 
+// These are custom parameters to be used when the target is a Redshift cluster
+// to invoke the Redshift Data API ExecuteStatement based on EventBridge events.
+type RedshiftDataParameters struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the database. Required when authenticating using temporary credentials.
+	//
+	// Database is a required field
+	Database *string `min:"1" type:"string" required:"true"`
+
+	// The database user name. Required when authenticating using temporary credentials.
+	DbUser *string `min:"1" type:"string"`
+
+	// The name or ARN of the secret that enables access to the database. Required
+	// when authenticating using AWS Secrets Manager.
+	SecretManagerArn *string `min:"1" type:"string"`
+
+	// The SQL statement text to run.
+	//
+	// Sql is a required field
+	Sql *string `min:"1" type:"string" required:"true"`
+
+	// The name of the SQL statement. You can name the SQL statement when you create
+	// it to identify the query.
+	StatementName *string `min:"1" type:"string"`
+
+	// Indicates whether to send an event back to EventBridge after the SQL statement
+	// runs.
+	WithEvent *bool `type:"boolean"`
+}
+
+// String returns the string representation
+func (s RedshiftDataParameters) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RedshiftDataParameters) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RedshiftDataParameters) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RedshiftDataParameters"}
+	if s.Database == nil {
+		invalidParams.Add(request.NewErrParamRequired("Database"))
+	}
+	if s.Database != nil && len(*s.Database) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Database", 1))
+	}
+	if s.DbUser != nil && len(*s.DbUser) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DbUser", 1))
+	}
+	if s.SecretManagerArn != nil && len(*s.SecretManagerArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SecretManagerArn", 1))
+	}
+	if s.Sql == nil {
+		invalidParams.Add(request.NewErrParamRequired("Sql"))
+	}
+	if s.Sql != nil && len(*s.Sql) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Sql", 1))
+	}
+	if s.StatementName != nil && len(*s.StatementName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("StatementName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDatabase sets the Database field's value.
+func (s *RedshiftDataParameters) SetDatabase(v string) *RedshiftDataParameters {
+	s.Database = &v
+	return s
+}
+
+// SetDbUser sets the DbUser field's value.
+func (s *RedshiftDataParameters) SetDbUser(v string) *RedshiftDataParameters {
+	s.DbUser = &v
+	return s
+}
+
+// SetSecretManagerArn sets the SecretManagerArn field's value.
+func (s *RedshiftDataParameters) SetSecretManagerArn(v string) *RedshiftDataParameters {
+	s.SecretManagerArn = &v
+	return s
+}
+
+// SetSql sets the Sql field's value.
+func (s *RedshiftDataParameters) SetSql(v string) *RedshiftDataParameters {
+	s.Sql = &v
+	return s
+}
+
+// SetStatementName sets the StatementName field's value.
+func (s *RedshiftDataParameters) SetStatementName(v string) *RedshiftDataParameters {
+	s.StatementName = &v
+	return s
+}
+
+// SetWithEvent sets the WithEvent field's value.
+func (s *RedshiftDataParameters) SetWithEvent(v bool) *RedshiftDataParameters {
+	s.WithEvent = &v
+	return s
+}
+
 type RemovePermissionInput struct {
 	_ struct{} `type:"structure"`
 
@@ -6503,11 +8999,11 @@ type RemoveTargetsInput struct {
 	// The name of the event bus associated with the rule.
 	EventBusName *string `min:"1" type:"string"`
 
-	// If this is a managed rule created by an AWS service on your behalf, you must
-	// specify Force as True to remove targets. This parameter is ignored for rules
-	// that aren't managed rules. You can check whether a rule is a managed rule
-	// by using DescribeRule or ListRules and checking the ManagedBy field of the
-	// response.
+	// If this is a managed rule, created by an AWS service on your behalf, you
+	// must specify Force as True to remove targets. This parameter is ignored for
+	// rules that are not managed rules. You can check whether a rule is a managed
+	// rule by using DescribeRule or ListRules and checking the ManagedBy field
+	// of the response.
 	Force *bool `type:"boolean"`
 
 	// The IDs of the targets to remove from the rule.
@@ -6656,6 +9152,316 @@ func (s *RemoveTargetsResultEntry) SetTargetId(v string) *RemoveTargetsResultEnt
 	return s
 }
 
+// A Replay object that contains details about a replay.
+type Replay struct {
+	_ struct{} `type:"structure"`
+
+	// A time stamp for the time to start replaying events. Any event with a creation
+	// time prior to the EventEndTime specified is replayed.
+	EventEndTime *time.Time `type:"timestamp"`
+
+	// A time stamp for the time that the last event was replayed.
+	EventLastReplayedTime *time.Time `type:"timestamp"`
+
+	// The ARN of the archive to replay event from.
+	EventSourceArn *string `min:"1" type:"string"`
+
+	// A time stamp for the time to start replaying events. This is determined by
+	// the time in the event as described in Time (https://docs.aws.amazon.com/eventbridge/latest/APIReference/API_PutEventsRequestEntry.html#eventbridge-Type-PutEventsRequestEntry-Time).
+	EventStartTime *time.Time `type:"timestamp"`
+
+	// A time stamp for the time that the replay completed.
+	ReplayEndTime *time.Time `type:"timestamp"`
+
+	// The name of the replay.
+	ReplayName *string `min:"1" type:"string"`
+
+	// A time stamp for the time that the replay started.
+	ReplayStartTime *time.Time `type:"timestamp"`
+
+	// The current state of the replay.
+	State *string `type:"string" enum:"ReplayState"`
+
+	// A description of why the replay is in the current state.
+	StateReason *string `type:"string"`
+}
+
+// String returns the string representation
+func (s Replay) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Replay) GoString() string {
+	return s.String()
+}
+
+// SetEventEndTime sets the EventEndTime field's value.
+func (s *Replay) SetEventEndTime(v time.Time) *Replay {
+	s.EventEndTime = &v
+	return s
+}
+
+// SetEventLastReplayedTime sets the EventLastReplayedTime field's value.
+func (s *Replay) SetEventLastReplayedTime(v time.Time) *Replay {
+	s.EventLastReplayedTime = &v
+	return s
+}
+
+// SetEventSourceArn sets the EventSourceArn field's value.
+func (s *Replay) SetEventSourceArn(v string) *Replay {
+	s.EventSourceArn = &v
+	return s
+}
+
+// SetEventStartTime sets the EventStartTime field's value.
+func (s *Replay) SetEventStartTime(v time.Time) *Replay {
+	s.EventStartTime = &v
+	return s
+}
+
+// SetReplayEndTime sets the ReplayEndTime field's value.
+func (s *Replay) SetReplayEndTime(v time.Time) *Replay {
+	s.ReplayEndTime = &v
+	return s
+}
+
+// SetReplayName sets the ReplayName field's value.
+func (s *Replay) SetReplayName(v string) *Replay {
+	s.ReplayName = &v
+	return s
+}
+
+// SetReplayStartTime sets the ReplayStartTime field's value.
+func (s *Replay) SetReplayStartTime(v time.Time) *Replay {
+	s.ReplayStartTime = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *Replay) SetState(v string) *Replay {
+	s.State = &v
+	return s
+}
+
+// SetStateReason sets the StateReason field's value.
+func (s *Replay) SetStateReason(v string) *Replay {
+	s.StateReason = &v
+	return s
+}
+
+// A ReplayDestination object that contains details about a replay.
+type ReplayDestination struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the event bus to replay event to. You can replay events only to
+	// the event bus specified to create the archive.
+	//
+	// Arn is a required field
+	Arn *string `min:"1" type:"string" required:"true"`
+
+	// A list of ARNs for rules to replay events to.
+	FilterArns []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s ReplayDestination) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ReplayDestination) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ReplayDestination) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ReplayDestination"}
+	if s.Arn == nil {
+		invalidParams.Add(request.NewErrParamRequired("Arn"))
+	}
+	if s.Arn != nil && len(*s.Arn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Arn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetArn sets the Arn field's value.
+func (s *ReplayDestination) SetArn(v string) *ReplayDestination {
+	s.Arn = &v
+	return s
+}
+
+// SetFilterArns sets the FilterArns field's value.
+func (s *ReplayDestination) SetFilterArns(v []*string) *ReplayDestination {
+	s.FilterArns = v
+	return s
+}
+
+// The resource you are trying to create already exists.
+type ResourceAlreadyExistsException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s ResourceAlreadyExistsException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ResourceAlreadyExistsException) GoString() string {
+	return s.String()
+}
+
+func newErrorResourceAlreadyExistsException(v protocol.ResponseMetadata) error {
+	return &ResourceAlreadyExistsException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ResourceAlreadyExistsException) Code() string {
+	return "ResourceAlreadyExistsException"
+}
+
+// Message returns the exception's message.
+func (s *ResourceAlreadyExistsException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ResourceAlreadyExistsException) OrigErr() error {
+	return nil
+}
+
+func (s *ResourceAlreadyExistsException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ResourceAlreadyExistsException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ResourceAlreadyExistsException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// An entity that you specified does not exist.
+type ResourceNotFoundException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s ResourceNotFoundException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ResourceNotFoundException) GoString() string {
+	return s.String()
+}
+
+func newErrorResourceNotFoundException(v protocol.ResponseMetadata) error {
+	return &ResourceNotFoundException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ResourceNotFoundException) Code() string {
+	return "ResourceNotFoundException"
+}
+
+// Message returns the exception's message.
+func (s *ResourceNotFoundException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ResourceNotFoundException) OrigErr() error {
+	return nil
+}
+
+func (s *ResourceNotFoundException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ResourceNotFoundException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ResourceNotFoundException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// A RetryPolicy object that includes information about the retry policy settings.
+type RetryPolicy struct {
+	_ struct{} `type:"structure"`
+
+	// The maximum amount of time, in seconds, to continue to make retry attempts.
+	MaximumEventAgeInSeconds *int64 `min:"60" type:"integer"`
+
+	// The maximum number of retry attempts to make before the request fails. Retry
+	// attempts continue until either the maximum number of attempts is made or
+	// until the duration of the MaximumEventAgeInSeconds is met.
+	MaximumRetryAttempts *int64 `type:"integer"`
+}
+
+// String returns the string representation
+func (s RetryPolicy) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RetryPolicy) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RetryPolicy) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RetryPolicy"}
+	if s.MaximumEventAgeInSeconds != nil && *s.MaximumEventAgeInSeconds < 60 {
+		invalidParams.Add(request.NewErrParamMinValue("MaximumEventAgeInSeconds", 60))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaximumEventAgeInSeconds sets the MaximumEventAgeInSeconds field's value.
+func (s *RetryPolicy) SetMaximumEventAgeInSeconds(v int64) *RetryPolicy {
+	s.MaximumEventAgeInSeconds = &v
+	return s
+}
+
+// SetMaximumRetryAttempts sets the MaximumRetryAttempts field's value.
+func (s *RetryPolicy) SetMaximumRetryAttempts(v int64) *RetryPolicy {
+	s.MaximumRetryAttempts = &v
+	return s
+}
+
 // Contains information about a rule in Amazon EventBridge.
 type Rule struct {
 	_ struct{} `type:"structure"`
@@ -6669,12 +9475,13 @@ type Rule struct {
 	// The event bus associated with the rule.
 	EventBusName *string `min:"1" type:"string"`
 
-	// The event pattern of the rule. For more information, see Event Patterns (https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-and-event-patterns.html)
+	// The event pattern of the rule. For more information, see Events and Event
+	// Patterns (https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-and-event-patterns.html)
 	// in the Amazon EventBridge User Guide.
 	EventPattern *string `type:"string"`
 
-	// If an AWS service created the rule on behalf of your account, this field
-	// displays the principal name of the service that created the rule.
+	// If the rule was created on behalf of your account by an AWS service, this
+	// field displays the principal name of the service that created the rule.
 	ManagedBy *string `min:"1" type:"string"`
 
 	// The name of the rule.
@@ -6683,7 +9490,7 @@ type Rule struct {
 	// The Amazon Resource Name (ARN) of the role that is used for target invocation.
 	RoleArn *string `min:"1" type:"string"`
 
-	// The scheduling expression: for example, "cron(0 20 * * ? *)" or "rate(5 minutes)".
+	// The scheduling expression. For example, "cron(0 20 * * ? *)", "rate(5 minutes)".
 	ScheduleExpression *string `type:"string"`
 
 	// The state of the rule.
@@ -6810,7 +9617,7 @@ func (s *RunCommandParameters) SetRunCommandTargets(v []*RunCommandTarget) *RunC
 
 // Information about the EC2 instances that are to be sent the command, specified
 // as key-value pairs. Each RunCommandTarget block can include only one key,
-// but this key can specify multiple values.
+// but this key may specify multiple values.
 type RunCommandTarget struct {
 	_ struct{} `type:"structure"`
 
@@ -6895,13 +9702,180 @@ func (s *SqsParameters) SetMessageGroupId(v string) *SqsParameters {
 	return s
 }
 
-// A key-value pair associated with an AWS resource. In EventBridge, rules support
-// tagging.
+type StartReplayInput struct {
+	_ struct{} `type:"structure"`
+
+	// A description for the replay to start.
+	Description *string `type:"string"`
+
+	// A ReplayDestination object that includes details about the destination for
+	// the replay.
+	//
+	// Destination is a required field
+	Destination *ReplayDestination `type:"structure" required:"true"`
+
+	// A time stamp for the time to stop replaying events. Only events that occurred
+	// between the EventStartTime and EventEndTime are replayed.
+	//
+	// EventEndTime is a required field
+	EventEndTime *time.Time `type:"timestamp" required:"true"`
+
+	// The ARN of the archive to replay events from.
+	//
+	// EventSourceArn is a required field
+	EventSourceArn *string `min:"1" type:"string" required:"true"`
+
+	// A time stamp for the time to start replaying events. Only events that occurred
+	// between the EventStartTime and EventEndTime are replayed.
+	//
+	// EventStartTime is a required field
+	EventStartTime *time.Time `type:"timestamp" required:"true"`
+
+	// The name of the replay to start.
+	//
+	// ReplayName is a required field
+	ReplayName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s StartReplayInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartReplayInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartReplayInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartReplayInput"}
+	if s.Destination == nil {
+		invalidParams.Add(request.NewErrParamRequired("Destination"))
+	}
+	if s.EventEndTime == nil {
+		invalidParams.Add(request.NewErrParamRequired("EventEndTime"))
+	}
+	if s.EventSourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("EventSourceArn"))
+	}
+	if s.EventSourceArn != nil && len(*s.EventSourceArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EventSourceArn", 1))
+	}
+	if s.EventStartTime == nil {
+		invalidParams.Add(request.NewErrParamRequired("EventStartTime"))
+	}
+	if s.ReplayName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ReplayName"))
+	}
+	if s.ReplayName != nil && len(*s.ReplayName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ReplayName", 1))
+	}
+	if s.Destination != nil {
+		if err := s.Destination.Validate(); err != nil {
+			invalidParams.AddNested("Destination", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDescription sets the Description field's value.
+func (s *StartReplayInput) SetDescription(v string) *StartReplayInput {
+	s.Description = &v
+	return s
+}
+
+// SetDestination sets the Destination field's value.
+func (s *StartReplayInput) SetDestination(v *ReplayDestination) *StartReplayInput {
+	s.Destination = v
+	return s
+}
+
+// SetEventEndTime sets the EventEndTime field's value.
+func (s *StartReplayInput) SetEventEndTime(v time.Time) *StartReplayInput {
+	s.EventEndTime = &v
+	return s
+}
+
+// SetEventSourceArn sets the EventSourceArn field's value.
+func (s *StartReplayInput) SetEventSourceArn(v string) *StartReplayInput {
+	s.EventSourceArn = &v
+	return s
+}
+
+// SetEventStartTime sets the EventStartTime field's value.
+func (s *StartReplayInput) SetEventStartTime(v time.Time) *StartReplayInput {
+	s.EventStartTime = &v
+	return s
+}
+
+// SetReplayName sets the ReplayName field's value.
+func (s *StartReplayInput) SetReplayName(v string) *StartReplayInput {
+	s.ReplayName = &v
+	return s
+}
+
+type StartReplayOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the replay.
+	ReplayArn *string `min:"1" type:"string"`
+
+	// The time at which the replay started.
+	ReplayStartTime *time.Time `type:"timestamp"`
+
+	// The state of the replay.
+	State *string `type:"string" enum:"ReplayState"`
+
+	// The reason that the replay is in the state.
+	StateReason *string `type:"string"`
+}
+
+// String returns the string representation
+func (s StartReplayOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartReplayOutput) GoString() string {
+	return s.String()
+}
+
+// SetReplayArn sets the ReplayArn field's value.
+func (s *StartReplayOutput) SetReplayArn(v string) *StartReplayOutput {
+	s.ReplayArn = &v
+	return s
+}
+
+// SetReplayStartTime sets the ReplayStartTime field's value.
+func (s *StartReplayOutput) SetReplayStartTime(v time.Time) *StartReplayOutput {
+	s.ReplayStartTime = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *StartReplayOutput) SetState(v string) *StartReplayOutput {
+	s.State = &v
+	return s
+}
+
+// SetStateReason sets the StateReason field's value.
+func (s *StartReplayOutput) SetStateReason(v string) *StartReplayOutput {
+	s.StateReason = &v
+	return s
+}
+
+// A key-value pair associated with an AWS resource. In EventBridge, rules and
+// event buses support tagging.
 type Tag struct {
 	_ struct{} `type:"structure"`
 
-	// A string that you can use to assign a value. The combination of tag keys
-	// and values can help you organize and categorize your resources.
+	// A string you can use to assign a value. The combination of tag keys and values
+	// can help you organize and categorize your resources.
 	//
 	// Key is a required field
 	Key *string `min:"1" type:"string" required:"true"`
@@ -6956,12 +9930,12 @@ func (s *Tag) SetValue(v string) *Tag {
 type TagResourceInput struct {
 	_ struct{} `type:"structure"`
 
-	// The ARN of the rule that you're adding tags to.
+	// The ARN of the EventBridge resource that you're adding tags to.
 	//
 	// ResourceARN is a required field
 	ResourceARN *string `min:"1" type:"string" required:"true"`
 
-	// The list of key-value pairs to associate with the rule.
+	// The list of key-value pairs to associate with the resource.
 	//
 	// Tags is a required field
 	Tags []*Tag `type:"list" required:"true"`
@@ -7035,11 +10009,11 @@ func (s TagResourceOutput) GoString() string {
 // Targets are the resources to be invoked when a rule is triggered. For a complete
 // list of services and resources that can be set as a target, see PutTargets.
 //
-// If you're setting the event bus of another account as the target and that
+// If you are setting the event bus of another account as the target, and that
 // account granted permission to your account through an organization instead
-// of directly by the account ID, you must specify a RoleArn with proper permissions
-// in the Target structure. For more information, see Sending and Receiving
-// Events Between AWS Accounts (https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-cross-account-event-delivery.html)
+// of directly by the account ID, then you must specify a RoleArn with proper
+// permissions in the Target structure. For more information, see Sending and
+// Receiving Events Between AWS Accounts (https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-cross-account-event-delivery.html)
 // in the Amazon EventBridge User Guide.
 type Target struct {
 	_ struct{} `type:"structure"`
@@ -7054,11 +10028,23 @@ type Target struct {
 	// in the AWS Batch User Guide.
 	BatchParameters *BatchParameters `type:"structure"`
 
-	// Contains the Amazon ECS task definition and task count to be used if the
+	// The DeadLetterConfig that defines the target queue to send dead-letter queue
+	// events to.
+	DeadLetterConfig *DeadLetterConfig `type:"structure"`
+
+	// Contains the Amazon ECS task definition and task count to be used, if the
 	// event target is an Amazon ECS task. For more information about Amazon ECS
 	// tasks, see Task Definitions (https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task_defintions.html)
 	// in the Amazon EC2 Container Service Developer Guide.
 	EcsParameters *EcsParameters `type:"structure"`
+
+	// Contains the HTTP parameters to use when the target is a API Gateway REST
+	// endpoint.
+	//
+	// If you specify an API Gateway REST API as a target, you can use this parameter
+	// to specify headers, path parameter, query string keys/values as part of your
+	// target invoking request.
+	HttpParameters *HttpParameters `type:"structure"`
 
 	// The ID of the target.
 	//
@@ -7080,10 +10066,22 @@ type Target struct {
 	// then use that data to send customized input to the target.
 	InputTransformer *InputTransformer `type:"structure"`
 
-	// The custom parameter that you can use to control the shard assignment when
-	// the target is a Kinesis data stream. If you don't include this parameter,
-	// the default is to use the eventId as the partition key.
+	// The custom parameter you can use to control the shard assignment, when the
+	// target is a Kinesis data stream. If you do not include this parameter, the
+	// default is to use the eventId as the partition key.
 	KinesisParameters *KinesisParameters `type:"structure"`
+
+	// Contains the Redshift Data API parameters to use when the target is a Redshift
+	// cluster.
+	//
+	// If you specify a Redshift Cluster as a Target, you can use this to specify
+	// parameters to invoke the Redshift Data API ExecuteStatement based on EventBridge
+	// events.
+	RedshiftDataParameters *RedshiftDataParameters `type:"structure"`
+
+	// The RetryPolicy object that contains the retry policy configuration to use
+	// for the dead-letter queue.
+	RetryPolicy *RetryPolicy `type:"structure"`
 
 	// The Amazon Resource Name (ARN) of the IAM role to be used for this target
 	// when the rule is triggered. If one rule triggers multiple targets, you can
@@ -7133,6 +10131,11 @@ func (s *Target) Validate() error {
 			invalidParams.AddNested("BatchParameters", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.DeadLetterConfig != nil {
+		if err := s.DeadLetterConfig.Validate(); err != nil {
+			invalidParams.AddNested("DeadLetterConfig", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.EcsParameters != nil {
 		if err := s.EcsParameters.Validate(); err != nil {
 			invalidParams.AddNested("EcsParameters", err.(request.ErrInvalidParams))
@@ -7146,6 +10149,16 @@ func (s *Target) Validate() error {
 	if s.KinesisParameters != nil {
 		if err := s.KinesisParameters.Validate(); err != nil {
 			invalidParams.AddNested("KinesisParameters", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.RedshiftDataParameters != nil {
+		if err := s.RedshiftDataParameters.Validate(); err != nil {
+			invalidParams.AddNested("RedshiftDataParameters", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.RetryPolicy != nil {
+		if err := s.RetryPolicy.Validate(); err != nil {
+			invalidParams.AddNested("RetryPolicy", err.(request.ErrInvalidParams))
 		}
 	}
 	if s.RunCommandParameters != nil {
@@ -7172,9 +10185,21 @@ func (s *Target) SetBatchParameters(v *BatchParameters) *Target {
 	return s
 }
 
+// SetDeadLetterConfig sets the DeadLetterConfig field's value.
+func (s *Target) SetDeadLetterConfig(v *DeadLetterConfig) *Target {
+	s.DeadLetterConfig = v
+	return s
+}
+
 // SetEcsParameters sets the EcsParameters field's value.
 func (s *Target) SetEcsParameters(v *EcsParameters) *Target {
 	s.EcsParameters = v
+	return s
+}
+
+// SetHttpParameters sets the HttpParameters field's value.
+func (s *Target) SetHttpParameters(v *HttpParameters) *Target {
+	s.HttpParameters = v
 	return s
 }
 
@@ -7208,6 +10233,18 @@ func (s *Target) SetKinesisParameters(v *KinesisParameters) *Target {
 	return s
 }
 
+// SetRedshiftDataParameters sets the RedshiftDataParameters field's value.
+func (s *Target) SetRedshiftDataParameters(v *RedshiftDataParameters) *Target {
+	s.RedshiftDataParameters = v
+	return s
+}
+
+// SetRetryPolicy sets the RetryPolicy field's value.
+func (s *Target) SetRetryPolicy(v *RetryPolicy) *Target {
+	s.RetryPolicy = v
+	return s
+}
+
 // SetRoleArn sets the RoleArn field's value.
 func (s *Target) SetRoleArn(v string) *Target {
 	s.RoleArn = &v
@@ -7234,7 +10271,7 @@ type TestEventPatternInput struct {
 	// Event is a required field
 	Event *string `type:"string" required:"true"`
 
-	// The event pattern. For more information, see Event Patterns (https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-and-event-patterns.html)
+	// The event pattern. For more information, see Events and Event Patterns (https://docs.aws.amazon.com/eventbridge/latest/userguide/eventbridge-and-event-patterns.html)
 	// in the Amazon EventBridge User Guide.
 	//
 	// EventPattern is a required field
@@ -7305,7 +10342,7 @@ func (s *TestEventPatternOutput) SetResult(v bool) *TestEventPatternOutput {
 type UntagResourceInput struct {
 	_ struct{} `type:"structure"`
 
-	// The ARN of the rule that you're removing tags from.
+	// The ARN of the EventBridge resource from which you are removing tags.
 	//
 	// ResourceARN is a required field
 	ResourceARN *string `min:"1" type:"string" required:"true"`
@@ -7371,6 +10408,156 @@ func (s UntagResourceOutput) GoString() string {
 	return s.String()
 }
 
+type UpdateArchiveInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the archive to update.
+	//
+	// ArchiveName is a required field
+	ArchiveName *string `min:"1" type:"string" required:"true"`
+
+	// The description for the archive.
+	Description *string `type:"string"`
+
+	// The event pattern to use to filter events sent to the archive.
+	EventPattern *string `type:"string"`
+
+	// The number of days to retain events in the archive.
+	RetentionDays *int64 `type:"integer"`
+}
+
+// String returns the string representation
+func (s UpdateArchiveInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateArchiveInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateArchiveInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateArchiveInput"}
+	if s.ArchiveName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ArchiveName"))
+	}
+	if s.ArchiveName != nil && len(*s.ArchiveName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ArchiveName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetArchiveName sets the ArchiveName field's value.
+func (s *UpdateArchiveInput) SetArchiveName(v string) *UpdateArchiveInput {
+	s.ArchiveName = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateArchiveInput) SetDescription(v string) *UpdateArchiveInput {
+	s.Description = &v
+	return s
+}
+
+// SetEventPattern sets the EventPattern field's value.
+func (s *UpdateArchiveInput) SetEventPattern(v string) *UpdateArchiveInput {
+	s.EventPattern = &v
+	return s
+}
+
+// SetRetentionDays sets the RetentionDays field's value.
+func (s *UpdateArchiveInput) SetRetentionDays(v int64) *UpdateArchiveInput {
+	s.RetentionDays = &v
+	return s
+}
+
+type UpdateArchiveOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the archive.
+	ArchiveArn *string `min:"1" type:"string"`
+
+	// The time at which the archive was updated.
+	CreationTime *time.Time `type:"timestamp"`
+
+	// The state of the archive.
+	State *string `type:"string" enum:"ArchiveState"`
+
+	// The reason that the archive is in the current state.
+	StateReason *string `type:"string"`
+}
+
+// String returns the string representation
+func (s UpdateArchiveOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateArchiveOutput) GoString() string {
+	return s.String()
+}
+
+// SetArchiveArn sets the ArchiveArn field's value.
+func (s *UpdateArchiveOutput) SetArchiveArn(v string) *UpdateArchiveOutput {
+	s.ArchiveArn = &v
+	return s
+}
+
+// SetCreationTime sets the CreationTime field's value.
+func (s *UpdateArchiveOutput) SetCreationTime(v time.Time) *UpdateArchiveOutput {
+	s.CreationTime = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *UpdateArchiveOutput) SetState(v string) *UpdateArchiveOutput {
+	s.State = &v
+	return s
+}
+
+// SetStateReason sets the StateReason field's value.
+func (s *UpdateArchiveOutput) SetStateReason(v string) *UpdateArchiveOutput {
+	s.StateReason = &v
+	return s
+}
+
+const (
+	// ArchiveStateEnabled is a ArchiveState enum value
+	ArchiveStateEnabled = "ENABLED"
+
+	// ArchiveStateDisabled is a ArchiveState enum value
+	ArchiveStateDisabled = "DISABLED"
+
+	// ArchiveStateCreating is a ArchiveState enum value
+	ArchiveStateCreating = "CREATING"
+
+	// ArchiveStateUpdating is a ArchiveState enum value
+	ArchiveStateUpdating = "UPDATING"
+
+	// ArchiveStateCreateFailed is a ArchiveState enum value
+	ArchiveStateCreateFailed = "CREATE_FAILED"
+
+	// ArchiveStateUpdateFailed is a ArchiveState enum value
+	ArchiveStateUpdateFailed = "UPDATE_FAILED"
+)
+
+// ArchiveState_Values returns all elements of the ArchiveState enum
+func ArchiveState_Values() []string {
+	return []string{
+		ArchiveStateEnabled,
+		ArchiveStateDisabled,
+		ArchiveStateCreating,
+		ArchiveStateUpdating,
+		ArchiveStateCreateFailed,
+		ArchiveStateUpdateFailed,
+	}
+}
+
 const (
 	// AssignPublicIpEnabled is a AssignPublicIp enum value
 	AssignPublicIpEnabled = "ENABLED"
@@ -7378,6 +10565,14 @@ const (
 	// AssignPublicIpDisabled is a AssignPublicIp enum value
 	AssignPublicIpDisabled = "DISABLED"
 )
+
+// AssignPublicIp_Values returns all elements of the AssignPublicIp enum
+func AssignPublicIp_Values() []string {
+	return []string{
+		AssignPublicIpEnabled,
+		AssignPublicIpDisabled,
+	}
+}
 
 const (
 	// EventSourceStatePending is a EventSourceState enum value
@@ -7390,6 +10585,15 @@ const (
 	EventSourceStateDeleted = "DELETED"
 )
 
+// EventSourceState_Values returns all elements of the EventSourceState enum
+func EventSourceState_Values() []string {
+	return []string{
+		EventSourceStatePending,
+		EventSourceStateActive,
+		EventSourceStateDeleted,
+	}
+}
+
 const (
 	// LaunchTypeEc2 is a LaunchType enum value
 	LaunchTypeEc2 = "EC2"
@@ -7398,6 +10602,46 @@ const (
 	LaunchTypeFargate = "FARGATE"
 )
 
+// LaunchType_Values returns all elements of the LaunchType enum
+func LaunchType_Values() []string {
+	return []string{
+		LaunchTypeEc2,
+		LaunchTypeFargate,
+	}
+}
+
+const (
+	// ReplayStateStarting is a ReplayState enum value
+	ReplayStateStarting = "STARTING"
+
+	// ReplayStateRunning is a ReplayState enum value
+	ReplayStateRunning = "RUNNING"
+
+	// ReplayStateCancelling is a ReplayState enum value
+	ReplayStateCancelling = "CANCELLING"
+
+	// ReplayStateCompleted is a ReplayState enum value
+	ReplayStateCompleted = "COMPLETED"
+
+	// ReplayStateCancelled is a ReplayState enum value
+	ReplayStateCancelled = "CANCELLED"
+
+	// ReplayStateFailed is a ReplayState enum value
+	ReplayStateFailed = "FAILED"
+)
+
+// ReplayState_Values returns all elements of the ReplayState enum
+func ReplayState_Values() []string {
+	return []string{
+		ReplayStateStarting,
+		ReplayStateRunning,
+		ReplayStateCancelling,
+		ReplayStateCompleted,
+		ReplayStateCancelled,
+		ReplayStateFailed,
+	}
+}
+
 const (
 	// RuleStateEnabled is a RuleState enum value
 	RuleStateEnabled = "ENABLED"
@@ -7405,3 +10649,11 @@ const (
 	// RuleStateDisabled is a RuleState enum value
 	RuleStateDisabled = "DISABLED"
 )
+
+// RuleState_Values returns all elements of the RuleState enum
+func RuleState_Values() []string {
+	return []string{
+		RuleStateEnabled,
+		RuleStateDisabled,
+	}
+}

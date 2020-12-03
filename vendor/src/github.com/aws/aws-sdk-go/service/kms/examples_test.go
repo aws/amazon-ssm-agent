@@ -227,6 +227,10 @@ func ExampleKMS_Decrypt_shared00() {
 				fmt.Println(kms.ErrCodeInvalidCiphertextException, aerr.Error())
 			case kms.ErrCodeKeyUnavailableException:
 				fmt.Println(kms.ErrCodeKeyUnavailableException, aerr.Error())
+			case kms.ErrCodeIncorrectKeyException:
+				fmt.Println(kms.ErrCodeIncorrectKeyException, aerr.Error())
+			case kms.ErrCodeInvalidKeyUsageException:
+				fmt.Println(kms.ErrCodeInvalidKeyUsageException, aerr.Error())
 			case kms.ErrCodeDependencyTimeoutException:
 				fmt.Println(kms.ErrCodeDependencyTimeoutException, aerr.Error())
 			case kms.ErrCodeInvalidGrantTokenException:
@@ -1143,6 +1147,8 @@ func ExampleKMS_ReEncrypt_shared00() {
 				fmt.Println(kms.ErrCodeInvalidCiphertextException, aerr.Error())
 			case kms.ErrCodeKeyUnavailableException:
 				fmt.Println(kms.ErrCodeKeyUnavailableException, aerr.Error())
+			case kms.ErrCodeIncorrectKeyException:
+				fmt.Println(kms.ErrCodeIncorrectKeyException, aerr.Error())
 			case kms.ErrCodeDependencyTimeoutException:
 				fmt.Println(kms.ErrCodeDependencyTimeoutException, aerr.Error())
 			case kms.ErrCodeInvalidKeyUsageException:
@@ -1394,6 +1400,8 @@ func ExampleKMS_UpdateAlias_shared00() {
 				fmt.Println(kms.ErrCodeNotFoundException, aerr.Error())
 			case kms.ErrCodeInternalException:
 				fmt.Println(kms.ErrCodeInternalException, aerr.Error())
+			case kms.ErrCodeLimitExceededException:
+				fmt.Println(kms.ErrCodeLimitExceededException, aerr.Error())
 			case kms.ErrCodeInvalidStateException:
 				fmt.Println(kms.ErrCodeInvalidStateException, aerr.Error())
 			default:

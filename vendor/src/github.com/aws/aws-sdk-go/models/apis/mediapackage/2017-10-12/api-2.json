@@ -12,6 +12,40 @@
     "uid": "mediapackage-2017-10-12"
   },
   "operations": {
+    "ConfigureLogs": {
+      "errors": [
+        {
+          "shape": "UnprocessableEntityException"
+        },
+        {
+          "shape": "InternalServerErrorException"
+        },
+        {
+          "shape": "ForbiddenException"
+        },
+        {
+          "shape": "NotFoundException"
+        },
+        {
+          "shape": "ServiceUnavailableException"
+        },
+        {
+          "shape": "TooManyRequestsException"
+        }
+      ],
+      "http": {
+        "method": "PUT",
+        "requestUri": "/channels/{id}/configure_logs",
+        "responseCode": 200
+      },
+      "input": {
+        "shape": "ConfigureLogsRequest"
+      },
+      "name": "ConfigureLogs",
+      "output": {
+        "shape": "ConfigureLogsResponse"
+      }
+    },
     "CreateChannel": {
       "errors": [
         {
@@ -569,7 +603,8 @@
       "enum": [
         "NONE",
         "SCTE35_ENHANCED",
-        "PASSTHROUGH"
+        "PASSTHROUGH",
+        "DATERANGE"
       ],
       "type": "string"
     },
@@ -588,6 +623,23 @@
       ],
       "type": "string"
     },
+    "Authorization": {
+      "members": {
+        "CdnIdentifierSecret": {
+          "locationName": "cdnIdentifierSecret",
+          "shape": "__string"
+        },
+        "SecretsRoleArn": {
+          "locationName": "secretsRoleArn",
+          "shape": "__string"
+        }
+      },
+      "required": [
+        "SecretsRoleArn",
+        "CdnIdentifierSecret"
+      ],
+      "type": "structure"
+    },
     "Channel": {
       "members": {
         "Arn": {
@@ -598,6 +650,10 @@
           "locationName": "description",
           "shape": "__string"
         },
+        "EgressAccessLogs": {
+          "locationName": "egressAccessLogs",
+          "shape": "EgressAccessLogs"
+        },
         "HlsIngest": {
           "locationName": "hlsIngest",
           "shape": "HlsIngest"
@@ -605,6 +661,10 @@
         "Id": {
           "locationName": "id",
           "shape": "__string"
+        },
+        "IngressAccessLogs": {
+          "locationName": "ingressAccessLogs",
+          "shape": "IngressAccessLogs"
         },
         "Tags": {
           "locationName": "tags",
@@ -721,6 +781,73 @@
       },
       "type": "structure"
     },
+    "ConfigureLogsParameters": {
+      "members": {
+        "EgressAccessLogs": {
+          "locationName": "egressAccessLogs",
+          "shape": "EgressAccessLogs"
+        },
+        "IngressAccessLogs": {
+          "locationName": "ingressAccessLogs",
+          "shape": "IngressAccessLogs"
+        }
+      },
+      "type": "structure"
+    },
+    "ConfigureLogsRequest": {
+      "members": {
+        "EgressAccessLogs": {
+          "locationName": "egressAccessLogs",
+          "shape": "EgressAccessLogs"
+        },
+        "Id": {
+          "location": "uri",
+          "locationName": "id",
+          "shape": "__string"
+        },
+        "IngressAccessLogs": {
+          "locationName": "ingressAccessLogs",
+          "shape": "IngressAccessLogs"
+        }
+      },
+      "required": [
+        "Id"
+      ],
+      "type": "structure"
+    },
+    "ConfigureLogsResponse": {
+      "members": {
+        "Arn": {
+          "locationName": "arn",
+          "shape": "__string"
+        },
+        "Description": {
+          "locationName": "description",
+          "shape": "__string"
+        },
+        "EgressAccessLogs": {
+          "locationName": "egressAccessLogs",
+          "shape": "EgressAccessLogs"
+        },
+        "HlsIngest": {
+          "locationName": "hlsIngest",
+          "shape": "HlsIngest"
+        },
+        "Id": {
+          "locationName": "id",
+          "shape": "__string"
+        },
+        "IngressAccessLogs": {
+          "locationName": "ingressAccessLogs",
+          "shape": "IngressAccessLogs"
+        },
+        "Tags": {
+          "locationName": "tags",
+          "shape": "Tags"
+        }
+      },
+      "type": "structure"
+    },
     "CreateChannelRequest": {
       "members": {
         "Description": {
@@ -751,6 +878,10 @@
           "locationName": "description",
           "shape": "__string"
         },
+        "EgressAccessLogs": {
+          "locationName": "egressAccessLogs",
+          "shape": "EgressAccessLogs"
+        },
         "HlsIngest": {
           "locationName": "hlsIngest",
           "shape": "HlsIngest"
@@ -758,6 +889,10 @@
         "Id": {
           "locationName": "id",
           "shape": "__string"
+        },
+        "IngressAccessLogs": {
+          "locationName": "ingressAccessLogs",
+          "shape": "IngressAccessLogs"
         },
         "Tags": {
           "locationName": "tags",
@@ -841,6 +976,10 @@
     },
     "CreateOriginEndpointRequest": {
       "members": {
+        "Authorization": {
+          "locationName": "authorization",
+          "shape": "Authorization"
+        },
         "ChannelId": {
           "locationName": "channelId",
           "shape": "__string"
@@ -895,8 +1034,8 @@
         }
       },
       "required": [
-        "Id",
-        "ChannelId"
+        "ChannelId",
+        "Id"
       ],
       "type": "structure"
     },
@@ -905,6 +1044,10 @@
         "Arn": {
           "locationName": "arn",
           "shape": "__string"
+        },
+        "Authorization": {
+          "locationName": "authorization",
+          "shape": "Authorization"
         },
         "ChannelId": {
           "locationName": "channelId",
@@ -1034,6 +1177,14 @@
         "SuggestedPresentationDelaySeconds": {
           "locationName": "suggestedPresentationDelaySeconds",
           "shape": "__integer"
+        },
+        "UtcTiming": {
+          "locationName": "utcTiming",
+          "shape": "UtcTiming"
+        },
+        "UtcTimingUri": {
+          "locationName": "utcTimingUri",
+          "shape": "__string"
         }
       },
       "type": "structure"
@@ -1095,6 +1246,10 @@
           "locationName": "description",
           "shape": "__string"
         },
+        "EgressAccessLogs": {
+          "locationName": "egressAccessLogs",
+          "shape": "EgressAccessLogs"
+        },
         "HlsIngest": {
           "locationName": "hlsIngest",
           "shape": "HlsIngest"
@@ -1102,6 +1257,10 @@
         "Id": {
           "locationName": "id",
           "shape": "__string"
+        },
+        "IngressAccessLogs": {
+          "locationName": "ingressAccessLogs",
+          "shape": "IngressAccessLogs"
         },
         "Tags": {
           "locationName": "tags",
@@ -1183,6 +1342,10 @@
           "locationName": "arn",
           "shape": "__string"
         },
+        "Authorization": {
+          "locationName": "authorization",
+          "shape": "Authorization"
+        },
         "ChannelId": {
           "locationName": "channelId",
           "shape": "__string"
@@ -1238,6 +1401,15 @@
         "Whitelist": {
           "locationName": "whitelist",
           "shape": "__listOf__string"
+        }
+      },
+      "type": "structure"
+    },
+    "EgressAccessLogs": {
+      "members": {
+        "LogGroupName": {
+          "locationName": "logGroupName",
+          "shape": "__string"
         }
       },
       "type": "structure"
@@ -1539,6 +1711,15 @@
       },
       "type": "structure"
     },
+    "IngressAccessLogs": {
+      "members": {
+        "LogGroupName": {
+          "locationName": "logGroupName",
+          "shape": "__string"
+        }
+      },
+      "type": "structure"
+    },
     "InternalServerErrorException": {
       "error": {
         "httpStatusCode": 500
@@ -1737,6 +1918,10 @@
           "locationName": "arn",
           "shape": "__string"
         },
+        "Authorization": {
+          "locationName": "authorization",
+          "shape": "Authorization"
+        },
         "ChannelId": {
           "locationName": "channelId",
           "shape": "__string"
@@ -1798,6 +1983,10 @@
     },
     "OriginEndpointCreateParameters": {
       "members": {
+        "Authorization": {
+          "locationName": "authorization",
+          "shape": "Authorization"
+        },
         "ChannelId": {
           "locationName": "channelId",
           "shape": "__string"
@@ -1852,8 +2041,8 @@
         }
       },
       "required": [
-        "Id",
-        "ChannelId"
+        "ChannelId",
+        "Id"
       ],
       "type": "structure"
     },
@@ -1872,6 +2061,10 @@
     },
     "OriginEndpointUpdateParameters": {
       "members": {
+        "Authorization": {
+          "locationName": "authorization",
+          "shape": "Authorization"
+        },
         "CmafPackage": {
           "locationName": "cmafPackage",
           "shape": "CmafPackageCreateOrUpdateParameters"
@@ -1962,6 +2155,10 @@
           "locationName": "description",
           "shape": "__string"
         },
+        "EgressAccessLogs": {
+          "locationName": "egressAccessLogs",
+          "shape": "EgressAccessLogs"
+        },
         "HlsIngest": {
           "locationName": "hlsIngest",
           "shape": "HlsIngest"
@@ -1969,6 +2166,10 @@
         "Id": {
           "locationName": "id",
           "shape": "__string"
+        },
+        "IngressAccessLogs": {
+          "locationName": "ingressAccessLogs",
+          "shape": "IngressAccessLogs"
         },
         "Tags": {
           "locationName": "tags",
@@ -2006,6 +2207,10 @@
           "locationName": "description",
           "shape": "__string"
         },
+        "EgressAccessLogs": {
+          "locationName": "egressAccessLogs",
+          "shape": "EgressAccessLogs"
+        },
         "HlsIngest": {
           "locationName": "hlsIngest",
           "shape": "HlsIngest"
@@ -2013,6 +2218,10 @@
         "Id": {
           "locationName": "id",
           "shape": "__string"
+        },
+        "IngressAccessLogs": {
+          "locationName": "ingressAccessLogs",
+          "shape": "IngressAccessLogs"
         },
         "Tags": {
           "locationName": "tags",
@@ -2239,6 +2448,10 @@
           "locationName": "description",
           "shape": "__string"
         },
+        "EgressAccessLogs": {
+          "locationName": "egressAccessLogs",
+          "shape": "EgressAccessLogs"
+        },
         "HlsIngest": {
           "locationName": "hlsIngest",
           "shape": "HlsIngest"
@@ -2246,6 +2459,10 @@
         "Id": {
           "locationName": "id",
           "shape": "__string"
+        },
+        "IngressAccessLogs": {
+          "locationName": "ingressAccessLogs",
+          "shape": "IngressAccessLogs"
         },
         "Tags": {
           "locationName": "tags",
@@ -2256,6 +2473,10 @@
     },
     "UpdateOriginEndpointRequest": {
       "members": {
+        "Authorization": {
+          "locationName": "authorization",
+          "shape": "Authorization"
+        },
         "CmafPackage": {
           "locationName": "cmafPackage",
           "shape": "CmafPackageCreateOrUpdateParameters"
@@ -2312,6 +2533,10 @@
         "Arn": {
           "locationName": "arn",
           "shape": "__string"
+        },
+        "Authorization": {
+          "locationName": "authorization",
+          "shape": "Authorization"
         },
         "ChannelId": {
           "locationName": "channelId",
@@ -2371,6 +2596,14 @@
         }
       },
       "type": "structure"
+    },
+    "UtcTiming": {
+      "enum": [
+        "NONE",
+        "HTTP-HEAD",
+        "HTTP-ISO"
+      ],
+      "type": "string"
     },
     "__AdTriggersElement": {
       "enum": [

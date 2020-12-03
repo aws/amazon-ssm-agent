@@ -12,6 +12,94 @@ import (
 	"github.com/aws/aws-sdk-go/private/protocol/restjson"
 )
 
+const opConfigureLogs = "ConfigureLogs"
+
+// ConfigureLogsRequest generates a "aws/request.Request" representing the
+// client's request for the ConfigureLogs operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ConfigureLogs for more information on using the ConfigureLogs
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ConfigureLogsRequest method.
+//    req, resp := client.ConfigureLogsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediapackage-2017-10-12/ConfigureLogs
+func (c *MediaPackage) ConfigureLogsRequest(input *ConfigureLogsInput) (req *request.Request, output *ConfigureLogsOutput) {
+	op := &request.Operation{
+		Name:       opConfigureLogs,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/channels/{id}/configure_logs",
+	}
+
+	if input == nil {
+		input = &ConfigureLogsInput{}
+	}
+
+	output = &ConfigureLogsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ConfigureLogs API operation for AWS Elemental MediaPackage.
+//
+// Changes the Channel's properities to configure log subscription
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Elemental MediaPackage's
+// API operation ConfigureLogs for usage and error information.
+//
+// Returned Error Types:
+//   * UnprocessableEntityException
+//
+//   * InternalServerErrorException
+//
+//   * ForbiddenException
+//
+//   * NotFoundException
+//
+//   * ServiceUnavailableException
+//
+//   * TooManyRequestsException
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediapackage-2017-10-12/ConfigureLogs
+func (c *MediaPackage) ConfigureLogs(input *ConfigureLogsInput) (*ConfigureLogsOutput, error) {
+	req, out := c.ConfigureLogsRequest(input)
+	return out, req.Send()
+}
+
+// ConfigureLogsWithContext is the same as ConfigureLogs with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ConfigureLogs for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaPackage) ConfigureLogsWithContext(ctx aws.Context, input *ConfigureLogsInput, opts ...request.Option) (*ConfigureLogsOutput, error) {
+	req, out := c.ConfigureLogsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
 const opCreateChannel = "CreateChannel"
 
 // CreateChannelRequest generates a "aws/request.Request" representing the
@@ -65,18 +153,18 @@ func (c *MediaPackage) CreateChannelRequest(input *CreateChannelInput) (req *req
 // See the AWS API reference guide for AWS Elemental MediaPackage's
 // API operation CreateChannel for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeUnprocessableEntityException "UnprocessableEntityException"
+// Returned Error Types:
+//   * UnprocessableEntityException
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //
-//   * ErrCodeForbiddenException "ForbiddenException"
+//   * ForbiddenException
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediapackage-2017-10-12/CreateChannel
 func (c *MediaPackage) CreateChannel(input *CreateChannelInput) (*CreateChannelOutput, error) {
@@ -153,18 +241,18 @@ func (c *MediaPackage) CreateHarvestJobRequest(input *CreateHarvestJobInput) (re
 // See the AWS API reference guide for AWS Elemental MediaPackage's
 // API operation CreateHarvestJob for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeUnprocessableEntityException "UnprocessableEntityException"
+// Returned Error Types:
+//   * UnprocessableEntityException
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //
-//   * ErrCodeForbiddenException "ForbiddenException"
+//   * ForbiddenException
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediapackage-2017-10-12/CreateHarvestJob
 func (c *MediaPackage) CreateHarvestJob(input *CreateHarvestJobInput) (*CreateHarvestJobOutput, error) {
@@ -241,18 +329,18 @@ func (c *MediaPackage) CreateOriginEndpointRequest(input *CreateOriginEndpointIn
 // See the AWS API reference guide for AWS Elemental MediaPackage's
 // API operation CreateOriginEndpoint for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeUnprocessableEntityException "UnprocessableEntityException"
+// Returned Error Types:
+//   * UnprocessableEntityException
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //
-//   * ErrCodeForbiddenException "ForbiddenException"
+//   * ForbiddenException
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediapackage-2017-10-12/CreateOriginEndpoint
 func (c *MediaPackage) CreateOriginEndpoint(input *CreateOriginEndpointInput) (*CreateOriginEndpointOutput, error) {
@@ -330,18 +418,18 @@ func (c *MediaPackage) DeleteChannelRequest(input *DeleteChannelInput) (req *req
 // See the AWS API reference guide for AWS Elemental MediaPackage's
 // API operation DeleteChannel for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeUnprocessableEntityException "UnprocessableEntityException"
+// Returned Error Types:
+//   * UnprocessableEntityException
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //
-//   * ErrCodeForbiddenException "ForbiddenException"
+//   * ForbiddenException
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediapackage-2017-10-12/DeleteChannel
 func (c *MediaPackage) DeleteChannel(input *DeleteChannelInput) (*DeleteChannelOutput, error) {
@@ -419,18 +507,18 @@ func (c *MediaPackage) DeleteOriginEndpointRequest(input *DeleteOriginEndpointIn
 // See the AWS API reference guide for AWS Elemental MediaPackage's
 // API operation DeleteOriginEndpoint for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeUnprocessableEntityException "UnprocessableEntityException"
+// Returned Error Types:
+//   * UnprocessableEntityException
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //
-//   * ErrCodeForbiddenException "ForbiddenException"
+//   * ForbiddenException
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediapackage-2017-10-12/DeleteOriginEndpoint
 func (c *MediaPackage) DeleteOriginEndpoint(input *DeleteOriginEndpointInput) (*DeleteOriginEndpointOutput, error) {
@@ -507,18 +595,18 @@ func (c *MediaPackage) DescribeChannelRequest(input *DescribeChannelInput) (req 
 // See the AWS API reference guide for AWS Elemental MediaPackage's
 // API operation DescribeChannel for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeUnprocessableEntityException "UnprocessableEntityException"
+// Returned Error Types:
+//   * UnprocessableEntityException
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //
-//   * ErrCodeForbiddenException "ForbiddenException"
+//   * ForbiddenException
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediapackage-2017-10-12/DescribeChannel
 func (c *MediaPackage) DescribeChannel(input *DescribeChannelInput) (*DescribeChannelOutput, error) {
@@ -595,18 +683,18 @@ func (c *MediaPackage) DescribeHarvestJobRequest(input *DescribeHarvestJobInput)
 // See the AWS API reference guide for AWS Elemental MediaPackage's
 // API operation DescribeHarvestJob for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeUnprocessableEntityException "UnprocessableEntityException"
+// Returned Error Types:
+//   * UnprocessableEntityException
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //
-//   * ErrCodeForbiddenException "ForbiddenException"
+//   * ForbiddenException
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediapackage-2017-10-12/DescribeHarvestJob
 func (c *MediaPackage) DescribeHarvestJob(input *DescribeHarvestJobInput) (*DescribeHarvestJobOutput, error) {
@@ -683,18 +771,18 @@ func (c *MediaPackage) DescribeOriginEndpointRequest(input *DescribeOriginEndpoi
 // See the AWS API reference guide for AWS Elemental MediaPackage's
 // API operation DescribeOriginEndpoint for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeUnprocessableEntityException "UnprocessableEntityException"
+// Returned Error Types:
+//   * UnprocessableEntityException
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //
-//   * ErrCodeForbiddenException "ForbiddenException"
+//   * ForbiddenException
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediapackage-2017-10-12/DescribeOriginEndpoint
 func (c *MediaPackage) DescribeOriginEndpoint(input *DescribeOriginEndpointInput) (*DescribeOriginEndpointOutput, error) {
@@ -777,18 +865,18 @@ func (c *MediaPackage) ListChannelsRequest(input *ListChannelsInput) (req *reque
 // See the AWS API reference guide for AWS Elemental MediaPackage's
 // API operation ListChannels for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeUnprocessableEntityException "UnprocessableEntityException"
+// Returned Error Types:
+//   * UnprocessableEntityException
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //
-//   * ErrCodeForbiddenException "ForbiddenException"
+//   * ForbiddenException
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediapackage-2017-10-12/ListChannels
 func (c *MediaPackage) ListChannels(input *ListChannelsInput) (*ListChannelsOutput, error) {
@@ -923,18 +1011,18 @@ func (c *MediaPackage) ListHarvestJobsRequest(input *ListHarvestJobsInput) (req 
 // See the AWS API reference guide for AWS Elemental MediaPackage's
 // API operation ListHarvestJobs for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeUnprocessableEntityException "UnprocessableEntityException"
+// Returned Error Types:
+//   * UnprocessableEntityException
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //
-//   * ErrCodeForbiddenException "ForbiddenException"
+//   * ForbiddenException
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediapackage-2017-10-12/ListHarvestJobs
 func (c *MediaPackage) ListHarvestJobs(input *ListHarvestJobsInput) (*ListHarvestJobsOutput, error) {
@@ -1069,18 +1157,18 @@ func (c *MediaPackage) ListOriginEndpointsRequest(input *ListOriginEndpointsInpu
 // See the AWS API reference guide for AWS Elemental MediaPackage's
 // API operation ListOriginEndpoints for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeUnprocessableEntityException "UnprocessableEntityException"
+// Returned Error Types:
+//   * UnprocessableEntityException
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //
-//   * ErrCodeForbiddenException "ForbiddenException"
+//   * ForbiddenException
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediapackage-2017-10-12/ListOriginEndpoints
 func (c *MediaPackage) ListOriginEndpoints(input *ListOriginEndpointsInput) (*ListOriginEndpointsOutput, error) {
@@ -1287,18 +1375,18 @@ func (c *MediaPackage) RotateChannelCredentialsRequest(input *RotateChannelCrede
 // See the AWS API reference guide for AWS Elemental MediaPackage's
 // API operation RotateChannelCredentials for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeUnprocessableEntityException "UnprocessableEntityException"
+// Returned Error Types:
+//   * UnprocessableEntityException
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //
-//   * ErrCodeForbiddenException "ForbiddenException"
+//   * ForbiddenException
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediapackage-2017-10-12/RotateChannelCredentials
 //
@@ -1380,18 +1468,18 @@ func (c *MediaPackage) RotateIngestEndpointCredentialsRequest(input *RotateInges
 // See the AWS API reference guide for AWS Elemental MediaPackage's
 // API operation RotateIngestEndpointCredentials for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeUnprocessableEntityException "UnprocessableEntityException"
+// Returned Error Types:
+//   * UnprocessableEntityException
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //
-//   * ErrCodeForbiddenException "ForbiddenException"
+//   * ForbiddenException
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediapackage-2017-10-12/RotateIngestEndpointCredentials
 func (c *MediaPackage) RotateIngestEndpointCredentials(input *RotateIngestEndpointCredentialsInput) (*RotateIngestEndpointCredentialsOutput, error) {
@@ -1614,18 +1702,18 @@ func (c *MediaPackage) UpdateChannelRequest(input *UpdateChannelInput) (req *req
 // See the AWS API reference guide for AWS Elemental MediaPackage's
 // API operation UpdateChannel for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeUnprocessableEntityException "UnprocessableEntityException"
+// Returned Error Types:
+//   * UnprocessableEntityException
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //
-//   * ErrCodeForbiddenException "ForbiddenException"
+//   * ForbiddenException
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediapackage-2017-10-12/UpdateChannel
 func (c *MediaPackage) UpdateChannel(input *UpdateChannelInput) (*UpdateChannelOutput, error) {
@@ -1702,18 +1790,18 @@ func (c *MediaPackage) UpdateOriginEndpointRequest(input *UpdateOriginEndpointIn
 // See the AWS API reference guide for AWS Elemental MediaPackage's
 // API operation UpdateOriginEndpoint for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeUnprocessableEntityException "UnprocessableEntityException"
+// Returned Error Types:
+//   * UnprocessableEntityException
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //
-//   * ErrCodeForbiddenException "ForbiddenException"
+//   * ForbiddenException
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mediapackage-2017-10-12/UpdateOriginEndpoint
 func (c *MediaPackage) UpdateOriginEndpoint(input *UpdateOriginEndpointInput) (*UpdateOriginEndpointOutput, error) {
@@ -1737,6 +1825,62 @@ func (c *MediaPackage) UpdateOriginEndpointWithContext(ctx aws.Context, input *U
 	return out, req.Send()
 }
 
+// CDN Authorization credentials
+type Authorization struct {
+	_ struct{} `type:"structure"`
+
+	// The Amazon Resource Name (ARN) for the secret in Secrets Manager that your
+	// Content Distribution Network (CDN) uses for authorization to access your
+	// endpoint.
+	//
+	// CdnIdentifierSecret is a required field
+	CdnIdentifierSecret *string `locationName:"cdnIdentifierSecret" type:"string" required:"true"`
+
+	// The Amazon Resource Name (ARN) for the IAM role that allows MediaPackage
+	// to communicate with AWS Secrets Manager.
+	//
+	// SecretsRoleArn is a required field
+	SecretsRoleArn *string `locationName:"secretsRoleArn" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s Authorization) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Authorization) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Authorization) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Authorization"}
+	if s.CdnIdentifierSecret == nil {
+		invalidParams.Add(request.NewErrParamRequired("CdnIdentifierSecret"))
+	}
+	if s.SecretsRoleArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("SecretsRoleArn"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetCdnIdentifierSecret sets the CdnIdentifierSecret field's value.
+func (s *Authorization) SetCdnIdentifierSecret(v string) *Authorization {
+	s.CdnIdentifierSecret = &v
+	return s
+}
+
+// SetSecretsRoleArn sets the SecretsRoleArn field's value.
+func (s *Authorization) SetSecretsRoleArn(v string) *Authorization {
+	s.SecretsRoleArn = &v
+	return s
+}
+
 // A Channel resource configuration.
 type Channel struct {
 	_ struct{} `type:"structure"`
@@ -1747,11 +1891,17 @@ type Channel struct {
 	// A short text description of the Channel.
 	Description *string `locationName:"description" type:"string"`
 
+	// Configure egress access logging.
+	EgressAccessLogs *EgressAccessLogs `locationName:"egressAccessLogs" type:"structure"`
+
 	// An HTTP Live Streaming (HLS) ingest resource configuration.
 	HlsIngest *HlsIngest `locationName:"hlsIngest" type:"structure"`
 
 	// The ID of the Channel.
 	Id *string `locationName:"id" type:"string"`
+
+	// Configure ingress access logging.
+	IngressAccessLogs *IngressAccessLogs `locationName:"ingressAccessLogs" type:"structure"`
 
 	// A collection of tags associated with a resource
 	Tags map[string]*string `locationName:"tags" type:"map"`
@@ -1779,6 +1929,12 @@ func (s *Channel) SetDescription(v string) *Channel {
 	return s
 }
 
+// SetEgressAccessLogs sets the EgressAccessLogs field's value.
+func (s *Channel) SetEgressAccessLogs(v *EgressAccessLogs) *Channel {
+	s.EgressAccessLogs = v
+	return s
+}
+
 // SetHlsIngest sets the HlsIngest field's value.
 func (s *Channel) SetHlsIngest(v *HlsIngest) *Channel {
 	s.HlsIngest = v
@@ -1788,6 +1944,12 @@ func (s *Channel) SetHlsIngest(v *HlsIngest) *Channel {
 // SetId sets the Id field's value.
 func (s *Channel) SetId(v string) *Channel {
 	s.Id = &v
+	return s
+}
+
+// SetIngressAccessLogs sets the IngressAccessLogs field's value.
+func (s *Channel) SetIngressAccessLogs(v *IngressAccessLogs) *Channel {
+	s.IngressAccessLogs = v
 	return s
 }
 
@@ -2000,6 +2162,137 @@ func (s *CmafPackageCreateOrUpdateParameters) SetStreamSelection(v *StreamSelect
 	return s
 }
 
+type ConfigureLogsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Configure egress access logging.
+	EgressAccessLogs *EgressAccessLogs `locationName:"egressAccessLogs" type:"structure"`
+
+	// Id is a required field
+	Id *string `location:"uri" locationName:"id" type:"string" required:"true"`
+
+	// Configure ingress access logging.
+	IngressAccessLogs *IngressAccessLogs `locationName:"ingressAccessLogs" type:"structure"`
+}
+
+// String returns the string representation
+func (s ConfigureLogsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ConfigureLogsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ConfigureLogsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ConfigureLogsInput"}
+	if s.Id == nil {
+		invalidParams.Add(request.NewErrParamRequired("Id"))
+	}
+	if s.Id != nil && len(*s.Id) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEgressAccessLogs sets the EgressAccessLogs field's value.
+func (s *ConfigureLogsInput) SetEgressAccessLogs(v *EgressAccessLogs) *ConfigureLogsInput {
+	s.EgressAccessLogs = v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *ConfigureLogsInput) SetId(v string) *ConfigureLogsInput {
+	s.Id = &v
+	return s
+}
+
+// SetIngressAccessLogs sets the IngressAccessLogs field's value.
+func (s *ConfigureLogsInput) SetIngressAccessLogs(v *IngressAccessLogs) *ConfigureLogsInput {
+	s.IngressAccessLogs = v
+	return s
+}
+
+type ConfigureLogsOutput struct {
+	_ struct{} `type:"structure"`
+
+	Arn *string `locationName:"arn" type:"string"`
+
+	Description *string `locationName:"description" type:"string"`
+
+	// Configure egress access logging.
+	EgressAccessLogs *EgressAccessLogs `locationName:"egressAccessLogs" type:"structure"`
+
+	// An HTTP Live Streaming (HLS) ingest resource configuration.
+	HlsIngest *HlsIngest `locationName:"hlsIngest" type:"structure"`
+
+	Id *string `locationName:"id" type:"string"`
+
+	// Configure ingress access logging.
+	IngressAccessLogs *IngressAccessLogs `locationName:"ingressAccessLogs" type:"structure"`
+
+	// A collection of tags associated with a resource
+	Tags map[string]*string `locationName:"tags" type:"map"`
+}
+
+// String returns the string representation
+func (s ConfigureLogsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ConfigureLogsOutput) GoString() string {
+	return s.String()
+}
+
+// SetArn sets the Arn field's value.
+func (s *ConfigureLogsOutput) SetArn(v string) *ConfigureLogsOutput {
+	s.Arn = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *ConfigureLogsOutput) SetDescription(v string) *ConfigureLogsOutput {
+	s.Description = &v
+	return s
+}
+
+// SetEgressAccessLogs sets the EgressAccessLogs field's value.
+func (s *ConfigureLogsOutput) SetEgressAccessLogs(v *EgressAccessLogs) *ConfigureLogsOutput {
+	s.EgressAccessLogs = v
+	return s
+}
+
+// SetHlsIngest sets the HlsIngest field's value.
+func (s *ConfigureLogsOutput) SetHlsIngest(v *HlsIngest) *ConfigureLogsOutput {
+	s.HlsIngest = v
+	return s
+}
+
+// SetId sets the Id field's value.
+func (s *ConfigureLogsOutput) SetId(v string) *ConfigureLogsOutput {
+	s.Id = &v
+	return s
+}
+
+// SetIngressAccessLogs sets the IngressAccessLogs field's value.
+func (s *ConfigureLogsOutput) SetIngressAccessLogs(v *IngressAccessLogs) *ConfigureLogsOutput {
+	s.IngressAccessLogs = v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *ConfigureLogsOutput) SetTags(v map[string]*string) *ConfigureLogsOutput {
+	s.Tags = v
+	return s
+}
+
 type CreateChannelInput struct {
 	_ struct{} `type:"structure"`
 
@@ -2060,10 +2353,16 @@ type CreateChannelOutput struct {
 
 	Description *string `locationName:"description" type:"string"`
 
+	// Configure egress access logging.
+	EgressAccessLogs *EgressAccessLogs `locationName:"egressAccessLogs" type:"structure"`
+
 	// An HTTP Live Streaming (HLS) ingest resource configuration.
 	HlsIngest *HlsIngest `locationName:"hlsIngest" type:"structure"`
 
 	Id *string `locationName:"id" type:"string"`
+
+	// Configure ingress access logging.
+	IngressAccessLogs *IngressAccessLogs `locationName:"ingressAccessLogs" type:"structure"`
 
 	// A collection of tags associated with a resource
 	Tags map[string]*string `locationName:"tags" type:"map"`
@@ -2091,6 +2390,12 @@ func (s *CreateChannelOutput) SetDescription(v string) *CreateChannelOutput {
 	return s
 }
 
+// SetEgressAccessLogs sets the EgressAccessLogs field's value.
+func (s *CreateChannelOutput) SetEgressAccessLogs(v *EgressAccessLogs) *CreateChannelOutput {
+	s.EgressAccessLogs = v
+	return s
+}
+
 // SetHlsIngest sets the HlsIngest field's value.
 func (s *CreateChannelOutput) SetHlsIngest(v *HlsIngest) *CreateChannelOutput {
 	s.HlsIngest = v
@@ -2100,6 +2405,12 @@ func (s *CreateChannelOutput) SetHlsIngest(v *HlsIngest) *CreateChannelOutput {
 // SetId sets the Id field's value.
 func (s *CreateChannelOutput) SetId(v string) *CreateChannelOutput {
 	s.Id = &v
+	return s
+}
+
+// SetIngressAccessLogs sets the IngressAccessLogs field's value.
+func (s *CreateChannelOutput) SetIngressAccessLogs(v *IngressAccessLogs) *CreateChannelOutput {
+	s.IngressAccessLogs = v
 	return s
 }
 
@@ -2292,6 +2603,9 @@ func (s *CreateHarvestJobOutput) SetStatus(v string) *CreateHarvestJobOutput {
 type CreateOriginEndpointInput struct {
 	_ struct{} `type:"structure"`
 
+	// CDN Authorization credentials
+	Authorization *Authorization `locationName:"authorization" type:"structure"`
+
 	// ChannelId is a required field
 	ChannelId *string `locationName:"channelId" type:"string" required:"true"`
 
@@ -2345,6 +2659,11 @@ func (s *CreateOriginEndpointInput) Validate() error {
 	if s.Id == nil {
 		invalidParams.Add(request.NewErrParamRequired("Id"))
 	}
+	if s.Authorization != nil {
+		if err := s.Authorization.Validate(); err != nil {
+			invalidParams.AddNested("Authorization", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.CmafPackage != nil {
 		if err := s.CmafPackage.Validate(); err != nil {
 			invalidParams.AddNested("CmafPackage", err.(request.ErrInvalidParams))
@@ -2370,6 +2689,12 @@ func (s *CreateOriginEndpointInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAuthorization sets the Authorization field's value.
+func (s *CreateOriginEndpointInput) SetAuthorization(v *Authorization) *CreateOriginEndpointInput {
+	s.Authorization = v
+	return s
 }
 
 // SetChannelId sets the ChannelId field's value.
@@ -2455,6 +2780,9 @@ type CreateOriginEndpointOutput struct {
 
 	Arn *string `locationName:"arn" type:"string"`
 
+	// CDN Authorization credentials
+	Authorization *Authorization `locationName:"authorization" type:"structure"`
+
 	ChannelId *string `locationName:"channelId" type:"string"`
 
 	// A Common Media Application Format (CMAF) packaging configuration.
@@ -2502,6 +2830,12 @@ func (s CreateOriginEndpointOutput) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *CreateOriginEndpointOutput) SetArn(v string) *CreateOriginEndpointOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetAuthorization sets the Authorization field's value.
+func (s *CreateOriginEndpointOutput) SetAuthorization(v *Authorization) *CreateOriginEndpointOutput {
+	s.Authorization = v
 	return s
 }
 
@@ -2712,6 +3046,14 @@ type DashPackage struct {
 
 	// Duration (in seconds) to delay live content before presentation.
 	SuggestedPresentationDelaySeconds *int64 `locationName:"suggestedPresentationDelaySeconds" type:"integer"`
+
+	// Determines the type of UTCTiming included in the Media Presentation Description
+	// (MPD)
+	UtcTiming *string `locationName:"utcTiming" type:"string" enum:"UtcTiming"`
+
+	// Specifies the value attribute of the UTCTiming field when utcTiming is set
+	// to HTTP-ISO or HTTP-HEAD
+	UtcTimingUri *string `locationName:"utcTimingUri" type:"string"`
 }
 
 // String returns the string representation
@@ -2814,6 +3156,18 @@ func (s *DashPackage) SetStreamSelection(v *StreamSelection) *DashPackage {
 // SetSuggestedPresentationDelaySeconds sets the SuggestedPresentationDelaySeconds field's value.
 func (s *DashPackage) SetSuggestedPresentationDelaySeconds(v int64) *DashPackage {
 	s.SuggestedPresentationDelaySeconds = &v
+	return s
+}
+
+// SetUtcTiming sets the UtcTiming field's value.
+func (s *DashPackage) SetUtcTiming(v string) *DashPackage {
+	s.UtcTiming = &v
+	return s
+}
+
+// SetUtcTimingUri sets the UtcTimingUri field's value.
+func (s *DashPackage) SetUtcTimingUri(v string) *DashPackage {
+	s.UtcTimingUri = &v
 	return s
 }
 
@@ -2969,10 +3323,16 @@ type DescribeChannelOutput struct {
 
 	Description *string `locationName:"description" type:"string"`
 
+	// Configure egress access logging.
+	EgressAccessLogs *EgressAccessLogs `locationName:"egressAccessLogs" type:"structure"`
+
 	// An HTTP Live Streaming (HLS) ingest resource configuration.
 	HlsIngest *HlsIngest `locationName:"hlsIngest" type:"structure"`
 
 	Id *string `locationName:"id" type:"string"`
+
+	// Configure ingress access logging.
+	IngressAccessLogs *IngressAccessLogs `locationName:"ingressAccessLogs" type:"structure"`
 
 	// A collection of tags associated with a resource
 	Tags map[string]*string `locationName:"tags" type:"map"`
@@ -3000,6 +3360,12 @@ func (s *DescribeChannelOutput) SetDescription(v string) *DescribeChannelOutput 
 	return s
 }
 
+// SetEgressAccessLogs sets the EgressAccessLogs field's value.
+func (s *DescribeChannelOutput) SetEgressAccessLogs(v *EgressAccessLogs) *DescribeChannelOutput {
+	s.EgressAccessLogs = v
+	return s
+}
+
 // SetHlsIngest sets the HlsIngest field's value.
 func (s *DescribeChannelOutput) SetHlsIngest(v *HlsIngest) *DescribeChannelOutput {
 	s.HlsIngest = v
@@ -3009,6 +3375,12 @@ func (s *DescribeChannelOutput) SetHlsIngest(v *HlsIngest) *DescribeChannelOutpu
 // SetId sets the Id field's value.
 func (s *DescribeChannelOutput) SetId(v string) *DescribeChannelOutput {
 	s.Id = &v
+	return s
+}
+
+// SetIngressAccessLogs sets the IngressAccessLogs field's value.
+func (s *DescribeChannelOutput) SetIngressAccessLogs(v *IngressAccessLogs) *DescribeChannelOutput {
+	s.IngressAccessLogs = v
 	return s
 }
 
@@ -3189,6 +3561,9 @@ type DescribeOriginEndpointOutput struct {
 
 	Arn *string `locationName:"arn" type:"string"`
 
+	// CDN Authorization credentials
+	Authorization *Authorization `locationName:"authorization" type:"structure"`
+
 	ChannelId *string `locationName:"channelId" type:"string"`
 
 	// A Common Media Application Format (CMAF) packaging configuration.
@@ -3236,6 +3611,12 @@ func (s DescribeOriginEndpointOutput) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *DescribeOriginEndpointOutput) SetArn(v string) *DescribeOriginEndpointOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetAuthorization sets the Authorization field's value.
+func (s *DescribeOriginEndpointOutput) SetAuthorization(v *Authorization) *DescribeOriginEndpointOutput {
+	s.Authorization = v
 	return s
 }
 
@@ -3321,6 +3702,85 @@ func (s *DescribeOriginEndpointOutput) SetUrl(v string) *DescribeOriginEndpointO
 func (s *DescribeOriginEndpointOutput) SetWhitelist(v []*string) *DescribeOriginEndpointOutput {
 	s.Whitelist = v
 	return s
+}
+
+// Configure egress access logging.
+type EgressAccessLogs struct {
+	_ struct{} `type:"structure"`
+
+	// Customize the log group name.
+	LogGroupName *string `locationName:"logGroupName" type:"string"`
+}
+
+// String returns the string representation
+func (s EgressAccessLogs) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s EgressAccessLogs) GoString() string {
+	return s.String()
+}
+
+// SetLogGroupName sets the LogGroupName field's value.
+func (s *EgressAccessLogs) SetLogGroupName(v string) *EgressAccessLogs {
+	s.LogGroupName = &v
+	return s
+}
+
+type ForbiddenException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s ForbiddenException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ForbiddenException) GoString() string {
+	return s.String()
+}
+
+func newErrorForbiddenException(v protocol.ResponseMetadata) error {
+	return &ForbiddenException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ForbiddenException) Code() string {
+	return "ForbiddenException"
+}
+
+// Message returns the exception's message.
+func (s *ForbiddenException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ForbiddenException) OrigErr() error {
+	return nil
+}
+
+func (s *ForbiddenException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ForbiddenException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ForbiddenException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 // A HarvestJob resource configuration
@@ -3538,7 +3998,10 @@ type HlsManifest struct {
 	// will omit all SCTE-35 ad markers from the output."PASSTHROUGH" causes the
 	// manifest to contain a copy of the SCTE-35 admarkers (comments) taken directly
 	// from the input HTTP Live Streaming (HLS) manifest."SCTE35_ENHANCED" generates
-	// ad markers and blackout tags based on SCTE-35messages in the input source.
+	// ad markers and blackout tags based on SCTE-35messages in the input source."DATERANGE"
+	// inserts EXT-X-DATERANGE tags to signal ad and program transition events in
+	// HLS and CMAF manifests. For this option, you must set a programDateTimeIntervalSeconds
+	// value that is greater than 0.
 	AdMarkers *string `locationName:"adMarkers" type:"string" enum:"AdMarkers"`
 
 	// The ID of the manifest. The ID must be unique within the OriginEndpoint and
@@ -3642,7 +4105,10 @@ type HlsManifestCreateOrUpdateParameters struct {
 	// will omit all SCTE-35 ad markers from the output."PASSTHROUGH" causes the
 	// manifest to contain a copy of the SCTE-35 admarkers (comments) taken directly
 	// from the input HTTP Live Streaming (HLS) manifest."SCTE35_ENHANCED" generates
-	// ad markers and blackout tags based on SCTE-35messages in the input source.
+	// ad markers and blackout tags based on SCTE-35messages in the input source."DATERANGE"
+	// inserts EXT-X-DATERANGE tags to signal ad and program transition events in
+	// HLS and CMAF manifests. For this option, you must set a programDateTimeIntervalSeconds
+	// value that is greater than 0.
 	AdMarkers *string `locationName:"adMarkers" type:"string" enum:"AdMarkers"`
 
 	// A list of SCTE-35 message types that are treated as ad markers in the output.
@@ -3779,7 +4245,10 @@ type HlsPackage struct {
 	// will omit all SCTE-35 ad markers from the output."PASSTHROUGH" causes the
 	// manifest to contain a copy of the SCTE-35 admarkers (comments) taken directly
 	// from the input HTTP Live Streaming (HLS) manifest."SCTE35_ENHANCED" generates
-	// ad markers and blackout tags based on SCTE-35messages in the input source.
+	// ad markers and blackout tags based on SCTE-35messages in the input source."DATERANGE"
+	// inserts EXT-X-DATERANGE tags to signal ad and program transition events in
+	// HLS and CMAF manifests. For this option, you must set a programDateTimeIntervalSeconds
+	// value that is greater than 0.
 	AdMarkers *string `locationName:"adMarkers" type:"string" enum:"AdMarkers"`
 
 	// A list of SCTE-35 message types that are treated as ad markers in the output.
@@ -3974,6 +4443,85 @@ func (s *IngestEndpoint) SetUrl(v string) *IngestEndpoint {
 func (s *IngestEndpoint) SetUsername(v string) *IngestEndpoint {
 	s.Username = &v
 	return s
+}
+
+// Configure ingress access logging.
+type IngressAccessLogs struct {
+	_ struct{} `type:"structure"`
+
+	// Customize the log group name.
+	LogGroupName *string `locationName:"logGroupName" type:"string"`
+}
+
+// String returns the string representation
+func (s IngressAccessLogs) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s IngressAccessLogs) GoString() string {
+	return s.String()
+}
+
+// SetLogGroupName sets the LogGroupName field's value.
+func (s *IngressAccessLogs) SetLogGroupName(v string) *IngressAccessLogs {
+	s.LogGroupName = &v
+	return s
+}
+
+type InternalServerErrorException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s InternalServerErrorException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InternalServerErrorException) GoString() string {
+	return s.String()
+}
+
+func newErrorInternalServerErrorException(v protocol.ResponseMetadata) error {
+	return &InternalServerErrorException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *InternalServerErrorException) Code() string {
+	return "InternalServerErrorException"
+}
+
+// Message returns the exception's message.
+func (s *InternalServerErrorException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *InternalServerErrorException) OrigErr() error {
+	return nil
+}
+
+func (s *InternalServerErrorException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *InternalServerErrorException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *InternalServerErrorException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 type ListChannelsInput struct {
@@ -4391,12 +4939,70 @@ func (s *MssPackage) SetStreamSelection(v *StreamSelection) *MssPackage {
 	return s
 }
 
+type NotFoundException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s NotFoundException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s NotFoundException) GoString() string {
+	return s.String()
+}
+
+func newErrorNotFoundException(v protocol.ResponseMetadata) error {
+	return &NotFoundException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *NotFoundException) Code() string {
+	return "NotFoundException"
+}
+
+// Message returns the exception's message.
+func (s *NotFoundException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *NotFoundException) OrigErr() error {
+	return nil
+}
+
+func (s *NotFoundException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *NotFoundException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *NotFoundException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // An OriginEndpoint resource configuration.
 type OriginEndpoint struct {
 	_ struct{} `type:"structure"`
 
 	// The Amazon Resource Name (ARN) assigned to the OriginEndpoint.
 	Arn *string `locationName:"arn" type:"string"`
+
+	// CDN Authorization credentials
+	Authorization *Authorization `locationName:"authorization" type:"structure"`
 
 	// The ID of the Channel the OriginEndpoint is associated with.
 	ChannelId *string `locationName:"channelId" type:"string"`
@@ -4460,6 +5066,12 @@ func (s OriginEndpoint) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *OriginEndpoint) SetArn(v string) *OriginEndpoint {
 	s.Arn = &v
+	return s
+}
+
+// SetAuthorization sets the Authorization field's value.
+func (s *OriginEndpoint) SetAuthorization(v *Authorization) *OriginEndpoint {
+	s.Authorization = v
 	return s
 }
 
@@ -4595,10 +5207,16 @@ type RotateChannelCredentialsOutput struct {
 
 	Description *string `locationName:"description" type:"string"`
 
+	// Configure egress access logging.
+	EgressAccessLogs *EgressAccessLogs `locationName:"egressAccessLogs" type:"structure"`
+
 	// An HTTP Live Streaming (HLS) ingest resource configuration.
 	HlsIngest *HlsIngest `locationName:"hlsIngest" type:"structure"`
 
 	Id *string `locationName:"id" type:"string"`
+
+	// Configure ingress access logging.
+	IngressAccessLogs *IngressAccessLogs `locationName:"ingressAccessLogs" type:"structure"`
 
 	// A collection of tags associated with a resource
 	Tags map[string]*string `locationName:"tags" type:"map"`
@@ -4626,6 +5244,12 @@ func (s *RotateChannelCredentialsOutput) SetDescription(v string) *RotateChannel
 	return s
 }
 
+// SetEgressAccessLogs sets the EgressAccessLogs field's value.
+func (s *RotateChannelCredentialsOutput) SetEgressAccessLogs(v *EgressAccessLogs) *RotateChannelCredentialsOutput {
+	s.EgressAccessLogs = v
+	return s
+}
+
 // SetHlsIngest sets the HlsIngest field's value.
 func (s *RotateChannelCredentialsOutput) SetHlsIngest(v *HlsIngest) *RotateChannelCredentialsOutput {
 	s.HlsIngest = v
@@ -4635,6 +5259,12 @@ func (s *RotateChannelCredentialsOutput) SetHlsIngest(v *HlsIngest) *RotateChann
 // SetId sets the Id field's value.
 func (s *RotateChannelCredentialsOutput) SetId(v string) *RotateChannelCredentialsOutput {
 	s.Id = &v
+	return s
+}
+
+// SetIngressAccessLogs sets the IngressAccessLogs field's value.
+func (s *RotateChannelCredentialsOutput) SetIngressAccessLogs(v *IngressAccessLogs) *RotateChannelCredentialsOutput {
+	s.IngressAccessLogs = v
 	return s
 }
 
@@ -4705,10 +5335,16 @@ type RotateIngestEndpointCredentialsOutput struct {
 
 	Description *string `locationName:"description" type:"string"`
 
+	// Configure egress access logging.
+	EgressAccessLogs *EgressAccessLogs `locationName:"egressAccessLogs" type:"structure"`
+
 	// An HTTP Live Streaming (HLS) ingest resource configuration.
 	HlsIngest *HlsIngest `locationName:"hlsIngest" type:"structure"`
 
 	Id *string `locationName:"id" type:"string"`
+
+	// Configure ingress access logging.
+	IngressAccessLogs *IngressAccessLogs `locationName:"ingressAccessLogs" type:"structure"`
 
 	// A collection of tags associated with a resource
 	Tags map[string]*string `locationName:"tags" type:"map"`
@@ -4736,6 +5372,12 @@ func (s *RotateIngestEndpointCredentialsOutput) SetDescription(v string) *Rotate
 	return s
 }
 
+// SetEgressAccessLogs sets the EgressAccessLogs field's value.
+func (s *RotateIngestEndpointCredentialsOutput) SetEgressAccessLogs(v *EgressAccessLogs) *RotateIngestEndpointCredentialsOutput {
+	s.EgressAccessLogs = v
+	return s
+}
+
 // SetHlsIngest sets the HlsIngest field's value.
 func (s *RotateIngestEndpointCredentialsOutput) SetHlsIngest(v *HlsIngest) *RotateIngestEndpointCredentialsOutput {
 	s.HlsIngest = v
@@ -4745,6 +5387,12 @@ func (s *RotateIngestEndpointCredentialsOutput) SetHlsIngest(v *HlsIngest) *Rota
 // SetId sets the Id field's value.
 func (s *RotateIngestEndpointCredentialsOutput) SetId(v string) *RotateIngestEndpointCredentialsOutput {
 	s.Id = &v
+	return s
+}
+
+// SetIngressAccessLogs sets the IngressAccessLogs field's value.
+func (s *RotateIngestEndpointCredentialsOutput) SetIngressAccessLogs(v *IngressAccessLogs) *RotateIngestEndpointCredentialsOutput {
+	s.IngressAccessLogs = v
 	return s
 }
 
@@ -4821,6 +5469,61 @@ func (s *S3Destination) SetManifestKey(v string) *S3Destination {
 func (s *S3Destination) SetRoleArn(v string) *S3Destination {
 	s.RoleArn = &v
 	return s
+}
+
+type ServiceUnavailableException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s ServiceUnavailableException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ServiceUnavailableException) GoString() string {
+	return s.String()
+}
+
+func newErrorServiceUnavailableException(v protocol.ResponseMetadata) error {
+	return &ServiceUnavailableException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ServiceUnavailableException) Code() string {
+	return "ServiceUnavailableException"
+}
+
+// Message returns the exception's message.
+func (s *ServiceUnavailableException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ServiceUnavailableException) OrigErr() error {
+	return nil
+}
+
+func (s *ServiceUnavailableException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ServiceUnavailableException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ServiceUnavailableException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 // A configuration for accessing an external Secure Packager and Encoder Key
@@ -5024,6 +5727,116 @@ func (s TagResourceOutput) GoString() string {
 	return s.String()
 }
 
+type TooManyRequestsException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s TooManyRequestsException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TooManyRequestsException) GoString() string {
+	return s.String()
+}
+
+func newErrorTooManyRequestsException(v protocol.ResponseMetadata) error {
+	return &TooManyRequestsException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *TooManyRequestsException) Code() string {
+	return "TooManyRequestsException"
+}
+
+// Message returns the exception's message.
+func (s *TooManyRequestsException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *TooManyRequestsException) OrigErr() error {
+	return nil
+}
+
+func (s *TooManyRequestsException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *TooManyRequestsException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *TooManyRequestsException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+type UnprocessableEntityException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s UnprocessableEntityException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UnprocessableEntityException) GoString() string {
+	return s.String()
+}
+
+func newErrorUnprocessableEntityException(v protocol.ResponseMetadata) error {
+	return &UnprocessableEntityException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *UnprocessableEntityException) Code() string {
+	return "UnprocessableEntityException"
+}
+
+// Message returns the exception's message.
+func (s *UnprocessableEntityException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *UnprocessableEntityException) OrigErr() error {
+	return nil
+}
+
+func (s *UnprocessableEntityException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *UnprocessableEntityException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *UnprocessableEntityException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 type UntagResourceInput struct {
 	_ struct{} `type:"structure"`
 
@@ -5143,10 +5956,16 @@ type UpdateChannelOutput struct {
 
 	Description *string `locationName:"description" type:"string"`
 
+	// Configure egress access logging.
+	EgressAccessLogs *EgressAccessLogs `locationName:"egressAccessLogs" type:"structure"`
+
 	// An HTTP Live Streaming (HLS) ingest resource configuration.
 	HlsIngest *HlsIngest `locationName:"hlsIngest" type:"structure"`
 
 	Id *string `locationName:"id" type:"string"`
+
+	// Configure ingress access logging.
+	IngressAccessLogs *IngressAccessLogs `locationName:"ingressAccessLogs" type:"structure"`
 
 	// A collection of tags associated with a resource
 	Tags map[string]*string `locationName:"tags" type:"map"`
@@ -5174,6 +5993,12 @@ func (s *UpdateChannelOutput) SetDescription(v string) *UpdateChannelOutput {
 	return s
 }
 
+// SetEgressAccessLogs sets the EgressAccessLogs field's value.
+func (s *UpdateChannelOutput) SetEgressAccessLogs(v *EgressAccessLogs) *UpdateChannelOutput {
+	s.EgressAccessLogs = v
+	return s
+}
+
 // SetHlsIngest sets the HlsIngest field's value.
 func (s *UpdateChannelOutput) SetHlsIngest(v *HlsIngest) *UpdateChannelOutput {
 	s.HlsIngest = v
@@ -5186,6 +6011,12 @@ func (s *UpdateChannelOutput) SetId(v string) *UpdateChannelOutput {
 	return s
 }
 
+// SetIngressAccessLogs sets the IngressAccessLogs field's value.
+func (s *UpdateChannelOutput) SetIngressAccessLogs(v *IngressAccessLogs) *UpdateChannelOutput {
+	s.IngressAccessLogs = v
+	return s
+}
+
 // SetTags sets the Tags field's value.
 func (s *UpdateChannelOutput) SetTags(v map[string]*string) *UpdateChannelOutput {
 	s.Tags = v
@@ -5194,6 +6025,9 @@ func (s *UpdateChannelOutput) SetTags(v map[string]*string) *UpdateChannelOutput
 
 type UpdateOriginEndpointInput struct {
 	_ struct{} `type:"structure"`
+
+	// CDN Authorization credentials
+	Authorization *Authorization `locationName:"authorization" type:"structure"`
 
 	// A Common Media Application Format (CMAF) packaging configuration.
 	CmafPackage *CmafPackageCreateOrUpdateParameters `locationName:"cmafPackage" type:"structure"`
@@ -5242,6 +6076,11 @@ func (s *UpdateOriginEndpointInput) Validate() error {
 	if s.Id != nil && len(*s.Id) < 1 {
 		invalidParams.Add(request.NewErrParamMinLen("Id", 1))
 	}
+	if s.Authorization != nil {
+		if err := s.Authorization.Validate(); err != nil {
+			invalidParams.AddNested("Authorization", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.CmafPackage != nil {
 		if err := s.CmafPackage.Validate(); err != nil {
 			invalidParams.AddNested("CmafPackage", err.(request.ErrInvalidParams))
@@ -5267,6 +6106,12 @@ func (s *UpdateOriginEndpointInput) Validate() error {
 		return invalidParams
 	}
 	return nil
+}
+
+// SetAuthorization sets the Authorization field's value.
+func (s *UpdateOriginEndpointInput) SetAuthorization(v *Authorization) *UpdateOriginEndpointInput {
+	s.Authorization = v
+	return s
 }
 
 // SetCmafPackage sets the CmafPackage field's value.
@@ -5340,6 +6185,9 @@ type UpdateOriginEndpointOutput struct {
 
 	Arn *string `locationName:"arn" type:"string"`
 
+	// CDN Authorization credentials
+	Authorization *Authorization `locationName:"authorization" type:"structure"`
+
 	ChannelId *string `locationName:"channelId" type:"string"`
 
 	// A Common Media Application Format (CMAF) packaging configuration.
@@ -5387,6 +6235,12 @@ func (s UpdateOriginEndpointOutput) GoString() string {
 // SetArn sets the Arn field's value.
 func (s *UpdateOriginEndpointOutput) SetArn(v string) *UpdateOriginEndpointOutput {
 	s.Arn = &v
+	return s
+}
+
+// SetAuthorization sets the Authorization field's value.
+func (s *UpdateOriginEndpointOutput) SetAuthorization(v *Authorization) *UpdateOriginEndpointOutput {
+	s.Authorization = v
 	return s
 }
 
@@ -5483,7 +6337,20 @@ const (
 
 	// AdMarkersPassthrough is a AdMarkers enum value
 	AdMarkersPassthrough = "PASSTHROUGH"
+
+	// AdMarkersDaterange is a AdMarkers enum value
+	AdMarkersDaterange = "DATERANGE"
 )
+
+// AdMarkers_Values returns all elements of the AdMarkers enum
+func AdMarkers_Values() []string {
+	return []string{
+		AdMarkersNone,
+		AdMarkersScte35Enhanced,
+		AdMarkersPassthrough,
+		AdMarkersDaterange,
+	}
+}
 
 // This setting allows the delivery restriction flags on SCTE-35 segmentation
 // descriptors todetermine whether a message signals an ad. Choosing "NONE"
@@ -5509,6 +6376,16 @@ const (
 	AdsOnDeliveryRestrictionsBoth = "BOTH"
 )
 
+// AdsOnDeliveryRestrictions_Values returns all elements of the AdsOnDeliveryRestrictions enum
+func AdsOnDeliveryRestrictions_Values() []string {
+	return []string{
+		AdsOnDeliveryRestrictionsNone,
+		AdsOnDeliveryRestrictionsRestricted,
+		AdsOnDeliveryRestrictionsUnrestricted,
+		AdsOnDeliveryRestrictionsBoth,
+	}
+}
+
 const (
 	// EncryptionMethodAes128 is a EncryptionMethod enum value
 	EncryptionMethodAes128 = "AES_128"
@@ -5516,6 +6393,14 @@ const (
 	// EncryptionMethodSampleAes is a EncryptionMethod enum value
 	EncryptionMethodSampleAes = "SAMPLE_AES"
 )
+
+// EncryptionMethod_Values returns all elements of the EncryptionMethod enum
+func EncryptionMethod_Values() []string {
+	return []string{
+		EncryptionMethodAes128,
+		EncryptionMethodSampleAes,
+	}
+}
 
 const (
 	// ManifestLayoutFull is a ManifestLayout enum value
@@ -5525,6 +6410,14 @@ const (
 	ManifestLayoutCompact = "COMPACT"
 )
 
+// ManifestLayout_Values returns all elements of the ManifestLayout enum
+func ManifestLayout_Values() []string {
+	return []string{
+		ManifestLayoutFull,
+		ManifestLayoutCompact,
+	}
+}
+
 const (
 	// OriginationAllow is a Origination enum value
 	OriginationAllow = "ALLOW"
@@ -5532,6 +6425,14 @@ const (
 	// OriginationDeny is a Origination enum value
 	OriginationDeny = "DENY"
 )
+
+// Origination_Values returns all elements of the Origination enum
+func Origination_Values() []string {
+	return []string{
+		OriginationAllow,
+		OriginationDeny,
+	}
+}
 
 const (
 	// PlaylistTypeNone is a PlaylistType enum value
@@ -5544,6 +6445,15 @@ const (
 	PlaylistTypeVod = "VOD"
 )
 
+// PlaylistType_Values returns all elements of the PlaylistType enum
+func PlaylistType_Values() []string {
+	return []string{
+		PlaylistTypeNone,
+		PlaylistTypeEvent,
+		PlaylistTypeVod,
+	}
+}
+
 const (
 	// ProfileNone is a Profile enum value
 	ProfileNone = "NONE"
@@ -5551,6 +6461,14 @@ const (
 	// ProfileHbbtv15 is a Profile enum value
 	ProfileHbbtv15 = "HBBTV_1_5"
 )
+
+// Profile_Values returns all elements of the Profile enum
+func Profile_Values() []string {
+	return []string{
+		ProfileNone,
+		ProfileHbbtv15,
+	}
+}
 
 const (
 	// SegmentTemplateFormatNumberWithTimeline is a SegmentTemplateFormat enum value
@@ -5563,6 +6481,15 @@ const (
 	SegmentTemplateFormatNumberWithDuration = "NUMBER_WITH_DURATION"
 )
 
+// SegmentTemplateFormat_Values returns all elements of the SegmentTemplateFormat enum
+func SegmentTemplateFormat_Values() []string {
+	return []string{
+		SegmentTemplateFormatNumberWithTimeline,
+		SegmentTemplateFormatTimeWithTimeline,
+		SegmentTemplateFormatNumberWithDuration,
+	}
+}
+
 const (
 	// StatusInProgress is a Status enum value
 	StatusInProgress = "IN_PROGRESS"
@@ -5574,6 +6501,15 @@ const (
 	StatusFailed = "FAILED"
 )
 
+// Status_Values returns all elements of the Status enum
+func Status_Values() []string {
+	return []string{
+		StatusInProgress,
+		StatusSucceeded,
+		StatusFailed,
+	}
+}
+
 const (
 	// StreamOrderOriginal is a StreamOrder enum value
 	StreamOrderOriginal = "ORIGINAL"
@@ -5584,6 +6520,35 @@ const (
 	// StreamOrderVideoBitrateDescending is a StreamOrder enum value
 	StreamOrderVideoBitrateDescending = "VIDEO_BITRATE_DESCENDING"
 )
+
+// StreamOrder_Values returns all elements of the StreamOrder enum
+func StreamOrder_Values() []string {
+	return []string{
+		StreamOrderOriginal,
+		StreamOrderVideoBitrateAscending,
+		StreamOrderVideoBitrateDescending,
+	}
+}
+
+const (
+	// UtcTimingNone is a UtcTiming enum value
+	UtcTimingNone = "NONE"
+
+	// UtcTimingHttpHead is a UtcTiming enum value
+	UtcTimingHttpHead = "HTTP-HEAD"
+
+	// UtcTimingHttpIso is a UtcTiming enum value
+	UtcTimingHttpIso = "HTTP-ISO"
+)
+
+// UtcTiming_Values returns all elements of the UtcTiming enum
+func UtcTiming_Values() []string {
+	return []string{
+		UtcTimingNone,
+		UtcTimingHttpHead,
+		UtcTimingHttpIso,
+	}
+}
 
 const (
 	// __AdTriggersElementSpliceInsert is a __AdTriggersElement enum value
@@ -5611,7 +6576,28 @@ const (
 	__AdTriggersElementDistributorOverlayPlacementOpportunity = "DISTRIBUTOR_OVERLAY_PLACEMENT_OPPORTUNITY"
 )
 
+// __AdTriggersElement_Values returns all elements of the __AdTriggersElement enum
+func __AdTriggersElement_Values() []string {
+	return []string{
+		__AdTriggersElementSpliceInsert,
+		__AdTriggersElementBreak,
+		__AdTriggersElementProviderAdvertisement,
+		__AdTriggersElementDistributorAdvertisement,
+		__AdTriggersElementProviderPlacementOpportunity,
+		__AdTriggersElementDistributorPlacementOpportunity,
+		__AdTriggersElementProviderOverlayPlacementOpportunity,
+		__AdTriggersElementDistributorOverlayPlacementOpportunity,
+	}
+}
+
 const (
 	// __PeriodTriggersElementAds is a __PeriodTriggersElement enum value
 	__PeriodTriggersElementAds = "ADS"
 )
+
+// __PeriodTriggersElement_Values returns all elements of the __PeriodTriggersElement enum
+func __PeriodTriggersElement_Values() []string {
+	return []string{
+		__PeriodTriggersElementAds,
+	}
+}

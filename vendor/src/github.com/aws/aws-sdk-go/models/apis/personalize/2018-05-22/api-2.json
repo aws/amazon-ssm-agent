@@ -110,6 +110,21 @@
       ],
       "idempotent":true
     },
+    "CreateFilter":{
+      "name":"CreateFilter",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateFilterRequest"},
+      "output":{"shape":"CreateFilterResponse"},
+      "errors":[
+        {"shape":"InvalidInputException"},
+        {"shape":"ResourceAlreadyExistsException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"LimitExceededException"}
+      ]
+    },
     "CreateSchema":{
       "name":"CreateSchema",
       "http":{
@@ -152,6 +167,7 @@
       "errors":[
         {"shape":"InvalidInputException"},
         {"shape":"ResourceNotFoundException"},
+        {"shape":"LimitExceededException"},
         {"shape":"ResourceInUseException"}
       ]
     },
@@ -210,6 +226,19 @@
         {"shape":"ResourceInUseException"}
       ],
       "idempotent":true
+    },
+    "DeleteFilter":{
+      "name":"DeleteFilter",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteFilterRequest"},
+      "errors":[
+        {"shape":"InvalidInputException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"ResourceInUseException"}
+      ]
     },
     "DeleteSchema":{
       "name":"DeleteSchema",
@@ -345,6 +374,20 @@
       },
       "input":{"shape":"DescribeFeatureTransformationRequest"},
       "output":{"shape":"DescribeFeatureTransformationResponse"},
+      "errors":[
+        {"shape":"InvalidInputException"},
+        {"shape":"ResourceNotFoundException"}
+      ],
+      "idempotent":true
+    },
+    "DescribeFilter":{
+      "name":"DescribeFilter",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeFilterRequest"},
+      "output":{"shape":"DescribeFilterResponse"},
       "errors":[
         {"shape":"InvalidInputException"},
         {"shape":"ResourceNotFoundException"}
@@ -504,6 +547,20 @@
       ],
       "idempotent":true
     },
+    "ListFilters":{
+      "name":"ListFilters",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListFiltersRequest"},
+      "output":{"shape":"ListFiltersResponse"},
+      "errors":[
+        {"shape":"InvalidInputException"},
+        {"shape":"InvalidNextTokenException"}
+      ],
+      "idempotent":true
+    },
     "ListRecipes":{
       "name":"ListRecipes",
       "http":{
@@ -635,15 +692,23 @@
       "members":{
         "jobName":{"shape":"Name"},
         "batchInferenceJobArn":{"shape":"Arn"},
+        "filterArn":{"shape":"Arn"},
         "failureReason":{"shape":"FailureReason"},
         "solutionVersionArn":{"shape":"Arn"},
         "numResults":{"shape":"NumBatchResults"},
         "jobInput":{"shape":"BatchInferenceJobInput"},
         "jobOutput":{"shape":"BatchInferenceJobOutput"},
+        "batchInferenceJobConfig":{"shape":"BatchInferenceJobConfig"},
         "roleArn":{"shape":"RoleArn"},
         "status":{"shape":"Status"},
         "creationDateTime":{"shape":"Date"},
         "lastUpdatedDateTime":{"shape":"Date"}
+      }
+    },
+    "BatchInferenceJobConfig":{
+      "type":"structure",
+      "members":{
+        "itemExplorationConfig":{"shape":"HyperParameters"}
       }
     },
     "BatchInferenceJobInput":{
@@ -668,7 +733,8 @@
         "status":{"shape":"Status"},
         "creationDateTime":{"shape":"Date"},
         "lastUpdatedDateTime":{"shape":"Date"},
-        "failureReason":{"shape":"FailureReason"}
+        "failureReason":{"shape":"FailureReason"},
+        "solutionVersionArn":{"shape":"Arn"}
       }
     },
     "BatchInferenceJobs":{
@@ -684,11 +750,18 @@
         "campaignArn":{"shape":"Arn"},
         "solutionVersionArn":{"shape":"Arn"},
         "minProvisionedTPS":{"shape":"TransactionsPerSecond"},
+        "campaignConfig":{"shape":"CampaignConfig"},
         "status":{"shape":"Status"},
         "failureReason":{"shape":"FailureReason"},
         "creationDateTime":{"shape":"Date"},
         "lastUpdatedDateTime":{"shape":"Date"},
         "latestCampaignUpdate":{"shape":"CampaignUpdateSummary"}
+      }
+    },
+    "CampaignConfig":{
+      "type":"structure",
+      "members":{
+        "itemExplorationConfig":{"shape":"HyperParameters"}
       }
     },
     "CampaignSummary":{
@@ -707,6 +780,7 @@
       "members":{
         "solutionVersionArn":{"shape":"Arn"},
         "minProvisionedTPS":{"shape":"TransactionsPerSecond"},
+        "campaignConfig":{"shape":"CampaignConfig"},
         "status":{"shape":"Status"},
         "failureReason":{"shape":"FailureReason"},
         "creationDateTime":{"shape":"Date"},
@@ -772,10 +846,12 @@
       "members":{
         "jobName":{"shape":"Name"},
         "solutionVersionArn":{"shape":"Arn"},
+        "filterArn":{"shape":"Arn"},
         "numResults":{"shape":"NumBatchResults"},
         "jobInput":{"shape":"BatchInferenceJobInput"},
         "jobOutput":{"shape":"BatchInferenceJobOutput"},
-        "roleArn":{"shape":"RoleArn"}
+        "roleArn":{"shape":"RoleArn"},
+        "batchInferenceJobConfig":{"shape":"BatchInferenceJobConfig"}
       }
     },
     "CreateBatchInferenceJobResponse":{
@@ -794,7 +870,8 @@
       "members":{
         "name":{"shape":"Name"},
         "solutionVersionArn":{"shape":"Arn"},
-        "minProvisionedTPS":{"shape":"TransactionsPerSecond"}
+        "minProvisionedTPS":{"shape":"TransactionsPerSecond"},
+        "campaignConfig":{"shape":"CampaignConfig"}
       }
     },
     "CreateCampaignResponse":{
@@ -876,6 +953,25 @@
       "members":{
         "eventTrackerArn":{"shape":"Arn"},
         "trackingId":{"shape":"TrackingId"}
+      }
+    },
+    "CreateFilterRequest":{
+      "type":"structure",
+      "required":[
+        "name",
+        "datasetGroupArn",
+        "filterExpression"
+      ],
+      "members":{
+        "name":{"shape":"Name"},
+        "datasetGroupArn":{"shape":"Arn"},
+        "filterExpression":{"shape":"FilterExpression"}
+      }
+    },
+    "CreateFilterResponse":{
+      "type":"structure",
+      "members":{
+        "filterArn":{"shape":"Arn"}
       }
     },
     "CreateSchemaRequest":{
@@ -1126,6 +1222,13 @@
         "eventTrackerArn":{"shape":"Arn"}
       }
     },
+    "DeleteFilterRequest":{
+      "type":"structure",
+      "required":["filterArn"],
+      "members":{
+        "filterArn":{"shape":"Arn"}
+      }
+    },
     "DeleteSchemaRequest":{
       "type":"structure",
       "required":["schemaArn"],
@@ -1244,6 +1347,19 @@
         "featureTransformation":{"shape":"FeatureTransformation"}
       }
     },
+    "DescribeFilterRequest":{
+      "type":"structure",
+      "required":["filterArn"],
+      "members":{
+        "filterArn":{"shape":"Arn"}
+      }
+    },
+    "DescribeFilterResponse":{
+      "type":"structure",
+      "members":{
+        "filter":{"shape":"Filter"}
+      }
+    },
     "DescribeRecipeRequest":{
       "type":"structure",
       "required":["recipeArn"],
@@ -1360,6 +1476,42 @@
       "type":"map",
       "key":{"shape":"ParameterName"},
       "value":{"shape":"ParameterValue"},
+      "max":100
+    },
+    "Filter":{
+      "type":"structure",
+      "members":{
+        "name":{"shape":"Name"},
+        "filterArn":{"shape":"Arn"},
+        "creationDateTime":{"shape":"Date"},
+        "lastUpdatedDateTime":{"shape":"Date"},
+        "datasetGroupArn":{"shape":"Arn"},
+        "failureReason":{"shape":"FailureReason"},
+        "filterExpression":{"shape":"FilterExpression"},
+        "status":{"shape":"Status"}
+      }
+    },
+    "FilterExpression":{
+      "type":"string",
+      "max":2500,
+      "min":1,
+      "sensitive":true
+    },
+    "FilterSummary":{
+      "type":"structure",
+      "members":{
+        "name":{"shape":"Name"},
+        "filterArn":{"shape":"Arn"},
+        "creationDateTime":{"shape":"Date"},
+        "lastUpdatedDateTime":{"shape":"Date"},
+        "datasetGroupArn":{"shape":"Arn"},
+        "failureReason":{"shape":"FailureReason"},
+        "status":{"shape":"Status"}
+      }
+    },
+    "Filters":{
+      "type":"list",
+      "member":{"shape":"FilterSummary"},
       "max":100
     },
     "GetSolutionMetricsRequest":{
@@ -1550,6 +1702,21 @@
       "type":"structure",
       "members":{
         "eventTrackers":{"shape":"EventTrackers"},
+        "nextToken":{"shape":"NextToken"}
+      }
+    },
+    "ListFiltersRequest":{
+      "type":"structure",
+      "members":{
+        "datasetGroupArn":{"shape":"Arn"},
+        "nextToken":{"shape":"NextToken"},
+        "maxResults":{"shape":"MaxResults"}
+      }
+    },
+    "ListFiltersResponse":{
+      "type":"structure",
+      "members":{
+        "Filters":{"shape":"Filters"},
         "nextToken":{"shape":"NextToken"}
       }
     },
@@ -1790,6 +1957,7 @@
         "solutionConfig":{"shape":"SolutionConfig"},
         "trainingHours":{"shape":"TrainingHours"},
         "trainingMode":{"shape":"TrainingMode"},
+        "tunedHPOParams":{"shape":"TunedHPOParams"},
         "status":{"shape":"Status"},
         "failureReason":{"shape":"FailureReason"},
         "creationDateTime":{"shape":"Date"},
@@ -1844,13 +2012,20 @@
       "min":1
     },
     "Tunable":{"type":"boolean"},
+    "TunedHPOParams":{
+      "type":"structure",
+      "members":{
+        "algorithmHyperParameters":{"shape":"HyperParameters"}
+      }
+    },
     "UpdateCampaignRequest":{
       "type":"structure",
       "required":["campaignArn"],
       "members":{
         "campaignArn":{"shape":"Arn"},
         "solutionVersionArn":{"shape":"Arn"},
-        "minProvisionedTPS":{"shape":"TransactionsPerSecond"}
+        "minProvisionedTPS":{"shape":"TransactionsPerSecond"},
+        "campaignConfig":{"shape":"CampaignConfig"}
       }
     },
     "UpdateCampaignResponse":{

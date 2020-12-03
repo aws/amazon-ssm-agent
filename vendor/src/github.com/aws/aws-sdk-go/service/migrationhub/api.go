@@ -79,37 +79,40 @@ func (c *MigrationHub) AssociateCreatedArtifactRequest(input *AssociateCreatedAr
 // See the AWS API reference guide for AWS Migration Hub's
 // API operation AssociateCreatedArtifact for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeAccessDeniedException "AccessDeniedException"
+// Returned Error Types:
+//   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
 //
-//   * ErrCodeInternalServerError "InternalServerError"
+//   * ThrottlingException
+//   The request was denied due to request throttling.
+//
+//   * InternalServerError
 //   Exception raised when an internal, configuration, or dependency error is
 //   encountered.
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //   Exception raised when there is an internal, configuration, or dependency
 //   error encountered.
 //
-//   * ErrCodeDryRunOperation "DryRunOperation"
+//   * DryRunOperation
 //   Exception raised to indicate a successfully authorized action when the DryRun
 //   flag is set to "true".
 //
-//   * ErrCodeUnauthorizedOperation "UnauthorizedOperation"
+//   * UnauthorizedOperation
 //   Exception raised to indicate a request was not authorized when the DryRun
 //   flag is set to "true".
 //
-//   * ErrCodeInvalidInputException "InvalidInputException"
+//   * InvalidInputException
 //   Exception raised when the provided input violates a policy constraint or
 //   is entered in the wrong format or data type.
 //
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   * ResourceNotFoundException
 //   Exception raised when the request references a resource (Application Discovery
 //   Service configuration, update stream, migration task, etc.) that does not
 //   exist in Application Discovery Service (Application Discovery Service) or
 //   in Migration Hub's repository.
 //
-//   * ErrCodeHomeRegionNotSetException "HomeRegionNotSetException"
+//   * HomeRegionNotSetException
 //   The home region is not set. Set the home region to continue.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWSMigrationHub-2017-05-31/AssociateCreatedArtifact
@@ -189,42 +192,45 @@ func (c *MigrationHub) AssociateDiscoveredResourceRequest(input *AssociateDiscov
 // See the AWS API reference guide for AWS Migration Hub's
 // API operation AssociateDiscoveredResource for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeAccessDeniedException "AccessDeniedException"
+// Returned Error Types:
+//   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
 //
-//   * ErrCodeInternalServerError "InternalServerError"
+//   * ThrottlingException
+//   The request was denied due to request throttling.
+//
+//   * InternalServerError
 //   Exception raised when an internal, configuration, or dependency error is
 //   encountered.
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //   Exception raised when there is an internal, configuration, or dependency
 //   error encountered.
 //
-//   * ErrCodeDryRunOperation "DryRunOperation"
+//   * DryRunOperation
 //   Exception raised to indicate a successfully authorized action when the DryRun
 //   flag is set to "true".
 //
-//   * ErrCodeUnauthorizedOperation "UnauthorizedOperation"
+//   * UnauthorizedOperation
 //   Exception raised to indicate a request was not authorized when the DryRun
 //   flag is set to "true".
 //
-//   * ErrCodeInvalidInputException "InvalidInputException"
+//   * InvalidInputException
 //   Exception raised when the provided input violates a policy constraint or
 //   is entered in the wrong format or data type.
 //
-//   * ErrCodePolicyErrorException "PolicyErrorException"
+//   * PolicyErrorException
 //   Exception raised when there are problems accessing Application Discovery
 //   Service (Application Discovery Service); most likely due to a misconfigured
 //   policy or the migrationhub-discovery role is missing or not configured correctly.
 //
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   * ResourceNotFoundException
 //   Exception raised when the request references a resource (Application Discovery
 //   Service configuration, update stream, migration task, etc.) that does not
 //   exist in Application Discovery Service (Application Discovery Service) or
 //   in Migration Hub's repository.
 //
-//   * ErrCodeHomeRegionNotSetException "HomeRegionNotSetException"
+//   * HomeRegionNotSetException
 //   The home region is not set. Set the home region to continue.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWSMigrationHub-2017-05-31/AssociateDiscoveredResource
@@ -307,31 +313,34 @@ func (c *MigrationHub) CreateProgressUpdateStreamRequest(input *CreateProgressUp
 // See the AWS API reference guide for AWS Migration Hub's
 // API operation CreateProgressUpdateStream for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeAccessDeniedException "AccessDeniedException"
+// Returned Error Types:
+//   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
 //
-//   * ErrCodeInternalServerError "InternalServerError"
+//   * ThrottlingException
+//   The request was denied due to request throttling.
+//
+//   * InternalServerError
 //   Exception raised when an internal, configuration, or dependency error is
 //   encountered.
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //   Exception raised when there is an internal, configuration, or dependency
 //   error encountered.
 //
-//   * ErrCodeDryRunOperation "DryRunOperation"
+//   * DryRunOperation
 //   Exception raised to indicate a successfully authorized action when the DryRun
 //   flag is set to "true".
 //
-//   * ErrCodeUnauthorizedOperation "UnauthorizedOperation"
+//   * UnauthorizedOperation
 //   Exception raised to indicate a request was not authorized when the DryRun
 //   flag is set to "true".
 //
-//   * ErrCodeInvalidInputException "InvalidInputException"
+//   * InvalidInputException
 //   Exception raised when the provided input violates a policy constraint or
 //   is entered in the wrong format or data type.
 //
-//   * ErrCodeHomeRegionNotSetException "HomeRegionNotSetException"
+//   * HomeRegionNotSetException
 //   The home region is not set. Set the home region to continue.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWSMigrationHub-2017-05-31/CreateProgressUpdateStream
@@ -432,37 +441,40 @@ func (c *MigrationHub) DeleteProgressUpdateStreamRequest(input *DeleteProgressUp
 // See the AWS API reference guide for AWS Migration Hub's
 // API operation DeleteProgressUpdateStream for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeAccessDeniedException "AccessDeniedException"
+// Returned Error Types:
+//   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
 //
-//   * ErrCodeInternalServerError "InternalServerError"
+//   * ThrottlingException
+//   The request was denied due to request throttling.
+//
+//   * InternalServerError
 //   Exception raised when an internal, configuration, or dependency error is
 //   encountered.
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //   Exception raised when there is an internal, configuration, or dependency
 //   error encountered.
 //
-//   * ErrCodeDryRunOperation "DryRunOperation"
+//   * DryRunOperation
 //   Exception raised to indicate a successfully authorized action when the DryRun
 //   flag is set to "true".
 //
-//   * ErrCodeUnauthorizedOperation "UnauthorizedOperation"
+//   * UnauthorizedOperation
 //   Exception raised to indicate a request was not authorized when the DryRun
 //   flag is set to "true".
 //
-//   * ErrCodeInvalidInputException "InvalidInputException"
+//   * InvalidInputException
 //   Exception raised when the provided input violates a policy constraint or
 //   is entered in the wrong format or data type.
 //
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   * ResourceNotFoundException
 //   Exception raised when the request references a resource (Application Discovery
 //   Service configuration, update stream, migration task, etc.) that does not
 //   exist in Application Discovery Service (Application Discovery Service) or
 //   in Migration Hub's repository.
 //
-//   * ErrCodeHomeRegionNotSetException "HomeRegionNotSetException"
+//   * HomeRegionNotSetException
 //   The home region is not set. Set the home region to continue.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWSMigrationHub-2017-05-31/DeleteProgressUpdateStream
@@ -540,34 +552,37 @@ func (c *MigrationHub) DescribeApplicationStateRequest(input *DescribeApplicatio
 // See the AWS API reference guide for AWS Migration Hub's
 // API operation DescribeApplicationState for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeAccessDeniedException "AccessDeniedException"
+// Returned Error Types:
+//   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
 //
-//   * ErrCodeInternalServerError "InternalServerError"
+//   * ThrottlingException
+//   The request was denied due to request throttling.
+//
+//   * InternalServerError
 //   Exception raised when an internal, configuration, or dependency error is
 //   encountered.
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //   Exception raised when there is an internal, configuration, or dependency
 //   error encountered.
 //
-//   * ErrCodeInvalidInputException "InvalidInputException"
+//   * InvalidInputException
 //   Exception raised when the provided input violates a policy constraint or
 //   is entered in the wrong format or data type.
 //
-//   * ErrCodePolicyErrorException "PolicyErrorException"
+//   * PolicyErrorException
 //   Exception raised when there are problems accessing Application Discovery
 //   Service (Application Discovery Service); most likely due to a misconfigured
 //   policy or the migrationhub-discovery role is missing or not configured correctly.
 //
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   * ResourceNotFoundException
 //   Exception raised when the request references a resource (Application Discovery
 //   Service configuration, update stream, migration task, etc.) that does not
 //   exist in Application Discovery Service (Application Discovery Service) or
 //   in Migration Hub's repository.
 //
-//   * ErrCodeHomeRegionNotSetException "HomeRegionNotSetException"
+//   * HomeRegionNotSetException
 //   The home region is not set. Set the home region to continue.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWSMigrationHub-2017-05-31/DescribeApplicationState
@@ -645,29 +660,32 @@ func (c *MigrationHub) DescribeMigrationTaskRequest(input *DescribeMigrationTask
 // See the AWS API reference guide for AWS Migration Hub's
 // API operation DescribeMigrationTask for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeAccessDeniedException "AccessDeniedException"
+// Returned Error Types:
+//   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
 //
-//   * ErrCodeInternalServerError "InternalServerError"
+//   * ThrottlingException
+//   The request was denied due to request throttling.
+//
+//   * InternalServerError
 //   Exception raised when an internal, configuration, or dependency error is
 //   encountered.
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //   Exception raised when there is an internal, configuration, or dependency
 //   error encountered.
 //
-//   * ErrCodeInvalidInputException "InvalidInputException"
+//   * InvalidInputException
 //   Exception raised when the provided input violates a policy constraint or
 //   is entered in the wrong format or data type.
 //
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   * ResourceNotFoundException
 //   Exception raised when the request references a resource (Application Discovery
 //   Service configuration, update stream, migration task, etc.) that does not
 //   exist in Application Discovery Service (Application Discovery Service) or
 //   in Migration Hub's repository.
 //
-//   * ErrCodeHomeRegionNotSetException "HomeRegionNotSetException"
+//   * HomeRegionNotSetException
 //   The home region is not set. Set the home region to continue.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWSMigrationHub-2017-05-31/DescribeMigrationTask
@@ -758,37 +776,40 @@ func (c *MigrationHub) DisassociateCreatedArtifactRequest(input *DisassociateCre
 // See the AWS API reference guide for AWS Migration Hub's
 // API operation DisassociateCreatedArtifact for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeAccessDeniedException "AccessDeniedException"
+// Returned Error Types:
+//   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
 //
-//   * ErrCodeInternalServerError "InternalServerError"
+//   * ThrottlingException
+//   The request was denied due to request throttling.
+//
+//   * InternalServerError
 //   Exception raised when an internal, configuration, or dependency error is
 //   encountered.
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //   Exception raised when there is an internal, configuration, or dependency
 //   error encountered.
 //
-//   * ErrCodeDryRunOperation "DryRunOperation"
+//   * DryRunOperation
 //   Exception raised to indicate a successfully authorized action when the DryRun
 //   flag is set to "true".
 //
-//   * ErrCodeUnauthorizedOperation "UnauthorizedOperation"
+//   * UnauthorizedOperation
 //   Exception raised to indicate a request was not authorized when the DryRun
 //   flag is set to "true".
 //
-//   * ErrCodeInvalidInputException "InvalidInputException"
+//   * InvalidInputException
 //   Exception raised when the provided input violates a policy constraint or
 //   is entered in the wrong format or data type.
 //
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   * ResourceNotFoundException
 //   Exception raised when the request references a resource (Application Discovery
 //   Service configuration, update stream, migration task, etc.) that does not
 //   exist in Application Discovery Service (Application Discovery Service) or
 //   in Migration Hub's repository.
 //
-//   * ErrCodeHomeRegionNotSetException "HomeRegionNotSetException"
+//   * HomeRegionNotSetException
 //   The home region is not set. Set the home region to continue.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWSMigrationHub-2017-05-31/DisassociateCreatedArtifact
@@ -868,37 +889,40 @@ func (c *MigrationHub) DisassociateDiscoveredResourceRequest(input *Disassociate
 // See the AWS API reference guide for AWS Migration Hub's
 // API operation DisassociateDiscoveredResource for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeAccessDeniedException "AccessDeniedException"
+// Returned Error Types:
+//   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
 //
-//   * ErrCodeInternalServerError "InternalServerError"
+//   * ThrottlingException
+//   The request was denied due to request throttling.
+//
+//   * InternalServerError
 //   Exception raised when an internal, configuration, or dependency error is
 //   encountered.
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //   Exception raised when there is an internal, configuration, or dependency
 //   error encountered.
 //
-//   * ErrCodeDryRunOperation "DryRunOperation"
+//   * DryRunOperation
 //   Exception raised to indicate a successfully authorized action when the DryRun
 //   flag is set to "true".
 //
-//   * ErrCodeUnauthorizedOperation "UnauthorizedOperation"
+//   * UnauthorizedOperation
 //   Exception raised to indicate a request was not authorized when the DryRun
 //   flag is set to "true".
 //
-//   * ErrCodeInvalidInputException "InvalidInputException"
+//   * InvalidInputException
 //   Exception raised when the provided input violates a policy constraint or
 //   is entered in the wrong format or data type.
 //
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   * ResourceNotFoundException
 //   Exception raised when the request references a resource (Application Discovery
 //   Service configuration, update stream, migration task, etc.) that does not
 //   exist in Application Discovery Service (Application Discovery Service) or
 //   in Migration Hub's repository.
 //
-//   * ErrCodeHomeRegionNotSetException "HomeRegionNotSetException"
+//   * HomeRegionNotSetException
 //   The home region is not set. Set the home region to continue.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWSMigrationHub-2017-05-31/DisassociateDiscoveredResource
@@ -982,37 +1006,40 @@ func (c *MigrationHub) ImportMigrationTaskRequest(input *ImportMigrationTaskInpu
 // See the AWS API reference guide for AWS Migration Hub's
 // API operation ImportMigrationTask for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeAccessDeniedException "AccessDeniedException"
+// Returned Error Types:
+//   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
 //
-//   * ErrCodeInternalServerError "InternalServerError"
+//   * ThrottlingException
+//   The request was denied due to request throttling.
+//
+//   * InternalServerError
 //   Exception raised when an internal, configuration, or dependency error is
 //   encountered.
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //   Exception raised when there is an internal, configuration, or dependency
 //   error encountered.
 //
-//   * ErrCodeDryRunOperation "DryRunOperation"
+//   * DryRunOperation
 //   Exception raised to indicate a successfully authorized action when the DryRun
 //   flag is set to "true".
 //
-//   * ErrCodeUnauthorizedOperation "UnauthorizedOperation"
+//   * UnauthorizedOperation
 //   Exception raised to indicate a request was not authorized when the DryRun
 //   flag is set to "true".
 //
-//   * ErrCodeInvalidInputException "InvalidInputException"
+//   * InvalidInputException
 //   Exception raised when the provided input violates a policy constraint or
 //   is entered in the wrong format or data type.
 //
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   * ResourceNotFoundException
 //   Exception raised when the request references a resource (Application Discovery
 //   Service configuration, update stream, migration task, etc.) that does not
 //   exist in Application Discovery Service (Application Discovery Service) or
 //   in Migration Hub's repository.
 //
-//   * ErrCodeHomeRegionNotSetException "HomeRegionNotSetException"
+//   * HomeRegionNotSetException
 //   The home region is not set. Set the home region to continue.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWSMigrationHub-2017-05-31/ImportMigrationTask
@@ -1035,6 +1062,163 @@ func (c *MigrationHub) ImportMigrationTaskWithContext(ctx aws.Context, input *Im
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+const opListApplicationStates = "ListApplicationStates"
+
+// ListApplicationStatesRequest generates a "aws/request.Request" representing the
+// client's request for the ListApplicationStates operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListApplicationStates for more information on using the ListApplicationStates
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListApplicationStatesRequest method.
+//    req, resp := client.ListApplicationStatesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/AWSMigrationHub-2017-05-31/ListApplicationStates
+func (c *MigrationHub) ListApplicationStatesRequest(input *ListApplicationStatesInput) (req *request.Request, output *ListApplicationStatesOutput) {
+	op := &request.Operation{
+		Name:       opListApplicationStates,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListApplicationStatesInput{}
+	}
+
+	output = &ListApplicationStatesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListApplicationStates API operation for AWS Migration Hub.
+//
+// Lists all the migration statuses for your applications. If you use the optional
+// ApplicationIds parameter, only the migration statuses for those applications
+// will be returned.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Migration Hub's
+// API operation ListApplicationStates for usage and error information.
+//
+// Returned Error Types:
+//   * AccessDeniedException
+//   You do not have sufficient access to perform this action.
+//
+//   * ThrottlingException
+//   The request was denied due to request throttling.
+//
+//   * InternalServerError
+//   Exception raised when an internal, configuration, or dependency error is
+//   encountered.
+//
+//   * ServiceUnavailableException
+//   Exception raised when there is an internal, configuration, or dependency
+//   error encountered.
+//
+//   * InvalidInputException
+//   Exception raised when the provided input violates a policy constraint or
+//   is entered in the wrong format or data type.
+//
+//   * HomeRegionNotSetException
+//   The home region is not set. Set the home region to continue.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/AWSMigrationHub-2017-05-31/ListApplicationStates
+func (c *MigrationHub) ListApplicationStates(input *ListApplicationStatesInput) (*ListApplicationStatesOutput, error) {
+	req, out := c.ListApplicationStatesRequest(input)
+	return out, req.Send()
+}
+
+// ListApplicationStatesWithContext is the same as ListApplicationStates with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListApplicationStates for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MigrationHub) ListApplicationStatesWithContext(ctx aws.Context, input *ListApplicationStatesInput, opts ...request.Option) (*ListApplicationStatesOutput, error) {
+	req, out := c.ListApplicationStatesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListApplicationStatesPages iterates over the pages of a ListApplicationStates operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListApplicationStates method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListApplicationStates operation.
+//    pageNum := 0
+//    err := client.ListApplicationStatesPages(params,
+//        func(page *migrationhub.ListApplicationStatesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *MigrationHub) ListApplicationStatesPages(input *ListApplicationStatesInput, fn func(*ListApplicationStatesOutput, bool) bool) error {
+	return c.ListApplicationStatesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListApplicationStatesPagesWithContext same as ListApplicationStatesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MigrationHub) ListApplicationStatesPagesWithContext(ctx aws.Context, input *ListApplicationStatesInput, fn func(*ListApplicationStatesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListApplicationStatesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListApplicationStatesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListApplicationStatesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
 }
 
 const opListCreatedArtifacts = "ListCreatedArtifacts"
@@ -1104,29 +1288,32 @@ func (c *MigrationHub) ListCreatedArtifactsRequest(input *ListCreatedArtifactsIn
 // See the AWS API reference guide for AWS Migration Hub's
 // API operation ListCreatedArtifacts for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeAccessDeniedException "AccessDeniedException"
+// Returned Error Types:
+//   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
 //
-//   * ErrCodeInternalServerError "InternalServerError"
+//   * ThrottlingException
+//   The request was denied due to request throttling.
+//
+//   * InternalServerError
 //   Exception raised when an internal, configuration, or dependency error is
 //   encountered.
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //   Exception raised when there is an internal, configuration, or dependency
 //   error encountered.
 //
-//   * ErrCodeInvalidInputException "InvalidInputException"
+//   * InvalidInputException
 //   Exception raised when the provided input violates a policy constraint or
 //   is entered in the wrong format or data type.
 //
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   * ResourceNotFoundException
 //   Exception raised when the request references a resource (Application Discovery
 //   Service configuration, update stream, migration task, etc.) that does not
 //   exist in Application Discovery Service (Application Discovery Service) or
 //   in Migration Hub's repository.
 //
-//   * ErrCodeHomeRegionNotSetException "HomeRegionNotSetException"
+//   * HomeRegionNotSetException
 //   The home region is not set. Set the home region to continue.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWSMigrationHub-2017-05-31/ListCreatedArtifacts
@@ -1262,29 +1449,32 @@ func (c *MigrationHub) ListDiscoveredResourcesRequest(input *ListDiscoveredResou
 // See the AWS API reference guide for AWS Migration Hub's
 // API operation ListDiscoveredResources for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeAccessDeniedException "AccessDeniedException"
+// Returned Error Types:
+//   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
 //
-//   * ErrCodeInternalServerError "InternalServerError"
+//   * ThrottlingException
+//   The request was denied due to request throttling.
+//
+//   * InternalServerError
 //   Exception raised when an internal, configuration, or dependency error is
 //   encountered.
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //   Exception raised when there is an internal, configuration, or dependency
 //   error encountered.
 //
-//   * ErrCodeInvalidInputException "InvalidInputException"
+//   * InvalidInputException
 //   Exception raised when the provided input violates a policy constraint or
 //   is entered in the wrong format or data type.
 //
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   * ResourceNotFoundException
 //   Exception raised when the request references a resource (Application Discovery
 //   Service configuration, update stream, migration task, etc.) that does not
 //   exist in Application Discovery Service (Application Discovery Service) or
 //   in Migration Hub's repository.
 //
-//   * ErrCodeHomeRegionNotSetException "HomeRegionNotSetException"
+//   * HomeRegionNotSetException
 //   The home region is not set. Set the home region to continue.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWSMigrationHub-2017-05-31/ListDiscoveredResources
@@ -1428,34 +1618,37 @@ func (c *MigrationHub) ListMigrationTasksRequest(input *ListMigrationTasksInput)
 // See the AWS API reference guide for AWS Migration Hub's
 // API operation ListMigrationTasks for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeAccessDeniedException "AccessDeniedException"
+// Returned Error Types:
+//   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
 //
-//   * ErrCodeInternalServerError "InternalServerError"
+//   * ThrottlingException
+//   The request was denied due to request throttling.
+//
+//   * InternalServerError
 //   Exception raised when an internal, configuration, or dependency error is
 //   encountered.
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //   Exception raised when there is an internal, configuration, or dependency
 //   error encountered.
 //
-//   * ErrCodeInvalidInputException "InvalidInputException"
+//   * InvalidInputException
 //   Exception raised when the provided input violates a policy constraint or
 //   is entered in the wrong format or data type.
 //
-//   * ErrCodePolicyErrorException "PolicyErrorException"
+//   * PolicyErrorException
 //   Exception raised when there are problems accessing Application Discovery
 //   Service (Application Discovery Service); most likely due to a misconfigured
 //   policy or the migrationhub-discovery role is missing or not configured correctly.
 //
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   * ResourceNotFoundException
 //   Exception raised when the request references a resource (Application Discovery
 //   Service configuration, update stream, migration task, etc.) that does not
 //   exist in Application Discovery Service (Application Discovery Service) or
 //   in Migration Hub's repository.
 //
-//   * ErrCodeHomeRegionNotSetException "HomeRegionNotSetException"
+//   * HomeRegionNotSetException
 //   The home region is not set. Set the home region to continue.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWSMigrationHub-2017-05-31/ListMigrationTasks
@@ -1592,23 +1785,26 @@ func (c *MigrationHub) ListProgressUpdateStreamsRequest(input *ListProgressUpdat
 // See the AWS API reference guide for AWS Migration Hub's
 // API operation ListProgressUpdateStreams for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeAccessDeniedException "AccessDeniedException"
+// Returned Error Types:
+//   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
 //
-//   * ErrCodeInternalServerError "InternalServerError"
+//   * ThrottlingException
+//   The request was denied due to request throttling.
+//
+//   * InternalServerError
 //   Exception raised when an internal, configuration, or dependency error is
 //   encountered.
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //   Exception raised when there is an internal, configuration, or dependency
 //   error encountered.
 //
-//   * ErrCodeInvalidInputException "InvalidInputException"
+//   * InvalidInputException
 //   Exception raised when the provided input violates a policy constraint or
 //   is entered in the wrong format or data type.
 //
-//   * ErrCodeHomeRegionNotSetException "HomeRegionNotSetException"
+//   * HomeRegionNotSetException
 //   The home region is not set. Set the home region to continue.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWSMigrationHub-2017-05-31/ListProgressUpdateStreams
@@ -1741,42 +1937,45 @@ func (c *MigrationHub) NotifyApplicationStateRequest(input *NotifyApplicationSta
 // See the AWS API reference guide for AWS Migration Hub's
 // API operation NotifyApplicationState for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeAccessDeniedException "AccessDeniedException"
+// Returned Error Types:
+//   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
 //
-//   * ErrCodeInternalServerError "InternalServerError"
+//   * ThrottlingException
+//   The request was denied due to request throttling.
+//
+//   * InternalServerError
 //   Exception raised when an internal, configuration, or dependency error is
 //   encountered.
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //   Exception raised when there is an internal, configuration, or dependency
 //   error encountered.
 //
-//   * ErrCodeDryRunOperation "DryRunOperation"
+//   * DryRunOperation
 //   Exception raised to indicate a successfully authorized action when the DryRun
 //   flag is set to "true".
 //
-//   * ErrCodeUnauthorizedOperation "UnauthorizedOperation"
+//   * UnauthorizedOperation
 //   Exception raised to indicate a request was not authorized when the DryRun
 //   flag is set to "true".
 //
-//   * ErrCodeInvalidInputException "InvalidInputException"
+//   * InvalidInputException
 //   Exception raised when the provided input violates a policy constraint or
 //   is entered in the wrong format or data type.
 //
-//   * ErrCodePolicyErrorException "PolicyErrorException"
+//   * PolicyErrorException
 //   Exception raised when there are problems accessing Application Discovery
 //   Service (Application Discovery Service); most likely due to a misconfigured
 //   policy or the migrationhub-discovery role is missing or not configured correctly.
 //
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   * ResourceNotFoundException
 //   Exception raised when the request references a resource (Application Discovery
 //   Service configuration, update stream, migration task, etc.) that does not
 //   exist in Application Discovery Service (Application Discovery Service) or
 //   in Migration Hub's repository.
 //
-//   * ErrCodeHomeRegionNotSetException "HomeRegionNotSetException"
+//   * HomeRegionNotSetException
 //   The home region is not set. Set the home region to continue.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWSMigrationHub-2017-05-31/NotifyApplicationState
@@ -1864,37 +2063,40 @@ func (c *MigrationHub) NotifyMigrationTaskStateRequest(input *NotifyMigrationTas
 // See the AWS API reference guide for AWS Migration Hub's
 // API operation NotifyMigrationTaskState for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeAccessDeniedException "AccessDeniedException"
+// Returned Error Types:
+//   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
 //
-//   * ErrCodeInternalServerError "InternalServerError"
+//   * ThrottlingException
+//   The request was denied due to request throttling.
+//
+//   * InternalServerError
 //   Exception raised when an internal, configuration, or dependency error is
 //   encountered.
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //   Exception raised when there is an internal, configuration, or dependency
 //   error encountered.
 //
-//   * ErrCodeDryRunOperation "DryRunOperation"
+//   * DryRunOperation
 //   Exception raised to indicate a successfully authorized action when the DryRun
 //   flag is set to "true".
 //
-//   * ErrCodeUnauthorizedOperation "UnauthorizedOperation"
+//   * UnauthorizedOperation
 //   Exception raised to indicate a request was not authorized when the DryRun
 //   flag is set to "true".
 //
-//   * ErrCodeInvalidInputException "InvalidInputException"
+//   * InvalidInputException
 //   Exception raised when the provided input violates a policy constraint or
 //   is entered in the wrong format or data type.
 //
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   * ResourceNotFoundException
 //   Exception raised when the request references a resource (Application Discovery
 //   Service configuration, update stream, migration task, etc.) that does not
 //   exist in Application Discovery Service (Application Discovery Service) or
 //   in Migration Hub's repository.
 //
-//   * ErrCodeHomeRegionNotSetException "HomeRegionNotSetException"
+//   * HomeRegionNotSetException
 //   The home region is not set. Set the home region to continue.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWSMigrationHub-2017-05-31/NotifyMigrationTaskState
@@ -1989,37 +2191,40 @@ func (c *MigrationHub) PutResourceAttributesRequest(input *PutResourceAttributes
 // See the AWS API reference guide for AWS Migration Hub's
 // API operation PutResourceAttributes for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeAccessDeniedException "AccessDeniedException"
+// Returned Error Types:
+//   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
 //
-//   * ErrCodeInternalServerError "InternalServerError"
+//   * ThrottlingException
+//   The request was denied due to request throttling.
+//
+//   * InternalServerError
 //   Exception raised when an internal, configuration, or dependency error is
 //   encountered.
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //   Exception raised when there is an internal, configuration, or dependency
 //   error encountered.
 //
-//   * ErrCodeDryRunOperation "DryRunOperation"
+//   * DryRunOperation
 //   Exception raised to indicate a successfully authorized action when the DryRun
 //   flag is set to "true".
 //
-//   * ErrCodeUnauthorizedOperation "UnauthorizedOperation"
+//   * UnauthorizedOperation
 //   Exception raised to indicate a request was not authorized when the DryRun
 //   flag is set to "true".
 //
-//   * ErrCodeInvalidInputException "InvalidInputException"
+//   * InvalidInputException
 //   Exception raised when the provided input violates a policy constraint or
 //   is entered in the wrong format or data type.
 //
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   * ResourceNotFoundException
 //   Exception raised when the request references a resource (Application Discovery
 //   Service configuration, update stream, migration task, etc.) that does not
 //   exist in Application Discovery Service (Application Discovery Service) or
 //   in Migration Hub's repository.
 //
-//   * ErrCodeHomeRegionNotSetException "HomeRegionNotSetException"
+//   * HomeRegionNotSetException
 //   The home region is not set. Set the home region to continue.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/AWSMigrationHub-2017-05-31/PutResourceAttributes
@@ -2042,6 +2247,106 @@ func (c *MigrationHub) PutResourceAttributesWithContext(ctx aws.Context, input *
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// You do not have sufficient access to perform this action.
+type AccessDeniedException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation
+func (s AccessDeniedException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AccessDeniedException) GoString() string {
+	return s.String()
+}
+
+func newErrorAccessDeniedException(v protocol.ResponseMetadata) error {
+	return &AccessDeniedException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *AccessDeniedException) Code() string {
+	return "AccessDeniedException"
+}
+
+// Message returns the exception's message.
+func (s *AccessDeniedException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *AccessDeniedException) OrigErr() error {
+	return nil
+}
+
+func (s *AccessDeniedException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *AccessDeniedException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *AccessDeniedException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// The state of an application discovered through Migration Hub import, the
+// AWS Agentless Discovery Connector, or the AWS Application Discovery Agent.
+type ApplicationState struct {
+	_ struct{} `type:"structure"`
+
+	// The configurationId from the Application Discovery Service that uniquely
+	// identifies an application.
+	ApplicationId *string `min:"1" type:"string"`
+
+	// The current status of an application.
+	ApplicationStatus *string `type:"string" enum:"ApplicationStatus"`
+
+	// The timestamp when the application status was last updated.
+	LastUpdatedTime *time.Time `type:"timestamp"`
+}
+
+// String returns the string representation
+func (s ApplicationState) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ApplicationState) GoString() string {
+	return s.String()
+}
+
+// SetApplicationId sets the ApplicationId field's value.
+func (s *ApplicationState) SetApplicationId(v string) *ApplicationState {
+	s.ApplicationId = &v
+	return s
+}
+
+// SetApplicationStatus sets the ApplicationStatus field's value.
+func (s *ApplicationState) SetApplicationStatus(v string) *ApplicationState {
+	s.ApplicationStatus = &v
+	return s
+}
+
+// SetLastUpdatedTime sets the LastUpdatedTime field's value.
+func (s *ApplicationState) SetLastUpdatedTime(v time.Time) *ApplicationState {
+	s.LastUpdatedTime = &v
+	return s
 }
 
 type AssociateCreatedArtifactInput struct {
@@ -2844,6 +3149,119 @@ func (s *DiscoveredResource) SetDescription(v string) *DiscoveredResource {
 	return s
 }
 
+// Exception raised to indicate a successfully authorized action when the DryRun
+// flag is set to "true".
+type DryRunOperation struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation
+func (s DryRunOperation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DryRunOperation) GoString() string {
+	return s.String()
+}
+
+func newErrorDryRunOperation(v protocol.ResponseMetadata) error {
+	return &DryRunOperation{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *DryRunOperation) Code() string {
+	return "DryRunOperation"
+}
+
+// Message returns the exception's message.
+func (s *DryRunOperation) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *DryRunOperation) OrigErr() error {
+	return nil
+}
+
+func (s *DryRunOperation) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *DryRunOperation) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *DryRunOperation) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// The home region is not set. Set the home region to continue.
+type HomeRegionNotSetException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation
+func (s HomeRegionNotSetException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s HomeRegionNotSetException) GoString() string {
+	return s.String()
+}
+
+func newErrorHomeRegionNotSetException(v protocol.ResponseMetadata) error {
+	return &HomeRegionNotSetException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *HomeRegionNotSetException) Code() string {
+	return "HomeRegionNotSetException"
+}
+
+// Message returns the exception's message.
+func (s *HomeRegionNotSetException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *HomeRegionNotSetException) OrigErr() error {
+	return nil
+}
+
+func (s *HomeRegionNotSetException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *HomeRegionNotSetException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *HomeRegionNotSetException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 type ImportMigrationTaskInput struct {
 	_ struct{} `type:"structure"`
 
@@ -2925,6 +3343,214 @@ func (s ImportMigrationTaskOutput) String() string {
 // GoString returns the string representation
 func (s ImportMigrationTaskOutput) GoString() string {
 	return s.String()
+}
+
+// Exception raised when an internal, configuration, or dependency error is
+// encountered.
+type InternalServerError struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation
+func (s InternalServerError) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InternalServerError) GoString() string {
+	return s.String()
+}
+
+func newErrorInternalServerError(v protocol.ResponseMetadata) error {
+	return &InternalServerError{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *InternalServerError) Code() string {
+	return "InternalServerError"
+}
+
+// Message returns the exception's message.
+func (s *InternalServerError) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *InternalServerError) OrigErr() error {
+	return nil
+}
+
+func (s *InternalServerError) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *InternalServerError) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *InternalServerError) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// Exception raised when the provided input violates a policy constraint or
+// is entered in the wrong format or data type.
+type InvalidInputException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation
+func (s InvalidInputException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InvalidInputException) GoString() string {
+	return s.String()
+}
+
+func newErrorInvalidInputException(v protocol.ResponseMetadata) error {
+	return &InvalidInputException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *InvalidInputException) Code() string {
+	return "InvalidInputException"
+}
+
+// Message returns the exception's message.
+func (s *InvalidInputException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *InvalidInputException) OrigErr() error {
+	return nil
+}
+
+func (s *InvalidInputException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *InvalidInputException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *InvalidInputException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+type ListApplicationStatesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The configurationIds from the Application Discovery Service that uniquely
+	// identifies your applications.
+	ApplicationIds []*string `min:"1" type:"list"`
+
+	// Maximum number of results to be returned per page.
+	MaxResults *int64 `min:"1" type:"integer"`
+
+	// If a NextToken was returned by a previous call, there are more results available.
+	// To retrieve the next page of results, make the call again using the returned
+	// token in NextToken.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ListApplicationStatesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListApplicationStatesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListApplicationStatesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListApplicationStatesInput"}
+	if s.ApplicationIds != nil && len(s.ApplicationIds) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ApplicationIds", 1))
+	}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetApplicationIds sets the ApplicationIds field's value.
+func (s *ListApplicationStatesInput) SetApplicationIds(v []*string) *ListApplicationStatesInput {
+	s.ApplicationIds = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListApplicationStatesInput) SetMaxResults(v int64) *ListApplicationStatesInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListApplicationStatesInput) SetNextToken(v string) *ListApplicationStatesInput {
+	s.NextToken = &v
+	return s
+}
+
+type ListApplicationStatesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of Applications that exist in Application Discovery Service.
+	ApplicationStateList []*ApplicationState `type:"list"`
+
+	// If a NextToken was returned by a previous call, there are more results available.
+	// To retrieve the next page of results, make the call again using the returned
+	// token in NextToken.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ListApplicationStatesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListApplicationStatesOutput) GoString() string {
+	return s.String()
+}
+
+// SetApplicationStateList sets the ApplicationStateList field's value.
+func (s *ListApplicationStatesOutput) SetApplicationStateList(v []*ApplicationState) *ListApplicationStatesOutput {
+	s.ApplicationStateList = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListApplicationStatesOutput) SetNextToken(v string) *ListApplicationStatesOutput {
+	s.NextToken = &v
+	return s
 }
 
 type ListCreatedArtifactsInput struct {
@@ -3686,6 +4312,64 @@ func (s NotifyMigrationTaskStateOutput) GoString() string {
 	return s.String()
 }
 
+// Exception raised when there are problems accessing Application Discovery
+// Service (Application Discovery Service); most likely due to a misconfigured
+// policy or the migrationhub-discovery role is missing or not configured correctly.
+type PolicyErrorException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation
+func (s PolicyErrorException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PolicyErrorException) GoString() string {
+	return s.String()
+}
+
+func newErrorPolicyErrorException(v protocol.ResponseMetadata) error {
+	return &PolicyErrorException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *PolicyErrorException) Code() string {
+	return "PolicyErrorException"
+}
+
+// Message returns the exception's message.
+func (s *PolicyErrorException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *PolicyErrorException) OrigErr() error {
+	return nil
+}
+
+func (s *PolicyErrorException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *PolicyErrorException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *PolicyErrorException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // Summary of the AWS resource used for access control that is implicitly linked
 // to your AWS account.
 type ProgressUpdateStreamSummary struct {
@@ -3918,6 +4602,122 @@ func (s *ResourceAttribute) SetValue(v string) *ResourceAttribute {
 	return s
 }
 
+// Exception raised when the request references a resource (Application Discovery
+// Service configuration, update stream, migration task, etc.) that does not
+// exist in Application Discovery Service (Application Discovery Service) or
+// in Migration Hub's repository.
+type ResourceNotFoundException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation
+func (s ResourceNotFoundException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ResourceNotFoundException) GoString() string {
+	return s.String()
+}
+
+func newErrorResourceNotFoundException(v protocol.ResponseMetadata) error {
+	return &ResourceNotFoundException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ResourceNotFoundException) Code() string {
+	return "ResourceNotFoundException"
+}
+
+// Message returns the exception's message.
+func (s *ResourceNotFoundException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ResourceNotFoundException) OrigErr() error {
+	return nil
+}
+
+func (s *ResourceNotFoundException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ResourceNotFoundException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ResourceNotFoundException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// Exception raised when there is an internal, configuration, or dependency
+// error encountered.
+type ServiceUnavailableException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation
+func (s ServiceUnavailableException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ServiceUnavailableException) GoString() string {
+	return s.String()
+}
+
+func newErrorServiceUnavailableException(v protocol.ResponseMetadata) error {
+	return &ServiceUnavailableException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ServiceUnavailableException) Code() string {
+	return "ServiceUnavailableException"
+}
+
+// Message returns the exception's message.
+func (s *ServiceUnavailableException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ServiceUnavailableException) OrigErr() error {
+	return nil
+}
+
+func (s *ServiceUnavailableException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ServiceUnavailableException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ServiceUnavailableException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // Task object encapsulating task information.
 type Task struct {
 	_ struct{} `type:"structure"`
@@ -3977,6 +4777,123 @@ func (s *Task) SetStatusDetail(v string) *Task {
 	return s
 }
 
+// The request was denied due to request throttling.
+type ThrottlingException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	// A message that provides information about the exception.
+	Message_ *string `locationName:"Message" type:"string"`
+
+	// The number of seconds the caller should wait before retrying.
+	RetryAfterSeconds *int64 `type:"integer"`
+}
+
+// String returns the string representation
+func (s ThrottlingException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ThrottlingException) GoString() string {
+	return s.String()
+}
+
+func newErrorThrottlingException(v protocol.ResponseMetadata) error {
+	return &ThrottlingException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ThrottlingException) Code() string {
+	return "ThrottlingException"
+}
+
+// Message returns the exception's message.
+func (s *ThrottlingException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ThrottlingException) OrigErr() error {
+	return nil
+}
+
+func (s *ThrottlingException) Error() string {
+	return fmt.Sprintf("%s: %s\n%s", s.Code(), s.Message(), s.String())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ThrottlingException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ThrottlingException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// Exception raised to indicate a request was not authorized when the DryRun
+// flag is set to "true".
+type UnauthorizedOperation struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation
+func (s UnauthorizedOperation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UnauthorizedOperation) GoString() string {
+	return s.String()
+}
+
+func newErrorUnauthorizedOperation(v protocol.ResponseMetadata) error {
+	return &UnauthorizedOperation{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *UnauthorizedOperation) Code() string {
+	return "UnauthorizedOperation"
+}
+
+// Message returns the exception's message.
+func (s *UnauthorizedOperation) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *UnauthorizedOperation) OrigErr() error {
+	return nil
+}
+
+func (s *UnauthorizedOperation) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *UnauthorizedOperation) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *UnauthorizedOperation) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 const (
 	// ApplicationStatusNotStarted is a ApplicationStatus enum value
 	ApplicationStatusNotStarted = "NOT_STARTED"
@@ -3987,6 +4904,15 @@ const (
 	// ApplicationStatusCompleted is a ApplicationStatus enum value
 	ApplicationStatusCompleted = "COMPLETED"
 )
+
+// ApplicationStatus_Values returns all elements of the ApplicationStatus enum
+func ApplicationStatus_Values() []string {
+	return []string{
+		ApplicationStatusNotStarted,
+		ApplicationStatusInProgress,
+		ApplicationStatusCompleted,
+	}
+}
 
 const (
 	// ResourceAttributeTypeIpv4Address is a ResourceAttributeType enum value
@@ -4020,6 +4946,22 @@ const (
 	ResourceAttributeTypeMotherboardSerialNumber = "MOTHERBOARD_SERIAL_NUMBER"
 )
 
+// ResourceAttributeType_Values returns all elements of the ResourceAttributeType enum
+func ResourceAttributeType_Values() []string {
+	return []string{
+		ResourceAttributeTypeIpv4Address,
+		ResourceAttributeTypeIpv6Address,
+		ResourceAttributeTypeMacAddress,
+		ResourceAttributeTypeFqdn,
+		ResourceAttributeTypeVmManagerId,
+		ResourceAttributeTypeVmManagedObjectReference,
+		ResourceAttributeTypeVmName,
+		ResourceAttributeTypeVmPath,
+		ResourceAttributeTypeBiosId,
+		ResourceAttributeTypeMotherboardSerialNumber,
+	}
+}
+
 const (
 	// StatusNotStarted is a Status enum value
 	StatusNotStarted = "NOT_STARTED"
@@ -4033,3 +4975,13 @@ const (
 	// StatusCompleted is a Status enum value
 	StatusCompleted = "COMPLETED"
 )
+
+// Status_Values returns all elements of the Status enum
+func Status_Values() []string {
+	return []string{
+		StatusNotStarted,
+		StatusInProgress,
+		StatusFailed,
+		StatusCompleted,
+	}
+}

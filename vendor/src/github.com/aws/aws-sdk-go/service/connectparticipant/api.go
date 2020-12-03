@@ -3,6 +3,8 @@
 package connectparticipant
 
 import (
+	"fmt"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
@@ -80,18 +82,18 @@ func (c *ConnectParticipant) CreateParticipantConnectionRequest(input *CreatePar
 // See the AWS API reference guide for Amazon Connect Participant Service's
 // API operation CreateParticipantConnection for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeAccessDeniedException "AccessDeniedException"
+// Returned Error Types:
+//   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   This exception occurs when there is an internal failure in the Amazon Connect
 //   service.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   The request was denied due to request throttling.
 //
-//   * ErrCodeValidationException "ValidationException"
+//   * ValidationException
 //   The input fails to satisfy the constraints specified by Amazon Connect.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectparticipant-2018-09-07/CreateParticipantConnection
@@ -171,18 +173,18 @@ func (c *ConnectParticipant) DisconnectParticipantRequest(input *DisconnectParti
 // See the AWS API reference guide for Amazon Connect Participant Service's
 // API operation DisconnectParticipant for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeAccessDeniedException "AccessDeniedException"
+// Returned Error Types:
+//   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   This exception occurs when there is an internal failure in the Amazon Connect
 //   service.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   The request was denied due to request throttling.
 //
-//   * ErrCodeValidationException "ValidationException"
+//   * ValidationException
 //   The input fails to satisfy the constraints specified by Amazon Connect.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectparticipant-2018-09-07/DisconnectParticipant
@@ -267,18 +269,18 @@ func (c *ConnectParticipant) GetTranscriptRequest(input *GetTranscriptInput) (re
 // See the AWS API reference guide for Amazon Connect Participant Service's
 // API operation GetTranscript for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeAccessDeniedException "AccessDeniedException"
+// Returned Error Types:
+//   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   This exception occurs when there is an internal failure in the Amazon Connect
 //   service.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   The request was denied due to request throttling.
 //
-//   * ErrCodeValidationException "ValidationException"
+//   * ValidationException
 //   The input fails to satisfy the constraints specified by Amazon Connect.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectparticipant-2018-09-07/GetTranscript
@@ -409,18 +411,18 @@ func (c *ConnectParticipant) SendEventRequest(input *SendEventInput) (req *reque
 // See the AWS API reference guide for Amazon Connect Participant Service's
 // API operation SendEvent for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeAccessDeniedException "AccessDeniedException"
+// Returned Error Types:
+//   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   This exception occurs when there is an internal failure in the Amazon Connect
 //   service.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   The request was denied due to request throttling.
 //
-//   * ErrCodeValidationException "ValidationException"
+//   * ValidationException
 //   The input fails to satisfy the constraints specified by Amazon Connect.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectparticipant-2018-09-07/SendEvent
@@ -499,18 +501,18 @@ func (c *ConnectParticipant) SendMessageRequest(input *SendMessageInput) (req *r
 // See the AWS API reference guide for Amazon Connect Participant Service's
 // API operation SendMessage for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeAccessDeniedException "AccessDeniedException"
+// Returned Error Types:
+//   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //   This exception occurs when there is an internal failure in the Amazon Connect
 //   service.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   The request was denied due to request throttling.
 //
-//   * ErrCodeValidationException "ValidationException"
+//   * ValidationException
 //   The input fails to satisfy the constraints specified by Amazon Connect.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/connectparticipant-2018-09-07/SendMessage
@@ -533,6 +535,62 @@ func (c *ConnectParticipant) SendMessageWithContext(ctx aws.Context, input *Send
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// You do not have sufficient access to perform this action.
+type AccessDeniedException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation
+func (s AccessDeniedException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AccessDeniedException) GoString() string {
+	return s.String()
+}
+
+func newErrorAccessDeniedException(v protocol.ResponseMetadata) error {
+	return &AccessDeniedException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *AccessDeniedException) Code() string {
+	return "AccessDeniedException"
+}
+
+// Message returns the exception's message.
+func (s *AccessDeniedException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *AccessDeniedException) OrigErr() error {
+	return nil
+}
+
+func (s *AccessDeniedException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *AccessDeniedException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *AccessDeniedException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 // Connection credentials.
@@ -876,6 +934,63 @@ func (s *GetTranscriptOutput) SetNextToken(v string) *GetTranscriptOutput {
 func (s *GetTranscriptOutput) SetTranscript(v []*Item) *GetTranscriptOutput {
 	s.Transcript = v
 	return s
+}
+
+// This exception occurs when there is an internal failure in the Amazon Connect
+// service.
+type InternalServerException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation
+func (s InternalServerException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InternalServerException) GoString() string {
+	return s.String()
+}
+
+func newErrorInternalServerException(v protocol.ResponseMetadata) error {
+	return &InternalServerException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *InternalServerException) Code() string {
+	return "InternalServerException"
+}
+
+// Message returns the exception's message.
+func (s *InternalServerException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *InternalServerException) OrigErr() error {
+	return nil
+}
+
+func (s *InternalServerException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *InternalServerException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *InternalServerException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 // An item - message or event - that has been sent.
@@ -1270,6 +1385,118 @@ func (s *StartPosition) SetMostRecent(v int64) *StartPosition {
 	return s
 }
 
+// The request was denied due to request throttling.
+type ThrottlingException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation
+func (s ThrottlingException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ThrottlingException) GoString() string {
+	return s.String()
+}
+
+func newErrorThrottlingException(v protocol.ResponseMetadata) error {
+	return &ThrottlingException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ThrottlingException) Code() string {
+	return "ThrottlingException"
+}
+
+// Message returns the exception's message.
+func (s *ThrottlingException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ThrottlingException) OrigErr() error {
+	return nil
+}
+
+func (s *ThrottlingException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ThrottlingException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ThrottlingException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// The input fails to satisfy the constraints specified by Amazon Connect.
+type ValidationException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"Message" min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s ValidationException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ValidationException) GoString() string {
+	return s.String()
+}
+
+func newErrorValidationException(v protocol.ResponseMetadata) error {
+	return &ValidationException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ValidationException) Code() string {
+	return "ValidationException"
+}
+
+// Message returns the exception's message.
+func (s *ValidationException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ValidationException) OrigErr() error {
+	return nil
+}
+
+func (s *ValidationException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ValidationException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ValidationException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // The websocket for the participant's connection.
 type Websocket struct {
 	_ struct{} `type:"structure"`
@@ -1317,6 +1544,15 @@ const (
 	ChatItemTypeConnectionAck = "CONNECTION_ACK"
 )
 
+// ChatItemType_Values returns all elements of the ChatItemType enum
+func ChatItemType_Values() []string {
+	return []string{
+		ChatItemTypeMessage,
+		ChatItemTypeEvent,
+		ChatItemTypeConnectionAck,
+	}
+}
+
 const (
 	// ConnectionTypeWebsocket is a ConnectionType enum value
 	ConnectionTypeWebsocket = "WEBSOCKET"
@@ -1324,6 +1560,14 @@ const (
 	// ConnectionTypeConnectionCredentials is a ConnectionType enum value
 	ConnectionTypeConnectionCredentials = "CONNECTION_CREDENTIALS"
 )
+
+// ConnectionType_Values returns all elements of the ConnectionType enum
+func ConnectionType_Values() []string {
+	return []string{
+		ConnectionTypeWebsocket,
+		ConnectionTypeConnectionCredentials,
+	}
+}
 
 const (
 	// ParticipantRoleAgent is a ParticipantRole enum value
@@ -1336,6 +1580,15 @@ const (
 	ParticipantRoleSystem = "SYSTEM"
 )
 
+// ParticipantRole_Values returns all elements of the ParticipantRole enum
+func ParticipantRole_Values() []string {
+	return []string{
+		ParticipantRoleAgent,
+		ParticipantRoleCustomer,
+		ParticipantRoleSystem,
+	}
+}
+
 const (
 	// ScanDirectionForward is a ScanDirection enum value
 	ScanDirectionForward = "FORWARD"
@@ -1344,6 +1597,14 @@ const (
 	ScanDirectionBackward = "BACKWARD"
 )
 
+// ScanDirection_Values returns all elements of the ScanDirection enum
+func ScanDirection_Values() []string {
+	return []string{
+		ScanDirectionForward,
+		ScanDirectionBackward,
+	}
+}
+
 const (
 	// SortKeyDescending is a SortKey enum value
 	SortKeyDescending = "DESCENDING"
@@ -1351,3 +1612,11 @@ const (
 	// SortKeyAscending is a SortKey enum value
 	SortKeyAscending = "ASCENDING"
 )
+
+// SortKey_Values returns all elements of the SortKey enum
+func SortKey_Values() []string {
+	return []string{
+		SortKeyDescending,
+		SortKeyAscending,
+	}
+}

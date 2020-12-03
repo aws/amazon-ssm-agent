@@ -1,5 +1,10 @@
 {
   "pagination": {
+    "GetProvisionedProductOutputs": {
+      "input_token": "PageToken",
+      "output_token": "NextPageToken",
+      "limit_key": "PageSize"
+    },
     "ListAcceptedPortfolioShares": {
       "input_token": "PageToken",
       "output_token": "NextPageToken",
@@ -21,6 +26,11 @@
       "limit_key": "PageSize"
     },
     "ListOrganizationPortfolioAccess": {
+      "input_token": "PageToken",
+      "output_token": "NextPageToken",
+      "limit_key": "PageSize"
+    },
+    "ListPortfolioAccess": {
       "input_token": "PageToken",
       "output_token": "NextPageToken",
       "limit_key": "PageSize"

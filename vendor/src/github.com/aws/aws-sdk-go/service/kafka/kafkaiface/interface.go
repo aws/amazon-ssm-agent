@@ -26,7 +26,7 @@ import (
 //    // myFunc uses an SDK service client to make a request to
 //    // Managed Streaming for Kafka.
 //    func myFunc(svc kafkaiface.KafkaAPI) bool {
-//        // Make svc.CreateCluster request
+//        // Make svc.BatchAssociateScramSecret request
 //    }
 //
 //    func main() {
@@ -42,7 +42,7 @@ import (
 //    type mockKafkaClient struct {
 //        kafkaiface.KafkaAPI
 //    }
-//    func (m *mockKafkaClient) CreateCluster(input *kafka.CreateClusterInput) (*kafka.CreateClusterOutput, error) {
+//    func (m *mockKafkaClient) BatchAssociateScramSecret(input *kafka.BatchAssociateScramSecretInput) (*kafka.BatchAssociateScramSecretOutput, error) {
 //        // mock response/functionality
 //    }
 //
@@ -60,6 +60,14 @@ import (
 // and waiters. Its suggested to use the pattern above for testing, or using
 // tooling to generate mocks to satisfy the interfaces.
 type KafkaAPI interface {
+	BatchAssociateScramSecret(*kafka.BatchAssociateScramSecretInput) (*kafka.BatchAssociateScramSecretOutput, error)
+	BatchAssociateScramSecretWithContext(aws.Context, *kafka.BatchAssociateScramSecretInput, ...request.Option) (*kafka.BatchAssociateScramSecretOutput, error)
+	BatchAssociateScramSecretRequest(*kafka.BatchAssociateScramSecretInput) (*request.Request, *kafka.BatchAssociateScramSecretOutput)
+
+	BatchDisassociateScramSecret(*kafka.BatchDisassociateScramSecretInput) (*kafka.BatchDisassociateScramSecretOutput, error)
+	BatchDisassociateScramSecretWithContext(aws.Context, *kafka.BatchDisassociateScramSecretInput, ...request.Option) (*kafka.BatchDisassociateScramSecretOutput, error)
+	BatchDisassociateScramSecretRequest(*kafka.BatchDisassociateScramSecretInput) (*request.Request, *kafka.BatchDisassociateScramSecretOutput)
+
 	CreateCluster(*kafka.CreateClusterInput) (*kafka.CreateClusterOutput, error)
 	CreateClusterWithContext(aws.Context, *kafka.CreateClusterInput, ...request.Option) (*kafka.CreateClusterOutput, error)
 	CreateClusterRequest(*kafka.CreateClusterInput) (*request.Request, *kafka.CreateClusterOutput)
@@ -71,6 +79,10 @@ type KafkaAPI interface {
 	DeleteCluster(*kafka.DeleteClusterInput) (*kafka.DeleteClusterOutput, error)
 	DeleteClusterWithContext(aws.Context, *kafka.DeleteClusterInput, ...request.Option) (*kafka.DeleteClusterOutput, error)
 	DeleteClusterRequest(*kafka.DeleteClusterInput) (*request.Request, *kafka.DeleteClusterOutput)
+
+	DeleteConfiguration(*kafka.DeleteConfigurationInput) (*kafka.DeleteConfigurationOutput, error)
+	DeleteConfigurationWithContext(aws.Context, *kafka.DeleteConfigurationInput, ...request.Option) (*kafka.DeleteConfigurationOutput, error)
+	DeleteConfigurationRequest(*kafka.DeleteConfigurationInput) (*request.Request, *kafka.DeleteConfigurationOutput)
 
 	DescribeCluster(*kafka.DescribeClusterInput) (*kafka.DescribeClusterOutput, error)
 	DescribeClusterWithContext(aws.Context, *kafka.DescribeClusterInput, ...request.Option) (*kafka.DescribeClusterOutput, error)
@@ -91,6 +103,10 @@ type KafkaAPI interface {
 	GetBootstrapBrokers(*kafka.GetBootstrapBrokersInput) (*kafka.GetBootstrapBrokersOutput, error)
 	GetBootstrapBrokersWithContext(aws.Context, *kafka.GetBootstrapBrokersInput, ...request.Option) (*kafka.GetBootstrapBrokersOutput, error)
 	GetBootstrapBrokersRequest(*kafka.GetBootstrapBrokersInput) (*request.Request, *kafka.GetBootstrapBrokersOutput)
+
+	GetCompatibleKafkaVersions(*kafka.GetCompatibleKafkaVersionsInput) (*kafka.GetCompatibleKafkaVersionsOutput, error)
+	GetCompatibleKafkaVersionsWithContext(aws.Context, *kafka.GetCompatibleKafkaVersionsInput, ...request.Option) (*kafka.GetCompatibleKafkaVersionsOutput, error)
+	GetCompatibleKafkaVersionsRequest(*kafka.GetCompatibleKafkaVersionsInput) (*request.Request, *kafka.GetCompatibleKafkaVersionsOutput)
 
 	ListClusterOperations(*kafka.ListClusterOperationsInput) (*kafka.ListClusterOperationsOutput, error)
 	ListClusterOperationsWithContext(aws.Context, *kafka.ListClusterOperationsInput, ...request.Option) (*kafka.ListClusterOperationsOutput, error)
@@ -120,6 +136,13 @@ type KafkaAPI interface {
 	ListConfigurationsPages(*kafka.ListConfigurationsInput, func(*kafka.ListConfigurationsOutput, bool) bool) error
 	ListConfigurationsPagesWithContext(aws.Context, *kafka.ListConfigurationsInput, func(*kafka.ListConfigurationsOutput, bool) bool, ...request.Option) error
 
+	ListKafkaVersions(*kafka.ListKafkaVersionsInput) (*kafka.ListKafkaVersionsOutput, error)
+	ListKafkaVersionsWithContext(aws.Context, *kafka.ListKafkaVersionsInput, ...request.Option) (*kafka.ListKafkaVersionsOutput, error)
+	ListKafkaVersionsRequest(*kafka.ListKafkaVersionsInput) (*request.Request, *kafka.ListKafkaVersionsOutput)
+
+	ListKafkaVersionsPages(*kafka.ListKafkaVersionsInput, func(*kafka.ListKafkaVersionsOutput, bool) bool) error
+	ListKafkaVersionsPagesWithContext(aws.Context, *kafka.ListKafkaVersionsInput, func(*kafka.ListKafkaVersionsOutput, bool) bool, ...request.Option) error
+
 	ListNodes(*kafka.ListNodesInput) (*kafka.ListNodesOutput, error)
 	ListNodesWithContext(aws.Context, *kafka.ListNodesInput, ...request.Option) (*kafka.ListNodesOutput, error)
 	ListNodesRequest(*kafka.ListNodesInput) (*request.Request, *kafka.ListNodesOutput)
@@ -127,9 +150,20 @@ type KafkaAPI interface {
 	ListNodesPages(*kafka.ListNodesInput, func(*kafka.ListNodesOutput, bool) bool) error
 	ListNodesPagesWithContext(aws.Context, *kafka.ListNodesInput, func(*kafka.ListNodesOutput, bool) bool, ...request.Option) error
 
+	ListScramSecrets(*kafka.ListScramSecretsInput) (*kafka.ListScramSecretsOutput, error)
+	ListScramSecretsWithContext(aws.Context, *kafka.ListScramSecretsInput, ...request.Option) (*kafka.ListScramSecretsOutput, error)
+	ListScramSecretsRequest(*kafka.ListScramSecretsInput) (*request.Request, *kafka.ListScramSecretsOutput)
+
+	ListScramSecretsPages(*kafka.ListScramSecretsInput, func(*kafka.ListScramSecretsOutput, bool) bool) error
+	ListScramSecretsPagesWithContext(aws.Context, *kafka.ListScramSecretsInput, func(*kafka.ListScramSecretsOutput, bool) bool, ...request.Option) error
+
 	ListTagsForResource(*kafka.ListTagsForResourceInput) (*kafka.ListTagsForResourceOutput, error)
 	ListTagsForResourceWithContext(aws.Context, *kafka.ListTagsForResourceInput, ...request.Option) (*kafka.ListTagsForResourceOutput, error)
 	ListTagsForResourceRequest(*kafka.ListTagsForResourceInput) (*request.Request, *kafka.ListTagsForResourceOutput)
+
+	RebootBroker(*kafka.RebootBrokerInput) (*kafka.RebootBrokerOutput, error)
+	RebootBrokerWithContext(aws.Context, *kafka.RebootBrokerInput, ...request.Option) (*kafka.RebootBrokerOutput, error)
+	RebootBrokerRequest(*kafka.RebootBrokerInput) (*request.Request, *kafka.RebootBrokerOutput)
 
 	TagResource(*kafka.TagResourceInput) (*kafka.TagResourceOutput, error)
 	TagResourceWithContext(aws.Context, *kafka.TagResourceInput, ...request.Option) (*kafka.TagResourceOutput, error)
@@ -150,6 +184,18 @@ type KafkaAPI interface {
 	UpdateClusterConfiguration(*kafka.UpdateClusterConfigurationInput) (*kafka.UpdateClusterConfigurationOutput, error)
 	UpdateClusterConfigurationWithContext(aws.Context, *kafka.UpdateClusterConfigurationInput, ...request.Option) (*kafka.UpdateClusterConfigurationOutput, error)
 	UpdateClusterConfigurationRequest(*kafka.UpdateClusterConfigurationInput) (*request.Request, *kafka.UpdateClusterConfigurationOutput)
+
+	UpdateClusterKafkaVersion(*kafka.UpdateClusterKafkaVersionInput) (*kafka.UpdateClusterKafkaVersionOutput, error)
+	UpdateClusterKafkaVersionWithContext(aws.Context, *kafka.UpdateClusterKafkaVersionInput, ...request.Option) (*kafka.UpdateClusterKafkaVersionOutput, error)
+	UpdateClusterKafkaVersionRequest(*kafka.UpdateClusterKafkaVersionInput) (*request.Request, *kafka.UpdateClusterKafkaVersionOutput)
+
+	UpdateConfiguration(*kafka.UpdateConfigurationInput) (*kafka.UpdateConfigurationOutput, error)
+	UpdateConfigurationWithContext(aws.Context, *kafka.UpdateConfigurationInput, ...request.Option) (*kafka.UpdateConfigurationOutput, error)
+	UpdateConfigurationRequest(*kafka.UpdateConfigurationInput) (*request.Request, *kafka.UpdateConfigurationOutput)
+
+	UpdateMonitoring(*kafka.UpdateMonitoringInput) (*kafka.UpdateMonitoringOutput, error)
+	UpdateMonitoringWithContext(aws.Context, *kafka.UpdateMonitoringInput, ...request.Option) (*kafka.UpdateMonitoringOutput, error)
+	UpdateMonitoringRequest(*kafka.UpdateMonitoringInput) (*request.Request, *kafka.UpdateMonitoringOutput)
 }
 
 var _ KafkaAPI = (*kafka.Kafka)(nil)

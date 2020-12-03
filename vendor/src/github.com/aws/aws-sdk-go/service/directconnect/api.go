@@ -67,11 +67,11 @@ func (c *DirectConnect) AcceptDirectConnectGatewayAssociationProposalRequest(inp
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation AcceptDirectConnectGatewayAssociationProposal for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/AcceptDirectConnectGatewayAssociationProposal
@@ -161,11 +161,11 @@ func (c *DirectConnect) AllocateConnectionOnInterconnectRequest(input *AllocateC
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation AllocateConnectionOnInterconnect for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/AllocateConnectionOnInterconnect
@@ -256,17 +256,17 @@ func (c *DirectConnect) AllocateHostedConnectionRequest(input *AllocateHostedCon
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation AllocateHostedConnection for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeDuplicateTagKeysException "DuplicateTagKeysException"
+// Returned Error Types:
+//   * DuplicateTagKeysException
 //   A tag key was specified more than once.
 //
-//   * ErrCodeTooManyTagsException "TooManyTagsException"
+//   * TooManyTagsException
 //   You have reached the limit on the number of tags that can be assigned.
 //
-//   * ErrCodeServerException "DirectConnectServerException"
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/AllocateHostedConnection
@@ -348,17 +348,17 @@ func (c *DirectConnect) AllocatePrivateVirtualInterfaceRequest(input *AllocatePr
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation AllocatePrivateVirtualInterface for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeDuplicateTagKeysException "DuplicateTagKeysException"
+// Returned Error Types:
+//   * DuplicateTagKeysException
 //   A tag key was specified more than once.
 //
-//   * ErrCodeTooManyTagsException "TooManyTagsException"
+//   * TooManyTagsException
 //   You have reached the limit on the number of tags that can be assigned.
 //
-//   * ErrCodeServerException "DirectConnectServerException"
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/AllocatePrivateVirtualInterface
@@ -448,17 +448,17 @@ func (c *DirectConnect) AllocatePublicVirtualInterfaceRequest(input *AllocatePub
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation AllocatePublicVirtualInterface for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeDuplicateTagKeysException "DuplicateTagKeysException"
+// Returned Error Types:
+//   * DuplicateTagKeysException
 //   A tag key was specified more than once.
 //
-//   * ErrCodeTooManyTagsException "TooManyTagsException"
+//   * TooManyTagsException
 //   You have reached the limit on the number of tags that can be assigned.
 //
-//   * ErrCodeServerException "DirectConnectServerException"
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/AllocatePublicVirtualInterface
@@ -546,17 +546,17 @@ func (c *DirectConnect) AllocateTransitVirtualInterfaceRequest(input *AllocateTr
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation AllocateTransitVirtualInterface for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeDuplicateTagKeysException "DuplicateTagKeysException"
+// Returned Error Types:
+//   * DuplicateTagKeysException
 //   A tag key was specified more than once.
 //
-//   * ErrCodeTooManyTagsException "TooManyTagsException"
+//   * TooManyTagsException
 //   You have reached the limit on the number of tags that can be assigned.
 //
-//   * ErrCodeServerException "DirectConnectServerException"
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/AllocateTransitVirtualInterface
@@ -650,11 +650,11 @@ func (c *DirectConnect) AssociateConnectionWithLagRequest(input *AssociateConnec
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation AssociateConnectionWithLag for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/AssociateConnectionWithLag
@@ -738,11 +738,11 @@ func (c *DirectConnect) AssociateHostedConnectionRequest(input *AssociateHostedC
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation AssociateHostedConnection for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/AssociateHostedConnection
@@ -833,11 +833,11 @@ func (c *DirectConnect) AssociateVirtualInterfaceRequest(input *AssociateVirtual
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation AssociateVirtualInterface for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/AssociateVirtualInterface
@@ -919,11 +919,11 @@ func (c *DirectConnect) ConfirmConnectionRequest(input *ConfirmConnectionInput) 
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation ConfirmConnection for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/ConfirmConnection
@@ -1005,11 +1005,11 @@ func (c *DirectConnect) ConfirmPrivateVirtualInterfaceRequest(input *ConfirmPriv
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation ConfirmPrivateVirtualInterface for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/ConfirmPrivateVirtualInterface
@@ -1090,11 +1090,11 @@ func (c *DirectConnect) ConfirmPublicVirtualInterfaceRequest(input *ConfirmPubli
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation ConfirmPublicVirtualInterface for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/ConfirmPublicVirtualInterface
@@ -1175,11 +1175,11 @@ func (c *DirectConnect) ConfirmTransitVirtualInterfaceRequest(input *ConfirmTran
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation ConfirmTransitVirtualInterface for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/ConfirmTransitVirtualInterface
@@ -1271,11 +1271,11 @@ func (c *DirectConnect) CreateBGPPeerRequest(input *CreateBGPPeerInput) (req *re
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation CreateBGPPeer for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/CreateBGPPeer
@@ -1366,17 +1366,17 @@ func (c *DirectConnect) CreateConnectionRequest(input *CreateConnectionInput) (r
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation CreateConnection for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeDuplicateTagKeysException "DuplicateTagKeysException"
+// Returned Error Types:
+//   * DuplicateTagKeysException
 //   A tag key was specified more than once.
 //
-//   * ErrCodeTooManyTagsException "TooManyTagsException"
+//   * TooManyTagsException
 //   You have reached the limit on the number of tags that can be assigned.
 //
-//   * ErrCodeServerException "DirectConnectServerException"
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/CreateConnection
@@ -1460,11 +1460,11 @@ func (c *DirectConnect) CreateDirectConnectGatewayRequest(input *CreateDirectCon
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation CreateDirectConnectGateway for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/CreateDirectConnectGateway
@@ -1544,11 +1544,11 @@ func (c *DirectConnect) CreateDirectConnectGatewayAssociationRequest(input *Crea
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation CreateDirectConnectGatewayAssociation for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/CreateDirectConnectGatewayAssociation
@@ -1620,10 +1620,8 @@ func (c *DirectConnect) CreateDirectConnectGatewayAssociationProposalRequest(inp
 // Creates a proposal to associate the specified virtual private gateway or
 // transit gateway with the specified Direct Connect gateway.
 //
-// You can only associate a Direct Connect gateway and virtual private gateway
-// or transit gateway when the account that owns the Direct Connect gateway
-// and the account that owns the virtual private gateway or transit gateway
-// have the same AWS Payer ID.
+// You can associate a Direct Connect gateway and virtual private gateway or
+// transit gateway that is owned by any AWS account.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1632,11 +1630,11 @@ func (c *DirectConnect) CreateDirectConnectGatewayAssociationProposalRequest(inp
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation CreateDirectConnectGatewayAssociationProposal for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/CreateDirectConnectGatewayAssociationProposal
@@ -1736,17 +1734,17 @@ func (c *DirectConnect) CreateInterconnectRequest(input *CreateInterconnectInput
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation CreateInterconnect for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeDuplicateTagKeysException "DuplicateTagKeysException"
+// Returned Error Types:
+//   * DuplicateTagKeysException
 //   A tag key was specified more than once.
 //
-//   * ErrCodeTooManyTagsException "TooManyTagsException"
+//   * TooManyTagsException
 //   You have reached the limit on the number of tags that can be assigned.
 //
-//   * ErrCodeServerException "DirectConnectServerException"
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/CreateInterconnect
@@ -1816,24 +1814,24 @@ func (c *DirectConnect) CreateLagRequest(input *CreateLagInput) (req *request.Re
 // CreateLag API operation for AWS Direct Connect.
 //
 // Creates a link aggregation group (LAG) with the specified number of bundled
-// physical connections between the customer network and a specific AWS Direct
-// Connect location. A LAG is a logical interface that uses the Link Aggregation
-// Control Protocol (LACP) to aggregate multiple interfaces, enabling you to
-// treat them as a single interface.
+// physical dedicated connections between the customer network and a specific
+// AWS Direct Connect location. A LAG is a logical interface that uses the Link
+// Aggregation Control Protocol (LACP) to aggregate multiple interfaces, enabling
+// you to treat them as a single interface.
 //
-// All connections in a LAG must use the same bandwidth and must terminate at
-// the same AWS Direct Connect endpoint.
+// All connections in a LAG must use the same bandwidth (either 1Gbps or 10Gbps)
+// and must terminate at the same AWS Direct Connect endpoint.
 //
-// You can have up to 10 connections per LAG. Regardless of this limit, if you
-// request more connections for the LAG than AWS Direct Connect can allocate
+// You can have up to 10 dedicated connections per LAG. Regardless of this limit,
+// if you request more connections for the LAG than AWS Direct Connect can allocate
 // on a single endpoint, no LAG is created.
 //
-// You can specify an existing physical connection or interconnect to include
-// in the LAG (which counts towards the total number of connections). Doing
-// so interrupts the current physical connection or hosted connections, and
-// re-establishes them as a member of the LAG. The LAG will be created on the
-// same AWS Direct Connect endpoint to which the connection terminates. Any
-// virtual interfaces associated with the connection are automatically disassociated
+// You can specify an existing physical dedicated connection or interconnect
+// to include in the LAG (which counts towards the total number of connections).
+// Doing so interrupts the current physical dedicated connection, and re-establishes
+// them as a member of the LAG. The LAG will be created on the same AWS Direct
+// Connect endpoint to which the dedicated connection terminates. Any virtual
+// interfaces associated with the dedicated connection are automatically disassociated
 // and re-associated with the LAG. The connection ID does not change.
 //
 // If the AWS account used to create a LAG is a registered AWS Direct Connect
@@ -1848,17 +1846,17 @@ func (c *DirectConnect) CreateLagRequest(input *CreateLagInput) (req *request.Re
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation CreateLag for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeDuplicateTagKeysException "DuplicateTagKeysException"
+// Returned Error Types:
+//   * DuplicateTagKeysException
 //   A tag key was specified more than once.
 //
-//   * ErrCodeTooManyTagsException "TooManyTagsException"
+//   * TooManyTagsException
 //   You have reached the limit on the number of tags that can be assigned.
 //
-//   * ErrCodeServerException "DirectConnectServerException"
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/CreateLag
@@ -1935,6 +1933,13 @@ func (c *DirectConnect) CreatePrivateVirtualInterfaceRequest(input *CreatePrivat
 // different AWS Regions. Connecting the private virtual interface to a VGW
 // only provides access to a single VPC within the same Region.
 //
+// Setting the MTU of a virtual interface to 9001 (jumbo frames) can cause an
+// update to the underlying physical connection if it wasn't updated to support
+// jumbo frames. Updating the connection disrupts network connectivity for all
+// virtual interfaces associated with the connection for up to 30 seconds. To
+// check whether your connection supports jumbo frames, call DescribeConnections.
+// To check whether your virtual interface supports jumbo frames, call DescribeVirtualInterfaces.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -1942,17 +1947,17 @@ func (c *DirectConnect) CreatePrivateVirtualInterfaceRequest(input *CreatePrivat
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation CreatePrivateVirtualInterface for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeDuplicateTagKeysException "DuplicateTagKeysException"
+// Returned Error Types:
+//   * DuplicateTagKeysException
 //   A tag key was specified more than once.
 //
-//   * ErrCodeTooManyTagsException "TooManyTagsException"
+//   * TooManyTagsException
 //   You have reached the limit on the number of tags that can be assigned.
 //
-//   * ErrCodeServerException "DirectConnectServerException"
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/CreatePrivateVirtualInterface
@@ -2036,17 +2041,17 @@ func (c *DirectConnect) CreatePublicVirtualInterfaceRequest(input *CreatePublicV
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation CreatePublicVirtualInterface for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeDuplicateTagKeysException "DuplicateTagKeysException"
+// Returned Error Types:
+//   * DuplicateTagKeysException
 //   A tag key was specified more than once.
 //
-//   * ErrCodeTooManyTagsException "TooManyTagsException"
+//   * TooManyTagsException
 //   You have reached the limit on the number of tags that can be assigned.
 //
-//   * ErrCodeServerException "DirectConnectServerException"
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/CreatePublicVirtualInterface
@@ -2126,6 +2131,13 @@ func (c *DirectConnect) CreateTransitVirtualInterfaceRequest(input *CreateTransi
 // 64512 for both your the transit gateway and Direct Connect gateway, the association
 // request fails.
 //
+// Setting the MTU of a virtual interface to 8500 (jumbo frames) can cause an
+// update to the underlying physical connection if it wasn't updated to support
+// jumbo frames. Updating the connection disrupts network connectivity for all
+// virtual interfaces associated with the connection for up to 30 seconds. To
+// check whether your connection supports jumbo frames, call DescribeConnections.
+// To check whether your virtual interface supports jumbo frames, call DescribeVirtualInterfaces.
+//
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
 // the error.
@@ -2133,17 +2145,17 @@ func (c *DirectConnect) CreateTransitVirtualInterfaceRequest(input *CreateTransi
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation CreateTransitVirtualInterface for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeDuplicateTagKeysException "DuplicateTagKeysException"
+// Returned Error Types:
+//   * DuplicateTagKeysException
 //   A tag key was specified more than once.
 //
-//   * ErrCodeTooManyTagsException "TooManyTagsException"
+//   * TooManyTagsException
 //   You have reached the limit on the number of tags that can be assigned.
 //
-//   * ErrCodeServerException "DirectConnectServerException"
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/CreateTransitVirtualInterface
@@ -2224,11 +2236,11 @@ func (c *DirectConnect) DeleteBGPPeerRequest(input *DeleteBGPPeerInput) (req *re
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation DeleteBGPPeer for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/DeleteBGPPeer
@@ -2311,11 +2323,11 @@ func (c *DirectConnect) DeleteConnectionRequest(input *DeleteConnectionInput) (r
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation DeleteConnection for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/DeleteConnection
@@ -2395,11 +2407,11 @@ func (c *DirectConnect) DeleteDirectConnectGatewayRequest(input *DeleteDirectCon
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation DeleteDirectConnectGateway for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/DeleteDirectConnectGateway
@@ -2483,11 +2495,11 @@ func (c *DirectConnect) DeleteDirectConnectGatewayAssociationRequest(input *Dele
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation DeleteDirectConnectGatewayAssociation for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/DeleteDirectConnectGatewayAssociation
@@ -2566,11 +2578,11 @@ func (c *DirectConnect) DeleteDirectConnectGatewayAssociationProposalRequest(inp
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation DeleteDirectConnectGatewayAssociationProposal for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/DeleteDirectConnectGatewayAssociationProposal
@@ -2650,11 +2662,11 @@ func (c *DirectConnect) DeleteInterconnectRequest(input *DeleteInterconnectInput
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation DeleteInterconnect for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/DeleteInterconnect
@@ -2733,11 +2745,11 @@ func (c *DirectConnect) DeleteLagRequest(input *DeleteLagInput) (req *request.Re
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation DeleteLag for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/DeleteLag
@@ -2815,11 +2827,11 @@ func (c *DirectConnect) DeleteVirtualInterfaceRequest(input *DeleteVirtualInterf
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation DeleteVirtualInterface for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/DeleteVirtualInterface
@@ -2910,11 +2922,11 @@ func (c *DirectConnect) DescribeConnectionLoaRequest(input *DescribeConnectionLo
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation DescribeConnectionLoa for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/DescribeConnectionLoa
@@ -2996,11 +3008,11 @@ func (c *DirectConnect) DescribeConnectionsRequest(input *DescribeConnectionsInp
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation DescribeConnections for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/DescribeConnections
@@ -3087,11 +3099,11 @@ func (c *DirectConnect) DescribeConnectionsOnInterconnectRequest(input *Describe
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation DescribeConnectionsOnInterconnect for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/DescribeConnectionsOnInterconnect
@@ -3174,11 +3186,11 @@ func (c *DirectConnect) DescribeDirectConnectGatewayAssociationProposalsRequest(
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation DescribeDirectConnectGatewayAssociationProposals for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/DescribeDirectConnectGatewayAssociationProposals
@@ -3263,11 +3275,11 @@ func (c *DirectConnect) DescribeDirectConnectGatewayAssociationsRequest(input *D
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation DescribeDirectConnectGatewayAssociations for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/DescribeDirectConnectGatewayAssociations
@@ -3351,11 +3363,11 @@ func (c *DirectConnect) DescribeDirectConnectGatewayAttachmentsRequest(input *De
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation DescribeDirectConnectGatewayAttachments for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/DescribeDirectConnectGatewayAttachments
@@ -3434,11 +3446,11 @@ func (c *DirectConnect) DescribeDirectConnectGatewaysRequest(input *DescribeDire
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation DescribeDirectConnectGateways for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/DescribeDirectConnectGateways
@@ -3519,11 +3531,11 @@ func (c *DirectConnect) DescribeHostedConnectionsRequest(input *DescribeHostedCo
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation DescribeHostedConnections for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/DescribeHostedConnections
@@ -3614,11 +3626,11 @@ func (c *DirectConnect) DescribeInterconnectLoaRequest(input *DescribeInterconne
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation DescribeInterconnectLoa for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/DescribeInterconnectLoa
@@ -3700,11 +3712,11 @@ func (c *DirectConnect) DescribeInterconnectsRequest(input *DescribeInterconnect
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation DescribeInterconnects for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/DescribeInterconnects
@@ -3782,11 +3794,11 @@ func (c *DirectConnect) DescribeLagsRequest(input *DescribeLagsInput) (req *requ
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation DescribeLags for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/DescribeLags
@@ -3871,11 +3883,11 @@ func (c *DirectConnect) DescribeLoaRequest(input *DescribeLoaInput) (req *reques
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation DescribeLoa for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/DescribeLoa
@@ -3954,11 +3966,11 @@ func (c *DirectConnect) DescribeLocationsRequest(input *DescribeLocationsInput) 
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation DescribeLocations for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/DescribeLocations
@@ -4036,11 +4048,11 @@ func (c *DirectConnect) DescribeTagsRequest(input *DescribeTagsInput) (req *requ
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation DescribeTags for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/DescribeTags
@@ -4121,11 +4133,11 @@ func (c *DirectConnect) DescribeVirtualGatewaysRequest(input *DescribeVirtualGat
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation DescribeVirtualGateways for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/DescribeVirtualGateways
@@ -4210,11 +4222,11 @@ func (c *DirectConnect) DescribeVirtualInterfacesRequest(input *DescribeVirtualI
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation DescribeVirtualInterfaces for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/DescribeVirtualInterfaces
@@ -4302,11 +4314,11 @@ func (c *DirectConnect) DisassociateConnectionFromLagRequest(input *Disassociate
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation DisassociateConnectionFromLag for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/DisassociateConnectionFromLag
@@ -4326,6 +4338,262 @@ func (c *DirectConnect) DisassociateConnectionFromLag(input *DisassociateConnect
 // for more information on using Contexts.
 func (c *DirectConnect) DisassociateConnectionFromLagWithContext(ctx aws.Context, input *DisassociateConnectionFromLagInput, opts ...request.Option) (*Connection, error) {
 	req, out := c.DisassociateConnectionFromLagRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opListVirtualInterfaceTestHistory = "ListVirtualInterfaceTestHistory"
+
+// ListVirtualInterfaceTestHistoryRequest generates a "aws/request.Request" representing the
+// client's request for the ListVirtualInterfaceTestHistory operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListVirtualInterfaceTestHistory for more information on using the ListVirtualInterfaceTestHistory
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListVirtualInterfaceTestHistoryRequest method.
+//    req, resp := client.ListVirtualInterfaceTestHistoryRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/ListVirtualInterfaceTestHistory
+func (c *DirectConnect) ListVirtualInterfaceTestHistoryRequest(input *ListVirtualInterfaceTestHistoryInput) (req *request.Request, output *ListVirtualInterfaceTestHistoryOutput) {
+	op := &request.Operation{
+		Name:       opListVirtualInterfaceTestHistory,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &ListVirtualInterfaceTestHistoryInput{}
+	}
+
+	output = &ListVirtualInterfaceTestHistoryOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListVirtualInterfaceTestHistory API operation for AWS Direct Connect.
+//
+// Lists the virtual interface failover test history.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Direct Connect's
+// API operation ListVirtualInterfaceTestHistory for usage and error information.
+//
+// Returned Error Types:
+//   * ServerException
+//   A server-side error occurred.
+//
+//   * ClientException
+//   One or more parameters are not valid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/ListVirtualInterfaceTestHistory
+func (c *DirectConnect) ListVirtualInterfaceTestHistory(input *ListVirtualInterfaceTestHistoryInput) (*ListVirtualInterfaceTestHistoryOutput, error) {
+	req, out := c.ListVirtualInterfaceTestHistoryRequest(input)
+	return out, req.Send()
+}
+
+// ListVirtualInterfaceTestHistoryWithContext is the same as ListVirtualInterfaceTestHistory with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListVirtualInterfaceTestHistory for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *DirectConnect) ListVirtualInterfaceTestHistoryWithContext(ctx aws.Context, input *ListVirtualInterfaceTestHistoryInput, opts ...request.Option) (*ListVirtualInterfaceTestHistoryOutput, error) {
+	req, out := c.ListVirtualInterfaceTestHistoryRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opStartBgpFailoverTest = "StartBgpFailoverTest"
+
+// StartBgpFailoverTestRequest generates a "aws/request.Request" representing the
+// client's request for the StartBgpFailoverTest operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StartBgpFailoverTest for more information on using the StartBgpFailoverTest
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StartBgpFailoverTestRequest method.
+//    req, resp := client.StartBgpFailoverTestRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/StartBgpFailoverTest
+func (c *DirectConnect) StartBgpFailoverTestRequest(input *StartBgpFailoverTestInput) (req *request.Request, output *StartBgpFailoverTestOutput) {
+	op := &request.Operation{
+		Name:       opStartBgpFailoverTest,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StartBgpFailoverTestInput{}
+	}
+
+	output = &StartBgpFailoverTestOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StartBgpFailoverTest API operation for AWS Direct Connect.
+//
+// Starts the virtual interface failover test that verifies your configuration
+// meets your resiliency requirements by placing the BGP peering session in
+// the DOWN state. You can then send traffic to verify that there are no outages.
+//
+// You can run the test on public, private, transit, and hosted virtual interfaces.
+//
+// You can use ListVirtualInterfaceTestHistory (https://docs.aws.amazon.com/directconnect/latest/APIReference/API_ListVirtualInterfaceTestHistory.html)
+// to view the virtual interface test history.
+//
+// If you need to stop the test before the test interval completes, use StopBgpFailoverTest
+// (https://docs.aws.amazon.com/directconnect/latest/APIReference/API_StopBgpFailoverTest.html).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Direct Connect's
+// API operation StartBgpFailoverTest for usage and error information.
+//
+// Returned Error Types:
+//   * ServerException
+//   A server-side error occurred.
+//
+//   * ClientException
+//   One or more parameters are not valid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/StartBgpFailoverTest
+func (c *DirectConnect) StartBgpFailoverTest(input *StartBgpFailoverTestInput) (*StartBgpFailoverTestOutput, error) {
+	req, out := c.StartBgpFailoverTestRequest(input)
+	return out, req.Send()
+}
+
+// StartBgpFailoverTestWithContext is the same as StartBgpFailoverTest with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StartBgpFailoverTest for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *DirectConnect) StartBgpFailoverTestWithContext(ctx aws.Context, input *StartBgpFailoverTestInput, opts ...request.Option) (*StartBgpFailoverTestOutput, error) {
+	req, out := c.StartBgpFailoverTestRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opStopBgpFailoverTest = "StopBgpFailoverTest"
+
+// StopBgpFailoverTestRequest generates a "aws/request.Request" representing the
+// client's request for the StopBgpFailoverTest operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See StopBgpFailoverTest for more information on using the StopBgpFailoverTest
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the StopBgpFailoverTestRequest method.
+//    req, resp := client.StopBgpFailoverTestRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/StopBgpFailoverTest
+func (c *DirectConnect) StopBgpFailoverTestRequest(input *StopBgpFailoverTestInput) (req *request.Request, output *StopBgpFailoverTestOutput) {
+	op := &request.Operation{
+		Name:       opStopBgpFailoverTest,
+		HTTPMethod: "POST",
+		HTTPPath:   "/",
+	}
+
+	if input == nil {
+		input = &StopBgpFailoverTestInput{}
+	}
+
+	output = &StopBgpFailoverTestOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// StopBgpFailoverTest API operation for AWS Direct Connect.
+//
+// Stops the virtual interface failover test.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Direct Connect's
+// API operation StopBgpFailoverTest for usage and error information.
+//
+// Returned Error Types:
+//   * ServerException
+//   A server-side error occurred.
+//
+//   * ClientException
+//   One or more parameters are not valid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/StopBgpFailoverTest
+func (c *DirectConnect) StopBgpFailoverTest(input *StopBgpFailoverTestInput) (*StopBgpFailoverTestOutput, error) {
+	req, out := c.StopBgpFailoverTestRequest(input)
+	return out, req.Send()
+}
+
+// StopBgpFailoverTestWithContext is the same as StopBgpFailoverTest with the addition of
+// the ability to pass a context and additional request options.
+//
+// See StopBgpFailoverTest for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *DirectConnect) StopBgpFailoverTestWithContext(ctx aws.Context, input *StopBgpFailoverTestInput, opts ...request.Option) (*StopBgpFailoverTestOutput, error) {
+	req, out := c.StopBgpFailoverTestRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -4389,17 +4657,17 @@ func (c *DirectConnect) TagResourceRequest(input *TagResourceInput) (req *reques
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation TagResource for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeDuplicateTagKeysException "DuplicateTagKeysException"
+// Returned Error Types:
+//   * DuplicateTagKeysException
 //   A tag key was specified more than once.
 //
-//   * ErrCodeTooManyTagsException "TooManyTagsException"
+//   * TooManyTagsException
 //   You have reached the limit on the number of tags that can be assigned.
 //
-//   * ErrCodeServerException "DirectConnectServerException"
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/TagResource
@@ -4478,11 +4746,11 @@ func (c *DirectConnect) UntagResourceRequest(input *UntagResourceInput) (req *re
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation UntagResource for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/UntagResource
@@ -4562,11 +4830,11 @@ func (c *DirectConnect) UpdateDirectConnectGatewayAssociationRequest(input *Upda
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation UpdateDirectConnectGatewayAssociation for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/UpdateDirectConnectGatewayAssociation
@@ -4658,11 +4926,11 @@ func (c *DirectConnect) UpdateLagRequest(input *UpdateLagInput) (req *request.Re
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation UpdateLag for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/UpdateLag
@@ -4738,7 +5006,7 @@ func (c *DirectConnect) UpdateVirtualInterfaceAttributesRequest(input *UpdateVir
 // jumbo frames. Updating the connection disrupts network connectivity for all
 // virtual interfaces associated with the connection for up to 30 seconds. To
 // check whether your connection supports jumbo frames, call DescribeConnections.
-// To check whether your virtual interface supports jumbo frames, call DescribeVirtualInterfaces.
+// To check whether your virtual q interface supports jumbo frames, call DescribeVirtualInterfaces.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -4747,11 +5015,11 @@ func (c *DirectConnect) UpdateVirtualInterfaceAttributesRequest(input *UpdateVir
 // See the AWS API reference guide for AWS Direct Connect's
 // API operation UpdateVirtualInterfaceAttributes for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServerException "DirectConnectServerException"
+// Returned Error Types:
+//   * ServerException
 //   A server-side error occurred.
 //
-//   * ErrCodeClientException "DirectConnectClientException"
+//   * ClientException
 //   One or more parameters are not valid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/directconnect-2012-10-25/UpdateVirtualInterfaceAttributes
@@ -5656,6 +5924,62 @@ func (s *BGPPeer) SetBgpStatus(v string) *BGPPeer {
 func (s *BGPPeer) SetCustomerAddress(v string) *BGPPeer {
 	s.CustomerAddress = &v
 	return s
+}
+
+// One or more parameters are not valid.
+type ClientException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s ClientException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ClientException) GoString() string {
+	return s.String()
+}
+
+func newErrorClientException(v protocol.ResponseMetadata) error {
+	return &ClientException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ClientException) Code() string {
+	return "DirectConnectClientException"
+}
+
+// Message returns the exception's message.
+func (s *ClientException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ClientException) OrigErr() error {
+	return nil
+}
+
+func (s *ClientException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ClientException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ClientException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 type ConfirmConnectionInput struct {
@@ -6805,12 +7129,11 @@ type CreateLagInput struct {
 	// The tags to associate with the automtically created LAGs.
 	ChildConnectionTags []*Tag `locationName:"childConnectionTags" min:"1" type:"list"`
 
-	// The ID of an existing connection to migrate to the LAG.
+	// The ID of an existing dedicated connection to migrate to the LAG.
 	ConnectionId *string `locationName:"connectionId" type:"string"`
 
-	// The bandwidth of the individual physical connections bundled by the LAG.
-	// The possible values are 50Mbps, 100Mbps, 200Mbps, 300Mbps, 400Mbps, 500Mbps,
-	// 1Gbps, 2Gbps, 5Gbps, and 10Gbps.
+	// The bandwidth of the individual physical dedicated connections bundled by
+	// the LAG. The possible values are 1Gbps and 10Gbps.
 	//
 	// ConnectionsBandwidth is a required field
 	ConnectionsBandwidth *string `locationName:"connectionsBandwidth" type:"string" required:"true"`
@@ -6825,8 +7148,8 @@ type CreateLagInput struct {
 	// Location is a required field
 	Location *string `locationName:"location" type:"string" required:"true"`
 
-	// The number of physical connections initially provisioned and bundled by the
-	// LAG.
+	// The number of physical dedicated connections initially provisioned and bundled
+	// by the LAG.
 	//
 	// NumberOfConnections is a required field
 	NumberOfConnections *int64 `locationName:"numberOfConnections" type:"integer" required:"true"`
@@ -8656,6 +8979,62 @@ func (s *DisassociateConnectionFromLagInput) SetLagId(v string) *DisassociateCon
 	return s
 }
 
+// A tag key was specified more than once.
+type DuplicateTagKeysException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s DuplicateTagKeysException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DuplicateTagKeysException) GoString() string {
+	return s.String()
+}
+
+func newErrorDuplicateTagKeysException(v protocol.ResponseMetadata) error {
+	return &DuplicateTagKeysException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *DuplicateTagKeysException) Code() string {
+	return "DuplicateTagKeysException"
+}
+
+// Message returns the exception's message.
+func (s *DuplicateTagKeysException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *DuplicateTagKeysException) OrigErr() error {
+	return nil
+}
+
+func (s *DuplicateTagKeysException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *DuplicateTagKeysException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *DuplicateTagKeysException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // Information about a Direct Connect gateway, which enables you to connect
 // virtual interfaces and virtual private gateway or transit gateways.
 type Gateway struct {
@@ -9244,12 +9623,12 @@ type Lag struct {
 	// The location of the LAG.
 	Location *string `locationName:"location" type:"string"`
 
-	// The minimum number of physical connections that must be operational for the
-	// LAG itself to be operational.
+	// The minimum number of physical dedicated connections that must be operational
+	// for the LAG itself to be operational.
 	MinimumLinks *int64 `locationName:"minimumLinks" type:"integer"`
 
-	// The number of physical connections bundled by the LAG, up to a maximum of
-	// 10.
+	// The number of physical dedicated connections bundled by the LAG, up to a
+	// maximum of 10.
 	NumberOfConnections *int64 `locationName:"numberOfConnections" type:"integer"`
 
 	// The ID of the AWS account that owns the LAG.
@@ -9374,6 +9753,111 @@ func (s *Lag) SetRegion(v string) *Lag {
 // SetTags sets the Tags field's value.
 func (s *Lag) SetTags(v []*Tag) *Lag {
 	s.Tags = v
+	return s
+}
+
+type ListVirtualInterfaceTestHistoryInput struct {
+	_ struct{} `type:"structure"`
+
+	// The BGP peers that were placed in the DOWN state during the virtual interface
+	// failover test.
+	BgpPeers []*string `locationName:"bgpPeers" type:"list"`
+
+	// The maximum number of results to return with a single call. To retrieve the
+	// remaining results, make another call with the returned nextToken value.
+	//
+	// If MaxResults is given a value larger than 100, only 100 results are returned.
+	MaxResults *int64 `locationName:"maxResults" type:"integer"`
+
+	// The token for the next page of results.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// The status of the virtual interface failover test.
+	Status *string `locationName:"status" type:"string"`
+
+	// The ID of the virtual interface failover test.
+	TestId *string `locationName:"testId" type:"string"`
+
+	// The ID of the virtual interface that was tested.
+	VirtualInterfaceId *string `locationName:"virtualInterfaceId" type:"string"`
+}
+
+// String returns the string representation
+func (s ListVirtualInterfaceTestHistoryInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListVirtualInterfaceTestHistoryInput) GoString() string {
+	return s.String()
+}
+
+// SetBgpPeers sets the BgpPeers field's value.
+func (s *ListVirtualInterfaceTestHistoryInput) SetBgpPeers(v []*string) *ListVirtualInterfaceTestHistoryInput {
+	s.BgpPeers = v
+	return s
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListVirtualInterfaceTestHistoryInput) SetMaxResults(v int64) *ListVirtualInterfaceTestHistoryInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListVirtualInterfaceTestHistoryInput) SetNextToken(v string) *ListVirtualInterfaceTestHistoryInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *ListVirtualInterfaceTestHistoryInput) SetStatus(v string) *ListVirtualInterfaceTestHistoryInput {
+	s.Status = &v
+	return s
+}
+
+// SetTestId sets the TestId field's value.
+func (s *ListVirtualInterfaceTestHistoryInput) SetTestId(v string) *ListVirtualInterfaceTestHistoryInput {
+	s.TestId = &v
+	return s
+}
+
+// SetVirtualInterfaceId sets the VirtualInterfaceId field's value.
+func (s *ListVirtualInterfaceTestHistoryInput) SetVirtualInterfaceId(v string) *ListVirtualInterfaceTestHistoryInput {
+	s.VirtualInterfaceId = &v
+	return s
+}
+
+type ListVirtualInterfaceTestHistoryOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The token to use to retrieve the next page of results. This value is null
+	// when there are no more results to return.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// The ID of the tested virtual interface.
+	VirtualInterfaceTestHistory []*VirtualInterfaceTestHistory `locationName:"virtualInterfaceTestHistory" type:"list"`
+}
+
+// String returns the string representation
+func (s ListVirtualInterfaceTestHistoryOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListVirtualInterfaceTestHistoryOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListVirtualInterfaceTestHistoryOutput) SetNextToken(v string) *ListVirtualInterfaceTestHistoryOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetVirtualInterfaceTestHistory sets the VirtualInterfaceTestHistory field's value.
+func (s *ListVirtualInterfaceTestHistoryOutput) SetVirtualInterfaceTestHistory(v []*VirtualInterfaceTestHistory) *ListVirtualInterfaceTestHistoryOutput {
+	s.VirtualInterfaceTestHistory = v
 	return s
 }
 
@@ -9573,7 +10057,9 @@ type NewPrivateVirtualInterface struct {
 	// The ID of the virtual private gateway.
 	VirtualGatewayId *string `locationName:"virtualGatewayId" type:"string"`
 
-	// The name of the virtual interface assigned by the customer network.
+	// The name of the virtual interface assigned by the customer network. The name
+	// has a maximum of 100 characters. The following are valid characters: a-z,
+	// 0-9 and a hyphen (-).
 	//
 	// VirtualInterfaceName is a required field
 	VirtualInterfaceName *string `locationName:"virtualInterfaceName" type:"string" required:"true"`
@@ -9723,7 +10209,9 @@ type NewPrivateVirtualInterfaceAllocation struct {
 	// The tags associated with the private virtual interface.
 	Tags []*Tag `locationName:"tags" min:"1" type:"list"`
 
-	// The name of the virtual interface assigned by the customer network.
+	// The name of the virtual interface assigned by the customer network. The name
+	// has a maximum of 100 characters. The following are valid characters: a-z,
+	// 0-9 and a hyphen (-).
 	//
 	// VirtualInterfaceName is a required field
 	VirtualInterfaceName *string `locationName:"virtualInterfaceName" type:"string" required:"true"`
@@ -9861,7 +10349,9 @@ type NewPublicVirtualInterface struct {
 	// The tags associated with the public virtual interface.
 	Tags []*Tag `locationName:"tags" min:"1" type:"list"`
 
-	// The name of the virtual interface assigned by the customer network.
+	// The name of the virtual interface assigned by the customer network. The name
+	// has a maximum of 100 characters. The following are valid characters: a-z,
+	// 0-9 and a hyphen (-).
 	//
 	// VirtualInterfaceName is a required field
 	VirtualInterfaceName *string `locationName:"virtualInterfaceName" type:"string" required:"true"`
@@ -9999,7 +10489,9 @@ type NewPublicVirtualInterfaceAllocation struct {
 	// The tags associated with the public virtual interface.
 	Tags []*Tag `locationName:"tags" min:"1" type:"list"`
 
-	// The name of the virtual interface assigned by the customer network.
+	// The name of the virtual interface assigned by the customer network. The name
+	// has a maximum of 100 characters. The following are valid characters: a-z,
+	// 0-9 and a hyphen (-).
 	//
 	// VirtualInterfaceName is a required field
 	VirtualInterfaceName *string `locationName:"virtualInterfaceName" type:"string" required:"true"`
@@ -10138,7 +10630,9 @@ type NewTransitVirtualInterface struct {
 	// The tags associated with the transitive virtual interface.
 	Tags []*Tag `locationName:"tags" min:"1" type:"list"`
 
-	// The name of the virtual interface assigned by the customer network.
+	// The name of the virtual interface assigned by the customer network. The name
+	// has a maximum of 100 characters. The following are valid characters: a-z,
+	// 0-9 and a hyphen (-).
 	VirtualInterfaceName *string `locationName:"virtualInterfaceName" type:"string"`
 
 	// The ID of the VLAN.
@@ -10267,7 +10761,9 @@ type NewTransitVirtualInterfaceAllocation struct {
 	// The tags associated with the transitive virtual interface.
 	Tags []*Tag `locationName:"tags" min:"1" type:"list"`
 
-	// The name of the virtual interface assigned by the customer network.
+	// The name of the virtual interface assigned by the customer network. The name
+	// has a maximum of 100 characters. The following are valid characters: a-z,
+	// 0-9 and a hyphen (-).
 	VirtualInterfaceName *string `locationName:"virtualInterfaceName" type:"string"`
 
 	// The ID of the VLAN.
@@ -10420,6 +10916,206 @@ func (s *RouteFilterPrefix) SetCidr(v string) *RouteFilterPrefix {
 	return s
 }
 
+// A server-side error occurred.
+type ServerException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s ServerException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ServerException) GoString() string {
+	return s.String()
+}
+
+func newErrorServerException(v protocol.ResponseMetadata) error {
+	return &ServerException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ServerException) Code() string {
+	return "DirectConnectServerException"
+}
+
+// Message returns the exception's message.
+func (s *ServerException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ServerException) OrigErr() error {
+	return nil
+}
+
+func (s *ServerException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ServerException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ServerException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+type StartBgpFailoverTestInput struct {
+	_ struct{} `type:"structure"`
+
+	// The BGP peers to place in the DOWN state.
+	BgpPeers []*string `locationName:"bgpPeers" type:"list"`
+
+	// The time in minutes that the virtual interface failover test will last.
+	//
+	// Maximum value: 180 minutes (3 hours).
+	//
+	// Default: 180 minutes (3 hours).
+	TestDurationInMinutes *int64 `locationName:"testDurationInMinutes" type:"integer"`
+
+	// The ID of the virtual interface you want to test.
+	//
+	// VirtualInterfaceId is a required field
+	VirtualInterfaceId *string `locationName:"virtualInterfaceId" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s StartBgpFailoverTestInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartBgpFailoverTestInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StartBgpFailoverTestInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StartBgpFailoverTestInput"}
+	if s.VirtualInterfaceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("VirtualInterfaceId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBgpPeers sets the BgpPeers field's value.
+func (s *StartBgpFailoverTestInput) SetBgpPeers(v []*string) *StartBgpFailoverTestInput {
+	s.BgpPeers = v
+	return s
+}
+
+// SetTestDurationInMinutes sets the TestDurationInMinutes field's value.
+func (s *StartBgpFailoverTestInput) SetTestDurationInMinutes(v int64) *StartBgpFailoverTestInput {
+	s.TestDurationInMinutes = &v
+	return s
+}
+
+// SetVirtualInterfaceId sets the VirtualInterfaceId field's value.
+func (s *StartBgpFailoverTestInput) SetVirtualInterfaceId(v string) *StartBgpFailoverTestInput {
+	s.VirtualInterfaceId = &v
+	return s
+}
+
+type StartBgpFailoverTestOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the virtual interface failover test.
+	VirtualInterfaceTest *VirtualInterfaceTestHistory `locationName:"virtualInterfaceTest" type:"structure"`
+}
+
+// String returns the string representation
+func (s StartBgpFailoverTestOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StartBgpFailoverTestOutput) GoString() string {
+	return s.String()
+}
+
+// SetVirtualInterfaceTest sets the VirtualInterfaceTest field's value.
+func (s *StartBgpFailoverTestOutput) SetVirtualInterfaceTest(v *VirtualInterfaceTestHistory) *StartBgpFailoverTestOutput {
+	s.VirtualInterfaceTest = v
+	return s
+}
+
+type StopBgpFailoverTestInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the virtual interface you no longer want to test.
+	//
+	// VirtualInterfaceId is a required field
+	VirtualInterfaceId *string `locationName:"virtualInterfaceId" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s StopBgpFailoverTestInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopBgpFailoverTestInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *StopBgpFailoverTestInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "StopBgpFailoverTestInput"}
+	if s.VirtualInterfaceId == nil {
+		invalidParams.Add(request.NewErrParamRequired("VirtualInterfaceId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetVirtualInterfaceId sets the VirtualInterfaceId field's value.
+func (s *StopBgpFailoverTestInput) SetVirtualInterfaceId(v string) *StopBgpFailoverTestInput {
+	s.VirtualInterfaceId = &v
+	return s
+}
+
+type StopBgpFailoverTestOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Information about the virtual interface failover test.
+	VirtualInterfaceTest *VirtualInterfaceTestHistory `locationName:"virtualInterfaceTest" type:"structure"`
+}
+
+// String returns the string representation
+func (s StopBgpFailoverTestOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StopBgpFailoverTestOutput) GoString() string {
+	return s.String()
+}
+
+// SetVirtualInterfaceTest sets the VirtualInterfaceTest field's value.
+func (s *StopBgpFailoverTestOutput) SetVirtualInterfaceTest(v *VirtualInterfaceTestHistory) *StopBgpFailoverTestOutput {
+	s.VirtualInterfaceTest = v
+	return s
+}
+
 // Information about a tag.
 type Tag struct {
 	_ struct{} `type:"structure"`
@@ -10548,6 +11244,62 @@ func (s TagResourceOutput) String() string {
 // GoString returns the string representation
 func (s TagResourceOutput) GoString() string {
 	return s.String()
+}
+
+// You have reached the limit on the number of tags that can be assigned.
+type TooManyTagsException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s TooManyTagsException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TooManyTagsException) GoString() string {
+	return s.String()
+}
+
+func newErrorTooManyTagsException(v protocol.ResponseMetadata) error {
+	return &TooManyTagsException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *TooManyTagsException) Code() string {
+	return "TooManyTagsException"
+}
+
+// Message returns the exception's message.
+func (s *TooManyTagsException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *TooManyTagsException) OrigErr() error {
+	return nil
+}
+
+func (s *TooManyTagsException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *TooManyTagsException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *TooManyTagsException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 type UntagResourceInput struct {
@@ -10855,7 +11607,9 @@ type UpdateVirtualInterfaceAttributesOutput struct {
 	// The ID of the virtual interface.
 	VirtualInterfaceId *string `locationName:"virtualInterfaceId" type:"string"`
 
-	// The name of the virtual interface assigned by the customer network.
+	// The name of the virtual interface assigned by the customer network. The name
+	// has a maximum of 100 characters. The following are valid characters: a-z,
+	// 0-9 and a hyphen (-).
 	VirtualInterfaceName *string `locationName:"virtualInterfaceName" type:"string"`
 
 	// The state of the virtual interface. The following are the possible values:
@@ -11163,7 +11917,9 @@ type VirtualInterface struct {
 	// The ID of the virtual interface.
 	VirtualInterfaceId *string `locationName:"virtualInterfaceId" type:"string"`
 
-	// The name of the virtual interface assigned by the customer network.
+	// The name of the virtual interface assigned by the customer network. The name
+	// has a maximum of 100 characters. The following are valid characters: a-z,
+	// 0-9 and a hyphen (-).
 	VirtualInterfaceName *string `locationName:"virtualInterfaceName" type:"string"`
 
 	// The state of the virtual interface. The following are the possible values:
@@ -11359,6 +12115,94 @@ func (s *VirtualInterface) SetVlan(v int64) *VirtualInterface {
 	return s
 }
 
+// Information about the virtual interface failover test.
+type VirtualInterfaceTestHistory struct {
+	_ struct{} `type:"structure"`
+
+	// The BGP peers that were put in the DOWN state as part of the virtual interface
+	// failover test.
+	BgpPeers []*string `locationName:"bgpPeers" type:"list"`
+
+	// The time that the virtual interface moves out of the DOWN state.
+	EndTime *time.Time `locationName:"endTime" type:"timestamp"`
+
+	// The owner ID of the tested virtual interface.
+	OwnerAccount *string `locationName:"ownerAccount" type:"string"`
+
+	// The time that the virtual interface moves to the DOWN state.
+	StartTime *time.Time `locationName:"startTime" type:"timestamp"`
+
+	// The status of the virtual interface failover test.
+	Status *string `locationName:"status" type:"string"`
+
+	// The time that the virtual interface failover test ran in minutes.
+	TestDurationInMinutes *int64 `locationName:"testDurationInMinutes" type:"integer"`
+
+	// The ID of the virtual interface failover test.
+	TestId *string `locationName:"testId" type:"string"`
+
+	// The ID of the tested virtual interface.
+	VirtualInterfaceId *string `locationName:"virtualInterfaceId" type:"string"`
+}
+
+// String returns the string representation
+func (s VirtualInterfaceTestHistory) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s VirtualInterfaceTestHistory) GoString() string {
+	return s.String()
+}
+
+// SetBgpPeers sets the BgpPeers field's value.
+func (s *VirtualInterfaceTestHistory) SetBgpPeers(v []*string) *VirtualInterfaceTestHistory {
+	s.BgpPeers = v
+	return s
+}
+
+// SetEndTime sets the EndTime field's value.
+func (s *VirtualInterfaceTestHistory) SetEndTime(v time.Time) *VirtualInterfaceTestHistory {
+	s.EndTime = &v
+	return s
+}
+
+// SetOwnerAccount sets the OwnerAccount field's value.
+func (s *VirtualInterfaceTestHistory) SetOwnerAccount(v string) *VirtualInterfaceTestHistory {
+	s.OwnerAccount = &v
+	return s
+}
+
+// SetStartTime sets the StartTime field's value.
+func (s *VirtualInterfaceTestHistory) SetStartTime(v time.Time) *VirtualInterfaceTestHistory {
+	s.StartTime = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *VirtualInterfaceTestHistory) SetStatus(v string) *VirtualInterfaceTestHistory {
+	s.Status = &v
+	return s
+}
+
+// SetTestDurationInMinutes sets the TestDurationInMinutes field's value.
+func (s *VirtualInterfaceTestHistory) SetTestDurationInMinutes(v int64) *VirtualInterfaceTestHistory {
+	s.TestDurationInMinutes = &v
+	return s
+}
+
+// SetTestId sets the TestId field's value.
+func (s *VirtualInterfaceTestHistory) SetTestId(v string) *VirtualInterfaceTestHistory {
+	s.TestId = &v
+	return s
+}
+
+// SetVirtualInterfaceId sets the VirtualInterfaceId field's value.
+func (s *VirtualInterfaceTestHistory) SetVirtualInterfaceId(v string) *VirtualInterfaceTestHistory {
+	s.VirtualInterfaceId = &v
+	return s
+}
+
 const (
 	// AddressFamilyIpv4 is a AddressFamily enum value
 	AddressFamilyIpv4 = "ipv4"
@@ -11366,6 +12210,14 @@ const (
 	// AddressFamilyIpv6 is a AddressFamily enum value
 	AddressFamilyIpv6 = "ipv6"
 )
+
+// AddressFamily_Values returns all elements of the AddressFamily enum
+func AddressFamily_Values() []string {
+	return []string{
+		AddressFamilyIpv4,
+		AddressFamilyIpv6,
+	}
+}
 
 const (
 	// BGPPeerStateVerifying is a BGPPeerState enum value
@@ -11384,6 +12236,17 @@ const (
 	BGPPeerStateDeleted = "deleted"
 )
 
+// BGPPeerState_Values returns all elements of the BGPPeerState enum
+func BGPPeerState_Values() []string {
+	return []string{
+		BGPPeerStateVerifying,
+		BGPPeerStatePending,
+		BGPPeerStateAvailable,
+		BGPPeerStateDeleting,
+		BGPPeerStateDeleted,
+	}
+}
+
 const (
 	// BGPStatusUp is a BGPStatus enum value
 	BGPStatusUp = "up"
@@ -11394,6 +12257,15 @@ const (
 	// BGPStatusUnknown is a BGPStatus enum value
 	BGPStatusUnknown = "unknown"
 )
+
+// BGPStatus_Values returns all elements of the BGPStatus enum
+func BGPStatus_Values() []string {
+	return []string{
+		BGPStatusUp,
+		BGPStatusDown,
+		BGPStatusUnknown,
+	}
+}
 
 const (
 	// ConnectionStateOrdering is a ConnectionState enum value
@@ -11424,6 +12296,21 @@ const (
 	ConnectionStateUnknown = "unknown"
 )
 
+// ConnectionState_Values returns all elements of the ConnectionState enum
+func ConnectionState_Values() []string {
+	return []string{
+		ConnectionStateOrdering,
+		ConnectionStateRequested,
+		ConnectionStatePending,
+		ConnectionStateAvailable,
+		ConnectionStateDown,
+		ConnectionStateDeleting,
+		ConnectionStateDeleted,
+		ConnectionStateRejected,
+		ConnectionStateUnknown,
+	}
+}
+
 const (
 	// GatewayAssociationProposalStateRequested is a GatewayAssociationProposalState enum value
 	GatewayAssociationProposalStateRequested = "requested"
@@ -11434,6 +12321,15 @@ const (
 	// GatewayAssociationProposalStateDeleted is a GatewayAssociationProposalState enum value
 	GatewayAssociationProposalStateDeleted = "deleted"
 )
+
+// GatewayAssociationProposalState_Values returns all elements of the GatewayAssociationProposalState enum
+func GatewayAssociationProposalState_Values() []string {
+	return []string{
+		GatewayAssociationProposalStateRequested,
+		GatewayAssociationProposalStateAccepted,
+		GatewayAssociationProposalStateDeleted,
+	}
+}
 
 const (
 	// GatewayAssociationStateAssociating is a GatewayAssociationState enum value
@@ -11452,6 +12348,17 @@ const (
 	GatewayAssociationStateUpdating = "updating"
 )
 
+// GatewayAssociationState_Values returns all elements of the GatewayAssociationState enum
+func GatewayAssociationState_Values() []string {
+	return []string{
+		GatewayAssociationStateAssociating,
+		GatewayAssociationStateAssociated,
+		GatewayAssociationStateDisassociating,
+		GatewayAssociationStateDisassociated,
+		GatewayAssociationStateUpdating,
+	}
+}
+
 const (
 	// GatewayAttachmentStateAttaching is a GatewayAttachmentState enum value
 	GatewayAttachmentStateAttaching = "attaching"
@@ -11466,6 +12373,16 @@ const (
 	GatewayAttachmentStateDetached = "detached"
 )
 
+// GatewayAttachmentState_Values returns all elements of the GatewayAttachmentState enum
+func GatewayAttachmentState_Values() []string {
+	return []string{
+		GatewayAttachmentStateAttaching,
+		GatewayAttachmentStateAttached,
+		GatewayAttachmentStateDetaching,
+		GatewayAttachmentStateDetached,
+	}
+}
+
 const (
 	// GatewayAttachmentTypeTransitVirtualInterface is a GatewayAttachmentType enum value
 	GatewayAttachmentTypeTransitVirtualInterface = "TransitVirtualInterface"
@@ -11473,6 +12390,14 @@ const (
 	// GatewayAttachmentTypePrivateVirtualInterface is a GatewayAttachmentType enum value
 	GatewayAttachmentTypePrivateVirtualInterface = "PrivateVirtualInterface"
 )
+
+// GatewayAttachmentType_Values returns all elements of the GatewayAttachmentType enum
+func GatewayAttachmentType_Values() []string {
+	return []string{
+		GatewayAttachmentTypeTransitVirtualInterface,
+		GatewayAttachmentTypePrivateVirtualInterface,
+	}
+}
 
 const (
 	// GatewayStatePending is a GatewayState enum value
@@ -11488,6 +12413,16 @@ const (
 	GatewayStateDeleted = "deleted"
 )
 
+// GatewayState_Values returns all elements of the GatewayState enum
+func GatewayState_Values() []string {
+	return []string{
+		GatewayStatePending,
+		GatewayStateAvailable,
+		GatewayStateDeleting,
+		GatewayStateDeleted,
+	}
+}
+
 const (
 	// GatewayTypeVirtualPrivateGateway is a GatewayType enum value
 	GatewayTypeVirtualPrivateGateway = "virtualPrivateGateway"
@@ -11495,6 +12430,14 @@ const (
 	// GatewayTypeTransitGateway is a GatewayType enum value
 	GatewayTypeTransitGateway = "transitGateway"
 )
+
+// GatewayType_Values returns all elements of the GatewayType enum
+func GatewayType_Values() []string {
+	return []string{
+		GatewayTypeVirtualPrivateGateway,
+		GatewayTypeTransitGateway,
+	}
+}
 
 const (
 	// HasLogicalRedundancyUnknown is a HasLogicalRedundancy enum value
@@ -11506,6 +12449,15 @@ const (
 	// HasLogicalRedundancyNo is a HasLogicalRedundancy enum value
 	HasLogicalRedundancyNo = "no"
 )
+
+// HasLogicalRedundancy_Values returns all elements of the HasLogicalRedundancy enum
+func HasLogicalRedundancy_Values() []string {
+	return []string{
+		HasLogicalRedundancyUnknown,
+		HasLogicalRedundancyYes,
+		HasLogicalRedundancyNo,
+	}
+}
 
 const (
 	// InterconnectStateRequested is a InterconnectState enum value
@@ -11530,6 +12482,19 @@ const (
 	InterconnectStateUnknown = "unknown"
 )
 
+// InterconnectState_Values returns all elements of the InterconnectState enum
+func InterconnectState_Values() []string {
+	return []string{
+		InterconnectStateRequested,
+		InterconnectStatePending,
+		InterconnectStateAvailable,
+		InterconnectStateDown,
+		InterconnectStateDeleting,
+		InterconnectStateDeleted,
+		InterconnectStateUnknown,
+	}
+}
+
 const (
 	// LagStateRequested is a LagState enum value
 	LagStateRequested = "requested"
@@ -11553,10 +12518,30 @@ const (
 	LagStateUnknown = "unknown"
 )
 
+// LagState_Values returns all elements of the LagState enum
+func LagState_Values() []string {
+	return []string{
+		LagStateRequested,
+		LagStatePending,
+		LagStateAvailable,
+		LagStateDown,
+		LagStateDeleting,
+		LagStateDeleted,
+		LagStateUnknown,
+	}
+}
+
 const (
 	// LoaContentTypeApplicationPdf is a LoaContentType enum value
 	LoaContentTypeApplicationPdf = "application/pdf"
 )
+
+// LoaContentType_Values returns all elements of the LoaContentType enum
+func LoaContentType_Values() []string {
+	return []string{
+		LoaContentTypeApplicationPdf,
+	}
+}
 
 const (
 	// VirtualInterfaceStateConfirming is a VirtualInterfaceState enum value
@@ -11586,3 +12571,18 @@ const (
 	// VirtualInterfaceStateUnknown is a VirtualInterfaceState enum value
 	VirtualInterfaceStateUnknown = "unknown"
 )
+
+// VirtualInterfaceState_Values returns all elements of the VirtualInterfaceState enum
+func VirtualInterfaceState_Values() []string {
+	return []string{
+		VirtualInterfaceStateConfirming,
+		VirtualInterfaceStateVerifying,
+		VirtualInterfaceStatePending,
+		VirtualInterfaceStateAvailable,
+		VirtualInterfaceStateDown,
+		VirtualInterfaceStateDeleting,
+		VirtualInterfaceStateDeleted,
+		VirtualInterfaceStateRejected,
+		VirtualInterfaceStateUnknown,
+	}
+}

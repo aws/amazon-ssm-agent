@@ -64,6 +64,10 @@ type LightsailAPI interface {
 	AllocateStaticIpWithContext(aws.Context, *lightsail.AllocateStaticIpInput, ...request.Option) (*lightsail.AllocateStaticIpOutput, error)
 	AllocateStaticIpRequest(*lightsail.AllocateStaticIpInput) (*request.Request, *lightsail.AllocateStaticIpOutput)
 
+	AttachCertificateToDistribution(*lightsail.AttachCertificateToDistributionInput) (*lightsail.AttachCertificateToDistributionOutput, error)
+	AttachCertificateToDistributionWithContext(aws.Context, *lightsail.AttachCertificateToDistributionInput, ...request.Option) (*lightsail.AttachCertificateToDistributionOutput, error)
+	AttachCertificateToDistributionRequest(*lightsail.AttachCertificateToDistributionInput) (*request.Request, *lightsail.AttachCertificateToDistributionOutput)
+
 	AttachDisk(*lightsail.AttachDiskInput) (*lightsail.AttachDiskOutput, error)
 	AttachDiskWithContext(aws.Context, *lightsail.AttachDiskInput, ...request.Option) (*lightsail.AttachDiskOutput, error)
 	AttachDiskRequest(*lightsail.AttachDiskInput) (*request.Request, *lightsail.AttachDiskOutput)
@@ -88,9 +92,17 @@ type LightsailAPI interface {
 	CopySnapshotWithContext(aws.Context, *lightsail.CopySnapshotInput, ...request.Option) (*lightsail.CopySnapshotOutput, error)
 	CopySnapshotRequest(*lightsail.CopySnapshotInput) (*request.Request, *lightsail.CopySnapshotOutput)
 
+	CreateCertificate(*lightsail.CreateCertificateInput) (*lightsail.CreateCertificateOutput, error)
+	CreateCertificateWithContext(aws.Context, *lightsail.CreateCertificateInput, ...request.Option) (*lightsail.CreateCertificateOutput, error)
+	CreateCertificateRequest(*lightsail.CreateCertificateInput) (*request.Request, *lightsail.CreateCertificateOutput)
+
 	CreateCloudFormationStack(*lightsail.CreateCloudFormationStackInput) (*lightsail.CreateCloudFormationStackOutput, error)
 	CreateCloudFormationStackWithContext(aws.Context, *lightsail.CreateCloudFormationStackInput, ...request.Option) (*lightsail.CreateCloudFormationStackOutput, error)
 	CreateCloudFormationStackRequest(*lightsail.CreateCloudFormationStackInput) (*request.Request, *lightsail.CreateCloudFormationStackOutput)
+
+	CreateContactMethod(*lightsail.CreateContactMethodInput) (*lightsail.CreateContactMethodOutput, error)
+	CreateContactMethodWithContext(aws.Context, *lightsail.CreateContactMethodInput, ...request.Option) (*lightsail.CreateContactMethodOutput, error)
+	CreateContactMethodRequest(*lightsail.CreateContactMethodInput) (*request.Request, *lightsail.CreateContactMethodOutput)
 
 	CreateDisk(*lightsail.CreateDiskInput) (*lightsail.CreateDiskOutput, error)
 	CreateDiskWithContext(aws.Context, *lightsail.CreateDiskInput, ...request.Option) (*lightsail.CreateDiskOutput, error)
@@ -103,6 +115,10 @@ type LightsailAPI interface {
 	CreateDiskSnapshot(*lightsail.CreateDiskSnapshotInput) (*lightsail.CreateDiskSnapshotOutput, error)
 	CreateDiskSnapshotWithContext(aws.Context, *lightsail.CreateDiskSnapshotInput, ...request.Option) (*lightsail.CreateDiskSnapshotOutput, error)
 	CreateDiskSnapshotRequest(*lightsail.CreateDiskSnapshotInput) (*request.Request, *lightsail.CreateDiskSnapshotOutput)
+
+	CreateDistribution(*lightsail.CreateDistributionInput) (*lightsail.CreateDistributionOutput, error)
+	CreateDistributionWithContext(aws.Context, *lightsail.CreateDistributionInput, ...request.Option) (*lightsail.CreateDistributionOutput, error)
+	CreateDistributionRequest(*lightsail.CreateDistributionInput) (*request.Request, *lightsail.CreateDistributionOutput)
 
 	CreateDomain(*lightsail.CreateDomainInput) (*lightsail.CreateDomainOutput, error)
 	CreateDomainWithContext(aws.Context, *lightsail.CreateDomainInput, ...request.Option) (*lightsail.CreateDomainOutput, error)
@@ -148,9 +164,21 @@ type LightsailAPI interface {
 	CreateRelationalDatabaseSnapshotWithContext(aws.Context, *lightsail.CreateRelationalDatabaseSnapshotInput, ...request.Option) (*lightsail.CreateRelationalDatabaseSnapshotOutput, error)
 	CreateRelationalDatabaseSnapshotRequest(*lightsail.CreateRelationalDatabaseSnapshotInput) (*request.Request, *lightsail.CreateRelationalDatabaseSnapshotOutput)
 
+	DeleteAlarm(*lightsail.DeleteAlarmInput) (*lightsail.DeleteAlarmOutput, error)
+	DeleteAlarmWithContext(aws.Context, *lightsail.DeleteAlarmInput, ...request.Option) (*lightsail.DeleteAlarmOutput, error)
+	DeleteAlarmRequest(*lightsail.DeleteAlarmInput) (*request.Request, *lightsail.DeleteAlarmOutput)
+
 	DeleteAutoSnapshot(*lightsail.DeleteAutoSnapshotInput) (*lightsail.DeleteAutoSnapshotOutput, error)
 	DeleteAutoSnapshotWithContext(aws.Context, *lightsail.DeleteAutoSnapshotInput, ...request.Option) (*lightsail.DeleteAutoSnapshotOutput, error)
 	DeleteAutoSnapshotRequest(*lightsail.DeleteAutoSnapshotInput) (*request.Request, *lightsail.DeleteAutoSnapshotOutput)
+
+	DeleteCertificate(*lightsail.DeleteCertificateInput) (*lightsail.DeleteCertificateOutput, error)
+	DeleteCertificateWithContext(aws.Context, *lightsail.DeleteCertificateInput, ...request.Option) (*lightsail.DeleteCertificateOutput, error)
+	DeleteCertificateRequest(*lightsail.DeleteCertificateInput) (*request.Request, *lightsail.DeleteCertificateOutput)
+
+	DeleteContactMethod(*lightsail.DeleteContactMethodInput) (*lightsail.DeleteContactMethodOutput, error)
+	DeleteContactMethodWithContext(aws.Context, *lightsail.DeleteContactMethodInput, ...request.Option) (*lightsail.DeleteContactMethodOutput, error)
+	DeleteContactMethodRequest(*lightsail.DeleteContactMethodInput) (*request.Request, *lightsail.DeleteContactMethodOutput)
 
 	DeleteDisk(*lightsail.DeleteDiskInput) (*lightsail.DeleteDiskOutput, error)
 	DeleteDiskWithContext(aws.Context, *lightsail.DeleteDiskInput, ...request.Option) (*lightsail.DeleteDiskOutput, error)
@@ -159,6 +187,10 @@ type LightsailAPI interface {
 	DeleteDiskSnapshot(*lightsail.DeleteDiskSnapshotInput) (*lightsail.DeleteDiskSnapshotOutput, error)
 	DeleteDiskSnapshotWithContext(aws.Context, *lightsail.DeleteDiskSnapshotInput, ...request.Option) (*lightsail.DeleteDiskSnapshotOutput, error)
 	DeleteDiskSnapshotRequest(*lightsail.DeleteDiskSnapshotInput) (*request.Request, *lightsail.DeleteDiskSnapshotOutput)
+
+	DeleteDistribution(*lightsail.DeleteDistributionInput) (*lightsail.DeleteDistributionOutput, error)
+	DeleteDistributionWithContext(aws.Context, *lightsail.DeleteDistributionInput, ...request.Option) (*lightsail.DeleteDistributionOutput, error)
+	DeleteDistributionRequest(*lightsail.DeleteDistributionInput) (*request.Request, *lightsail.DeleteDistributionOutput)
 
 	DeleteDomain(*lightsail.DeleteDomainInput) (*lightsail.DeleteDomainOutput, error)
 	DeleteDomainWithContext(aws.Context, *lightsail.DeleteDomainInput, ...request.Option) (*lightsail.DeleteDomainOutput, error)
@@ -200,6 +232,10 @@ type LightsailAPI interface {
 	DeleteRelationalDatabaseSnapshotWithContext(aws.Context, *lightsail.DeleteRelationalDatabaseSnapshotInput, ...request.Option) (*lightsail.DeleteRelationalDatabaseSnapshotOutput, error)
 	DeleteRelationalDatabaseSnapshotRequest(*lightsail.DeleteRelationalDatabaseSnapshotInput) (*request.Request, *lightsail.DeleteRelationalDatabaseSnapshotOutput)
 
+	DetachCertificateFromDistribution(*lightsail.DetachCertificateFromDistributionInput) (*lightsail.DetachCertificateFromDistributionOutput, error)
+	DetachCertificateFromDistributionWithContext(aws.Context, *lightsail.DetachCertificateFromDistributionInput, ...request.Option) (*lightsail.DetachCertificateFromDistributionOutput, error)
+	DetachCertificateFromDistributionRequest(*lightsail.DetachCertificateFromDistributionInput) (*request.Request, *lightsail.DetachCertificateFromDistributionOutput)
+
 	DetachDisk(*lightsail.DetachDiskInput) (*lightsail.DetachDiskOutput, error)
 	DetachDiskWithContext(aws.Context, *lightsail.DetachDiskInput, ...request.Option) (*lightsail.DetachDiskOutput, error)
 	DetachDiskRequest(*lightsail.DetachDiskInput) (*request.Request, *lightsail.DetachDiskOutput)
@@ -232,6 +268,10 @@ type LightsailAPI interface {
 	GetActiveNamesWithContext(aws.Context, *lightsail.GetActiveNamesInput, ...request.Option) (*lightsail.GetActiveNamesOutput, error)
 	GetActiveNamesRequest(*lightsail.GetActiveNamesInput) (*request.Request, *lightsail.GetActiveNamesOutput)
 
+	GetAlarms(*lightsail.GetAlarmsInput) (*lightsail.GetAlarmsOutput, error)
+	GetAlarmsWithContext(aws.Context, *lightsail.GetAlarmsInput, ...request.Option) (*lightsail.GetAlarmsOutput, error)
+	GetAlarmsRequest(*lightsail.GetAlarmsInput) (*request.Request, *lightsail.GetAlarmsOutput)
+
 	GetAutoSnapshots(*lightsail.GetAutoSnapshotsInput) (*lightsail.GetAutoSnapshotsOutput, error)
 	GetAutoSnapshotsWithContext(aws.Context, *lightsail.GetAutoSnapshotsInput, ...request.Option) (*lightsail.GetAutoSnapshotsOutput, error)
 	GetAutoSnapshotsRequest(*lightsail.GetAutoSnapshotsInput) (*request.Request, *lightsail.GetAutoSnapshotsOutput)
@@ -244,9 +284,17 @@ type LightsailAPI interface {
 	GetBundlesWithContext(aws.Context, *lightsail.GetBundlesInput, ...request.Option) (*lightsail.GetBundlesOutput, error)
 	GetBundlesRequest(*lightsail.GetBundlesInput) (*request.Request, *lightsail.GetBundlesOutput)
 
+	GetCertificates(*lightsail.GetCertificatesInput) (*lightsail.GetCertificatesOutput, error)
+	GetCertificatesWithContext(aws.Context, *lightsail.GetCertificatesInput, ...request.Option) (*lightsail.GetCertificatesOutput, error)
+	GetCertificatesRequest(*lightsail.GetCertificatesInput) (*request.Request, *lightsail.GetCertificatesOutput)
+
 	GetCloudFormationStackRecords(*lightsail.GetCloudFormationStackRecordsInput) (*lightsail.GetCloudFormationStackRecordsOutput, error)
 	GetCloudFormationStackRecordsWithContext(aws.Context, *lightsail.GetCloudFormationStackRecordsInput, ...request.Option) (*lightsail.GetCloudFormationStackRecordsOutput, error)
 	GetCloudFormationStackRecordsRequest(*lightsail.GetCloudFormationStackRecordsInput) (*request.Request, *lightsail.GetCloudFormationStackRecordsOutput)
+
+	GetContactMethods(*lightsail.GetContactMethodsInput) (*lightsail.GetContactMethodsOutput, error)
+	GetContactMethodsWithContext(aws.Context, *lightsail.GetContactMethodsInput, ...request.Option) (*lightsail.GetContactMethodsOutput, error)
+	GetContactMethodsRequest(*lightsail.GetContactMethodsInput) (*request.Request, *lightsail.GetContactMethodsOutput)
 
 	GetDisk(*lightsail.GetDiskInput) (*lightsail.GetDiskOutput, error)
 	GetDiskWithContext(aws.Context, *lightsail.GetDiskInput, ...request.Option) (*lightsail.GetDiskOutput, error)
@@ -263,6 +311,22 @@ type LightsailAPI interface {
 	GetDisks(*lightsail.GetDisksInput) (*lightsail.GetDisksOutput, error)
 	GetDisksWithContext(aws.Context, *lightsail.GetDisksInput, ...request.Option) (*lightsail.GetDisksOutput, error)
 	GetDisksRequest(*lightsail.GetDisksInput) (*request.Request, *lightsail.GetDisksOutput)
+
+	GetDistributionBundles(*lightsail.GetDistributionBundlesInput) (*lightsail.GetDistributionBundlesOutput, error)
+	GetDistributionBundlesWithContext(aws.Context, *lightsail.GetDistributionBundlesInput, ...request.Option) (*lightsail.GetDistributionBundlesOutput, error)
+	GetDistributionBundlesRequest(*lightsail.GetDistributionBundlesInput) (*request.Request, *lightsail.GetDistributionBundlesOutput)
+
+	GetDistributionLatestCacheReset(*lightsail.GetDistributionLatestCacheResetInput) (*lightsail.GetDistributionLatestCacheResetOutput, error)
+	GetDistributionLatestCacheResetWithContext(aws.Context, *lightsail.GetDistributionLatestCacheResetInput, ...request.Option) (*lightsail.GetDistributionLatestCacheResetOutput, error)
+	GetDistributionLatestCacheResetRequest(*lightsail.GetDistributionLatestCacheResetInput) (*request.Request, *lightsail.GetDistributionLatestCacheResetOutput)
+
+	GetDistributionMetricData(*lightsail.GetDistributionMetricDataInput) (*lightsail.GetDistributionMetricDataOutput, error)
+	GetDistributionMetricDataWithContext(aws.Context, *lightsail.GetDistributionMetricDataInput, ...request.Option) (*lightsail.GetDistributionMetricDataOutput, error)
+	GetDistributionMetricDataRequest(*lightsail.GetDistributionMetricDataInput) (*request.Request, *lightsail.GetDistributionMetricDataOutput)
+
+	GetDistributions(*lightsail.GetDistributionsInput) (*lightsail.GetDistributionsOutput, error)
+	GetDistributionsWithContext(aws.Context, *lightsail.GetDistributionsInput, ...request.Option) (*lightsail.GetDistributionsOutput, error)
+	GetDistributionsRequest(*lightsail.GetDistributionsInput) (*request.Request, *lightsail.GetDistributionsOutput)
 
 	GetDomain(*lightsail.GetDomainInput) (*lightsail.GetDomainOutput, error)
 	GetDomainWithContext(aws.Context, *lightsail.GetDomainInput, ...request.Option) (*lightsail.GetDomainOutput, error)
@@ -420,6 +484,10 @@ type LightsailAPI interface {
 	PeerVpcWithContext(aws.Context, *lightsail.PeerVpcInput, ...request.Option) (*lightsail.PeerVpcOutput, error)
 	PeerVpcRequest(*lightsail.PeerVpcInput) (*request.Request, *lightsail.PeerVpcOutput)
 
+	PutAlarm(*lightsail.PutAlarmInput) (*lightsail.PutAlarmOutput, error)
+	PutAlarmWithContext(aws.Context, *lightsail.PutAlarmInput, ...request.Option) (*lightsail.PutAlarmOutput, error)
+	PutAlarmRequest(*lightsail.PutAlarmInput) (*request.Request, *lightsail.PutAlarmOutput)
+
 	PutInstancePublicPorts(*lightsail.PutInstancePublicPortsInput) (*lightsail.PutInstancePublicPortsOutput, error)
 	PutInstancePublicPortsWithContext(aws.Context, *lightsail.PutInstancePublicPortsInput, ...request.Option) (*lightsail.PutInstancePublicPortsOutput, error)
 	PutInstancePublicPortsRequest(*lightsail.PutInstancePublicPortsInput) (*request.Request, *lightsail.PutInstancePublicPortsOutput)
@@ -435,6 +503,14 @@ type LightsailAPI interface {
 	ReleaseStaticIp(*lightsail.ReleaseStaticIpInput) (*lightsail.ReleaseStaticIpOutput, error)
 	ReleaseStaticIpWithContext(aws.Context, *lightsail.ReleaseStaticIpInput, ...request.Option) (*lightsail.ReleaseStaticIpOutput, error)
 	ReleaseStaticIpRequest(*lightsail.ReleaseStaticIpInput) (*request.Request, *lightsail.ReleaseStaticIpOutput)
+
+	ResetDistributionCache(*lightsail.ResetDistributionCacheInput) (*lightsail.ResetDistributionCacheOutput, error)
+	ResetDistributionCacheWithContext(aws.Context, *lightsail.ResetDistributionCacheInput, ...request.Option) (*lightsail.ResetDistributionCacheOutput, error)
+	ResetDistributionCacheRequest(*lightsail.ResetDistributionCacheInput) (*request.Request, *lightsail.ResetDistributionCacheOutput)
+
+	SendContactMethodVerification(*lightsail.SendContactMethodVerificationInput) (*lightsail.SendContactMethodVerificationOutput, error)
+	SendContactMethodVerificationWithContext(aws.Context, *lightsail.SendContactMethodVerificationInput, ...request.Option) (*lightsail.SendContactMethodVerificationOutput, error)
+	SendContactMethodVerificationRequest(*lightsail.SendContactMethodVerificationInput) (*request.Request, *lightsail.SendContactMethodVerificationOutput)
 
 	StartInstance(*lightsail.StartInstanceInput) (*lightsail.StartInstanceOutput, error)
 	StartInstanceWithContext(aws.Context, *lightsail.StartInstanceInput, ...request.Option) (*lightsail.StartInstanceOutput, error)
@@ -456,6 +532,10 @@ type LightsailAPI interface {
 	TagResourceWithContext(aws.Context, *lightsail.TagResourceInput, ...request.Option) (*lightsail.TagResourceOutput, error)
 	TagResourceRequest(*lightsail.TagResourceInput) (*request.Request, *lightsail.TagResourceOutput)
 
+	TestAlarm(*lightsail.TestAlarmInput) (*lightsail.TestAlarmOutput, error)
+	TestAlarmWithContext(aws.Context, *lightsail.TestAlarmInput, ...request.Option) (*lightsail.TestAlarmOutput, error)
+	TestAlarmRequest(*lightsail.TestAlarmInput) (*request.Request, *lightsail.TestAlarmOutput)
+
 	UnpeerVpc(*lightsail.UnpeerVpcInput) (*lightsail.UnpeerVpcOutput, error)
 	UnpeerVpcWithContext(aws.Context, *lightsail.UnpeerVpcInput, ...request.Option) (*lightsail.UnpeerVpcOutput, error)
 	UnpeerVpcRequest(*lightsail.UnpeerVpcInput) (*request.Request, *lightsail.UnpeerVpcOutput)
@@ -463,6 +543,14 @@ type LightsailAPI interface {
 	UntagResource(*lightsail.UntagResourceInput) (*lightsail.UntagResourceOutput, error)
 	UntagResourceWithContext(aws.Context, *lightsail.UntagResourceInput, ...request.Option) (*lightsail.UntagResourceOutput, error)
 	UntagResourceRequest(*lightsail.UntagResourceInput) (*request.Request, *lightsail.UntagResourceOutput)
+
+	UpdateDistribution(*lightsail.UpdateDistributionInput) (*lightsail.UpdateDistributionOutput, error)
+	UpdateDistributionWithContext(aws.Context, *lightsail.UpdateDistributionInput, ...request.Option) (*lightsail.UpdateDistributionOutput, error)
+	UpdateDistributionRequest(*lightsail.UpdateDistributionInput) (*request.Request, *lightsail.UpdateDistributionOutput)
+
+	UpdateDistributionBundle(*lightsail.UpdateDistributionBundleInput) (*lightsail.UpdateDistributionBundleOutput, error)
+	UpdateDistributionBundleWithContext(aws.Context, *lightsail.UpdateDistributionBundleInput, ...request.Option) (*lightsail.UpdateDistributionBundleOutput, error)
+	UpdateDistributionBundleRequest(*lightsail.UpdateDistributionBundleInput) (*request.Request, *lightsail.UpdateDistributionBundleOutput)
 
 	UpdateDomainEntry(*lightsail.UpdateDomainEntryInput) (*lightsail.UpdateDomainEntryOutput, error)
 	UpdateDomainEntryWithContext(aws.Context, *lightsail.UpdateDomainEntryInput, ...request.Option) (*lightsail.UpdateDomainEntryOutput, error)

@@ -260,6 +260,13 @@ type ServiceCatalogAPI interface {
 	GetAWSOrganizationsAccessStatusWithContext(aws.Context, *servicecatalog.GetAWSOrganizationsAccessStatusInput, ...request.Option) (*servicecatalog.GetAWSOrganizationsAccessStatusOutput, error)
 	GetAWSOrganizationsAccessStatusRequest(*servicecatalog.GetAWSOrganizationsAccessStatusInput) (*request.Request, *servicecatalog.GetAWSOrganizationsAccessStatusOutput)
 
+	GetProvisionedProductOutputs(*servicecatalog.GetProvisionedProductOutputsInput) (*servicecatalog.GetProvisionedProductOutputsOutput, error)
+	GetProvisionedProductOutputsWithContext(aws.Context, *servicecatalog.GetProvisionedProductOutputsInput, ...request.Option) (*servicecatalog.GetProvisionedProductOutputsOutput, error)
+	GetProvisionedProductOutputsRequest(*servicecatalog.GetProvisionedProductOutputsInput) (*request.Request, *servicecatalog.GetProvisionedProductOutputsOutput)
+
+	GetProvisionedProductOutputsPages(*servicecatalog.GetProvisionedProductOutputsInput, func(*servicecatalog.GetProvisionedProductOutputsOutput, bool) bool) error
+	GetProvisionedProductOutputsPagesWithContext(aws.Context, *servicecatalog.GetProvisionedProductOutputsInput, func(*servicecatalog.GetProvisionedProductOutputsOutput, bool) bool, ...request.Option) error
+
 	ListAcceptedPortfolioShares(*servicecatalog.ListAcceptedPortfolioSharesInput) (*servicecatalog.ListAcceptedPortfolioSharesOutput, error)
 	ListAcceptedPortfolioSharesWithContext(aws.Context, *servicecatalog.ListAcceptedPortfolioSharesInput, ...request.Option) (*servicecatalog.ListAcceptedPortfolioSharesOutput, error)
 	ListAcceptedPortfolioSharesRequest(*servicecatalog.ListAcceptedPortfolioSharesInput) (*request.Request, *servicecatalog.ListAcceptedPortfolioSharesOutput)
@@ -298,6 +305,9 @@ type ServiceCatalogAPI interface {
 	ListPortfolioAccess(*servicecatalog.ListPortfolioAccessInput) (*servicecatalog.ListPortfolioAccessOutput, error)
 	ListPortfolioAccessWithContext(aws.Context, *servicecatalog.ListPortfolioAccessInput, ...request.Option) (*servicecatalog.ListPortfolioAccessOutput, error)
 	ListPortfolioAccessRequest(*servicecatalog.ListPortfolioAccessInput) (*request.Request, *servicecatalog.ListPortfolioAccessOutput)
+
+	ListPortfolioAccessPages(*servicecatalog.ListPortfolioAccessInput, func(*servicecatalog.ListPortfolioAccessOutput, bool) bool) error
+	ListPortfolioAccessPagesWithContext(aws.Context, *servicecatalog.ListPortfolioAccessInput, func(*servicecatalog.ListPortfolioAccessOutput, bool) bool, ...request.Option) error
 
 	ListPortfolios(*servicecatalog.ListPortfoliosInput) (*servicecatalog.ListPortfoliosOutput, error)
 	ListPortfoliosWithContext(aws.Context, *servicecatalog.ListPortfoliosInput, ...request.Option) (*servicecatalog.ListPortfoliosOutput, error)

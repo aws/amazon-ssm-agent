@@ -143,6 +143,15 @@
       },
       "input":{"shape":"DeleteBucketMetricsConfigurationRequest"}
     },
+    "DeleteBucketOwnershipControls":{
+      "name":"DeleteBucketOwnershipControls",
+      "http":{
+        "method":"DELETE",
+        "requestUri":"/{Bucket}?ownershipControls",
+        "responseCode":204
+      },
+      "input":{"shape":"DeleteBucketOwnershipControlsRequest"}
+    },
     "DeleteBucketPolicy":{
       "name":"DeleteBucketPolicy",
       "http":{
@@ -212,7 +221,8 @@
       "input":{"shape":"DeleteObjectsRequest"},
       "output":{"shape":"DeleteObjectsOutput"},
       "documentationUrl":"http://docs.amazonwebservices.com/AmazonS3/latest/API/multiobjectdeleteapi.html",
-      "alias":"DeleteMultipleObjects"
+      "alias":"DeleteMultipleObjects",
+      "httpChecksumRequired":true
     },
     "DeletePublicAccessBlock":{
       "name":"DeletePublicAccessBlock",
@@ -347,6 +357,15 @@
       },
       "input":{"shape":"GetBucketNotificationConfigurationRequest"},
       "output":{"shape":"NotificationConfiguration"}
+    },
+    "GetBucketOwnershipControls":{
+      "name":"GetBucketOwnershipControls",
+      "http":{
+        "method":"GET",
+        "requestUri":"/{Bucket}?ownershipControls"
+      },
+      "input":{"shape":"GetBucketOwnershipControlsRequest"},
+      "output":{"shape":"GetBucketOwnershipControlsOutput"}
     },
     "GetBucketPolicy":{
       "name":"GetBucketPolicy",
@@ -631,7 +650,8 @@
         "requestUri":"/{Bucket}?acl"
       },
       "input":{"shape":"PutBucketAclRequest"},
-      "documentationUrl":"http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTBucketPUTacl.html"
+      "documentationUrl":"http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTBucketPUTacl.html",
+      "httpChecksumRequired":true
     },
     "PutBucketAnalyticsConfiguration":{
       "name":"PutBucketAnalyticsConfiguration",
@@ -648,7 +668,8 @@
         "requestUri":"/{Bucket}?cors"
       },
       "input":{"shape":"PutBucketCorsRequest"},
-      "documentationUrl":"http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTBucketPUTcors.html"
+      "documentationUrl":"http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTBucketPUTcors.html",
+      "httpChecksumRequired":true
     },
     "PutBucketEncryption":{
       "name":"PutBucketEncryption",
@@ -656,7 +677,8 @@
         "method":"PUT",
         "requestUri":"/{Bucket}?encryption"
       },
-      "input":{"shape":"PutBucketEncryptionRequest"}
+      "input":{"shape":"PutBucketEncryptionRequest"},
+      "httpChecksumRequired":true
     },
     "PutBucketInventoryConfiguration":{
       "name":"PutBucketInventoryConfiguration",
@@ -674,7 +696,8 @@
       },
       "input":{"shape":"PutBucketLifecycleRequest"},
       "documentationUrl":"http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTBucketPUTlifecycle.html",
-      "deprecated":true
+      "deprecated":true,
+      "httpChecksumRequired":true
     },
     "PutBucketLifecycleConfiguration":{
       "name":"PutBucketLifecycleConfiguration",
@@ -682,7 +705,8 @@
         "method":"PUT",
         "requestUri":"/{Bucket}?lifecycle"
       },
-      "input":{"shape":"PutBucketLifecycleConfigurationRequest"}
+      "input":{"shape":"PutBucketLifecycleConfigurationRequest"},
+      "httpChecksumRequired":true
     },
     "PutBucketLogging":{
       "name":"PutBucketLogging",
@@ -691,7 +715,8 @@
         "requestUri":"/{Bucket}?logging"
       },
       "input":{"shape":"PutBucketLoggingRequest"},
-      "documentationUrl":"http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTBucketPUTlogging.html"
+      "documentationUrl":"http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTBucketPUTlogging.html",
+      "httpChecksumRequired":true
     },
     "PutBucketMetricsConfiguration":{
       "name":"PutBucketMetricsConfiguration",
@@ -709,7 +734,8 @@
       },
       "input":{"shape":"PutBucketNotificationRequest"},
       "documentationUrl":"http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTBucketPUTnotification.html",
-      "deprecated":true
+      "deprecated":true,
+      "httpChecksumRequired":true
     },
     "PutBucketNotificationConfiguration":{
       "name":"PutBucketNotificationConfiguration",
@@ -719,6 +745,14 @@
       },
       "input":{"shape":"PutBucketNotificationConfigurationRequest"}
     },
+    "PutBucketOwnershipControls":{
+      "name":"PutBucketOwnershipControls",
+      "http":{
+        "method":"PUT",
+        "requestUri":"/{Bucket}?ownershipControls"
+      },
+      "input":{"shape":"PutBucketOwnershipControlsRequest"}
+    },
     "PutBucketPolicy":{
       "name":"PutBucketPolicy",
       "http":{
@@ -726,7 +760,8 @@
         "requestUri":"/{Bucket}?policy"
       },
       "input":{"shape":"PutBucketPolicyRequest"},
-      "documentationUrl":"http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTBucketPUTpolicy.html"
+      "documentationUrl":"http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTBucketPUTpolicy.html",
+      "httpChecksumRequired":true
     },
     "PutBucketReplication":{
       "name":"PutBucketReplication",
@@ -734,7 +769,8 @@
         "method":"PUT",
         "requestUri":"/{Bucket}?replication"
       },
-      "input":{"shape":"PutBucketReplicationRequest"}
+      "input":{"shape":"PutBucketReplicationRequest"},
+      "httpChecksumRequired":true
     },
     "PutBucketRequestPayment":{
       "name":"PutBucketRequestPayment",
@@ -743,7 +779,8 @@
         "requestUri":"/{Bucket}?requestPayment"
       },
       "input":{"shape":"PutBucketRequestPaymentRequest"},
-      "documentationUrl":"http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTrequestPaymentPUT.html"
+      "documentationUrl":"http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTrequestPaymentPUT.html",
+      "httpChecksumRequired":true
     },
     "PutBucketTagging":{
       "name":"PutBucketTagging",
@@ -752,7 +789,8 @@
         "requestUri":"/{Bucket}?tagging"
       },
       "input":{"shape":"PutBucketTaggingRequest"},
-      "documentationUrl":"http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTBucketPUTtagging.html"
+      "documentationUrl":"http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTBucketPUTtagging.html",
+      "httpChecksumRequired":true
     },
     "PutBucketVersioning":{
       "name":"PutBucketVersioning",
@@ -761,7 +799,8 @@
         "requestUri":"/{Bucket}?versioning"
       },
       "input":{"shape":"PutBucketVersioningRequest"},
-      "documentationUrl":"http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTBucketPUTVersioningStatus.html"
+      "documentationUrl":"http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTBucketPUTVersioningStatus.html",
+      "httpChecksumRequired":true
     },
     "PutBucketWebsite":{
       "name":"PutBucketWebsite",
@@ -770,7 +809,8 @@
         "requestUri":"/{Bucket}?website"
       },
       "input":{"shape":"PutBucketWebsiteRequest"},
-      "documentationUrl":"http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTBucketPUTwebsite.html"
+      "documentationUrl":"http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTBucketPUTwebsite.html",
+      "httpChecksumRequired":true
     },
     "PutObject":{
       "name":"PutObject",
@@ -793,7 +833,8 @@
       "errors":[
         {"shape":"NoSuchKey"}
       ],
-      "documentationUrl":"http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTObjectPUTacl.html"
+      "documentationUrl":"http://docs.amazonwebservices.com/AmazonS3/latest/API/RESTObjectPUTacl.html",
+      "httpChecksumRequired":true
     },
     "PutObjectLegalHold":{
       "name":"PutObjectLegalHold",
@@ -802,7 +843,8 @@
         "requestUri":"/{Bucket}/{Key+}?legal-hold"
       },
       "input":{"shape":"PutObjectLegalHoldRequest"},
-      "output":{"shape":"PutObjectLegalHoldOutput"}
+      "output":{"shape":"PutObjectLegalHoldOutput"},
+      "httpChecksumRequired":true
     },
     "PutObjectLockConfiguration":{
       "name":"PutObjectLockConfiguration",
@@ -811,7 +853,8 @@
         "requestUri":"/{Bucket}?object-lock"
       },
       "input":{"shape":"PutObjectLockConfigurationRequest"},
-      "output":{"shape":"PutObjectLockConfigurationOutput"}
+      "output":{"shape":"PutObjectLockConfigurationOutput"},
+      "httpChecksumRequired":true
     },
     "PutObjectRetention":{
       "name":"PutObjectRetention",
@@ -820,7 +863,8 @@
         "requestUri":"/{Bucket}/{Key+}?retention"
       },
       "input":{"shape":"PutObjectRetentionRequest"},
-      "output":{"shape":"PutObjectRetentionOutput"}
+      "output":{"shape":"PutObjectRetentionOutput"},
+      "httpChecksumRequired":true
     },
     "PutObjectTagging":{
       "name":"PutObjectTagging",
@@ -829,7 +873,8 @@
         "requestUri":"/{Bucket}/{Key+}?tagging"
       },
       "input":{"shape":"PutObjectTaggingRequest"},
-      "output":{"shape":"PutObjectTaggingOutput"}
+      "output":{"shape":"PutObjectTaggingOutput"},
+      "httpChecksumRequired":true
     },
     "PutPublicAccessBlock":{
       "name":"PutPublicAccessBlock",
@@ -837,7 +882,8 @@
         "method":"PUT",
         "requestUri":"/{Bucket}?publicAccessBlock"
       },
-      "input":{"shape":"PutPublicAccessBlockRequest"}
+      "input":{"shape":"PutPublicAccessBlockRequest"},
+      "httpChecksumRequired":true
     },
     "RestoreObject":{
       "name":"RestoreObject",
@@ -932,6 +978,11 @@
           "shape":"RequestPayer",
           "location":"header",
           "locationName":"x-amz-request-payer"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -1090,17 +1141,31 @@
     "BucketLocationConstraint":{
       "type":"string",
       "enum":[
-        "EU",
-        "eu-west-1",
-        "us-west-1",
-        "us-west-2",
+        "af-south-1",
+        "ap-east-1",
+        "ap-northeast-1",
+        "ap-northeast-2",
+        "ap-northeast-3",
         "ap-south-1",
         "ap-southeast-1",
         "ap-southeast-2",
-        "ap-northeast-1",
-        "sa-east-1",
+        "ca-central-1",
         "cn-north-1",
-        "eu-central-1"
+        "cn-northwest-1",
+        "EU",
+        "eu-central-1",
+        "eu-north-1",
+        "eu-south-1",
+        "eu-west-1",
+        "eu-west-2",
+        "eu-west-3",
+        "me-south-1",
+        "sa-east-1",
+        "us-east-2",
+        "us-gov-east-1",
+        "us-gov-west-1",
+        "us-west-1",
+        "us-west-2"
       ]
     },
     "BucketLoggingStatus":{
@@ -1297,6 +1362,11 @@
           "shape":"RequestPayer",
           "location":"header",
           "locationName":"x-amz-request-payer"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       },
       "payload":"MultipartUpload"
@@ -1595,6 +1665,16 @@
           "shape":"ObjectLockLegalHoldStatus",
           "location":"header",
           "locationName":"x-amz-object-lock-legal-hold"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
+        },
+        "ExpectedSourceBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-source-expected-bucket-owner"
         }
       }
     },
@@ -1888,6 +1968,11 @@
           "shape":"ObjectLockLegalHoldStatus",
           "location":"header",
           "locationName":"x-amz-object-lock-legal-hold"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -1933,6 +2018,11 @@
           "shape":"AnalyticsId",
           "location":"querystring",
           "locationName":"id"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -1944,6 +2034,11 @@
           "shape":"BucketName",
           "location":"uri",
           "locationName":"Bucket"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -1955,6 +2050,11 @@
           "shape":"BucketName",
           "location":"uri",
           "locationName":"Bucket"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -1974,6 +2074,11 @@
           "shape":"InventoryId",
           "location":"querystring",
           "locationName":"id"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -1985,6 +2090,11 @@
           "shape":"BucketName",
           "location":"uri",
           "locationName":"Bucket"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -2004,6 +2114,27 @@
           "shape":"MetricsId",
           "location":"querystring",
           "locationName":"id"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
+        }
+      }
+    },
+    "DeleteBucketOwnershipControlsRequest":{
+      "type":"structure",
+      "required":["Bucket"],
+      "members":{
+        "Bucket":{
+          "shape":"BucketName",
+          "location":"uri",
+          "locationName":"Bucket"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -2015,6 +2146,11 @@
           "shape":"BucketName",
           "location":"uri",
           "locationName":"Bucket"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -2026,6 +2162,11 @@
           "shape":"BucketName",
           "location":"uri",
           "locationName":"Bucket"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -2037,6 +2178,11 @@
           "shape":"BucketName",
           "location":"uri",
           "locationName":"Bucket"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -2048,6 +2194,11 @@
           "shape":"BucketName",
           "location":"uri",
           "locationName":"Bucket"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -2059,6 +2210,11 @@
           "shape":"BucketName",
           "location":"uri",
           "locationName":"Bucket"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -2148,6 +2304,11 @@
           "shape":"BypassGovernanceRetention",
           "location":"header",
           "locationName":"x-amz-bypass-governance-retention"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -2182,6 +2343,11 @@
           "shape":"ObjectVersionId",
           "location":"querystring",
           "locationName":"versionId"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -2231,6 +2397,11 @@
           "shape":"BypassGovernanceRetention",
           "location":"header",
           "locationName":"x-amz-bypass-governance-retention"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       },
       "payload":"Delete"
@@ -2243,6 +2414,11 @@
           "shape":"BucketName",
           "location":"uri",
           "locationName":"Bucket"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -2432,6 +2608,11 @@
           "shape":"BucketName",
           "location":"uri",
           "locationName":"Bucket"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -2453,6 +2634,11 @@
           "shape":"BucketName",
           "location":"uri",
           "locationName":"Bucket"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -2479,6 +2665,11 @@
           "shape":"AnalyticsId",
           "location":"querystring",
           "locationName":"id"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -2499,6 +2690,11 @@
           "shape":"BucketName",
           "location":"uri",
           "locationName":"Bucket"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -2517,6 +2713,11 @@
           "shape":"BucketName",
           "location":"uri",
           "locationName":"Bucket"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -2543,6 +2744,11 @@
           "shape":"InventoryId",
           "location":"querystring",
           "locationName":"id"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -2563,6 +2769,11 @@
           "shape":"BucketName",
           "location":"uri",
           "locationName":"Bucket"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -2583,6 +2794,11 @@
           "shape":"BucketName",
           "location":"uri",
           "locationName":"Bucket"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -2600,6 +2816,11 @@
           "shape":"BucketName",
           "location":"uri",
           "locationName":"Bucket"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -2617,6 +2838,11 @@
           "shape":"BucketName",
           "location":"uri",
           "locationName":"Bucket"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -2643,6 +2869,11 @@
           "shape":"MetricsId",
           "location":"querystring",
           "locationName":"id"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -2654,6 +2885,34 @@
           "shape":"BucketName",
           "location":"uri",
           "locationName":"Bucket"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
+        }
+      }
+    },
+    "GetBucketOwnershipControlsOutput":{
+      "type":"structure",
+      "members":{
+        "OwnershipControls":{"shape":"OwnershipControls"}
+      },
+      "payload":"OwnershipControls"
+    },
+    "GetBucketOwnershipControlsRequest":{
+      "type":"structure",
+      "required":["Bucket"],
+      "members":{
+        "Bucket":{
+          "shape":"BucketName",
+          "location":"uri",
+          "locationName":"Bucket"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -2672,6 +2931,11 @@
           "shape":"BucketName",
           "location":"uri",
           "locationName":"Bucket"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -2690,6 +2954,11 @@
           "shape":"BucketName",
           "location":"uri",
           "locationName":"Bucket"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -2708,6 +2977,11 @@
           "shape":"BucketName",
           "location":"uri",
           "locationName":"Bucket"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -2725,6 +2999,11 @@
           "shape":"BucketName",
           "location":"uri",
           "locationName":"Bucket"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -2743,6 +3022,11 @@
           "shape":"BucketName",
           "location":"uri",
           "locationName":"Bucket"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -2764,6 +3048,11 @@
           "shape":"BucketName",
           "location":"uri",
           "locationName":"Bucket"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -2784,6 +3073,11 @@
           "shape":"BucketName",
           "location":"uri",
           "locationName":"Bucket"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -2828,6 +3122,11 @@
           "shape":"RequestPayer",
           "location":"header",
           "locationName":"x-amz-request-payer"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -2864,6 +3163,11 @@
           "shape":"RequestPayer",
           "location":"header",
           "locationName":"x-amz-request-payer"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -2882,6 +3186,11 @@
           "shape":"BucketName",
           "location":"uri",
           "locationName":"Bucket"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -3146,6 +3455,11 @@
           "shape":"PartNumber",
           "location":"querystring",
           "locationName":"partNumber"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -3182,6 +3496,11 @@
           "shape":"RequestPayer",
           "location":"header",
           "locationName":"x-amz-request-payer"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -3218,6 +3537,11 @@
           "shape":"ObjectVersionId",
           "location":"querystring",
           "locationName":"versionId"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -3257,6 +3581,11 @@
           "shape":"RequestPayer",
           "location":"header",
           "locationName":"x-amz-request-payer"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -3275,6 +3604,11 @@
           "shape":"BucketName",
           "location":"uri",
           "locationName":"Bucket"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -3331,6 +3665,11 @@
           "shape":"BucketName",
           "location":"uri",
           "locationName":"Bucket"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -3550,6 +3889,11 @@
           "shape":"PartNumber",
           "location":"querystring",
           "locationName":"partNumber"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -3847,6 +4191,11 @@
           "shape":"Token",
           "location":"querystring",
           "locationName":"continuation-token"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -3875,6 +4224,11 @@
           "shape":"Token",
           "location":"querystring",
           "locationName":"continuation-token"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -3903,6 +4257,11 @@
           "shape":"Token",
           "location":"querystring",
           "locationName":"continuation-token"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -3971,6 +4330,11 @@
           "shape":"UploadIdMarker",
           "location":"querystring",
           "locationName":"upload-id-marker"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -4036,6 +4400,11 @@
           "shape":"VersionIdMarker",
           "location":"querystring",
           "locationName":"version-id-marker"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -4092,6 +4461,11 @@
           "shape":"RequestPayer",
           "location":"header",
           "locationName":"x-amz-request-payer"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -4160,6 +4534,11 @@
           "shape":"RequestPayer",
           "location":"header",
           "locationName":"x-amz-request-payer"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -4234,6 +4613,11 @@
           "shape":"RequestPayer",
           "location":"header",
           "locationName":"x-amz-request-payer"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       }
     },
@@ -4554,6 +4938,13 @@
       },
       "exception":true
     },
+    "ObjectOwnership":{
+      "type":"string",
+      "enum":[
+        "BucketOwnerPreferred",
+        "ObjectWriter"
+      ]
+    },
     "ObjectStorageClass":{
       "type":"string",
       "enum":[
@@ -4563,7 +4954,8 @@
         "STANDARD_IA",
         "ONEZONE_IA",
         "INTELLIGENT_TIERING",
-        "DEEP_ARCHIVE"
+        "DEEP_ARCHIVE",
+        "OUTPOSTS"
       ]
     },
     "ObjectVersion":{
@@ -4612,6 +5004,28 @@
     "OwnerOverride":{
       "type":"string",
       "enum":["Destination"]
+    },
+    "OwnershipControls":{
+      "type":"structure",
+      "required":["Rules"],
+      "members":{
+        "Rules":{
+          "shape":"OwnershipControlsRules",
+          "locationName":"Rule"
+        }
+      }
+    },
+    "OwnershipControlsRule":{
+      "type":"structure",
+      "required":["ObjectOwnership"],
+      "members":{
+        "ObjectOwnership":{"shape":"ObjectOwnership"}
+      }
+    },
+    "OwnershipControlsRules":{
+      "type":"list",
+      "member":{"shape":"OwnershipControlsRule"},
+      "flattened":true
     },
     "ParquetInput":{
       "type":"structure",
@@ -4726,6 +5140,11 @@
           "shape":"AccelerateConfiguration",
           "locationName":"AccelerateConfiguration",
           "xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       },
       "payload":"AccelerateConfiguration"
@@ -4751,6 +5170,8 @@
         },
         "ContentMD5":{
           "shape":"ContentMD5",
+          "deprecated":true,
+          "deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.",
           "location":"header",
           "locationName":"Content-MD5"
         },
@@ -4778,6 +5199,11 @@
           "shape":"GrantWriteACP",
           "location":"header",
           "locationName":"x-amz-grant-write-acp"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       },
       "payload":"AccessControlPolicy"
@@ -4804,6 +5230,11 @@
           "shape":"AnalyticsConfiguration",
           "locationName":"AnalyticsConfiguration",
           "xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       },
       "payload":"AnalyticsConfiguration"
@@ -4827,8 +5258,15 @@
         },
         "ContentMD5":{
           "shape":"ContentMD5",
+          "deprecated":true,
+          "deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.",
           "location":"header",
           "locationName":"Content-MD5"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       },
       "payload":"CORSConfiguration"
@@ -4847,6 +5285,8 @@
         },
         "ContentMD5":{
           "shape":"ContentMD5",
+          "deprecated":true,
+          "deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.",
           "location":"header",
           "locationName":"Content-MD5"
         },
@@ -4854,6 +5294,11 @@
           "shape":"ServerSideEncryptionConfiguration",
           "locationName":"ServerSideEncryptionConfiguration",
           "xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       },
       "payload":"ServerSideEncryptionConfiguration"
@@ -4880,6 +5325,11 @@
           "shape":"InventoryConfiguration",
           "locationName":"InventoryConfiguration",
           "xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       },
       "payload":"InventoryConfiguration"
@@ -4897,6 +5347,11 @@
           "shape":"BucketLifecycleConfiguration",
           "locationName":"LifecycleConfiguration",
           "xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       },
       "payload":"LifecycleConfiguration"
@@ -4912,6 +5367,8 @@
         },
         "ContentMD5":{
           "shape":"ContentMD5",
+          "deprecated":true,
+          "deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.",
           "location":"header",
           "locationName":"Content-MD5"
         },
@@ -4919,6 +5376,11 @@
           "shape":"LifecycleConfiguration",
           "locationName":"LifecycleConfiguration",
           "xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       },
       "payload":"LifecycleConfiguration"
@@ -4942,8 +5404,15 @@
         },
         "ContentMD5":{
           "shape":"ContentMD5",
+          "deprecated":true,
+          "deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.",
           "location":"header",
           "locationName":"Content-MD5"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       },
       "payload":"BucketLoggingStatus"
@@ -4970,6 +5439,11 @@
           "shape":"MetricsConfiguration",
           "locationName":"MetricsConfiguration",
           "xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       },
       "payload":"MetricsConfiguration"
@@ -4990,6 +5464,11 @@
           "shape":"NotificationConfiguration",
           "locationName":"NotificationConfiguration",
           "xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       },
       "payload":"NotificationConfiguration"
@@ -5008,6 +5487,8 @@
         },
         "ContentMD5":{
           "shape":"ContentMD5",
+          "deprecated":true,
+          "deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.",
           "location":"header",
           "locationName":"Content-MD5"
         },
@@ -5015,9 +5496,44 @@
           "shape":"NotificationConfigurationDeprecated",
           "locationName":"NotificationConfiguration",
           "xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       },
       "payload":"NotificationConfiguration"
+    },
+    "PutBucketOwnershipControlsRequest":{
+      "type":"structure",
+      "required":[
+        "Bucket",
+        "OwnershipControls"
+      ],
+      "members":{
+        "Bucket":{
+          "shape":"BucketName",
+          "location":"uri",
+          "locationName":"Bucket"
+        },
+        "ContentMD5":{
+          "shape":"ContentMD5",
+          "location":"header",
+          "locationName":"Content-MD5"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
+        },
+        "OwnershipControls":{
+          "shape":"OwnershipControls",
+          "locationName":"OwnershipControls",
+          "xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}
+        }
+      },
+      "payload":"OwnershipControls"
     },
     "PutBucketPolicyRequest":{
       "type":"structure",
@@ -5033,6 +5549,8 @@
         },
         "ContentMD5":{
           "shape":"ContentMD5",
+          "deprecated":true,
+          "deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.",
           "location":"header",
           "locationName":"Content-MD5"
         },
@@ -5041,7 +5559,12 @@
           "location":"header",
           "locationName":"x-amz-confirm-remove-self-bucket-access"
         },
-        "Policy":{"shape":"Policy"}
+        "Policy":{"shape":"Policy"},
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
+        }
       },
       "payload":"Policy"
     },
@@ -5059,6 +5582,8 @@
         },
         "ContentMD5":{
           "shape":"ContentMD5",
+          "deprecated":true,
+          "deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.",
           "location":"header",
           "locationName":"Content-MD5"
         },
@@ -5071,6 +5596,11 @@
           "shape":"ObjectLockToken",
           "location":"header",
           "locationName":"x-amz-bucket-object-lock-token"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       },
       "payload":"ReplicationConfiguration"
@@ -5089,6 +5619,8 @@
         },
         "ContentMD5":{
           "shape":"ContentMD5",
+          "deprecated":true,
+          "deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.",
           "location":"header",
           "locationName":"Content-MD5"
         },
@@ -5096,6 +5628,11 @@
           "shape":"RequestPaymentConfiguration",
           "locationName":"RequestPaymentConfiguration",
           "xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       },
       "payload":"RequestPaymentConfiguration"
@@ -5114,6 +5651,8 @@
         },
         "ContentMD5":{
           "shape":"ContentMD5",
+          "deprecated":true,
+          "deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.",
           "location":"header",
           "locationName":"Content-MD5"
         },
@@ -5121,6 +5660,11 @@
           "shape":"Tagging",
           "locationName":"Tagging",
           "xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       },
       "payload":"Tagging"
@@ -5139,6 +5683,8 @@
         },
         "ContentMD5":{
           "shape":"ContentMD5",
+          "deprecated":true,
+          "deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.",
           "location":"header",
           "locationName":"Content-MD5"
         },
@@ -5151,6 +5697,11 @@
           "shape":"VersioningConfiguration",
           "locationName":"VersioningConfiguration",
           "xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       },
       "payload":"VersioningConfiguration"
@@ -5169,6 +5720,8 @@
         },
         "ContentMD5":{
           "shape":"ContentMD5",
+          "deprecated":true,
+          "deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.",
           "location":"header",
           "locationName":"Content-MD5"
         },
@@ -5176,6 +5729,11 @@
           "shape":"WebsiteConfiguration",
           "locationName":"WebsiteConfiguration",
           "xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       },
       "payload":"WebsiteConfiguration"
@@ -5214,6 +5772,8 @@
         },
         "ContentMD5":{
           "shape":"ContentMD5",
+          "deprecated":true,
+          "deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.",
           "location":"header",
           "locationName":"Content-MD5"
         },
@@ -5256,6 +5816,11 @@
           "shape":"ObjectVersionId",
           "location":"querystring",
           "locationName":"versionId"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       },
       "payload":"AccessControlPolicy"
@@ -5304,8 +5869,15 @@
         },
         "ContentMD5":{
           "shape":"ContentMD5",
+          "deprecated":true,
+          "deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.",
           "location":"header",
           "locationName":"Content-MD5"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       },
       "payload":"LegalHold"
@@ -5346,8 +5918,15 @@
         },
         "ContentMD5":{
           "shape":"ContentMD5",
+          "deprecated":true,
+          "deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.",
           "location":"header",
           "locationName":"Content-MD5"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       },
       "payload":"ObjectLockConfiguration"
@@ -5557,6 +6136,11 @@
           "shape":"ObjectLockLegalHoldStatus",
           "location":"header",
           "locationName":"x-amz-object-lock-legal-hold"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       },
       "payload":"Body"
@@ -5610,8 +6194,15 @@
         },
         "ContentMD5":{
           "shape":"ContentMD5",
+          "deprecated":true,
+          "deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.",
           "location":"header",
           "locationName":"Content-MD5"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       },
       "payload":"Retention"
@@ -5651,6 +6242,8 @@
         },
         "ContentMD5":{
           "shape":"ContentMD5",
+          "deprecated":true,
+          "deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.",
           "location":"header",
           "locationName":"Content-MD5"
         },
@@ -5658,6 +6251,11 @@
           "shape":"Tagging",
           "locationName":"Tagging",
           "xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       },
       "payload":"Tagging"
@@ -5676,6 +6274,8 @@
         },
         "ContentMD5":{
           "shape":"ContentMD5",
+          "deprecated":true,
+          "deprecatedMessage":"Content-MD5 header will now be automatically computed and injected in associated operation's Http request.",
           "location":"header",
           "locationName":"Content-MD5"
         },
@@ -5683,6 +6283,11 @@
           "shape":"PublicAccessBlockConfiguration",
           "locationName":"PublicAccessBlockConfiguration",
           "xmlNamespace":{"uri":"http://s3.amazonaws.com/doc/2006-03-01/"}
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       },
       "payload":"PublicAccessBlockConfiguration"
@@ -5943,6 +6548,11 @@
           "shape":"RequestPayer",
           "location":"header",
           "locationName":"x-amz-request-payer"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       },
       "payload":"RestoreRequest"
@@ -6122,7 +6732,12 @@
         "RequestProgress":{"shape":"RequestProgress"},
         "InputSerialization":{"shape":"InputSerialization"},
         "OutputSerialization":{"shape":"OutputSerialization"},
-        "ScanRange":{"shape":"ScanRange"}
+        "ScanRange":{"shape":"ScanRange"},
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
+        }
       }
     },
     "SelectParameters":{
@@ -6227,7 +6842,8 @@
         "ONEZONE_IA",
         "INTELLIGENT_TIERING",
         "GLACIER",
-        "DEEP_ARCHIVE"
+        "DEEP_ARCHIVE",
+        "OUTPOSTS"
       ]
     },
     "StorageClassAnalysis":{
@@ -6515,6 +7131,16 @@
           "shape":"RequestPayer",
           "location":"header",
           "locationName":"x-amz-request-payer"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
+        },
+        "ExpectedSourceBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-source-expected-bucket-owner"
         }
       }
     },
@@ -6615,6 +7241,11 @@
           "shape":"RequestPayer",
           "location":"header",
           "locationName":"x-amz-request-payer"
+        },
+        "ExpectedBucketOwner":{
+          "shape":"AccountId",
+          "location":"header",
+          "locationName":"x-amz-expected-bucket-owner"
         }
       },
       "payload":"Body"

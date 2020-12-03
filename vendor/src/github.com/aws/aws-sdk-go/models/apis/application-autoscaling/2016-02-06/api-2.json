@@ -429,7 +429,13 @@
         "EC2SpotFleetRequestAverageNetworkOut",
         "SageMakerVariantInvocationsPerInstance",
         "ECSServiceAverageCPUUtilization",
-        "ECSServiceAverageMemoryUtilization"
+        "ECSServiceAverageMemoryUtilization",
+        "AppStreamAverageCapacityUtilization",
+        "ComprehendInferenceUtilization",
+        "LambdaProvisionedConcurrencyUtilization",
+        "CassandraReadCapacityUtilization",
+        "CassandraWriteCapacityUtilization",
+        "KafkaBrokerStorageUtilization"
       ]
     },
     "MetricUnit":{"type":"string"},
@@ -567,7 +573,13 @@
         "dynamodb:index:WriteCapacityUnits",
         "rds:cluster:ReadReplicaCount",
         "sagemaker:variant:DesiredInstanceCount",
-        "custom-resource:ResourceType:Property"
+        "custom-resource:ResourceType:Property",
+        "comprehend:document-classifier-endpoint:DesiredInferenceUnits",
+        "comprehend:entity-recognizer-endpoint:DesiredInferenceUnits",
+        "lambda:function:ProvisionedConcurrency",
+        "cassandra:table:ReadCapacityUnits",
+        "cassandra:table:WriteCapacityUnits",
+        "kafka:broker-storage:VolumeSize"
       ]
     },
     "ScalableTarget":{
@@ -717,7 +729,11 @@
         "dynamodb",
         "rds",
         "sagemaker",
-        "custom-resource"
+        "custom-resource",
+        "comprehend",
+        "lambda",
+        "cassandra",
+        "kafka"
       ]
     },
     "StepAdjustment":{

@@ -2,6 +2,10 @@
 
 package sesv2
 
+import (
+	"github.com/aws/aws-sdk-go/private/protocol"
+)
+
 const (
 
 	// ErrCodeAccountSuspendedException for service response error code
@@ -28,6 +32,18 @@ const (
 	//
 	// The resource is being modified by another operation or thread.
 	ErrCodeConcurrentModificationException = "ConcurrentModificationException"
+
+	// ErrCodeConflictException for service response error code
+	// "ConflictException".
+	//
+	// If there is already an ongoing account details update under review.
+	ErrCodeConflictException = "ConflictException"
+
+	// ErrCodeInvalidNextTokenException for service response error code
+	// "InvalidNextTokenException".
+	//
+	// The specified request includes an invalid or expired token.
+	ErrCodeInvalidNextTokenException = "InvalidNextTokenException"
 
 	// ErrCodeLimitExceededException for service response error code
 	// "LimitExceededException".
@@ -66,3 +82,18 @@ const (
 	// Too many requests have been made to the operation.
 	ErrCodeTooManyRequestsException = "TooManyRequestsException"
 )
+
+var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
+	"AccountSuspendedException":          newErrorAccountSuspendedException,
+	"AlreadyExistsException":             newErrorAlreadyExistsException,
+	"BadRequestException":                newErrorBadRequestException,
+	"ConcurrentModificationException":    newErrorConcurrentModificationException,
+	"ConflictException":                  newErrorConflictException,
+	"InvalidNextTokenException":          newErrorInvalidNextTokenException,
+	"LimitExceededException":             newErrorLimitExceededException,
+	"MailFromDomainNotVerifiedException": newErrorMailFromDomainNotVerifiedException,
+	"MessageRejected":                    newErrorMessageRejected,
+	"NotFoundException":                  newErrorNotFoundException,
+	"SendingPausedException":             newErrorSendingPausedException,
+	"TooManyRequestsException":           newErrorTooManyRequestsException,
+}

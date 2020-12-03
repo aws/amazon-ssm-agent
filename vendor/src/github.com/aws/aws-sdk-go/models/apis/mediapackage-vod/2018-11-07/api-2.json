@@ -419,6 +419,79 @@
       "output": {
         "shape": "ListPackagingGroupsResponse"
       }
+    },
+    "ListTagsForResource": {
+      "errors": [],
+      "http": {
+        "method": "GET",
+        "requestUri": "/tags/{resource-arn}",
+        "responseCode": 200
+      },
+      "input": {
+        "shape": "ListTagsForResourceRequest"
+      },
+      "name": "ListTagsForResource",
+      "output": {
+        "shape": "ListTagsForResourceResponse"
+      }
+    },
+    "TagResource": {
+      "errors": [],
+      "http": {
+        "method": "POST",
+        "requestUri": "/tags/{resource-arn}",
+        "responseCode": 204
+      },
+      "input": {
+        "shape": "TagResourceRequest"
+      },
+      "name": "TagResource"
+    },
+    "UntagResource": {
+      "errors": [],
+      "http": {
+        "method": "DELETE",
+        "requestUri": "/tags/{resource-arn}",
+        "responseCode": 204
+      },
+      "input": {
+        "shape": "UntagResourceRequest"
+      },
+      "name": "UntagResource"
+    },
+    "UpdatePackagingGroup": {
+      "errors": [
+        {
+          "shape": "UnprocessableEntityException"
+        },
+        {
+          "shape": "InternalServerErrorException"
+        },
+        {
+          "shape": "ForbiddenException"
+        },
+        {
+          "shape": "NotFoundException"
+        },
+        {
+          "shape": "ServiceUnavailableException"
+        },
+        {
+          "shape": "TooManyRequestsException"
+        }
+      ],
+      "http": {
+        "method": "PUT",
+        "requestUri": "/packaging_groups/{id}",
+        "responseCode": 200
+      },
+      "input": {
+        "shape": "UpdatePackagingGroupRequest"
+      },
+      "name": "UpdatePackagingGroup",
+      "output": {
+        "shape": "UpdatePackagingGroupResponse"
+      }
     }
   },
   "shapes": {
@@ -463,6 +536,10 @@
         "SourceRoleArn": {
           "locationName": "sourceRoleArn",
           "shape": "__string"
+        },
+        "Tags": {
+          "locationName": "tags",
+          "shape": "Tags"
         }
       },
       "type": "structure"
@@ -488,6 +565,10 @@
         "SourceRoleArn": {
           "locationName": "sourceRoleArn",
           "shape": "__string"
+        },
+        "Tags": {
+          "locationName": "tags",
+          "shape": "Tags"
         }
       },
       "required": [
@@ -540,8 +621,29 @@
         "SourceRoleArn": {
           "locationName": "sourceRoleArn",
           "shape": "__string"
+        },
+        "Tags": {
+          "locationName": "tags",
+          "shape": "Tags"
         }
       },
+      "type": "structure"
+    },
+    "Authorization": {
+      "members": {
+        "CdnIdentifierSecret": {
+          "locationName": "cdnIdentifierSecret",
+          "shape": "__string"
+        },
+        "SecretsRoleArn": {
+          "locationName": "secretsRoleArn",
+          "shape": "__string"
+        }
+      },
+      "required": [
+        "SecretsRoleArn",
+        "CdnIdentifierSecret"
+      ],
       "type": "structure"
     },
     "CmafEncryption": {
@@ -597,6 +699,10 @@
         "SourceRoleArn": {
           "locationName": "sourceRoleArn",
           "shape": "__string"
+        },
+        "Tags": {
+          "locationName": "tags",
+          "shape": "Tags"
         }
       },
       "required": [
@@ -640,6 +746,10 @@
         "SourceRoleArn": {
           "locationName": "sourceRoleArn",
           "shape": "__string"
+        },
+        "Tags": {
+          "locationName": "tags",
+          "shape": "Tags"
         }
       },
       "type": "structure"
@@ -669,6 +779,10 @@
         "PackagingGroupId": {
           "locationName": "packagingGroupId",
           "shape": "__string"
+        },
+        "Tags": {
+          "locationName": "tags",
+          "shape": "Tags"
         }
       },
       "required": [
@@ -706,15 +820,27 @@
         "PackagingGroupId": {
           "locationName": "packagingGroupId",
           "shape": "__string"
+        },
+        "Tags": {
+          "locationName": "tags",
+          "shape": "Tags"
         }
       },
       "type": "structure"
     },
     "CreatePackagingGroupRequest": {
       "members": {
+        "Authorization": {
+          "locationName": "authorization",
+          "shape": "Authorization"
+        },
         "Id": {
           "locationName": "id",
           "shape": "__string"
+        },
+        "Tags": {
+          "locationName": "tags",
+          "shape": "Tags"
         }
       },
       "required": [
@@ -728,9 +854,21 @@
           "locationName": "arn",
           "shape": "__string"
         },
+        "Authorization": {
+          "locationName": "authorization",
+          "shape": "Authorization"
+        },
+        "DomainName": {
+          "locationName": "domainName",
+          "shape": "__string"
+        },
         "Id": {
           "locationName": "id",
           "shape": "__string"
+        },
+        "Tags": {
+          "locationName": "tags",
+          "shape": "Tags"
         }
       },
       "type": "structure"
@@ -749,6 +887,10 @@
     },
     "DashManifest": {
       "members": {
+        "ManifestLayout": {
+          "locationName": "manifestLayout",
+          "shape": "ManifestLayout"
+        },
         "ManifestName": {
           "locationName": "manifestName",
           "shape": "__string"
@@ -778,9 +920,17 @@
           "locationName": "encryption",
           "shape": "DashEncryption"
         },
+        "PeriodTriggers": {
+          "locationName": "periodTriggers",
+          "shape": "__listOf__PeriodTriggersElement"
+        },
         "SegmentDurationSeconds": {
           "locationName": "segmentDurationSeconds",
           "shape": "__integer"
+        },
+        "SegmentTemplateFormat": {
+          "locationName": "segmentTemplateFormat",
+          "shape": "SegmentTemplateFormat"
         }
       },
       "required": [
@@ -885,6 +1035,10 @@
         "SourceRoleArn": {
           "locationName": "sourceRoleArn",
           "shape": "__string"
+        },
+        "Tags": {
+          "locationName": "tags",
+          "shape": "Tags"
         }
       },
       "type": "structure"
@@ -931,6 +1085,10 @@
         "PackagingGroupId": {
           "locationName": "packagingGroupId",
           "shape": "__string"
+        },
+        "Tags": {
+          "locationName": "tags",
+          "shape": "Tags"
         }
       },
       "type": "structure"
@@ -954,9 +1112,21 @@
           "locationName": "arn",
           "shape": "__string"
         },
+        "Authorization": {
+          "locationName": "authorization",
+          "shape": "Authorization"
+        },
+        "DomainName": {
+          "locationName": "domainName",
+          "shape": "__string"
+        },
         "Id": {
           "locationName": "id",
           "shape": "__string"
+        },
+        "Tags": {
+          "locationName": "tags",
+          "shape": "Tags"
         }
       },
       "type": "structure"
@@ -1174,6 +1344,35 @@
       },
       "type": "structure"
     },
+    "ListTagsForResourceRequest": {
+      "members": {
+        "ResourceArn": {
+          "location": "uri",
+          "locationName": "resource-arn",
+          "shape": "__string"
+        }
+      },
+      "required": [
+        "ResourceArn"
+      ],
+      "type": "structure"
+    },
+    "ListTagsForResourceResponse": {
+      "members": {
+        "Tags": {
+          "locationName": "tags",
+          "shape": "__mapOf__string"
+        }
+      },
+      "type": "structure"
+    },
+    "ManifestLayout": {
+      "enum": [
+        "FULL",
+        "COMPACT"
+      ],
+      "type": "string"
+    },
     "MaxResults": {
       "max": 1000,
       "min": 1,
@@ -1266,6 +1465,10 @@
         "PackagingGroupId": {
           "locationName": "packagingGroupId",
           "shape": "__string"
+        },
+        "Tags": {
+          "locationName": "tags",
+          "shape": "Tags"
         }
       },
       "type": "structure"
@@ -1295,6 +1498,10 @@
         "PackagingGroupId": {
           "locationName": "packagingGroupId",
           "shape": "__string"
+        },
+        "Tags": {
+          "locationName": "tags",
+          "shape": "Tags"
         }
       },
       "required": [
@@ -1322,18 +1529,38 @@
           "locationName": "arn",
           "shape": "__string"
         },
+        "Authorization": {
+          "locationName": "authorization",
+          "shape": "Authorization"
+        },
+        "DomainName": {
+          "locationName": "domainName",
+          "shape": "__string"
+        },
         "Id": {
           "locationName": "id",
           "shape": "__string"
+        },
+        "Tags": {
+          "locationName": "tags",
+          "shape": "Tags"
         }
       },
       "type": "structure"
     },
     "PackagingGroupCreateParameters": {
       "members": {
+        "Authorization": {
+          "locationName": "authorization",
+          "shape": "Authorization"
+        },
         "Id": {
           "locationName": "id",
           "shape": "__string"
+        },
+        "Tags": {
+          "locationName": "tags",
+          "shape": "Tags"
         }
       },
       "required": [
@@ -1354,10 +1581,27 @@
       },
       "type": "structure"
     },
+    "PackagingGroupUpdateParameters": {
+      "members": {
+        "Authorization": {
+          "locationName": "authorization",
+          "shape": "Authorization"
+        }
+      },
+      "type": "structure"
+    },
     "Profile": {
       "enum": [
         "NONE",
         "HBBTV_1_5"
+      ],
+      "type": "string"
+    },
+    "SegmentTemplateFormat": {
+      "enum": [
+        "NUMBER_WITH_TIMELINE",
+        "TIME_WITH_TIMELINE",
+        "NUMBER_WITH_DURATION"
       ],
       "type": "string"
     },
@@ -1421,6 +1665,45 @@
       },
       "type": "structure"
     },
+    "TagResourceRequest": {
+      "members": {
+        "ResourceArn": {
+          "location": "uri",
+          "locationName": "resource-arn",
+          "shape": "__string"
+        },
+        "Tags": {
+          "locationName": "tags",
+          "shape": "__mapOf__string"
+        }
+      },
+      "required": [
+        "ResourceArn",
+        "Tags"
+      ],
+      "type": "structure"
+    },
+    "Tags": {
+      "key": {
+        "shape": "__string"
+      },
+      "type": "map",
+      "value": {
+        "shape": "__string"
+      }
+    },
+    "TagsModel": {
+      "members": {
+        "Tags": {
+          "locationName": "tags",
+          "shape": "__mapOf__string"
+        }
+      },
+      "required": [
+        "Tags"
+      ],
+      "type": "structure"
+    },
     "TooManyRequestsException": {
       "error": {
         "httpStatusCode": 429
@@ -1446,6 +1729,73 @@
         }
       },
       "type": "structure"
+    },
+    "UntagResourceRequest": {
+      "members": {
+        "ResourceArn": {
+          "location": "uri",
+          "locationName": "resource-arn",
+          "shape": "__string"
+        },
+        "TagKeys": {
+          "location": "querystring",
+          "locationName": "tagKeys",
+          "shape": "__listOf__string"
+        }
+      },
+      "required": [
+        "TagKeys",
+        "ResourceArn"
+      ],
+      "type": "structure"
+    },
+    "UpdatePackagingGroupRequest": {
+      "members": {
+        "Authorization": {
+          "locationName": "authorization",
+          "shape": "Authorization"
+        },
+        "Id": {
+          "location": "uri",
+          "locationName": "id",
+          "shape": "__string"
+        }
+      },
+      "required": [
+        "Id"
+      ],
+      "type": "structure"
+    },
+    "UpdatePackagingGroupResponse": {
+      "members": {
+        "Arn": {
+          "locationName": "arn",
+          "shape": "__string"
+        },
+        "Authorization": {
+          "locationName": "authorization",
+          "shape": "Authorization"
+        },
+        "DomainName": {
+          "locationName": "domainName",
+          "shape": "__string"
+        },
+        "Id": {
+          "locationName": "id",
+          "shape": "__string"
+        },
+        "Tags": {
+          "locationName": "tags",
+          "shape": "Tags"
+        }
+      },
+      "type": "structure"
+    },
+    "__PeriodTriggersElement": {
+      "enum": [
+        "ADS"
+      ],
+      "type": "string"
     },
     "__boolean": {
       "type": "boolean"
@@ -1498,6 +1848,12 @@
       },
       "type": "list"
     },
+    "__listOf__PeriodTriggersElement": {
+      "member": {
+        "shape": "__PeriodTriggersElement"
+      },
+      "type": "list"
+    },
     "__listOf__string": {
       "member": {
         "shape": "__string"
@@ -1506,6 +1862,15 @@
     },
     "__long": {
       "type": "long"
+    },
+    "__mapOf__string": {
+      "key": {
+        "shape": "__string"
+      },
+      "type": "map",
+      "value": {
+        "shape": "__string"
+      }
     },
     "__string": {
       "type": "string"

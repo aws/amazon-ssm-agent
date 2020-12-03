@@ -14,21 +14,20 @@ import (
 )
 
 func TestWrapFactory(t *testing.T) {
-	c := DecryptionClient{
-		WrapRegistry: map[string]WrapEntry{
+	o := DecryptionClientOptions{
+		CryptoRegistry: initCryptoRegistryFrom(map[string]WrapEntry{
 			KMSWrap: (kmsKeyHandler{
 				kms: kms.New(unit.Session),
 			}).decryptHandler,
-		},
-		CEKRegistry: map[string]CEKEntry{
+		}, map[string]CEKEntry{
 			AESGCMNoPadding: newAESGCMContentCipher,
-		},
+		}, map[string]Padder{}),
 	}
 	env := Envelope{
 		WrapAlg: KMSWrap,
 		MatDesc: `{"kms_cmk_id":""}`,
 	}
-	wrap, err := c.wrapFromEnvelope(env)
+	wrap, err := wrapFromEnvelope(o, env)
 	w, ok := wrap.(*kmsKeyHandler)
 
 	if err != nil {
@@ -42,21 +41,20 @@ func TestWrapFactory(t *testing.T) {
 	}
 }
 func TestWrapFactoryErrorNoWrap(t *testing.T) {
-	c := DecryptionClient{
-		WrapRegistry: map[string]WrapEntry{
+	o := DecryptionClientOptions{
+		CryptoRegistry: initCryptoRegistryFrom(map[string]WrapEntry{
 			KMSWrap: (kmsKeyHandler{
 				kms: kms.New(unit.Session),
 			}).decryptHandler,
-		},
-		CEKRegistry: map[string]CEKEntry{
+		}, map[string]CEKEntry{
 			AESGCMNoPadding: newAESGCMContentCipher,
-		},
+		}, map[string]Padder{}),
 	}
 	env := Envelope{
 		WrapAlg: "none",
 		MatDesc: `{"kms_cmk_id":""}`,
 	}
-	wrap, err := c.wrapFromEnvelope(env)
+	wrap, err := wrapFromEnvelope(o, env)
 
 	if err == nil {
 		t.Error("expected error, but received none")
@@ -67,21 +65,20 @@ func TestWrapFactoryErrorNoWrap(t *testing.T) {
 }
 
 func TestWrapFactoryCustomEntry(t *testing.T) {
-	c := DecryptionClient{
-		WrapRegistry: map[string]WrapEntry{
+	o := DecryptionClientOptions{
+		CryptoRegistry: initCryptoRegistryFrom(map[string]WrapEntry{
 			"custom": (kmsKeyHandler{
 				kms: kms.New(unit.Session),
 			}).decryptHandler,
-		},
-		CEKRegistry: map[string]CEKEntry{
+		}, map[string]CEKEntry{
 			AESGCMNoPadding: newAESGCMContentCipher,
-		},
+		}, map[string]Padder{}),
 	}
 	env := Envelope{
 		WrapAlg: "custom",
 		MatDesc: `{"kms_cmk_id":""}`,
 	}
-	wrap, err := c.wrapFromEnvelope(env)
+	wrap, err := wrapFromEnvelope(o, env)
 
 	if err != nil {
 		t.Errorf("expected no error, but received %v", err)
@@ -107,18 +104,16 @@ func TestCEKFactory(t *testing.T) {
 		Region:           aws.String("us-west-2"),
 	})
 
-	c := DecryptionClient{
-		WrapRegistry: map[string]WrapEntry{
+	o := DecryptionClientOptions{
+		CryptoRegistry: initCryptoRegistryFrom(map[string]WrapEntry{
 			KMSWrap: (kmsKeyHandler{
 				kms: kms.New(sess),
 			}).decryptHandler,
-		},
-		CEKRegistry: map[string]CEKEntry{
+		}, map[string]CEKEntry{
 			AESGCMNoPadding: newAESGCMContentCipher,
-		},
-		PadderRegistry: map[string]Padder{
+		}, map[string]Padder{
 			NoPadder.Name(): NoPadder,
-		},
+		}),
 	}
 	iv, err := hex.DecodeString("0d18e06c7c725ac9e362e1ce")
 	if err != nil {
@@ -139,8 +134,8 @@ func TestCEKFactory(t *testing.T) {
 		IV:        ivB64,
 		MatDesc:   `{"kms_cmk_id":""}`,
 	}
-	wrap, err := c.wrapFromEnvelope(env)
-	cek, err := c.cekFromEnvelope(env, wrap)
+	wrap, err := wrapFromEnvelope(o, env)
+	cek, err := cekFromEnvelope(o, aws.BackgroundContext(), env, wrap)
 
 	if err != nil {
 		t.Errorf("expected no error, but received %v", err)
@@ -166,18 +161,19 @@ func TestCEKFactoryNoCEK(t *testing.T) {
 		Region:           aws.String("us-west-2"),
 	})
 
-	c := DecryptionClient{
-		WrapRegistry: map[string]WrapEntry{
-			KMSWrap: (kmsKeyHandler{
-				kms: kms.New(sess),
-			}).decryptHandler,
-		},
-		CEKRegistry: map[string]CEKEntry{
-			AESGCMNoPadding: newAESGCMContentCipher,
-		},
-		PadderRegistry: map[string]Padder{
-			NoPadder.Name(): NoPadder,
-		},
+	o := DecryptionClientOptions{
+		CryptoRegistry: initCryptoRegistryFrom(
+			map[string]WrapEntry{
+				KMSWrap: (kmsKeyHandler{
+					kms: kms.New(sess),
+				}).decryptHandler,
+			},
+			map[string]CEKEntry{
+				AESGCMNoPadding: newAESGCMContentCipher,
+			},
+			map[string]Padder{
+				NoPadder.Name(): NoPadder,
+			}),
 	}
 	iv, err := hex.DecodeString("0d18e06c7c725ac9e362e1ce")
 	if err != nil {
@@ -198,8 +194,8 @@ func TestCEKFactoryNoCEK(t *testing.T) {
 		IV:        ivB64,
 		MatDesc:   `{"kms_cmk_id":""}`,
 	}
-	wrap, err := c.wrapFromEnvelope(env)
-	cek, err := c.cekFromEnvelope(env, wrap)
+	wrap, err := wrapFromEnvelope(o, env)
+	cek, err := cekFromEnvelope(o, aws.BackgroundContext(), env, wrap)
 
 	if err == nil {
 		t.Error("expected error, but received none")
@@ -225,16 +221,15 @@ func TestCEKFactoryCustomEntry(t *testing.T) {
 		Region:           aws.String("us-west-2"),
 	})
 
-	c := DecryptionClient{
-		WrapRegistry: map[string]WrapEntry{
-			KMSWrap: (kmsKeyHandler{
-				kms: kms.New(sess),
-			}).decryptHandler,
-		},
-		CEKRegistry: map[string]CEKEntry{
-			"custom": newAESGCMContentCipher,
-		},
-		PadderRegistry: map[string]Padder{},
+	o := DecryptionClientOptions{
+		CryptoRegistry: initCryptoRegistryFrom(
+			map[string]WrapEntry{
+				KMSWrap: (kmsKeyHandler{
+					kms: kms.New(sess),
+				}).decryptHandler,
+			}, map[string]CEKEntry{
+				"custom": newAESGCMContentCipher,
+			}, map[string]Padder{}),
 	}
 	iv, err := hex.DecodeString("0d18e06c7c725ac9e362e1ce")
 	if err != nil {
@@ -255,8 +250,8 @@ func TestCEKFactoryCustomEntry(t *testing.T) {
 		IV:        ivB64,
 		MatDesc:   `{"kms_cmk_id":""}`,
 	}
-	wrap, err := c.wrapFromEnvelope(env)
-	cek, err := c.cekFromEnvelope(env, wrap)
+	wrap, err := wrapFromEnvelope(o, env)
+	cek, err := cekFromEnvelope(o, aws.BackgroundContext(), env, wrap)
 
 	if err != nil {
 		t.Errorf("expected no error, but received %v", err)

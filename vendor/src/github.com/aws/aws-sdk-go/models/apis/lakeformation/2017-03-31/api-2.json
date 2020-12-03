@@ -335,13 +335,15 @@
       "members":{
         "DataLakeAdmins":{"shape":"DataLakePrincipalList"},
         "CreateDatabaseDefaultPermissions":{"shape":"PrincipalPermissionsList"},
-        "CreateTableDefaultPermissions":{"shape":"PrincipalPermissionsList"}
+        "CreateTableDefaultPermissions":{"shape":"PrincipalPermissionsList"},
+        "TrustedResourceOwners":{"shape":"TrustedResourceOwners"}
       }
     },
     "DataLocationResource":{
       "type":"structure",
       "required":["ResourceArn"],
       "members":{
+        "CatalogId":{"shape":"CatalogIdString"},
         "ResourceArn":{"shape":"ResourceArnString"}
       }
     },
@@ -349,6 +351,7 @@
       "type":"structure",
       "required":["Name"],
       "members":{
+        "CatalogId":{"shape":"CatalogIdString"},
         "Name":{"shape":"NameString"}
       }
     },
@@ -382,6 +385,12 @@
       "max":2048,
       "min":0,
       "pattern":"[\\u0020-\\uD7FF\\uE000-\\uFFFD\\uD800\\uDC00-\\uDBFF\\uDFFF\\r\\n\\t]*"
+    },
+    "DetailsMap":{
+      "type":"structure",
+      "members":{
+        "ResourceShare":{"shape":"ResourceShareList"}
+      }
     },
     "EntityNotFoundException":{
       "type":"structure",
@@ -559,6 +568,7 @@
         "DROP",
         "DELETE",
         "INSERT",
+        "DESCRIBE",
         "CREATE_DATABASE",
         "CREATE_TABLE",
         "DATA_LOCATION_ACCESS"
@@ -585,7 +595,8 @@
         "Principal":{"shape":"DataLakePrincipal"},
         "Resource":{"shape":"Resource"},
         "Permissions":{"shape":"PermissionList"},
-        "PermissionsWithGrantOption":{"shape":"PermissionList"}
+        "PermissionsWithGrantOption":{"shape":"PermissionList"},
+        "AdditionalDetails":{"shape":"DetailsMap"}
       }
     },
     "PrincipalResourcePermissionsList":{
@@ -605,6 +616,7 @@
       "members":{
       }
     },
+    "RAMResourceShareArn":{"type":"string"},
     "RegisterResourceRequest":{
       "type":"structure",
       "required":["ResourceArn"],
@@ -642,6 +654,10 @@
       "type":"list",
       "member":{"shape":"ResourceInfo"}
     },
+    "ResourceShareList":{
+      "type":"list",
+      "member":{"shape":"RAMResourceShareArn"}
+    },
     "RevokePermissionsRequest":{
       "type":"structure",
       "required":[
@@ -669,18 +685,27 @@
     },
     "TableResource":{
       "type":"structure",
+      "required":["DatabaseName"],
+      "members":{
+        "CatalogId":{"shape":"CatalogIdString"},
+        "DatabaseName":{"shape":"NameString"},
+        "Name":{"shape":"NameString"},
+        "TableWildcard":{"shape":"TableWildcard"}
+      }
+    },
+    "TableWildcard":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "TableWithColumnsResource":{
+      "type":"structure",
       "required":[
         "DatabaseName",
         "Name"
       ],
       "members":{
-        "DatabaseName":{"shape":"NameString"},
-        "Name":{"shape":"NameString"}
-      }
-    },
-    "TableWithColumnsResource":{
-      "type":"structure",
-      "members":{
+        "CatalogId":{"shape":"CatalogIdString"},
         "DatabaseName":{"shape":"NameString"},
         "Name":{"shape":"NameString"},
         "ColumnNames":{"shape":"ColumnNames"},
@@ -688,6 +713,10 @@
       }
     },
     "Token":{"type":"string"},
+    "TrustedResourceOwners":{
+      "type":"list",
+      "member":{"shape":"CatalogIdString"}
+    },
     "UpdateResourceRequest":{
       "type":"structure",
       "required":[

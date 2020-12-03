@@ -12,6 +12,35 @@
     "signatureVersion": "v4"
   },
   "operations": {
+    "BatchAssociateScramSecret" : {
+      "name" : "BatchAssociateScramSecret",
+      "http" : {
+        "method" : "POST",
+        "requestUri" : "/v1/clusters/{clusterArn}/scram-secrets",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "BatchAssociateScramSecretRequest"
+      },
+      "output" : {
+        "shape" : "BatchAssociateScramSecretResponse"
+      },
+      "errors" : [ {
+        "shape" : "BadRequestException"
+      }, {
+        "shape" : "UnauthorizedException"
+      }, {
+        "shape" : "InternalServerErrorException"
+      }, {
+        "shape" : "ForbiddenException"
+      }, {
+        "shape" : "NotFoundException"
+      }, {
+        "shape" : "ServiceUnavailableException"
+      }, {
+        "shape" : "TooManyRequestsException"
+      } ]
+    },
     "CreateCluster": {
       "name": "CreateCluster",
       "http": {
@@ -98,6 +127,34 @@
       },
       "output": {
         "shape": "DeleteClusterResponse"
+      },
+      "errors": [
+        {
+          "shape": "NotFoundException"
+        },
+        {
+          "shape": "BadRequestException"
+        },
+        {
+          "shape": "InternalServerErrorException"
+        },
+        {
+          "shape": "ForbiddenException"
+        }
+      ]
+    },
+    "DeleteConfiguration": {
+      "name": "DeleteConfiguration",
+      "http": {
+        "method": "DELETE",
+        "requestUri": "/v1/configurations/{arn}",
+        "responseCode": 200
+      },
+      "input": {
+        "shape": "DeleteConfigurationRequest"
+      },
+      "output": {
+        "shape": "DeleteConfigurationResponse"
       },
       "errors": [
         {
@@ -244,6 +301,35 @@
         }
       ]
     },
+    "BatchDisassociateScramSecret" : {
+      "name" : "BatchDisassociateScramSecret",
+      "http" : {
+        "method" : "PATCH",
+        "requestUri" : "/v1/clusters/{clusterArn}/scram-secrets",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "BatchDisassociateScramSecretRequest"
+      },
+      "output" : {
+        "shape" : "BatchDisassociateScramSecretResponse"
+      },
+      "errors" : [ {
+        "shape" : "BadRequestException"
+      }, {
+        "shape" : "UnauthorizedException"
+      }, {
+        "shape" : "InternalServerErrorException"
+      }, {
+        "shape" : "ForbiddenException"
+      }, {
+        "shape" : "NotFoundException"
+      }, {
+        "shape" : "ServiceUnavailableException"
+      }, {
+        "shape" : "TooManyRequestsException"
+      } ]
+    },
     "GetBootstrapBrokers": {
       "name": "GetBootstrapBrokers",
       "http": {
@@ -273,6 +359,43 @@
         {
           "shape": "ForbiddenException"
         }
+      ]
+    },
+    "GetCompatibleKafkaVersions" : {
+      "name" : "GetCompatibleKafkaVersions",
+      "http" : {
+        "method" : "GET",
+        "requestUri" : "/v1/compatible-kafka-versions",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "GetCompatibleKafkaVersionsRequest"
+      },
+      "output" : {
+        "shape" : "GetCompatibleKafkaVersionsResponse"
+      },
+      "errors" : [ 
+        {
+          "shape" : "BadRequestException"
+        }, 
+        {
+          "shape" : "UnauthorizedException"
+        }, 
+        {
+          "shape" : "InternalServerErrorException"
+        }, 
+        {
+          "shape" : "ForbiddenException"
+        }, 
+        {
+          "shape" : "NotFoundException"
+        }, 
+        {
+          "shape" : "ServiceUnavailableException"
+        }, 
+        {
+          "shape" : "TooManyRequestsException"
+        } 
       ]
     },
     "ListClusterOperations": {
@@ -396,6 +519,34 @@
         }
       ]
     },
+    "ListKafkaVersions": {
+      "name": "ListKafkaVersions",
+      "http": {
+        "method": "GET",
+        "requestUri": "/v1/kafka-versions",
+        "responseCode": 200
+      },
+      "input": {
+        "shape": "ListKafkaVersionsRequest"
+      },
+      "output": {
+        "shape": "ListKafkaVersionsResponse"
+      },
+      "errors": [
+        {
+          "shape": "BadRequestException"
+        },
+        {
+          "shape": "UnauthorizedException"
+        },
+        {
+          "shape": "InternalServerErrorException"
+        },
+        {
+          "shape": "ForbiddenException"
+        }
+      ]
+    },
     "ListNodes": {
       "name": "ListNodes",
       "http": {
@@ -424,6 +575,35 @@
         }
       ]
     },
+    "ListScramSecrets" : {
+      "name" : "ListScramSecrets",
+      "http" : {
+        "method" : "GET",
+        "requestUri" : "/v1/clusters/{clusterArn}/scram-secrets",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "ListScramSecretsRequest"
+      },
+      "output" : {
+        "shape" : "ListScramSecretsResponse"
+      },
+      "errors" : [ {
+        "shape" : "BadRequestException"
+      }, {
+        "shape" : "UnauthorizedException"
+      }, {
+        "shape" : "InternalServerErrorException"
+      }, {
+        "shape" : "ForbiddenException"
+      }, {
+        "shape" : "NotFoundException"
+      }, {
+        "shape" : "ServiceUnavailableException"
+      }, {
+        "shape" : "TooManyRequestsException"
+      } ]
+    },
     "ListTagsForResource": {
       "name": "ListTagsForResource",
       "http": {
@@ -446,6 +626,43 @@
         },
         {
           "shape": "InternalServerErrorException"
+        }
+      ]
+    },
+    "RebootBroker": {
+      "name": "RebootBroker",
+      "http": {
+        "method": "PUT",
+        "requestUri": "/v1/clusters/{clusterArn}/reboot-broker",
+        "responseCode": 200
+      },
+      "input": {
+        "shape": "RebootBrokerRequest"
+      },
+      "output": {
+        "shape": "RebootBrokerResponse"
+      },
+      "errors": [
+        {
+        "shape": "BadRequestException"
+        },
+        {
+          "shape": "UnauthorizedException"
+        },
+        {
+          "shape": "InternalServerErrorException"
+        },
+        {
+          "shape": "ForbiddenException"
+        },
+        {
+          "shape": "NotFoundException"
+        },
+        {
+          "shape": "ServiceUnavailableException"
+        },
+        {
+        "shape": "TooManyRequestsException"
         }
       ]
     },
@@ -555,6 +772,37 @@
         }
       ]
     },
+    "UpdateConfiguration": {
+      "name": "UpdateConfiguration",
+      "http": {
+        "method": "PUT",
+        "requestUri": "/v1/configurations/{arn}",
+        "responseCode": 200
+      },
+      "input": {
+        "shape": "UpdateConfigurationRequest"
+      },
+      "output": {
+        "shape": "UpdateConfigurationResponse"
+      },
+      "errors": [
+        {
+          "shape": "ServiceUnavailableException"
+        },
+        {
+          "shape": "BadRequestException"
+        },
+        {
+          "shape": "UnauthorizedException"
+        },
+        {
+          "shape": "InternalServerErrorException"
+        },
+        {
+          "shape": "ForbiddenException"
+        }
+      ]
+    },
     "UpdateClusterConfiguration": {
       "name": "UpdateClusterConfiguration",
       "http": {
@@ -588,9 +836,99 @@
           "shape": "ServiceUnavailableException"
         }
       ]
+    },
+    "UpdateClusterKafkaVersion" : {
+      "name" : "UpdateClusterKafkaVersion",
+      "http" : {
+        "method" : "PUT",
+        "requestUri" : "/v1/clusters/{clusterArn}/version",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "UpdateClusterKafkaVersionRequest"
+      },
+      "output" : {
+        "shape" : "UpdateClusterKafkaVersionResponse"
+      },
+      "errors" : [ 
+        {
+          "shape" : "BadRequestException"
+        }, 
+        {
+          "shape" : "UnauthorizedException"
+        }, 
+        {
+          "shape" : "InternalServerErrorException"
+        }, 
+        {
+          "shape" : "ForbiddenException"
+        }, 
+        {
+          "shape" : "NotFoundException"
+        }, 
+        {
+          "shape" : "ServiceUnavailableException"
+        }, 
+        {
+          "shape" : "TooManyRequestsException"
+        } 
+      ]
+    },
+    "UpdateMonitoring" : {
+      "name" : "UpdateMonitoring",
+      "http" : {
+        "method" : "PUT",
+        "requestUri" : "/v1/clusters/{clusterArn}/monitoring",
+        "responseCode" : 200
+      },
+      "input" : {
+        "shape" : "UpdateMonitoringRequest"
+      },
+      "output" : {
+        "shape" : "UpdateMonitoringResponse"
+      },
+      "errors" : [ {
+        "shape" : "ServiceUnavailableException"
+      }, {
+        "shape" : "BadRequestException"
+      }, {
+        "shape" : "UnauthorizedException"
+      }, {
+        "shape" : "InternalServerErrorException"
+      }, {
+        "shape" : "ForbiddenException"
+      } ]
     }
   },
   "shapes": {
+    "BatchAssociateScramSecretRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ClusterArn" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "clusterArn"
+        },
+        "SecretArnList" : {
+          "shape" : "__listOf__string",
+          "locationName" : "secretArnList"
+        }
+      },
+      "required" : [ "ClusterArn", "SecretArnList" ]
+    },
+    "BatchAssociateScramSecretResponse" : {
+      "type" : "structure",
+      "members" : {
+        "ClusterArn" : {
+          "shape" : "__string",
+          "locationName" : "clusterArn"
+        },
+        "UnprocessedScramSecrets" : {
+          "shape" : "__listOfUnprocessedScramSecret",
+          "locationName" : "unprocessedScramSecrets"
+        }
+      }
+    },
     "BadRequestException": {
       "type": "structure",
       "members": {
@@ -630,6 +968,23 @@
         "VolumeSizeGB",
         "KafkaBrokerNodeId"
       ]
+    },
+    "BrokerLogs" : {
+      "type" : "structure",
+      "members" : {
+        "CloudWatchLogs" : {
+          "shape" : "CloudWatchLogs",
+          "locationName" : "cloudWatchLogs"
+        },
+        "Firehose" : {
+          "shape" : "Firehose",
+          "locationName" : "firehose"
+        },
+        "S3" : {
+          "shape" : "S3",
+          "locationName" : "s3"
+        }
+      }
     },
     "BrokerNodeGroupInfo": {
       "type": "structure",
@@ -706,12 +1061,16 @@
         }
       }
     },
-    "ClientAuthentication": {
-      "type": "structure",
-      "members": {
-        "Tls": {
-          "shape": "Tls",
-          "locationName": "tls"
+    "ClientAuthentication" : {
+      "type" : "structure",
+      "members" : {
+        "Sasl" : {
+          "shape" : "Sasl",
+          "locationName" : "sasl"
+        },
+        "Tls" : {
+          "shape" : "Tls",
+          "locationName" : "tls"
         }
       }
     },
@@ -722,6 +1081,20 @@
         "TLS_PLAINTEXT",
         "PLAINTEXT"
       ]
+    },
+    "CloudWatchLogs" : {
+      "type" : "structure",
+      "members" : {
+        "Enabled" : {
+          "shape" : "__boolean",
+          "locationName" : "enabled"
+        },
+        "LogGroup" : {
+          "shape" : "__string",
+          "locationName" : "logGroup"
+        }
+      },
+      "required" : [ "Enabled" ]
     },
     "ClusterInfo": {
       "type": "structure",
@@ -754,6 +1127,10 @@
           "shape": "BrokerSoftwareInfo",
           "locationName": "currentBrokerSoftwareInfo"
         },
+        "LoggingInfo": {
+          "shape": "LoggingInfo",
+          "locationName": "loggingInfo"
+        },
         "CurrentVersion": {
           "shape": "__string",
           "locationName": "currentVersion"
@@ -770,6 +1147,10 @@
           "shape": "__integer",
           "locationName": "numberOfBrokerNodes"
         },
+        "OpenMonitoring" : {
+          "shape" : "OpenMonitoring",
+          "locationName" : "openMonitoring"
+        },
         "State": {
           "shape": "ClusterState",
           "locationName": "state"
@@ -781,6 +1162,10 @@
         "ZookeeperConnectString": {
           "shape": "__string",
           "locationName": "zookeeperConnectString"
+        },
+        "ZookeeperConnectStringTls" : {
+          "shape" : "__string",
+          "locationName" : "zookeeperConnectStringTls"
         }
       }
     },
@@ -807,6 +1192,10 @@
           "shape": "ErrorInfo",
           "locationName": "errorInfo"
         },
+        "OperationSteps": {
+          "shape": "__listOfClusterOperationStep",
+          "locationName": "operationSteps"
+        },
         "OperationArn": {
           "shape": "__string",
           "locationName": "operationArn"
@@ -829,6 +1218,28 @@
         }
       }
     },
+    "ClusterOperationStep" : {
+      "type" : "structure",
+      "members" : {
+        "StepInfo" : {
+          "shape" : "ClusterOperationStepInfo",
+          "locationName" : "stepInfo"
+        },
+        "StepName" : {
+          "shape" : "__string",
+          "locationName" : "stepName"
+        }
+      }
+    },
+    "ClusterOperationStepInfo" : {
+      "type" : "structure",
+      "members" : {
+        "StepStatus" : {
+          "shape" : "__string",
+          "locationName" : "stepStatus"
+        }
+      }
+    },
     "ClusterState": {
       "type": "string",
       "enum": [
@@ -838,6 +1249,19 @@
         "DELETING",
         "FAILED"
       ]
+    },
+    "CompatibleKafkaVersion" : {
+      "type" : "structure",
+      "members" : {
+        "SourceVersion" : {
+          "shape" : "__string",
+          "locationName" : "sourceVersion"
+        },
+        "TargetVersions" : {
+          "shape" : "__listOf__string",
+          "locationName" : "targetVersions"
+        }
+      }
     },
     "Configuration": {
       "type": "structure",
@@ -865,6 +1289,10 @@
         "Name": {
           "shape": "__string",
           "locationName": "name"
+        },
+        "State": {
+          "shape": "ConfigurationState",
+          "locationName": "state"
         }
       },
       "required": [
@@ -873,7 +1301,8 @@
         "CreationTime",
         "KafkaVersions",
         "Arn",
-        "Name"
+        "Name",
+        "State"
       ]
     },
     "ConfigurationInfo": {
@@ -912,6 +1341,14 @@
       "required": [
         "Revision",
         "CreationTime"
+      ]
+    },
+    "ConfigurationState": {
+      "type": "string",
+      "enum": [
+        "ACTIVE",
+        "DELETING",
+        "DELETE_FAILED"
       ]
     },
     "ConflictException": {
@@ -962,9 +1399,17 @@
           "shape": "__stringMin1Max128",
           "locationName": "kafkaVersion"
         },
+        "LoggingInfo": {
+          "shape": "LoggingInfo",
+          "locationName": "loggingInfo"
+        },
         "NumberOfBrokerNodes": {
           "shape": "__integerMin1Max15",
           "locationName": "numberOfBrokerNodes"
+        },
+        "OpenMonitoring" : {
+          "shape" : "OpenMonitoringInfo",
+          "locationName" : "openMonitoring"
         },
         "Tags": {
           "shape": "__mapOf__string",
@@ -1017,7 +1462,6 @@
       },
       "required": [
         "ServerProperties",
-        "KafkaVersions",
         "Name"
       ]
     },
@@ -1039,6 +1483,10 @@
         "Name": {
           "shape": "__string",
           "locationName": "name"
+        },
+        "State": {
+          "shape": "ConfigurationState",
+          "locationName": "state"
         }
       }
     },
@@ -1069,6 +1517,32 @@
         },
         "State": {
           "shape": "ClusterState",
+          "locationName": "state"
+        }
+      }
+    },
+    "DeleteConfigurationRequest": {
+      "type": "structure",
+      "members": {
+        "Arn": {
+          "shape": "__string",
+          "location": "uri",
+          "locationName": "arn"
+        }
+      },
+      "required": [
+        "Arn"
+      ]
+    },
+    "DeleteConfigurationResponse": {
+      "type": "structure",
+      "members": {
+        "Arn": {
+          "shape": "__string",
+          "locationName": "arn"
+        },
+        "State": {
+          "shape": "ConfigurationState",
           "locationName": "state"
         }
       }
@@ -1156,6 +1630,10 @@
         "Name": {
           "shape": "__string",
           "locationName": "name"
+        },
+        "State": {
+          "shape": "ConfigurationState",
+          "locationName": "state"
         }
       }
     },
@@ -1200,6 +1678,34 @@
         "ServerProperties": {
           "shape": "__blob",
           "locationName": "serverProperties"
+        }
+      }
+    },
+    "BatchDisassociateScramSecretRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ClusterArn" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "clusterArn"
+        },
+        "SecretArnList" : {
+          "shape" : "__listOf__string",
+          "locationName" : "secretArnList"
+        }
+      },
+      "required" : [ "ClusterArn", "SecretArnList" ]
+    },
+    "BatchDisassociateScramSecretResponse" : {
+      "type" : "structure",
+      "members" : {
+        "ClusterArn" : {
+          "shape" : "__string",
+          "locationName" : "clusterArn"
+        },
+        "UnprocessedScramSecrets" : {
+          "shape" : "__listOfUnprocessedScramSecret",
+          "locationName" : "unprocessedScramSecrets"
         }
       }
     },
@@ -1271,6 +1777,20 @@
         }
       }
     },
+    "Firehose" : {
+      "type" : "structure",
+      "members" : {
+        "DeliveryStream" : {
+          "shape" : "__string",
+          "locationName" : "deliveryStream"
+        },
+        "Enabled" : {
+          "shape" : "__boolean",
+          "locationName" : "enabled"
+        }
+      },
+      "required" : [ "Enabled" ]
+    },
     "ErrorInfo": {
       "type": "structure",
       "members": {
@@ -1324,6 +1844,29 @@
         "BootstrapBrokerStringTls": {
           "shape": "__string",
           "locationName": "bootstrapBrokerStringTls"
+        },
+        "BootstrapBrokerStringSaslScram": {
+          "shape": "__string",
+          "locationName": "bootstrapBrokerStringSaslScram"
+        }
+      }
+    },
+    "GetCompatibleKafkaVersionsRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ClusterArn" : {
+          "shape" : "__string",
+          "location" : "querystring",
+          "locationName" : "clusterArn"
+        }
+      }
+    },
+    "GetCompatibleKafkaVersionsResponse" : {
+      "type" : "structure",
+      "members" : {
+        "CompatibleKafkaVersions" : {
+          "shape" : "__listOfCompatibleKafkaVersion",
+          "locationName" : "compatibleKafkaVersions"
         }
       }
     },
@@ -1343,6 +1886,26 @@
       "error": {
         "httpStatusCode": 500
       }
+    },
+    "KafkaVersion": {
+      "type": "structure",
+      "members": {
+        "Version": {
+          "shape": "__string",
+          "locationName": "version"
+        },
+        "Status": {
+          "shape": "KafkaVersionStatus",
+          "locationName": "status"
+        }
+      }
+    },
+    "KafkaVersionStatus": {
+      "type": "string",
+      "enum": [
+        "ACTIVE",
+        "DEPRECATED"
+      ]
     },
     "ListClusterOperationsRequest": {
       "type": "structure",
@@ -1477,6 +2040,34 @@
         }
       }
     },
+    "ListKafkaVersionsRequest": {
+      "type": "structure",
+      "members": {
+        "MaxResults": {
+          "shape": "MaxResults",
+          "location": "querystring",
+          "locationName": "maxResults"
+        },
+        "NextToken": {
+          "shape": "__string",
+          "location": "querystring",
+          "locationName": "nextToken"
+        }
+      }
+    },
+    "ListKafkaVersionsResponse": {
+      "type": "structure",
+      "members": {
+        "KafkaVersions": {
+          "shape": "__listOfKafkaVersion",
+          "locationName": "kafkaVersions"
+        },
+        "NextToken": {
+          "shape": "__string",
+          "locationName": "nextToken"
+        }
+      }
+    },
     "ListNodesRequest": {
       "type": "structure",
       "members": {
@@ -1513,6 +2104,40 @@
         }
       }
     },
+    "ListScramSecretsRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ClusterArn" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "clusterArn"
+        },
+        "MaxResults" : {
+          "shape" : "MaxResults",
+          "location" : "querystring",
+          "locationName" : "maxResults"
+        },
+        "NextToken" : {
+          "shape" : "__string",
+          "location" : "querystring",
+          "locationName" : "nextToken"
+        }
+      },
+      "required" : [ "ClusterArn" ]
+    },
+    "ListScramSecretsResponse" : {
+      "type" : "structure",
+      "members" : {
+        "NextToken" : {
+          "shape" : "__string",
+          "locationName" : "nextToken"
+        },
+        "SecretArnList" : {
+          "shape" : "__listOf__string",
+          "locationName" : "secretArnList"
+        }
+      }
+    },
     "ListTagsForResourceRequest": {
       "type": "structure",
       "members": {
@@ -1540,6 +2165,16 @@
       "min": 1,
       "max": 100
     },
+    "LoggingInfo": {
+      "type": "structure",
+      "members": {
+        "BrokerLogs": {
+          "shape": "BrokerLogs",
+          "locationName": "brokerLogs"
+        }
+      },
+     "required": [ "BrokerLogs" ]
+    },
     "MutableClusterInfo": {
       "type": "structure",
       "members": {
@@ -1554,6 +2189,22 @@
         "NumberOfBrokerNodes": {
           "shape": "__integer",
           "locationName": "numberOfBrokerNodes"
+        },
+        "OpenMonitoring" : {
+          "shape" : "OpenMonitoring",
+          "locationName" : "openMonitoring"
+        },
+        "EnhancedMonitoring" : {
+          "shape" : "EnhancedMonitoring",
+          "locationName" : "enhancedMonitoring"
+        },
+        "KafkaVersion" : {
+          "shape" : "__string",
+          "locationName" : "kafkaVersion"
+        },
+        "LoggingInfo": {
+          "shape": "LoggingInfo",
+          "locationName": "loggingInfo"
         }
       }
     },
@@ -1609,6 +2260,24 @@
         "httpStatusCode": 404
       }
     },
+    "Sasl" : {
+      "type" : "structure",
+      "members" : {
+        "Scram" : {
+          "shape" : "Scram",
+          "locationName" : "scram"
+        }
+      }
+    },
+    "Scram" : {
+      "type" : "structure",
+      "members" : {
+        "Enabled" : {
+          "shape" : "__boolean",
+          "locationName" : "enabled"
+        }
+      }
+    },
     "ServiceUnavailableException": {
       "type": "structure",
       "members": {
@@ -1624,6 +2293,19 @@
       "exception": true,
       "error": {
         "httpStatusCode": 503
+      }
+    },
+    "StateInfo": {
+      "type": "structure",
+      "members": {
+        "Code": {
+          "shape": "__string",
+          "locationName": "code"
+        },
+        "Message": {
+          "shape": "__string",
+          "locationName": "message"
+        }
       }
     },
     "StorageInfo": {
@@ -1694,6 +2376,23 @@
       "exception": true,
       "error": {
         "httpStatusCode": 401
+      }
+    },
+    "UnprocessedScramSecret" : {
+      "type" : "structure",
+      "members" : {
+        "ErrorCode" : {
+          "shape" : "__string",
+          "locationName" : "errorCode"
+        },
+        "ErrorMessage" : {
+          "shape" : "__string",
+          "locationName" : "errorMessage"
+        },
+        "SecretArn" : {
+          "shape" : "__string",
+          "locationName" : "secretArn"
+        }
       }
     },
     "UntagResourceRequest": {
@@ -1823,6 +2522,117 @@
         }
       }
     },
+    "UpdateClusterKafkaVersionRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ClusterArn" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "clusterArn"
+        },
+        "ConfigurationInfo" : {
+          "shape" : "ConfigurationInfo",
+          "locationName" : "configurationInfo"
+        },
+        "CurrentVersion" : {
+          "shape" : "__string",
+          "locationName" : "currentVersion"
+        },
+        "TargetKafkaVersion" : {
+          "shape" : "__string",
+          "locationName" : "targetKafkaVersion"
+        }
+      },
+      "required" : [ "ClusterArn", "TargetKafkaVersion", "CurrentVersion" ]
+    },
+    "UpdateClusterKafkaVersionResponse" : {
+      "type" : "structure",
+      "members" : {
+        "ClusterArn" : {
+          "shape" : "__string",
+          "locationName" : "clusterArn"
+        },
+        "ClusterOperationArn" : {
+          "shape" : "__string",
+          "locationName" : "clusterOperationArn"
+        }
+      }
+    },
+    "UpdateConfigurationRequest" : {
+      "type": "structure",
+      "members": {
+        "Arn": {
+          "shape": "__string",
+          "location": "uri",
+          "locationName": "arn"
+        },
+        "Description": {
+          "shape": "__string",
+          "locationName": "description"
+        },
+        "ServerProperties": {
+          "shape": "__blob",
+          "locationName": "serverProperties"
+        }
+      },
+      "required": [
+        "Arn",
+        "ServerProperties"
+      ]
+    },
+    "UpdateConfigurationResponse" : {
+      "type": "structure",
+      "members": {
+        "Arn": {
+          "shape": "__string",
+          "locationName": "arn"
+        },
+        "LatestRevision": {
+          "shape": "ConfigurationRevision",
+          "locationName": "latestRevision"
+        }
+      }
+    },
+    "UpdateMonitoringRequest" : {
+      "type" : "structure",
+      "members" : {
+        "ClusterArn" : {
+          "shape" : "__string",
+          "location" : "uri",
+          "locationName" : "clusterArn"
+        },
+        "CurrentVersion" : {
+          "shape" : "__string",
+          "locationName" : "currentVersion"
+        },
+        "EnhancedMonitoring" : {
+          "shape" : "EnhancedMonitoring",
+          "locationName" : "enhancedMonitoring"
+        },
+        "OpenMonitoring" : {
+          "shape" : "OpenMonitoringInfo",
+          "locationName" : "openMonitoring"
+        },
+        "LoggingInfo": {
+          "shape": "LoggingInfo",
+          "locationName": "loggingInfo"
+        }
+      },
+      "required" : [ "ClusterArn", "CurrentVersion" ]
+    },
+    "UpdateMonitoringResponse" : {
+      "type" : "structure",
+      "members" : {
+        "ClusterArn" : {
+          "shape" : "__string",
+          "locationName" : "clusterArn"
+        },
+        "ClusterOperationArn" : {
+          "shape" : "__string",
+          "locationName" : "clusterOperationArn"
+        }
+      }
+    },
     "ZookeeperNodeInfo": {
       "type": "structure",
       "members": {
@@ -1847,6 +2657,138 @@
           "locationName": "zookeeperVersion"
         }
       }
+    },
+    "OpenMonitoring" : {
+      "type" : "structure",
+      "members" : {
+        "Prometheus" : {
+          "shape" : "Prometheus",
+          "locationName" : "prometheus"
+        }
+      },
+      "required" : [ "Prometheus" ]
+    },
+    "OpenMonitoringInfo" : {
+      "type" : "structure",
+      "members" : {
+        "Prometheus" : {
+          "shape" : "PrometheusInfo",
+          "locationName" : "prometheus"
+        }
+      },
+      "required" : [ "Prometheus" ]
+    },
+    "Prometheus" : {
+      "type" : "structure",
+      "members" : {
+        "JmxExporter" : {
+          "shape" : "JmxExporter",
+          "locationName" : "jmxExporter"
+        },
+        "NodeExporter" : {
+          "shape" : "NodeExporter",
+          "locationName" : "nodeExporter"
+        }
+      }
+    },
+    "PrometheusInfo" : {
+      "type" : "structure",
+      "members" : {
+        "JmxExporter" : {
+          "shape" : "JmxExporterInfo",
+          "locationName" : "jmxExporter"
+        },
+        "NodeExporter" : {
+          "shape" : "NodeExporterInfo",
+          "locationName" : "nodeExporter"
+        }
+      }
+    },
+    "RebootBrokerRequest": {
+      "type": "structure",
+      "members": {
+        "BrokerIds": {
+          "shape": "__listOf__string",
+          "locationName": "brokerIds"
+        },
+        "ClusterArn": {
+          "shape": "__string",
+          "location": "uri",
+          "locationName": "clusterArn"
+        }
+      },
+      "required": [ "ClusterArn", "BrokerIds" ]
+    },
+    "RebootBrokerResponse": {
+      "type": "structure",
+      "members": {
+        "ClusterArn": {
+          "shape": "__string",
+          "locationName": "clusterArn"
+        },
+        "ClusterOperationArn": {
+          "shape": "__string",
+          "locationName": "clusterOperationArn"
+        }
+      }
+    },
+    "S3" : {
+      "type" : "structure",
+      "members" : {
+        "Bucket" : {
+          "shape" : "__string",
+          "locationName" : "bucket"
+        },
+        "Enabled" : {
+          "shape" : "__boolean",
+          "locationName" : "enabled"
+        },
+        "Prefix" : {
+          "shape" : "__string",
+          "locationName" : "prefix"
+        }
+      },
+      "required" : [ "Enabled" ]
+    },
+    "JmxExporter" : {
+      "type" : "structure",
+      "members" : {
+        "EnabledInBroker" : {
+          "shape" : "__boolean",
+          "locationName" : "enabledInBroker"
+        }
+      },
+      "required" : [ "EnabledInBroker" ]
+    },
+    "JmxExporterInfo" : {
+      "type" : "structure",
+      "members" : {
+        "EnabledInBroker" : {
+          "shape" : "__boolean",
+          "locationName" : "enabledInBroker"
+        }
+      },
+      "required" : [ "EnabledInBroker" ]
+    },
+    "NodeExporter" : {
+      "type" : "structure",
+      "members" : {
+        "EnabledInBroker" : {
+          "shape" : "__boolean",
+          "locationName" : "enabledInBroker"
+        }
+      },
+      "required" : [ "EnabledInBroker" ]
+    },
+    "NodeExporterInfo" : {
+      "type" : "structure",
+      "members" : {
+        "EnabledInBroker" : {
+          "shape" : "__boolean",
+          "locationName" : "enabledInBroker"
+        }
+      },
+      "required" : [ "EnabledInBroker" ]
     },
     "__boolean": {
       "type": "boolean"
@@ -1888,6 +2830,18 @@
         "shape": "ClusterOperationInfo"
       }
     },
+    "__listOfClusterOperationStep" : {
+      "type" : "list",
+      "member" : {
+        "shape" : "ClusterOperationStep"
+      }
+    },
+    "__listOfCompatibleKafkaVersion" : {
+      "type" : "list",
+      "member" : {
+        "shape" : "CompatibleKafkaVersion"
+      }
+    },
     "__listOfConfiguration": {
       "type": "list",
       "member": {
@@ -1900,10 +2854,22 @@
         "shape": "ConfigurationRevision"
       }
     },
+    "__listOfKafkaVersion": {
+      "type": "list",
+      "member": {
+        "shape": "KafkaVersion"
+      }
+    },
     "__listOfNodeInfo": {
       "type": "list",
       "member": {
         "shape": "NodeInfo"
+      }
+    },
+    "__listOfUnprocessedScramSecret" : {
+      "type" : "list",
+      "member" : {
+        "shape" : "UnprocessedScramSecret"
       }
     },
     "__listOf__string": {

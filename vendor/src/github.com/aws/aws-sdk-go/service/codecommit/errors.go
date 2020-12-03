@@ -2,6 +2,10 @@
 
 package codecommit
 
+import (
+	"github.com/aws/aws-sdk-go/private/protocol"
+)
+
 const (
 
 	// ErrCodeActorDoesNotExistException for service response error code
@@ -113,7 +117,8 @@ const (
 	// ErrCodeBranchNameExistsException for service response error code
 	// "BranchNameExistsException".
 	//
-	// The specified branch name already exists.
+	// Cannot create the branch with the specified name because the commit conflicts
+	// with an existing branch with the same name. Branch names must be unique.
 	ErrCodeBranchNameExistsException = "BranchNameExistsException"
 
 	// ErrCodeBranchNameIsTagNameException for service response error code
@@ -632,6 +637,19 @@ const (
 	// OPEN to CLOSED.
 	ErrCodeInvalidPullRequestStatusUpdateException = "InvalidPullRequestStatusUpdateException"
 
+	// ErrCodeInvalidReactionUserArnException for service response error code
+	// "InvalidReactionUserArnException".
+	//
+	// The Amazon Resource Name (ARN) of the user or identity is not valid.
+	ErrCodeInvalidReactionUserArnException = "InvalidReactionUserArnException"
+
+	// ErrCodeInvalidReactionValueException for service response error code
+	// "InvalidReactionValueException".
+	//
+	// The value of the reaction is not valid. For more information, see the AWS
+	// CodeCommit User Guide (https://docs.aws.amazon.com/codecommit/latest/userguide/welcome.html).
+	ErrCodeInvalidReactionValueException = "InvalidReactionValueException"
+
 	// ErrCodeInvalidReferenceNameException for service response error code
 	// "InvalidReferenceNameException".
 	//
@@ -1019,6 +1037,19 @@ const (
 	// reference both a file and a folder.
 	ErrCodePutFileEntryConflictException = "PutFileEntryConflictException"
 
+	// ErrCodeReactionLimitExceededException for service response error code
+	// "ReactionLimitExceededException".
+	//
+	// The number of reactions has been exceeded. Reactions are limited to one reaction
+	// per user for each individual comment ID.
+	ErrCodeReactionLimitExceededException = "ReactionLimitExceededException"
+
+	// ErrCodeReactionValueRequiredException for service response error code
+	// "ReactionValueRequiredException".
+	//
+	// A reaction value is required.
+	ErrCodeReactionValueRequiredException = "ReactionValueRequiredException"
+
 	// ErrCodeReferenceDoesNotExistException for service response error code
 	// "ReferenceDoesNotExistException".
 	//
@@ -1239,3 +1270,191 @@ const (
 	// The maximum number of tags for an AWS CodeCommit resource has been exceeded.
 	ErrCodeTooManyTagsException = "TooManyTagsException"
 )
+
+var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
+	"ActorDoesNotExistException":                            newErrorActorDoesNotExistException,
+	"ApprovalRuleContentRequiredException":                  newErrorApprovalRuleContentRequiredException,
+	"ApprovalRuleDoesNotExistException":                     newErrorApprovalRuleDoesNotExistException,
+	"ApprovalRuleNameAlreadyExistsException":                newErrorApprovalRuleNameAlreadyExistsException,
+	"ApprovalRuleNameRequiredException":                     newErrorApprovalRuleNameRequiredException,
+	"ApprovalRuleTemplateContentRequiredException":          newErrorApprovalRuleTemplateContentRequiredException,
+	"ApprovalRuleTemplateDoesNotExistException":             newErrorApprovalRuleTemplateDoesNotExistException,
+	"ApprovalRuleTemplateInUseException":                    newErrorApprovalRuleTemplateInUseException,
+	"ApprovalRuleTemplateNameAlreadyExistsException":        newErrorApprovalRuleTemplateNameAlreadyExistsException,
+	"ApprovalRuleTemplateNameRequiredException":             newErrorApprovalRuleTemplateNameRequiredException,
+	"ApprovalStateRequiredException":                        newErrorApprovalStateRequiredException,
+	"AuthorDoesNotExistException":                           newErrorAuthorDoesNotExistException,
+	"BeforeCommitIdAndAfterCommitIdAreSameException":        newErrorBeforeCommitIdAndAfterCommitIdAreSameException,
+	"BlobIdDoesNotExistException":                           newErrorBlobIdDoesNotExistException,
+	"BlobIdRequiredException":                               newErrorBlobIdRequiredException,
+	"BranchDoesNotExistException":                           newErrorBranchDoesNotExistException,
+	"BranchNameExistsException":                             newErrorBranchNameExistsException,
+	"BranchNameIsTagNameException":                          newErrorBranchNameIsTagNameException,
+	"BranchNameRequiredException":                           newErrorBranchNameRequiredException,
+	"CannotDeleteApprovalRuleFromTemplateException":         newErrorCannotDeleteApprovalRuleFromTemplateException,
+	"CannotModifyApprovalRuleFromTemplateException":         newErrorCannotModifyApprovalRuleFromTemplateException,
+	"ClientRequestTokenRequiredException":                   newErrorClientRequestTokenRequiredException,
+	"CommentContentRequiredException":                       newErrorCommentContentRequiredException,
+	"CommentContentSizeLimitExceededException":              newErrorCommentContentSizeLimitExceededException,
+	"CommentDeletedException":                               newErrorCommentDeletedException,
+	"CommentDoesNotExistException":                          newErrorCommentDoesNotExistException,
+	"CommentIdRequiredException":                            newErrorCommentIdRequiredException,
+	"CommentNotCreatedByCallerException":                    newErrorCommentNotCreatedByCallerException,
+	"CommitDoesNotExistException":                           newErrorCommitDoesNotExistException,
+	"CommitIdDoesNotExistException":                         newErrorCommitIdDoesNotExistException,
+	"CommitIdRequiredException":                             newErrorCommitIdRequiredException,
+	"CommitIdsLimitExceededException":                       newErrorCommitIdsLimitExceededException,
+	"CommitIdsListRequiredException":                        newErrorCommitIdsListRequiredException,
+	"CommitMessageLengthExceededException":                  newErrorCommitMessageLengthExceededException,
+	"CommitRequiredException":                               newErrorCommitRequiredException,
+	"ConcurrentReferenceUpdateException":                    newErrorConcurrentReferenceUpdateException,
+	"DefaultBranchCannotBeDeletedException":                 newErrorDefaultBranchCannotBeDeletedException,
+	"DirectoryNameConflictsWithFileNameException":           newErrorDirectoryNameConflictsWithFileNameException,
+	"EncryptionIntegrityChecksFailedException":              newErrorEncryptionIntegrityChecksFailedException,
+	"EncryptionKeyAccessDeniedException":                    newErrorEncryptionKeyAccessDeniedException,
+	"EncryptionKeyDisabledException":                        newErrorEncryptionKeyDisabledException,
+	"EncryptionKeyNotFoundException":                        newErrorEncryptionKeyNotFoundException,
+	"EncryptionKeyUnavailableException":                     newErrorEncryptionKeyUnavailableException,
+	"FileContentAndSourceFileSpecifiedException":            newErrorFileContentAndSourceFileSpecifiedException,
+	"FileContentRequiredException":                          newErrorFileContentRequiredException,
+	"FileContentSizeLimitExceededException":                 newErrorFileContentSizeLimitExceededException,
+	"FileDoesNotExistException":                             newErrorFileDoesNotExistException,
+	"FileEntryRequiredException":                            newErrorFileEntryRequiredException,
+	"FileModeRequiredException":                             newErrorFileModeRequiredException,
+	"FileNameConflictsWithDirectoryNameException":           newErrorFileNameConflictsWithDirectoryNameException,
+	"FilePathConflictsWithSubmodulePathException":           newErrorFilePathConflictsWithSubmodulePathException,
+	"FileTooLargeException":                                 newErrorFileTooLargeException,
+	"FolderContentSizeLimitExceededException":               newErrorFolderContentSizeLimitExceededException,
+	"FolderDoesNotExistException":                           newErrorFolderDoesNotExistException,
+	"IdempotencyParameterMismatchException":                 newErrorIdempotencyParameterMismatchException,
+	"InvalidActorArnException":                              newErrorInvalidActorArnException,
+	"InvalidApprovalRuleContentException":                   newErrorInvalidApprovalRuleContentException,
+	"InvalidApprovalRuleNameException":                      newErrorInvalidApprovalRuleNameException,
+	"InvalidApprovalRuleTemplateContentException":           newErrorInvalidApprovalRuleTemplateContentException,
+	"InvalidApprovalRuleTemplateDescriptionException":       newErrorInvalidApprovalRuleTemplateDescriptionException,
+	"InvalidApprovalRuleTemplateNameException":              newErrorInvalidApprovalRuleTemplateNameException,
+	"InvalidApprovalStateException":                         newErrorInvalidApprovalStateException,
+	"InvalidAuthorArnException":                             newErrorInvalidAuthorArnException,
+	"InvalidBlobIdException":                                newErrorInvalidBlobIdException,
+	"InvalidBranchNameException":                            newErrorInvalidBranchNameException,
+	"InvalidClientRequestTokenException":                    newErrorInvalidClientRequestTokenException,
+	"InvalidCommentIdException":                             newErrorInvalidCommentIdException,
+	"InvalidCommitException":                                newErrorInvalidCommitException,
+	"InvalidCommitIdException":                              newErrorInvalidCommitIdException,
+	"InvalidConflictDetailLevelException":                   newErrorInvalidConflictDetailLevelException,
+	"InvalidConflictResolutionException":                    newErrorInvalidConflictResolutionException,
+	"InvalidConflictResolutionStrategyException":            newErrorInvalidConflictResolutionStrategyException,
+	"InvalidContinuationTokenException":                     newErrorInvalidContinuationTokenException,
+	"InvalidDeletionParameterException":                     newErrorInvalidDeletionParameterException,
+	"InvalidDescriptionException":                           newErrorInvalidDescriptionException,
+	"InvalidDestinationCommitSpecifierException":            newErrorInvalidDestinationCommitSpecifierException,
+	"InvalidEmailException":                                 newErrorInvalidEmailException,
+	"InvalidFileLocationException":                          newErrorInvalidFileLocationException,
+	"InvalidFileModeException":                              newErrorInvalidFileModeException,
+	"InvalidFilePositionException":                          newErrorInvalidFilePositionException,
+	"InvalidMaxConflictFilesException":                      newErrorInvalidMaxConflictFilesException,
+	"InvalidMaxMergeHunksException":                         newErrorInvalidMaxMergeHunksException,
+	"InvalidMaxResultsException":                            newErrorInvalidMaxResultsException,
+	"InvalidMergeOptionException":                           newErrorInvalidMergeOptionException,
+	"InvalidOrderException":                                 newErrorInvalidOrderException,
+	"InvalidOverrideStatusException":                        newErrorInvalidOverrideStatusException,
+	"InvalidParentCommitIdException":                        newErrorInvalidParentCommitIdException,
+	"InvalidPathException":                                  newErrorInvalidPathException,
+	"InvalidPullRequestEventTypeException":                  newErrorInvalidPullRequestEventTypeException,
+	"InvalidPullRequestIdException":                         newErrorInvalidPullRequestIdException,
+	"InvalidPullRequestStatusException":                     newErrorInvalidPullRequestStatusException,
+	"InvalidPullRequestStatusUpdateException":               newErrorInvalidPullRequestStatusUpdateException,
+	"InvalidReactionUserArnException":                       newErrorInvalidReactionUserArnException,
+	"InvalidReactionValueException":                         newErrorInvalidReactionValueException,
+	"InvalidReferenceNameException":                         newErrorInvalidReferenceNameException,
+	"InvalidRelativeFileVersionEnumException":               newErrorInvalidRelativeFileVersionEnumException,
+	"InvalidReplacementContentException":                    newErrorInvalidReplacementContentException,
+	"InvalidReplacementTypeException":                       newErrorInvalidReplacementTypeException,
+	"InvalidRepositoryDescriptionException":                 newErrorInvalidRepositoryDescriptionException,
+	"InvalidRepositoryNameException":                        newErrorInvalidRepositoryNameException,
+	"InvalidRepositoryTriggerBranchNameException":           newErrorInvalidRepositoryTriggerBranchNameException,
+	"InvalidRepositoryTriggerCustomDataException":           newErrorInvalidRepositoryTriggerCustomDataException,
+	"InvalidRepositoryTriggerDestinationArnException":       newErrorInvalidRepositoryTriggerDestinationArnException,
+	"InvalidRepositoryTriggerEventsException":               newErrorInvalidRepositoryTriggerEventsException,
+	"InvalidRepositoryTriggerNameException":                 newErrorInvalidRepositoryTriggerNameException,
+	"InvalidRepositoryTriggerRegionException":               newErrorInvalidRepositoryTriggerRegionException,
+	"InvalidResourceArnException":                           newErrorInvalidResourceArnException,
+	"InvalidRevisionIdException":                            newErrorInvalidRevisionIdException,
+	"InvalidRuleContentSha256Exception":                     newErrorInvalidRuleContentSha256Exception,
+	"InvalidSortByException":                                newErrorInvalidSortByException,
+	"InvalidSourceCommitSpecifierException":                 newErrorInvalidSourceCommitSpecifierException,
+	"InvalidSystemTagUsageException":                        newErrorInvalidSystemTagUsageException,
+	"InvalidTagKeysListException":                           newErrorInvalidTagKeysListException,
+	"InvalidTagsMapException":                               newErrorInvalidTagsMapException,
+	"InvalidTargetBranchException":                          newErrorInvalidTargetBranchException,
+	"InvalidTargetException":                                newErrorInvalidTargetException,
+	"InvalidTargetsException":                               newErrorInvalidTargetsException,
+	"InvalidTitleException":                                 newErrorInvalidTitleException,
+	"ManualMergeRequiredException":                          newErrorManualMergeRequiredException,
+	"MaximumBranchesExceededException":                      newErrorMaximumBranchesExceededException,
+	"MaximumConflictResolutionEntriesExceededException":     newErrorMaximumConflictResolutionEntriesExceededException,
+	"MaximumFileContentToLoadExceededException":             newErrorMaximumFileContentToLoadExceededException,
+	"MaximumFileEntriesExceededException":                   newErrorMaximumFileEntriesExceededException,
+	"MaximumItemsToCompareExceededException":                newErrorMaximumItemsToCompareExceededException,
+	"MaximumNumberOfApprovalsExceededException":             newErrorMaximumNumberOfApprovalsExceededException,
+	"MaximumOpenPullRequestsExceededException":              newErrorMaximumOpenPullRequestsExceededException,
+	"MaximumRepositoryNamesExceededException":               newErrorMaximumRepositoryNamesExceededException,
+	"MaximumRepositoryTriggersExceededException":            newErrorMaximumRepositoryTriggersExceededException,
+	"MaximumRuleTemplatesAssociatedWithRepositoryException": newErrorMaximumRuleTemplatesAssociatedWithRepositoryException,
+	"MergeOptionRequiredException":                          newErrorMergeOptionRequiredException,
+	"MultipleConflictResolutionEntriesException":            newErrorMultipleConflictResolutionEntriesException,
+	"MultipleRepositoriesInPullRequestException":            newErrorMultipleRepositoriesInPullRequestException,
+	"NameLengthExceededException":                           newErrorNameLengthExceededException,
+	"NoChangeException":                                     newErrorNoChangeException,
+	"NumberOfRuleTemplatesExceededException":                newErrorNumberOfRuleTemplatesExceededException,
+	"NumberOfRulesExceededException":                        newErrorNumberOfRulesExceededException,
+	"OverrideAlreadySetException":                           newErrorOverrideAlreadySetException,
+	"OverrideStatusRequiredException":                       newErrorOverrideStatusRequiredException,
+	"ParentCommitDoesNotExistException":                     newErrorParentCommitDoesNotExistException,
+	"ParentCommitIdOutdatedException":                       newErrorParentCommitIdOutdatedException,
+	"ParentCommitIdRequiredException":                       newErrorParentCommitIdRequiredException,
+	"PathDoesNotExistException":                             newErrorPathDoesNotExistException,
+	"PathRequiredException":                                 newErrorPathRequiredException,
+	"PullRequestAlreadyClosedException":                     newErrorPullRequestAlreadyClosedException,
+	"PullRequestApprovalRulesNotSatisfiedException":         newErrorPullRequestApprovalRulesNotSatisfiedException,
+	"PullRequestCannotBeApprovedByAuthorException":          newErrorPullRequestCannotBeApprovedByAuthorException,
+	"PullRequestDoesNotExistException":                      newErrorPullRequestDoesNotExistException,
+	"PullRequestIdRequiredException":                        newErrorPullRequestIdRequiredException,
+	"PullRequestStatusRequiredException":                    newErrorPullRequestStatusRequiredException,
+	"PutFileEntryConflictException":                         newErrorPutFileEntryConflictException,
+	"ReactionLimitExceededException":                        newErrorReactionLimitExceededException,
+	"ReactionValueRequiredException":                        newErrorReactionValueRequiredException,
+	"ReferenceDoesNotExistException":                        newErrorReferenceDoesNotExistException,
+	"ReferenceNameRequiredException":                        newErrorReferenceNameRequiredException,
+	"ReferenceTypeNotSupportedException":                    newErrorReferenceTypeNotSupportedException,
+	"ReplacementContentRequiredException":                   newErrorReplacementContentRequiredException,
+	"ReplacementTypeRequiredException":                      newErrorReplacementTypeRequiredException,
+	"RepositoryDoesNotExistException":                       newErrorRepositoryDoesNotExistException,
+	"RepositoryLimitExceededException":                      newErrorRepositoryLimitExceededException,
+	"RepositoryNameExistsException":                         newErrorRepositoryNameExistsException,
+	"RepositoryNameRequiredException":                       newErrorRepositoryNameRequiredException,
+	"RepositoryNamesRequiredException":                      newErrorRepositoryNamesRequiredException,
+	"RepositoryNotAssociatedWithPullRequestException":       newErrorRepositoryNotAssociatedWithPullRequestException,
+	"RepositoryTriggerBranchNameListRequiredException":      newErrorRepositoryTriggerBranchNameListRequiredException,
+	"RepositoryTriggerDestinationArnRequiredException":      newErrorRepositoryTriggerDestinationArnRequiredException,
+	"RepositoryTriggerEventsListRequiredException":          newErrorRepositoryTriggerEventsListRequiredException,
+	"RepositoryTriggerNameRequiredException":                newErrorRepositoryTriggerNameRequiredException,
+	"RepositoryTriggersListRequiredException":               newErrorRepositoryTriggersListRequiredException,
+	"ResourceArnRequiredException":                          newErrorResourceArnRequiredException,
+	"RestrictedSourceFileException":                         newErrorRestrictedSourceFileException,
+	"RevisionIdRequiredException":                           newErrorRevisionIdRequiredException,
+	"RevisionNotCurrentException":                           newErrorRevisionNotCurrentException,
+	"SameFileContentException":                              newErrorSameFileContentException,
+	"SamePathRequestException":                              newErrorSamePathRequestException,
+	"SourceAndDestinationAreSameException":                  newErrorSourceAndDestinationAreSameException,
+	"SourceFileOrContentRequiredException":                  newErrorSourceFileOrContentRequiredException,
+	"TagKeysListRequiredException":                          newErrorTagKeysListRequiredException,
+	"TagPolicyException":                                    newErrorTagPolicyException,
+	"TagsMapRequiredException":                              newErrorTagsMapRequiredException,
+	"TargetRequiredException":                               newErrorTargetRequiredException,
+	"TargetsRequiredException":                              newErrorTargetsRequiredException,
+	"TipOfSourceReferenceIsDifferentException":              newErrorTipOfSourceReferenceIsDifferentException,
+	"TipsDivergenceExceededException":                       newErrorTipsDivergenceExceededException,
+	"TitleRequiredException":                                newErrorTitleRequiredException,
+	"TooManyTagsException":                                  newErrorTooManyTagsException,
+}

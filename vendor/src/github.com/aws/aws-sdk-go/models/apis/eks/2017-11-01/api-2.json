@@ -31,6 +31,23 @@
         {"shape":"UnsupportedAvailabilityZoneException"}
       ]
     },
+    "CreateFargateProfile":{
+      "name":"CreateFargateProfile",
+      "http":{
+        "method":"POST",
+        "requestUri":"/clusters/{name}/fargate-profiles"
+      },
+      "input":{"shape":"CreateFargateProfileRequest"},
+      "output":{"shape":"CreateFargateProfileResponse"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"InvalidRequestException"},
+        {"shape":"ClientException"},
+        {"shape":"ServerException"},
+        {"shape":"ResourceLimitExceededException"},
+        {"shape":"UnsupportedAvailabilityZoneException"}
+      ]
+    },
     "CreateNodegroup":{
       "name":"CreateNodegroup",
       "http":{
@@ -65,6 +82,21 @@
         {"shape":"ServiceUnavailableException"}
       ]
     },
+    "DeleteFargateProfile":{
+      "name":"DeleteFargateProfile",
+      "http":{
+        "method":"DELETE",
+        "requestUri":"/clusters/{name}/fargate-profiles/{fargateProfileName}"
+      },
+      "input":{"shape":"DeleteFargateProfileRequest"},
+      "output":{"shape":"DeleteFargateProfileResponse"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"ClientException"},
+        {"shape":"ServerException"},
+        {"shape":"ResourceNotFoundException"}
+      ]
+    },
     "DeleteNodegroup":{
       "name":"DeleteNodegroup",
       "http":{
@@ -95,6 +127,21 @@
         {"shape":"ClientException"},
         {"shape":"ServerException"},
         {"shape":"ServiceUnavailableException"}
+      ]
+    },
+    "DescribeFargateProfile":{
+      "name":"DescribeFargateProfile",
+      "http":{
+        "method":"GET",
+        "requestUri":"/clusters/{name}/fargate-profiles/{fargateProfileName}"
+      },
+      "input":{"shape":"DescribeFargateProfileRequest"},
+      "output":{"shape":"DescribeFargateProfileResponse"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"ClientException"},
+        {"shape":"ServerException"},
+        {"shape":"ResourceNotFoundException"}
       ]
     },
     "DescribeNodegroup":{
@@ -141,6 +188,21 @@
         {"shape":"ClientException"},
         {"shape":"ServerException"},
         {"shape":"ServiceUnavailableException"}
+      ]
+    },
+    "ListFargateProfiles":{
+      "name":"ListFargateProfiles",
+      "http":{
+        "method":"GET",
+        "requestUri":"/clusters/{name}/fargate-profiles"
+      },
+      "input":{"shape":"ListFargateProfilesRequest"},
+      "output":{"shape":"ListFargateProfilesResponse"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"ClientException"},
+        {"shape":"ServerException"}
       ]
     },
     "ListNodegroups":{
@@ -287,7 +349,8 @@
       "type":"string",
       "enum":[
         "AL2_x86_64",
-        "AL2_x86_64_GPU"
+        "AL2_x86_64_GPU",
+        "AL2_ARM_64"
       ]
     },
     "AutoScalingGroup":{
@@ -348,13 +411,15 @@
         "endpoint":{"shape":"String"},
         "roleArn":{"shape":"String"},
         "resourcesVpcConfig":{"shape":"VpcConfigResponse"},
+        "kubernetesNetworkConfig":{"shape":"KubernetesNetworkConfigResponse"},
         "logging":{"shape":"Logging"},
         "identity":{"shape":"Identity"},
         "status":{"shape":"ClusterStatus"},
         "certificateAuthority":{"shape":"Certificate"},
         "clientRequestToken":{"shape":"String"},
         "platformVersion":{"shape":"String"},
-        "tags":{"shape":"TagMap"}
+        "tags":{"shape":"TagMap"},
+        "encryptionConfig":{"shape":"EncryptionConfigList"}
       }
     },
     "ClusterName":{
@@ -385,7 +450,39 @@
         "version":{"shape":"String"},
         "roleArn":{"shape":"String"},
         "resourcesVpcConfig":{"shape":"VpcConfigRequest"},
+        "kubernetesNetworkConfig":{"shape":"KubernetesNetworkConfigRequest"},
         "logging":{"shape":"Logging"},
+        "clientRequestToken":{
+          "shape":"String",
+          "idempotencyToken":true
+        },
+        "tags":{"shape":"TagMap"},
+        "encryptionConfig":{"shape":"EncryptionConfigList"}
+      }
+    },
+    "CreateClusterResponse":{
+      "type":"structure",
+      "members":{
+        "cluster":{"shape":"Cluster"}
+      }
+    },
+    "CreateFargateProfileRequest":{
+      "type":"structure",
+      "required":[
+        "fargateProfileName",
+        "clusterName",
+        "podExecutionRoleArn"
+      ],
+      "members":{
+        "fargateProfileName":{"shape":"String"},
+        "clusterName":{
+          "shape":"String",
+          "location":"uri",
+          "locationName":"name"
+        },
+        "podExecutionRoleArn":{"shape":"String"},
+        "subnets":{"shape":"StringList"},
+        "selectors":{"shape":"FargateProfileSelectors"},
         "clientRequestToken":{
           "shape":"String",
           "idempotencyToken":true
@@ -393,10 +490,10 @@
         "tags":{"shape":"TagMap"}
       }
     },
-    "CreateClusterResponse":{
+    "CreateFargateProfileResponse":{
       "type":"structure",
       "members":{
-        "cluster":{"shape":"Cluster"}
+        "fargateProfile":{"shape":"FargateProfile"}
       }
     },
     "CreateNodegroupRequest":{
@@ -427,6 +524,7 @@
           "shape":"String",
           "idempotencyToken":true
         },
+        "launchTemplate":{"shape":"LaunchTemplateSpecification"},
         "version":{"shape":"String"},
         "releaseVersion":{"shape":"String"}
       }
@@ -452,6 +550,31 @@
       "type":"structure",
       "members":{
         "cluster":{"shape":"Cluster"}
+      }
+    },
+    "DeleteFargateProfileRequest":{
+      "type":"structure",
+      "required":[
+        "clusterName",
+        "fargateProfileName"
+      ],
+      "members":{
+        "clusterName":{
+          "shape":"String",
+          "location":"uri",
+          "locationName":"name"
+        },
+        "fargateProfileName":{
+          "shape":"String",
+          "location":"uri",
+          "locationName":"fargateProfileName"
+        }
+      }
+    },
+    "DeleteFargateProfileResponse":{
+      "type":"structure",
+      "members":{
+        "fargateProfile":{"shape":"FargateProfile"}
       }
     },
     "DeleteNodegroupRequest":{
@@ -494,6 +617,31 @@
       "type":"structure",
       "members":{
         "cluster":{"shape":"Cluster"}
+      }
+    },
+    "DescribeFargateProfileRequest":{
+      "type":"structure",
+      "required":[
+        "clusterName",
+        "fargateProfileName"
+      ],
+      "members":{
+        "clusterName":{
+          "shape":"String",
+          "location":"uri",
+          "locationName":"name"
+        },
+        "fargateProfileName":{
+          "shape":"String",
+          "location":"uri",
+          "locationName":"fargateProfileName"
+        }
+      }
+    },
+    "DescribeFargateProfileResponse":{
+      "type":"structure",
+      "members":{
+        "fargateProfile":{"shape":"FargateProfile"}
       }
     },
     "DescribeNodegroupRequest":{
@@ -551,6 +699,18 @@
         "update":{"shape":"Update"}
       }
     },
+    "EncryptionConfig":{
+      "type":"structure",
+      "members":{
+        "resources":{"shape":"StringList"},
+        "provider":{"shape":"Provider"}
+      }
+    },
+    "EncryptionConfigList":{
+      "type":"list",
+      "member":{"shape":"EncryptionConfig"},
+      "max":1
+    },
     "ErrorCode":{
       "type":"string",
       "enum":[
@@ -564,7 +724,8 @@
         "Unknown",
         "NodeCreationFailure",
         "PodEvictionFailure",
-        "InsufficientFreeAddresses"
+        "InsufficientFreeAddresses",
+        "ClusterUnreachable"
       ]
     },
     "ErrorDetail":{
@@ -579,6 +740,52 @@
       "type":"list",
       "member":{"shape":"ErrorDetail"}
     },
+    "FargateProfile":{
+      "type":"structure",
+      "members":{
+        "fargateProfileName":{"shape":"String"},
+        "fargateProfileArn":{"shape":"String"},
+        "clusterName":{"shape":"String"},
+        "createdAt":{"shape":"Timestamp"},
+        "podExecutionRoleArn":{"shape":"String"},
+        "subnets":{"shape":"StringList"},
+        "selectors":{"shape":"FargateProfileSelectors"},
+        "status":{"shape":"FargateProfileStatus"},
+        "tags":{"shape":"TagMap"}
+      }
+    },
+    "FargateProfileLabel":{
+      "type":"map",
+      "key":{"shape":"String"},
+      "value":{"shape":"String"}
+    },
+    "FargateProfileSelector":{
+      "type":"structure",
+      "members":{
+        "namespace":{"shape":"String"},
+        "labels":{"shape":"FargateProfileLabel"}
+      }
+    },
+    "FargateProfileSelectors":{
+      "type":"list",
+      "member":{"shape":"FargateProfileSelector"}
+    },
+    "FargateProfileStatus":{
+      "type":"string",
+      "enum":[
+        "CREATING",
+        "ACTIVE",
+        "DELETING",
+        "CREATE_FAILED",
+        "DELETE_FAILED"
+      ]
+    },
+    "FargateProfilesRequestMaxResults":{
+      "type":"integer",
+      "box":true,
+      "max":100,
+      "min":1
+    },
     "Identity":{
       "type":"structure",
       "members":{
@@ -590,6 +797,7 @@
       "members":{
         "clusterName":{"shape":"String"},
         "nodegroupName":{"shape":"String"},
+        "fargateProfileName":{"shape":"String"},
         "message":{"shape":"String"}
       },
       "error":{"httpStatusCode":400},
@@ -617,6 +825,26 @@
       "type":"list",
       "member":{"shape":"Issue"}
     },
+    "KubernetesNetworkConfigRequest":{
+      "type":"structure",
+      "members":{
+        "serviceIpv4Cidr":{"shape":"String"}
+      }
+    },
+    "KubernetesNetworkConfigResponse":{
+      "type":"structure",
+      "members":{
+        "serviceIpv4Cidr":{"shape":"String"}
+      }
+    },
+    "LaunchTemplateSpecification":{
+      "type":"structure",
+      "members":{
+        "name":{"shape":"String"},
+        "version":{"shape":"String"},
+        "id":{"shape":"String"}
+      }
+    },
     "ListClustersRequest":{
       "type":"structure",
       "members":{
@@ -642,6 +870,34 @@
       "type":"structure",
       "members":{
         "clusters":{"shape":"StringList"},
+        "nextToken":{"shape":"String"}
+      }
+    },
+    "ListFargateProfilesRequest":{
+      "type":"structure",
+      "required":["clusterName"],
+      "members":{
+        "clusterName":{
+          "shape":"String",
+          "location":"uri",
+          "locationName":"name"
+        },
+        "maxResults":{
+          "shape":"FargateProfilesRequestMaxResults",
+          "location":"querystring",
+          "locationName":"maxResults"
+        },
+        "nextToken":{
+          "shape":"String",
+          "location":"querystring",
+          "locationName":"nextToken"
+        }
+      }
+    },
+    "ListFargateProfilesResponse":{
+      "type":"structure",
+      "members":{
+        "fargateProfileNames":{"shape":"StringList"},
         "nextToken":{"shape":"String"}
       }
     },
@@ -787,6 +1043,7 @@
         "resources":{"shape":"NodegroupResources"},
         "diskSize":{"shape":"BoxedInteger"},
         "health":{"shape":"NodegroupHealth"},
+        "launchTemplate":{"shape":"LaunchTemplateSpecification"},
         "tags":{"shape":"TagMap"}
       }
     },
@@ -800,17 +1057,23 @@
       "type":"string",
       "enum":[
         "AutoScalingGroupNotFound",
+        "AutoScalingGroupInvalidConfiguration",
         "Ec2SecurityGroupNotFound",
         "Ec2SecurityGroupDeletionFailure",
         "Ec2LaunchTemplateNotFound",
         "Ec2LaunchTemplateVersionMismatch",
+        "Ec2SubnetNotFound",
+        "Ec2SubnetInvalidConfiguration",
         "IamInstanceProfileNotFound",
+        "IamLimitExceeded",
         "IamNodeRoleNotFound",
+        "NodeCreationFailure",
         "AsgInstanceLaunchFailures",
         "InstanceLimitExceeded",
         "InsufficientFreeAddresses",
         "AccessDenied",
-        "InternalFailure"
+        "InternalFailure",
+        "ClusterUnreachable"
       ]
     },
     "NodegroupResources":{
@@ -854,6 +1117,12 @@
         "issuer":{"shape":"String"}
       }
     },
+    "Provider":{
+      "type":"structure",
+      "members":{
+        "keyArn":{"shape":"String"}
+      }
+    },
     "RemoteAccessConfig":{
       "type":"structure",
       "members":{
@@ -886,6 +1155,7 @@
       "members":{
         "clusterName":{"shape":"String"},
         "nodegroupName":{"shape":"String"},
+        "fargateProfileName":{"shape":"String"},
         "message":{"shape":"String"}
       },
       "error":{"httpStatusCode":404},
@@ -1110,6 +1380,7 @@
         },
         "version":{"shape":"String"},
         "releaseVersion":{"shape":"String"},
+        "launchTemplate":{"shape":"LaunchTemplateSpecification"},
         "force":{"shape":"Boolean"},
         "clientRequestToken":{
           "shape":"String",
@@ -1143,7 +1414,8 @@
         "LabelsToRemove",
         "MaxSize",
         "MinSize",
-        "ReleaseVersion"
+        "ReleaseVersion",
+        "PublicAccessCidrs"
       ]
     },
     "UpdateParams":{
@@ -1174,7 +1446,8 @@
         "subnetIds":{"shape":"StringList"},
         "securityGroupIds":{"shape":"StringList"},
         "endpointPublicAccess":{"shape":"BoxedBoolean"},
-        "endpointPrivateAccess":{"shape":"BoxedBoolean"}
+        "endpointPrivateAccess":{"shape":"BoxedBoolean"},
+        "publicAccessCidrs":{"shape":"StringList"}
       }
     },
     "VpcConfigResponse":{
@@ -1185,7 +1458,8 @@
         "clusterSecurityGroupId":{"shape":"String"},
         "vpcId":{"shape":"String"},
         "endpointPublicAccess":{"shape":"Boolean"},
-        "endpointPrivateAccess":{"shape":"Boolean"}
+        "endpointPrivateAccess":{"shape":"Boolean"},
+        "publicAccessCidrs":{"shape":"StringList"}
       }
     },
     "labelKey":{

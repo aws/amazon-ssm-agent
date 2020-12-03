@@ -49,6 +49,22 @@
       ],
       "idempotent":true
     },
+    "CancelMailboxExportJob":{
+      "name":"CancelMailboxExportJob",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CancelMailboxExportJobRequest"},
+      "output":{"shape":"CancelMailboxExportJobResponse"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"OrganizationNotFoundException"},
+        {"shape":"OrganizationStateException"},
+        {"shape":"EntityNotFoundException"}
+      ],
+      "idempotent":true
+    },
     "CreateAlias":{
       "name":"CreateAlias",
       "http":{
@@ -65,7 +81,8 @@
         {"shape":"MailDomainNotFoundException"},
         {"shape":"MailDomainStateException"},
         {"shape":"OrganizationNotFoundException"},
-        {"shape":"OrganizationStateException"}
+        {"shape":"OrganizationStateException"},
+        {"shape":"LimitExceededException"}
       ],
       "idempotent":true
     },
@@ -86,6 +103,23 @@
         {"shape":"OrganizationStateException"},
         {"shape":"ReservedNameException"},
         {"shape":"UnsupportedOperationException"}
+      ],
+      "idempotent":true
+    },
+    "CreateOrganization":{
+      "name":"CreateOrganization",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"CreateOrganizationRequest"},
+      "output":{"shape":"CreateOrganizationResponse"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"DirectoryInUseException"},
+        {"shape":"DirectoryUnavailableException"},
+        {"shape":"LimitExceededException"},
+        {"shape":"NameAvailabilityException"}
       ],
       "idempotent":true
     },
@@ -128,6 +162,19 @@
         {"shape":"UnsupportedOperationException"}
       ],
       "idempotent":true
+    },
+    "DeleteAccessControlRule":{
+      "name":"DeleteAccessControlRule",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteAccessControlRuleRequest"},
+      "output":{"shape":"DeleteAccessControlRuleResponse"},
+      "errors":[
+        {"shape":"OrganizationNotFoundException"},
+        {"shape":"OrganizationStateException"}
+      ]
     },
     "DeleteAlias":{
       "name":"DeleteAlias",
@@ -182,6 +229,21 @@
       ],
       "idempotent":true
     },
+    "DeleteOrganization":{
+      "name":"DeleteOrganization",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteOrganizationRequest"},
+      "output":{"shape":"DeleteOrganizationResponse"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"OrganizationNotFoundException"},
+        {"shape":"OrganizationStateException"}
+      ],
+      "idempotent":true
+    },
     "DeleteResource":{
       "name":"DeleteResource",
       "http":{
@@ -192,6 +254,21 @@
       "output":{"shape":"DeleteResourceResponse"},
       "errors":[
         {"shape":"EntityStateException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"OrganizationNotFoundException"},
+        {"shape":"OrganizationStateException"}
+      ],
+      "idempotent":true
+    },
+    "DeleteRetentionPolicy":{
+      "name":"DeleteRetentionPolicy",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteRetentionPolicyRequest"},
+      "output":{"shape":"DeleteRetentionPolicyResponse"},
+      "errors":[
         {"shape":"InvalidParameterException"},
         {"shape":"OrganizationNotFoundException"},
         {"shape":"OrganizationStateException"}
@@ -247,6 +324,22 @@
         {"shape":"InvalidParameterException"},
         {"shape":"OrganizationNotFoundException"},
         {"shape":"OrganizationStateException"}
+      ],
+      "idempotent":true
+    },
+    "DescribeMailboxExportJob":{
+      "name":"DescribeMailboxExportJob",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeMailboxExportJobRequest"},
+      "output":{"shape":"DescribeMailboxExportJobResponse"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"OrganizationNotFoundException"},
+        {"shape":"OrganizationStateException"},
+        {"shape":"EntityNotFoundException"}
       ],
       "idempotent":true
     },
@@ -333,6 +426,37 @@
       ],
       "idempotent":true
     },
+    "GetAccessControlEffect":{
+      "name":"GetAccessControlEffect",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetAccessControlEffectRequest"},
+      "output":{"shape":"GetAccessControlEffectResponse"},
+      "errors":[
+        {"shape":"EntityNotFoundException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"OrganizationNotFoundException"},
+        {"shape":"OrganizationStateException"}
+      ]
+    },
+    "GetDefaultRetentionPolicy":{
+      "name":"GetDefaultRetentionPolicy",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"GetDefaultRetentionPolicyRequest"},
+      "output":{"shape":"GetDefaultRetentionPolicyResponse"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"OrganizationNotFoundException"},
+        {"shape":"OrganizationStateException"},
+        {"shape":"EntityNotFoundException"}
+      ],
+      "idempotent":true
+    },
     "GetMailboxDetails":{
       "name":"GetMailboxDetails",
       "http":{
@@ -347,6 +471,19 @@
         {"shape":"EntityNotFoundException"}
       ],
       "idempotent":true
+    },
+    "ListAccessControlRules":{
+      "name":"ListAccessControlRules",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListAccessControlRulesRequest"},
+      "output":{"shape":"ListAccessControlRulesResponse"},
+      "errors":[
+        {"shape":"OrganizationNotFoundException"},
+        {"shape":"OrganizationStateException"}
+      ]
     },
     "ListAliases":{
       "name":"ListAliases",
@@ -392,6 +529,21 @@
       "output":{"shape":"ListGroupsResponse"},
       "errors":[
         {"shape":"EntityNotFoundException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"OrganizationNotFoundException"},
+        {"shape":"OrganizationStateException"}
+      ],
+      "idempotent":true
+    },
+    "ListMailboxExportJobs":{
+      "name":"ListMailboxExportJobs",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListMailboxExportJobsRequest"},
+      "output":{"shape":"ListMailboxExportJobsResponse"},
+      "errors":[
         {"shape":"InvalidParameterException"},
         {"shape":"OrganizationNotFoundException"},
         {"shape":"OrganizationStateException"}
@@ -459,6 +611,18 @@
       ],
       "idempotent":true
     },
+    "ListTagsForResource":{
+      "name":"ListTagsForResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListTagsForResourceRequest"},
+      "output":{"shape":"ListTagsForResourceResponse"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"}
+      ]
+    },
     "ListUsers":{
       "name":"ListUsers",
       "http":{
@@ -474,6 +638,22 @@
       ],
       "idempotent":true
     },
+    "PutAccessControlRule":{
+      "name":"PutAccessControlRule",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"PutAccessControlRuleRequest"},
+      "output":{"shape":"PutAccessControlRuleResponse"},
+      "errors":[
+        {"shape":"LimitExceededException"},
+        {"shape":"InvalidParameterException"},
+        {"shape":"EntityNotFoundException"},
+        {"shape":"OrganizationNotFoundException"},
+        {"shape":"OrganizationStateException"}
+      ]
+    },
     "PutMailboxPermissions":{
       "name":"PutMailboxPermissions",
       "http":{
@@ -488,6 +668,22 @@
         {"shape":"InvalidParameterException"},
         {"shape":"OrganizationNotFoundException"},
         {"shape":"OrganizationStateException"}
+      ],
+      "idempotent":true
+    },
+    "PutRetentionPolicy":{
+      "name":"PutRetentionPolicy",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"PutRetentionPolicyRequest"},
+      "output":{"shape":"PutRetentionPolicyResponse"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"OrganizationNotFoundException"},
+        {"shape":"OrganizationStateException"},
+        {"shape":"LimitExceededException"}
       ],
       "idempotent":true
     },
@@ -534,6 +730,49 @@
         {"shape":"UnsupportedOperationException"}
       ],
       "idempotent":true
+    },
+    "StartMailboxExportJob":{
+      "name":"StartMailboxExportJob",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"StartMailboxExportJobRequest"},
+      "output":{"shape":"StartMailboxExportJobResponse"},
+      "errors":[
+        {"shape":"InvalidParameterException"},
+        {"shape":"OrganizationNotFoundException"},
+        {"shape":"OrganizationStateException"},
+        {"shape":"EntityNotFoundException"},
+        {"shape":"LimitExceededException"}
+      ],
+      "idempotent":true
+    },
+    "TagResource":{
+      "name":"TagResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"TagResourceRequest"},
+      "output":{"shape":"TagResourceResponse"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"TooManyTagsException"},
+        {"shape":"OrganizationStateException"}
+      ]
+    },
+    "UntagResource":{
+      "name":"UntagResource",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"UntagResourceRequest"},
+      "output":{"shape":"UntagResourceResponse"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"}
+      ]
     },
     "UpdateMailboxQuota":{
       "name":"UpdateMailboxQuota",
@@ -600,9 +839,73 @@
     }
   },
   "shapes":{
+    "AccessControlRule":{
+      "type":"structure",
+      "members":{
+        "Name":{"shape":"AccessControlRuleName"},
+        "Effect":{"shape":"AccessControlRuleEffect"},
+        "Description":{"shape":"AccessControlRuleDescription"},
+        "IpRanges":{"shape":"IpRangeList"},
+        "NotIpRanges":{"shape":"IpRangeList"},
+        "Actions":{"shape":"ActionsList"},
+        "NotActions":{"shape":"ActionsList"},
+        "UserIds":{"shape":"UserIdList"},
+        "NotUserIds":{"shape":"UserIdList"},
+        "DateCreated":{"shape":"Timestamp"},
+        "DateModified":{"shape":"Timestamp"}
+      }
+    },
+    "AccessControlRuleAction":{
+      "type":"string",
+      "max":64,
+      "min":1,
+      "pattern":"[a-zA-Z]+"
+    },
+    "AccessControlRuleDescription":{
+      "type":"string",
+      "max":255,
+      "min":0,
+      "pattern":"[\\u0020-\\u00FF]+"
+    },
+    "AccessControlRuleEffect":{
+      "type":"string",
+      "enum":[
+        "ALLOW",
+        "DENY"
+      ]
+    },
+    "AccessControlRuleName":{
+      "type":"string",
+      "max":64,
+      "min":1,
+      "pattern":"[a-zA-Z0-9_-]+"
+    },
+    "AccessControlRuleNameList":{
+      "type":"list",
+      "member":{"shape":"AccessControlRuleName"},
+      "max":10,
+      "min":0
+    },
+    "AccessControlRulesList":{
+      "type":"list",
+      "member":{"shape":"AccessControlRule"},
+      "max":10,
+      "min":0
+    },
+    "ActionsList":{
+      "type":"list",
+      "member":{"shape":"AccessControlRuleAction"},
+      "max":10,
+      "min":0
+    },
     "Aliases":{
       "type":"list",
       "member":{"shape":"EmailAddress"}
+    },
+    "AmazonResourceName":{
+      "type":"string",
+      "max":1011,
+      "min":1
     },
     "AssociateDelegateToResourceRequest":{
       "type":"structure",
@@ -649,6 +952,27 @@
       }
     },
     "Boolean":{"type":"boolean"},
+    "CancelMailboxExportJobRequest":{
+      "type":"structure",
+      "required":[
+        "ClientToken",
+        "JobId",
+        "OrganizationId"
+      ],
+      "members":{
+        "ClientToken":{
+          "shape":"IdempotencyClientToken",
+          "idempotencyToken":true
+        },
+        "JobId":{"shape":"MailboxExportJobId"},
+        "OrganizationId":{"shape":"OrganizationId"}
+      }
+    },
+    "CancelMailboxExportJobResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
     "CreateAliasRequest":{
       "type":"structure",
       "required":[
@@ -682,6 +1006,27 @@
       "type":"structure",
       "members":{
         "GroupId":{"shape":"WorkMailIdentifier"}
+      }
+    },
+    "CreateOrganizationRequest":{
+      "type":"structure",
+      "required":["Alias"],
+      "members":{
+        "DirectoryId":{"shape":"DirectoryId"},
+        "Alias":{"shape":"OrganizationName"},
+        "ClientToken":{
+          "shape":"IdempotencyClientToken",
+          "idempotencyToken":true
+        },
+        "Domains":{"shape":"Domains"},
+        "KmsKeyArn":{"shape":"KmsKeyArn"},
+        "EnableInteroperability":{"shape":"Boolean"}
+      }
+    },
+    "CreateOrganizationResponse":{
+      "type":"structure",
+      "members":{
+        "OrganizationId":{"shape":"OrganizationId"}
       }
     },
     "CreateResourceRequest":{
@@ -733,6 +1078,22 @@
       "members":{
         "Id":{"shape":"String"},
         "Type":{"shape":"MemberType"}
+      }
+    },
+    "DeleteAccessControlRuleRequest":{
+      "type":"structure",
+      "required":[
+        "OrganizationId",
+        "Name"
+      ],
+      "members":{
+        "OrganizationId":{"shape":"OrganizationId"},
+        "Name":{"shape":"AccessControlRuleName"}
+      }
+    },
+    "DeleteAccessControlRuleResponse":{
+      "type":"structure",
+      "members":{
       }
     },
     "DeleteAliasRequest":{
@@ -787,6 +1148,28 @@
       "members":{
       }
     },
+    "DeleteOrganizationRequest":{
+      "type":"structure",
+      "required":[
+        "OrganizationId",
+        "DeleteDirectory"
+      ],
+      "members":{
+        "ClientToken":{
+          "shape":"IdempotencyClientToken",
+          "idempotencyToken":true
+        },
+        "OrganizationId":{"shape":"OrganizationId"},
+        "DeleteDirectory":{"shape":"Boolean"}
+      }
+    },
+    "DeleteOrganizationResponse":{
+      "type":"structure",
+      "members":{
+        "OrganizationId":{"shape":"OrganizationId"},
+        "State":{"shape":"String"}
+      }
+    },
     "DeleteResourceRequest":{
       "type":"structure",
       "required":[
@@ -799,6 +1182,22 @@
       }
     },
     "DeleteResourceResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "DeleteRetentionPolicyRequest":{
+      "type":"structure",
+      "required":[
+        "OrganizationId",
+        "Id"
+      ],
+      "members":{
+        "OrganizationId":{"shape":"OrganizationId"},
+        "Id":{"shape":"ShortString"}
+      }
+    },
+    "DeleteRetentionPolicyResponse":{
       "type":"structure",
       "members":{
       }
@@ -857,6 +1256,34 @@
         "DisabledDate":{"shape":"Timestamp"}
       }
     },
+    "DescribeMailboxExportJobRequest":{
+      "type":"structure",
+      "required":[
+        "JobId",
+        "OrganizationId"
+      ],
+      "members":{
+        "JobId":{"shape":"MailboxExportJobId"},
+        "OrganizationId":{"shape":"OrganizationId"}
+      }
+    },
+    "DescribeMailboxExportJobResponse":{
+      "type":"structure",
+      "members":{
+        "EntityId":{"shape":"WorkMailIdentifier"},
+        "Description":{"shape":"Description"},
+        "RoleArn":{"shape":"RoleArn"},
+        "KmsKeyArn":{"shape":"KmsKeyArn"},
+        "S3BucketName":{"shape":"S3BucketName"},
+        "S3Prefix":{"shape":"S3ObjectKey"},
+        "S3Path":{"shape":"S3ObjectKey"},
+        "EstimatedProgress":{"shape":"Percentage"},
+        "State":{"shape":"MailboxExportJobState"},
+        "ErrorInfo":{"shape":"MailboxExportErrorInfo"},
+        "StartTime":{"shape":"Timestamp"},
+        "EndTime":{"shape":"Timestamp"}
+      }
+    },
     "DescribeOrganizationRequest":{
       "type":"structure",
       "required":["OrganizationId"],
@@ -874,7 +1301,8 @@
         "DirectoryType":{"shape":"String"},
         "DefaultMailDomain":{"shape":"String"},
         "CompletedDate":{"shape":"Timestamp"},
-        "ErrorMessage":{"shape":"String"}
+        "ErrorMessage":{"shape":"String"},
+        "ARN":{"shape":"AmazonResourceName"}
       }
     },
     "DescribeResourceRequest":{
@@ -924,6 +1352,25 @@
         "EnabledDate":{"shape":"Timestamp"},
         "DisabledDate":{"shape":"Timestamp"}
       }
+    },
+    "Description":{
+      "type":"string",
+      "max":1023,
+      "min":0,
+      "pattern":"[\\S\\s]*"
+    },
+    "DirectoryId":{
+      "type":"string",
+      "max":12,
+      "min":12,
+      "pattern":"^d-[0-9a-f]{10}$"
+    },
+    "DirectoryInUseException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"String"}
+      },
+      "exception":true
     },
     "DirectoryServiceAuthenticationFailedException":{
       "type":"structure",
@@ -975,11 +1422,30 @@
       "members":{
       }
     },
+    "Domain":{
+      "type":"structure",
+      "members":{
+        "DomainName":{"shape":"DomainName"},
+        "HostedZoneId":{"shape":"HostedZoneId"}
+      }
+    },
+    "DomainName":{
+      "type":"string",
+      "max":255,
+      "min":3,
+      "pattern":"[a-zA-Z0-9.-]+\\.[a-zA-Z-]{2,}"
+    },
+    "Domains":{
+      "type":"list",
+      "member":{"shape":"Domain"},
+      "max":5,
+      "min":0
+    },
     "EmailAddress":{
       "type":"string",
       "max":254,
       "min":1,
-      "pattern":"[a-zA-Z0-9._%+-]{1,64}@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}"
+      "pattern":"[a-zA-Z0-9._%+-]{1,64}@[a-zA-Z0-9.-]+\\.[a-zA-Z-]{2,}"
     },
     "EmailAddressInUseException":{
       "type":"structure",
@@ -1016,6 +1482,70 @@
         "Message":{"shape":"String"}
       },
       "exception":true
+    },
+    "FolderConfiguration":{
+      "type":"structure",
+      "required":[
+        "Name",
+        "Action"
+      ],
+      "members":{
+        "Name":{"shape":"FolderName"},
+        "Action":{"shape":"RetentionAction"},
+        "Period":{"shape":"RetentionPeriod"}
+      }
+    },
+    "FolderConfigurations":{
+      "type":"list",
+      "member":{"shape":"FolderConfiguration"}
+    },
+    "FolderName":{
+      "type":"string",
+      "enum":[
+        "INBOX",
+        "DELETED_ITEMS",
+        "SENT_ITEMS",
+        "DRAFTS",
+        "JUNK_EMAIL"
+      ]
+    },
+    "GetAccessControlEffectRequest":{
+      "type":"structure",
+      "required":[
+        "OrganizationId",
+        "IpAddress",
+        "Action",
+        "UserId"
+      ],
+      "members":{
+        "OrganizationId":{"shape":"OrganizationId"},
+        "IpAddress":{"shape":"IpAddress"},
+        "Action":{"shape":"AccessControlRuleAction"},
+        "UserId":{"shape":"WorkMailIdentifier"}
+      }
+    },
+    "GetAccessControlEffectResponse":{
+      "type":"structure",
+      "members":{
+        "Effect":{"shape":"AccessControlRuleEffect"},
+        "MatchedRules":{"shape":"AccessControlRuleNameList"}
+      }
+    },
+    "GetDefaultRetentionPolicyRequest":{
+      "type":"structure",
+      "required":["OrganizationId"],
+      "members":{
+        "OrganizationId":{"shape":"OrganizationId"}
+      }
+    },
+    "GetDefaultRetentionPolicyResponse":{
+      "type":"structure",
+      "members":{
+        "Id":{"shape":"ShortString"},
+        "Name":{"shape":"ShortString"},
+        "Description":{"shape":"String"},
+        "FolderConfigurations":{"shape":"FolderConfigurations"}
+      }
     },
     "GetMailboxDetailsRequest":{
       "type":"structure",
@@ -1056,6 +1586,18 @@
       "type":"list",
       "member":{"shape":"Group"}
     },
+    "HostedZoneId":{
+      "type":"string",
+      "max":32,
+      "min":1,
+      "pattern":"[\\S\\s]*"
+    },
+    "IdempotencyClientToken":{
+      "type":"string",
+      "max":128,
+      "min":1,
+      "pattern":"[\\x21-\\x7e]+"
+    },
     "InvalidConfigurationException":{
       "type":"structure",
       "members":{
@@ -1076,6 +1618,54 @@
         "Message":{"shape":"String"}
       },
       "exception":true
+    },
+    "IpAddress":{
+      "type":"string",
+      "max":15,
+      "min":1,
+      "pattern":"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])$"
+    },
+    "IpRange":{
+      "type":"string",
+      "max":18,
+      "min":1,
+      "pattern":"^(([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])\\.){3}([0-9]|[1-9][0-9]|1[0-9]{2}|2[0-4][0-9]|25[0-5])/([0-9]|[12][0-9]|3[0-2])$"
+    },
+    "IpRangeList":{
+      "type":"list",
+      "member":{"shape":"IpRange"},
+      "max":10,
+      "min":0
+    },
+    "Jobs":{
+      "type":"list",
+      "member":{"shape":"MailboxExportJob"}
+    },
+    "KmsKeyArn":{
+      "type":"string",
+      "max":2048,
+      "min":20,
+      "pattern":"arn:aws:kms:[a-z0-9-]*:[a-z0-9-]+:[A-Za-z0-9][A-Za-z0-9:_/+=,@.-]{0,1023}"
+    },
+    "LimitExceededException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"String"}
+      },
+      "exception":true
+    },
+    "ListAccessControlRulesRequest":{
+      "type":"structure",
+      "required":["OrganizationId"],
+      "members":{
+        "OrganizationId":{"shape":"OrganizationId"}
+      }
+    },
+    "ListAccessControlRulesResponse":{
+      "type":"structure",
+      "members":{
+        "Rules":{"shape":"AccessControlRulesList"}
+      }
     },
     "ListAliasesRequest":{
       "type":"structure",
@@ -1130,6 +1720,22 @@
       "type":"structure",
       "members":{
         "Groups":{"shape":"Groups"},
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
+    "ListMailboxExportJobsRequest":{
+      "type":"structure",
+      "required":["OrganizationId"],
+      "members":{
+        "OrganizationId":{"shape":"OrganizationId"},
+        "NextToken":{"shape":"NextToken"},
+        "MaxResults":{"shape":"MaxResults"}
+      }
+    },
+    "ListMailboxExportJobsResponse":{
+      "type":"structure",
+      "members":{
+        "Jobs":{"shape":"Jobs"},
         "NextToken":{"shape":"NextToken"}
       }
     },
@@ -1203,6 +1809,19 @@
         "NextToken":{"shape":"NextToken"}
       }
     },
+    "ListTagsForResourceRequest":{
+      "type":"structure",
+      "required":["ResourceARN"],
+      "members":{
+        "ResourceARN":{"shape":"AmazonResourceName"}
+      }
+    },
+    "ListTagsForResourceResponse":{
+      "type":"structure",
+      "members":{
+        "Tags":{"shape":"TagList"}
+      }
+    },
     "ListUsersRequest":{
       "type":"structure",
       "required":["OrganizationId"],
@@ -1232,6 +1851,41 @@
         "Message":{"shape":"String"}
       },
       "exception":true
+    },
+    "MailboxExportErrorInfo":{
+      "type":"string",
+      "max":1024,
+      "min":1,
+      "pattern":"[\\S\\s]*"
+    },
+    "MailboxExportJob":{
+      "type":"structure",
+      "members":{
+        "JobId":{"shape":"MailboxExportJobId"},
+        "EntityId":{"shape":"WorkMailIdentifier"},
+        "Description":{"shape":"Description"},
+        "S3BucketName":{"shape":"S3BucketName"},
+        "S3Path":{"shape":"S3ObjectKey"},
+        "EstimatedProgress":{"shape":"Percentage"},
+        "State":{"shape":"MailboxExportJobState"},
+        "StartTime":{"shape":"Timestamp"},
+        "EndTime":{"shape":"Timestamp"}
+      }
+    },
+    "MailboxExportJobId":{
+      "type":"string",
+      "max":63,
+      "min":1,
+      "pattern":"[A-Za-z0-9-]+"
+    },
+    "MailboxExportJobState":{
+      "type":"string",
+      "enum":[
+        "RUNNING",
+        "COMPLETED",
+        "FAILED",
+        "CANCELLED"
+      ]
     },
     "MailboxQuota":{
       "type":"integer",
@@ -1280,17 +1934,20 @@
     "NextToken":{
       "type":"string",
       "max":1024,
-      "min":1
+      "min":1,
+      "pattern":"[\\S\\s]*|[a-zA-Z0-9/+=]{1,1024}"
     },
     "OrganizationId":{
       "type":"string",
+      "max":34,
+      "min":34,
       "pattern":"^m-[0-9a-f]{32}$"
     },
     "OrganizationName":{
       "type":"string",
       "max":62,
       "min":1,
-      "pattern":"^(?!d-)([\\da-zA-Z]+)([-]*[\\da-zA-Z])*"
+      "pattern":"^(?!d-)([\\da-zA-Z]+)([-][\\da-zA-Z]+)*"
     },
     "OrganizationNotFoundException":{
       "type":"structure",
@@ -1315,6 +1972,7 @@
       "members":{
         "OrganizationId":{"shape":"OrganizationId"},
         "Alias":{"shape":"OrganizationName"},
+        "DefaultMailDomain":{"shape":"DomainName"},
         "ErrorMessage":{"shape":"String"},
         "State":{"shape":"String"}
       }
@@ -1324,6 +1982,11 @@
       "max":256,
       "pattern":"[\\u0020-\\u00FF]+",
       "sensitive":true
+    },
+    "Percentage":{
+      "type":"integer",
+      "max":100,
+      "min":0
     },
     "Permission":{
       "type":"structure",
@@ -1354,6 +2017,38 @@
       "type":"list",
       "member":{"shape":"Permission"}
     },
+    "PolicyDescription":{
+      "type":"string",
+      "max":256,
+      "pattern":"[\\w\\d\\s\\S\\-!?=,.;:'_]+",
+      "sensitive":true
+    },
+    "PutAccessControlRuleRequest":{
+      "type":"structure",
+      "required":[
+        "Name",
+        "Effect",
+        "Description",
+        "OrganizationId"
+      ],
+      "members":{
+        "Name":{"shape":"AccessControlRuleName"},
+        "Effect":{"shape":"AccessControlRuleEffect"},
+        "Description":{"shape":"AccessControlRuleDescription"},
+        "IpRanges":{"shape":"IpRangeList"},
+        "NotIpRanges":{"shape":"IpRangeList"},
+        "Actions":{"shape":"ActionsList"},
+        "NotActions":{"shape":"ActionsList"},
+        "UserIds":{"shape":"UserIdList"},
+        "NotUserIds":{"shape":"UserIdList"},
+        "OrganizationId":{"shape":"OrganizationId"}
+      }
+    },
+    "PutAccessControlRuleResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
     "PutMailboxPermissionsRequest":{
       "type":"structure",
       "required":[
@@ -1370,6 +2065,26 @@
       }
     },
     "PutMailboxPermissionsResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "PutRetentionPolicyRequest":{
+      "type":"structure",
+      "required":[
+        "OrganizationId",
+        "Name",
+        "FolderConfigurations"
+      ],
+      "members":{
+        "OrganizationId":{"shape":"OrganizationId"},
+        "Id":{"shape":"ShortString"},
+        "Name":{"shape":"ShortString"},
+        "Description":{"shape":"PolicyDescription"},
+        "FolderConfigurations":{"shape":"FolderConfigurations"}
+      }
+    },
+    "PutRetentionPolicyResponse":{
       "type":"structure",
       "members":{
       }
@@ -1435,13 +2150,22 @@
     },
     "ResourceId":{
       "type":"string",
+      "max":34,
+      "min":34,
       "pattern":"^r-[0-9a-f]{32}$"
     },
     "ResourceName":{
       "type":"string",
       "max":20,
       "min":1,
-      "pattern":"[\\w\\-.]+(@[a-zA-Z0-9.\\-]+\\.[a-zA-Z0-9]{2,})?"
+      "pattern":"[\\w\\-.]+(@[a-zA-Z0-9.\\-]+\\.[a-zA-Z0-9-]{2,})?"
+    },
+    "ResourceNotFoundException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"String"}
+      },
+      "exception":true
     },
     "ResourceType":{
       "type":"string",
@@ -1454,17 +2178,157 @@
       "type":"list",
       "member":{"shape":"Resource"}
     },
+    "RetentionAction":{
+      "type":"string",
+      "enum":[
+        "NONE",
+        "DELETE",
+        "PERMANENTLY_DELETE"
+      ]
+    },
+    "RetentionPeriod":{
+      "type":"integer",
+      "box":true,
+      "max":730,
+      "min":1
+    },
+    "RoleArn":{
+      "type":"string",
+      "max":2048,
+      "min":20
+    },
+    "S3BucketName":{
+      "type":"string",
+      "max":63,
+      "min":1,
+      "pattern":"[A-Za-z0-9.-]+"
+    },
+    "S3ObjectKey":{
+      "type":"string",
+      "max":1023,
+      "min":1,
+      "pattern":"[A-Za-z0-9!_.*'()/-]+"
+    },
+    "ShortString":{
+      "type":"string",
+      "max":64,
+      "min":1,
+      "pattern":"[a-zA-Z0-9_-]+"
+    },
+    "StartMailboxExportJobRequest":{
+      "type":"structure",
+      "required":[
+        "ClientToken",
+        "OrganizationId",
+        "EntityId",
+        "RoleArn",
+        "KmsKeyArn",
+        "S3BucketName",
+        "S3Prefix"
+      ],
+      "members":{
+        "ClientToken":{
+          "shape":"IdempotencyClientToken",
+          "idempotencyToken":true
+        },
+        "OrganizationId":{"shape":"OrganizationId"},
+        "EntityId":{"shape":"WorkMailIdentifier"},
+        "Description":{"shape":"Description"},
+        "RoleArn":{"shape":"RoleArn"},
+        "KmsKeyArn":{"shape":"KmsKeyArn"},
+        "S3BucketName":{"shape":"S3BucketName"},
+        "S3Prefix":{"shape":"S3ObjectKey"}
+      }
+    },
+    "StartMailboxExportJobResponse":{
+      "type":"structure",
+      "members":{
+        "JobId":{"shape":"MailboxExportJobId"}
+      }
+    },
     "String":{
       "type":"string",
       "max":256
     },
+    "Tag":{
+      "type":"structure",
+      "required":[
+        "Key",
+        "Value"
+      ],
+      "members":{
+        "Key":{"shape":"TagKey"},
+        "Value":{"shape":"TagValue"}
+      }
+    },
+    "TagKey":{
+      "type":"string",
+      "max":128,
+      "min":1
+    },
+    "TagKeyList":{
+      "type":"list",
+      "member":{"shape":"TagKey"},
+      "max":50,
+      "min":0
+    },
+    "TagList":{
+      "type":"list",
+      "member":{"shape":"Tag"},
+      "max":50,
+      "min":0
+    },
+    "TagResourceRequest":{
+      "type":"structure",
+      "required":[
+        "ResourceARN",
+        "Tags"
+      ],
+      "members":{
+        "ResourceARN":{"shape":"AmazonResourceName"},
+        "Tags":{"shape":"TagList"}
+      }
+    },
+    "TagResourceResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
+    "TagValue":{
+      "type":"string",
+      "max":256,
+      "min":0
+    },
     "Timestamp":{"type":"timestamp"},
+    "TooManyTagsException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"String"}
+      },
+      "exception":true
+    },
     "UnsupportedOperationException":{
       "type":"structure",
       "members":{
         "Message":{"shape":"String"}
       },
       "exception":true
+    },
+    "UntagResourceRequest":{
+      "type":"structure",
+      "required":[
+        "ResourceARN",
+        "TagKeys"
+      ],
+      "members":{
+        "ResourceARN":{"shape":"AmazonResourceName"},
+        "TagKeys":{"shape":"TagKeyList"}
+      }
+    },
+    "UntagResourceResponse":{
+      "type":"structure",
+      "members":{
+      }
     },
     "UpdateMailboxQuotaRequest":{
       "type":"structure",
@@ -1533,11 +2397,17 @@
         "DisabledDate":{"shape":"Timestamp"}
       }
     },
+    "UserIdList":{
+      "type":"list",
+      "member":{"shape":"WorkMailIdentifier"},
+      "max":10,
+      "min":0
+    },
     "UserName":{
       "type":"string",
       "max":64,
       "min":1,
-      "pattern":"[\\w\\-.]+(@[a-zA-Z0-9.\\-]+\\.[a-zA-Z0-9]{2,})?"
+      "pattern":"[\\w\\-.]+(@[a-zA-Z0-9.\\-]+\\.[a-zA-Z0-9-]{2,})?"
     },
     "UserRole":{
       "type":"string",

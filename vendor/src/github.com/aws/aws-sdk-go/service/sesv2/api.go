@@ -71,23 +71,23 @@ func (c *SESV2) CreateConfigurationSetRequest(input *CreateConfigurationSetInput
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation CreateConfigurationSet for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeAlreadyExistsException "AlreadyExistsException"
+// Returned Error Types:
+//   * AlreadyExistsException
 //   The resource specified in your request already exists.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeLimitExceededException "LimitExceededException"
+//   * LimitExceededException
 //   There are too many instances of the specified resource type.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
-//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   * ConcurrentModificationException
 //   The resource is being modified by another operation or thread.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/CreateConfigurationSet
@@ -173,20 +173,20 @@ func (c *SESV2) CreateConfigurationSetEventDestinationRequest(input *CreateConfi
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation CreateConfigurationSetEventDestination for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeAlreadyExistsException "AlreadyExistsException"
+//   * AlreadyExistsException
 //   The resource specified in your request already exists.
 //
-//   * ErrCodeLimitExceededException "LimitExceededException"
+//   * LimitExceededException
 //   There are too many instances of the specified resource type.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/CreateConfigurationSetEventDestination
@@ -206,6 +206,283 @@ func (c *SESV2) CreateConfigurationSetEventDestination(input *CreateConfiguratio
 // for more information on using Contexts.
 func (c *SESV2) CreateConfigurationSetEventDestinationWithContext(ctx aws.Context, input *CreateConfigurationSetEventDestinationInput, opts ...request.Option) (*CreateConfigurationSetEventDestinationOutput, error) {
 	req, out := c.CreateConfigurationSetEventDestinationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateContact = "CreateContact"
+
+// CreateContactRequest generates a "aws/request.Request" representing the
+// client's request for the CreateContact operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateContact for more information on using the CreateContact
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateContactRequest method.
+//    req, resp := client.CreateContactRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/CreateContact
+func (c *SESV2) CreateContactRequest(input *CreateContactInput) (req *request.Request, output *CreateContactOutput) {
+	op := &request.Operation{
+		Name:       opCreateContact,
+		HTTPMethod: "POST",
+		HTTPPath:   "/v2/email/contact-lists/{ContactListName}/contacts",
+	}
+
+	if input == nil {
+		input = &CreateContactInput{}
+	}
+
+	output = &CreateContactOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// CreateContact API operation for Amazon Simple Email Service.
+//
+// Creates a contact, which is an end-user who is receiving the email, and adds
+// them to a contact list.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation CreateContact for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+//   * NotFoundException
+//   The resource you attempted to access doesn't exist.
+//
+//   * AlreadyExistsException
+//   The resource specified in your request already exists.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/CreateContact
+func (c *SESV2) CreateContact(input *CreateContactInput) (*CreateContactOutput, error) {
+	req, out := c.CreateContactRequest(input)
+	return out, req.Send()
+}
+
+// CreateContactWithContext is the same as CreateContact with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateContact for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) CreateContactWithContext(ctx aws.Context, input *CreateContactInput, opts ...request.Option) (*CreateContactOutput, error) {
+	req, out := c.CreateContactRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateContactList = "CreateContactList"
+
+// CreateContactListRequest generates a "aws/request.Request" representing the
+// client's request for the CreateContactList operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateContactList for more information on using the CreateContactList
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateContactListRequest method.
+//    req, resp := client.CreateContactListRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/CreateContactList
+func (c *SESV2) CreateContactListRequest(input *CreateContactListInput) (req *request.Request, output *CreateContactListOutput) {
+	op := &request.Operation{
+		Name:       opCreateContactList,
+		HTTPMethod: "POST",
+		HTTPPath:   "/v2/email/contact-lists",
+	}
+
+	if input == nil {
+		input = &CreateContactListInput{}
+	}
+
+	output = &CreateContactListOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// CreateContactList API operation for Amazon Simple Email Service.
+//
+// Creates a contact list.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation CreateContactList for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+//   * AlreadyExistsException
+//   The resource specified in your request already exists.
+//
+//   * LimitExceededException
+//   There are too many instances of the specified resource type.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/CreateContactList
+func (c *SESV2) CreateContactList(input *CreateContactListInput) (*CreateContactListOutput, error) {
+	req, out := c.CreateContactListRequest(input)
+	return out, req.Send()
+}
+
+// CreateContactListWithContext is the same as CreateContactList with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateContactList for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) CreateContactListWithContext(ctx aws.Context, input *CreateContactListInput, opts ...request.Option) (*CreateContactListOutput, error) {
+	req, out := c.CreateContactListRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateCustomVerificationEmailTemplate = "CreateCustomVerificationEmailTemplate"
+
+// CreateCustomVerificationEmailTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the CreateCustomVerificationEmailTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateCustomVerificationEmailTemplate for more information on using the CreateCustomVerificationEmailTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateCustomVerificationEmailTemplateRequest method.
+//    req, resp := client.CreateCustomVerificationEmailTemplateRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/CreateCustomVerificationEmailTemplate
+func (c *SESV2) CreateCustomVerificationEmailTemplateRequest(input *CreateCustomVerificationEmailTemplateInput) (req *request.Request, output *CreateCustomVerificationEmailTemplateOutput) {
+	op := &request.Operation{
+		Name:       opCreateCustomVerificationEmailTemplate,
+		HTTPMethod: "POST",
+		HTTPPath:   "/v2/email/custom-verification-email-templates",
+	}
+
+	if input == nil {
+		input = &CreateCustomVerificationEmailTemplateInput{}
+	}
+
+	output = &CreateCustomVerificationEmailTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// CreateCustomVerificationEmailTemplate API operation for Amazon Simple Email Service.
+//
+// Creates a new custom verification email template.
+//
+// For more information about custom verification email templates, see Using
+// Custom Verification Email Templates (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-verify-address-custom.html)
+// in the Amazon SES Developer Guide.
+//
+// You can execute this operation no more than once per second.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation CreateCustomVerificationEmailTemplate for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+//   * AlreadyExistsException
+//   The resource specified in your request already exists.
+//
+//   * NotFoundException
+//   The resource you attempted to access doesn't exist.
+//
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+//   * LimitExceededException
+//   There are too many instances of the specified resource type.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/CreateCustomVerificationEmailTemplate
+func (c *SESV2) CreateCustomVerificationEmailTemplate(input *CreateCustomVerificationEmailTemplateInput) (*CreateCustomVerificationEmailTemplateOutput, error) {
+	req, out := c.CreateCustomVerificationEmailTemplateRequest(input)
+	return out, req.Send()
+}
+
+// CreateCustomVerificationEmailTemplateWithContext is the same as CreateCustomVerificationEmailTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateCustomVerificationEmailTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) CreateCustomVerificationEmailTemplateWithContext(ctx aws.Context, input *CreateCustomVerificationEmailTemplateInput, opts ...request.Option) (*CreateCustomVerificationEmailTemplateOutput, error) {
+	req, out := c.CreateCustomVerificationEmailTemplateRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -269,20 +546,20 @@ func (c *SESV2) CreateDedicatedIpPoolRequest(input *CreateDedicatedIpPoolInput) 
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation CreateDedicatedIpPool for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeAlreadyExistsException "AlreadyExistsException"
+// Returned Error Types:
+//   * AlreadyExistsException
 //   The resource specified in your request already exists.
 //
-//   * ErrCodeLimitExceededException "LimitExceededException"
+//   * LimitExceededException
 //   There are too many instances of the specified resource type.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
-//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   * ConcurrentModificationException
 //   The resource is being modified by another operation or thread.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/CreateDedicatedIpPool
@@ -355,7 +632,7 @@ func (c *SESV2) CreateDeliverabilityTestReportRequest(input *CreateDeliverabilit
 // tests can help you predict how your messages will be handled by various email
 // providers around the world. When you perform a predictive inbox placement
 // test, you provide a sample message that contains the content that you plan
-// to send to your customers. Amazon SES API v2 then sends that message to special
+// to send to your customers. Amazon SES then sends that message to special
 // email addresses spread across several major email providers. After about
 // 24 hours, the test is complete, and you can use the GetDeliverabilityTestReport
 // operation to view the results of the test.
@@ -367,34 +644,34 @@ func (c *SESV2) CreateDeliverabilityTestReportRequest(input *CreateDeliverabilit
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation CreateDeliverabilityTestReport for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeAccountSuspendedException "AccountSuspendedException"
+// Returned Error Types:
+//   * AccountSuspendedException
 //   The message can't be sent because the account's ability to send email has
 //   been permanently restricted.
 //
-//   * ErrCodeSendingPausedException "SendingPausedException"
+//   * SendingPausedException
 //   The message can't be sent because the account's ability to send email is
 //   currently paused.
 //
-//   * ErrCodeMessageRejected "MessageRejected"
+//   * MessageRejected
 //   The message can't be sent because it contains invalid content.
 //
-//   * ErrCodeMailFromDomainNotVerifiedException "MailFromDomainNotVerifiedException"
+//   * MailFromDomainNotVerifiedException
 //   The message can't be sent because the sending domain isn't verified.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeLimitExceededException "LimitExceededException"
+//   * LimitExceededException
 //   There are too many instances of the specified resource type.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
-//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   * ConcurrentModificationException
 //   The resource is being modified by another operation or thread.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/CreateDeliverabilityTestReport
@@ -473,11 +750,20 @@ func (c *SESV2) CreateEmailIdentityRequest(input *CreateEmailIdentityInput) (req
 // Your email address is verified as soon as you follow the link in the verification
 // email.
 //
-// When you verify a domain, this operation provides a set of DKIM tokens, which
-// you can convert into CNAME tokens. You add these CNAME tokens to the DNS
-// configuration for your domain. Your domain is verified when Amazon SES detects
-// these records in the DNS configuration for your domain. For some DNS providers,
-// it can take 72 hours or more to complete the domain verification process.
+// When you verify a domain without specifying the DkimSigningAttributes object,
+// this operation provides a set of DKIM tokens. You can convert these tokens
+// into CNAME records, which you then add to the DNS configuration for your
+// domain. Your domain is verified when Amazon SES detects these records in
+// the DNS configuration for your domain. This verification method is known
+// as Easy DKIM (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html).
+//
+// Alternatively, you can perform the verification process by providing your
+// own public-private key pair. This verification method is known as Bring Your
+// Own DKIM (BYODKIM). To use BYODKIM, your call to the CreateEmailIdentity
+// operation has to include the DkimSigningAttributes object. When you specify
+// this object, you provide a selector (a component of the DNS record name that
+// identifies the public key that you want to use for DKIM authentication) and
+// a private key.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -486,17 +772,20 @@ func (c *SESV2) CreateEmailIdentityRequest(input *CreateEmailIdentityInput) (req
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation CreateEmailIdentity for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeLimitExceededException "LimitExceededException"
+// Returned Error Types:
+//   * AlreadyExistsException
+//   The resource specified in your request already exists.
+//
+//   * LimitExceededException
 //   There are too many instances of the specified resource type.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
-//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   * ConcurrentModificationException
 //   The resource is being modified by another operation or thread.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/CreateEmailIdentity
@@ -516,6 +805,286 @@ func (c *SESV2) CreateEmailIdentity(input *CreateEmailIdentityInput) (*CreateEma
 // for more information on using Contexts.
 func (c *SESV2) CreateEmailIdentityWithContext(ctx aws.Context, input *CreateEmailIdentityInput, opts ...request.Option) (*CreateEmailIdentityOutput, error) {
 	req, out := c.CreateEmailIdentityRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateEmailIdentityPolicy = "CreateEmailIdentityPolicy"
+
+// CreateEmailIdentityPolicyRequest generates a "aws/request.Request" representing the
+// client's request for the CreateEmailIdentityPolicy operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateEmailIdentityPolicy for more information on using the CreateEmailIdentityPolicy
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateEmailIdentityPolicyRequest method.
+//    req, resp := client.CreateEmailIdentityPolicyRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/CreateEmailIdentityPolicy
+func (c *SESV2) CreateEmailIdentityPolicyRequest(input *CreateEmailIdentityPolicyInput) (req *request.Request, output *CreateEmailIdentityPolicyOutput) {
+	op := &request.Operation{
+		Name:       opCreateEmailIdentityPolicy,
+		HTTPMethod: "POST",
+		HTTPPath:   "/v2/email/identities/{EmailIdentity}/policies/{PolicyName}",
+	}
+
+	if input == nil {
+		input = &CreateEmailIdentityPolicyInput{}
+	}
+
+	output = &CreateEmailIdentityPolicyOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// CreateEmailIdentityPolicy API operation for Amazon Simple Email Service.
+//
+// Creates the specified sending authorization policy for the given identity
+// (an email address or a domain).
+//
+// This API is for the identity owner only. If you have not verified the identity,
+// this API will return an error.
+//
+// Sending authorization is a feature that enables an identity owner to authorize
+// other senders to use its identities. For information about using sending
+// authorization, see the Amazon SES Developer Guide (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html).
+//
+// You can execute this operation no more than once per second.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation CreateEmailIdentityPolicy for usage and error information.
+//
+// Returned Error Types:
+//   * NotFoundException
+//   The resource you attempted to access doesn't exist.
+//
+//   * AlreadyExistsException
+//   The resource specified in your request already exists.
+//
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+//   * LimitExceededException
+//   There are too many instances of the specified resource type.
+//
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/CreateEmailIdentityPolicy
+func (c *SESV2) CreateEmailIdentityPolicy(input *CreateEmailIdentityPolicyInput) (*CreateEmailIdentityPolicyOutput, error) {
+	req, out := c.CreateEmailIdentityPolicyRequest(input)
+	return out, req.Send()
+}
+
+// CreateEmailIdentityPolicyWithContext is the same as CreateEmailIdentityPolicy with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateEmailIdentityPolicy for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) CreateEmailIdentityPolicyWithContext(ctx aws.Context, input *CreateEmailIdentityPolicyInput, opts ...request.Option) (*CreateEmailIdentityPolicyOutput, error) {
+	req, out := c.CreateEmailIdentityPolicyRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateEmailTemplate = "CreateEmailTemplate"
+
+// CreateEmailTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the CreateEmailTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateEmailTemplate for more information on using the CreateEmailTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateEmailTemplateRequest method.
+//    req, resp := client.CreateEmailTemplateRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/CreateEmailTemplate
+func (c *SESV2) CreateEmailTemplateRequest(input *CreateEmailTemplateInput) (req *request.Request, output *CreateEmailTemplateOutput) {
+	op := &request.Operation{
+		Name:       opCreateEmailTemplate,
+		HTTPMethod: "POST",
+		HTTPPath:   "/v2/email/templates",
+	}
+
+	if input == nil {
+		input = &CreateEmailTemplateInput{}
+	}
+
+	output = &CreateEmailTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// CreateEmailTemplate API operation for Amazon Simple Email Service.
+//
+// Creates an email template. Email templates enable you to send personalized
+// email to one or more destinations in a single API operation. For more information,
+// see the Amazon SES Developer Guide (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html).
+//
+// You can execute this operation no more than once per second.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation CreateEmailTemplate for usage and error information.
+//
+// Returned Error Types:
+//   * AlreadyExistsException
+//   The resource specified in your request already exists.
+//
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+//   * LimitExceededException
+//   There are too many instances of the specified resource type.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/CreateEmailTemplate
+func (c *SESV2) CreateEmailTemplate(input *CreateEmailTemplateInput) (*CreateEmailTemplateOutput, error) {
+	req, out := c.CreateEmailTemplateRequest(input)
+	return out, req.Send()
+}
+
+// CreateEmailTemplateWithContext is the same as CreateEmailTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateEmailTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) CreateEmailTemplateWithContext(ctx aws.Context, input *CreateEmailTemplateInput, opts ...request.Option) (*CreateEmailTemplateOutput, error) {
+	req, out := c.CreateEmailTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opCreateImportJob = "CreateImportJob"
+
+// CreateImportJobRequest generates a "aws/request.Request" representing the
+// client's request for the CreateImportJob operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See CreateImportJob for more information on using the CreateImportJob
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the CreateImportJobRequest method.
+//    req, resp := client.CreateImportJobRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/CreateImportJob
+func (c *SESV2) CreateImportJobRequest(input *CreateImportJobInput) (req *request.Request, output *CreateImportJobOutput) {
+	op := &request.Operation{
+		Name:       opCreateImportJob,
+		HTTPMethod: "POST",
+		HTTPPath:   "/v2/email/import-jobs",
+	}
+
+	if input == nil {
+		input = &CreateImportJobInput{}
+	}
+
+	output = &CreateImportJobOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// CreateImportJob API operation for Amazon Simple Email Service.
+//
+// Creates an import job for a data destination.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation CreateImportJob for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+//   * LimitExceededException
+//   There are too many instances of the specified resource type.
+//
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/CreateImportJob
+func (c *SESV2) CreateImportJob(input *CreateImportJobInput) (*CreateImportJobOutput, error) {
+	req, out := c.CreateImportJobRequest(input)
+	return out, req.Send()
+}
+
+// CreateImportJobWithContext is the same as CreateImportJob with the addition of
+// the ability to pass a context and additional request options.
+//
+// See CreateImportJob for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) CreateImportJobWithContext(ctx aws.Context, input *CreateImportJobInput, opts ...request.Option) (*CreateImportJobOutput, error) {
+	req, out := c.CreateImportJobRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -581,17 +1150,17 @@ func (c *SESV2) DeleteConfigurationSetRequest(input *DeleteConfigurationSetInput
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation DeleteConfigurationSet for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
-//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   * ConcurrentModificationException
 //   The resource is being modified by another operation or thread.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/DeleteConfigurationSet
@@ -676,14 +1245,14 @@ func (c *SESV2) DeleteConfigurationSetEventDestinationRequest(input *DeleteConfi
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation DeleteConfigurationSetEventDestination for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/DeleteConfigurationSetEventDestination
@@ -703,6 +1272,273 @@ func (c *SESV2) DeleteConfigurationSetEventDestination(input *DeleteConfiguratio
 // for more information on using Contexts.
 func (c *SESV2) DeleteConfigurationSetEventDestinationWithContext(ctx aws.Context, input *DeleteConfigurationSetEventDestinationInput, opts ...request.Option) (*DeleteConfigurationSetEventDestinationOutput, error) {
 	req, out := c.DeleteConfigurationSetEventDestinationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteContact = "DeleteContact"
+
+// DeleteContactRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteContact operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteContact for more information on using the DeleteContact
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteContactRequest method.
+//    req, resp := client.DeleteContactRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/DeleteContact
+func (c *SESV2) DeleteContactRequest(input *DeleteContactInput) (req *request.Request, output *DeleteContactOutput) {
+	op := &request.Operation{
+		Name:       opDeleteContact,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/v2/email/contact-lists/{ContactListName}/contacts/{EmailAddress}",
+	}
+
+	if input == nil {
+		input = &DeleteContactInput{}
+	}
+
+	output = &DeleteContactOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteContact API operation for Amazon Simple Email Service.
+//
+// Removes a contact from a contact list.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation DeleteContact for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+//   * NotFoundException
+//   The resource you attempted to access doesn't exist.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/DeleteContact
+func (c *SESV2) DeleteContact(input *DeleteContactInput) (*DeleteContactOutput, error) {
+	req, out := c.DeleteContactRequest(input)
+	return out, req.Send()
+}
+
+// DeleteContactWithContext is the same as DeleteContact with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteContact for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) DeleteContactWithContext(ctx aws.Context, input *DeleteContactInput, opts ...request.Option) (*DeleteContactOutput, error) {
+	req, out := c.DeleteContactRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteContactList = "DeleteContactList"
+
+// DeleteContactListRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteContactList operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteContactList for more information on using the DeleteContactList
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteContactListRequest method.
+//    req, resp := client.DeleteContactListRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/DeleteContactList
+func (c *SESV2) DeleteContactListRequest(input *DeleteContactListInput) (req *request.Request, output *DeleteContactListOutput) {
+	op := &request.Operation{
+		Name:       opDeleteContactList,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/v2/email/contact-lists/{ContactListName}",
+	}
+
+	if input == nil {
+		input = &DeleteContactListInput{}
+	}
+
+	output = &DeleteContactListOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteContactList API operation for Amazon Simple Email Service.
+//
+// Deletes a contact list and all of the contacts on that list.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation DeleteContactList for usage and error information.
+//
+// Returned Error Types:
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+//   * NotFoundException
+//   The resource you attempted to access doesn't exist.
+//
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+//   * ConcurrentModificationException
+//   The resource is being modified by another operation or thread.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/DeleteContactList
+func (c *SESV2) DeleteContactList(input *DeleteContactListInput) (*DeleteContactListOutput, error) {
+	req, out := c.DeleteContactListRequest(input)
+	return out, req.Send()
+}
+
+// DeleteContactListWithContext is the same as DeleteContactList with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteContactList for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) DeleteContactListWithContext(ctx aws.Context, input *DeleteContactListInput, opts ...request.Option) (*DeleteContactListOutput, error) {
+	req, out := c.DeleteContactListRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteCustomVerificationEmailTemplate = "DeleteCustomVerificationEmailTemplate"
+
+// DeleteCustomVerificationEmailTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteCustomVerificationEmailTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteCustomVerificationEmailTemplate for more information on using the DeleteCustomVerificationEmailTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteCustomVerificationEmailTemplateRequest method.
+//    req, resp := client.DeleteCustomVerificationEmailTemplateRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/DeleteCustomVerificationEmailTemplate
+func (c *SESV2) DeleteCustomVerificationEmailTemplateRequest(input *DeleteCustomVerificationEmailTemplateInput) (req *request.Request, output *DeleteCustomVerificationEmailTemplateOutput) {
+	op := &request.Operation{
+		Name:       opDeleteCustomVerificationEmailTemplate,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/v2/email/custom-verification-email-templates/{TemplateName}",
+	}
+
+	if input == nil {
+		input = &DeleteCustomVerificationEmailTemplateInput{}
+	}
+
+	output = &DeleteCustomVerificationEmailTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteCustomVerificationEmailTemplate API operation for Amazon Simple Email Service.
+//
+// Deletes an existing custom verification email template.
+//
+// For more information about custom verification email templates, see Using
+// Custom Verification Email Templates (https://docs.aws.amazon.com/es/latest/DeveloperGuide/send-email-verify-address-custom.html)
+// in the Amazon SES Developer Guide.
+//
+// You can execute this operation no more than once per second.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation DeleteCustomVerificationEmailTemplate for usage and error information.
+//
+// Returned Error Types:
+//   * NotFoundException
+//   The resource you attempted to access doesn't exist.
+//
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/DeleteCustomVerificationEmailTemplate
+func (c *SESV2) DeleteCustomVerificationEmailTemplate(input *DeleteCustomVerificationEmailTemplateInput) (*DeleteCustomVerificationEmailTemplateOutput, error) {
+	req, out := c.DeleteCustomVerificationEmailTemplateRequest(input)
+	return out, req.Send()
+}
+
+// DeleteCustomVerificationEmailTemplateWithContext is the same as DeleteCustomVerificationEmailTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteCustomVerificationEmailTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) DeleteCustomVerificationEmailTemplateWithContext(ctx aws.Context, input *DeleteCustomVerificationEmailTemplateInput, opts ...request.Option) (*DeleteCustomVerificationEmailTemplateOutput, error) {
+	req, out := c.DeleteCustomVerificationEmailTemplateRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -762,17 +1598,17 @@ func (c *SESV2) DeleteDedicatedIpPoolRequest(input *DeleteDedicatedIpPoolInput) 
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation DeleteDedicatedIpPool for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
-//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   * ConcurrentModificationException
 //   The resource is being modified by another operation or thread.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/DeleteDedicatedIpPool
@@ -852,17 +1688,17 @@ func (c *SESV2) DeleteEmailIdentityRequest(input *DeleteEmailIdentityInput) (req
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation DeleteEmailIdentity for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
-//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   * ConcurrentModificationException
 //   The resource is being modified by another operation or thread.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/DeleteEmailIdentity
@@ -882,6 +1718,277 @@ func (c *SESV2) DeleteEmailIdentity(input *DeleteEmailIdentityInput) (*DeleteEma
 // for more information on using Contexts.
 func (c *SESV2) DeleteEmailIdentityWithContext(ctx aws.Context, input *DeleteEmailIdentityInput, opts ...request.Option) (*DeleteEmailIdentityOutput, error) {
 	req, out := c.DeleteEmailIdentityRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteEmailIdentityPolicy = "DeleteEmailIdentityPolicy"
+
+// DeleteEmailIdentityPolicyRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteEmailIdentityPolicy operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteEmailIdentityPolicy for more information on using the DeleteEmailIdentityPolicy
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteEmailIdentityPolicyRequest method.
+//    req, resp := client.DeleteEmailIdentityPolicyRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/DeleteEmailIdentityPolicy
+func (c *SESV2) DeleteEmailIdentityPolicyRequest(input *DeleteEmailIdentityPolicyInput) (req *request.Request, output *DeleteEmailIdentityPolicyOutput) {
+	op := &request.Operation{
+		Name:       opDeleteEmailIdentityPolicy,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/v2/email/identities/{EmailIdentity}/policies/{PolicyName}",
+	}
+
+	if input == nil {
+		input = &DeleteEmailIdentityPolicyInput{}
+	}
+
+	output = &DeleteEmailIdentityPolicyOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteEmailIdentityPolicy API operation for Amazon Simple Email Service.
+//
+// Deletes the specified sending authorization policy for the given identity
+// (an email address or a domain). This API returns successfully even if a policy
+// with the specified name does not exist.
+//
+// This API is for the identity owner only. If you have not verified the identity,
+// this API will return an error.
+//
+// Sending authorization is a feature that enables an identity owner to authorize
+// other senders to use its identities. For information about using sending
+// authorization, see the Amazon SES Developer Guide (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html).
+//
+// You can execute this operation no more than once per second.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation DeleteEmailIdentityPolicy for usage and error information.
+//
+// Returned Error Types:
+//   * NotFoundException
+//   The resource you attempted to access doesn't exist.
+//
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/DeleteEmailIdentityPolicy
+func (c *SESV2) DeleteEmailIdentityPolicy(input *DeleteEmailIdentityPolicyInput) (*DeleteEmailIdentityPolicyOutput, error) {
+	req, out := c.DeleteEmailIdentityPolicyRequest(input)
+	return out, req.Send()
+}
+
+// DeleteEmailIdentityPolicyWithContext is the same as DeleteEmailIdentityPolicy with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteEmailIdentityPolicy for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) DeleteEmailIdentityPolicyWithContext(ctx aws.Context, input *DeleteEmailIdentityPolicyInput, opts ...request.Option) (*DeleteEmailIdentityPolicyOutput, error) {
+	req, out := c.DeleteEmailIdentityPolicyRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteEmailTemplate = "DeleteEmailTemplate"
+
+// DeleteEmailTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteEmailTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteEmailTemplate for more information on using the DeleteEmailTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteEmailTemplateRequest method.
+//    req, resp := client.DeleteEmailTemplateRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/DeleteEmailTemplate
+func (c *SESV2) DeleteEmailTemplateRequest(input *DeleteEmailTemplateInput) (req *request.Request, output *DeleteEmailTemplateOutput) {
+	op := &request.Operation{
+		Name:       opDeleteEmailTemplate,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/v2/email/templates/{TemplateName}",
+	}
+
+	if input == nil {
+		input = &DeleteEmailTemplateInput{}
+	}
+
+	output = &DeleteEmailTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteEmailTemplate API operation for Amazon Simple Email Service.
+//
+// Deletes an email template.
+//
+// You can execute this operation no more than once per second.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation DeleteEmailTemplate for usage and error information.
+//
+// Returned Error Types:
+//   * NotFoundException
+//   The resource you attempted to access doesn't exist.
+//
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/DeleteEmailTemplate
+func (c *SESV2) DeleteEmailTemplate(input *DeleteEmailTemplateInput) (*DeleteEmailTemplateOutput, error) {
+	req, out := c.DeleteEmailTemplateRequest(input)
+	return out, req.Send()
+}
+
+// DeleteEmailTemplateWithContext is the same as DeleteEmailTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteEmailTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) DeleteEmailTemplateWithContext(ctx aws.Context, input *DeleteEmailTemplateInput, opts ...request.Option) (*DeleteEmailTemplateOutput, error) {
+	req, out := c.DeleteEmailTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDeleteSuppressedDestination = "DeleteSuppressedDestination"
+
+// DeleteSuppressedDestinationRequest generates a "aws/request.Request" representing the
+// client's request for the DeleteSuppressedDestination operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DeleteSuppressedDestination for more information on using the DeleteSuppressedDestination
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DeleteSuppressedDestinationRequest method.
+//    req, resp := client.DeleteSuppressedDestinationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/DeleteSuppressedDestination
+func (c *SESV2) DeleteSuppressedDestinationRequest(input *DeleteSuppressedDestinationInput) (req *request.Request, output *DeleteSuppressedDestinationOutput) {
+	op := &request.Operation{
+		Name:       opDeleteSuppressedDestination,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/v2/email/suppression/addresses/{EmailAddress}",
+	}
+
+	if input == nil {
+		input = &DeleteSuppressedDestinationInput{}
+	}
+
+	output = &DeleteSuppressedDestinationOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// DeleteSuppressedDestination API operation for Amazon Simple Email Service.
+//
+// Removes an email address from the suppression list for your account.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation DeleteSuppressedDestination for usage and error information.
+//
+// Returned Error Types:
+//   * NotFoundException
+//   The resource you attempted to access doesn't exist.
+//
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/DeleteSuppressedDestination
+func (c *SESV2) DeleteSuppressedDestination(input *DeleteSuppressedDestinationInput) (*DeleteSuppressedDestinationOutput, error) {
+	req, out := c.DeleteSuppressedDestinationRequest(input)
+	return out, req.Send()
+}
+
+// DeleteSuppressedDestinationWithContext is the same as DeleteSuppressedDestination with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DeleteSuppressedDestination for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) DeleteSuppressedDestinationWithContext(ctx aws.Context, input *DeleteSuppressedDestinationInput, opts ...request.Option) (*DeleteSuppressedDestinationOutput, error) {
+	req, out := c.DeleteSuppressedDestinationRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -941,11 +2048,11 @@ func (c *SESV2) GetAccountRequest(input *GetAccountInput) (req *request.Request,
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation GetAccount for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+// Returned Error Types:
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/GetAccount
@@ -1024,14 +2131,14 @@ func (c *SESV2) GetBlacklistReportsRequest(input *GetBlacklistReportsInput) (req
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation GetBlacklistReports for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+// Returned Error Types:
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/GetBlacklistReports
@@ -1117,14 +2224,14 @@ func (c *SESV2) GetConfigurationSetRequest(input *GetConfigurationSetInput) (req
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation GetConfigurationSet for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/GetConfigurationSet
@@ -1209,14 +2316,14 @@ func (c *SESV2) GetConfigurationSetEventDestinationsRequest(input *GetConfigurat
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation GetConfigurationSetEventDestinations for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/GetConfigurationSetEventDestinations
@@ -1236,6 +2343,269 @@ func (c *SESV2) GetConfigurationSetEventDestinations(input *GetConfigurationSetE
 // for more information on using Contexts.
 func (c *SESV2) GetConfigurationSetEventDestinationsWithContext(ctx aws.Context, input *GetConfigurationSetEventDestinationsInput, opts ...request.Option) (*GetConfigurationSetEventDestinationsOutput, error) {
 	req, out := c.GetConfigurationSetEventDestinationsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetContact = "GetContact"
+
+// GetContactRequest generates a "aws/request.Request" representing the
+// client's request for the GetContact operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetContact for more information on using the GetContact
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetContactRequest method.
+//    req, resp := client.GetContactRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/GetContact
+func (c *SESV2) GetContactRequest(input *GetContactInput) (req *request.Request, output *GetContactOutput) {
+	op := &request.Operation{
+		Name:       opGetContact,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v2/email/contact-lists/{ContactListName}/contacts/{EmailAddress}",
+	}
+
+	if input == nil {
+		input = &GetContactInput{}
+	}
+
+	output = &GetContactOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetContact API operation for Amazon Simple Email Service.
+//
+// Returns a contact from a contact list.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation GetContact for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+//   * NotFoundException
+//   The resource you attempted to access doesn't exist.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/GetContact
+func (c *SESV2) GetContact(input *GetContactInput) (*GetContactOutput, error) {
+	req, out := c.GetContactRequest(input)
+	return out, req.Send()
+}
+
+// GetContactWithContext is the same as GetContact with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetContact for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) GetContactWithContext(ctx aws.Context, input *GetContactInput, opts ...request.Option) (*GetContactOutput, error) {
+	req, out := c.GetContactRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetContactList = "GetContactList"
+
+// GetContactListRequest generates a "aws/request.Request" representing the
+// client's request for the GetContactList operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetContactList for more information on using the GetContactList
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetContactListRequest method.
+//    req, resp := client.GetContactListRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/GetContactList
+func (c *SESV2) GetContactListRequest(input *GetContactListInput) (req *request.Request, output *GetContactListOutput) {
+	op := &request.Operation{
+		Name:       opGetContactList,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v2/email/contact-lists/{ContactListName}",
+	}
+
+	if input == nil {
+		input = &GetContactListInput{}
+	}
+
+	output = &GetContactListOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetContactList API operation for Amazon Simple Email Service.
+//
+// Returns contact list metadata. It does not return any information about the
+// contacts present in the list.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation GetContactList for usage and error information.
+//
+// Returned Error Types:
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+//   * NotFoundException
+//   The resource you attempted to access doesn't exist.
+//
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/GetContactList
+func (c *SESV2) GetContactList(input *GetContactListInput) (*GetContactListOutput, error) {
+	req, out := c.GetContactListRequest(input)
+	return out, req.Send()
+}
+
+// GetContactListWithContext is the same as GetContactList with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetContactList for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) GetContactListWithContext(ctx aws.Context, input *GetContactListInput, opts ...request.Option) (*GetContactListOutput, error) {
+	req, out := c.GetContactListRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetCustomVerificationEmailTemplate = "GetCustomVerificationEmailTemplate"
+
+// GetCustomVerificationEmailTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the GetCustomVerificationEmailTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetCustomVerificationEmailTemplate for more information on using the GetCustomVerificationEmailTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetCustomVerificationEmailTemplateRequest method.
+//    req, resp := client.GetCustomVerificationEmailTemplateRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/GetCustomVerificationEmailTemplate
+func (c *SESV2) GetCustomVerificationEmailTemplateRequest(input *GetCustomVerificationEmailTemplateInput) (req *request.Request, output *GetCustomVerificationEmailTemplateOutput) {
+	op := &request.Operation{
+		Name:       opGetCustomVerificationEmailTemplate,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v2/email/custom-verification-email-templates/{TemplateName}",
+	}
+
+	if input == nil {
+		input = &GetCustomVerificationEmailTemplateInput{}
+	}
+
+	output = &GetCustomVerificationEmailTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetCustomVerificationEmailTemplate API operation for Amazon Simple Email Service.
+//
+// Returns the custom email verification template for the template name you
+// specify.
+//
+// For more information about custom verification email templates, see Using
+// Custom Verification Email Templates (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-verify-address-custom.html)
+// in the Amazon SES Developer Guide.
+//
+// You can execute this operation no more than once per second.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation GetCustomVerificationEmailTemplate for usage and error information.
+//
+// Returned Error Types:
+//   * NotFoundException
+//   The resource you attempted to access doesn't exist.
+//
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/GetCustomVerificationEmailTemplate
+func (c *SESV2) GetCustomVerificationEmailTemplate(input *GetCustomVerificationEmailTemplateInput) (*GetCustomVerificationEmailTemplateOutput, error) {
+	req, out := c.GetCustomVerificationEmailTemplateRequest(input)
+	return out, req.Send()
+}
+
+// GetCustomVerificationEmailTemplateWithContext is the same as GetCustomVerificationEmailTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetCustomVerificationEmailTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) GetCustomVerificationEmailTemplateWithContext(ctx aws.Context, input *GetCustomVerificationEmailTemplateInput, opts ...request.Option) (*GetCustomVerificationEmailTemplateOutput, error) {
+	req, out := c.GetCustomVerificationEmailTemplateRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1296,14 +2666,14 @@ func (c *SESV2) GetDedicatedIpRequest(input *GetDedicatedIpInput) (req *request.
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation GetDedicatedIp for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+// Returned Error Types:
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/GetDedicatedIp
@@ -1387,14 +2757,14 @@ func (c *SESV2) GetDedicatedIpsRequest(input *GetDedicatedIpsInput) (req *reques
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation GetDedicatedIps for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+// Returned Error Types:
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/GetDedicatedIps
@@ -1524,7 +2894,7 @@ func (c *SESV2) GetDeliverabilityDashboardOptionsRequest(input *GetDeliverabilit
 // When you use the Deliverability dashboard, you pay a monthly subscription
 // charge, in addition to any other fees that you accrue by using Amazon SES
 // and other AWS services. For more information about the features and cost
-// of a Deliverability dashboard subscription, see Amazon Pinpoint Pricing (http://aws.amazon.com/pinpoint/pricing/).
+// of a Deliverability dashboard subscription, see Amazon SES Pricing (http://aws.amazon.com/ses/pricing/).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1533,14 +2903,14 @@ func (c *SESV2) GetDeliverabilityDashboardOptionsRequest(input *GetDeliverabilit
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation GetDeliverabilityDashboardOptions for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+// Returned Error Types:
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeLimitExceededException "LimitExceededException"
+//   * LimitExceededException
 //   There are too many instances of the specified resource type.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/GetDeliverabilityDashboardOptions
@@ -1618,14 +2988,14 @@ func (c *SESV2) GetDeliverabilityTestReportRequest(input *GetDeliverabilityTestR
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation GetDeliverabilityTestReport for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+// Returned Error Types:
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/GetDeliverabilityTestReport
@@ -1705,14 +3075,14 @@ func (c *SESV2) GetDomainDeliverabilityCampaignRequest(input *GetDomainDeliverab
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation GetDomainDeliverabilityCampaign for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+// Returned Error Types:
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/GetDomainDeliverabilityCampaign
@@ -1791,14 +3161,14 @@ func (c *SESV2) GetDomainStatisticsReportRequest(input *GetDomainStatisticsRepor
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation GetDomainStatisticsReport for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+// Returned Error Types:
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/GetDomainStatisticsReport
@@ -1868,8 +3238,8 @@ func (c *SESV2) GetEmailIdentityRequest(input *GetEmailIdentityInput) (req *requ
 // GetEmailIdentity API operation for Amazon Simple Email Service.
 //
 // Provides information about a specific identity, including the identity's
-// verification status, its DKIM authentication status, and its custom Mail-From
-// settings.
+// verification status, sending authorization policies, its DKIM authentication
+// status, and its custom Mail-From settings.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1878,14 +3248,14 @@ func (c *SESV2) GetEmailIdentityRequest(input *GetEmailIdentityInput) (req *requ
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation GetEmailIdentity for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/GetEmailIdentity
@@ -1905,6 +3275,362 @@ func (c *SESV2) GetEmailIdentity(input *GetEmailIdentityInput) (*GetEmailIdentit
 // for more information on using Contexts.
 func (c *SESV2) GetEmailIdentityWithContext(ctx aws.Context, input *GetEmailIdentityInput, opts ...request.Option) (*GetEmailIdentityOutput, error) {
 	req, out := c.GetEmailIdentityRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetEmailIdentityPolicies = "GetEmailIdentityPolicies"
+
+// GetEmailIdentityPoliciesRequest generates a "aws/request.Request" representing the
+// client's request for the GetEmailIdentityPolicies operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetEmailIdentityPolicies for more information on using the GetEmailIdentityPolicies
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetEmailIdentityPoliciesRequest method.
+//    req, resp := client.GetEmailIdentityPoliciesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/GetEmailIdentityPolicies
+func (c *SESV2) GetEmailIdentityPoliciesRequest(input *GetEmailIdentityPoliciesInput) (req *request.Request, output *GetEmailIdentityPoliciesOutput) {
+	op := &request.Operation{
+		Name:       opGetEmailIdentityPolicies,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v2/email/identities/{EmailIdentity}/policies",
+	}
+
+	if input == nil {
+		input = &GetEmailIdentityPoliciesInput{}
+	}
+
+	output = &GetEmailIdentityPoliciesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetEmailIdentityPolicies API operation for Amazon Simple Email Service.
+//
+// Returns the requested sending authorization policies for the given identity
+// (an email address or a domain). The policies are returned as a map of policy
+// names to policy contents. You can retrieve a maximum of 20 policies at a
+// time.
+//
+// This API is for the identity owner only. If you have not verified the identity,
+// this API will return an error.
+//
+// Sending authorization is a feature that enables an identity owner to authorize
+// other senders to use its identities. For information about using sending
+// authorization, see the Amazon SES Developer Guide (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html).
+//
+// You can execute this operation no more than once per second.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation GetEmailIdentityPolicies for usage and error information.
+//
+// Returned Error Types:
+//   * NotFoundException
+//   The resource you attempted to access doesn't exist.
+//
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/GetEmailIdentityPolicies
+func (c *SESV2) GetEmailIdentityPolicies(input *GetEmailIdentityPoliciesInput) (*GetEmailIdentityPoliciesOutput, error) {
+	req, out := c.GetEmailIdentityPoliciesRequest(input)
+	return out, req.Send()
+}
+
+// GetEmailIdentityPoliciesWithContext is the same as GetEmailIdentityPolicies with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetEmailIdentityPolicies for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) GetEmailIdentityPoliciesWithContext(ctx aws.Context, input *GetEmailIdentityPoliciesInput, opts ...request.Option) (*GetEmailIdentityPoliciesOutput, error) {
+	req, out := c.GetEmailIdentityPoliciesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetEmailTemplate = "GetEmailTemplate"
+
+// GetEmailTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the GetEmailTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetEmailTemplate for more information on using the GetEmailTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetEmailTemplateRequest method.
+//    req, resp := client.GetEmailTemplateRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/GetEmailTemplate
+func (c *SESV2) GetEmailTemplateRequest(input *GetEmailTemplateInput) (req *request.Request, output *GetEmailTemplateOutput) {
+	op := &request.Operation{
+		Name:       opGetEmailTemplate,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v2/email/templates/{TemplateName}",
+	}
+
+	if input == nil {
+		input = &GetEmailTemplateInput{}
+	}
+
+	output = &GetEmailTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetEmailTemplate API operation for Amazon Simple Email Service.
+//
+// Displays the template object (which includes the subject line, HTML part
+// and text part) for the template you specify.
+//
+// You can execute this operation no more than once per second.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation GetEmailTemplate for usage and error information.
+//
+// Returned Error Types:
+//   * NotFoundException
+//   The resource you attempted to access doesn't exist.
+//
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/GetEmailTemplate
+func (c *SESV2) GetEmailTemplate(input *GetEmailTemplateInput) (*GetEmailTemplateOutput, error) {
+	req, out := c.GetEmailTemplateRequest(input)
+	return out, req.Send()
+}
+
+// GetEmailTemplateWithContext is the same as GetEmailTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetEmailTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) GetEmailTemplateWithContext(ctx aws.Context, input *GetEmailTemplateInput, opts ...request.Option) (*GetEmailTemplateOutput, error) {
+	req, out := c.GetEmailTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetImportJob = "GetImportJob"
+
+// GetImportJobRequest generates a "aws/request.Request" representing the
+// client's request for the GetImportJob operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetImportJob for more information on using the GetImportJob
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetImportJobRequest method.
+//    req, resp := client.GetImportJobRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/GetImportJob
+func (c *SESV2) GetImportJobRequest(input *GetImportJobInput) (req *request.Request, output *GetImportJobOutput) {
+	op := &request.Operation{
+		Name:       opGetImportJob,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v2/email/import-jobs/{JobId}",
+	}
+
+	if input == nil {
+		input = &GetImportJobInput{}
+	}
+
+	output = &GetImportJobOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetImportJob API operation for Amazon Simple Email Service.
+//
+// Provides information about an import job.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation GetImportJob for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+//   * NotFoundException
+//   The resource you attempted to access doesn't exist.
+//
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/GetImportJob
+func (c *SESV2) GetImportJob(input *GetImportJobInput) (*GetImportJobOutput, error) {
+	req, out := c.GetImportJobRequest(input)
+	return out, req.Send()
+}
+
+// GetImportJobWithContext is the same as GetImportJob with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetImportJob for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) GetImportJobWithContext(ctx aws.Context, input *GetImportJobInput, opts ...request.Option) (*GetImportJobOutput, error) {
+	req, out := c.GetImportJobRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetSuppressedDestination = "GetSuppressedDestination"
+
+// GetSuppressedDestinationRequest generates a "aws/request.Request" representing the
+// client's request for the GetSuppressedDestination operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetSuppressedDestination for more information on using the GetSuppressedDestination
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetSuppressedDestinationRequest method.
+//    req, resp := client.GetSuppressedDestinationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/GetSuppressedDestination
+func (c *SESV2) GetSuppressedDestinationRequest(input *GetSuppressedDestinationInput) (req *request.Request, output *GetSuppressedDestinationOutput) {
+	op := &request.Operation{
+		Name:       opGetSuppressedDestination,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v2/email/suppression/addresses/{EmailAddress}",
+	}
+
+	if input == nil {
+		input = &GetSuppressedDestinationInput{}
+	}
+
+	output = &GetSuppressedDestinationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetSuppressedDestination API operation for Amazon Simple Email Service.
+//
+// Retrieves information about a specific email address that's on the suppression
+// list for your account.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation GetSuppressedDestination for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+//   * NotFoundException
+//   The resource you attempted to access doesn't exist.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/GetSuppressedDestination
+func (c *SESV2) GetSuppressedDestination(input *GetSuppressedDestinationInput) (*GetSuppressedDestinationOutput, error) {
+	req, out := c.GetSuppressedDestinationRequest(input)
+	return out, req.Send()
+}
+
+// GetSuppressedDestinationWithContext is the same as GetSuppressedDestination with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetSuppressedDestination for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) GetSuppressedDestinationWithContext(ctx aws.Context, input *GetSuppressedDestinationInput, opts ...request.Option) (*GetSuppressedDestinationOutput, error) {
+	req, out := c.GetSuppressedDestinationRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1976,11 +3702,11 @@ func (c *SESV2) ListConfigurationSetsRequest(input *ListConfigurationSetsInput) 
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation ListConfigurationSets for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+// Returned Error Types:
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/ListConfigurationSets
@@ -2057,6 +3783,436 @@ func (c *SESV2) ListConfigurationSetsPagesWithContext(ctx aws.Context, input *Li
 	return p.Err()
 }
 
+const opListContactLists = "ListContactLists"
+
+// ListContactListsRequest generates a "aws/request.Request" representing the
+// client's request for the ListContactLists operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListContactLists for more information on using the ListContactLists
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListContactListsRequest method.
+//    req, resp := client.ListContactListsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/ListContactLists
+func (c *SESV2) ListContactListsRequest(input *ListContactListsInput) (req *request.Request, output *ListContactListsOutput) {
+	op := &request.Operation{
+		Name:       opListContactLists,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v2/email/contact-lists",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "PageSize",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListContactListsInput{}
+	}
+
+	output = &ListContactListsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListContactLists API operation for Amazon Simple Email Service.
+//
+// Lists all of the contact lists available.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation ListContactLists for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/ListContactLists
+func (c *SESV2) ListContactLists(input *ListContactListsInput) (*ListContactListsOutput, error) {
+	req, out := c.ListContactListsRequest(input)
+	return out, req.Send()
+}
+
+// ListContactListsWithContext is the same as ListContactLists with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListContactLists for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) ListContactListsWithContext(ctx aws.Context, input *ListContactListsInput, opts ...request.Option) (*ListContactListsOutput, error) {
+	req, out := c.ListContactListsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListContactListsPages iterates over the pages of a ListContactLists operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListContactLists method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListContactLists operation.
+//    pageNum := 0
+//    err := client.ListContactListsPages(params,
+//        func(page *sesv2.ListContactListsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *SESV2) ListContactListsPages(input *ListContactListsInput, fn func(*ListContactListsOutput, bool) bool) error {
+	return c.ListContactListsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListContactListsPagesWithContext same as ListContactListsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) ListContactListsPagesWithContext(ctx aws.Context, input *ListContactListsInput, fn func(*ListContactListsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListContactListsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListContactListsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListContactListsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListContacts = "ListContacts"
+
+// ListContactsRequest generates a "aws/request.Request" representing the
+// client's request for the ListContacts operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListContacts for more information on using the ListContacts
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListContactsRequest method.
+//    req, resp := client.ListContactsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/ListContacts
+func (c *SESV2) ListContactsRequest(input *ListContactsInput) (req *request.Request, output *ListContactsOutput) {
+	op := &request.Operation{
+		Name:       opListContacts,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v2/email/contact-lists/{ContactListName}/contacts",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "PageSize",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListContactsInput{}
+	}
+
+	output = &ListContactsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListContacts API operation for Amazon Simple Email Service.
+//
+// Lists the contacts present in a specific contact list.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation ListContacts for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+//   * NotFoundException
+//   The resource you attempted to access doesn't exist.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/ListContacts
+func (c *SESV2) ListContacts(input *ListContactsInput) (*ListContactsOutput, error) {
+	req, out := c.ListContactsRequest(input)
+	return out, req.Send()
+}
+
+// ListContactsWithContext is the same as ListContacts with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListContacts for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) ListContactsWithContext(ctx aws.Context, input *ListContactsInput, opts ...request.Option) (*ListContactsOutput, error) {
+	req, out := c.ListContactsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListContactsPages iterates over the pages of a ListContacts operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListContacts method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListContacts operation.
+//    pageNum := 0
+//    err := client.ListContactsPages(params,
+//        func(page *sesv2.ListContactsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *SESV2) ListContactsPages(input *ListContactsInput, fn func(*ListContactsOutput, bool) bool) error {
+	return c.ListContactsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListContactsPagesWithContext same as ListContactsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) ListContactsPagesWithContext(ctx aws.Context, input *ListContactsInput, fn func(*ListContactsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListContactsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListContactsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListContactsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListCustomVerificationEmailTemplates = "ListCustomVerificationEmailTemplates"
+
+// ListCustomVerificationEmailTemplatesRequest generates a "aws/request.Request" representing the
+// client's request for the ListCustomVerificationEmailTemplates operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListCustomVerificationEmailTemplates for more information on using the ListCustomVerificationEmailTemplates
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListCustomVerificationEmailTemplatesRequest method.
+//    req, resp := client.ListCustomVerificationEmailTemplatesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/ListCustomVerificationEmailTemplates
+func (c *SESV2) ListCustomVerificationEmailTemplatesRequest(input *ListCustomVerificationEmailTemplatesInput) (req *request.Request, output *ListCustomVerificationEmailTemplatesOutput) {
+	op := &request.Operation{
+		Name:       opListCustomVerificationEmailTemplates,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v2/email/custom-verification-email-templates",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "PageSize",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListCustomVerificationEmailTemplatesInput{}
+	}
+
+	output = &ListCustomVerificationEmailTemplatesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListCustomVerificationEmailTemplates API operation for Amazon Simple Email Service.
+//
+// Lists the existing custom verification email templates for your account in
+// the current AWS Region.
+//
+// For more information about custom verification email templates, see Using
+// Custom Verification Email Templates (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-verify-address-custom.html)
+// in the Amazon SES Developer Guide.
+//
+// You can execute this operation no more than once per second.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation ListCustomVerificationEmailTemplates for usage and error information.
+//
+// Returned Error Types:
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/ListCustomVerificationEmailTemplates
+func (c *SESV2) ListCustomVerificationEmailTemplates(input *ListCustomVerificationEmailTemplatesInput) (*ListCustomVerificationEmailTemplatesOutput, error) {
+	req, out := c.ListCustomVerificationEmailTemplatesRequest(input)
+	return out, req.Send()
+}
+
+// ListCustomVerificationEmailTemplatesWithContext is the same as ListCustomVerificationEmailTemplates with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListCustomVerificationEmailTemplates for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) ListCustomVerificationEmailTemplatesWithContext(ctx aws.Context, input *ListCustomVerificationEmailTemplatesInput, opts ...request.Option) (*ListCustomVerificationEmailTemplatesOutput, error) {
+	req, out := c.ListCustomVerificationEmailTemplatesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListCustomVerificationEmailTemplatesPages iterates over the pages of a ListCustomVerificationEmailTemplates operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListCustomVerificationEmailTemplates method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListCustomVerificationEmailTemplates operation.
+//    pageNum := 0
+//    err := client.ListCustomVerificationEmailTemplatesPages(params,
+//        func(page *sesv2.ListCustomVerificationEmailTemplatesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *SESV2) ListCustomVerificationEmailTemplatesPages(input *ListCustomVerificationEmailTemplatesInput, fn func(*ListCustomVerificationEmailTemplatesOutput, bool) bool) error {
+	return c.ListCustomVerificationEmailTemplatesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListCustomVerificationEmailTemplatesPagesWithContext same as ListCustomVerificationEmailTemplatesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) ListCustomVerificationEmailTemplatesPagesWithContext(ctx aws.Context, input *ListCustomVerificationEmailTemplatesInput, fn func(*ListCustomVerificationEmailTemplatesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListCustomVerificationEmailTemplatesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListCustomVerificationEmailTemplatesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListCustomVerificationEmailTemplatesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListDedicatedIpPools = "ListDedicatedIpPools"
 
 // ListDedicatedIpPoolsRequest generates a "aws/request.Request" representing the
@@ -2117,11 +4273,11 @@ func (c *SESV2) ListDedicatedIpPoolsRequest(input *ListDedicatedIpPoolsInput) (r
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation ListDedicatedIpPools for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+// Returned Error Types:
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/ListDedicatedIpPools
@@ -2260,14 +4416,14 @@ func (c *SESV2) ListDeliverabilityTestReportsRequest(input *ListDeliverabilityTe
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation ListDeliverabilityTestReports for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+// Returned Error Types:
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/ListDeliverabilityTestReports
@@ -2405,14 +4561,14 @@ func (c *SESV2) ListDomainDeliverabilityCampaignsRequest(input *ListDomainDelive
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation ListDomainDeliverabilityCampaigns for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+// Returned Error Types:
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/ListDomainDeliverabilityCampaigns
@@ -2552,11 +4708,11 @@ func (c *SESV2) ListEmailIdentitiesRequest(input *ListEmailIdentitiesInput) (req
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation ListEmailIdentities for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+// Returned Error Types:
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/ListEmailIdentities
@@ -2633,6 +4789,433 @@ func (c *SESV2) ListEmailIdentitiesPagesWithContext(ctx aws.Context, input *List
 	return p.Err()
 }
 
+const opListEmailTemplates = "ListEmailTemplates"
+
+// ListEmailTemplatesRequest generates a "aws/request.Request" representing the
+// client's request for the ListEmailTemplates operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListEmailTemplates for more information on using the ListEmailTemplates
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListEmailTemplatesRequest method.
+//    req, resp := client.ListEmailTemplatesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/ListEmailTemplates
+func (c *SESV2) ListEmailTemplatesRequest(input *ListEmailTemplatesInput) (req *request.Request, output *ListEmailTemplatesOutput) {
+	op := &request.Operation{
+		Name:       opListEmailTemplates,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v2/email/templates",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "PageSize",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListEmailTemplatesInput{}
+	}
+
+	output = &ListEmailTemplatesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListEmailTemplates API operation for Amazon Simple Email Service.
+//
+// Lists the email templates present in your Amazon SES account in the current
+// AWS Region.
+//
+// You can execute this operation no more than once per second.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation ListEmailTemplates for usage and error information.
+//
+// Returned Error Types:
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/ListEmailTemplates
+func (c *SESV2) ListEmailTemplates(input *ListEmailTemplatesInput) (*ListEmailTemplatesOutput, error) {
+	req, out := c.ListEmailTemplatesRequest(input)
+	return out, req.Send()
+}
+
+// ListEmailTemplatesWithContext is the same as ListEmailTemplates with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListEmailTemplates for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) ListEmailTemplatesWithContext(ctx aws.Context, input *ListEmailTemplatesInput, opts ...request.Option) (*ListEmailTemplatesOutput, error) {
+	req, out := c.ListEmailTemplatesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListEmailTemplatesPages iterates over the pages of a ListEmailTemplates operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListEmailTemplates method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListEmailTemplates operation.
+//    pageNum := 0
+//    err := client.ListEmailTemplatesPages(params,
+//        func(page *sesv2.ListEmailTemplatesOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *SESV2) ListEmailTemplatesPages(input *ListEmailTemplatesInput, fn func(*ListEmailTemplatesOutput, bool) bool) error {
+	return c.ListEmailTemplatesPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListEmailTemplatesPagesWithContext same as ListEmailTemplatesPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) ListEmailTemplatesPagesWithContext(ctx aws.Context, input *ListEmailTemplatesInput, fn func(*ListEmailTemplatesOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListEmailTemplatesInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListEmailTemplatesRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListEmailTemplatesOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListImportJobs = "ListImportJobs"
+
+// ListImportJobsRequest generates a "aws/request.Request" representing the
+// client's request for the ListImportJobs operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListImportJobs for more information on using the ListImportJobs
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListImportJobsRequest method.
+//    req, resp := client.ListImportJobsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/ListImportJobs
+func (c *SESV2) ListImportJobsRequest(input *ListImportJobsInput) (req *request.Request, output *ListImportJobsOutput) {
+	op := &request.Operation{
+		Name:       opListImportJobs,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v2/email/import-jobs",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "PageSize",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListImportJobsInput{}
+	}
+
+	output = &ListImportJobsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListImportJobs API operation for Amazon Simple Email Service.
+//
+// Lists all of the import jobs.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation ListImportJobs for usage and error information.
+//
+// Returned Error Types:
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/ListImportJobs
+func (c *SESV2) ListImportJobs(input *ListImportJobsInput) (*ListImportJobsOutput, error) {
+	req, out := c.ListImportJobsRequest(input)
+	return out, req.Send()
+}
+
+// ListImportJobsWithContext is the same as ListImportJobs with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListImportJobs for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) ListImportJobsWithContext(ctx aws.Context, input *ListImportJobsInput, opts ...request.Option) (*ListImportJobsOutput, error) {
+	req, out := c.ListImportJobsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListImportJobsPages iterates over the pages of a ListImportJobs operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListImportJobs method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListImportJobs operation.
+//    pageNum := 0
+//    err := client.ListImportJobsPages(params,
+//        func(page *sesv2.ListImportJobsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *SESV2) ListImportJobsPages(input *ListImportJobsInput, fn func(*ListImportJobsOutput, bool) bool) error {
+	return c.ListImportJobsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListImportJobsPagesWithContext same as ListImportJobsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) ListImportJobsPagesWithContext(ctx aws.Context, input *ListImportJobsInput, fn func(*ListImportJobsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListImportJobsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListImportJobsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListImportJobsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListSuppressedDestinations = "ListSuppressedDestinations"
+
+// ListSuppressedDestinationsRequest generates a "aws/request.Request" representing the
+// client's request for the ListSuppressedDestinations operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListSuppressedDestinations for more information on using the ListSuppressedDestinations
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListSuppressedDestinationsRequest method.
+//    req, resp := client.ListSuppressedDestinationsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/ListSuppressedDestinations
+func (c *SESV2) ListSuppressedDestinationsRequest(input *ListSuppressedDestinationsInput) (req *request.Request, output *ListSuppressedDestinationsOutput) {
+	op := &request.Operation{
+		Name:       opListSuppressedDestinations,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v2/email/suppression/addresses",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "PageSize",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListSuppressedDestinationsInput{}
+	}
+
+	output = &ListSuppressedDestinationsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListSuppressedDestinations API operation for Amazon Simple Email Service.
+//
+// Retrieves a list of email addresses that are on the suppression list for
+// your account.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation ListSuppressedDestinations for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+//   * InvalidNextTokenException
+//   The specified request includes an invalid or expired token.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/ListSuppressedDestinations
+func (c *SESV2) ListSuppressedDestinations(input *ListSuppressedDestinationsInput) (*ListSuppressedDestinationsOutput, error) {
+	req, out := c.ListSuppressedDestinationsRequest(input)
+	return out, req.Send()
+}
+
+// ListSuppressedDestinationsWithContext is the same as ListSuppressedDestinations with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListSuppressedDestinations for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) ListSuppressedDestinationsWithContext(ctx aws.Context, input *ListSuppressedDestinationsInput, opts ...request.Option) (*ListSuppressedDestinationsOutput, error) {
+	req, out := c.ListSuppressedDestinationsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListSuppressedDestinationsPages iterates over the pages of a ListSuppressedDestinations operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListSuppressedDestinations method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListSuppressedDestinations operation.
+//    pageNum := 0
+//    err := client.ListSuppressedDestinationsPages(params,
+//        func(page *sesv2.ListSuppressedDestinationsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *SESV2) ListSuppressedDestinationsPages(input *ListSuppressedDestinationsInput, fn func(*ListSuppressedDestinationsOutput, bool) bool) error {
+	return c.ListSuppressedDestinationsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListSuppressedDestinationsPagesWithContext same as ListSuppressedDestinationsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) ListSuppressedDestinationsPagesWithContext(ctx aws.Context, input *ListSuppressedDestinationsInput, fn func(*ListSuppressedDestinationsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListSuppressedDestinationsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListSuppressedDestinationsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListSuppressedDestinationsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListTagsForResource = "ListTagsForResource"
 
 // ListTagsForResourceRequest generates a "aws/request.Request" representing the
@@ -2691,14 +5274,14 @@ func (c *SESV2) ListTagsForResourceRequest(input *ListTagsForResourceInput) (req
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation ListTagsForResource for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   The input you provided is invalid.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/ListTagsForResource
@@ -2777,11 +5360,11 @@ func (c *SESV2) PutAccountDedicatedIpWarmupAttributesRequest(input *PutAccountDe
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation PutAccountDedicatedIpWarmupAttributes for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+// Returned Error Types:
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/PutAccountDedicatedIpWarmupAttributes
@@ -2801,6 +5384,92 @@ func (c *SESV2) PutAccountDedicatedIpWarmupAttributes(input *PutAccountDedicated
 // for more information on using Contexts.
 func (c *SESV2) PutAccountDedicatedIpWarmupAttributesWithContext(ctx aws.Context, input *PutAccountDedicatedIpWarmupAttributesInput, opts ...request.Option) (*PutAccountDedicatedIpWarmupAttributesOutput, error) {
 	req, out := c.PutAccountDedicatedIpWarmupAttributesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opPutAccountDetails = "PutAccountDetails"
+
+// PutAccountDetailsRequest generates a "aws/request.Request" representing the
+// client's request for the PutAccountDetails operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PutAccountDetails for more information on using the PutAccountDetails
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the PutAccountDetailsRequest method.
+//    req, resp := client.PutAccountDetailsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/PutAccountDetails
+func (c *SESV2) PutAccountDetailsRequest(input *PutAccountDetailsInput) (req *request.Request, output *PutAccountDetailsOutput) {
+	op := &request.Operation{
+		Name:       opPutAccountDetails,
+		HTTPMethod: "POST",
+		HTTPPath:   "/v2/email/account/details",
+	}
+
+	if input == nil {
+		input = &PutAccountDetailsInput{}
+	}
+
+	output = &PutAccountDetailsOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// PutAccountDetails API operation for Amazon Simple Email Service.
+//
+// Update your Amazon SES account details.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation PutAccountDetails for usage and error information.
+//
+// Returned Error Types:
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+//   * ConflictException
+//   If there is already an ongoing account details update under review.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/PutAccountDetails
+func (c *SESV2) PutAccountDetails(input *PutAccountDetailsInput) (*PutAccountDetailsOutput, error) {
+	req, out := c.PutAccountDetailsRequest(input)
+	return out, req.Send()
+}
+
+// PutAccountDetailsWithContext is the same as PutAccountDetails with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PutAccountDetails for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) PutAccountDetailsWithContext(ctx aws.Context, input *PutAccountDetailsInput, opts ...request.Option) (*PutAccountDetailsOutput, error) {
+	req, out := c.PutAccountDetailsRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -2860,11 +5529,11 @@ func (c *SESV2) PutAccountSendingAttributesRequest(input *PutAccountSendingAttri
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation PutAccountSendingAttributes for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+// Returned Error Types:
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/PutAccountSendingAttributes
@@ -2884,6 +5553,89 @@ func (c *SESV2) PutAccountSendingAttributes(input *PutAccountSendingAttributesIn
 // for more information on using Contexts.
 func (c *SESV2) PutAccountSendingAttributesWithContext(ctx aws.Context, input *PutAccountSendingAttributesInput, opts ...request.Option) (*PutAccountSendingAttributesOutput, error) {
 	req, out := c.PutAccountSendingAttributesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opPutAccountSuppressionAttributes = "PutAccountSuppressionAttributes"
+
+// PutAccountSuppressionAttributesRequest generates a "aws/request.Request" representing the
+// client's request for the PutAccountSuppressionAttributes operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PutAccountSuppressionAttributes for more information on using the PutAccountSuppressionAttributes
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the PutAccountSuppressionAttributesRequest method.
+//    req, resp := client.PutAccountSuppressionAttributesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/PutAccountSuppressionAttributes
+func (c *SESV2) PutAccountSuppressionAttributesRequest(input *PutAccountSuppressionAttributesInput) (req *request.Request, output *PutAccountSuppressionAttributesOutput) {
+	op := &request.Operation{
+		Name:       opPutAccountSuppressionAttributes,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/v2/email/account/suppression",
+	}
+
+	if input == nil {
+		input = &PutAccountSuppressionAttributesInput{}
+	}
+
+	output = &PutAccountSuppressionAttributesOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// PutAccountSuppressionAttributes API operation for Amazon Simple Email Service.
+//
+// Change the settings for the account-level suppression list.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation PutAccountSuppressionAttributes for usage and error information.
+//
+// Returned Error Types:
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/PutAccountSuppressionAttributes
+func (c *SESV2) PutAccountSuppressionAttributes(input *PutAccountSuppressionAttributesInput) (*PutAccountSuppressionAttributesOutput, error) {
+	req, out := c.PutAccountSuppressionAttributesRequest(input)
+	return out, req.Send()
+}
+
+// PutAccountSuppressionAttributesWithContext is the same as PutAccountSuppressionAttributes with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PutAccountSuppressionAttributes for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) PutAccountSuppressionAttributesWithContext(ctx aws.Context, input *PutAccountSuppressionAttributesInput, opts ...request.Option) (*PutAccountSuppressionAttributesOutput, error) {
+	req, out := c.PutAccountSuppressionAttributesRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -2945,14 +5697,14 @@ func (c *SESV2) PutConfigurationSetDeliveryOptionsRequest(input *PutConfiguratio
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation PutConfigurationSetDeliveryOptions for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/PutConfigurationSetDeliveryOptions
@@ -3032,14 +5784,14 @@ func (c *SESV2) PutConfigurationSetReputationOptionsRequest(input *PutConfigurat
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation PutConfigurationSetReputationOptions for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/PutConfigurationSetReputationOptions
@@ -3119,14 +5871,14 @@ func (c *SESV2) PutConfigurationSetSendingOptionsRequest(input *PutConfiguration
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation PutConfigurationSetSendingOptions for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/PutConfigurationSetSendingOptions
@@ -3146,6 +5898,92 @@ func (c *SESV2) PutConfigurationSetSendingOptions(input *PutConfigurationSetSend
 // for more information on using Contexts.
 func (c *SESV2) PutConfigurationSetSendingOptionsWithContext(ctx aws.Context, input *PutConfigurationSetSendingOptionsInput, opts ...request.Option) (*PutConfigurationSetSendingOptionsOutput, error) {
 	req, out := c.PutConfigurationSetSendingOptionsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opPutConfigurationSetSuppressionOptions = "PutConfigurationSetSuppressionOptions"
+
+// PutConfigurationSetSuppressionOptionsRequest generates a "aws/request.Request" representing the
+// client's request for the PutConfigurationSetSuppressionOptions operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PutConfigurationSetSuppressionOptions for more information on using the PutConfigurationSetSuppressionOptions
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the PutConfigurationSetSuppressionOptionsRequest method.
+//    req, resp := client.PutConfigurationSetSuppressionOptionsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/PutConfigurationSetSuppressionOptions
+func (c *SESV2) PutConfigurationSetSuppressionOptionsRequest(input *PutConfigurationSetSuppressionOptionsInput) (req *request.Request, output *PutConfigurationSetSuppressionOptionsOutput) {
+	op := &request.Operation{
+		Name:       opPutConfigurationSetSuppressionOptions,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/v2/email/configuration-sets/{ConfigurationSetName}/suppression-options",
+	}
+
+	if input == nil {
+		input = &PutConfigurationSetSuppressionOptionsInput{}
+	}
+
+	output = &PutConfigurationSetSuppressionOptionsOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// PutConfigurationSetSuppressionOptions API operation for Amazon Simple Email Service.
+//
+// Specify the account suppression list preferences for a configuration set.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation PutConfigurationSetSuppressionOptions for usage and error information.
+//
+// Returned Error Types:
+//   * NotFoundException
+//   The resource you attempted to access doesn't exist.
+//
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/PutConfigurationSetSuppressionOptions
+func (c *SESV2) PutConfigurationSetSuppressionOptions(input *PutConfigurationSetSuppressionOptionsInput) (*PutConfigurationSetSuppressionOptionsOutput, error) {
+	req, out := c.PutConfigurationSetSuppressionOptionsRequest(input)
+	return out, req.Send()
+}
+
+// PutConfigurationSetSuppressionOptionsWithContext is the same as PutConfigurationSetSuppressionOptions with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PutConfigurationSetSuppressionOptions for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) PutConfigurationSetSuppressionOptionsWithContext(ctx aws.Context, input *PutConfigurationSetSuppressionOptionsInput, opts ...request.Option) (*PutConfigurationSetSuppressionOptionsOutput, error) {
+	req, out := c.PutConfigurationSetSuppressionOptionsRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -3206,14 +6044,14 @@ func (c *SESV2) PutConfigurationSetTrackingOptionsRequest(input *PutConfiguratio
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation PutConfigurationSetTrackingOptions for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/PutConfigurationSetTrackingOptions
@@ -3298,14 +6136,14 @@ func (c *SESV2) PutDedicatedIpInPoolRequest(input *PutDedicatedIpInPoolInput) (r
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation PutDedicatedIpInPool for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/PutDedicatedIpInPool
@@ -3382,14 +6220,14 @@ func (c *SESV2) PutDedicatedIpWarmupAttributesRequest(input *PutDedicatedIpWarmu
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation PutDedicatedIpWarmupAttributes for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/PutDedicatedIpWarmupAttributes
@@ -3467,7 +6305,7 @@ func (c *SESV2) PutDeliverabilityDashboardOptionRequest(input *PutDeliverability
 // When you use the Deliverability dashboard, you pay a monthly subscription
 // charge, in addition to any other fees that you accrue by using Amazon SES
 // and other AWS services. For more information about the features and cost
-// of a Deliverability dashboard subscription, see Amazon Pinpoint Pricing (http://aws.amazon.com/pinpoint/pricing/).
+// of a Deliverability dashboard subscription, see Amazon SES Pricing (http://aws.amazon.com/ses/pricing/).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3476,20 +6314,20 @@ func (c *SESV2) PutDeliverabilityDashboardOptionRequest(input *PutDeliverability
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation PutDeliverabilityDashboardOption for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeAlreadyExistsException "AlreadyExistsException"
+// Returned Error Types:
+//   * AlreadyExistsException
 //   The resource specified in your request already exists.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeLimitExceededException "LimitExceededException"
+//   * LimitExceededException
 //   There are too many instances of the specified resource type.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/PutDeliverabilityDashboardOption
@@ -3568,14 +6406,14 @@ func (c *SESV2) PutEmailIdentityDkimAttributesRequest(input *PutEmailIdentityDki
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation PutEmailIdentityDkimAttributes for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/PutEmailIdentityDkimAttributes
@@ -3595,6 +6433,103 @@ func (c *SESV2) PutEmailIdentityDkimAttributes(input *PutEmailIdentityDkimAttrib
 // for more information on using Contexts.
 func (c *SESV2) PutEmailIdentityDkimAttributesWithContext(ctx aws.Context, input *PutEmailIdentityDkimAttributesInput, opts ...request.Option) (*PutEmailIdentityDkimAttributesOutput, error) {
 	req, out := c.PutEmailIdentityDkimAttributesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opPutEmailIdentityDkimSigningAttributes = "PutEmailIdentityDkimSigningAttributes"
+
+// PutEmailIdentityDkimSigningAttributesRequest generates a "aws/request.Request" representing the
+// client's request for the PutEmailIdentityDkimSigningAttributes operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PutEmailIdentityDkimSigningAttributes for more information on using the PutEmailIdentityDkimSigningAttributes
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the PutEmailIdentityDkimSigningAttributesRequest method.
+//    req, resp := client.PutEmailIdentityDkimSigningAttributesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/PutEmailIdentityDkimSigningAttributes
+func (c *SESV2) PutEmailIdentityDkimSigningAttributesRequest(input *PutEmailIdentityDkimSigningAttributesInput) (req *request.Request, output *PutEmailIdentityDkimSigningAttributesOutput) {
+	op := &request.Operation{
+		Name:       opPutEmailIdentityDkimSigningAttributes,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/v1/email/identities/{EmailIdentity}/dkim/signing",
+	}
+
+	if input == nil {
+		input = &PutEmailIdentityDkimSigningAttributesInput{}
+	}
+
+	output = &PutEmailIdentityDkimSigningAttributesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// PutEmailIdentityDkimSigningAttributes API operation for Amazon Simple Email Service.
+//
+// Used to configure or change the DKIM authentication settings for an email
+// domain identity. You can use this operation to do any of the following:
+//
+//    * Update the signing attributes for an identity that uses Bring Your Own
+//    DKIM (BYODKIM).
+//
+//    * Change from using no DKIM authentication to using Easy DKIM.
+//
+//    * Change from using no DKIM authentication to using BYODKIM.
+//
+//    * Change from using Easy DKIM to using BYODKIM.
+//
+//    * Change from using BYODKIM to using Easy DKIM.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation PutEmailIdentityDkimSigningAttributes for usage and error information.
+//
+// Returned Error Types:
+//   * NotFoundException
+//   The resource you attempted to access doesn't exist.
+//
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/PutEmailIdentityDkimSigningAttributes
+func (c *SESV2) PutEmailIdentityDkimSigningAttributes(input *PutEmailIdentityDkimSigningAttributesInput) (*PutEmailIdentityDkimSigningAttributesOutput, error) {
+	req, out := c.PutEmailIdentityDkimSigningAttributesRequest(input)
+	return out, req.Send()
+}
+
+// PutEmailIdentityDkimSigningAttributesWithContext is the same as PutEmailIdentityDkimSigningAttributes with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PutEmailIdentityDkimSigningAttributes for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) PutEmailIdentityDkimSigningAttributesWithContext(ctx aws.Context, input *PutEmailIdentityDkimSigningAttributesInput, opts ...request.Option) (*PutEmailIdentityDkimSigningAttributesOutput, error) {
+	req, out := c.PutEmailIdentityDkimSigningAttributesRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -3665,14 +6600,14 @@ func (c *SESV2) PutEmailIdentityFeedbackAttributesRequest(input *PutEmailIdentit
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation PutEmailIdentityFeedbackAttributes for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/PutEmailIdentityFeedbackAttributes
@@ -3752,14 +6687,14 @@ func (c *SESV2) PutEmailIdentityMailFromAttributesRequest(input *PutEmailIdentit
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation PutEmailIdentityMailFromAttributes for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/PutEmailIdentityMailFromAttributes
@@ -3779,6 +6714,299 @@ func (c *SESV2) PutEmailIdentityMailFromAttributes(input *PutEmailIdentityMailFr
 // for more information on using Contexts.
 func (c *SESV2) PutEmailIdentityMailFromAttributesWithContext(ctx aws.Context, input *PutEmailIdentityMailFromAttributesInput, opts ...request.Option) (*PutEmailIdentityMailFromAttributesOutput, error) {
 	req, out := c.PutEmailIdentityMailFromAttributesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opPutSuppressedDestination = "PutSuppressedDestination"
+
+// PutSuppressedDestinationRequest generates a "aws/request.Request" representing the
+// client's request for the PutSuppressedDestination operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PutSuppressedDestination for more information on using the PutSuppressedDestination
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the PutSuppressedDestinationRequest method.
+//    req, resp := client.PutSuppressedDestinationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/PutSuppressedDestination
+func (c *SESV2) PutSuppressedDestinationRequest(input *PutSuppressedDestinationInput) (req *request.Request, output *PutSuppressedDestinationOutput) {
+	op := &request.Operation{
+		Name:       opPutSuppressedDestination,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/v2/email/suppression/addresses",
+	}
+
+	if input == nil {
+		input = &PutSuppressedDestinationInput{}
+	}
+
+	output = &PutSuppressedDestinationOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// PutSuppressedDestination API operation for Amazon Simple Email Service.
+//
+// Adds an email address to the suppression list for your account.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation PutSuppressedDestination for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/PutSuppressedDestination
+func (c *SESV2) PutSuppressedDestination(input *PutSuppressedDestinationInput) (*PutSuppressedDestinationOutput, error) {
+	req, out := c.PutSuppressedDestinationRequest(input)
+	return out, req.Send()
+}
+
+// PutSuppressedDestinationWithContext is the same as PutSuppressedDestination with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PutSuppressedDestination for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) PutSuppressedDestinationWithContext(ctx aws.Context, input *PutSuppressedDestinationInput, opts ...request.Option) (*PutSuppressedDestinationOutput, error) {
+	req, out := c.PutSuppressedDestinationRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opSendBulkEmail = "SendBulkEmail"
+
+// SendBulkEmailRequest generates a "aws/request.Request" representing the
+// client's request for the SendBulkEmail operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See SendBulkEmail for more information on using the SendBulkEmail
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the SendBulkEmailRequest method.
+//    req, resp := client.SendBulkEmailRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/SendBulkEmail
+func (c *SESV2) SendBulkEmailRequest(input *SendBulkEmailInput) (req *request.Request, output *SendBulkEmailOutput) {
+	op := &request.Operation{
+		Name:       opSendBulkEmail,
+		HTTPMethod: "POST",
+		HTTPPath:   "/v2/email/outbound-bulk-emails",
+	}
+
+	if input == nil {
+		input = &SendBulkEmailInput{}
+	}
+
+	output = &SendBulkEmailOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// SendBulkEmail API operation for Amazon Simple Email Service.
+//
+// Composes an email message to multiple destinations.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation SendBulkEmail for usage and error information.
+//
+// Returned Error Types:
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+//   * LimitExceededException
+//   There are too many instances of the specified resource type.
+//
+//   * AccountSuspendedException
+//   The message can't be sent because the account's ability to send email has
+//   been permanently restricted.
+//
+//   * SendingPausedException
+//   The message can't be sent because the account's ability to send email is
+//   currently paused.
+//
+//   * MessageRejected
+//   The message can't be sent because it contains invalid content.
+//
+//   * MailFromDomainNotVerifiedException
+//   The message can't be sent because the sending domain isn't verified.
+//
+//   * NotFoundException
+//   The resource you attempted to access doesn't exist.
+//
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/SendBulkEmail
+func (c *SESV2) SendBulkEmail(input *SendBulkEmailInput) (*SendBulkEmailOutput, error) {
+	req, out := c.SendBulkEmailRequest(input)
+	return out, req.Send()
+}
+
+// SendBulkEmailWithContext is the same as SendBulkEmail with the addition of
+// the ability to pass a context and additional request options.
+//
+// See SendBulkEmail for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) SendBulkEmailWithContext(ctx aws.Context, input *SendBulkEmailInput, opts ...request.Option) (*SendBulkEmailOutput, error) {
+	req, out := c.SendBulkEmailRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opSendCustomVerificationEmail = "SendCustomVerificationEmail"
+
+// SendCustomVerificationEmailRequest generates a "aws/request.Request" representing the
+// client's request for the SendCustomVerificationEmail operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See SendCustomVerificationEmail for more information on using the SendCustomVerificationEmail
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the SendCustomVerificationEmailRequest method.
+//    req, resp := client.SendCustomVerificationEmailRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/SendCustomVerificationEmail
+func (c *SESV2) SendCustomVerificationEmailRequest(input *SendCustomVerificationEmailInput) (req *request.Request, output *SendCustomVerificationEmailOutput) {
+	op := &request.Operation{
+		Name:       opSendCustomVerificationEmail,
+		HTTPMethod: "POST",
+		HTTPPath:   "/v2/email/outbound-custom-verification-emails",
+	}
+
+	if input == nil {
+		input = &SendCustomVerificationEmailInput{}
+	}
+
+	output = &SendCustomVerificationEmailOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// SendCustomVerificationEmail API operation for Amazon Simple Email Service.
+//
+// Adds an email address to the list of identities for your Amazon SES account
+// in the current AWS Region and attempts to verify it. As a result of executing
+// this operation, a customized verification email is sent to the specified
+// address.
+//
+// To use this operation, you must first create a custom verification email
+// template. For more information about creating and using custom verification
+// email templates, see Using Custom Verification Email Templates (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-verify-address-custom.html)
+// in the Amazon SES Developer Guide.
+//
+// You can execute this operation no more than once per second.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation SendCustomVerificationEmail for usage and error information.
+//
+// Returned Error Types:
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+//   * LimitExceededException
+//   There are too many instances of the specified resource type.
+//
+//   * MessageRejected
+//   The message can't be sent because it contains invalid content.
+//
+//   * SendingPausedException
+//   The message can't be sent because the account's ability to send email is
+//   currently paused.
+//
+//   * MailFromDomainNotVerifiedException
+//   The message can't be sent because the sending domain isn't verified.
+//
+//   * NotFoundException
+//   The resource you attempted to access doesn't exist.
+//
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/SendCustomVerificationEmail
+func (c *SESV2) SendCustomVerificationEmail(input *SendCustomVerificationEmailInput) (*SendCustomVerificationEmailOutput, error) {
+	req, out := c.SendCustomVerificationEmailRequest(input)
+	return out, req.Send()
+}
+
+// SendCustomVerificationEmailWithContext is the same as SendCustomVerificationEmail with the addition of
+// the ability to pass a context and additional request options.
+//
+// See SendCustomVerificationEmail for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) SendCustomVerificationEmailWithContext(ctx aws.Context, input *SendCustomVerificationEmailInput, opts ...request.Option) (*SendCustomVerificationEmailOutput, error) {
+	req, out := c.SendCustomVerificationEmailRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -3832,13 +7060,17 @@ func (c *SESV2) SendEmailRequest(input *SendEmailInput) (req *request.Request, o
 // of messages:
 //
 //    * Simple – A standard email message. When you create this type of message,
-//    you specify the sender, the recipient, and the message body, and the Amazon
-//    SES API v2 assembles the message for you.
+//    you specify the sender, the recipient, and the message body, and Amazon
+//    SES assembles the message for you.
 //
 //    * Raw – A raw, MIME-formatted email message. When you send this type
 //    of email, you have to specify all of the message headers, as well as the
 //    message body. You can use this message type to send messages that contain
 //    attachments. The message that you specify has to be a valid MIME message.
+//
+//    * Templated – A message that contains personalization tags. When you
+//    send this type of email, Amazon SES API v2 automatically replaces the
+//    tags with values that you specify.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -3847,31 +7079,31 @@ func (c *SESV2) SendEmailRequest(input *SendEmailInput) (req *request.Request, o
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation SendEmail for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+// Returned Error Types:
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeLimitExceededException "LimitExceededException"
+//   * LimitExceededException
 //   There are too many instances of the specified resource type.
 //
-//   * ErrCodeAccountSuspendedException "AccountSuspendedException"
+//   * AccountSuspendedException
 //   The message can't be sent because the account's ability to send email has
 //   been permanently restricted.
 //
-//   * ErrCodeSendingPausedException "SendingPausedException"
+//   * SendingPausedException
 //   The message can't be sent because the account's ability to send email is
 //   currently paused.
 //
-//   * ErrCodeMessageRejected "MessageRejected"
+//   * MessageRejected
 //   The message can't be sent because it contains invalid content.
 //
-//   * ErrCodeMailFromDomainNotVerifiedException "MailFromDomainNotVerifiedException"
+//   * MailFromDomainNotVerifiedException
 //   The message can't be sent because the sending domain isn't verified.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/SendEmail
@@ -3959,17 +7191,17 @@ func (c *SESV2) TagResourceRequest(input *TagResourceInput) (req *request.Reques
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation TagResource for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   The input you provided is invalid.
 //
-//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   * ConcurrentModificationException
 //   The resource is being modified by another operation or thread.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/TagResource
@@ -3989,6 +7221,94 @@ func (c *SESV2) TagResource(input *TagResourceInput) (*TagResourceOutput, error)
 // for more information on using Contexts.
 func (c *SESV2) TagResourceWithContext(ctx aws.Context, input *TagResourceInput, opts ...request.Option) (*TagResourceOutput, error) {
 	req, out := c.TagResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opTestRenderEmailTemplate = "TestRenderEmailTemplate"
+
+// TestRenderEmailTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the TestRenderEmailTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See TestRenderEmailTemplate for more information on using the TestRenderEmailTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the TestRenderEmailTemplateRequest method.
+//    req, resp := client.TestRenderEmailTemplateRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/TestRenderEmailTemplate
+func (c *SESV2) TestRenderEmailTemplateRequest(input *TestRenderEmailTemplateInput) (req *request.Request, output *TestRenderEmailTemplateOutput) {
+	op := &request.Operation{
+		Name:       opTestRenderEmailTemplate,
+		HTTPMethod: "POST",
+		HTTPPath:   "/v2/email/templates/{TemplateName}/render",
+	}
+
+	if input == nil {
+		input = &TestRenderEmailTemplateInput{}
+	}
+
+	output = &TestRenderEmailTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// TestRenderEmailTemplate API operation for Amazon Simple Email Service.
+//
+// Creates a preview of the MIME content of an email when provided with a template
+// and a set of replacement data.
+//
+// You can execute this operation no more than once per second.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation TestRenderEmailTemplate for usage and error information.
+//
+// Returned Error Types:
+//   * NotFoundException
+//   The resource you attempted to access doesn't exist.
+//
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/TestRenderEmailTemplate
+func (c *SESV2) TestRenderEmailTemplate(input *TestRenderEmailTemplateInput) (*TestRenderEmailTemplateOutput, error) {
+	req, out := c.TestRenderEmailTemplateRequest(input)
+	return out, req.Send()
+}
+
+// TestRenderEmailTemplateWithContext is the same as TestRenderEmailTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See TestRenderEmailTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) TestRenderEmailTemplateWithContext(ctx aws.Context, input *TestRenderEmailTemplateInput, opts ...request.Option) (*TestRenderEmailTemplateOutput, error) {
+	req, out := c.TestRenderEmailTemplateRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -4048,17 +7368,17 @@ func (c *SESV2) UntagResourceRequest(input *UntagResourceInput) (req *request.Re
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation UntagResource for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   The input you provided is invalid.
 //
-//   * ErrCodeConcurrentModificationException "ConcurrentModificationException"
+//   * ConcurrentModificationException
 //   The resource is being modified by another operation or thread.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/UntagResource
@@ -4143,14 +7463,14 @@ func (c *SESV2) UpdateConfigurationSetEventDestinationRequest(input *UpdateConfi
 // See the AWS API reference guide for Amazon Simple Email Service's
 // API operation UpdateConfigurationSetEventDestination for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   The resource you attempted to access doesn't exist.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Too many requests have been made to the operation.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The input you provided is invalid.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/UpdateConfigurationSetEventDestination
@@ -4173,6 +7493,713 @@ func (c *SESV2) UpdateConfigurationSetEventDestinationWithContext(ctx aws.Contex
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+const opUpdateContact = "UpdateContact"
+
+// UpdateContactRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateContact operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateContact for more information on using the UpdateContact
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateContactRequest method.
+//    req, resp := client.UpdateContactRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/UpdateContact
+func (c *SESV2) UpdateContactRequest(input *UpdateContactInput) (req *request.Request, output *UpdateContactOutput) {
+	op := &request.Operation{
+		Name:       opUpdateContact,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/v2/email/contact-lists/{ContactListName}/contacts/{EmailAddress}",
+	}
+
+	if input == nil {
+		input = &UpdateContactInput{}
+	}
+
+	output = &UpdateContactOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpdateContact API operation for Amazon Simple Email Service.
+//
+// Updates a contact's preferences for a list. It is not necessary to specify
+// all existing topic preferences in the TopicPreferences object, just the ones
+// that need updating.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation UpdateContact for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+//   * NotFoundException
+//   The resource you attempted to access doesn't exist.
+//
+//   * ConcurrentModificationException
+//   The resource is being modified by another operation or thread.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/UpdateContact
+func (c *SESV2) UpdateContact(input *UpdateContactInput) (*UpdateContactOutput, error) {
+	req, out := c.UpdateContactRequest(input)
+	return out, req.Send()
+}
+
+// UpdateContactWithContext is the same as UpdateContact with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateContact for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) UpdateContactWithContext(ctx aws.Context, input *UpdateContactInput, opts ...request.Option) (*UpdateContactOutput, error) {
+	req, out := c.UpdateContactRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateContactList = "UpdateContactList"
+
+// UpdateContactListRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateContactList operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateContactList for more information on using the UpdateContactList
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateContactListRequest method.
+//    req, resp := client.UpdateContactListRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/UpdateContactList
+func (c *SESV2) UpdateContactListRequest(input *UpdateContactListInput) (req *request.Request, output *UpdateContactListOutput) {
+	op := &request.Operation{
+		Name:       opUpdateContactList,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/v2/email/contact-lists/{ContactListName}",
+	}
+
+	if input == nil {
+		input = &UpdateContactListInput{}
+	}
+
+	output = &UpdateContactListOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpdateContactList API operation for Amazon Simple Email Service.
+//
+// Updates contact list metadata. This operation does a complete replacement.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation UpdateContactList for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+//   * NotFoundException
+//   The resource you attempted to access doesn't exist.
+//
+//   * ConcurrentModificationException
+//   The resource is being modified by another operation or thread.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/UpdateContactList
+func (c *SESV2) UpdateContactList(input *UpdateContactListInput) (*UpdateContactListOutput, error) {
+	req, out := c.UpdateContactListRequest(input)
+	return out, req.Send()
+}
+
+// UpdateContactListWithContext is the same as UpdateContactList with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateContactList for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) UpdateContactListWithContext(ctx aws.Context, input *UpdateContactListInput, opts ...request.Option) (*UpdateContactListOutput, error) {
+	req, out := c.UpdateContactListRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateCustomVerificationEmailTemplate = "UpdateCustomVerificationEmailTemplate"
+
+// UpdateCustomVerificationEmailTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateCustomVerificationEmailTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateCustomVerificationEmailTemplate for more information on using the UpdateCustomVerificationEmailTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateCustomVerificationEmailTemplateRequest method.
+//    req, resp := client.UpdateCustomVerificationEmailTemplateRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/UpdateCustomVerificationEmailTemplate
+func (c *SESV2) UpdateCustomVerificationEmailTemplateRequest(input *UpdateCustomVerificationEmailTemplateInput) (req *request.Request, output *UpdateCustomVerificationEmailTemplateOutput) {
+	op := &request.Operation{
+		Name:       opUpdateCustomVerificationEmailTemplate,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/v2/email/custom-verification-email-templates/{TemplateName}",
+	}
+
+	if input == nil {
+		input = &UpdateCustomVerificationEmailTemplateInput{}
+	}
+
+	output = &UpdateCustomVerificationEmailTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpdateCustomVerificationEmailTemplate API operation for Amazon Simple Email Service.
+//
+// Updates an existing custom verification email template.
+//
+// For more information about custom verification email templates, see Using
+// Custom Verification Email Templates (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-verify-address-custom.html)
+// in the Amazon SES Developer Guide.
+//
+// You can execute this operation no more than once per second.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation UpdateCustomVerificationEmailTemplate for usage and error information.
+//
+// Returned Error Types:
+//   * NotFoundException
+//   The resource you attempted to access doesn't exist.
+//
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/UpdateCustomVerificationEmailTemplate
+func (c *SESV2) UpdateCustomVerificationEmailTemplate(input *UpdateCustomVerificationEmailTemplateInput) (*UpdateCustomVerificationEmailTemplateOutput, error) {
+	req, out := c.UpdateCustomVerificationEmailTemplateRequest(input)
+	return out, req.Send()
+}
+
+// UpdateCustomVerificationEmailTemplateWithContext is the same as UpdateCustomVerificationEmailTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateCustomVerificationEmailTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) UpdateCustomVerificationEmailTemplateWithContext(ctx aws.Context, input *UpdateCustomVerificationEmailTemplateInput, opts ...request.Option) (*UpdateCustomVerificationEmailTemplateOutput, error) {
+	req, out := c.UpdateCustomVerificationEmailTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateEmailIdentityPolicy = "UpdateEmailIdentityPolicy"
+
+// UpdateEmailIdentityPolicyRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateEmailIdentityPolicy operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateEmailIdentityPolicy for more information on using the UpdateEmailIdentityPolicy
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateEmailIdentityPolicyRequest method.
+//    req, resp := client.UpdateEmailIdentityPolicyRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/UpdateEmailIdentityPolicy
+func (c *SESV2) UpdateEmailIdentityPolicyRequest(input *UpdateEmailIdentityPolicyInput) (req *request.Request, output *UpdateEmailIdentityPolicyOutput) {
+	op := &request.Operation{
+		Name:       opUpdateEmailIdentityPolicy,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/v2/email/identities/{EmailIdentity}/policies/{PolicyName}",
+	}
+
+	if input == nil {
+		input = &UpdateEmailIdentityPolicyInput{}
+	}
+
+	output = &UpdateEmailIdentityPolicyOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpdateEmailIdentityPolicy API operation for Amazon Simple Email Service.
+//
+// Updates the specified sending authorization policy for the given identity
+// (an email address or a domain). This API returns successfully even if a policy
+// with the specified name does not exist.
+//
+// This API is for the identity owner only. If you have not verified the identity,
+// this API will return an error.
+//
+// Sending authorization is a feature that enables an identity owner to authorize
+// other senders to use its identities. For information about using sending
+// authorization, see the Amazon SES Developer Guide (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html).
+//
+// You can execute this operation no more than once per second.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation UpdateEmailIdentityPolicy for usage and error information.
+//
+// Returned Error Types:
+//   * NotFoundException
+//   The resource you attempted to access doesn't exist.
+//
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/UpdateEmailIdentityPolicy
+func (c *SESV2) UpdateEmailIdentityPolicy(input *UpdateEmailIdentityPolicyInput) (*UpdateEmailIdentityPolicyOutput, error) {
+	req, out := c.UpdateEmailIdentityPolicyRequest(input)
+	return out, req.Send()
+}
+
+// UpdateEmailIdentityPolicyWithContext is the same as UpdateEmailIdentityPolicy with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateEmailIdentityPolicy for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) UpdateEmailIdentityPolicyWithContext(ctx aws.Context, input *UpdateEmailIdentityPolicyInput, opts ...request.Option) (*UpdateEmailIdentityPolicyOutput, error) {
+	req, out := c.UpdateEmailIdentityPolicyRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateEmailTemplate = "UpdateEmailTemplate"
+
+// UpdateEmailTemplateRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateEmailTemplate operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateEmailTemplate for more information on using the UpdateEmailTemplate
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateEmailTemplateRequest method.
+//    req, resp := client.UpdateEmailTemplateRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/UpdateEmailTemplate
+func (c *SESV2) UpdateEmailTemplateRequest(input *UpdateEmailTemplateInput) (req *request.Request, output *UpdateEmailTemplateOutput) {
+	op := &request.Operation{
+		Name:       opUpdateEmailTemplate,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/v2/email/templates/{TemplateName}",
+	}
+
+	if input == nil {
+		input = &UpdateEmailTemplateInput{}
+	}
+
+	output = &UpdateEmailTemplateOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpdateEmailTemplate API operation for Amazon Simple Email Service.
+//
+// Updates an email template. Email templates enable you to send personalized
+// email to one or more destinations in a single API operation. For more information,
+// see the Amazon SES Developer Guide (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html).
+//
+// You can execute this operation no more than once per second.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for Amazon Simple Email Service's
+// API operation UpdateEmailTemplate for usage and error information.
+//
+// Returned Error Types:
+//   * NotFoundException
+//   The resource you attempted to access doesn't exist.
+//
+//   * TooManyRequestsException
+//   Too many requests have been made to the operation.
+//
+//   * BadRequestException
+//   The input you provided is invalid.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/sesv2-2019-09-27/UpdateEmailTemplate
+func (c *SESV2) UpdateEmailTemplate(input *UpdateEmailTemplateInput) (*UpdateEmailTemplateOutput, error) {
+	req, out := c.UpdateEmailTemplateRequest(input)
+	return out, req.Send()
+}
+
+// UpdateEmailTemplateWithContext is the same as UpdateEmailTemplate with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateEmailTemplate for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *SESV2) UpdateEmailTemplateWithContext(ctx aws.Context, input *UpdateEmailTemplateInput, opts ...request.Option) (*UpdateEmailTemplateOutput, error) {
+	req, out := c.UpdateEmailTemplateRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// An object that contains information about your account details.
+type AccountDetails struct {
+	_ struct{} `type:"structure"`
+
+	// Additional email addresses where updates are sent about your account review
+	// process.
+	AdditionalContactEmailAddresses []*string `min:"1" type:"list" sensitive:"true"`
+
+	// The language you would prefer for the case. The contact language can be one
+	// of ENGLISH or JAPANESE.
+	ContactLanguage *string `type:"string" enum:"ContactLanguage"`
+
+	// The type of email your account is sending. The mail type can be one of the
+	// following:
+	//
+	//    * MARKETING – Most of your sending traffic is to keep your customers
+	//    informed of your latest offering.
+	//
+	//    * TRANSACTIONAL – Most of your sending traffic is to communicate during
+	//    a transaction with a customer.
+	MailType *string `type:"string" enum:"MailType"`
+
+	// Information about the review of the latest details you submitted.
+	ReviewDetails *ReviewDetails `type:"structure"`
+
+	// A description of the types of email that you plan to send.
+	UseCaseDescription *string `min:"1" type:"string" sensitive:"true"`
+
+	// The URL of your website. This information helps us better understand the
+	// type of content that you plan to send.
+	WebsiteURL *string `min:"1" type:"string" sensitive:"true"`
+}
+
+// String returns the string representation
+func (s AccountDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AccountDetails) GoString() string {
+	return s.String()
+}
+
+// SetAdditionalContactEmailAddresses sets the AdditionalContactEmailAddresses field's value.
+func (s *AccountDetails) SetAdditionalContactEmailAddresses(v []*string) *AccountDetails {
+	s.AdditionalContactEmailAddresses = v
+	return s
+}
+
+// SetContactLanguage sets the ContactLanguage field's value.
+func (s *AccountDetails) SetContactLanguage(v string) *AccountDetails {
+	s.ContactLanguage = &v
+	return s
+}
+
+// SetMailType sets the MailType field's value.
+func (s *AccountDetails) SetMailType(v string) *AccountDetails {
+	s.MailType = &v
+	return s
+}
+
+// SetReviewDetails sets the ReviewDetails field's value.
+func (s *AccountDetails) SetReviewDetails(v *ReviewDetails) *AccountDetails {
+	s.ReviewDetails = v
+	return s
+}
+
+// SetUseCaseDescription sets the UseCaseDescription field's value.
+func (s *AccountDetails) SetUseCaseDescription(v string) *AccountDetails {
+	s.UseCaseDescription = &v
+	return s
+}
+
+// SetWebsiteURL sets the WebsiteURL field's value.
+func (s *AccountDetails) SetWebsiteURL(v string) *AccountDetails {
+	s.WebsiteURL = &v
+	return s
+}
+
+// The message can't be sent because the account's ability to send email has
+// been permanently restricted.
+type AccountSuspendedException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s AccountSuspendedException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AccountSuspendedException) GoString() string {
+	return s.String()
+}
+
+func newErrorAccountSuspendedException(v protocol.ResponseMetadata) error {
+	return &AccountSuspendedException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *AccountSuspendedException) Code() string {
+	return "AccountSuspendedException"
+}
+
+// Message returns the exception's message.
+func (s *AccountSuspendedException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *AccountSuspendedException) OrigErr() error {
+	return nil
+}
+
+func (s *AccountSuspendedException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *AccountSuspendedException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *AccountSuspendedException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// The resource specified in your request already exists.
+type AlreadyExistsException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s AlreadyExistsException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AlreadyExistsException) GoString() string {
+	return s.String()
+}
+
+func newErrorAlreadyExistsException(v protocol.ResponseMetadata) error {
+	return &AlreadyExistsException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *AlreadyExistsException) Code() string {
+	return "AlreadyExistsException"
+}
+
+// Message returns the exception's message.
+func (s *AlreadyExistsException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *AlreadyExistsException) OrigErr() error {
+	return nil
+}
+
+func (s *AlreadyExistsException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *AlreadyExistsException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *AlreadyExistsException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// The input you provided is invalid.
+type BadRequestException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s BadRequestException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BadRequestException) GoString() string {
+	return s.String()
+}
+
+func newErrorBadRequestException(v protocol.ResponseMetadata) error {
+	return &BadRequestException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *BadRequestException) Code() string {
+	return "BadRequestException"
+}
+
+// Message returns the exception's message.
+func (s *BadRequestException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *BadRequestException) OrigErr() error {
+	return nil
+}
+
+func (s *BadRequestException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *BadRequestException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *BadRequestException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 // An object that contains information about a blacklisting event that impacts
@@ -4273,6 +8300,211 @@ func (s *Body) SetHtml(v *Content) *Body {
 // SetText sets the Text field's value.
 func (s *Body) SetText(v *Content) *Body {
 	s.Text = v
+	return s
+}
+
+// An object that contains the body of the message. You can specify a template
+// message.
+type BulkEmailContent struct {
+	_ struct{} `type:"structure"`
+
+	// The template to use for the bulk email message.
+	Template *Template `type:"structure"`
+}
+
+// String returns the string representation
+func (s BulkEmailContent) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BulkEmailContent) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BulkEmailContent) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "BulkEmailContent"}
+	if s.Template != nil {
+		if err := s.Template.Validate(); err != nil {
+			invalidParams.AddNested("Template", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetTemplate sets the Template field's value.
+func (s *BulkEmailContent) SetTemplate(v *Template) *BulkEmailContent {
+	s.Template = v
+	return s
+}
+
+type BulkEmailEntry struct {
+	_ struct{} `type:"structure"`
+
+	// Represents the destination of the message, consisting of To:, CC:, and BCC:
+	// fields.
+	//
+	// Amazon SES does not support the SMTPUTF8 extension, as described in RFC6531
+	// (https://tools.ietf.org/html/rfc6531). For this reason, the local part of
+	// a destination email address (the part of the email address that precedes
+	// the @ sign) may only contain 7-bit ASCII characters (https://en.wikipedia.org/wiki/Email_address#Local-part).
+	// If the domain part of an address (the part after the @ sign) contains non-ASCII
+	// characters, they must be encoded using Punycode, as described in RFC3492
+	// (https://tools.ietf.org/html/rfc3492.html).
+	//
+	// Destination is a required field
+	Destination *Destination `type:"structure" required:"true"`
+
+	// The ReplacementEmailContent associated with a BulkEmailEntry.
+	ReplacementEmailContent *ReplacementEmailContent `type:"structure"`
+
+	// A list of tags, in the form of name/value pairs, to apply to an email that
+	// you send using the SendBulkTemplatedEmail operation. Tags correspond to characteristics
+	// of the email that you define, so that you can publish email sending events.
+	ReplacementTags []*MessageTag `type:"list"`
+}
+
+// String returns the string representation
+func (s BulkEmailEntry) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BulkEmailEntry) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *BulkEmailEntry) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "BulkEmailEntry"}
+	if s.Destination == nil {
+		invalidParams.Add(request.NewErrParamRequired("Destination"))
+	}
+	if s.ReplacementTags != nil {
+		for i, v := range s.ReplacementTags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "ReplacementTags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDestination sets the Destination field's value.
+func (s *BulkEmailEntry) SetDestination(v *Destination) *BulkEmailEntry {
+	s.Destination = v
+	return s
+}
+
+// SetReplacementEmailContent sets the ReplacementEmailContent field's value.
+func (s *BulkEmailEntry) SetReplacementEmailContent(v *ReplacementEmailContent) *BulkEmailEntry {
+	s.ReplacementEmailContent = v
+	return s
+}
+
+// SetReplacementTags sets the ReplacementTags field's value.
+func (s *BulkEmailEntry) SetReplacementTags(v []*MessageTag) *BulkEmailEntry {
+	s.ReplacementTags = v
+	return s
+}
+
+// The result of the SendBulkEmail operation of each specified BulkEmailEntry.
+type BulkEmailEntryResult struct {
+	_ struct{} `type:"structure"`
+
+	// A description of an error that prevented a message being sent using the SendBulkTemplatedEmail
+	// operation.
+	Error *string `type:"string"`
+
+	// The unique message identifier returned from the SendBulkTemplatedEmail operation.
+	MessageId *string `type:"string"`
+
+	// The status of a message sent using the SendBulkTemplatedEmail operation.
+	//
+	// Possible values for this parameter include:
+	//
+	//    * SUCCESS: Amazon SES accepted the message, and will attempt to deliver
+	//    it to the recipients.
+	//
+	//    * MESSAGE_REJECTED: The message was rejected because it contained a virus.
+	//
+	//    * MAIL_FROM_DOMAIN_NOT_VERIFIED: The sender's email address or domain
+	//    was not verified.
+	//
+	//    * CONFIGURATION_SET_DOES_NOT_EXIST: The configuration set you specified
+	//    does not exist.
+	//
+	//    * TEMPLATE_DOES_NOT_EXIST: The template you specified does not exist.
+	//
+	//    * ACCOUNT_SUSPENDED: Your account has been shut down because of issues
+	//    related to your email sending practices.
+	//
+	//    * ACCOUNT_THROTTLED: The number of emails you can send has been reduced
+	//    because your account has exceeded its allocated sending limit.
+	//
+	//    * ACCOUNT_DAILY_QUOTA_EXCEEDED: You have reached or exceeded the maximum
+	//    number of emails you can send from your account in a 24-hour period.
+	//
+	//    * INVALID_SENDING_POOL_NAME: The configuration set you specified refers
+	//    to an IP pool that does not exist.
+	//
+	//    * ACCOUNT_SENDING_PAUSED: Email sending for the Amazon SES account was
+	//    disabled using the UpdateAccountSendingEnabled (https://docs.aws.amazon.com/ses/latest/APIReference/API_UpdateAccountSendingEnabled.html)
+	//    operation.
+	//
+	//    * CONFIGURATION_SET_SENDING_PAUSED: Email sending for this configuration
+	//    set was disabled using the UpdateConfigurationSetSendingEnabled (https://docs.aws.amazon.com/ses/latest/APIReference/API_UpdateConfigurationSetSendingEnabled.html)
+	//    operation.
+	//
+	//    * INVALID_PARAMETER_VALUE: One or more of the parameters you specified
+	//    when calling this operation was invalid. See the error message for additional
+	//    information.
+	//
+	//    * TRANSIENT_FAILURE: Amazon SES was unable to process your request because
+	//    of a temporary issue.
+	//
+	//    * FAILED: Amazon SES was unable to process your request. See the error
+	//    message for additional information.
+	Status *string `type:"string" enum:"BulkEmailStatus"`
+}
+
+// String returns the string representation
+func (s BulkEmailEntryResult) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BulkEmailEntryResult) GoString() string {
+	return s.String()
+}
+
+// SetError sets the Error field's value.
+func (s *BulkEmailEntryResult) SetError(v string) *BulkEmailEntryResult {
+	s.Error = &v
+	return s
+}
+
+// SetMessageId sets the MessageId field's value.
+func (s *BulkEmailEntryResult) SetMessageId(v string) *BulkEmailEntryResult {
+	s.MessageId = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *BulkEmailEntryResult) SetStatus(v string) *BulkEmailEntryResult {
+	s.Status = &v
 	return s
 }
 
@@ -4413,15 +8645,281 @@ func (s *CloudWatchDimensionConfiguration) SetDimensionValueSource(v string) *Cl
 	return s
 }
 
+// The resource is being modified by another operation or thread.
+type ConcurrentModificationException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s ConcurrentModificationException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ConcurrentModificationException) GoString() string {
+	return s.String()
+}
+
+func newErrorConcurrentModificationException(v protocol.ResponseMetadata) error {
+	return &ConcurrentModificationException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ConcurrentModificationException) Code() string {
+	return "ConcurrentModificationException"
+}
+
+// Message returns the exception's message.
+func (s *ConcurrentModificationException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ConcurrentModificationException) OrigErr() error {
+	return nil
+}
+
+func (s *ConcurrentModificationException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ConcurrentModificationException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ConcurrentModificationException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// If there is already an ongoing account details update under review.
+type ConflictException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s ConflictException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ConflictException) GoString() string {
+	return s.String()
+}
+
+func newErrorConflictException(v protocol.ResponseMetadata) error {
+	return &ConflictException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ConflictException) Code() string {
+	return "ConflictException"
+}
+
+// Message returns the exception's message.
+func (s *ConflictException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ConflictException) OrigErr() error {
+	return nil
+}
+
+func (s *ConflictException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ConflictException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ConflictException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// A contact is the end-user who is receiving the email.
+type Contact struct {
+	_ struct{} `type:"structure"`
+
+	// The contact's email address.
+	EmailAddress *string `type:"string"`
+
+	// A timestamp noting the last time the contact's information was updated.
+	LastUpdatedTimestamp *time.Time `type:"timestamp"`
+
+	// The default topic preferences applied to the contact.
+	TopicDefaultPreferences []*TopicPreference `type:"list"`
+
+	// The contact's preference for being opted-in to or opted-out of a topic.
+	TopicPreferences []*TopicPreference `type:"list"`
+
+	// A boolean value status noting if the contact is unsubscribed from all contact
+	// list topics.
+	UnsubscribeAll *bool `type:"boolean"`
+}
+
+// String returns the string representation
+func (s Contact) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Contact) GoString() string {
+	return s.String()
+}
+
+// SetEmailAddress sets the EmailAddress field's value.
+func (s *Contact) SetEmailAddress(v string) *Contact {
+	s.EmailAddress = &v
+	return s
+}
+
+// SetLastUpdatedTimestamp sets the LastUpdatedTimestamp field's value.
+func (s *Contact) SetLastUpdatedTimestamp(v time.Time) *Contact {
+	s.LastUpdatedTimestamp = &v
+	return s
+}
+
+// SetTopicDefaultPreferences sets the TopicDefaultPreferences field's value.
+func (s *Contact) SetTopicDefaultPreferences(v []*TopicPreference) *Contact {
+	s.TopicDefaultPreferences = v
+	return s
+}
+
+// SetTopicPreferences sets the TopicPreferences field's value.
+func (s *Contact) SetTopicPreferences(v []*TopicPreference) *Contact {
+	s.TopicPreferences = v
+	return s
+}
+
+// SetUnsubscribeAll sets the UnsubscribeAll field's value.
+func (s *Contact) SetUnsubscribeAll(v bool) *Contact {
+	s.UnsubscribeAll = &v
+	return s
+}
+
+// A list that contains contacts that have subscribed to a particular topic
+// or topics.
+type ContactList struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the contact list.
+	ContactListName *string `type:"string"`
+
+	// A timestamp noting the last time the contact list was updated.
+	LastUpdatedTimestamp *time.Time `type:"timestamp"`
+}
+
+// String returns the string representation
+func (s ContactList) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ContactList) GoString() string {
+	return s.String()
+}
+
+// SetContactListName sets the ContactListName field's value.
+func (s *ContactList) SetContactListName(v string) *ContactList {
+	s.ContactListName = &v
+	return s
+}
+
+// SetLastUpdatedTimestamp sets the LastUpdatedTimestamp field's value.
+func (s *ContactList) SetLastUpdatedTimestamp(v time.Time) *ContactList {
+	s.LastUpdatedTimestamp = &v
+	return s
+}
+
+// An object that contains details about the action of a contact list.
+type ContactListDestination struct {
+	_ struct{} `type:"structure"`
+
+	// >The type of action that you want to perform on the addresses. Acceptable
+	// values:
+	//
+	//    * PUT: add the addresses to the contact list. If the record already exists,
+	//    it will override it with the new value.
+	//
+	//    * DELETE: remove the addresses from the contact list.
+	//
+	// ContactListImportAction is a required field
+	ContactListImportAction *string `type:"string" required:"true" enum:"ContactListImportAction"`
+
+	// The name of the contact list.
+	//
+	// ContactListName is a required field
+	ContactListName *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s ContactListDestination) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ContactListDestination) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ContactListDestination) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ContactListDestination"}
+	if s.ContactListImportAction == nil {
+		invalidParams.Add(request.NewErrParamRequired("ContactListImportAction"))
+	}
+	if s.ContactListName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ContactListName"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContactListImportAction sets the ContactListImportAction field's value.
+func (s *ContactListDestination) SetContactListImportAction(v string) *ContactListDestination {
+	s.ContactListImportAction = &v
+	return s
+}
+
+// SetContactListName sets the ContactListName field's value.
+func (s *ContactListDestination) SetContactListName(v string) *ContactListDestination {
+	s.ContactListName = &v
+	return s
+}
+
 // An object that represents the content of the email, and optionally a character
 // set specification.
 type Content struct {
 	_ struct{} `type:"structure"`
 
 	// The character set for the content. Because of the constraints of the SMTP
-	// protocol, the Amazon SES API v2 uses 7-bit ASCII by default. If the text
-	// includes characters outside of the ASCII range, you have to specify a character
-	// set. For example, you could specify UTF-8, ISO-8859-1, or Shift_JIS.
+	// protocol, Amazon SES uses 7-bit ASCII by default. If the text includes characters
+	// outside of the ASCII range, you have to specify a character set. For example,
+	// you could specify UTF-8, ISO-8859-1, or Shift_JIS.
 	Charset *string `type:"string"`
 
 	// The content of the message itself.
@@ -4578,6 +9076,10 @@ type CreateConfigurationSetInput struct {
 	// send using the configuration set.
 	SendingOptions *SendingOptions `type:"structure"`
 
+	// An object that contains information about the suppression list preferences
+	// for your account.
+	SuppressionOptions *SuppressionOptions `type:"structure"`
+
 	// An array of objects that define the tags (keys and values) that you want
 	// to associate with the configuration set.
 	Tags []*Tag `type:"list"`
@@ -4649,6 +9151,12 @@ func (s *CreateConfigurationSetInput) SetSendingOptions(v *SendingOptions) *Crea
 	return s
 }
 
+// SetSuppressionOptions sets the SuppressionOptions field's value.
+func (s *CreateConfigurationSetInput) SetSuppressionOptions(v *SuppressionOptions) *CreateConfigurationSetInput {
+	s.SuppressionOptions = v
+	return s
+}
+
 // SetTags sets the Tags field's value.
 func (s *CreateConfigurationSetInput) SetTags(v []*Tag) *CreateConfigurationSetInput {
 	s.Tags = v
@@ -4674,6 +9182,347 @@ func (s CreateConfigurationSetOutput) String() string {
 
 // GoString returns the string representation
 func (s CreateConfigurationSetOutput) GoString() string {
+	return s.String()
+}
+
+type CreateContactInput struct {
+	_ struct{} `type:"structure"`
+
+	// The attribute data attached to a contact.
+	AttributesData *string `type:"string"`
+
+	// The name of the contact list to which the contact should be added.
+	//
+	// ContactListName is a required field
+	ContactListName *string `location:"uri" locationName:"ContactListName" type:"string" required:"true"`
+
+	// The contact's email address.
+	//
+	// EmailAddress is a required field
+	EmailAddress *string `type:"string" required:"true"`
+
+	// The contact's preferences for being opted-in to or opted-out of topics.
+	TopicPreferences []*TopicPreference `type:"list"`
+
+	// A boolean value status noting if the contact is unsubscribed from all contact
+	// list topics.
+	UnsubscribeAll *bool `type:"boolean"`
+}
+
+// String returns the string representation
+func (s CreateContactInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateContactInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateContactInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateContactInput"}
+	if s.ContactListName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ContactListName"))
+	}
+	if s.ContactListName != nil && len(*s.ContactListName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ContactListName", 1))
+	}
+	if s.EmailAddress == nil {
+		invalidParams.Add(request.NewErrParamRequired("EmailAddress"))
+	}
+	if s.TopicPreferences != nil {
+		for i, v := range s.TopicPreferences {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "TopicPreferences", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAttributesData sets the AttributesData field's value.
+func (s *CreateContactInput) SetAttributesData(v string) *CreateContactInput {
+	s.AttributesData = &v
+	return s
+}
+
+// SetContactListName sets the ContactListName field's value.
+func (s *CreateContactInput) SetContactListName(v string) *CreateContactInput {
+	s.ContactListName = &v
+	return s
+}
+
+// SetEmailAddress sets the EmailAddress field's value.
+func (s *CreateContactInput) SetEmailAddress(v string) *CreateContactInput {
+	s.EmailAddress = &v
+	return s
+}
+
+// SetTopicPreferences sets the TopicPreferences field's value.
+func (s *CreateContactInput) SetTopicPreferences(v []*TopicPreference) *CreateContactInput {
+	s.TopicPreferences = v
+	return s
+}
+
+// SetUnsubscribeAll sets the UnsubscribeAll field's value.
+func (s *CreateContactInput) SetUnsubscribeAll(v bool) *CreateContactInput {
+	s.UnsubscribeAll = &v
+	return s
+}
+
+type CreateContactListInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the contact list.
+	//
+	// ContactListName is a required field
+	ContactListName *string `type:"string" required:"true"`
+
+	// A description of what the contact list is about.
+	Description *string `type:"string"`
+
+	// The tags associated with a contact list.
+	Tags []*Tag `type:"list"`
+
+	// An interest group, theme, or label within a list. A contact list can have
+	// multiple topics.
+	Topics []*Topic `type:"list"`
+}
+
+// String returns the string representation
+func (s CreateContactListInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateContactListInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateContactListInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateContactListInput"}
+	if s.ContactListName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ContactListName"))
+	}
+	if s.Tags != nil {
+		for i, v := range s.Tags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Tags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.Topics != nil {
+		for i, v := range s.Topics {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Topics", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContactListName sets the ContactListName field's value.
+func (s *CreateContactListInput) SetContactListName(v string) *CreateContactListInput {
+	s.ContactListName = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *CreateContactListInput) SetDescription(v string) *CreateContactListInput {
+	s.Description = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *CreateContactListInput) SetTags(v []*Tag) *CreateContactListInput {
+	s.Tags = v
+	return s
+}
+
+// SetTopics sets the Topics field's value.
+func (s *CreateContactListInput) SetTopics(v []*Topic) *CreateContactListInput {
+	s.Topics = v
+	return s
+}
+
+type CreateContactListOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s CreateContactListOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateContactListOutput) GoString() string {
+	return s.String()
+}
+
+type CreateContactOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s CreateContactOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateContactOutput) GoString() string {
+	return s.String()
+}
+
+// Represents a request to create a custom verification email template.
+type CreateCustomVerificationEmailTemplateInput struct {
+	_ struct{} `type:"structure"`
+
+	// The URL that the recipient of the verification email is sent to if his or
+	// her address is not successfully verified.
+	//
+	// FailureRedirectionURL is a required field
+	FailureRedirectionURL *string `type:"string" required:"true"`
+
+	// The email address that the custom verification email is sent from.
+	//
+	// FromEmailAddress is a required field
+	FromEmailAddress *string `type:"string" required:"true"`
+
+	// The URL that the recipient of the verification email is sent to if his or
+	// her address is successfully verified.
+	//
+	// SuccessRedirectionURL is a required field
+	SuccessRedirectionURL *string `type:"string" required:"true"`
+
+	// The content of the custom verification email. The total size of the email
+	// must be less than 10 MB. The message body may contain HTML, with some limitations.
+	// For more information, see Custom Verification Email Frequently Asked Questions
+	// (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-verify-address-custom.html#custom-verification-emails-faq)
+	// in the Amazon SES Developer Guide.
+	//
+	// TemplateContent is a required field
+	TemplateContent *string `type:"string" required:"true"`
+
+	// The name of the custom verification email template.
+	//
+	// TemplateName is a required field
+	TemplateName *string `min:"1" type:"string" required:"true"`
+
+	// The subject line of the custom verification email.
+	//
+	// TemplateSubject is a required field
+	TemplateSubject *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s CreateCustomVerificationEmailTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateCustomVerificationEmailTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateCustomVerificationEmailTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateCustomVerificationEmailTemplateInput"}
+	if s.FailureRedirectionURL == nil {
+		invalidParams.Add(request.NewErrParamRequired("FailureRedirectionURL"))
+	}
+	if s.FromEmailAddress == nil {
+		invalidParams.Add(request.NewErrParamRequired("FromEmailAddress"))
+	}
+	if s.SuccessRedirectionURL == nil {
+		invalidParams.Add(request.NewErrParamRequired("SuccessRedirectionURL"))
+	}
+	if s.TemplateContent == nil {
+		invalidParams.Add(request.NewErrParamRequired("TemplateContent"))
+	}
+	if s.TemplateName == nil {
+		invalidParams.Add(request.NewErrParamRequired("TemplateName"))
+	}
+	if s.TemplateName != nil && len(*s.TemplateName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TemplateName", 1))
+	}
+	if s.TemplateSubject == nil {
+		invalidParams.Add(request.NewErrParamRequired("TemplateSubject"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFailureRedirectionURL sets the FailureRedirectionURL field's value.
+func (s *CreateCustomVerificationEmailTemplateInput) SetFailureRedirectionURL(v string) *CreateCustomVerificationEmailTemplateInput {
+	s.FailureRedirectionURL = &v
+	return s
+}
+
+// SetFromEmailAddress sets the FromEmailAddress field's value.
+func (s *CreateCustomVerificationEmailTemplateInput) SetFromEmailAddress(v string) *CreateCustomVerificationEmailTemplateInput {
+	s.FromEmailAddress = &v
+	return s
+}
+
+// SetSuccessRedirectionURL sets the SuccessRedirectionURL field's value.
+func (s *CreateCustomVerificationEmailTemplateInput) SetSuccessRedirectionURL(v string) *CreateCustomVerificationEmailTemplateInput {
+	s.SuccessRedirectionURL = &v
+	return s
+}
+
+// SetTemplateContent sets the TemplateContent field's value.
+func (s *CreateCustomVerificationEmailTemplateInput) SetTemplateContent(v string) *CreateCustomVerificationEmailTemplateInput {
+	s.TemplateContent = &v
+	return s
+}
+
+// SetTemplateName sets the TemplateName field's value.
+func (s *CreateCustomVerificationEmailTemplateInput) SetTemplateName(v string) *CreateCustomVerificationEmailTemplateInput {
+	s.TemplateName = &v
+	return s
+}
+
+// SetTemplateSubject sets the TemplateSubject field's value.
+func (s *CreateCustomVerificationEmailTemplateInput) SetTemplateSubject(v string) *CreateCustomVerificationEmailTemplateInput {
+	s.TemplateSubject = &v
+	return s
+}
+
+// If the action is successful, the service sends back an HTTP 200 response
+// with an empty HTTP body.
+type CreateCustomVerificationEmailTemplateOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s CreateCustomVerificationEmailTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateCustomVerificationEmailTemplateOutput) GoString() string {
 	return s.String()
 }
 
@@ -4896,10 +9745,18 @@ func (s *CreateDeliverabilityTestReportOutput) SetReportId(v string) *CreateDeli
 type CreateEmailIdentityInput struct {
 	_ struct{} `type:"structure"`
 
+	// If your request includes this object, Amazon SES configures the identity
+	// to use Bring Your Own DKIM (BYODKIM) for DKIM authentication purposes, as
+	// opposed to the default method, Easy DKIM (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html).
+	//
+	// You can only specify this object if the email identity is a domain, as opposed
+	// to an address.
+	DkimSigningAttributes *DkimSigningAttributes `type:"structure"`
+
 	// The email address or domain that you want to verify.
 	//
 	// EmailIdentity is a required field
-	EmailIdentity *string `type:"string" required:"true"`
+	EmailIdentity *string `min:"1" type:"string" required:"true"`
 
 	// An array of objects that define the tags (keys and values) that you want
 	// to associate with the email identity.
@@ -4922,6 +9779,14 @@ func (s *CreateEmailIdentityInput) Validate() error {
 	if s.EmailIdentity == nil {
 		invalidParams.Add(request.NewErrParamRequired("EmailIdentity"))
 	}
+	if s.EmailIdentity != nil && len(*s.EmailIdentity) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EmailIdentity", 1))
+	}
+	if s.DkimSigningAttributes != nil {
+		if err := s.DkimSigningAttributes.Validate(); err != nil {
+			invalidParams.AddNested("DkimSigningAttributes", err.(request.ErrInvalidParams))
+		}
+	}
 	if s.Tags != nil {
 		for i, v := range s.Tags {
 			if v == nil {
@@ -4939,6 +9804,12 @@ func (s *CreateEmailIdentityInput) Validate() error {
 	return nil
 }
 
+// SetDkimSigningAttributes sets the DkimSigningAttributes field's value.
+func (s *CreateEmailIdentityInput) SetDkimSigningAttributes(v *DkimSigningAttributes) *CreateEmailIdentityInput {
+	s.DkimSigningAttributes = v
+	return s
+}
+
 // SetEmailIdentity sets the EmailIdentity field's value.
 func (s *CreateEmailIdentityInput) SetEmailIdentity(v string) *CreateEmailIdentityInput {
 	s.EmailIdentity = &v
@@ -4951,17 +9822,14 @@ func (s *CreateEmailIdentityInput) SetTags(v []*Tag) *CreateEmailIdentityInput {
 	return s
 }
 
-// If the email identity is a domain, this object contains tokens that you can
-// use to create a set of CNAME records. To sucessfully verify your domain,
-// you have to add these records to the DNS configuration for your domain.
+// If the email identity is a domain, this object contains information about
+// the DKIM verification status for the domain.
 //
 // If the email identity is an email address, this object is empty.
 type CreateEmailIdentityOutput struct {
 	_ struct{} `type:"structure"`
 
 	// An object that contains information about the DKIM attributes for the identity.
-	// This object includes the tokens that you use to create the CNAME records
-	// that are required to complete the DKIM verification process.
 	DkimAttributes *DkimAttributes `type:"structure"`
 
 	// The email identity type.
@@ -4998,6 +9866,332 @@ func (s *CreateEmailIdentityOutput) SetIdentityType(v string) *CreateEmailIdenti
 // SetVerifiedForSendingStatus sets the VerifiedForSendingStatus field's value.
 func (s *CreateEmailIdentityOutput) SetVerifiedForSendingStatus(v bool) *CreateEmailIdentityOutput {
 	s.VerifiedForSendingStatus = &v
+	return s
+}
+
+// Represents a request to create a sending authorization policy for an identity.
+// Sending authorization is an Amazon SES feature that enables you to authorize
+// other senders to use your identities. For information, see the Amazon SES
+// Developer Guide (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-identity-owner-tasks-management.html).
+type CreateEmailIdentityPolicyInput struct {
+	_ struct{} `type:"structure"`
+
+	// The email identity for which you want to create a policy.
+	//
+	// EmailIdentity is a required field
+	EmailIdentity *string `location:"uri" locationName:"EmailIdentity" min:"1" type:"string" required:"true"`
+
+	// The text of the policy in JSON format. The policy cannot exceed 4 KB.
+	//
+	// For information about the syntax of sending authorization policies, see the
+	// Amazon SES Developer Guide (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-policies.html).
+	//
+	// Policy is a required field
+	Policy *string `min:"1" type:"string" required:"true"`
+
+	// The name of the policy.
+	//
+	// The policy name cannot exceed 64 characters and can only include alphanumeric
+	// characters, dashes, and underscores.
+	//
+	// PolicyName is a required field
+	PolicyName *string `location:"uri" locationName:"PolicyName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s CreateEmailIdentityPolicyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateEmailIdentityPolicyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateEmailIdentityPolicyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateEmailIdentityPolicyInput"}
+	if s.EmailIdentity == nil {
+		invalidParams.Add(request.NewErrParamRequired("EmailIdentity"))
+	}
+	if s.EmailIdentity != nil && len(*s.EmailIdentity) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EmailIdentity", 1))
+	}
+	if s.Policy == nil {
+		invalidParams.Add(request.NewErrParamRequired("Policy"))
+	}
+	if s.Policy != nil && len(*s.Policy) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Policy", 1))
+	}
+	if s.PolicyName == nil {
+		invalidParams.Add(request.NewErrParamRequired("PolicyName"))
+	}
+	if s.PolicyName != nil && len(*s.PolicyName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PolicyName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEmailIdentity sets the EmailIdentity field's value.
+func (s *CreateEmailIdentityPolicyInput) SetEmailIdentity(v string) *CreateEmailIdentityPolicyInput {
+	s.EmailIdentity = &v
+	return s
+}
+
+// SetPolicy sets the Policy field's value.
+func (s *CreateEmailIdentityPolicyInput) SetPolicy(v string) *CreateEmailIdentityPolicyInput {
+	s.Policy = &v
+	return s
+}
+
+// SetPolicyName sets the PolicyName field's value.
+func (s *CreateEmailIdentityPolicyInput) SetPolicyName(v string) *CreateEmailIdentityPolicyInput {
+	s.PolicyName = &v
+	return s
+}
+
+// An HTTP 200 response if the request succeeds, or an error message if the
+// request fails.
+type CreateEmailIdentityPolicyOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s CreateEmailIdentityPolicyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateEmailIdentityPolicyOutput) GoString() string {
+	return s.String()
+}
+
+// Represents a request to create an email template. For more information, see
+// the Amazon SES Developer Guide (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html).
+type CreateEmailTemplateInput struct {
+	_ struct{} `type:"structure"`
+
+	// The content of the email template, composed of a subject line, an HTML part,
+	// and a text-only part.
+	//
+	// TemplateContent is a required field
+	TemplateContent *EmailTemplateContent `type:"structure" required:"true"`
+
+	// The name of the template you want to create.
+	//
+	// TemplateName is a required field
+	TemplateName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s CreateEmailTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateEmailTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateEmailTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateEmailTemplateInput"}
+	if s.TemplateContent == nil {
+		invalidParams.Add(request.NewErrParamRequired("TemplateContent"))
+	}
+	if s.TemplateName == nil {
+		invalidParams.Add(request.NewErrParamRequired("TemplateName"))
+	}
+	if s.TemplateName != nil && len(*s.TemplateName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TemplateName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetTemplateContent sets the TemplateContent field's value.
+func (s *CreateEmailTemplateInput) SetTemplateContent(v *EmailTemplateContent) *CreateEmailTemplateInput {
+	s.TemplateContent = v
+	return s
+}
+
+// SetTemplateName sets the TemplateName field's value.
+func (s *CreateEmailTemplateInput) SetTemplateName(v string) *CreateEmailTemplateInput {
+	s.TemplateName = &v
+	return s
+}
+
+// If the action is successful, the service sends back an HTTP 200 response
+// with an empty HTTP body.
+type CreateEmailTemplateOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s CreateEmailTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateEmailTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// Represents a request to create an import job from a data source for a data
+// destination.
+type CreateImportJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// The data source for the import job.
+	//
+	// ImportDataSource is a required field
+	ImportDataSource *ImportDataSource `type:"structure" required:"true"`
+
+	// The destination for the import job.
+	//
+	// ImportDestination is a required field
+	ImportDestination *ImportDestination `type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s CreateImportJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateImportJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *CreateImportJobInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "CreateImportJobInput"}
+	if s.ImportDataSource == nil {
+		invalidParams.Add(request.NewErrParamRequired("ImportDataSource"))
+	}
+	if s.ImportDestination == nil {
+		invalidParams.Add(request.NewErrParamRequired("ImportDestination"))
+	}
+	if s.ImportDataSource != nil {
+		if err := s.ImportDataSource.Validate(); err != nil {
+			invalidParams.AddNested("ImportDataSource", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.ImportDestination != nil {
+		if err := s.ImportDestination.Validate(); err != nil {
+			invalidParams.AddNested("ImportDestination", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetImportDataSource sets the ImportDataSource field's value.
+func (s *CreateImportJobInput) SetImportDataSource(v *ImportDataSource) *CreateImportJobInput {
+	s.ImportDataSource = v
+	return s
+}
+
+// SetImportDestination sets the ImportDestination field's value.
+func (s *CreateImportJobInput) SetImportDestination(v *ImportDestination) *CreateImportJobInput {
+	s.ImportDestination = v
+	return s
+}
+
+// An HTTP 200 response if the request succeeds, or an error message if the
+// request fails.
+type CreateImportJobOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A string that represents the import job ID.
+	JobId *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s CreateImportJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateImportJobOutput) GoString() string {
+	return s.String()
+}
+
+// SetJobId sets the JobId field's value.
+func (s *CreateImportJobOutput) SetJobId(v string) *CreateImportJobOutput {
+	s.JobId = &v
+	return s
+}
+
+// Contains information about a custom verification email template.
+type CustomVerificationEmailTemplateMetadata struct {
+	_ struct{} `type:"structure"`
+
+	// The URL that the recipient of the verification email is sent to if his or
+	// her address is not successfully verified.
+	FailureRedirectionURL *string `type:"string"`
+
+	// The email address that the custom verification email is sent from.
+	FromEmailAddress *string `type:"string"`
+
+	// The URL that the recipient of the verification email is sent to if his or
+	// her address is successfully verified.
+	SuccessRedirectionURL *string `type:"string"`
+
+	// The name of the custom verification email template.
+	TemplateName *string `min:"1" type:"string"`
+
+	// The subject line of the custom verification email.
+	TemplateSubject *string `type:"string"`
+}
+
+// String returns the string representation
+func (s CustomVerificationEmailTemplateMetadata) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CustomVerificationEmailTemplateMetadata) GoString() string {
+	return s.String()
+}
+
+// SetFailureRedirectionURL sets the FailureRedirectionURL field's value.
+func (s *CustomVerificationEmailTemplateMetadata) SetFailureRedirectionURL(v string) *CustomVerificationEmailTemplateMetadata {
+	s.FailureRedirectionURL = &v
+	return s
+}
+
+// SetFromEmailAddress sets the FromEmailAddress field's value.
+func (s *CustomVerificationEmailTemplateMetadata) SetFromEmailAddress(v string) *CustomVerificationEmailTemplateMetadata {
+	s.FromEmailAddress = &v
+	return s
+}
+
+// SetSuccessRedirectionURL sets the SuccessRedirectionURL field's value.
+func (s *CustomVerificationEmailTemplateMetadata) SetSuccessRedirectionURL(v string) *CustomVerificationEmailTemplateMetadata {
+	s.SuccessRedirectionURL = &v
+	return s
+}
+
+// SetTemplateName sets the TemplateName field's value.
+func (s *CustomVerificationEmailTemplateMetadata) SetTemplateName(v string) *CustomVerificationEmailTemplateMetadata {
+	s.TemplateName = &v
+	return s
+}
+
+// SetTemplateSubject sets the TemplateSubject field's value.
+func (s *CustomVerificationEmailTemplateMetadata) SetTemplateSubject(v string) *CustomVerificationEmailTemplateMetadata {
+	s.TemplateSubject = &v
 	return s
 }
 
@@ -5047,7 +10241,7 @@ func (s *DailyVolume) SetVolumeStatistics(v *VolumeStatistics) *DailyVolume {
 }
 
 // Contains information about a dedicated IP address that is associated with
-// your Amazon SES API v2 account.
+// your Amazon SES account.
 //
 // To learn more about requesting dedicated IP addresses, see Requesting and
 // Relinquishing Dedicated IP Addresses (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/dedicated-ip-case.html)
@@ -5251,6 +10445,191 @@ func (s DeleteConfigurationSetOutput) GoString() string {
 	return s.String()
 }
 
+type DeleteContactInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the contact list from which the contact should be removed.
+	//
+	// ContactListName is a required field
+	ContactListName *string `location:"uri" locationName:"ContactListName" type:"string" required:"true"`
+
+	// The contact's email address.
+	//
+	// EmailAddress is a required field
+	EmailAddress *string `location:"uri" locationName:"EmailAddress" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteContactInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteContactInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteContactInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteContactInput"}
+	if s.ContactListName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ContactListName"))
+	}
+	if s.ContactListName != nil && len(*s.ContactListName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ContactListName", 1))
+	}
+	if s.EmailAddress == nil {
+		invalidParams.Add(request.NewErrParamRequired("EmailAddress"))
+	}
+	if s.EmailAddress != nil && len(*s.EmailAddress) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EmailAddress", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContactListName sets the ContactListName field's value.
+func (s *DeleteContactInput) SetContactListName(v string) *DeleteContactInput {
+	s.ContactListName = &v
+	return s
+}
+
+// SetEmailAddress sets the EmailAddress field's value.
+func (s *DeleteContactInput) SetEmailAddress(v string) *DeleteContactInput {
+	s.EmailAddress = &v
+	return s
+}
+
+type DeleteContactListInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the contact list.
+	//
+	// ContactListName is a required field
+	ContactListName *string `location:"uri" locationName:"ContactListName" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteContactListInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteContactListInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteContactListInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteContactListInput"}
+	if s.ContactListName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ContactListName"))
+	}
+	if s.ContactListName != nil && len(*s.ContactListName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ContactListName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContactListName sets the ContactListName field's value.
+func (s *DeleteContactListInput) SetContactListName(v string) *DeleteContactListInput {
+	s.ContactListName = &v
+	return s
+}
+
+type DeleteContactListOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteContactListOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteContactListOutput) GoString() string {
+	return s.String()
+}
+
+type DeleteContactOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteContactOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteContactOutput) GoString() string {
+	return s.String()
+}
+
+// Represents a request to delete an existing custom verification email template.
+type DeleteCustomVerificationEmailTemplateInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the custom verification email template that you want to delete.
+	//
+	// TemplateName is a required field
+	TemplateName *string `location:"uri" locationName:"TemplateName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteCustomVerificationEmailTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteCustomVerificationEmailTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteCustomVerificationEmailTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteCustomVerificationEmailTemplateInput"}
+	if s.TemplateName == nil {
+		invalidParams.Add(request.NewErrParamRequired("TemplateName"))
+	}
+	if s.TemplateName != nil && len(*s.TemplateName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TemplateName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetTemplateName sets the TemplateName field's value.
+func (s *DeleteCustomVerificationEmailTemplateInput) SetTemplateName(v string) *DeleteCustomVerificationEmailTemplateInput {
+	s.TemplateName = &v
+	return s
+}
+
+// If the action is successful, the service sends back an HTTP 200 response
+// with an empty HTTP body.
+type DeleteCustomVerificationEmailTemplateOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteCustomVerificationEmailTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteCustomVerificationEmailTemplateOutput) GoString() string {
+	return s.String()
+}
+
 // A request to delete a dedicated IP pool.
 type DeleteDedicatedIpPoolInput struct {
 	_ struct{} `type:"structure"`
@@ -5319,7 +10698,7 @@ type DeleteEmailIdentityInput struct {
 	// The identity (that is, the email address or domain) that you want to delete.
 	//
 	// EmailIdentity is a required field
-	EmailIdentity *string `location:"uri" locationName:"EmailIdentity" type:"string" required:"true"`
+	EmailIdentity *string `location:"uri" locationName:"EmailIdentity" min:"1" type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -5367,6 +10746,204 @@ func (s DeleteEmailIdentityOutput) String() string {
 
 // GoString returns the string representation
 func (s DeleteEmailIdentityOutput) GoString() string {
+	return s.String()
+}
+
+// Represents a request to delete a sending authorization policy for an identity.
+// Sending authorization is an Amazon SES feature that enables you to authorize
+// other senders to use your identities. For information, see the Amazon SES
+// Developer Guide (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-identity-owner-tasks-management.html).
+type DeleteEmailIdentityPolicyInput struct {
+	_ struct{} `type:"structure"`
+
+	// The email identity for which you want to delete a policy.
+	//
+	// EmailIdentity is a required field
+	EmailIdentity *string `location:"uri" locationName:"EmailIdentity" min:"1" type:"string" required:"true"`
+
+	// The name of the policy.
+	//
+	// The policy name cannot exceed 64 characters and can only include alphanumeric
+	// characters, dashes, and underscores.
+	//
+	// PolicyName is a required field
+	PolicyName *string `location:"uri" locationName:"PolicyName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteEmailIdentityPolicyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteEmailIdentityPolicyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteEmailIdentityPolicyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteEmailIdentityPolicyInput"}
+	if s.EmailIdentity == nil {
+		invalidParams.Add(request.NewErrParamRequired("EmailIdentity"))
+	}
+	if s.EmailIdentity != nil && len(*s.EmailIdentity) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EmailIdentity", 1))
+	}
+	if s.PolicyName == nil {
+		invalidParams.Add(request.NewErrParamRequired("PolicyName"))
+	}
+	if s.PolicyName != nil && len(*s.PolicyName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PolicyName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEmailIdentity sets the EmailIdentity field's value.
+func (s *DeleteEmailIdentityPolicyInput) SetEmailIdentity(v string) *DeleteEmailIdentityPolicyInput {
+	s.EmailIdentity = &v
+	return s
+}
+
+// SetPolicyName sets the PolicyName field's value.
+func (s *DeleteEmailIdentityPolicyInput) SetPolicyName(v string) *DeleteEmailIdentityPolicyInput {
+	s.PolicyName = &v
+	return s
+}
+
+// An HTTP 200 response if the request succeeds, or an error message if the
+// request fails.
+type DeleteEmailIdentityPolicyOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteEmailIdentityPolicyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteEmailIdentityPolicyOutput) GoString() string {
+	return s.String()
+}
+
+// Represents a request to delete an email template. For more information, see
+// the Amazon SES Developer Guide (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html).
+type DeleteEmailTemplateInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the template to be deleted.
+	//
+	// TemplateName is a required field
+	TemplateName *string `location:"uri" locationName:"TemplateName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteEmailTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteEmailTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteEmailTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteEmailTemplateInput"}
+	if s.TemplateName == nil {
+		invalidParams.Add(request.NewErrParamRequired("TemplateName"))
+	}
+	if s.TemplateName != nil && len(*s.TemplateName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TemplateName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetTemplateName sets the TemplateName field's value.
+func (s *DeleteEmailTemplateInput) SetTemplateName(v string) *DeleteEmailTemplateInput {
+	s.TemplateName = &v
+	return s
+}
+
+// If the action is successful, the service sends back an HTTP 200 response
+// with an empty HTTP body.
+type DeleteEmailTemplateOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteEmailTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteEmailTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// A request to remove an email address from the suppression list for your account.
+type DeleteSuppressedDestinationInput struct {
+	_ struct{} `type:"structure"`
+
+	// The suppressed email destination to remove from the account suppression list.
+	//
+	// EmailAddress is a required field
+	EmailAddress *string `location:"uri" locationName:"EmailAddress" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DeleteSuppressedDestinationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteSuppressedDestinationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DeleteSuppressedDestinationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DeleteSuppressedDestinationInput"}
+	if s.EmailAddress == nil {
+		invalidParams.Add(request.NewErrParamRequired("EmailAddress"))
+	}
+	if s.EmailAddress != nil && len(*s.EmailAddress) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EmailAddress", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEmailAddress sets the EmailAddress field's value.
+func (s *DeleteSuppressedDestinationInput) SetEmailAddress(v string) *DeleteSuppressedDestinationInput {
+	s.EmailAddress = &v
+	return s
+}
+
+// An HTTP 200 response if the request succeeds, or an error message if the
+// request fails.
+type DeleteSuppressedDestinationOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s DeleteSuppressedDestinationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DeleteSuppressedDestinationOutput) GoString() string {
 	return s.String()
 }
 
@@ -5529,10 +11106,29 @@ func (s *Destination) SetToAddresses(v []*string) *Destination {
 	return s
 }
 
-// An object that contains information about the DKIM configuration for an email
-// identity.
+// An object that contains information about the DKIM authentication status
+// for an email identity.
+//
+// Amazon SES determines the authentication status by searching for specific
+// records in the DNS configuration for the domain. If you used Easy DKIM (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html)
+// to set up DKIM authentication, Amazon SES tries to find three unique CNAME
+// records in the DNS configuration for your domain. If you provided a public
+// key to perform DKIM authentication, Amazon SES tries to find a TXT record
+// that uses the selector that you specified. The value of the TXT record must
+// be a public key that's paired with the private key that you specified in
+// the process of creating the identity
 type DkimAttributes struct {
 	_ struct{} `type:"structure"`
+
+	// A string that indicates how DKIM was configured for the identity. There are
+	// two possible values:
+	//
+	//    * AWS_SES – Indicates that DKIM was configured for the identity by using
+	//    Easy DKIM (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html).
+	//
+	//    * EXTERNAL – Indicates that DKIM was configured for the identity by
+	//    using Bring Your Own DKIM (BYODKIM).
+	SigningAttributesOrigin *string `type:"string" enum:"DkimSigningAttributesOrigin"`
 
 	// If the value is true, then the messages that you send from the identity are
 	// signed using DKIM. If the value is false, then the messages that you send
@@ -5542,28 +11138,36 @@ type DkimAttributes struct {
 	// Describes whether or not Amazon SES has successfully located the DKIM records
 	// in the DNS records for the domain. The status can be one of the following:
 	//
-	//    * PENDING – Amazon SES hasn't yet detected the DKIM records in the DNS
-	//    configuration for the domain, but will continue to attempt to locate them.
+	//    * PENDING – The verification process was initiated, but Amazon SES hasn't
+	//    yet detected the DKIM records in the DNS configuration for the domain.
 	//
-	//    * SUCCESS – Amazon SES located the DKIM records in the DNS configuration
-	//    for the domain and determined that they're correct. You can now send DKIM-signed
-	//    email from the identity.
+	//    * SUCCESS – The verification process completed successfully.
 	//
-	//    * FAILED – Amazon SES wasn't able to locate the DKIM records in the
-	//    DNS settings for the domain, and won't continue to search for them.
+	//    * FAILED – The verification process failed. This typically occurs when
+	//    Amazon SES fails to find the DKIM records in the DNS configuration of
+	//    the domain.
 	//
-	//    * TEMPORARY_FAILURE – A temporary issue occurred, which prevented Amazon
-	//    SES from determining the DKIM status for the domain.
+	//    * TEMPORARY_FAILURE – A temporary issue is preventing Amazon SES from
+	//    determining the DKIM authentication status of the domain.
 	//
-	//    * NOT_STARTED – Amazon SES hasn't yet started searching for the DKIM
-	//    records in the DKIM records for the domain.
+	//    * NOT_STARTED – The DKIM verification process hasn't been initiated
+	//    for the domain.
 	Status *string `type:"string" enum:"DkimStatus"`
 
-	// A set of unique strings that you use to create a set of CNAME records that
+	// If you used Easy DKIM (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html)
+	// to configure DKIM authentication for the domain, then this object contains
+	// a set of unique strings that you use to create a set of CNAME records that
 	// you add to the DNS configuration for your domain. When Amazon SES detects
 	// these records in the DNS configuration for your domain, the DKIM authentication
-	// process is complete. Amazon SES usually detects these records within about
-	// 72 hours of adding them to the DNS configuration for your domain.
+	// process is complete.
+	//
+	// If you configured DKIM authentication for the domain by providing your own
+	// public-private key pair, then this object contains the selector for the public
+	// key.
+	//
+	// Regardless of the DKIM authentication method you use, Amazon SES searches
+	// for the appropriate records in the DNS configuration of the domain for up
+	// to 72 hours.
 	Tokens []*string `type:"list"`
 }
 
@@ -5575,6 +11179,12 @@ func (s DkimAttributes) String() string {
 // GoString returns the string representation
 func (s DkimAttributes) GoString() string {
 	return s.String()
+}
+
+// SetSigningAttributesOrigin sets the SigningAttributesOrigin field's value.
+func (s *DkimAttributes) SetSigningAttributesOrigin(v string) *DkimAttributes {
+	s.SigningAttributesOrigin = &v
+	return s
 }
 
 // SetSigningEnabled sets the SigningEnabled field's value.
@@ -5592,6 +11202,70 @@ func (s *DkimAttributes) SetStatus(v string) *DkimAttributes {
 // SetTokens sets the Tokens field's value.
 func (s *DkimAttributes) SetTokens(v []*string) *DkimAttributes {
 	s.Tokens = v
+	return s
+}
+
+// An object that contains information about the tokens used for setting up
+// Bring Your Own DKIM (BYODKIM).
+type DkimSigningAttributes struct {
+	_ struct{} `type:"structure"`
+
+	// A private key that's used to generate a DKIM signature.
+	//
+	// The private key must use 1024-bit RSA encryption, and must be encoded using
+	// base64 encoding.
+	//
+	// DomainSigningPrivateKey is a required field
+	DomainSigningPrivateKey *string `min:"1" type:"string" required:"true" sensitive:"true"`
+
+	// A string that's used to identify a public key in the DNS configuration for
+	// a domain.
+	//
+	// DomainSigningSelector is a required field
+	DomainSigningSelector *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DkimSigningAttributes) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DkimSigningAttributes) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DkimSigningAttributes) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DkimSigningAttributes"}
+	if s.DomainSigningPrivateKey == nil {
+		invalidParams.Add(request.NewErrParamRequired("DomainSigningPrivateKey"))
+	}
+	if s.DomainSigningPrivateKey != nil && len(*s.DomainSigningPrivateKey) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DomainSigningPrivateKey", 1))
+	}
+	if s.DomainSigningSelector == nil {
+		invalidParams.Add(request.NewErrParamRequired("DomainSigningSelector"))
+	}
+	if s.DomainSigningSelector != nil && len(*s.DomainSigningSelector) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("DomainSigningSelector", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDomainSigningPrivateKey sets the DomainSigningPrivateKey field's value.
+func (s *DkimSigningAttributes) SetDomainSigningPrivateKey(v string) *DkimSigningAttributes {
+	s.DomainSigningPrivateKey = &v
+	return s
+}
+
+// SetDomainSigningSelector sets the DomainSigningSelector field's value.
+func (s *DkimSigningAttributes) SetDomainSigningSelector(v string) *DkimSigningAttributes {
+	s.DomainSigningSelector = &v
 	return s
 }
 
@@ -5621,7 +11295,7 @@ type DomainDeliverabilityCampaign struct {
 	FirstSeenDateTime *time.Time `type:"timestamp"`
 
 	// The verified email address that the email message was sent from.
-	FromAddress *string `type:"string"`
+	FromAddress *string `min:"1" type:"string"`
 
 	// The URL of an image that contains a snapshot of the email message that was
 	// sent.
@@ -5928,6 +11602,11 @@ func (s *EmailContent) Validate() error {
 			invalidParams.AddNested("Simple", err.(request.ErrInvalidParams))
 		}
 	}
+	if s.Template != nil {
+		if err := s.Template.Validate(); err != nil {
+			invalidParams.AddNested("Template", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -5953,12 +11632,89 @@ func (s *EmailContent) SetTemplate(v *Template) *EmailContent {
 	return s
 }
 
+// The content of the email, composed of a subject line, an HTML part, and a
+// text-only part.
+type EmailTemplateContent struct {
+	_ struct{} `type:"structure"`
+
+	// The HTML body of the email.
+	Html *string `type:"string"`
+
+	// The subject line of the email.
+	Subject *string `type:"string"`
+
+	// The email body that will be visible to recipients whose email clients do
+	// not display HTML.
+	Text *string `type:"string"`
+}
+
+// String returns the string representation
+func (s EmailTemplateContent) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s EmailTemplateContent) GoString() string {
+	return s.String()
+}
+
+// SetHtml sets the Html field's value.
+func (s *EmailTemplateContent) SetHtml(v string) *EmailTemplateContent {
+	s.Html = &v
+	return s
+}
+
+// SetSubject sets the Subject field's value.
+func (s *EmailTemplateContent) SetSubject(v string) *EmailTemplateContent {
+	s.Subject = &v
+	return s
+}
+
+// SetText sets the Text field's value.
+func (s *EmailTemplateContent) SetText(v string) *EmailTemplateContent {
+	s.Text = &v
+	return s
+}
+
+// Contains information about an email template.
+type EmailTemplateMetadata struct {
+	_ struct{} `type:"structure"`
+
+	// The time and date the template was created.
+	CreatedTimestamp *time.Time `type:"timestamp"`
+
+	// The name of the template.
+	TemplateName *string `min:"1" type:"string"`
+}
+
+// String returns the string representation
+func (s EmailTemplateMetadata) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s EmailTemplateMetadata) GoString() string {
+	return s.String()
+}
+
+// SetCreatedTimestamp sets the CreatedTimestamp field's value.
+func (s *EmailTemplateMetadata) SetCreatedTimestamp(v time.Time) *EmailTemplateMetadata {
+	s.CreatedTimestamp = &v
+	return s
+}
+
+// SetTemplateName sets the TemplateName field's value.
+func (s *EmailTemplateMetadata) SetTemplateName(v string) *EmailTemplateMetadata {
+	s.TemplateName = &v
+	return s
+}
+
 // In the Amazon SES API v2, events include message sends, deliveries, opens,
-// clicks, bounces, and complaints. Event destinations are places that you can
-// send information about these events to. For example, you can send event data
-// to Amazon SNS to receive notifications when you receive bounces or complaints,
-// or you can use Amazon Kinesis Data Firehose to stream data to Amazon S3 for
-// long-term storage.
+// clicks, bounces, complaints and delivery delays. Event destinations are places
+// that you can send information about these events to. For example, you can
+// send event data to Amazon SNS to receive notifications when you receive bounces
+// or complaints, or you can use Amazon Kinesis Data Firehose to stream data
+// to Amazon S3 for long-term storage.
 type EventDestination struct {
 	_ struct{} `type:"structure"`
 
@@ -6164,6 +11920,40 @@ func (s *EventDestinationDefinition) SetSnsDestination(v *SnsDestination) *Event
 	return s
 }
 
+// An object that contains the failure details about an import job.
+type FailureInfo struct {
+	_ struct{} `type:"structure"`
+
+	// A message about why the import job failed.
+	ErrorMessage *string `type:"string"`
+
+	// An Amazon S3 presigned URL that contains all the failed records and related
+	// information.
+	FailedRecordsS3Url *string `type:"string"`
+}
+
+// String returns the string representation
+func (s FailureInfo) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s FailureInfo) GoString() string {
+	return s.String()
+}
+
+// SetErrorMessage sets the ErrorMessage field's value.
+func (s *FailureInfo) SetErrorMessage(v string) *FailureInfo {
+	s.ErrorMessage = &v
+	return s
+}
+
+// SetFailedRecordsS3Url sets the FailedRecordsS3Url field's value.
+func (s *FailureInfo) SetFailedRecordsS3Url(v string) *FailureInfo {
+	s.FailedRecordsS3Url = &v
+	return s
+}
+
 // A request to obtain information about the email-sending capabilities of your
 // Amazon SES account.
 type GetAccountInput struct {
@@ -6188,6 +11978,9 @@ type GetAccountOutput struct {
 	// Indicates whether or not the automatic warm-up feature is enabled for dedicated
 	// IP addresses that are associated with your account.
 	DedicatedIpAutoWarmupEnabled *bool `type:"boolean"`
+
+	// An object that defines your account details.
+	Details *AccountDetails `type:"structure"`
 
 	// The reputation status of your Amazon SES account. The status can be one of
 	// the following:
@@ -6227,6 +12020,10 @@ type GetAccountOutput struct {
 	// Indicates whether or not email sending is enabled for your Amazon SES account
 	// in the current AWS Region.
 	SendingEnabled *bool `type:"boolean"`
+
+	// An object that contains information about the email address suppression preferences
+	// for your account in the current AWS Region.
+	SuppressionAttributes *SuppressionAttributes `type:"structure"`
 }
 
 // String returns the string representation
@@ -6242,6 +12039,12 @@ func (s GetAccountOutput) GoString() string {
 // SetDedicatedIpAutoWarmupEnabled sets the DedicatedIpAutoWarmupEnabled field's value.
 func (s *GetAccountOutput) SetDedicatedIpAutoWarmupEnabled(v bool) *GetAccountOutput {
 	s.DedicatedIpAutoWarmupEnabled = &v
+	return s
+}
+
+// SetDetails sets the Details field's value.
+func (s *GetAccountOutput) SetDetails(v *AccountDetails) *GetAccountOutput {
+	s.Details = v
 	return s
 }
 
@@ -6266,6 +12069,12 @@ func (s *GetAccountOutput) SetSendQuota(v *SendQuota) *GetAccountOutput {
 // SetSendingEnabled sets the SendingEnabled field's value.
 func (s *GetAccountOutput) SetSendingEnabled(v bool) *GetAccountOutput {
 	s.SendingEnabled = &v
+	return s
+}
+
+// SetSuppressionAttributes sets the SuppressionAttributes field's value.
+func (s *GetAccountOutput) SetSuppressionAttributes(v *SuppressionAttributes) *GetAccountOutput {
+	s.SuppressionAttributes = v
 	return s
 }
 
@@ -6468,6 +12277,10 @@ type GetConfigurationSetOutput struct {
 	// send using the configuration set.
 	SendingOptions *SendingOptions `type:"structure"`
 
+	// An object that contains information about the suppression list preferences
+	// for your account.
+	SuppressionOptions *SuppressionOptions `type:"structure"`
+
 	// An array of objects that define the tags (keys and values) that are associated
 	// with the configuration set.
 	Tags []*Tag `type:"list"`
@@ -6511,6 +12324,12 @@ func (s *GetConfigurationSetOutput) SetSendingOptions(v *SendingOptions) *GetCon
 	return s
 }
 
+// SetSuppressionOptions sets the SuppressionOptions field's value.
+func (s *GetConfigurationSetOutput) SetSuppressionOptions(v *SuppressionOptions) *GetConfigurationSetOutput {
+	s.SuppressionOptions = v
+	return s
+}
+
 // SetTags sets the Tags field's value.
 func (s *GetConfigurationSetOutput) SetTags(v []*Tag) *GetConfigurationSetOutput {
 	s.Tags = v
@@ -6520,6 +12339,374 @@ func (s *GetConfigurationSetOutput) SetTags(v []*Tag) *GetConfigurationSetOutput
 // SetTrackingOptions sets the TrackingOptions field's value.
 func (s *GetConfigurationSetOutput) SetTrackingOptions(v *TrackingOptions) *GetConfigurationSetOutput {
 	s.TrackingOptions = v
+	return s
+}
+
+type GetContactInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the contact list to which the contact belongs.
+	//
+	// ContactListName is a required field
+	ContactListName *string `location:"uri" locationName:"ContactListName" type:"string" required:"true"`
+
+	// The contact's email addres.
+	//
+	// EmailAddress is a required field
+	EmailAddress *string `location:"uri" locationName:"EmailAddress" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetContactInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetContactInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetContactInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetContactInput"}
+	if s.ContactListName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ContactListName"))
+	}
+	if s.ContactListName != nil && len(*s.ContactListName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ContactListName", 1))
+	}
+	if s.EmailAddress == nil {
+		invalidParams.Add(request.NewErrParamRequired("EmailAddress"))
+	}
+	if s.EmailAddress != nil && len(*s.EmailAddress) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EmailAddress", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContactListName sets the ContactListName field's value.
+func (s *GetContactInput) SetContactListName(v string) *GetContactInput {
+	s.ContactListName = &v
+	return s
+}
+
+// SetEmailAddress sets the EmailAddress field's value.
+func (s *GetContactInput) SetEmailAddress(v string) *GetContactInput {
+	s.EmailAddress = &v
+	return s
+}
+
+type GetContactListInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the contact list.
+	//
+	// ContactListName is a required field
+	ContactListName *string `location:"uri" locationName:"ContactListName" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetContactListInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetContactListInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetContactListInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetContactListInput"}
+	if s.ContactListName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ContactListName"))
+	}
+	if s.ContactListName != nil && len(*s.ContactListName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ContactListName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContactListName sets the ContactListName field's value.
+func (s *GetContactListInput) SetContactListName(v string) *GetContactListInput {
+	s.ContactListName = &v
+	return s
+}
+
+type GetContactListOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the contact list.
+	ContactListName *string `type:"string"`
+
+	// A timestamp noting when the contact list was created.
+	CreatedTimestamp *time.Time `type:"timestamp"`
+
+	// A description of what the contact list is about.
+	Description *string `type:"string"`
+
+	// A timestamp noting the last time the contact list was updated.
+	LastUpdatedTimestamp *time.Time `type:"timestamp"`
+
+	// The tags associated with a contact list.
+	Tags []*Tag `type:"list"`
+
+	// An interest group, theme, or label within a list. A contact list can have
+	// multiple topics.
+	Topics []*Topic `type:"list"`
+}
+
+// String returns the string representation
+func (s GetContactListOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetContactListOutput) GoString() string {
+	return s.String()
+}
+
+// SetContactListName sets the ContactListName field's value.
+func (s *GetContactListOutput) SetContactListName(v string) *GetContactListOutput {
+	s.ContactListName = &v
+	return s
+}
+
+// SetCreatedTimestamp sets the CreatedTimestamp field's value.
+func (s *GetContactListOutput) SetCreatedTimestamp(v time.Time) *GetContactListOutput {
+	s.CreatedTimestamp = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *GetContactListOutput) SetDescription(v string) *GetContactListOutput {
+	s.Description = &v
+	return s
+}
+
+// SetLastUpdatedTimestamp sets the LastUpdatedTimestamp field's value.
+func (s *GetContactListOutput) SetLastUpdatedTimestamp(v time.Time) *GetContactListOutput {
+	s.LastUpdatedTimestamp = &v
+	return s
+}
+
+// SetTags sets the Tags field's value.
+func (s *GetContactListOutput) SetTags(v []*Tag) *GetContactListOutput {
+	s.Tags = v
+	return s
+}
+
+// SetTopics sets the Topics field's value.
+func (s *GetContactListOutput) SetTopics(v []*Topic) *GetContactListOutput {
+	s.Topics = v
+	return s
+}
+
+type GetContactOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The attribute data attached to a contact.
+	AttributesData *string `type:"string"`
+
+	// The name of the contact list to which the contact belongs.
+	ContactListName *string `type:"string"`
+
+	// A timestamp noting when the contact was created.
+	CreatedTimestamp *time.Time `type:"timestamp"`
+
+	// The contact's email addres.
+	EmailAddress *string `type:"string"`
+
+	// A timestamp noting the last time the contact's information was updated.
+	LastUpdatedTimestamp *time.Time `type:"timestamp"`
+
+	// The default topic preferences applied to the contact.
+	TopicDefaultPreferences []*TopicPreference `type:"list"`
+
+	// The contact's preference for being opted-in to or opted-out of a topic.>
+	TopicPreferences []*TopicPreference `type:"list"`
+
+	// A boolean value status noting if the contact is unsubscribed from all contact
+	// list topics.
+	UnsubscribeAll *bool `type:"boolean"`
+}
+
+// String returns the string representation
+func (s GetContactOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetContactOutput) GoString() string {
+	return s.String()
+}
+
+// SetAttributesData sets the AttributesData field's value.
+func (s *GetContactOutput) SetAttributesData(v string) *GetContactOutput {
+	s.AttributesData = &v
+	return s
+}
+
+// SetContactListName sets the ContactListName field's value.
+func (s *GetContactOutput) SetContactListName(v string) *GetContactOutput {
+	s.ContactListName = &v
+	return s
+}
+
+// SetCreatedTimestamp sets the CreatedTimestamp field's value.
+func (s *GetContactOutput) SetCreatedTimestamp(v time.Time) *GetContactOutput {
+	s.CreatedTimestamp = &v
+	return s
+}
+
+// SetEmailAddress sets the EmailAddress field's value.
+func (s *GetContactOutput) SetEmailAddress(v string) *GetContactOutput {
+	s.EmailAddress = &v
+	return s
+}
+
+// SetLastUpdatedTimestamp sets the LastUpdatedTimestamp field's value.
+func (s *GetContactOutput) SetLastUpdatedTimestamp(v time.Time) *GetContactOutput {
+	s.LastUpdatedTimestamp = &v
+	return s
+}
+
+// SetTopicDefaultPreferences sets the TopicDefaultPreferences field's value.
+func (s *GetContactOutput) SetTopicDefaultPreferences(v []*TopicPreference) *GetContactOutput {
+	s.TopicDefaultPreferences = v
+	return s
+}
+
+// SetTopicPreferences sets the TopicPreferences field's value.
+func (s *GetContactOutput) SetTopicPreferences(v []*TopicPreference) *GetContactOutput {
+	s.TopicPreferences = v
+	return s
+}
+
+// SetUnsubscribeAll sets the UnsubscribeAll field's value.
+func (s *GetContactOutput) SetUnsubscribeAll(v bool) *GetContactOutput {
+	s.UnsubscribeAll = &v
+	return s
+}
+
+// Represents a request to retrieve an existing custom verification email template.
+type GetCustomVerificationEmailTemplateInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the custom verification email template that you want to retrieve.
+	//
+	// TemplateName is a required field
+	TemplateName *string `location:"uri" locationName:"TemplateName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetCustomVerificationEmailTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetCustomVerificationEmailTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetCustomVerificationEmailTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetCustomVerificationEmailTemplateInput"}
+	if s.TemplateName == nil {
+		invalidParams.Add(request.NewErrParamRequired("TemplateName"))
+	}
+	if s.TemplateName != nil && len(*s.TemplateName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TemplateName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetTemplateName sets the TemplateName field's value.
+func (s *GetCustomVerificationEmailTemplateInput) SetTemplateName(v string) *GetCustomVerificationEmailTemplateInput {
+	s.TemplateName = &v
+	return s
+}
+
+// The following elements are returned by the service.
+type GetCustomVerificationEmailTemplateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The URL that the recipient of the verification email is sent to if his or
+	// her address is not successfully verified.
+	FailureRedirectionURL *string `type:"string"`
+
+	// The email address that the custom verification email is sent from.
+	FromEmailAddress *string `type:"string"`
+
+	// The URL that the recipient of the verification email is sent to if his or
+	// her address is successfully verified.
+	SuccessRedirectionURL *string `type:"string"`
+
+	// The content of the custom verification email.
+	TemplateContent *string `type:"string"`
+
+	// The name of the custom verification email template.
+	TemplateName *string `min:"1" type:"string"`
+
+	// The subject line of the custom verification email.
+	TemplateSubject *string `type:"string"`
+}
+
+// String returns the string representation
+func (s GetCustomVerificationEmailTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetCustomVerificationEmailTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// SetFailureRedirectionURL sets the FailureRedirectionURL field's value.
+func (s *GetCustomVerificationEmailTemplateOutput) SetFailureRedirectionURL(v string) *GetCustomVerificationEmailTemplateOutput {
+	s.FailureRedirectionURL = &v
+	return s
+}
+
+// SetFromEmailAddress sets the FromEmailAddress field's value.
+func (s *GetCustomVerificationEmailTemplateOutput) SetFromEmailAddress(v string) *GetCustomVerificationEmailTemplateOutput {
+	s.FromEmailAddress = &v
+	return s
+}
+
+// SetSuccessRedirectionURL sets the SuccessRedirectionURL field's value.
+func (s *GetCustomVerificationEmailTemplateOutput) SetSuccessRedirectionURL(v string) *GetCustomVerificationEmailTemplateOutput {
+	s.SuccessRedirectionURL = &v
+	return s
+}
+
+// SetTemplateContent sets the TemplateContent field's value.
+func (s *GetCustomVerificationEmailTemplateOutput) SetTemplateContent(v string) *GetCustomVerificationEmailTemplateOutput {
+	s.TemplateContent = &v
+	return s
+}
+
+// SetTemplateName sets the TemplateName field's value.
+func (s *GetCustomVerificationEmailTemplateOutput) SetTemplateName(v string) *GetCustomVerificationEmailTemplateOutput {
+	s.TemplateName = &v
+	return s
+}
+
+// SetTemplateSubject sets the TemplateSubject field's value.
+func (s *GetCustomVerificationEmailTemplateOutput) SetTemplateSubject(v string) *GetCustomVerificationEmailTemplateOutput {
+	s.TemplateSubject = &v
 	return s
 }
 
@@ -6962,7 +13149,7 @@ type GetDomainStatisticsReportInput struct {
 	// The domain that you want to obtain deliverability metrics for.
 	//
 	// Domain is a required field
-	Domain *string `location:"uri" locationName:"Domain" type:"string" required:"true"`
+	Domain *string `location:"uri" locationName:"Domain" min:"1" type:"string" required:"true"`
 
 	// The last day (in Unix time) that you want to obtain domain deliverability
 	// metrics for. The EndDate that you specify has to be less than or equal to
@@ -7077,7 +13264,7 @@ type GetEmailIdentityInput struct {
 	// The email identity that you want to retrieve details for.
 	//
 	// EmailIdentity is a required field
-	EmailIdentity *string `location:"uri" locationName:"EmailIdentity" type:"string" required:"true"`
+	EmailIdentity *string `location:"uri" locationName:"EmailIdentity" min:"1" type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -7117,8 +13304,6 @@ type GetEmailIdentityOutput struct {
 	_ struct{} `type:"structure"`
 
 	// An object that contains information about the DKIM attributes for the identity.
-	// This object includes the tokens that you use to create the CNAME records
-	// that are required to complete the DKIM verification process.
 	DkimAttributes *DkimAttributes `type:"structure"`
 
 	// The feedback forwarding configuration for the identity.
@@ -7139,6 +13324,9 @@ type GetEmailIdentityOutput struct {
 	// An object that contains information about the Mail-From attributes for the
 	// email identity.
 	MailFromAttributes *MailFromAttributes `type:"structure"`
+
+	// A map of policy names to policies.
+	Policies map[string]*string `type:"map"`
 
 	// An array of objects that define the tags (keys and values) that are associated
 	// with the email identity.
@@ -7184,6 +13372,12 @@ func (s *GetEmailIdentityOutput) SetMailFromAttributes(v *MailFromAttributes) *G
 	return s
 }
 
+// SetPolicies sets the Policies field's value.
+func (s *GetEmailIdentityOutput) SetPolicies(v map[string]*string) *GetEmailIdentityOutput {
+	s.Policies = v
+	return s
+}
+
 // SetTags sets the Tags field's value.
 func (s *GetEmailIdentityOutput) SetTags(v []*Tag) *GetEmailIdentityOutput {
 	s.Tags = v
@@ -7196,12 +13390,369 @@ func (s *GetEmailIdentityOutput) SetVerifiedForSendingStatus(v bool) *GetEmailId
 	return s
 }
 
+// A request to return the policies of an email identity.
+type GetEmailIdentityPoliciesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The email identity that you want to retrieve policies for.
+	//
+	// EmailIdentity is a required field
+	EmailIdentity *string `location:"uri" locationName:"EmailIdentity" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetEmailIdentityPoliciesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetEmailIdentityPoliciesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetEmailIdentityPoliciesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetEmailIdentityPoliciesInput"}
+	if s.EmailIdentity == nil {
+		invalidParams.Add(request.NewErrParamRequired("EmailIdentity"))
+	}
+	if s.EmailIdentity != nil && len(*s.EmailIdentity) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EmailIdentity", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEmailIdentity sets the EmailIdentity field's value.
+func (s *GetEmailIdentityPoliciesInput) SetEmailIdentity(v string) *GetEmailIdentityPoliciesInput {
+	s.EmailIdentity = &v
+	return s
+}
+
+// Identity policies associated with email identity.
+type GetEmailIdentityPoliciesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A map of policy names to policies.
+	Policies map[string]*string `type:"map"`
+}
+
+// String returns the string representation
+func (s GetEmailIdentityPoliciesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetEmailIdentityPoliciesOutput) GoString() string {
+	return s.String()
+}
+
+// SetPolicies sets the Policies field's value.
+func (s *GetEmailIdentityPoliciesOutput) SetPolicies(v map[string]*string) *GetEmailIdentityPoliciesOutput {
+	s.Policies = v
+	return s
+}
+
+// Represents a request to display the template object (which includes the subject
+// line, HTML part and text part) for the template you specify.
+type GetEmailTemplateInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the template you want to retrieve.
+	//
+	// TemplateName is a required field
+	TemplateName *string `location:"uri" locationName:"TemplateName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetEmailTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetEmailTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetEmailTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetEmailTemplateInput"}
+	if s.TemplateName == nil {
+		invalidParams.Add(request.NewErrParamRequired("TemplateName"))
+	}
+	if s.TemplateName != nil && len(*s.TemplateName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TemplateName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetTemplateName sets the TemplateName field's value.
+func (s *GetEmailTemplateInput) SetTemplateName(v string) *GetEmailTemplateInput {
+	s.TemplateName = &v
+	return s
+}
+
+// The following element is returned by the service.
+type GetEmailTemplateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The content of the email template, composed of a subject line, an HTML part,
+	// and a text-only part.
+	//
+	// TemplateContent is a required field
+	TemplateContent *EmailTemplateContent `type:"structure" required:"true"`
+
+	// The name of the template you want to retrieve.
+	//
+	// TemplateName is a required field
+	TemplateName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetEmailTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetEmailTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// SetTemplateContent sets the TemplateContent field's value.
+func (s *GetEmailTemplateOutput) SetTemplateContent(v *EmailTemplateContent) *GetEmailTemplateOutput {
+	s.TemplateContent = v
+	return s
+}
+
+// SetTemplateName sets the TemplateName field's value.
+func (s *GetEmailTemplateOutput) SetTemplateName(v string) *GetEmailTemplateOutput {
+	s.TemplateName = &v
+	return s
+}
+
+// Represents a request for information about an import job using the import
+// job ID.
+type GetImportJobInput struct {
+	_ struct{} `type:"structure"`
+
+	// The ID of the import job.
+	//
+	// JobId is a required field
+	JobId *string `location:"uri" locationName:"JobId" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetImportJobInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetImportJobInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetImportJobInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetImportJobInput"}
+	if s.JobId == nil {
+		invalidParams.Add(request.NewErrParamRequired("JobId"))
+	}
+	if s.JobId != nil && len(*s.JobId) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("JobId", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetJobId sets the JobId field's value.
+func (s *GetImportJobInput) SetJobId(v string) *GetImportJobInput {
+	s.JobId = &v
+	return s
+}
+
+// An HTTP 200 response if the request succeeds, or an error message if the
+// request fails.
+type GetImportJobOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The time stamp of when the import job was completed.
+	CompletedTimestamp *time.Time `type:"timestamp"`
+
+	// The time stamp of when the import job was created.
+	CreatedTimestamp *time.Time `type:"timestamp"`
+
+	// The number of records that failed processing because of invalid input or
+	// other reasons.
+	FailedRecordsCount *int64 `type:"integer"`
+
+	// The failure details about an import job.
+	FailureInfo *FailureInfo `type:"structure"`
+
+	// The data source of the import job.
+	ImportDataSource *ImportDataSource `type:"structure"`
+
+	// The destination of the import job.
+	ImportDestination *ImportDestination `type:"structure"`
+
+	// A string that represents the import job ID.
+	JobId *string `min:"1" type:"string"`
+
+	// The status of the import job.
+	JobStatus *string `type:"string" enum:"JobStatus"`
+
+	// The current number of records processed.
+	ProcessedRecordsCount *int64 `type:"integer"`
+}
+
+// String returns the string representation
+func (s GetImportJobOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetImportJobOutput) GoString() string {
+	return s.String()
+}
+
+// SetCompletedTimestamp sets the CompletedTimestamp field's value.
+func (s *GetImportJobOutput) SetCompletedTimestamp(v time.Time) *GetImportJobOutput {
+	s.CompletedTimestamp = &v
+	return s
+}
+
+// SetCreatedTimestamp sets the CreatedTimestamp field's value.
+func (s *GetImportJobOutput) SetCreatedTimestamp(v time.Time) *GetImportJobOutput {
+	s.CreatedTimestamp = &v
+	return s
+}
+
+// SetFailedRecordsCount sets the FailedRecordsCount field's value.
+func (s *GetImportJobOutput) SetFailedRecordsCount(v int64) *GetImportJobOutput {
+	s.FailedRecordsCount = &v
+	return s
+}
+
+// SetFailureInfo sets the FailureInfo field's value.
+func (s *GetImportJobOutput) SetFailureInfo(v *FailureInfo) *GetImportJobOutput {
+	s.FailureInfo = v
+	return s
+}
+
+// SetImportDataSource sets the ImportDataSource field's value.
+func (s *GetImportJobOutput) SetImportDataSource(v *ImportDataSource) *GetImportJobOutput {
+	s.ImportDataSource = v
+	return s
+}
+
+// SetImportDestination sets the ImportDestination field's value.
+func (s *GetImportJobOutput) SetImportDestination(v *ImportDestination) *GetImportJobOutput {
+	s.ImportDestination = v
+	return s
+}
+
+// SetJobId sets the JobId field's value.
+func (s *GetImportJobOutput) SetJobId(v string) *GetImportJobOutput {
+	s.JobId = &v
+	return s
+}
+
+// SetJobStatus sets the JobStatus field's value.
+func (s *GetImportJobOutput) SetJobStatus(v string) *GetImportJobOutput {
+	s.JobStatus = &v
+	return s
+}
+
+// SetProcessedRecordsCount sets the ProcessedRecordsCount field's value.
+func (s *GetImportJobOutput) SetProcessedRecordsCount(v int64) *GetImportJobOutput {
+	s.ProcessedRecordsCount = &v
+	return s
+}
+
+// A request to retrieve information about an email address that's on the suppression
+// list for your account.
+type GetSuppressedDestinationInput struct {
+	_ struct{} `type:"structure"`
+
+	// The email address that's on the account suppression list.
+	//
+	// EmailAddress is a required field
+	EmailAddress *string `location:"uri" locationName:"EmailAddress" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetSuppressedDestinationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetSuppressedDestinationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetSuppressedDestinationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetSuppressedDestinationInput"}
+	if s.EmailAddress == nil {
+		invalidParams.Add(request.NewErrParamRequired("EmailAddress"))
+	}
+	if s.EmailAddress != nil && len(*s.EmailAddress) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EmailAddress", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEmailAddress sets the EmailAddress field's value.
+func (s *GetSuppressedDestinationInput) SetEmailAddress(v string) *GetSuppressedDestinationInput {
+	s.EmailAddress = &v
+	return s
+}
+
+// Information about the suppressed email address.
+type GetSuppressedDestinationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// An object containing information about the suppressed email address.
+	//
+	// SuppressedDestination is a required field
+	SuppressedDestination *SuppressedDestination `type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s GetSuppressedDestinationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetSuppressedDestinationOutput) GoString() string {
+	return s.String()
+}
+
+// SetSuppressedDestination sets the SuppressedDestination field's value.
+func (s *GetSuppressedDestinationOutput) SetSuppressedDestination(v *SuppressedDestination) *GetSuppressedDestinationOutput {
+	s.SuppressedDestination = v
+	return s
+}
+
 // Information about an email identity.
 type IdentityInfo struct {
 	_ struct{} `type:"structure"`
 
 	// The address or domain of the identity.
-	IdentityName *string `type:"string"`
+	IdentityName *string `min:"1" type:"string"`
 
 	// The email identity type. The identity type can be one of the following:
 	//
@@ -7248,6 +13799,166 @@ func (s *IdentityInfo) SetSendingEnabled(v bool) *IdentityInfo {
 	return s
 }
 
+// An object that contains details about the data source of the import job.
+type ImportDataSource struct {
+	_ struct{} `type:"structure"`
+
+	// The data format of the import job's data source.
+	//
+	// DataFormat is a required field
+	DataFormat *string `type:"string" required:"true" enum:"DataFormat"`
+
+	// An Amazon S3 URL in the format s3://<bucket_name>/<object>.
+	//
+	// S3Url is a required field
+	S3Url *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s ImportDataSource) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ImportDataSource) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ImportDataSource) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ImportDataSource"}
+	if s.DataFormat == nil {
+		invalidParams.Add(request.NewErrParamRequired("DataFormat"))
+	}
+	if s.S3Url == nil {
+		invalidParams.Add(request.NewErrParamRequired("S3Url"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDataFormat sets the DataFormat field's value.
+func (s *ImportDataSource) SetDataFormat(v string) *ImportDataSource {
+	s.DataFormat = &v
+	return s
+}
+
+// SetS3Url sets the S3Url field's value.
+func (s *ImportDataSource) SetS3Url(v string) *ImportDataSource {
+	s.S3Url = &v
+	return s
+}
+
+// An object that contains details about the resource destination the import
+// job is going to target.
+type ImportDestination struct {
+	_ struct{} `type:"structure"`
+
+	// An object that contains the action of the import job towards a contact list.
+	ContactListDestination *ContactListDestination `type:"structure"`
+
+	// An object that contains the action of the import job towards suppression
+	// list.
+	SuppressionListDestination *SuppressionListDestination `type:"structure"`
+}
+
+// String returns the string representation
+func (s ImportDestination) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ImportDestination) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ImportDestination) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ImportDestination"}
+	if s.ContactListDestination != nil {
+		if err := s.ContactListDestination.Validate(); err != nil {
+			invalidParams.AddNested("ContactListDestination", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.SuppressionListDestination != nil {
+		if err := s.SuppressionListDestination.Validate(); err != nil {
+			invalidParams.AddNested("SuppressionListDestination", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContactListDestination sets the ContactListDestination field's value.
+func (s *ImportDestination) SetContactListDestination(v *ContactListDestination) *ImportDestination {
+	s.ContactListDestination = v
+	return s
+}
+
+// SetSuppressionListDestination sets the SuppressionListDestination field's value.
+func (s *ImportDestination) SetSuppressionListDestination(v *SuppressionListDestination) *ImportDestination {
+	s.SuppressionListDestination = v
+	return s
+}
+
+// A summary of the import job.
+type ImportJobSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The date and time when the import job was created.
+	CreatedTimestamp *time.Time `type:"timestamp"`
+
+	// An object that contains details about the resource destination the import
+	// job is going to target.
+	ImportDestination *ImportDestination `type:"structure"`
+
+	// A string that represents the import job ID.
+	JobId *string `min:"1" type:"string"`
+
+	// The status of the import job.
+	JobStatus *string `type:"string" enum:"JobStatus"`
+}
+
+// String returns the string representation
+func (s ImportJobSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ImportJobSummary) GoString() string {
+	return s.String()
+}
+
+// SetCreatedTimestamp sets the CreatedTimestamp field's value.
+func (s *ImportJobSummary) SetCreatedTimestamp(v time.Time) *ImportJobSummary {
+	s.CreatedTimestamp = &v
+	return s
+}
+
+// SetImportDestination sets the ImportDestination field's value.
+func (s *ImportJobSummary) SetImportDestination(v *ImportDestination) *ImportJobSummary {
+	s.ImportDestination = v
+	return s
+}
+
+// SetJobId sets the JobId field's value.
+func (s *ImportJobSummary) SetJobId(v string) *ImportJobSummary {
+	s.JobId = &v
+	return s
+}
+
+// SetJobStatus sets the JobStatus field's value.
+func (s *ImportJobSummary) SetJobStatus(v string) *ImportJobSummary {
+	s.JobStatus = &v
+	return s
+}
+
 // An object that contains information about the inbox placement data settings
 // for a verified domain that’s associated with your AWS account. This data
 // is available only if you enabled the Deliverability dashboard for the domain.
@@ -7282,6 +13993,62 @@ func (s *InboxPlacementTrackingOption) SetGlobal(v bool) *InboxPlacementTracking
 func (s *InboxPlacementTrackingOption) SetTrackedIsps(v []*string) *InboxPlacementTrackingOption {
 	s.TrackedIsps = v
 	return s
+}
+
+// The specified request includes an invalid or expired token.
+type InvalidNextTokenException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s InvalidNextTokenException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InvalidNextTokenException) GoString() string {
+	return s.String()
+}
+
+func newErrorInvalidNextTokenException(v protocol.ResponseMetadata) error {
+	return &InvalidNextTokenException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *InvalidNextTokenException) Code() string {
+	return "InvalidNextTokenException"
+}
+
+// Message returns the exception's message.
+func (s *InvalidNextTokenException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *InvalidNextTokenException) OrigErr() error {
+	return nil
+}
+
+func (s *InvalidNextTokenException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *InvalidNextTokenException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *InvalidNextTokenException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 // An object that describes how email sent during the predictive inbox placement
@@ -7375,6 +14142,62 @@ func (s *KinesisFirehoseDestination) SetIamRoleArn(v string) *KinesisFirehoseDes
 	return s
 }
 
+// There are too many instances of the specified resource type.
+type LimitExceededException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s LimitExceededException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s LimitExceededException) GoString() string {
+	return s.String()
+}
+
+func newErrorLimitExceededException(v protocol.ResponseMetadata) error {
+	return &LimitExceededException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *LimitExceededException) Code() string {
+	return "LimitExceededException"
+}
+
+// Message returns the exception's message.
+func (s *LimitExceededException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *LimitExceededException) OrigErr() error {
+	return nil
+}
+
+func (s *LimitExceededException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *LimitExceededException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *LimitExceededException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // A request to obtain a list of configuration sets for your Amazon SES account
 // in the current AWS Region.
 type ListConfigurationSetsInput struct {
@@ -7446,6 +14269,295 @@ func (s *ListConfigurationSetsOutput) SetConfigurationSets(v []*string) *ListCon
 
 // SetNextToken sets the NextToken field's value.
 func (s *ListConfigurationSetsOutput) SetNextToken(v string) *ListConfigurationSetsOutput {
+	s.NextToken = &v
+	return s
+}
+
+type ListContactListsInput struct {
+	_ struct{} `type:"structure"`
+
+	// A string token indicating that there might be additional contact lists available
+	// to be listed. Use the token provided in the Response to use in the subsequent
+	// call to ListContactLists with the same parameters to retrieve the next page
+	// of contact lists.
+	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
+
+	// Maximum number of contact lists to return at once. Use this parameter to
+	// paginate results. If additional contact lists exist beyond the specified
+	// limit, the NextToken element is sent in the response. Use the NextToken value
+	// in subsequent requests to retrieve additional lists.
+	PageSize *int64 `location:"querystring" locationName:"PageSize" type:"integer"`
+}
+
+// String returns the string representation
+func (s ListContactListsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListContactListsInput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListContactListsInput) SetNextToken(v string) *ListContactListsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPageSize sets the PageSize field's value.
+func (s *ListContactListsInput) SetPageSize(v int64) *ListContactListsInput {
+	s.PageSize = &v
+	return s
+}
+
+type ListContactListsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The available contact lists.
+	ContactLists []*ContactList `type:"list"`
+
+	// A string token indicating that there might be additional contact lists available
+	// to be listed. Copy this token to a subsequent call to ListContactLists with
+	// the same parameters to retrieve the next page of contact lists.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ListContactListsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListContactListsOutput) GoString() string {
+	return s.String()
+}
+
+// SetContactLists sets the ContactLists field's value.
+func (s *ListContactListsOutput) SetContactLists(v []*ContactList) *ListContactListsOutput {
+	s.ContactLists = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListContactListsOutput) SetNextToken(v string) *ListContactListsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// A filter that can be applied to a list of contacts.
+type ListContactsFilter struct {
+	_ struct{} `type:"structure"`
+
+	// The status by which you are filtering: OPT_IN or OPT_OUT.
+	FilteredStatus *string `type:"string" enum:"SubscriptionStatus"`
+
+	// Used for filtering by a specific topic preference.
+	TopicFilter *TopicFilter `type:"structure"`
+}
+
+// String returns the string representation
+func (s ListContactsFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListContactsFilter) GoString() string {
+	return s.String()
+}
+
+// SetFilteredStatus sets the FilteredStatus field's value.
+func (s *ListContactsFilter) SetFilteredStatus(v string) *ListContactsFilter {
+	s.FilteredStatus = &v
+	return s
+}
+
+// SetTopicFilter sets the TopicFilter field's value.
+func (s *ListContactsFilter) SetTopicFilter(v *TopicFilter) *ListContactsFilter {
+	s.TopicFilter = v
+	return s
+}
+
+type ListContactsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the contact list.
+	//
+	// ContactListName is a required field
+	ContactListName *string `location:"uri" locationName:"ContactListName" type:"string" required:"true"`
+
+	// A filter that can be applied to a list of contacts.
+	Filter *ListContactsFilter `type:"structure"`
+
+	// A string token indicating that there might be additional contacts available
+	// to be listed. Use the token provided in the Response to use in the subsequent
+	// call to ListContacts with the same parameters to retrieve the next page of
+	// contacts.
+	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
+
+	// The number of contacts that may be returned at once, which is dependent on
+	// if there are more or less contacts than the value of the PageSize. Use this
+	// parameter to paginate results. If additional contacts exist beyond the specified
+	// limit, the NextToken element is sent in the response. Use the NextToken value
+	// in subsequent requests to retrieve additional contacts.
+	PageSize *int64 `location:"querystring" locationName:"PageSize" type:"integer"`
+}
+
+// String returns the string representation
+func (s ListContactsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListContactsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListContactsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListContactsInput"}
+	if s.ContactListName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ContactListName"))
+	}
+	if s.ContactListName != nil && len(*s.ContactListName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ContactListName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContactListName sets the ContactListName field's value.
+func (s *ListContactsInput) SetContactListName(v string) *ListContactsInput {
+	s.ContactListName = &v
+	return s
+}
+
+// SetFilter sets the Filter field's value.
+func (s *ListContactsInput) SetFilter(v *ListContactsFilter) *ListContactsInput {
+	s.Filter = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListContactsInput) SetNextToken(v string) *ListContactsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPageSize sets the PageSize field's value.
+func (s *ListContactsInput) SetPageSize(v int64) *ListContactsInput {
+	s.PageSize = &v
+	return s
+}
+
+type ListContactsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The contacts present in a specific contact list.
+	Contacts []*Contact `type:"list"`
+
+	// A string token indicating that there might be additional contacts available
+	// to be listed. Copy this token to a subsequent call to ListContacts with the
+	// same parameters to retrieve the next page of contacts.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ListContactsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListContactsOutput) GoString() string {
+	return s.String()
+}
+
+// SetContacts sets the Contacts field's value.
+func (s *ListContactsOutput) SetContacts(v []*Contact) *ListContactsOutput {
+	s.Contacts = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListContactsOutput) SetNextToken(v string) *ListContactsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// Represents a request to list the existing custom verification email templates
+// for your account.
+type ListCustomVerificationEmailTemplatesInput struct {
+	_ struct{} `type:"structure"`
+
+	// A token returned from a previous call to ListCustomVerificationEmailTemplates
+	// to indicate the position in the list of custom verification email templates.
+	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
+
+	// The number of results to show in a single call to ListCustomVerificationEmailTemplates.
+	// If the number of results is larger than the number you specified in this
+	// parameter, then the response includes a NextToken element, which you can
+	// use to obtain additional results.
+	//
+	// The value you specify has to be at least 1, and can be no more than 50.
+	PageSize *int64 `location:"querystring" locationName:"PageSize" type:"integer"`
+}
+
+// String returns the string representation
+func (s ListCustomVerificationEmailTemplatesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListCustomVerificationEmailTemplatesInput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListCustomVerificationEmailTemplatesInput) SetNextToken(v string) *ListCustomVerificationEmailTemplatesInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPageSize sets the PageSize field's value.
+func (s *ListCustomVerificationEmailTemplatesInput) SetPageSize(v int64) *ListCustomVerificationEmailTemplatesInput {
+	s.PageSize = &v
+	return s
+}
+
+// The following elements are returned by the service.
+type ListCustomVerificationEmailTemplatesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of the custom verification email templates that exist in your account.
+	CustomVerificationEmailTemplates []*CustomVerificationEmailTemplateMetadata `type:"list"`
+
+	// A token indicating that there are additional custom verification email templates
+	// available to be listed. Pass this token to a subsequent call to ListCustomVerificationEmailTemplates
+	// to retrieve the next 50 custom verification email templates.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ListCustomVerificationEmailTemplatesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListCustomVerificationEmailTemplatesOutput) GoString() string {
+	return s.String()
+}
+
+// SetCustomVerificationEmailTemplates sets the CustomVerificationEmailTemplates field's value.
+func (s *ListCustomVerificationEmailTemplatesOutput) SetCustomVerificationEmailTemplates(v []*CustomVerificationEmailTemplateMetadata) *ListCustomVerificationEmailTemplatesOutput {
+	s.CustomVerificationEmailTemplates = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListCustomVerificationEmailTemplatesOutput) SetNextToken(v string) *ListCustomVerificationEmailTemplatesOutput {
 	s.NextToken = &v
 	return s
 }
@@ -7821,6 +14933,322 @@ func (s *ListEmailIdentitiesOutput) SetNextToken(v string) *ListEmailIdentitiesO
 	return s
 }
 
+// Represents a request to list the email templates present in your Amazon SES
+// account in the current AWS Region. For more information, see the Amazon SES
+// Developer Guide (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html).
+type ListEmailTemplatesInput struct {
+	_ struct{} `type:"structure"`
+
+	// A token returned from a previous call to ListEmailTemplates to indicate the
+	// position in the list of email templates.
+	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
+
+	// The number of results to show in a single call to ListEmailTemplates. If
+	// the number of results is larger than the number you specified in this parameter,
+	// then the response includes a NextToken element, which you can use to obtain
+	// additional results.
+	//
+	// The value you specify has to be at least 1, and can be no more than 10.
+	PageSize *int64 `location:"querystring" locationName:"PageSize" type:"integer"`
+}
+
+// String returns the string representation
+func (s ListEmailTemplatesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListEmailTemplatesInput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListEmailTemplatesInput) SetNextToken(v string) *ListEmailTemplatesInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPageSize sets the PageSize field's value.
+func (s *ListEmailTemplatesInput) SetPageSize(v int64) *ListEmailTemplatesInput {
+	s.PageSize = &v
+	return s
+}
+
+// The following elements are returned by the service.
+type ListEmailTemplatesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A token indicating that there are additional email templates available to
+	// be listed. Pass this token to a subsequent ListEmailTemplates call to retrieve
+	// the next 10 email templates.
+	NextToken *string `type:"string"`
+
+	// An array the contains the name and creation time stamp for each template
+	// in your Amazon SES account.
+	TemplatesMetadata []*EmailTemplateMetadata `type:"list"`
+}
+
+// String returns the string representation
+func (s ListEmailTemplatesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListEmailTemplatesOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListEmailTemplatesOutput) SetNextToken(v string) *ListEmailTemplatesOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetTemplatesMetadata sets the TemplatesMetadata field's value.
+func (s *ListEmailTemplatesOutput) SetTemplatesMetadata(v []*EmailTemplateMetadata) *ListEmailTemplatesOutput {
+	s.TemplatesMetadata = v
+	return s
+}
+
+// Represents a request to list all of the import jobs for a data destination
+// within the specified maximum number of import jobs.
+type ListImportJobsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The destination of the import job, which can be used to list import jobs
+	// that have a certain ImportDestinationType.
+	ImportDestinationType *string `type:"string" enum:"ImportDestinationType"`
+
+	// A string token indicating that there might be additional import jobs available
+	// to be listed. Copy this token to a subsequent call to ListImportJobs with
+	// the same parameters to retrieve the next page of import jobs.
+	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
+
+	// Maximum number of import jobs to return at once. Use this parameter to paginate
+	// results. If additional import jobs exist beyond the specified limit, the
+	// NextToken element is sent in the response. Use the NextToken value in subsequent
+	// requests to retrieve additional addresses.
+	PageSize *int64 `location:"querystring" locationName:"PageSize" type:"integer"`
+}
+
+// String returns the string representation
+func (s ListImportJobsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListImportJobsInput) GoString() string {
+	return s.String()
+}
+
+// SetImportDestinationType sets the ImportDestinationType field's value.
+func (s *ListImportJobsInput) SetImportDestinationType(v string) *ListImportJobsInput {
+	s.ImportDestinationType = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListImportJobsInput) SetNextToken(v string) *ListImportJobsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPageSize sets the PageSize field's value.
+func (s *ListImportJobsInput) SetPageSize(v int64) *ListImportJobsInput {
+	s.PageSize = &v
+	return s
+}
+
+// An HTTP 200 response if the request succeeds, or an error message if the
+// request fails.
+type ListImportJobsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of the import job summaries.
+	ImportJobs []*ImportJobSummary `type:"list"`
+
+	// A string token indicating that there might be additional import jobs available
+	// to be listed. Copy this token to a subsequent call to ListImportJobs with
+	// the same parameters to retrieve the next page of import jobs.
+	NextToken *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ListImportJobsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListImportJobsOutput) GoString() string {
+	return s.String()
+}
+
+// SetImportJobs sets the ImportJobs field's value.
+func (s *ListImportJobsOutput) SetImportJobs(v []*ImportJobSummary) *ListImportJobsOutput {
+	s.ImportJobs = v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListImportJobsOutput) SetNextToken(v string) *ListImportJobsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// An object used to specify a list or topic to which an email belongs, which
+// will be used when a contact chooses to unsubscribe.
+type ListManagementOptions struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the contact list.
+	//
+	// ContactListName is a required field
+	ContactListName *string `type:"string" required:"true"`
+
+	// The name of the topic.
+	TopicName *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ListManagementOptions) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListManagementOptions) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListManagementOptions) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListManagementOptions"}
+	if s.ContactListName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ContactListName"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContactListName sets the ContactListName field's value.
+func (s *ListManagementOptions) SetContactListName(v string) *ListManagementOptions {
+	s.ContactListName = &v
+	return s
+}
+
+// SetTopicName sets the TopicName field's value.
+func (s *ListManagementOptions) SetTopicName(v string) *ListManagementOptions {
+	s.TopicName = &v
+	return s
+}
+
+// A request to obtain a list of email destinations that are on the suppression
+// list for your account.
+type ListSuppressedDestinationsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Used to filter the list of suppressed email destinations so that it only
+	// includes addresses that were added to the list before a specific date. The
+	// date that you specify should be in Unix time format.
+	EndDate *time.Time `location:"querystring" locationName:"EndDate" type:"timestamp"`
+
+	// A token returned from a previous call to ListSuppressedDestinations to indicate
+	// the position in the list of suppressed email addresses.
+	NextToken *string `location:"querystring" locationName:"NextToken" type:"string"`
+
+	// The number of results to show in a single call to ListSuppressedDestinations.
+	// If the number of results is larger than the number you specified in this
+	// parameter, then the response includes a NextToken element, which you can
+	// use to obtain additional results.
+	PageSize *int64 `location:"querystring" locationName:"PageSize" type:"integer"`
+
+	// The factors that caused the email address to be added to .
+	Reasons []*string `location:"querystring" locationName:"Reason" type:"list"`
+
+	// Used to filter the list of suppressed email destinations so that it only
+	// includes addresses that were added to the list after a specific date. The
+	// date that you specify should be in Unix time format.
+	StartDate *time.Time `location:"querystring" locationName:"StartDate" type:"timestamp"`
+}
+
+// String returns the string representation
+func (s ListSuppressedDestinationsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListSuppressedDestinationsInput) GoString() string {
+	return s.String()
+}
+
+// SetEndDate sets the EndDate field's value.
+func (s *ListSuppressedDestinationsInput) SetEndDate(v time.Time) *ListSuppressedDestinationsInput {
+	s.EndDate = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListSuppressedDestinationsInput) SetNextToken(v string) *ListSuppressedDestinationsInput {
+	s.NextToken = &v
+	return s
+}
+
+// SetPageSize sets the PageSize field's value.
+func (s *ListSuppressedDestinationsInput) SetPageSize(v int64) *ListSuppressedDestinationsInput {
+	s.PageSize = &v
+	return s
+}
+
+// SetReasons sets the Reasons field's value.
+func (s *ListSuppressedDestinationsInput) SetReasons(v []*string) *ListSuppressedDestinationsInput {
+	s.Reasons = v
+	return s
+}
+
+// SetStartDate sets the StartDate field's value.
+func (s *ListSuppressedDestinationsInput) SetStartDate(v time.Time) *ListSuppressedDestinationsInput {
+	s.StartDate = &v
+	return s
+}
+
+// A list of suppressed email addresses.
+type ListSuppressedDestinationsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A token that indicates that there are additional email addresses on the suppression
+	// list for your account. To view additional suppressed addresses, issue another
+	// request to ListSuppressedDestinations, and pass this token in the NextToken
+	// parameter.
+	NextToken *string `type:"string"`
+
+	// A list of summaries, each containing a summary for a suppressed email destination.
+	SuppressedDestinationSummaries []*SuppressedDestinationSummary `type:"list"`
+}
+
+// String returns the string representation
+func (s ListSuppressedDestinationsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListSuppressedDestinationsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListSuppressedDestinationsOutput) SetNextToken(v string) *ListSuppressedDestinationsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetSuppressedDestinationSummaries sets the SuppressedDestinationSummaries field's value.
+func (s *ListSuppressedDestinationsOutput) SetSuppressedDestinationSummaries(v []*SuppressedDestinationSummary) *ListSuppressedDestinationsOutput {
+	s.SuppressedDestinationSummaries = v
+	return s
+}
+
 type ListTagsForResourceInput struct {
 	_ struct{} `type:"structure"`
 
@@ -7952,6 +15380,62 @@ func (s *MailFromAttributes) SetMailFromDomainStatus(v string) *MailFromAttribut
 	return s
 }
 
+// The message can't be sent because the sending domain isn't verified.
+type MailFromDomainNotVerifiedException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s MailFromDomainNotVerifiedException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s MailFromDomainNotVerifiedException) GoString() string {
+	return s.String()
+}
+
+func newErrorMailFromDomainNotVerifiedException(v protocol.ResponseMetadata) error {
+	return &MailFromDomainNotVerifiedException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *MailFromDomainNotVerifiedException) Code() string {
+	return "MailFromDomainNotVerifiedException"
+}
+
+// Message returns the exception's message.
+func (s *MailFromDomainNotVerifiedException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *MailFromDomainNotVerifiedException) OrigErr() error {
+	return nil
+}
+
+func (s *MailFromDomainNotVerifiedException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *MailFromDomainNotVerifiedException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *MailFromDomainNotVerifiedException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // Represents the email message that you're sending. The Message object consists
 // of a subject line and a message body.
 type Message struct {
@@ -8019,6 +15503,62 @@ func (s *Message) SetSubject(v *Content) *Message {
 	return s
 }
 
+// The message can't be sent because it contains invalid content.
+type MessageRejected struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s MessageRejected) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s MessageRejected) GoString() string {
+	return s.String()
+}
+
+func newErrorMessageRejected(v protocol.ResponseMetadata) error {
+	return &MessageRejected{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *MessageRejected) Code() string {
+	return "MessageRejected"
+}
+
+// Message returns the exception's message.
+func (s *MessageRejected) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *MessageRejected) OrigErr() error {
+	return nil
+}
+
+func (s *MessageRejected) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *MessageRejected) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *MessageRejected) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // Contains the name and value of a tag that you apply to an email. You can
 // use message tags when you publish email sending events.
 type MessageTag struct {
@@ -8083,6 +15623,62 @@ func (s *MessageTag) SetName(v string) *MessageTag {
 func (s *MessageTag) SetValue(v string) *MessageTag {
 	s.Value = &v
 	return s
+}
+
+// The resource you attempted to access doesn't exist.
+type NotFoundException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s NotFoundException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s NotFoundException) GoString() string {
+	return s.String()
+}
+
+func newErrorNotFoundException(v protocol.ResponseMetadata) error {
+	return &NotFoundException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *NotFoundException) Code() string {
+	return "NotFoundException"
+}
+
+// Message returns the exception's message.
+func (s *NotFoundException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *NotFoundException) OrigErr() error {
+	return nil
+}
+
+func (s *NotFoundException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *NotFoundException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *NotFoundException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 // An object that contains information about email that was sent from the selected
@@ -8268,6 +15864,139 @@ func (s PutAccountDedicatedIpWarmupAttributesOutput) GoString() string {
 	return s.String()
 }
 
+// A request to submit new account details.
+type PutAccountDetailsInput struct {
+	_ struct{} `type:"structure"`
+
+	// Additional email addresses that you would like to be notified regarding Amazon
+	// SES matters.
+	AdditionalContactEmailAddresses []*string `min:"1" type:"list" sensitive:"true"`
+
+	// The language you would prefer to be contacted with.
+	ContactLanguage *string `type:"string" enum:"ContactLanguage"`
+
+	// The type of email your account will send.
+	//
+	// MailType is a required field
+	MailType *string `type:"string" required:"true" enum:"MailType"`
+
+	// Indicates whether or not your account should have production access in the
+	// current AWS Region.
+	//
+	// If the value is false, then your account is in the sandbox. When your account
+	// is in the sandbox, you can only send email to verified identities. Additionally,
+	// the maximum number of emails you can send in a 24-hour period (your sending
+	// quota) is 200, and the maximum number of emails you can send per second (your
+	// maximum sending rate) is 1.
+	//
+	// If the value is true, then your account has production access. When your
+	// account has production access, you can send email to any address. The sending
+	// quota and maximum sending rate for your account vary based on your specific
+	// use case.
+	ProductionAccessEnabled *bool `type:"boolean"`
+
+	// A description of the types of email that you plan to send.
+	//
+	// UseCaseDescription is a required field
+	UseCaseDescription *string `min:"1" type:"string" required:"true" sensitive:"true"`
+
+	// The URL of your website. This information helps us better understand the
+	// type of content that you plan to send.
+	//
+	// WebsiteURL is a required field
+	WebsiteURL *string `min:"1" type:"string" required:"true" sensitive:"true"`
+}
+
+// String returns the string representation
+func (s PutAccountDetailsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutAccountDetailsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutAccountDetailsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PutAccountDetailsInput"}
+	if s.AdditionalContactEmailAddresses != nil && len(s.AdditionalContactEmailAddresses) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("AdditionalContactEmailAddresses", 1))
+	}
+	if s.MailType == nil {
+		invalidParams.Add(request.NewErrParamRequired("MailType"))
+	}
+	if s.UseCaseDescription == nil {
+		invalidParams.Add(request.NewErrParamRequired("UseCaseDescription"))
+	}
+	if s.UseCaseDescription != nil && len(*s.UseCaseDescription) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("UseCaseDescription", 1))
+	}
+	if s.WebsiteURL == nil {
+		invalidParams.Add(request.NewErrParamRequired("WebsiteURL"))
+	}
+	if s.WebsiteURL != nil && len(*s.WebsiteURL) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("WebsiteURL", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAdditionalContactEmailAddresses sets the AdditionalContactEmailAddresses field's value.
+func (s *PutAccountDetailsInput) SetAdditionalContactEmailAddresses(v []*string) *PutAccountDetailsInput {
+	s.AdditionalContactEmailAddresses = v
+	return s
+}
+
+// SetContactLanguage sets the ContactLanguage field's value.
+func (s *PutAccountDetailsInput) SetContactLanguage(v string) *PutAccountDetailsInput {
+	s.ContactLanguage = &v
+	return s
+}
+
+// SetMailType sets the MailType field's value.
+func (s *PutAccountDetailsInput) SetMailType(v string) *PutAccountDetailsInput {
+	s.MailType = &v
+	return s
+}
+
+// SetProductionAccessEnabled sets the ProductionAccessEnabled field's value.
+func (s *PutAccountDetailsInput) SetProductionAccessEnabled(v bool) *PutAccountDetailsInput {
+	s.ProductionAccessEnabled = &v
+	return s
+}
+
+// SetUseCaseDescription sets the UseCaseDescription field's value.
+func (s *PutAccountDetailsInput) SetUseCaseDescription(v string) *PutAccountDetailsInput {
+	s.UseCaseDescription = &v
+	return s
+}
+
+// SetWebsiteURL sets the WebsiteURL field's value.
+func (s *PutAccountDetailsInput) SetWebsiteURL(v string) *PutAccountDetailsInput {
+	s.WebsiteURL = &v
+	return s
+}
+
+// An HTTP 200 response if the request succeeds, or an error message if the
+// request fails.
+type PutAccountDetailsOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s PutAccountDetailsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutAccountDetailsOutput) GoString() string {
+	return s.String()
+}
+
 // A request to change the ability of your account to send email.
 type PutAccountSendingAttributesInput struct {
 	_ struct{} `type:"structure"`
@@ -8309,6 +16038,55 @@ func (s PutAccountSendingAttributesOutput) String() string {
 
 // GoString returns the string representation
 func (s PutAccountSendingAttributesOutput) GoString() string {
+	return s.String()
+}
+
+// A request to change your account's suppression preferences.
+type PutAccountSuppressionAttributesInput struct {
+	_ struct{} `type:"structure"`
+
+	// A list that contains the reasons that email addresses will be automatically
+	// added to the suppression list for your account. This list can contain any
+	// or all of the following:
+	//
+	//    * COMPLAINT – Amazon SES adds an email address to the suppression list
+	//    for your account when a message sent to that address results in a complaint.
+	//
+	//    * BOUNCE – Amazon SES adds an email address to the suppression list
+	//    for your account when a message sent to that address results in a hard
+	//    bounce.
+	SuppressedReasons []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s PutAccountSuppressionAttributesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutAccountSuppressionAttributesInput) GoString() string {
+	return s.String()
+}
+
+// SetSuppressedReasons sets the SuppressedReasons field's value.
+func (s *PutAccountSuppressionAttributesInput) SetSuppressedReasons(v []*string) *PutAccountSuppressionAttributesInput {
+	s.SuppressedReasons = v
+	return s
+}
+
+// An HTTP 200 response if the request succeeds, or an error message if the
+// request fails.
+type PutAccountSuppressionAttributesOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s PutAccountSuppressionAttributesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutAccountSuppressionAttributesOutput) GoString() string {
 	return s.String()
 }
 
@@ -8531,6 +16309,84 @@ func (s PutConfigurationSetSendingOptionsOutput) String() string {
 
 // GoString returns the string representation
 func (s PutConfigurationSetSendingOptionsOutput) GoString() string {
+	return s.String()
+}
+
+// A request to change the account suppression list preferences for a specific
+// configuration set.
+type PutConfigurationSetSuppressionOptionsInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the configuration set that you want to change the suppression
+	// list preferences for.
+	//
+	// ConfigurationSetName is a required field
+	ConfigurationSetName *string `location:"uri" locationName:"ConfigurationSetName" type:"string" required:"true"`
+
+	// A list that contains the reasons that email addresses are automatically added
+	// to the suppression list for your account. This list can contain any or all
+	// of the following:
+	//
+	//    * COMPLAINT – Amazon SES adds an email address to the suppression list
+	//    for your account when a message sent to that address results in a complaint.
+	//
+	//    * BOUNCE – Amazon SES adds an email address to the suppression list
+	//    for your account when a message sent to that address results in a hard
+	//    bounce.
+	SuppressedReasons []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s PutConfigurationSetSuppressionOptionsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutConfigurationSetSuppressionOptionsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutConfigurationSetSuppressionOptionsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PutConfigurationSetSuppressionOptionsInput"}
+	if s.ConfigurationSetName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ConfigurationSetName"))
+	}
+	if s.ConfigurationSetName != nil && len(*s.ConfigurationSetName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ConfigurationSetName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConfigurationSetName sets the ConfigurationSetName field's value.
+func (s *PutConfigurationSetSuppressionOptionsInput) SetConfigurationSetName(v string) *PutConfigurationSetSuppressionOptionsInput {
+	s.ConfigurationSetName = &v
+	return s
+}
+
+// SetSuppressedReasons sets the SuppressedReasons field's value.
+func (s *PutConfigurationSetSuppressionOptionsInput) SetSuppressedReasons(v []*string) *PutConfigurationSetSuppressionOptionsInput {
+	s.SuppressedReasons = v
+	return s
+}
+
+// An HTTP 200 response if the request succeeds, or an error message if the
+// request fails.
+type PutConfigurationSetSuppressionOptionsOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s PutConfigurationSetSuppressionOptionsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutConfigurationSetSuppressionOptionsOutput) GoString() string {
 	return s.String()
 }
 
@@ -8833,7 +16689,7 @@ type PutEmailIdentityDkimAttributesInput struct {
 	// The email identity that you want to change the DKIM settings for.
 	//
 	// EmailIdentity is a required field
-	EmailIdentity *string `location:"uri" locationName:"EmailIdentity" type:"string" required:"true"`
+	EmailIdentity *string `location:"uri" locationName:"EmailIdentity" min:"1" type:"string" required:"true"`
 
 	// Sets the DKIM signing configuration for the identity.
 	//
@@ -8897,6 +16753,158 @@ func (s PutEmailIdentityDkimAttributesOutput) GoString() string {
 	return s.String()
 }
 
+// A request to change the DKIM attributes for an email identity.
+type PutEmailIdentityDkimSigningAttributesInput struct {
+	_ struct{} `type:"structure"`
+
+	// The email identity that you want to configure DKIM for.
+	//
+	// EmailIdentity is a required field
+	EmailIdentity *string `location:"uri" locationName:"EmailIdentity" min:"1" type:"string" required:"true"`
+
+	// An object that contains information about the private key and selector that
+	// you want to use to configure DKIM for the identity. This object is only required
+	// if you want to configure Bring Your Own DKIM (BYODKIM) for the identity.
+	SigningAttributes *DkimSigningAttributes `type:"structure"`
+
+	// The method that you want to use to configure DKIM for the identity. There
+	// are two possible values:
+	//
+	//    * AWS_SES – Configure DKIM for the identity by using Easy DKIM (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html).
+	//
+	//    * EXTERNAL – Configure DKIM for the identity by using Bring Your Own
+	//    DKIM (BYODKIM).
+	//
+	// SigningAttributesOrigin is a required field
+	SigningAttributesOrigin *string `type:"string" required:"true" enum:"DkimSigningAttributesOrigin"`
+}
+
+// String returns the string representation
+func (s PutEmailIdentityDkimSigningAttributesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutEmailIdentityDkimSigningAttributesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutEmailIdentityDkimSigningAttributesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PutEmailIdentityDkimSigningAttributesInput"}
+	if s.EmailIdentity == nil {
+		invalidParams.Add(request.NewErrParamRequired("EmailIdentity"))
+	}
+	if s.EmailIdentity != nil && len(*s.EmailIdentity) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EmailIdentity", 1))
+	}
+	if s.SigningAttributesOrigin == nil {
+		invalidParams.Add(request.NewErrParamRequired("SigningAttributesOrigin"))
+	}
+	if s.SigningAttributes != nil {
+		if err := s.SigningAttributes.Validate(); err != nil {
+			invalidParams.AddNested("SigningAttributes", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEmailIdentity sets the EmailIdentity field's value.
+func (s *PutEmailIdentityDkimSigningAttributesInput) SetEmailIdentity(v string) *PutEmailIdentityDkimSigningAttributesInput {
+	s.EmailIdentity = &v
+	return s
+}
+
+// SetSigningAttributes sets the SigningAttributes field's value.
+func (s *PutEmailIdentityDkimSigningAttributesInput) SetSigningAttributes(v *DkimSigningAttributes) *PutEmailIdentityDkimSigningAttributesInput {
+	s.SigningAttributes = v
+	return s
+}
+
+// SetSigningAttributesOrigin sets the SigningAttributesOrigin field's value.
+func (s *PutEmailIdentityDkimSigningAttributesInput) SetSigningAttributesOrigin(v string) *PutEmailIdentityDkimSigningAttributesInput {
+	s.SigningAttributesOrigin = &v
+	return s
+}
+
+// If the action is successful, the service sends back an HTTP 200 response.
+//
+// The following data is returned in JSON format by the service.
+type PutEmailIdentityDkimSigningAttributesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The DKIM authentication status of the identity. Amazon SES determines the
+	// authentication status by searching for specific records in the DNS configuration
+	// for your domain. If you used Easy DKIM (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html)
+	// to set up DKIM authentication, Amazon SES tries to find three unique CNAME
+	// records in the DNS configuration for your domain.
+	//
+	// If you provided a public key to perform DKIM authentication, Amazon SES tries
+	// to find a TXT record that uses the selector that you specified. The value
+	// of the TXT record must be a public key that's paired with the private key
+	// that you specified in the process of creating the identity.
+	//
+	// The status can be one of the following:
+	//
+	//    * PENDING – The verification process was initiated, but Amazon SES hasn't
+	//    yet detected the DKIM records in the DNS configuration for the domain.
+	//
+	//    * SUCCESS – The verification process completed successfully.
+	//
+	//    * FAILED – The verification process failed. This typically occurs when
+	//    Amazon SES fails to find the DKIM records in the DNS configuration of
+	//    the domain.
+	//
+	//    * TEMPORARY_FAILURE – A temporary issue is preventing Amazon SES from
+	//    determining the DKIM authentication status of the domain.
+	//
+	//    * NOT_STARTED – The DKIM verification process hasn't been initiated
+	//    for the domain.
+	DkimStatus *string `type:"string" enum:"DkimStatus"`
+
+	// If you used Easy DKIM (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/easy-dkim.html)
+	// to configure DKIM authentication for the domain, then this object contains
+	// a set of unique strings that you use to create a set of CNAME records that
+	// you add to the DNS configuration for your domain. When Amazon SES detects
+	// these records in the DNS configuration for your domain, the DKIM authentication
+	// process is complete.
+	//
+	// If you configured DKIM authentication for the domain by providing your own
+	// public-private key pair, then this object contains the selector that's associated
+	// with your public key.
+	//
+	// Regardless of the DKIM authentication method you use, Amazon SES searches
+	// for the appropriate records in the DNS configuration of the domain for up
+	// to 72 hours.
+	DkimTokens []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s PutEmailIdentityDkimSigningAttributesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutEmailIdentityDkimSigningAttributesOutput) GoString() string {
+	return s.String()
+}
+
+// SetDkimStatus sets the DkimStatus field's value.
+func (s *PutEmailIdentityDkimSigningAttributesOutput) SetDkimStatus(v string) *PutEmailIdentityDkimSigningAttributesOutput {
+	s.DkimStatus = &v
+	return s
+}
+
+// SetDkimTokens sets the DkimTokens field's value.
+func (s *PutEmailIdentityDkimSigningAttributesOutput) SetDkimTokens(v []*string) *PutEmailIdentityDkimSigningAttributesOutput {
+	s.DkimTokens = v
+	return s
+}
+
 // A request to set the attributes that control how bounce and complaint events
 // are processed.
 type PutEmailIdentityFeedbackAttributesInput struct {
@@ -8918,7 +16926,7 @@ type PutEmailIdentityFeedbackAttributesInput struct {
 	// forwarding for.
 	//
 	// EmailIdentity is a required field
-	EmailIdentity *string `location:"uri" locationName:"EmailIdentity" type:"string" required:"true"`
+	EmailIdentity *string `location:"uri" locationName:"EmailIdentity" min:"1" type:"string" required:"true"`
 }
 
 // String returns the string representation
@@ -8993,7 +17001,7 @@ type PutEmailIdentityMailFromAttributesInput struct {
 	// domain for.
 	//
 	// EmailIdentity is a required field
-	EmailIdentity *string `location:"uri" locationName:"EmailIdentity" type:"string" required:"true"`
+	EmailIdentity *string `location:"uri" locationName:"EmailIdentity" min:"1" type:"string" required:"true"`
 
 	// The custom MAIL FROM domain that you want the verified identity to use. The
 	// MAIL FROM domain must meet the following criteria:
@@ -9067,7 +17075,77 @@ func (s PutEmailIdentityMailFromAttributesOutput) GoString() string {
 	return s.String()
 }
 
-// The raw email message.
+// A request to add an email destination to the suppression list for your account.
+type PutSuppressedDestinationInput struct {
+	_ struct{} `type:"structure"`
+
+	// The email address that should be added to the suppression list for your account.
+	//
+	// EmailAddress is a required field
+	EmailAddress *string `type:"string" required:"true"`
+
+	// The factors that should cause the email address to be added to the suppression
+	// list for your account.
+	//
+	// Reason is a required field
+	Reason *string `type:"string" required:"true" enum:"SuppressionListReason"`
+}
+
+// String returns the string representation
+func (s PutSuppressedDestinationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutSuppressedDestinationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PutSuppressedDestinationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PutSuppressedDestinationInput"}
+	if s.EmailAddress == nil {
+		invalidParams.Add(request.NewErrParamRequired("EmailAddress"))
+	}
+	if s.Reason == nil {
+		invalidParams.Add(request.NewErrParamRequired("Reason"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEmailAddress sets the EmailAddress field's value.
+func (s *PutSuppressedDestinationInput) SetEmailAddress(v string) *PutSuppressedDestinationInput {
+	s.EmailAddress = &v
+	return s
+}
+
+// SetReason sets the Reason field's value.
+func (s *PutSuppressedDestinationInput) SetReason(v string) *PutSuppressedDestinationInput {
+	s.Reason = &v
+	return s
+}
+
+// An HTTP 200 response if the request succeeds, or an error message if the
+// request fails.
+type PutSuppressedDestinationOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s PutSuppressedDestinationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PutSuppressedDestinationOutput) GoString() string {
+	return s.String()
+}
+
+// Represents the raw content of an email message.
 type RawMessage struct {
 	_ struct{} `type:"structure"`
 
@@ -9080,7 +17158,7 @@ type RawMessage struct {
 	//
 	//    * Each part of a multipart MIME message must be formatted properly.
 	//
-	//    * Attachments must be in a file format that the Amazon SES API v2 supports.
+	//    * Attachments must be in a file format that the Amazon SES supports.
 	//
 	//    * The entire message must be Base64 encoded.
 	//
@@ -9126,6 +17204,58 @@ func (s *RawMessage) SetData(v []byte) *RawMessage {
 	return s
 }
 
+// The ReplaceEmailContent object to be used for a specific BulkEmailEntry.
+// The ReplacementTemplate can be specified within this object.
+type ReplacementEmailContent struct {
+	_ struct{} `type:"structure"`
+
+	// The ReplacementTemplate associated with ReplacementEmailContent.
+	ReplacementTemplate *ReplacementTemplate `type:"structure"`
+}
+
+// String returns the string representation
+func (s ReplacementEmailContent) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ReplacementEmailContent) GoString() string {
+	return s.String()
+}
+
+// SetReplacementTemplate sets the ReplacementTemplate field's value.
+func (s *ReplacementEmailContent) SetReplacementTemplate(v *ReplacementTemplate) *ReplacementEmailContent {
+	s.ReplacementTemplate = v
+	return s
+}
+
+// An object which contains ReplacementTemplateData to be used for a specific
+// BulkEmailEntry.
+type ReplacementTemplate struct {
+	_ struct{} `type:"structure"`
+
+	// A list of replacement values to apply to the template. This parameter is
+	// a JSON object, typically consisting of key-value pairs in which the keys
+	// correspond to replacement tags in the email template.
+	ReplacementTemplateData *string `type:"string"`
+}
+
+// String returns the string representation
+func (s ReplacementTemplate) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ReplacementTemplate) GoString() string {
+	return s.String()
+}
+
+// SetReplacementTemplateData sets the ReplacementTemplateData field's value.
+func (s *ReplacementTemplate) SetReplacementTemplateData(v string) *ReplacementTemplate {
+	s.ReplacementTemplateData = &v
+	return s
+}
+
 // Enable or disable collection of reputation metrics for emails that you send
 // using this configuration set in the current AWS Region.
 type ReputationOptions struct {
@@ -9164,7 +17294,340 @@ func (s *ReputationOptions) SetReputationMetricsEnabled(v bool) *ReputationOptio
 	return s
 }
 
-// A request to send an email message.
+// An object that contains information about your account details review.
+type ReviewDetails struct {
+	_ struct{} `type:"structure"`
+
+	// The associated support center case ID (if any).
+	CaseId *string `type:"string"`
+
+	// The status of the latest review of your account. The status can be one of
+	// the following:
+	//
+	//    * PENDING – We have received your appeal and are in the process of reviewing
+	//    it.
+	//
+	//    * GRANTED – Your appeal has been reviewed and your production access
+	//    has been granted.
+	//
+	//    * DENIED – Your appeal has been reviewed and your production access
+	//    has been denied.
+	//
+	//    * FAILED – An internal error occurred and we didn't receive your appeal.
+	//    You can submit your appeal again.
+	Status *string `type:"string" enum:"ReviewStatus"`
+}
+
+// String returns the string representation
+func (s ReviewDetails) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ReviewDetails) GoString() string {
+	return s.String()
+}
+
+// SetCaseId sets the CaseId field's value.
+func (s *ReviewDetails) SetCaseId(v string) *ReviewDetails {
+	s.CaseId = &v
+	return s
+}
+
+// SetStatus sets the Status field's value.
+func (s *ReviewDetails) SetStatus(v string) *ReviewDetails {
+	s.Status = &v
+	return s
+}
+
+// Represents a request to send email messages to multiple destinations using
+// Amazon SES. For more information, see the Amazon SES Developer Guide (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html).
+type SendBulkEmailInput struct {
+	_ struct{} `type:"structure"`
+
+	// The list of bulk email entry objects.
+	//
+	// BulkEmailEntries is a required field
+	BulkEmailEntries []*BulkEmailEntry `type:"list" required:"true"`
+
+	// The name of the configuration set that you want to use when sending the email.
+	ConfigurationSetName *string `type:"string"`
+
+	// An object that contains the body of the message. You can specify a template
+	// message.
+	//
+	// DefaultContent is a required field
+	DefaultContent *BulkEmailContent `type:"structure" required:"true"`
+
+	// A list of tags, in the form of name/value pairs, to apply to an email that
+	// you send using the SendEmail operation. Tags correspond to characteristics
+	// of the email that you define, so that you can publish email sending events.
+	DefaultEmailTags []*MessageTag `type:"list"`
+
+	// The address that you want bounce and complaint notifications to be sent to.
+	FeedbackForwardingEmailAddress *string `type:"string"`
+
+	// This parameter is used only for sending authorization. It is the ARN of the
+	// identity that is associated with the sending authorization policy that permits
+	// you to use the email address specified in the FeedbackForwardingEmailAddress
+	// parameter.
+	//
+	// For example, if the owner of example.com (which has ARN arn:aws:ses:us-east-1:123456789012:identity/example.com)
+	// attaches a policy to it that authorizes you to use feedback@example.com,
+	// then you would specify the FeedbackForwardingEmailAddressIdentityArn to be
+	// arn:aws:ses:us-east-1:123456789012:identity/example.com, and the FeedbackForwardingEmailAddress
+	// to be feedback@example.com.
+	//
+	// For more information about sending authorization, see the Amazon SES Developer
+	// Guide (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html).
+	FeedbackForwardingEmailAddressIdentityArn *string `type:"string"`
+
+	// The email address that you want to use as the "From" address for the email.
+	// The address that you specify has to be verified.
+	FromEmailAddress *string `type:"string"`
+
+	// This parameter is used only for sending authorization. It is the ARN of the
+	// identity that is associated with the sending authorization policy that permits
+	// you to use the email address specified in the FromEmailAddress parameter.
+	//
+	// For example, if the owner of example.com (which has ARN arn:aws:ses:us-east-1:123456789012:identity/example.com)
+	// attaches a policy to it that authorizes you to use sender@example.com, then
+	// you would specify the FromEmailAddressIdentityArn to be arn:aws:ses:us-east-1:123456789012:identity/example.com,
+	// and the FromEmailAddress to be sender@example.com.
+	//
+	// For more information about sending authorization, see the Amazon SES Developer
+	// Guide (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html).
+	FromEmailAddressIdentityArn *string `type:"string"`
+
+	// The "Reply-to" email addresses for the message. When the recipient replies
+	// to the message, each Reply-to address receives the reply.
+	ReplyToAddresses []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s SendBulkEmailInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SendBulkEmailInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SendBulkEmailInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SendBulkEmailInput"}
+	if s.BulkEmailEntries == nil {
+		invalidParams.Add(request.NewErrParamRequired("BulkEmailEntries"))
+	}
+	if s.DefaultContent == nil {
+		invalidParams.Add(request.NewErrParamRequired("DefaultContent"))
+	}
+	if s.BulkEmailEntries != nil {
+		for i, v := range s.BulkEmailEntries {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "BulkEmailEntries", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.DefaultContent != nil {
+		if err := s.DefaultContent.Validate(); err != nil {
+			invalidParams.AddNested("DefaultContent", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.DefaultEmailTags != nil {
+		for i, v := range s.DefaultEmailTags {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "DefaultEmailTags", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetBulkEmailEntries sets the BulkEmailEntries field's value.
+func (s *SendBulkEmailInput) SetBulkEmailEntries(v []*BulkEmailEntry) *SendBulkEmailInput {
+	s.BulkEmailEntries = v
+	return s
+}
+
+// SetConfigurationSetName sets the ConfigurationSetName field's value.
+func (s *SendBulkEmailInput) SetConfigurationSetName(v string) *SendBulkEmailInput {
+	s.ConfigurationSetName = &v
+	return s
+}
+
+// SetDefaultContent sets the DefaultContent field's value.
+func (s *SendBulkEmailInput) SetDefaultContent(v *BulkEmailContent) *SendBulkEmailInput {
+	s.DefaultContent = v
+	return s
+}
+
+// SetDefaultEmailTags sets the DefaultEmailTags field's value.
+func (s *SendBulkEmailInput) SetDefaultEmailTags(v []*MessageTag) *SendBulkEmailInput {
+	s.DefaultEmailTags = v
+	return s
+}
+
+// SetFeedbackForwardingEmailAddress sets the FeedbackForwardingEmailAddress field's value.
+func (s *SendBulkEmailInput) SetFeedbackForwardingEmailAddress(v string) *SendBulkEmailInput {
+	s.FeedbackForwardingEmailAddress = &v
+	return s
+}
+
+// SetFeedbackForwardingEmailAddressIdentityArn sets the FeedbackForwardingEmailAddressIdentityArn field's value.
+func (s *SendBulkEmailInput) SetFeedbackForwardingEmailAddressIdentityArn(v string) *SendBulkEmailInput {
+	s.FeedbackForwardingEmailAddressIdentityArn = &v
+	return s
+}
+
+// SetFromEmailAddress sets the FromEmailAddress field's value.
+func (s *SendBulkEmailInput) SetFromEmailAddress(v string) *SendBulkEmailInput {
+	s.FromEmailAddress = &v
+	return s
+}
+
+// SetFromEmailAddressIdentityArn sets the FromEmailAddressIdentityArn field's value.
+func (s *SendBulkEmailInput) SetFromEmailAddressIdentityArn(v string) *SendBulkEmailInput {
+	s.FromEmailAddressIdentityArn = &v
+	return s
+}
+
+// SetReplyToAddresses sets the ReplyToAddresses field's value.
+func (s *SendBulkEmailInput) SetReplyToAddresses(v []*string) *SendBulkEmailInput {
+	s.ReplyToAddresses = v
+	return s
+}
+
+// The following data is returned in JSON format by the service.
+type SendBulkEmailOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of BulkMailEntry objects.
+	//
+	// BulkEmailEntryResults is a required field
+	BulkEmailEntryResults []*BulkEmailEntryResult `type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s SendBulkEmailOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SendBulkEmailOutput) GoString() string {
+	return s.String()
+}
+
+// SetBulkEmailEntryResults sets the BulkEmailEntryResults field's value.
+func (s *SendBulkEmailOutput) SetBulkEmailEntryResults(v []*BulkEmailEntryResult) *SendBulkEmailOutput {
+	s.BulkEmailEntryResults = v
+	return s
+}
+
+// Represents a request to send a custom verification email to a specified recipient.
+type SendCustomVerificationEmailInput struct {
+	_ struct{} `type:"structure"`
+
+	// Name of a configuration set to use when sending the verification email.
+	ConfigurationSetName *string `type:"string"`
+
+	// The email address to verify.
+	//
+	// EmailAddress is a required field
+	EmailAddress *string `type:"string" required:"true"`
+
+	// The name of the custom verification email template to use when sending the
+	// verification email.
+	//
+	// TemplateName is a required field
+	TemplateName *string `min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s SendCustomVerificationEmailInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SendCustomVerificationEmailInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SendCustomVerificationEmailInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SendCustomVerificationEmailInput"}
+	if s.EmailAddress == nil {
+		invalidParams.Add(request.NewErrParamRequired("EmailAddress"))
+	}
+	if s.TemplateName == nil {
+		invalidParams.Add(request.NewErrParamRequired("TemplateName"))
+	}
+	if s.TemplateName != nil && len(*s.TemplateName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TemplateName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetConfigurationSetName sets the ConfigurationSetName field's value.
+func (s *SendCustomVerificationEmailInput) SetConfigurationSetName(v string) *SendCustomVerificationEmailInput {
+	s.ConfigurationSetName = &v
+	return s
+}
+
+// SetEmailAddress sets the EmailAddress field's value.
+func (s *SendCustomVerificationEmailInput) SetEmailAddress(v string) *SendCustomVerificationEmailInput {
+	s.EmailAddress = &v
+	return s
+}
+
+// SetTemplateName sets the TemplateName field's value.
+func (s *SendCustomVerificationEmailInput) SetTemplateName(v string) *SendCustomVerificationEmailInput {
+	s.TemplateName = &v
+	return s
+}
+
+// The following element is returned by the service.
+type SendCustomVerificationEmailOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The unique message identifier returned from the SendCustomVerificationEmail
+	// operation.
+	MessageId *string `type:"string"`
+}
+
+// String returns the string representation
+func (s SendCustomVerificationEmailOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SendCustomVerificationEmailOutput) GoString() string {
+	return s.String()
+}
+
+// SetMessageId sets the MessageId field's value.
+func (s *SendCustomVerificationEmailOutput) SetMessageId(v string) *SendCustomVerificationEmailOutput {
+	s.MessageId = &v
+	return s
+}
+
+// Represents a request to send a single formatted email using Amazon SES. For
+// more information, see the Amazon SES Developer Guide (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-formatted.html).
 type SendEmailInput struct {
 	_ struct{} `type:"structure"`
 
@@ -9172,15 +17635,13 @@ type SendEmailInput struct {
 	ConfigurationSetName *string `type:"string"`
 
 	// An object that contains the body of the message. You can send either a Simple
-	// message or a Raw message.
+	// message Raw message or a template Message.
 	//
 	// Content is a required field
 	Content *EmailContent `type:"structure" required:"true"`
 
 	// An object that contains the recipients of the email message.
-	//
-	// Destination is a required field
-	Destination *Destination `type:"structure" required:"true"`
+	Destination *Destination `type:"structure"`
 
 	// A list of tags, in the form of name/value pairs, to apply to an email that
 	// you send using the SendEmail operation. Tags correspond to characteristics
@@ -9190,9 +17651,44 @@ type SendEmailInput struct {
 	// The address that you want bounce and complaint notifications to be sent to.
 	FeedbackForwardingEmailAddress *string `type:"string"`
 
+	// This parameter is used only for sending authorization. It is the ARN of the
+	// identity that is associated with the sending authorization policy that permits
+	// you to use the email address specified in the FeedbackForwardingEmailAddress
+	// parameter.
+	//
+	// For example, if the owner of example.com (which has ARN arn:aws:ses:us-east-1:123456789012:identity/example.com)
+	// attaches a policy to it that authorizes you to use feedback@example.com,
+	// then you would specify the FeedbackForwardingEmailAddressIdentityArn to be
+	// arn:aws:ses:us-east-1:123456789012:identity/example.com, and the FeedbackForwardingEmailAddress
+	// to be feedback@example.com.
+	//
+	// For more information about sending authorization, see the Amazon SES Developer
+	// Guide (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html).
+	FeedbackForwardingEmailAddressIdentityArn *string `type:"string"`
+
 	// The email address that you want to use as the "From" address for the email.
 	// The address that you specify has to be verified.
 	FromEmailAddress *string `type:"string"`
+
+	// This parameter is used only for sending authorization. It is the ARN of the
+	// identity that is associated with the sending authorization policy that permits
+	// you to use the email address specified in the FromEmailAddress parameter.
+	//
+	// For example, if the owner of example.com (which has ARN arn:aws:ses:us-east-1:123456789012:identity/example.com)
+	// attaches a policy to it that authorizes you to use sender@example.com, then
+	// you would specify the FromEmailAddressIdentityArn to be arn:aws:ses:us-east-1:123456789012:identity/example.com,
+	// and the FromEmailAddress to be sender@example.com.
+	//
+	// For more information about sending authorization, see the Amazon SES Developer
+	// Guide (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization.html).
+	//
+	// For Raw emails, the FromEmailAddressIdentityArn value overrides the X-SES-SOURCE-ARN
+	// and X-SES-FROM-ARN headers specified in raw email message content.
+	FromEmailAddressIdentityArn *string `type:"string"`
+
+	// An object used to specify a list or topic to which an email belongs, which
+	// will be used when a contact chooses to unsubscribe.
+	ListManagementOptions *ListManagementOptions `type:"structure"`
 
 	// The "Reply-to" email addresses for the message. When the recipient replies
 	// to the message, each Reply-to address receives the reply.
@@ -9215,9 +17711,6 @@ func (s *SendEmailInput) Validate() error {
 	if s.Content == nil {
 		invalidParams.Add(request.NewErrParamRequired("Content"))
 	}
-	if s.Destination == nil {
-		invalidParams.Add(request.NewErrParamRequired("Destination"))
-	}
 	if s.Content != nil {
 		if err := s.Content.Validate(); err != nil {
 			invalidParams.AddNested("Content", err.(request.ErrInvalidParams))
@@ -9231,6 +17724,11 @@ func (s *SendEmailInput) Validate() error {
 			if err := v.Validate(); err != nil {
 				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "EmailTags", i), err.(request.ErrInvalidParams))
 			}
+		}
+	}
+	if s.ListManagementOptions != nil {
+		if err := s.ListManagementOptions.Validate(); err != nil {
+			invalidParams.AddNested("ListManagementOptions", err.(request.ErrInvalidParams))
 		}
 	}
 
@@ -9270,9 +17768,27 @@ func (s *SendEmailInput) SetFeedbackForwardingEmailAddress(v string) *SendEmailI
 	return s
 }
 
+// SetFeedbackForwardingEmailAddressIdentityArn sets the FeedbackForwardingEmailAddressIdentityArn field's value.
+func (s *SendEmailInput) SetFeedbackForwardingEmailAddressIdentityArn(v string) *SendEmailInput {
+	s.FeedbackForwardingEmailAddressIdentityArn = &v
+	return s
+}
+
 // SetFromEmailAddress sets the FromEmailAddress field's value.
 func (s *SendEmailInput) SetFromEmailAddress(v string) *SendEmailInput {
 	s.FromEmailAddress = &v
+	return s
+}
+
+// SetFromEmailAddressIdentityArn sets the FromEmailAddressIdentityArn field's value.
+func (s *SendEmailInput) SetFromEmailAddressIdentityArn(v string) *SendEmailInput {
+	s.FromEmailAddressIdentityArn = &v
+	return s
+}
+
+// SetListManagementOptions sets the ListManagementOptions field's value.
+func (s *SendEmailInput) SetListManagementOptions(v *ListManagementOptions) *SendEmailInput {
+	s.ListManagementOptions = v
 	return s
 }
 
@@ -9289,8 +17805,8 @@ type SendEmailOutput struct {
 	// A unique identifier for the message that is generated when the message is
 	// accepted.
 	//
-	// It is possible for the Amazon SES API v2 to accept a message without sending
-	// it. This can happen when the message that you're trying to send has an attachment
+	// It's possible for Amazon SES to accept a message without sending it. This
+	// can happen when the message that you're trying to send has an attachment
 	// contains a virus, or when you send a templated email that contains invalid
 	// personalization content, for example.
 	MessageId *string `type:"string"`
@@ -9385,6 +17901,63 @@ func (s *SendingOptions) SetSendingEnabled(v bool) *SendingOptions {
 	return s
 }
 
+// The message can't be sent because the account's ability to send email is
+// currently paused.
+type SendingPausedException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s SendingPausedException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SendingPausedException) GoString() string {
+	return s.String()
+}
+
+func newErrorSendingPausedException(v protocol.ResponseMetadata) error {
+	return &SendingPausedException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *SendingPausedException) Code() string {
+	return "SendingPausedException"
+}
+
+// Message returns the exception's message.
+func (s *SendingPausedException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *SendingPausedException) OrigErr() error {
+	return nil
+}
+
+func (s *SendingPausedException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *SendingPausedException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *SendingPausedException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // An object that defines an Amazon SNS destination for email events. You can
 // use Amazon SNS to send notification when certain email events occur.
 type SnsDestination struct {
@@ -9424,6 +17997,263 @@ func (s *SnsDestination) Validate() error {
 // SetTopicArn sets the TopicArn field's value.
 func (s *SnsDestination) SetTopicArn(v string) *SnsDestination {
 	s.TopicArn = &v
+	return s
+}
+
+// An object that contains information about an email address that is on the
+// suppression list for your account.
+type SuppressedDestination struct {
+	_ struct{} `type:"structure"`
+
+	// An optional value that can contain additional information about the reasons
+	// that the address was added to the suppression list for your account.
+	Attributes *SuppressedDestinationAttributes `type:"structure"`
+
+	// The email address that is on the suppression list for your account.
+	//
+	// EmailAddress is a required field
+	EmailAddress *string `type:"string" required:"true"`
+
+	// The date and time when the suppressed destination was last updated, shown
+	// in Unix time format.
+	//
+	// LastUpdateTime is a required field
+	LastUpdateTime *time.Time `type:"timestamp" required:"true"`
+
+	// The reason that the address was added to the suppression list for your account.
+	//
+	// Reason is a required field
+	Reason *string `type:"string" required:"true" enum:"SuppressionListReason"`
+}
+
+// String returns the string representation
+func (s SuppressedDestination) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SuppressedDestination) GoString() string {
+	return s.String()
+}
+
+// SetAttributes sets the Attributes field's value.
+func (s *SuppressedDestination) SetAttributes(v *SuppressedDestinationAttributes) *SuppressedDestination {
+	s.Attributes = v
+	return s
+}
+
+// SetEmailAddress sets the EmailAddress field's value.
+func (s *SuppressedDestination) SetEmailAddress(v string) *SuppressedDestination {
+	s.EmailAddress = &v
+	return s
+}
+
+// SetLastUpdateTime sets the LastUpdateTime field's value.
+func (s *SuppressedDestination) SetLastUpdateTime(v time.Time) *SuppressedDestination {
+	s.LastUpdateTime = &v
+	return s
+}
+
+// SetReason sets the Reason field's value.
+func (s *SuppressedDestination) SetReason(v string) *SuppressedDestination {
+	s.Reason = &v
+	return s
+}
+
+// An object that contains additional attributes that are related an email address
+// that is on the suppression list for your account.
+type SuppressedDestinationAttributes struct {
+	_ struct{} `type:"structure"`
+
+	// A unique identifier that's generated when an email address is added to the
+	// suppression list for your account.
+	FeedbackId *string `type:"string"`
+
+	// The unique identifier of the email message that caused the email address
+	// to be added to the suppression list for your account.
+	MessageId *string `type:"string"`
+}
+
+// String returns the string representation
+func (s SuppressedDestinationAttributes) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SuppressedDestinationAttributes) GoString() string {
+	return s.String()
+}
+
+// SetFeedbackId sets the FeedbackId field's value.
+func (s *SuppressedDestinationAttributes) SetFeedbackId(v string) *SuppressedDestinationAttributes {
+	s.FeedbackId = &v
+	return s
+}
+
+// SetMessageId sets the MessageId field's value.
+func (s *SuppressedDestinationAttributes) SetMessageId(v string) *SuppressedDestinationAttributes {
+	s.MessageId = &v
+	return s
+}
+
+// A summary that describes the suppressed email address.
+type SuppressedDestinationSummary struct {
+	_ struct{} `type:"structure"`
+
+	// The email address that's on the suppression list for your account.
+	//
+	// EmailAddress is a required field
+	EmailAddress *string `type:"string" required:"true"`
+
+	// The date and time when the suppressed destination was last updated, shown
+	// in Unix time format.
+	//
+	// LastUpdateTime is a required field
+	LastUpdateTime *time.Time `type:"timestamp" required:"true"`
+
+	// The reason that the address was added to the suppression list for your account.
+	//
+	// Reason is a required field
+	Reason *string `type:"string" required:"true" enum:"SuppressionListReason"`
+}
+
+// String returns the string representation
+func (s SuppressedDestinationSummary) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SuppressedDestinationSummary) GoString() string {
+	return s.String()
+}
+
+// SetEmailAddress sets the EmailAddress field's value.
+func (s *SuppressedDestinationSummary) SetEmailAddress(v string) *SuppressedDestinationSummary {
+	s.EmailAddress = &v
+	return s
+}
+
+// SetLastUpdateTime sets the LastUpdateTime field's value.
+func (s *SuppressedDestinationSummary) SetLastUpdateTime(v time.Time) *SuppressedDestinationSummary {
+	s.LastUpdateTime = &v
+	return s
+}
+
+// SetReason sets the Reason field's value.
+func (s *SuppressedDestinationSummary) SetReason(v string) *SuppressedDestinationSummary {
+	s.Reason = &v
+	return s
+}
+
+// An object that contains information about the email address suppression preferences
+// for your account in the current AWS Region.
+type SuppressionAttributes struct {
+	_ struct{} `type:"structure"`
+
+	// A list that contains the reasons that email addresses will be automatically
+	// added to the suppression list for your account. This list can contain any
+	// or all of the following:
+	//
+	//    * COMPLAINT – Amazon SES adds an email address to the suppression list
+	//    for your account when a message sent to that address results in a complaint.
+	//
+	//    * BOUNCE – Amazon SES adds an email address to the suppression list
+	//    for your account when a message sent to that address results in a hard
+	//    bounce.
+	SuppressedReasons []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s SuppressionAttributes) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SuppressionAttributes) GoString() string {
+	return s.String()
+}
+
+// SetSuppressedReasons sets the SuppressedReasons field's value.
+func (s *SuppressionAttributes) SetSuppressedReasons(v []*string) *SuppressionAttributes {
+	s.SuppressedReasons = v
+	return s
+}
+
+// An object that contains details about the action of suppression list.
+type SuppressionListDestination struct {
+	_ struct{} `type:"structure"`
+
+	// The type of action that you want to perform on the address. Acceptable values:
+	//
+	//    * PUT: add the addresses to the suppression list. If the record already
+	//    exists, it will override it with the new value.
+	//
+	//    * DELETE: remove the addresses from the suppression list.
+	//
+	// SuppressionListImportAction is a required field
+	SuppressionListImportAction *string `type:"string" required:"true" enum:"SuppressionListImportAction"`
+}
+
+// String returns the string representation
+func (s SuppressionListDestination) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SuppressionListDestination) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SuppressionListDestination) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SuppressionListDestination"}
+	if s.SuppressionListImportAction == nil {
+		invalidParams.Add(request.NewErrParamRequired("SuppressionListImportAction"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetSuppressionListImportAction sets the SuppressionListImportAction field's value.
+func (s *SuppressionListDestination) SetSuppressionListImportAction(v string) *SuppressionListDestination {
+	s.SuppressionListImportAction = &v
+	return s
+}
+
+// An object that contains information about the suppression list preferences
+// for your account.
+type SuppressionOptions struct {
+	_ struct{} `type:"structure"`
+
+	// A list that contains the reasons that email addresses are automatically added
+	// to the suppression list for your account. This list can contain any or all
+	// of the following:
+	//
+	//    * COMPLAINT – Amazon SES adds an email address to the suppression list
+	//    for your account when a message sent to that address results in a complaint.
+	//
+	//    * BOUNCE – Amazon SES adds an email address to the suppression list
+	//    for your account when a message sent to that address results in a hard
+	//    bounce.
+	SuppressedReasons []*string `type:"list"`
+}
+
+// String returns the string representation
+func (s SuppressionOptions) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s SuppressionOptions) GoString() string {
+	return s.String()
+}
+
+// SetSuppressedReasons sets the SuppressedReasons field's value.
+func (s *SuppressionOptions) SetSuppressedReasons(v []*string) *SuppressionOptions {
+	s.SuppressedReasons = v
 	return s
 }
 
@@ -9607,6 +18437,10 @@ type Template struct {
 	// in the template. The corresponding value defines the value to use for that
 	// variable.
 	TemplateData *string `type:"string"`
+
+	// The name of the template. You will refer to this name when you send email
+	// using the SendTemplatedEmail or SendBulkTemplatedEmail operations.
+	TemplateName *string `min:"1" type:"string"`
 }
 
 // String returns the string representation
@@ -9619,6 +18453,19 @@ func (s Template) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Template) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Template"}
+	if s.TemplateName != nil && len(*s.TemplateName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TemplateName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // SetTemplateArn sets the TemplateArn field's value.
 func (s *Template) SetTemplateArn(v string) *Template {
 	s.TemplateArn = &v
@@ -9628,6 +18475,319 @@ func (s *Template) SetTemplateArn(v string) *Template {
 // SetTemplateData sets the TemplateData field's value.
 func (s *Template) SetTemplateData(v string) *Template {
 	s.TemplateData = &v
+	return s
+}
+
+// SetTemplateName sets the TemplateName field's value.
+func (s *Template) SetTemplateName(v string) *Template {
+	s.TemplateName = &v
+	return s
+}
+
+// >Represents a request to create a preview of the MIME content of an email
+// when provided with a template and a set of replacement data.
+type TestRenderEmailTemplateInput struct {
+	_ struct{} `type:"structure"`
+
+	// A list of replacement values to apply to the template. This parameter is
+	// a JSON object, typically consisting of key-value pairs in which the keys
+	// correspond to replacement tags in the email template.
+	//
+	// TemplateData is a required field
+	TemplateData *string `type:"string" required:"true"`
+
+	// The name of the template that you want to render.
+	//
+	// TemplateName is a required field
+	TemplateName *string `location:"uri" locationName:"TemplateName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s TestRenderEmailTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TestRenderEmailTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TestRenderEmailTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TestRenderEmailTemplateInput"}
+	if s.TemplateData == nil {
+		invalidParams.Add(request.NewErrParamRequired("TemplateData"))
+	}
+	if s.TemplateName == nil {
+		invalidParams.Add(request.NewErrParamRequired("TemplateName"))
+	}
+	if s.TemplateName != nil && len(*s.TemplateName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TemplateName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetTemplateData sets the TemplateData field's value.
+func (s *TestRenderEmailTemplateInput) SetTemplateData(v string) *TestRenderEmailTemplateInput {
+	s.TemplateData = &v
+	return s
+}
+
+// SetTemplateName sets the TemplateName field's value.
+func (s *TestRenderEmailTemplateInput) SetTemplateName(v string) *TestRenderEmailTemplateInput {
+	s.TemplateName = &v
+	return s
+}
+
+// The following element is returned by the service.
+type TestRenderEmailTemplateOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The complete MIME message rendered by applying the data in the TemplateData
+	// parameter to the template specified in the TemplateName parameter.
+	//
+	// RenderedTemplate is a required field
+	RenderedTemplate *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s TestRenderEmailTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TestRenderEmailTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// SetRenderedTemplate sets the RenderedTemplate field's value.
+func (s *TestRenderEmailTemplateOutput) SetRenderedTemplate(v string) *TestRenderEmailTemplateOutput {
+	s.RenderedTemplate = &v
+	return s
+}
+
+// Too many requests have been made to the operation.
+type TooManyRequestsException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s TooManyRequestsException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TooManyRequestsException) GoString() string {
+	return s.String()
+}
+
+func newErrorTooManyRequestsException(v protocol.ResponseMetadata) error {
+	return &TooManyRequestsException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *TooManyRequestsException) Code() string {
+	return "TooManyRequestsException"
+}
+
+// Message returns the exception's message.
+func (s *TooManyRequestsException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *TooManyRequestsException) OrigErr() error {
+	return nil
+}
+
+func (s *TooManyRequestsException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *TooManyRequestsException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *TooManyRequestsException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// An interest group, theme, or label within a list. Lists can have multiple
+// topics.
+type Topic struct {
+	_ struct{} `type:"structure"`
+
+	// The default subscription status to be applied to a contact if the contact
+	// has not noted their preference for subscribing to a topic.
+	//
+	// DefaultSubscriptionStatus is a required field
+	DefaultSubscriptionStatus *string `type:"string" required:"true" enum:"SubscriptionStatus"`
+
+	// A description of what the topic is about, which the contact will see.
+	Description *string `type:"string"`
+
+	// The name of the topic the contact will see.
+	//
+	// DisplayName is a required field
+	DisplayName *string `type:"string" required:"true"`
+
+	// The name of the topic.
+	//
+	// TopicName is a required field
+	TopicName *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s Topic) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Topic) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *Topic) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "Topic"}
+	if s.DefaultSubscriptionStatus == nil {
+		invalidParams.Add(request.NewErrParamRequired("DefaultSubscriptionStatus"))
+	}
+	if s.DisplayName == nil {
+		invalidParams.Add(request.NewErrParamRequired("DisplayName"))
+	}
+	if s.TopicName == nil {
+		invalidParams.Add(request.NewErrParamRequired("TopicName"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetDefaultSubscriptionStatus sets the DefaultSubscriptionStatus field's value.
+func (s *Topic) SetDefaultSubscriptionStatus(v string) *Topic {
+	s.DefaultSubscriptionStatus = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *Topic) SetDescription(v string) *Topic {
+	s.Description = &v
+	return s
+}
+
+// SetDisplayName sets the DisplayName field's value.
+func (s *Topic) SetDisplayName(v string) *Topic {
+	s.DisplayName = &v
+	return s
+}
+
+// SetTopicName sets the TopicName field's value.
+func (s *Topic) SetTopicName(v string) *Topic {
+	s.TopicName = &v
+	return s
+}
+
+// Used for filtering by a specific topic preference.
+type TopicFilter struct {
+	_ struct{} `type:"structure"`
+
+	// The name of a topic on which you wish to apply the filter.
+	TopicName *string `type:"string"`
+
+	// Notes that the default subscription status should be applied to a contact
+	// because the contact has not noted their preference for subscribing to a topic.
+	UseDefaultIfPreferenceUnavailable *bool `type:"boolean"`
+}
+
+// String returns the string representation
+func (s TopicFilter) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TopicFilter) GoString() string {
+	return s.String()
+}
+
+// SetTopicName sets the TopicName field's value.
+func (s *TopicFilter) SetTopicName(v string) *TopicFilter {
+	s.TopicName = &v
+	return s
+}
+
+// SetUseDefaultIfPreferenceUnavailable sets the UseDefaultIfPreferenceUnavailable field's value.
+func (s *TopicFilter) SetUseDefaultIfPreferenceUnavailable(v bool) *TopicFilter {
+	s.UseDefaultIfPreferenceUnavailable = &v
+	return s
+}
+
+// The contact's preference for being opted-in to or opted-out of a topic.
+type TopicPreference struct {
+	_ struct{} `type:"structure"`
+
+	// The contact's subscription status to a topic which is either OPT_IN or OPT_OUT.
+	//
+	// SubscriptionStatus is a required field
+	SubscriptionStatus *string `type:"string" required:"true" enum:"SubscriptionStatus"`
+
+	// The name of the topic.
+	//
+	// TopicName is a required field
+	TopicName *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s TopicPreference) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TopicPreference) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TopicPreference) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TopicPreference"}
+	if s.SubscriptionStatus == nil {
+		invalidParams.Add(request.NewErrParamRequired("SubscriptionStatus"))
+	}
+	if s.TopicName == nil {
+		invalidParams.Add(request.NewErrParamRequired("TopicName"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetSubscriptionStatus sets the SubscriptionStatus field's value.
+func (s *TopicPreference) SetSubscriptionStatus(v string) *TopicPreference {
+	s.SubscriptionStatus = &v
+	return s
+}
+
+// SetTopicName sets the TopicName field's value.
+func (s *TopicPreference) SetTopicName(v string) *TopicPreference {
+	s.TopicName = &v
 	return s
 }
 
@@ -9846,6 +19006,509 @@ func (s UpdateConfigurationSetEventDestinationOutput) GoString() string {
 	return s.String()
 }
 
+type UpdateContactInput struct {
+	_ struct{} `type:"structure"`
+
+	// The attribute data attached to a contact.
+	AttributesData *string `type:"string"`
+
+	// The name of the contact list.
+	//
+	// ContactListName is a required field
+	ContactListName *string `location:"uri" locationName:"ContactListName" type:"string" required:"true"`
+
+	// The contact's email addres.
+	//
+	// EmailAddress is a required field
+	EmailAddress *string `location:"uri" locationName:"EmailAddress" type:"string" required:"true"`
+
+	// The contact's preference for being opted-in to or opted-out of a topic.
+	TopicPreferences []*TopicPreference `type:"list"`
+
+	// A boolean value status noting if the contact is unsubscribed from all contact
+	// list topics.
+	UnsubscribeAll *bool `type:"boolean"`
+}
+
+// String returns the string representation
+func (s UpdateContactInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateContactInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateContactInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateContactInput"}
+	if s.ContactListName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ContactListName"))
+	}
+	if s.ContactListName != nil && len(*s.ContactListName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ContactListName", 1))
+	}
+	if s.EmailAddress == nil {
+		invalidParams.Add(request.NewErrParamRequired("EmailAddress"))
+	}
+	if s.EmailAddress != nil && len(*s.EmailAddress) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EmailAddress", 1))
+	}
+	if s.TopicPreferences != nil {
+		for i, v := range s.TopicPreferences {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "TopicPreferences", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetAttributesData sets the AttributesData field's value.
+func (s *UpdateContactInput) SetAttributesData(v string) *UpdateContactInput {
+	s.AttributesData = &v
+	return s
+}
+
+// SetContactListName sets the ContactListName field's value.
+func (s *UpdateContactInput) SetContactListName(v string) *UpdateContactInput {
+	s.ContactListName = &v
+	return s
+}
+
+// SetEmailAddress sets the EmailAddress field's value.
+func (s *UpdateContactInput) SetEmailAddress(v string) *UpdateContactInput {
+	s.EmailAddress = &v
+	return s
+}
+
+// SetTopicPreferences sets the TopicPreferences field's value.
+func (s *UpdateContactInput) SetTopicPreferences(v []*TopicPreference) *UpdateContactInput {
+	s.TopicPreferences = v
+	return s
+}
+
+// SetUnsubscribeAll sets the UnsubscribeAll field's value.
+func (s *UpdateContactInput) SetUnsubscribeAll(v bool) *UpdateContactInput {
+	s.UnsubscribeAll = &v
+	return s
+}
+
+type UpdateContactListInput struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the contact list.
+	//
+	// ContactListName is a required field
+	ContactListName *string `location:"uri" locationName:"ContactListName" type:"string" required:"true"`
+
+	// A description of what the contact list is about.
+	Description *string `type:"string"`
+
+	// An interest group, theme, or label within a list. A contact list can have
+	// multiple topics.
+	Topics []*Topic `type:"list"`
+}
+
+// String returns the string representation
+func (s UpdateContactListInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateContactListInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateContactListInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateContactListInput"}
+	if s.ContactListName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ContactListName"))
+	}
+	if s.ContactListName != nil && len(*s.ContactListName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ContactListName", 1))
+	}
+	if s.Topics != nil {
+		for i, v := range s.Topics {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Topics", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetContactListName sets the ContactListName field's value.
+func (s *UpdateContactListInput) SetContactListName(v string) *UpdateContactListInput {
+	s.ContactListName = &v
+	return s
+}
+
+// SetDescription sets the Description field's value.
+func (s *UpdateContactListInput) SetDescription(v string) *UpdateContactListInput {
+	s.Description = &v
+	return s
+}
+
+// SetTopics sets the Topics field's value.
+func (s *UpdateContactListInput) SetTopics(v []*Topic) *UpdateContactListInput {
+	s.Topics = v
+	return s
+}
+
+type UpdateContactListOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateContactListOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateContactListOutput) GoString() string {
+	return s.String()
+}
+
+type UpdateContactOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateContactOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateContactOutput) GoString() string {
+	return s.String()
+}
+
+// Represents a request to update an existing custom verification email template.
+type UpdateCustomVerificationEmailTemplateInput struct {
+	_ struct{} `type:"structure"`
+
+	// The URL that the recipient of the verification email is sent to if his or
+	// her address is not successfully verified.
+	//
+	// FailureRedirectionURL is a required field
+	FailureRedirectionURL *string `type:"string" required:"true"`
+
+	// The email address that the custom verification email is sent from.
+	//
+	// FromEmailAddress is a required field
+	FromEmailAddress *string `type:"string" required:"true"`
+
+	// The URL that the recipient of the verification email is sent to if his or
+	// her address is successfully verified.
+	//
+	// SuccessRedirectionURL is a required field
+	SuccessRedirectionURL *string `type:"string" required:"true"`
+
+	// The content of the custom verification email. The total size of the email
+	// must be less than 10 MB. The message body may contain HTML, with some limitations.
+	// For more information, see Custom Verification Email Frequently Asked Questions
+	// (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-email-verify-address-custom.html#custom-verification-emails-faq)
+	// in the Amazon SES Developer Guide.
+	//
+	// TemplateContent is a required field
+	TemplateContent *string `type:"string" required:"true"`
+
+	// The name of the custom verification email template that you want to update.
+	//
+	// TemplateName is a required field
+	TemplateName *string `location:"uri" locationName:"TemplateName" min:"1" type:"string" required:"true"`
+
+	// The subject line of the custom verification email.
+	//
+	// TemplateSubject is a required field
+	TemplateSubject *string `type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s UpdateCustomVerificationEmailTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateCustomVerificationEmailTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateCustomVerificationEmailTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateCustomVerificationEmailTemplateInput"}
+	if s.FailureRedirectionURL == nil {
+		invalidParams.Add(request.NewErrParamRequired("FailureRedirectionURL"))
+	}
+	if s.FromEmailAddress == nil {
+		invalidParams.Add(request.NewErrParamRequired("FromEmailAddress"))
+	}
+	if s.SuccessRedirectionURL == nil {
+		invalidParams.Add(request.NewErrParamRequired("SuccessRedirectionURL"))
+	}
+	if s.TemplateContent == nil {
+		invalidParams.Add(request.NewErrParamRequired("TemplateContent"))
+	}
+	if s.TemplateName == nil {
+		invalidParams.Add(request.NewErrParamRequired("TemplateName"))
+	}
+	if s.TemplateName != nil && len(*s.TemplateName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TemplateName", 1))
+	}
+	if s.TemplateSubject == nil {
+		invalidParams.Add(request.NewErrParamRequired("TemplateSubject"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFailureRedirectionURL sets the FailureRedirectionURL field's value.
+func (s *UpdateCustomVerificationEmailTemplateInput) SetFailureRedirectionURL(v string) *UpdateCustomVerificationEmailTemplateInput {
+	s.FailureRedirectionURL = &v
+	return s
+}
+
+// SetFromEmailAddress sets the FromEmailAddress field's value.
+func (s *UpdateCustomVerificationEmailTemplateInput) SetFromEmailAddress(v string) *UpdateCustomVerificationEmailTemplateInput {
+	s.FromEmailAddress = &v
+	return s
+}
+
+// SetSuccessRedirectionURL sets the SuccessRedirectionURL field's value.
+func (s *UpdateCustomVerificationEmailTemplateInput) SetSuccessRedirectionURL(v string) *UpdateCustomVerificationEmailTemplateInput {
+	s.SuccessRedirectionURL = &v
+	return s
+}
+
+// SetTemplateContent sets the TemplateContent field's value.
+func (s *UpdateCustomVerificationEmailTemplateInput) SetTemplateContent(v string) *UpdateCustomVerificationEmailTemplateInput {
+	s.TemplateContent = &v
+	return s
+}
+
+// SetTemplateName sets the TemplateName field's value.
+func (s *UpdateCustomVerificationEmailTemplateInput) SetTemplateName(v string) *UpdateCustomVerificationEmailTemplateInput {
+	s.TemplateName = &v
+	return s
+}
+
+// SetTemplateSubject sets the TemplateSubject field's value.
+func (s *UpdateCustomVerificationEmailTemplateInput) SetTemplateSubject(v string) *UpdateCustomVerificationEmailTemplateInput {
+	s.TemplateSubject = &v
+	return s
+}
+
+// If the action is successful, the service sends back an HTTP 200 response
+// with an empty HTTP body.
+type UpdateCustomVerificationEmailTemplateOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateCustomVerificationEmailTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateCustomVerificationEmailTemplateOutput) GoString() string {
+	return s.String()
+}
+
+// Represents a request to update a sending authorization policy for an identity.
+// Sending authorization is an Amazon SES feature that enables you to authorize
+// other senders to use your identities. For information, see the Amazon SES
+// Developer Guide (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-identity-owner-tasks-management.html).
+type UpdateEmailIdentityPolicyInput struct {
+	_ struct{} `type:"structure"`
+
+	// The email identity for which you want to update policy.
+	//
+	// EmailIdentity is a required field
+	EmailIdentity *string `location:"uri" locationName:"EmailIdentity" min:"1" type:"string" required:"true"`
+
+	// The text of the policy in JSON format. The policy cannot exceed 4 KB.
+	//
+	// For information about the syntax of sending authorization policies, see the
+	// Amazon SES Developer Guide (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/sending-authorization-policies.html).
+	//
+	// Policy is a required field
+	Policy *string `min:"1" type:"string" required:"true"`
+
+	// The name of the policy.
+	//
+	// The policy name cannot exceed 64 characters and can only include alphanumeric
+	// characters, dashes, and underscores.
+	//
+	// PolicyName is a required field
+	PolicyName *string `location:"uri" locationName:"PolicyName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s UpdateEmailIdentityPolicyInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateEmailIdentityPolicyInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateEmailIdentityPolicyInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateEmailIdentityPolicyInput"}
+	if s.EmailIdentity == nil {
+		invalidParams.Add(request.NewErrParamRequired("EmailIdentity"))
+	}
+	if s.EmailIdentity != nil && len(*s.EmailIdentity) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("EmailIdentity", 1))
+	}
+	if s.Policy == nil {
+		invalidParams.Add(request.NewErrParamRequired("Policy"))
+	}
+	if s.Policy != nil && len(*s.Policy) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("Policy", 1))
+	}
+	if s.PolicyName == nil {
+		invalidParams.Add(request.NewErrParamRequired("PolicyName"))
+	}
+	if s.PolicyName != nil && len(*s.PolicyName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("PolicyName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetEmailIdentity sets the EmailIdentity field's value.
+func (s *UpdateEmailIdentityPolicyInput) SetEmailIdentity(v string) *UpdateEmailIdentityPolicyInput {
+	s.EmailIdentity = &v
+	return s
+}
+
+// SetPolicy sets the Policy field's value.
+func (s *UpdateEmailIdentityPolicyInput) SetPolicy(v string) *UpdateEmailIdentityPolicyInput {
+	s.Policy = &v
+	return s
+}
+
+// SetPolicyName sets the PolicyName field's value.
+func (s *UpdateEmailIdentityPolicyInput) SetPolicyName(v string) *UpdateEmailIdentityPolicyInput {
+	s.PolicyName = &v
+	return s
+}
+
+// An HTTP 200 response if the request succeeds, or an error message if the
+// request fails.
+type UpdateEmailIdentityPolicyOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateEmailIdentityPolicyOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateEmailIdentityPolicyOutput) GoString() string {
+	return s.String()
+}
+
+// Represents a request to update an email template. For more information, see
+// the Amazon SES Developer Guide (https://docs.aws.amazon.com/ses/latest/DeveloperGuide/send-personalized-email-api.html).
+type UpdateEmailTemplateInput struct {
+	_ struct{} `type:"structure"`
+
+	// The content of the email template, composed of a subject line, an HTML part,
+	// and a text-only part.
+	//
+	// TemplateContent is a required field
+	TemplateContent *EmailTemplateContent `type:"structure" required:"true"`
+
+	// The name of the template you want to update.
+	//
+	// TemplateName is a required field
+	TemplateName *string `location:"uri" locationName:"TemplateName" min:"1" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s UpdateEmailTemplateInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateEmailTemplateInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateEmailTemplateInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateEmailTemplateInput"}
+	if s.TemplateContent == nil {
+		invalidParams.Add(request.NewErrParamRequired("TemplateContent"))
+	}
+	if s.TemplateName == nil {
+		invalidParams.Add(request.NewErrParamRequired("TemplateName"))
+	}
+	if s.TemplateName != nil && len(*s.TemplateName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("TemplateName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetTemplateContent sets the TemplateContent field's value.
+func (s *UpdateEmailTemplateInput) SetTemplateContent(v *EmailTemplateContent) *UpdateEmailTemplateInput {
+	s.TemplateContent = v
+	return s
+}
+
+// SetTemplateName sets the TemplateName field's value.
+func (s *UpdateEmailTemplateInput) SetTemplateName(v string) *UpdateEmailTemplateInput {
+	s.TemplateName = &v
+	return s
+}
+
+// If the action is successful, the service sends back an HTTP 200 response
+// with an empty HTTP body.
+type UpdateEmailTemplateOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateEmailTemplateOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateEmailTemplateOutput) GoString() string {
+	return s.String()
+}
+
 // An object that contains information about the amount of email that was delivered
 // to recipients.
 type VolumeStatistics struct {
@@ -9917,6 +19580,127 @@ const (
 	BehaviorOnMxFailureRejectMessage = "REJECT_MESSAGE"
 )
 
+// BehaviorOnMxFailure_Values returns all elements of the BehaviorOnMxFailure enum
+func BehaviorOnMxFailure_Values() []string {
+	return []string{
+		BehaviorOnMxFailureUseDefaultValue,
+		BehaviorOnMxFailureRejectMessage,
+	}
+}
+
+const (
+	// BulkEmailStatusSuccess is a BulkEmailStatus enum value
+	BulkEmailStatusSuccess = "SUCCESS"
+
+	// BulkEmailStatusMessageRejected is a BulkEmailStatus enum value
+	BulkEmailStatusMessageRejected = "MESSAGE_REJECTED"
+
+	// BulkEmailStatusMailFromDomainNotVerified is a BulkEmailStatus enum value
+	BulkEmailStatusMailFromDomainNotVerified = "MAIL_FROM_DOMAIN_NOT_VERIFIED"
+
+	// BulkEmailStatusConfigurationSetNotFound is a BulkEmailStatus enum value
+	BulkEmailStatusConfigurationSetNotFound = "CONFIGURATION_SET_NOT_FOUND"
+
+	// BulkEmailStatusTemplateNotFound is a BulkEmailStatus enum value
+	BulkEmailStatusTemplateNotFound = "TEMPLATE_NOT_FOUND"
+
+	// BulkEmailStatusAccountSuspended is a BulkEmailStatus enum value
+	BulkEmailStatusAccountSuspended = "ACCOUNT_SUSPENDED"
+
+	// BulkEmailStatusAccountThrottled is a BulkEmailStatus enum value
+	BulkEmailStatusAccountThrottled = "ACCOUNT_THROTTLED"
+
+	// BulkEmailStatusAccountDailyQuotaExceeded is a BulkEmailStatus enum value
+	BulkEmailStatusAccountDailyQuotaExceeded = "ACCOUNT_DAILY_QUOTA_EXCEEDED"
+
+	// BulkEmailStatusInvalidSendingPoolName is a BulkEmailStatus enum value
+	BulkEmailStatusInvalidSendingPoolName = "INVALID_SENDING_POOL_NAME"
+
+	// BulkEmailStatusAccountSendingPaused is a BulkEmailStatus enum value
+	BulkEmailStatusAccountSendingPaused = "ACCOUNT_SENDING_PAUSED"
+
+	// BulkEmailStatusConfigurationSetSendingPaused is a BulkEmailStatus enum value
+	BulkEmailStatusConfigurationSetSendingPaused = "CONFIGURATION_SET_SENDING_PAUSED"
+
+	// BulkEmailStatusInvalidParameter is a BulkEmailStatus enum value
+	BulkEmailStatusInvalidParameter = "INVALID_PARAMETER"
+
+	// BulkEmailStatusTransientFailure is a BulkEmailStatus enum value
+	BulkEmailStatusTransientFailure = "TRANSIENT_FAILURE"
+
+	// BulkEmailStatusFailed is a BulkEmailStatus enum value
+	BulkEmailStatusFailed = "FAILED"
+)
+
+// BulkEmailStatus_Values returns all elements of the BulkEmailStatus enum
+func BulkEmailStatus_Values() []string {
+	return []string{
+		BulkEmailStatusSuccess,
+		BulkEmailStatusMessageRejected,
+		BulkEmailStatusMailFromDomainNotVerified,
+		BulkEmailStatusConfigurationSetNotFound,
+		BulkEmailStatusTemplateNotFound,
+		BulkEmailStatusAccountSuspended,
+		BulkEmailStatusAccountThrottled,
+		BulkEmailStatusAccountDailyQuotaExceeded,
+		BulkEmailStatusInvalidSendingPoolName,
+		BulkEmailStatusAccountSendingPaused,
+		BulkEmailStatusConfigurationSetSendingPaused,
+		BulkEmailStatusInvalidParameter,
+		BulkEmailStatusTransientFailure,
+		BulkEmailStatusFailed,
+	}
+}
+
+const (
+	// ContactLanguageEn is a ContactLanguage enum value
+	ContactLanguageEn = "EN"
+
+	// ContactLanguageJa is a ContactLanguage enum value
+	ContactLanguageJa = "JA"
+)
+
+// ContactLanguage_Values returns all elements of the ContactLanguage enum
+func ContactLanguage_Values() []string {
+	return []string{
+		ContactLanguageEn,
+		ContactLanguageJa,
+	}
+}
+
+const (
+	// ContactListImportActionDelete is a ContactListImportAction enum value
+	ContactListImportActionDelete = "DELETE"
+
+	// ContactListImportActionPut is a ContactListImportAction enum value
+	ContactListImportActionPut = "PUT"
+)
+
+// ContactListImportAction_Values returns all elements of the ContactListImportAction enum
+func ContactListImportAction_Values() []string {
+	return []string{
+		ContactListImportActionDelete,
+		ContactListImportActionPut,
+	}
+}
+
+// The data format of the import job's data source.
+const (
+	// DataFormatCsv is a DataFormat enum value
+	DataFormatCsv = "CSV"
+
+	// DataFormatJson is a DataFormat enum value
+	DataFormatJson = "JSON"
+)
+
+// DataFormat_Values returns all elements of the DataFormat enum
+func DataFormat_Values() []string {
+	return []string{
+		DataFormatCsv,
+		DataFormatJson,
+	}
+}
+
 // The current status of your Deliverability dashboard subscription. If this
 // value is PENDING_EXPIRATION, your subscription is scheduled to expire at
 // the end of the current calendar month.
@@ -9931,6 +19715,15 @@ const (
 	DeliverabilityDashboardAccountStatusDisabled = "DISABLED"
 )
 
+// DeliverabilityDashboardAccountStatus_Values returns all elements of the DeliverabilityDashboardAccountStatus enum
+func DeliverabilityDashboardAccountStatus_Values() []string {
+	return []string{
+		DeliverabilityDashboardAccountStatusActive,
+		DeliverabilityDashboardAccountStatusPendingExpiration,
+		DeliverabilityDashboardAccountStatusDisabled,
+	}
+}
+
 // The status of a predictive inbox placement test. If the status is IN_PROGRESS,
 // then the predictive inbox placement test is currently running. Predictive
 // inbox placement tests are usually complete within 24 hours of creating the
@@ -9943,6 +19736,14 @@ const (
 	// DeliverabilityTestStatusCompleted is a DeliverabilityTestStatus enum value
 	DeliverabilityTestStatusCompleted = "COMPLETED"
 )
+
+// DeliverabilityTestStatus_Values returns all elements of the DeliverabilityTestStatus enum
+func DeliverabilityTestStatus_Values() []string {
+	return []string{
+		DeliverabilityTestStatusInProgress,
+		DeliverabilityTestStatusCompleted,
+	}
+}
 
 // The location where the Amazon SES API v2 finds the value of a dimension to
 // publish to Amazon CloudWatch. If you want to use the message tags that you
@@ -9960,18 +19761,42 @@ const (
 	DimensionValueSourceLinkTag = "LINK_TAG"
 )
 
+// DimensionValueSource_Values returns all elements of the DimensionValueSource enum
+func DimensionValueSource_Values() []string {
+	return []string{
+		DimensionValueSourceMessageTag,
+		DimensionValueSourceEmailHeader,
+		DimensionValueSourceLinkTag,
+	}
+}
+
+const (
+	// DkimSigningAttributesOriginAwsSes is a DkimSigningAttributesOrigin enum value
+	DkimSigningAttributesOriginAwsSes = "AWS_SES"
+
+	// DkimSigningAttributesOriginExternal is a DkimSigningAttributesOrigin enum value
+	DkimSigningAttributesOriginExternal = "EXTERNAL"
+)
+
+// DkimSigningAttributesOrigin_Values returns all elements of the DkimSigningAttributesOrigin enum
+func DkimSigningAttributesOrigin_Values() []string {
+	return []string{
+		DkimSigningAttributesOriginAwsSes,
+		DkimSigningAttributesOriginExternal,
+	}
+}
+
 // The DKIM authentication status of the identity. The status can be one of
 // the following:
 //
-//    * PENDING – The DKIM verification process was initiated, and Amazon
-//    SES hasn't yet detected the CNAME records in the DNS configuration for
+//    * PENDING – The verification process was initiated, but Amazon SES hasn't
+//    yet detected the DKIM records in the DNS configuration for the domain.
+//
+//    * SUCCESS – The verification process completed successfully.
+//
+//    * FAILED – The verification process failed. This typically occurs when
+//    Amazon SES fails to find the DKIM records in the DNS configuration of
 //    the domain.
-//
-//    * SUCCESS – The DKIM authentication process completed successfully.
-//
-//    * FAILED – The DKIM authentication process failed. This can happen when
-//    Amazon SES fails to find the required CNAME records in the DNS configuration
-//    of the domain.
 //
 //    * TEMPORARY_FAILURE – A temporary issue is preventing Amazon SES from
 //    determining the DKIM authentication status of the domain.
@@ -9994,6 +19819,17 @@ const (
 	// DkimStatusNotStarted is a DkimStatus enum value
 	DkimStatusNotStarted = "NOT_STARTED"
 )
+
+// DkimStatus_Values returns all elements of the DkimStatus enum
+func DkimStatus_Values() []string {
+	return []string{
+		DkimStatusPending,
+		DkimStatusSuccess,
+		DkimStatusFailed,
+		DkimStatusTemporaryFailure,
+		DkimStatusNotStarted,
+	}
+}
 
 // An email sending event type. For example, email sends, opens, and bounces
 // are all email events.
@@ -10021,7 +19857,29 @@ const (
 
 	// EventTypeRenderingFailure is a EventType enum value
 	EventTypeRenderingFailure = "RENDERING_FAILURE"
+
+	// EventTypeDeliveryDelay is a EventType enum value
+	EventTypeDeliveryDelay = "DELIVERY_DELAY"
+
+	// EventTypeSubscription is a EventType enum value
+	EventTypeSubscription = "SUBSCRIPTION"
 )
+
+// EventType_Values returns all elements of the EventType enum
+func EventType_Values() []string {
+	return []string{
+		EventTypeSend,
+		EventTypeReject,
+		EventTypeBounce,
+		EventTypeComplaint,
+		EventTypeDelivery,
+		EventTypeOpen,
+		EventTypeClick,
+		EventTypeRenderingFailure,
+		EventTypeDeliveryDelay,
+		EventTypeSubscription,
+	}
+}
 
 // The email identity type. The identity type can be one of the following:
 //
@@ -10038,6 +19896,58 @@ const (
 	// IdentityTypeManagedDomain is a IdentityType enum value
 	IdentityTypeManagedDomain = "MANAGED_DOMAIN"
 )
+
+// IdentityType_Values returns all elements of the IdentityType enum
+func IdentityType_Values() []string {
+	return []string{
+		IdentityTypeEmailAddress,
+		IdentityTypeDomain,
+		IdentityTypeManagedDomain,
+	}
+}
+
+// The destination of the import job, which can be used to list import jobs
+// that have a certain ImportDestinationType.
+const (
+	// ImportDestinationTypeSuppressionList is a ImportDestinationType enum value
+	ImportDestinationTypeSuppressionList = "SUPPRESSION_LIST"
+
+	// ImportDestinationTypeContactList is a ImportDestinationType enum value
+	ImportDestinationTypeContactList = "CONTACT_LIST"
+)
+
+// ImportDestinationType_Values returns all elements of the ImportDestinationType enum
+func ImportDestinationType_Values() []string {
+	return []string{
+		ImportDestinationTypeSuppressionList,
+		ImportDestinationTypeContactList,
+	}
+}
+
+// The status of the import job.
+const (
+	// JobStatusCreated is a JobStatus enum value
+	JobStatusCreated = "CREATED"
+
+	// JobStatusProcessing is a JobStatus enum value
+	JobStatusProcessing = "PROCESSING"
+
+	// JobStatusCompleted is a JobStatus enum value
+	JobStatusCompleted = "COMPLETED"
+
+	// JobStatusFailed is a JobStatus enum value
+	JobStatusFailed = "FAILED"
+)
+
+// JobStatus_Values returns all elements of the JobStatus enum
+func JobStatus_Values() []string {
+	return []string{
+		JobStatusCreated,
+		JobStatusProcessing,
+		JobStatusCompleted,
+		JobStatusFailed,
+	}
+}
 
 // The status of the MAIL FROM domain. This status can have the following values:
 //
@@ -10065,6 +19975,118 @@ const (
 	MailFromDomainStatusTemporaryFailure = "TEMPORARY_FAILURE"
 )
 
+// MailFromDomainStatus_Values returns all elements of the MailFromDomainStatus enum
+func MailFromDomainStatus_Values() []string {
+	return []string{
+		MailFromDomainStatusPending,
+		MailFromDomainStatusSuccess,
+		MailFromDomainStatusFailed,
+		MailFromDomainStatusTemporaryFailure,
+	}
+}
+
+const (
+	// MailTypeMarketing is a MailType enum value
+	MailTypeMarketing = "MARKETING"
+
+	// MailTypeTransactional is a MailType enum value
+	MailTypeTransactional = "TRANSACTIONAL"
+)
+
+// MailType_Values returns all elements of the MailType enum
+func MailType_Values() []string {
+	return []string{
+		MailTypeMarketing,
+		MailTypeTransactional,
+	}
+}
+
+const (
+	// ReviewStatusPending is a ReviewStatus enum value
+	ReviewStatusPending = "PENDING"
+
+	// ReviewStatusFailed is a ReviewStatus enum value
+	ReviewStatusFailed = "FAILED"
+
+	// ReviewStatusGranted is a ReviewStatus enum value
+	ReviewStatusGranted = "GRANTED"
+
+	// ReviewStatusDenied is a ReviewStatus enum value
+	ReviewStatusDenied = "DENIED"
+)
+
+// ReviewStatus_Values returns all elements of the ReviewStatus enum
+func ReviewStatus_Values() []string {
+	return []string{
+		ReviewStatusPending,
+		ReviewStatusFailed,
+		ReviewStatusGranted,
+		ReviewStatusDenied,
+	}
+}
+
+const (
+	// SubscriptionStatusOptIn is a SubscriptionStatus enum value
+	SubscriptionStatusOptIn = "OPT_IN"
+
+	// SubscriptionStatusOptOut is a SubscriptionStatus enum value
+	SubscriptionStatusOptOut = "OPT_OUT"
+)
+
+// SubscriptionStatus_Values returns all elements of the SubscriptionStatus enum
+func SubscriptionStatus_Values() []string {
+	return []string{
+		SubscriptionStatusOptIn,
+		SubscriptionStatusOptOut,
+	}
+}
+
+// The type of action that you want to perform on the address. Acceptable values:
+//
+//    * PUT: add the addresses to the suppression list.
+//
+//    * DELETE: remove the address from the suppression list.
+const (
+	// SuppressionListImportActionDelete is a SuppressionListImportAction enum value
+	SuppressionListImportActionDelete = "DELETE"
+
+	// SuppressionListImportActionPut is a SuppressionListImportAction enum value
+	SuppressionListImportActionPut = "PUT"
+)
+
+// SuppressionListImportAction_Values returns all elements of the SuppressionListImportAction enum
+func SuppressionListImportAction_Values() []string {
+	return []string{
+		SuppressionListImportActionDelete,
+		SuppressionListImportActionPut,
+	}
+}
+
+// The reason that the address was added to the suppression list for your account.
+// The value can be one of the following:
+//
+//    * COMPLAINT – Amazon SES added an email address to the suppression list
+//    for your account because a message sent to that address results in a complaint.
+//
+//    * BOUNCE – Amazon SES added an email address to the suppression list
+//    for your account because a message sent to that address results in a hard
+//    bounce.
+const (
+	// SuppressionListReasonBounce is a SuppressionListReason enum value
+	SuppressionListReasonBounce = "BOUNCE"
+
+	// SuppressionListReasonComplaint is a SuppressionListReason enum value
+	SuppressionListReasonComplaint = "COMPLAINT"
+)
+
+// SuppressionListReason_Values returns all elements of the SuppressionListReason enum
+func SuppressionListReason_Values() []string {
+	return []string{
+		SuppressionListReasonBounce,
+		SuppressionListReasonComplaint,
+	}
+}
+
 // Specifies whether messages that use the configuration set are required to
 // use Transport Layer Security (TLS). If the value is Require, messages are
 // only delivered if a TLS connection can be established. If the value is Optional,
@@ -10077,6 +20099,14 @@ const (
 	TlsPolicyOptional = "OPTIONAL"
 )
 
+// TlsPolicy_Values returns all elements of the TlsPolicy enum
+func TlsPolicy_Values() []string {
+	return []string{
+		TlsPolicyRequire,
+		TlsPolicyOptional,
+	}
+}
+
 // The warmup status of a dedicated IP.
 const (
 	// WarmupStatusInProgress is a WarmupStatus enum value
@@ -10085,3 +20115,11 @@ const (
 	// WarmupStatusDone is a WarmupStatus enum value
 	WarmupStatusDone = "DONE"
 )
+
+// WarmupStatus_Values returns all elements of the WarmupStatus enum
+func WarmupStatus_Values() []string {
+	return []string{
+		WarmupStatusInProgress,
+		WarmupStatusDone,
+	}
+}

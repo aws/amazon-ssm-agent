@@ -67,11 +67,11 @@ func (c *Greengrass) AssociateRoleToGroupRequest(input *AssociateRoleToGroupInpu
 // See the AWS API reference guide for AWS Greengrass's
 // API operation AssociateRoleToGroup for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/AssociateRoleToGroup
@@ -152,11 +152,11 @@ func (c *Greengrass) AssociateServiceRoleToAccountRequest(input *AssociateServic
 // See the AWS API reference guide for AWS Greengrass's
 // API operation AssociateServiceRoleToAccount for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/AssociateServiceRoleToAccount
@@ -236,8 +236,8 @@ func (c *Greengrass) CreateConnectorDefinitionRequest(input *CreateConnectorDefi
 // See the AWS API reference guide for AWS Greengrass's
 // API operation CreateConnectorDefinition for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/CreateConnectorDefinition
@@ -315,8 +315,8 @@ func (c *Greengrass) CreateConnectorDefinitionVersionRequest(input *CreateConnec
 // See the AWS API reference guide for AWS Greengrass's
 // API operation CreateConnectorDefinitionVersion for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/CreateConnectorDefinitionVersion
@@ -396,8 +396,8 @@ func (c *Greengrass) CreateCoreDefinitionRequest(input *CreateCoreDefinitionInpu
 // See the AWS API reference guide for AWS Greengrass's
 // API operation CreateCoreDefinition for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/CreateCoreDefinition
@@ -476,8 +476,8 @@ func (c *Greengrass) CreateCoreDefinitionVersionRequest(input *CreateCoreDefinit
 // See the AWS API reference guide for AWS Greengrass's
 // API operation CreateCoreDefinitionVersion for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/CreateCoreDefinitionVersion
@@ -556,8 +556,8 @@ func (c *Greengrass) CreateDeploymentRequest(input *CreateDeploymentInput) (req 
 // See the AWS API reference guide for AWS Greengrass's
 // API operation CreateDeployment for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/CreateDeployment
@@ -636,8 +636,8 @@ func (c *Greengrass) CreateDeviceDefinitionRequest(input *CreateDeviceDefinition
 // See the AWS API reference guide for AWS Greengrass's
 // API operation CreateDeviceDefinition for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/CreateDeviceDefinition
@@ -715,8 +715,8 @@ func (c *Greengrass) CreateDeviceDefinitionVersionRequest(input *CreateDeviceDef
 // See the AWS API reference guide for AWS Greengrass's
 // API operation CreateDeviceDefinitionVersion for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/CreateDeviceDefinitionVersion
@@ -797,8 +797,8 @@ func (c *Greengrass) CreateFunctionDefinitionRequest(input *CreateFunctionDefini
 // See the AWS API reference guide for AWS Greengrass's
 // API operation CreateFunctionDefinition for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/CreateFunctionDefinition
@@ -876,8 +876,8 @@ func (c *Greengrass) CreateFunctionDefinitionVersionRequest(input *CreateFunctio
 // See the AWS API reference guide for AWS Greengrass's
 // API operation CreateFunctionDefinitionVersion for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/CreateFunctionDefinitionVersion
@@ -958,8 +958,8 @@ func (c *Greengrass) CreateGroupRequest(input *CreateGroupInput) (req *request.R
 // See the AWS API reference guide for AWS Greengrass's
 // API operation CreateGroup for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/CreateGroup
@@ -1038,11 +1038,11 @@ func (c *Greengrass) CreateGroupCertificateAuthorityRequest(input *CreateGroupCe
 // See the AWS API reference guide for AWS Greengrass's
 // API operation CreateGroupCertificateAuthority for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/CreateGroupCertificateAuthority
@@ -1120,8 +1120,8 @@ func (c *Greengrass) CreateGroupVersionRequest(input *CreateGroupVersionInput) (
 // See the AWS API reference guide for AWS Greengrass's
 // API operation CreateGroupVersion for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/CreateGroupVersion
@@ -1200,8 +1200,8 @@ func (c *Greengrass) CreateLoggerDefinitionRequest(input *CreateLoggerDefinition
 // See the AWS API reference guide for AWS Greengrass's
 // API operation CreateLoggerDefinition for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/CreateLoggerDefinition
@@ -1279,8 +1279,8 @@ func (c *Greengrass) CreateLoggerDefinitionVersionRequest(input *CreateLoggerDef
 // See the AWS API reference guide for AWS Greengrass's
 // API operation CreateLoggerDefinitionVersion for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/CreateLoggerDefinitionVersion
@@ -1360,8 +1360,8 @@ func (c *Greengrass) CreateResourceDefinitionRequest(input *CreateResourceDefini
 // See the AWS API reference guide for AWS Greengrass's
 // API operation CreateResourceDefinition for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/CreateResourceDefinition
@@ -1439,8 +1439,8 @@ func (c *Greengrass) CreateResourceDefinitionVersionRequest(input *CreateResourc
 // See the AWS API reference guide for AWS Greengrass's
 // API operation CreateResourceDefinitionVersion for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/CreateResourceDefinitionVersion
@@ -1521,11 +1521,11 @@ func (c *Greengrass) CreateSoftwareUpdateJobRequest(input *CreateSoftwareUpdateJ
 // See the AWS API reference guide for AWS Greengrass's
 // API operation CreateSoftwareUpdateJob for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/CreateSoftwareUpdateJob
@@ -1605,8 +1605,8 @@ func (c *Greengrass) CreateSubscriptionDefinitionRequest(input *CreateSubscripti
 // See the AWS API reference guide for AWS Greengrass's
 // API operation CreateSubscriptionDefinition for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/CreateSubscriptionDefinition
@@ -1684,8 +1684,8 @@ func (c *Greengrass) CreateSubscriptionDefinitionVersionRequest(input *CreateSub
 // See the AWS API reference guide for AWS Greengrass's
 // API operation CreateSubscriptionDefinitionVersion for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/CreateSubscriptionDefinitionVersion
@@ -1764,8 +1764,8 @@ func (c *Greengrass) DeleteConnectorDefinitionRequest(input *DeleteConnectorDefi
 // See the AWS API reference guide for AWS Greengrass's
 // API operation DeleteConnectorDefinition for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/DeleteConnectorDefinition
@@ -1844,8 +1844,8 @@ func (c *Greengrass) DeleteCoreDefinitionRequest(input *DeleteCoreDefinitionInpu
 // See the AWS API reference guide for AWS Greengrass's
 // API operation DeleteCoreDefinition for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/DeleteCoreDefinition
@@ -1924,8 +1924,8 @@ func (c *Greengrass) DeleteDeviceDefinitionRequest(input *DeleteDeviceDefinition
 // See the AWS API reference guide for AWS Greengrass's
 // API operation DeleteDeviceDefinition for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/DeleteDeviceDefinition
@@ -2004,8 +2004,8 @@ func (c *Greengrass) DeleteFunctionDefinitionRequest(input *DeleteFunctionDefini
 // See the AWS API reference guide for AWS Greengrass's
 // API operation DeleteFunctionDefinition for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/DeleteFunctionDefinition
@@ -2084,8 +2084,8 @@ func (c *Greengrass) DeleteGroupRequest(input *DeleteGroupInput) (req *request.R
 // See the AWS API reference guide for AWS Greengrass's
 // API operation DeleteGroup for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/DeleteGroup
@@ -2164,8 +2164,8 @@ func (c *Greengrass) DeleteLoggerDefinitionRequest(input *DeleteLoggerDefinition
 // See the AWS API reference guide for AWS Greengrass's
 // API operation DeleteLoggerDefinition for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/DeleteLoggerDefinition
@@ -2244,8 +2244,8 @@ func (c *Greengrass) DeleteResourceDefinitionRequest(input *DeleteResourceDefini
 // See the AWS API reference guide for AWS Greengrass's
 // API operation DeleteResourceDefinition for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/DeleteResourceDefinition
@@ -2324,8 +2324,8 @@ func (c *Greengrass) DeleteSubscriptionDefinitionRequest(input *DeleteSubscripti
 // See the AWS API reference guide for AWS Greengrass's
 // API operation DeleteSubscriptionDefinition for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/DeleteSubscriptionDefinition
@@ -2403,11 +2403,11 @@ func (c *Greengrass) DisassociateRoleFromGroupRequest(input *DisassociateRoleFro
 // See the AWS API reference guide for AWS Greengrass's
 // API operation DisassociateRoleFromGroup for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/DisassociateRoleFromGroup
@@ -2486,8 +2486,8 @@ func (c *Greengrass) DisassociateServiceRoleFromAccountRequest(input *Disassocia
 // See the AWS API reference guide for AWS Greengrass's
 // API operation DisassociateServiceRoleFromAccount for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+// Returned Error Types:
+//   * InternalServerErrorException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/DisassociateServiceRoleFromAccount
@@ -2565,11 +2565,11 @@ func (c *Greengrass) GetAssociatedRoleRequest(input *GetAssociatedRoleInput) (re
 // See the AWS API reference guide for AWS Greengrass's
 // API operation GetAssociatedRole for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetAssociatedRole
@@ -2647,8 +2647,8 @@ func (c *Greengrass) GetBulkDeploymentStatusRequest(input *GetBulkDeploymentStat
 // See the AWS API reference guide for AWS Greengrass's
 // API operation GetBulkDeploymentStatus for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetBulkDeploymentStatus
@@ -2726,11 +2726,11 @@ func (c *Greengrass) GetConnectivityInfoRequest(input *GetConnectivityInfoInput)
 // See the AWS API reference guide for AWS Greengrass's
 // API operation GetConnectivityInfo for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetConnectivityInfo
@@ -2808,8 +2808,8 @@ func (c *Greengrass) GetConnectorDefinitionRequest(input *GetConnectorDefinition
 // See the AWS API reference guide for AWS Greengrass's
 // API operation GetConnectorDefinition for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetConnectorDefinition
@@ -2890,8 +2890,8 @@ func (c *Greengrass) GetConnectorDefinitionVersionRequest(input *GetConnectorDef
 // See the AWS API reference guide for AWS Greengrass's
 // API operation GetConnectorDefinitionVersion for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetConnectorDefinitionVersion
@@ -2969,8 +2969,8 @@ func (c *Greengrass) GetCoreDefinitionRequest(input *GetCoreDefinitionInput) (re
 // See the AWS API reference guide for AWS Greengrass's
 // API operation GetCoreDefinition for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetCoreDefinition
@@ -3048,8 +3048,8 @@ func (c *Greengrass) GetCoreDefinitionVersionRequest(input *GetCoreDefinitionVer
 // See the AWS API reference guide for AWS Greengrass's
 // API operation GetCoreDefinitionVersion for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetCoreDefinitionVersion
@@ -3127,8 +3127,8 @@ func (c *Greengrass) GetDeploymentStatusRequest(input *GetDeploymentStatusInput)
 // See the AWS API reference guide for AWS Greengrass's
 // API operation GetDeploymentStatus for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetDeploymentStatus
@@ -3206,8 +3206,8 @@ func (c *Greengrass) GetDeviceDefinitionRequest(input *GetDeviceDefinitionInput)
 // See the AWS API reference guide for AWS Greengrass's
 // API operation GetDeviceDefinition for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetDeviceDefinition
@@ -3285,8 +3285,8 @@ func (c *Greengrass) GetDeviceDefinitionVersionRequest(input *GetDeviceDefinitio
 // See the AWS API reference guide for AWS Greengrass's
 // API operation GetDeviceDefinitionVersion for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetDeviceDefinitionVersion
@@ -3365,8 +3365,8 @@ func (c *Greengrass) GetFunctionDefinitionRequest(input *GetFunctionDefinitionIn
 // See the AWS API reference guide for AWS Greengrass's
 // API operation GetFunctionDefinition for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetFunctionDefinition
@@ -3445,8 +3445,8 @@ func (c *Greengrass) GetFunctionDefinitionVersionRequest(input *GetFunctionDefin
 // See the AWS API reference guide for AWS Greengrass's
 // API operation GetFunctionDefinitionVersion for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetFunctionDefinitionVersion
@@ -3524,8 +3524,8 @@ func (c *Greengrass) GetGroupRequest(input *GetGroupInput) (req *request.Request
 // See the AWS API reference guide for AWS Greengrass's
 // API operation GetGroup for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetGroup
@@ -3603,11 +3603,11 @@ func (c *Greengrass) GetGroupCertificateAuthorityRequest(input *GetGroupCertific
 // See the AWS API reference guide for AWS Greengrass's
 // API operation GetGroupCertificateAuthority for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetGroupCertificateAuthority
@@ -3685,11 +3685,11 @@ func (c *Greengrass) GetGroupCertificateConfigurationRequest(input *GetGroupCert
 // See the AWS API reference guide for AWS Greengrass's
 // API operation GetGroupCertificateConfiguration for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetGroupCertificateConfiguration
@@ -3767,8 +3767,8 @@ func (c *Greengrass) GetGroupVersionRequest(input *GetGroupVersionInput) (req *r
 // See the AWS API reference guide for AWS Greengrass's
 // API operation GetGroupVersion for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetGroupVersion
@@ -3846,8 +3846,8 @@ func (c *Greengrass) GetLoggerDefinitionRequest(input *GetLoggerDefinitionInput)
 // See the AWS API reference guide for AWS Greengrass's
 // API operation GetLoggerDefinition for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetLoggerDefinition
@@ -3925,8 +3925,8 @@ func (c *Greengrass) GetLoggerDefinitionVersionRequest(input *GetLoggerDefinitio
 // See the AWS API reference guide for AWS Greengrass's
 // API operation GetLoggerDefinitionVersion for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetLoggerDefinitionVersion
@@ -4005,8 +4005,8 @@ func (c *Greengrass) GetResourceDefinitionRequest(input *GetResourceDefinitionIn
 // See the AWS API reference guide for AWS Greengrass's
 // API operation GetResourceDefinition for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetResourceDefinition
@@ -4085,8 +4085,8 @@ func (c *Greengrass) GetResourceDefinitionVersionRequest(input *GetResourceDefin
 // See the AWS API reference guide for AWS Greengrass's
 // API operation GetResourceDefinitionVersion for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetResourceDefinitionVersion
@@ -4164,8 +4164,8 @@ func (c *Greengrass) GetServiceRoleForAccountRequest(input *GetServiceRoleForAcc
 // See the AWS API reference guide for AWS Greengrass's
 // API operation GetServiceRoleForAccount for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+// Returned Error Types:
+//   * InternalServerErrorException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetServiceRoleForAccount
@@ -4243,8 +4243,8 @@ func (c *Greengrass) GetSubscriptionDefinitionRequest(input *GetSubscriptionDefi
 // See the AWS API reference guide for AWS Greengrass's
 // API operation GetSubscriptionDefinition for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetSubscriptionDefinition
@@ -4322,8 +4322,8 @@ func (c *Greengrass) GetSubscriptionDefinitionVersionRequest(input *GetSubscript
 // See the AWS API reference guide for AWS Greengrass's
 // API operation GetSubscriptionDefinitionVersion for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetSubscriptionDefinitionVersion
@@ -4343,6 +4343,88 @@ func (c *Greengrass) GetSubscriptionDefinitionVersion(input *GetSubscriptionDefi
 // for more information on using Contexts.
 func (c *Greengrass) GetSubscriptionDefinitionVersionWithContext(ctx aws.Context, input *GetSubscriptionDefinitionVersionInput, opts ...request.Option) (*GetSubscriptionDefinitionVersionOutput, error) {
 	req, out := c.GetSubscriptionDefinitionVersionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opGetThingRuntimeConfiguration = "GetThingRuntimeConfiguration"
+
+// GetThingRuntimeConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the GetThingRuntimeConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See GetThingRuntimeConfiguration for more information on using the GetThingRuntimeConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the GetThingRuntimeConfigurationRequest method.
+//    req, resp := client.GetThingRuntimeConfigurationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetThingRuntimeConfiguration
+func (c *Greengrass) GetThingRuntimeConfigurationRequest(input *GetThingRuntimeConfigurationInput) (req *request.Request, output *GetThingRuntimeConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opGetThingRuntimeConfiguration,
+		HTTPMethod: "GET",
+		HTTPPath:   "/greengrass/things/{ThingName}/runtimeconfig",
+	}
+
+	if input == nil {
+		input = &GetThingRuntimeConfigurationInput{}
+	}
+
+	output = &GetThingRuntimeConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// GetThingRuntimeConfiguration API operation for AWS Greengrass.
+//
+// Get the runtime configuration of a thing.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Greengrass's
+// API operation GetThingRuntimeConfiguration for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   General error information.
+//
+//   * InternalServerErrorException
+//   General error information.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/GetThingRuntimeConfiguration
+func (c *Greengrass) GetThingRuntimeConfiguration(input *GetThingRuntimeConfigurationInput) (*GetThingRuntimeConfigurationOutput, error) {
+	req, out := c.GetThingRuntimeConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// GetThingRuntimeConfigurationWithContext is the same as GetThingRuntimeConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See GetThingRuntimeConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Greengrass) GetThingRuntimeConfigurationWithContext(ctx aws.Context, input *GetThingRuntimeConfigurationInput, opts ...request.Option) (*GetThingRuntimeConfigurationOutput, error) {
+	req, out := c.GetThingRuntimeConfigurationRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -4402,8 +4484,8 @@ func (c *Greengrass) ListBulkDeploymentDetailedReportsRequest(input *ListBulkDep
 // See the AWS API reference guide for AWS Greengrass's
 // API operation ListBulkDeploymentDetailedReports for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/ListBulkDeploymentDetailedReports
@@ -4481,8 +4563,8 @@ func (c *Greengrass) ListBulkDeploymentsRequest(input *ListBulkDeploymentsInput)
 // See the AWS API reference guide for AWS Greengrass's
 // API operation ListBulkDeployments for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/ListBulkDeployments
@@ -4562,8 +4644,8 @@ func (c *Greengrass) ListConnectorDefinitionVersionsRequest(input *ListConnector
 // See the AWS API reference guide for AWS Greengrass's
 // API operation ListConnectorDefinitionVersions for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/ListConnectorDefinitionVersions
@@ -4715,8 +4797,8 @@ func (c *Greengrass) ListCoreDefinitionVersionsRequest(input *ListCoreDefinition
 // See the AWS API reference guide for AWS Greengrass's
 // API operation ListCoreDefinitionVersions for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/ListCoreDefinitionVersions
@@ -4868,8 +4950,8 @@ func (c *Greengrass) ListDeploymentsRequest(input *ListDeploymentsInput) (req *r
 // See the AWS API reference guide for AWS Greengrass's
 // API operation ListDeployments for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/ListDeployments
@@ -4947,8 +5029,8 @@ func (c *Greengrass) ListDeviceDefinitionVersionsRequest(input *ListDeviceDefini
 // See the AWS API reference guide for AWS Greengrass's
 // API operation ListDeviceDefinitionVersions for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/ListDeviceDefinitionVersions
@@ -5100,8 +5182,8 @@ func (c *Greengrass) ListFunctionDefinitionVersionsRequest(input *ListFunctionDe
 // See the AWS API reference guide for AWS Greengrass's
 // API operation ListFunctionDefinitionVersions for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/ListFunctionDefinitionVersions
@@ -5253,11 +5335,11 @@ func (c *Greengrass) ListGroupCertificateAuthoritiesRequest(input *ListGroupCert
 // See the AWS API reference guide for AWS Greengrass's
 // API operation ListGroupCertificateAuthorities for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/ListGroupCertificateAuthorities
@@ -5335,8 +5417,8 @@ func (c *Greengrass) ListGroupVersionsRequest(input *ListGroupVersionsInput) (re
 // See the AWS API reference guide for AWS Greengrass's
 // API operation ListGroupVersions for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/ListGroupVersions
@@ -5488,8 +5570,8 @@ func (c *Greengrass) ListLoggerDefinitionVersionsRequest(input *ListLoggerDefini
 // See the AWS API reference guide for AWS Greengrass's
 // API operation ListLoggerDefinitionVersions for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/ListLoggerDefinitionVersions
@@ -5641,8 +5723,8 @@ func (c *Greengrass) ListResourceDefinitionVersionsRequest(input *ListResourceDe
 // See the AWS API reference guide for AWS Greengrass's
 // API operation ListResourceDefinitionVersions for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/ListResourceDefinitionVersions
@@ -5794,8 +5876,8 @@ func (c *Greengrass) ListSubscriptionDefinitionVersionsRequest(input *ListSubscr
 // See the AWS API reference guide for AWS Greengrass's
 // API operation ListSubscriptionDefinitionVersions for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/ListSubscriptionDefinitionVersions
@@ -5947,8 +6029,8 @@ func (c *Greengrass) ListTagsForResourceRequest(input *ListTagsForResourceInput)
 // See the AWS API reference guide for AWS Greengrass's
 // API operation ListTagsForResource for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/ListTagsForResource
@@ -6026,8 +6108,8 @@ func (c *Greengrass) ResetDeploymentsRequest(input *ResetDeploymentsInput) (req 
 // See the AWS API reference guide for AWS Greengrass's
 // API operation ResetDeployments for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/ResetDeployments
@@ -6110,8 +6192,8 @@ func (c *Greengrass) StartBulkDeploymentRequest(input *StartBulkDeploymentInput)
 // See the AWS API reference guide for AWS Greengrass's
 // API operation StartBulkDeployment for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/StartBulkDeployment
@@ -6193,8 +6275,8 @@ func (c *Greengrass) StopBulkDeploymentRequest(input *StopBulkDeploymentInput) (
 // See the AWS API reference guide for AWS Greengrass's
 // API operation StopBulkDeployment for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/StopBulkDeployment
@@ -6275,8 +6357,8 @@ func (c *Greengrass) TagResourceRequest(input *TagResourceInput) (req *request.R
 // See the AWS API reference guide for AWS Greengrass's
 // API operation TagResource for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/TagResource
@@ -6355,8 +6437,8 @@ func (c *Greengrass) UntagResourceRequest(input *UntagResourceInput) (req *reque
 // See the AWS API reference guide for AWS Greengrass's
 // API operation UntagResource for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/UntagResource
@@ -6436,11 +6518,11 @@ func (c *Greengrass) UpdateConnectivityInfoRequest(input *UpdateConnectivityInfo
 // See the AWS API reference guide for AWS Greengrass's
 // API operation UpdateConnectivityInfo for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/UpdateConnectivityInfo
@@ -6519,8 +6601,8 @@ func (c *Greengrass) UpdateConnectorDefinitionRequest(input *UpdateConnectorDefi
 // See the AWS API reference guide for AWS Greengrass's
 // API operation UpdateConnectorDefinition for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/UpdateConnectorDefinition
@@ -6599,8 +6681,8 @@ func (c *Greengrass) UpdateCoreDefinitionRequest(input *UpdateCoreDefinitionInpu
 // See the AWS API reference guide for AWS Greengrass's
 // API operation UpdateCoreDefinition for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/UpdateCoreDefinition
@@ -6679,8 +6761,8 @@ func (c *Greengrass) UpdateDeviceDefinitionRequest(input *UpdateDeviceDefinition
 // See the AWS API reference guide for AWS Greengrass's
 // API operation UpdateDeviceDefinition for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/UpdateDeviceDefinition
@@ -6759,8 +6841,8 @@ func (c *Greengrass) UpdateFunctionDefinitionRequest(input *UpdateFunctionDefini
 // See the AWS API reference guide for AWS Greengrass's
 // API operation UpdateFunctionDefinition for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/UpdateFunctionDefinition
@@ -6839,8 +6921,8 @@ func (c *Greengrass) UpdateGroupRequest(input *UpdateGroupInput) (req *request.R
 // See the AWS API reference guide for AWS Greengrass's
 // API operation UpdateGroup for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/UpdateGroup
@@ -6918,11 +7000,11 @@ func (c *Greengrass) UpdateGroupCertificateConfigurationRequest(input *UpdateGro
 // See the AWS API reference guide for AWS Greengrass's
 // API operation UpdateGroupCertificateConfiguration for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/UpdateGroupCertificateConfiguration
@@ -7001,8 +7083,8 @@ func (c *Greengrass) UpdateLoggerDefinitionRequest(input *UpdateLoggerDefinition
 // See the AWS API reference guide for AWS Greengrass's
 // API operation UpdateLoggerDefinition for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/UpdateLoggerDefinition
@@ -7081,8 +7163,8 @@ func (c *Greengrass) UpdateResourceDefinitionRequest(input *UpdateResourceDefini
 // See the AWS API reference guide for AWS Greengrass's
 // API operation UpdateResourceDefinition for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/UpdateResourceDefinition
@@ -7161,8 +7243,8 @@ func (c *Greengrass) UpdateSubscriptionDefinitionRequest(input *UpdateSubscripti
 // See the AWS API reference guide for AWS Greengrass's
 // API operation UpdateSubscriptionDefinition for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   General error information.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/UpdateSubscriptionDefinition
@@ -7182,6 +7264,89 @@ func (c *Greengrass) UpdateSubscriptionDefinition(input *UpdateSubscriptionDefin
 // for more information on using Contexts.
 func (c *Greengrass) UpdateSubscriptionDefinitionWithContext(ctx aws.Context, input *UpdateSubscriptionDefinitionInput, opts ...request.Option) (*UpdateSubscriptionDefinitionOutput, error) {
 	req, out := c.UpdateSubscriptionDefinitionRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateThingRuntimeConfiguration = "UpdateThingRuntimeConfiguration"
+
+// UpdateThingRuntimeConfigurationRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateThingRuntimeConfiguration operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateThingRuntimeConfiguration for more information on using the UpdateThingRuntimeConfiguration
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateThingRuntimeConfigurationRequest method.
+//    req, resp := client.UpdateThingRuntimeConfigurationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/UpdateThingRuntimeConfiguration
+func (c *Greengrass) UpdateThingRuntimeConfigurationRequest(input *UpdateThingRuntimeConfigurationInput) (req *request.Request, output *UpdateThingRuntimeConfigurationOutput) {
+	op := &request.Operation{
+		Name:       opUpdateThingRuntimeConfiguration,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/greengrass/things/{ThingName}/runtimeconfig",
+	}
+
+	if input == nil {
+		input = &UpdateThingRuntimeConfigurationInput{}
+	}
+
+	output = &UpdateThingRuntimeConfigurationOutput{}
+	req = c.newRequest(op, input, output)
+	req.Handlers.Unmarshal.Swap(restjson.UnmarshalHandler.Name, protocol.UnmarshalDiscardBodyHandler)
+	return
+}
+
+// UpdateThingRuntimeConfiguration API operation for AWS Greengrass.
+//
+// Updates the runtime configuration of a thing.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS Greengrass's
+// API operation UpdateThingRuntimeConfiguration for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   General error information.
+//
+//   * InternalServerErrorException
+//   General error information.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/greengrass-2017-06-07/UpdateThingRuntimeConfiguration
+func (c *Greengrass) UpdateThingRuntimeConfiguration(input *UpdateThingRuntimeConfigurationInput) (*UpdateThingRuntimeConfigurationOutput, error) {
+	req, out := c.UpdateThingRuntimeConfigurationRequest(input)
+	return out, req.Send()
+}
+
+// UpdateThingRuntimeConfigurationWithContext is the same as UpdateThingRuntimeConfiguration with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateThingRuntimeConfiguration for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Greengrass) UpdateThingRuntimeConfigurationWithContext(ctx aws.Context, input *UpdateThingRuntimeConfigurationInput, opts ...request.Option) (*UpdateThingRuntimeConfigurationOutput, error) {
+	req, out := c.UpdateThingRuntimeConfigurationRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -7324,6 +7489,65 @@ func (s AssociateServiceRoleToAccountOutput) GoString() string {
 func (s *AssociateServiceRoleToAccountOutput) SetAssociatedAt(v string) *AssociateServiceRoleToAccountOutput {
 	s.AssociatedAt = &v
 	return s
+}
+
+// General error information.
+type BadRequestException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	// A list of error details.
+	ErrorDetails []*ErrorDetail `type:"list"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation
+func (s BadRequestException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BadRequestException) GoString() string {
+	return s.String()
+}
+
+func newErrorBadRequestException(v protocol.ResponseMetadata) error {
+	return &BadRequestException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *BadRequestException) Code() string {
+	return "BadRequestException"
+}
+
+// Message returns the exception's message.
+func (s *BadRequestException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *BadRequestException) OrigErr() error {
+	return nil
+}
+
+func (s *BadRequestException) Error() string {
+	return fmt.Sprintf("%s: %s\n%s", s.Code(), s.Message(), s.String())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *BadRequestException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *BadRequestException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 // Information about a bulk deployment. You cannot start a new bulk deployment
@@ -13920,6 +14144,69 @@ func (s *GetSubscriptionDefinitionVersionOutput) SetVersion(v string) *GetSubscr
 	return s
 }
 
+type GetThingRuntimeConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	// ThingName is a required field
+	ThingName *string `location:"uri" locationName:"ThingName" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s GetThingRuntimeConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetThingRuntimeConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *GetThingRuntimeConfigurationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "GetThingRuntimeConfigurationInput"}
+	if s.ThingName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ThingName"))
+	}
+	if s.ThingName != nil && len(*s.ThingName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ThingName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetThingName sets the ThingName field's value.
+func (s *GetThingRuntimeConfigurationInput) SetThingName(v string) *GetThingRuntimeConfigurationInput {
+	s.ThingName = &v
+	return s
+}
+
+// The runtime configuration for a thing.
+type GetThingRuntimeConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// Runtime configuration for a thing.
+	RuntimeConfiguration *RuntimeConfiguration `type:"structure"`
+}
+
+// String returns the string representation
+func (s GetThingRuntimeConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GetThingRuntimeConfigurationOutput) GoString() string {
+	return s.String()
+}
+
+// SetRuntimeConfiguration sets the RuntimeConfiguration field's value.
+func (s *GetThingRuntimeConfigurationOutput) SetRuntimeConfiguration(v *RuntimeConfiguration) *GetThingRuntimeConfigurationOutput {
+	s.RuntimeConfiguration = v
+	return s
+}
+
 // Information about a certificate authority for a group.
 type GroupCertificateAuthorityProperties struct {
 	_ struct{} `type:"structure"`
@@ -14143,6 +14430,65 @@ func (s *GroupVersion) SetResourceDefinitionVersionArn(v string) *GroupVersion {
 func (s *GroupVersion) SetSubscriptionDefinitionVersionArn(v string) *GroupVersion {
 	s.SubscriptionDefinitionVersionArn = &v
 	return s
+}
+
+// General error information.
+type InternalServerErrorException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	// A list of error details.
+	ErrorDetails []*ErrorDetail `type:"list"`
+
+	Message_ *string `locationName:"Message" type:"string"`
+}
+
+// String returns the string representation
+func (s InternalServerErrorException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InternalServerErrorException) GoString() string {
+	return s.String()
+}
+
+func newErrorInternalServerErrorException(v protocol.ResponseMetadata) error {
+	return &InternalServerErrorException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *InternalServerErrorException) Code() string {
+	return "InternalServerErrorException"
+}
+
+// Message returns the exception's message.
+func (s *InternalServerErrorException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *InternalServerErrorException) OrigErr() error {
+	return nil
+}
+
+func (s *InternalServerErrorException) Error() string {
+	return fmt.Sprintf("%s: %s\n%s", s.Code(), s.Message(), s.String())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *InternalServerErrorException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *InternalServerErrorException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 type ListBulkDeploymentDetailedReportsInput struct {
@@ -16021,6 +16367,11 @@ func (s *Resource) Validate() error {
 	if s.ResourceDataContainer == nil {
 		invalidParams.Add(request.NewErrParamRequired("ResourceDataContainer"))
 	}
+	if s.ResourceDataContainer != nil {
+		if err := s.ResourceDataContainer.Validate(); err != nil {
+			invalidParams.AddNested("ResourceDataContainer", err.(request.ErrInvalidParams))
+		}
+	}
 
 	if invalidParams.Len() > 0 {
 		return invalidParams
@@ -16130,6 +16481,26 @@ func (s ResourceDataContainer) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ResourceDataContainer) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ResourceDataContainer"}
+	if s.S3MachineLearningModelResourceData != nil {
+		if err := s.S3MachineLearningModelResourceData.Validate(); err != nil {
+			invalidParams.AddNested("S3MachineLearningModelResourceData", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.SageMakerMachineLearningModelResourceData != nil {
+		if err := s.SageMakerMachineLearningModelResourceData.Validate(); err != nil {
+			invalidParams.AddNested("SageMakerMachineLearningModelResourceData", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // SetLocalDeviceResourceData sets the LocalDeviceResourceData field's value.
 func (s *ResourceDataContainer) SetLocalDeviceResourceData(v *LocalDeviceResourceData) *ResourceDataContainer {
 	s.LocalDeviceResourceData = v
@@ -16204,12 +16575,95 @@ func (s *ResourceDefinitionVersion) SetResources(v []*Resource) *ResourceDefinit
 	return s
 }
 
+// The owner setting for downloaded machine learning resources.
+type ResourceDownloadOwnerSetting struct {
+	_ struct{} `type:"structure"`
+
+	// The group owner of the resource. This is the name of an existing Linux OS
+	// group on the system or a GID. The group's permissions are added to the Lambda
+	// process.
+	//
+	// GroupOwner is a required field
+	GroupOwner *string `type:"string" required:"true"`
+
+	// The permissions that the group owner has to the resource. Valid values are
+	// ''rw'' (read/write) or ''ro'' (read-only).
+	//
+	// GroupPermission is a required field
+	GroupPermission *string `type:"string" required:"true" enum:"Permission"`
+}
+
+// String returns the string representation
+func (s ResourceDownloadOwnerSetting) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ResourceDownloadOwnerSetting) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ResourceDownloadOwnerSetting) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ResourceDownloadOwnerSetting"}
+	if s.GroupOwner == nil {
+		invalidParams.Add(request.NewErrParamRequired("GroupOwner"))
+	}
+	if s.GroupPermission == nil {
+		invalidParams.Add(request.NewErrParamRequired("GroupPermission"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetGroupOwner sets the GroupOwner field's value.
+func (s *ResourceDownloadOwnerSetting) SetGroupOwner(v string) *ResourceDownloadOwnerSetting {
+	s.GroupOwner = &v
+	return s
+}
+
+// SetGroupPermission sets the GroupPermission field's value.
+func (s *ResourceDownloadOwnerSetting) SetGroupPermission(v string) *ResourceDownloadOwnerSetting {
+	s.GroupPermission = &v
+	return s
+}
+
+// Runtime configuration for a thing.
+type RuntimeConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Configuration for telemetry service.
+	TelemetryConfiguration *TelemetryConfiguration `type:"structure"`
+}
+
+// String returns the string representation
+func (s RuntimeConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RuntimeConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetTelemetryConfiguration sets the TelemetryConfiguration field's value.
+func (s *RuntimeConfiguration) SetTelemetryConfiguration(v *TelemetryConfiguration) *RuntimeConfiguration {
+	s.TelemetryConfiguration = v
+	return s
+}
+
 // Attributes that define an Amazon S3 machine learning resource.
 type S3MachineLearningModelResourceData struct {
 	_ struct{} `type:"structure"`
 
 	// The absolute local path of the resource inside the Lambda environment.
 	DestinationPath *string `type:"string"`
+
+	// The owner setting for downloaded machine learning resources.
+	OwnerSetting *ResourceDownloadOwnerSetting `type:"structure"`
 
 	// The URI of the source model in an S3 bucket. The model package must be in
 	// tar.gz or .zip format.
@@ -16226,9 +16680,30 @@ func (s S3MachineLearningModelResourceData) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *S3MachineLearningModelResourceData) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "S3MachineLearningModelResourceData"}
+	if s.OwnerSetting != nil {
+		if err := s.OwnerSetting.Validate(); err != nil {
+			invalidParams.AddNested("OwnerSetting", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // SetDestinationPath sets the DestinationPath field's value.
 func (s *S3MachineLearningModelResourceData) SetDestinationPath(v string) *S3MachineLearningModelResourceData {
 	s.DestinationPath = &v
+	return s
+}
+
+// SetOwnerSetting sets the OwnerSetting field's value.
+func (s *S3MachineLearningModelResourceData) SetOwnerSetting(v *ResourceDownloadOwnerSetting) *S3MachineLearningModelResourceData {
+	s.OwnerSetting = v
 	return s
 }
 
@@ -16245,6 +16720,9 @@ type SageMakerMachineLearningModelResourceData struct {
 	// The absolute local path of the resource inside the Lambda environment.
 	DestinationPath *string `type:"string"`
 
+	// The owner setting for downloaded machine learning resources.
+	OwnerSetting *ResourceDownloadOwnerSetting `type:"structure"`
+
 	// The ARN of the Amazon SageMaker training job that represents the source model.
 	SageMakerJobArn *string `type:"string"`
 }
@@ -16259,9 +16737,30 @@ func (s SageMakerMachineLearningModelResourceData) GoString() string {
 	return s.String()
 }
 
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *SageMakerMachineLearningModelResourceData) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "SageMakerMachineLearningModelResourceData"}
+	if s.OwnerSetting != nil {
+		if err := s.OwnerSetting.Validate(); err != nil {
+			invalidParams.AddNested("OwnerSetting", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
 // SetDestinationPath sets the DestinationPath field's value.
 func (s *SageMakerMachineLearningModelResourceData) SetDestinationPath(v string) *SageMakerMachineLearningModelResourceData {
 	s.DestinationPath = &v
+	return s
+}
+
+// SetOwnerSetting sets the OwnerSetting field's value.
+func (s *SageMakerMachineLearningModelResourceData) SetOwnerSetting(v *ResourceDownloadOwnerSetting) *SageMakerMachineLearningModelResourceData {
+	s.OwnerSetting = v
 	return s
 }
 
@@ -16663,6 +17162,81 @@ func (s TagResourceOutput) String() string {
 // GoString returns the string representation
 func (s TagResourceOutput) GoString() string {
 	return s.String()
+}
+
+// Configuration settings for running telemetry.
+type TelemetryConfiguration struct {
+	_ struct{} `type:"structure"`
+
+	// Synchronization status of the device reported configuration with the desired
+	// configuration.
+	ConfigurationSyncStatus *string `type:"string" enum:"ConfigurationSyncStatus"`
+
+	// Configure telemetry to be on or off.
+	//
+	// Telemetry is a required field
+	Telemetry *string `type:"string" required:"true" enum:"Telemetry"`
+}
+
+// String returns the string representation
+func (s TelemetryConfiguration) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TelemetryConfiguration) GoString() string {
+	return s.String()
+}
+
+// SetConfigurationSyncStatus sets the ConfigurationSyncStatus field's value.
+func (s *TelemetryConfiguration) SetConfigurationSyncStatus(v string) *TelemetryConfiguration {
+	s.ConfigurationSyncStatus = &v
+	return s
+}
+
+// SetTelemetry sets the Telemetry field's value.
+func (s *TelemetryConfiguration) SetTelemetry(v string) *TelemetryConfiguration {
+	s.Telemetry = &v
+	return s
+}
+
+// Configuration settings for running telemetry.
+type TelemetryConfigurationUpdate struct {
+	_ struct{} `type:"structure"`
+
+	// Configure telemetry to be on or off.
+	//
+	// Telemetry is a required field
+	Telemetry *string `type:"string" required:"true" enum:"Telemetry"`
+}
+
+// String returns the string representation
+func (s TelemetryConfigurationUpdate) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TelemetryConfigurationUpdate) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *TelemetryConfigurationUpdate) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "TelemetryConfigurationUpdate"}
+	if s.Telemetry == nil {
+		invalidParams.Add(request.NewErrParamRequired("Telemetry"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetTelemetry sets the Telemetry field's value.
+func (s *TelemetryConfigurationUpdate) SetTelemetry(v string) *TelemetryConfigurationUpdate {
+	s.Telemetry = &v
+	return s
 }
 
 type UntagResourceInput struct {
@@ -17385,6 +17959,73 @@ func (s UpdateSubscriptionDefinitionOutput) GoString() string {
 	return s.String()
 }
 
+type UpdateThingRuntimeConfigurationInput struct {
+	_ struct{} `type:"structure"`
+
+	// Configuration settings for running telemetry.
+	TelemetryConfiguration *TelemetryConfigurationUpdate `type:"structure"`
+
+	// ThingName is a required field
+	ThingName *string `location:"uri" locationName:"ThingName" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s UpdateThingRuntimeConfigurationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateThingRuntimeConfigurationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateThingRuntimeConfigurationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateThingRuntimeConfigurationInput"}
+	if s.ThingName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ThingName"))
+	}
+	if s.ThingName != nil && len(*s.ThingName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ThingName", 1))
+	}
+	if s.TelemetryConfiguration != nil {
+		if err := s.TelemetryConfiguration.Validate(); err != nil {
+			invalidParams.AddNested("TelemetryConfiguration", err.(request.ErrInvalidParams))
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetTelemetryConfiguration sets the TelemetryConfiguration field's value.
+func (s *UpdateThingRuntimeConfigurationInput) SetTelemetryConfiguration(v *TelemetryConfigurationUpdate) *UpdateThingRuntimeConfigurationInput {
+	s.TelemetryConfiguration = v
+	return s
+}
+
+// SetThingName sets the ThingName field's value.
+func (s *UpdateThingRuntimeConfigurationInput) SetThingName(v string) *UpdateThingRuntimeConfigurationInput {
+	s.ThingName = &v
+	return s
+}
+
+type UpdateThingRuntimeConfigurationOutput struct {
+	_ struct{} `type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateThingRuntimeConfigurationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateThingRuntimeConfigurationOutput) GoString() string {
+	return s.String()
+}
+
 // Information about a version.
 type VersionInformation struct {
 	_ struct{} `type:"structure"`
@@ -17457,6 +18098,34 @@ const (
 	BulkDeploymentStatusFailed = "Failed"
 )
 
+// BulkDeploymentStatus_Values returns all elements of the BulkDeploymentStatus enum
+func BulkDeploymentStatus_Values() []string {
+	return []string{
+		BulkDeploymentStatusInitializing,
+		BulkDeploymentStatusRunning,
+		BulkDeploymentStatusCompleted,
+		BulkDeploymentStatusStopping,
+		BulkDeploymentStatusStopped,
+		BulkDeploymentStatusFailed,
+	}
+}
+
+const (
+	// ConfigurationSyncStatusInSync is a ConfigurationSyncStatus enum value
+	ConfigurationSyncStatusInSync = "InSync"
+
+	// ConfigurationSyncStatusOutOfSync is a ConfigurationSyncStatus enum value
+	ConfigurationSyncStatusOutOfSync = "OutOfSync"
+)
+
+// ConfigurationSyncStatus_Values returns all elements of the ConfigurationSyncStatus enum
+func ConfigurationSyncStatus_Values() []string {
+	return []string{
+		ConfigurationSyncStatusInSync,
+		ConfigurationSyncStatusOutOfSync,
+	}
+}
+
 // The type of deployment. When used for ''CreateDeployment'', only ''NewDeployment''
 // and ''Redeployment'' are valid.
 const (
@@ -17473,6 +18142,16 @@ const (
 	DeploymentTypeForceResetDeployment = "ForceResetDeployment"
 )
 
+// DeploymentType_Values returns all elements of the DeploymentType enum
+func DeploymentType_Values() []string {
+	return []string{
+		DeploymentTypeNewDeployment,
+		DeploymentTypeRedeployment,
+		DeploymentTypeResetDeployment,
+		DeploymentTypeForceResetDeployment,
+	}
+}
+
 const (
 	// EncodingTypeBinary is a EncodingType enum value
 	EncodingTypeBinary = "binary"
@@ -17480,6 +18159,14 @@ const (
 	// EncodingTypeJson is a EncodingType enum value
 	EncodingTypeJson = "json"
 )
+
+// EncodingType_Values returns all elements of the EncodingType enum
+func EncodingType_Values() []string {
+	return []string{
+		EncodingTypeBinary,
+		EncodingTypeJson,
+	}
+}
 
 // Specifies whether the Lambda function runs in a Greengrass container (default)
 // or without containerization. Unless your scenario requires that you run without
@@ -17494,6 +18181,14 @@ const (
 	FunctionIsolationModeNoContainer = "NoContainer"
 )
 
+// FunctionIsolationMode_Values returns all elements of the FunctionIsolationMode enum
+func FunctionIsolationMode_Values() []string {
+	return []string{
+		FunctionIsolationModeGreengrassContainer,
+		FunctionIsolationModeNoContainer,
+	}
+}
+
 const (
 	// LoggerComponentGreengrassSystem is a LoggerComponent enum value
 	LoggerComponentGreengrassSystem = "GreengrassSystem"
@@ -17501,6 +18196,14 @@ const (
 	// LoggerComponentLambda is a LoggerComponent enum value
 	LoggerComponentLambda = "Lambda"
 )
+
+// LoggerComponent_Values returns all elements of the LoggerComponent enum
+func LoggerComponent_Values() []string {
+	return []string{
+		LoggerComponentGreengrassSystem,
+		LoggerComponentLambda,
+	}
+}
 
 const (
 	// LoggerLevelDebug is a LoggerLevel enum value
@@ -17519,6 +18222,17 @@ const (
 	LoggerLevelFatal = "FATAL"
 )
 
+// LoggerLevel_Values returns all elements of the LoggerLevel enum
+func LoggerLevel_Values() []string {
+	return []string{
+		LoggerLevelDebug,
+		LoggerLevelInfo,
+		LoggerLevelWarn,
+		LoggerLevelError,
+		LoggerLevelFatal,
+	}
+}
+
 const (
 	// LoggerTypeFileSystem is a LoggerType enum value
 	LoggerTypeFileSystem = "FileSystem"
@@ -17526,6 +18240,14 @@ const (
 	// LoggerTypeAwscloudWatch is a LoggerType enum value
 	LoggerTypeAwscloudWatch = "AWSCloudWatch"
 )
+
+// LoggerType_Values returns all elements of the LoggerType enum
+func LoggerType_Values() []string {
+	return []string{
+		LoggerTypeFileSystem,
+		LoggerTypeAwscloudWatch,
+	}
+}
 
 // The type of permission a function has to access a resource.
 const (
@@ -17536,6 +18258,14 @@ const (
 	PermissionRw = "rw"
 )
 
+// Permission_Values returns all elements of the Permission enum
+func Permission_Values() []string {
+	return []string{
+		PermissionRo,
+		PermissionRw,
+	}
+}
+
 // The piece of software on the Greengrass core that will be updated.
 const (
 	// SoftwareToUpdateCore is a SoftwareToUpdate enum value
@@ -17544,6 +18274,30 @@ const (
 	// SoftwareToUpdateOtaAgent is a SoftwareToUpdate enum value
 	SoftwareToUpdateOtaAgent = "ota_agent"
 )
+
+// SoftwareToUpdate_Values returns all elements of the SoftwareToUpdate enum
+func SoftwareToUpdate_Values() []string {
+	return []string{
+		SoftwareToUpdateCore,
+		SoftwareToUpdateOtaAgent,
+	}
+}
+
+const (
+	// TelemetryOn is a Telemetry enum value
+	TelemetryOn = "On"
+
+	// TelemetryOff is a Telemetry enum value
+	TelemetryOff = "Off"
+)
+
+// Telemetry_Values returns all elements of the Telemetry enum
+func Telemetry_Values() []string {
+	return []string{
+		TelemetryOn,
+		TelemetryOff,
+	}
+}
 
 // The minimum level of log statements that should be logged by the OTA Agent
 // during an update.
@@ -17573,6 +18327,20 @@ const (
 	UpdateAgentLogLevelFatal = "FATAL"
 )
 
+// UpdateAgentLogLevel_Values returns all elements of the UpdateAgentLogLevel enum
+func UpdateAgentLogLevel_Values() []string {
+	return []string{
+		UpdateAgentLogLevelNone,
+		UpdateAgentLogLevelTrace,
+		UpdateAgentLogLevelDebug,
+		UpdateAgentLogLevelVerbose,
+		UpdateAgentLogLevelInfo,
+		UpdateAgentLogLevelWarn,
+		UpdateAgentLogLevelError,
+		UpdateAgentLogLevelFatal,
+	}
+}
+
 // The architecture of the cores which are the targets of an update.
 const (
 	// UpdateTargetsArchitectureArmv6l is a UpdateTargetsArchitecture enum value
@@ -17586,10 +18354,17 @@ const (
 
 	// UpdateTargetsArchitectureAarch64 is a UpdateTargetsArchitecture enum value
 	UpdateTargetsArchitectureAarch64 = "aarch64"
-
-	// UpdateTargetsArchitectureOpenwrt is a UpdateTargetsArchitecture enum value
-	UpdateTargetsArchitectureOpenwrt = "openwrt"
 )
+
+// UpdateTargetsArchitecture_Values returns all elements of the UpdateTargetsArchitecture enum
+func UpdateTargetsArchitecture_Values() []string {
+	return []string{
+		UpdateTargetsArchitectureArmv6l,
+		UpdateTargetsArchitectureArmv7l,
+		UpdateTargetsArchitectureX8664,
+		UpdateTargetsArchitectureAarch64,
+	}
+}
 
 // The operating system of the cores which are the targets of an update.
 const (
@@ -17601,4 +18376,17 @@ const (
 
 	// UpdateTargetsOperatingSystemAmazonLinux is a UpdateTargetsOperatingSystem enum value
 	UpdateTargetsOperatingSystemAmazonLinux = "amazon_linux"
+
+	// UpdateTargetsOperatingSystemOpenwrt is a UpdateTargetsOperatingSystem enum value
+	UpdateTargetsOperatingSystemOpenwrt = "openwrt"
 )
+
+// UpdateTargetsOperatingSystem_Values returns all elements of the UpdateTargetsOperatingSystem enum
+func UpdateTargetsOperatingSystem_Values() []string {
+	return []string{
+		UpdateTargetsOperatingSystemUbuntu,
+		UpdateTargetsOperatingSystemRaspbian,
+		UpdateTargetsOperatingSystemAmazonLinux,
+		UpdateTargetsOperatingSystemOpenwrt,
+	}
+}

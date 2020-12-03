@@ -27,7 +27,8 @@
       "errors":[
         {"shape":"MalformedPolicyDocumentException"},
         {"shape":"PackedPolicyTooLargeException"},
-        {"shape":"RegionDisabledException"}
+        {"shape":"RegionDisabledException"},
+        {"shape":"ExpiredTokenException"}
       ]
     },
     "AssumeRoleWithSAML":{

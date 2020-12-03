@@ -56,7 +56,7 @@ func (c *MediaConnect) AddFlowOutputsRequest(input *AddFlowOutputsInput) (req *r
 
 // AddFlowOutputs API operation for AWS MediaConnect.
 //
-// Adds outputs to an existing flow. You can create up to 20 outputs per flow.
+// Adds outputs to an existing flow. You can create up to 50 outputs per flow.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -65,38 +65,38 @@ func (c *MediaConnect) AddFlowOutputsRequest(input *AddFlowOutputsInput) (req *r
 // See the AWS API reference guide for AWS MediaConnect's
 // API operation AddFlowOutputs for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeAddFlowOutputs420Exception "AddFlowOutputs420Exception"
+// Returned Error Types:
+//   * AddFlowOutputs420Exception
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeForbiddenException "ForbiddenException"
+//   * ForbiddenException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
@@ -118,6 +118,218 @@ func (c *MediaConnect) AddFlowOutputs(input *AddFlowOutputsInput) (*AddFlowOutpu
 // for more information on using Contexts.
 func (c *MediaConnect) AddFlowOutputsWithContext(ctx aws.Context, input *AddFlowOutputsInput, opts ...request.Option) (*AddFlowOutputsOutput, error) {
 	req, out := c.AddFlowOutputsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opAddFlowSources = "AddFlowSources"
+
+// AddFlowSourcesRequest generates a "aws/request.Request" representing the
+// client's request for the AddFlowSources operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See AddFlowSources for more information on using the AddFlowSources
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the AddFlowSourcesRequest method.
+//    req, resp := client.AddFlowSourcesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediaconnect-2018-11-14/AddFlowSources
+func (c *MediaConnect) AddFlowSourcesRequest(input *AddFlowSourcesInput) (req *request.Request, output *AddFlowSourcesOutput) {
+	op := &request.Operation{
+		Name:       opAddFlowSources,
+		HTTPMethod: "POST",
+		HTTPPath:   "/v1/flows/{flowArn}/source",
+	}
+
+	if input == nil {
+		input = &AddFlowSourcesInput{}
+	}
+
+	output = &AddFlowSourcesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// AddFlowSources API operation for AWS MediaConnect.
+//
+// Adds Sources to flow
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS MediaConnect's
+// API operation AddFlowSources for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * InternalServerErrorException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * ForbiddenException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * NotFoundException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * ServiceUnavailableException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * TooManyRequestsException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediaconnect-2018-11-14/AddFlowSources
+func (c *MediaConnect) AddFlowSources(input *AddFlowSourcesInput) (*AddFlowSourcesOutput, error) {
+	req, out := c.AddFlowSourcesRequest(input)
+	return out, req.Send()
+}
+
+// AddFlowSourcesWithContext is the same as AddFlowSources with the addition of
+// the ability to pass a context and additional request options.
+//
+// See AddFlowSources for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaConnect) AddFlowSourcesWithContext(ctx aws.Context, input *AddFlowSourcesInput, opts ...request.Option) (*AddFlowSourcesOutput, error) {
+	req, out := c.AddFlowSourcesRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opAddFlowVpcInterfaces = "AddFlowVpcInterfaces"
+
+// AddFlowVpcInterfacesRequest generates a "aws/request.Request" representing the
+// client's request for the AddFlowVpcInterfaces operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See AddFlowVpcInterfaces for more information on using the AddFlowVpcInterfaces
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the AddFlowVpcInterfacesRequest method.
+//    req, resp := client.AddFlowVpcInterfacesRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediaconnect-2018-11-14/AddFlowVpcInterfaces
+func (c *MediaConnect) AddFlowVpcInterfacesRequest(input *AddFlowVpcInterfacesInput) (req *request.Request, output *AddFlowVpcInterfacesOutput) {
+	op := &request.Operation{
+		Name:       opAddFlowVpcInterfaces,
+		HTTPMethod: "POST",
+		HTTPPath:   "/v1/flows/{flowArn}/vpcInterfaces",
+	}
+
+	if input == nil {
+		input = &AddFlowVpcInterfacesInput{}
+	}
+
+	output = &AddFlowVpcInterfacesOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// AddFlowVpcInterfaces API operation for AWS MediaConnect.
+//
+// Adds VPC interfaces to flow
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS MediaConnect's
+// API operation AddFlowVpcInterfaces for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * InternalServerErrorException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * ForbiddenException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * NotFoundException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * ServiceUnavailableException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * TooManyRequestsException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediaconnect-2018-11-14/AddFlowVpcInterfaces
+func (c *MediaConnect) AddFlowVpcInterfaces(input *AddFlowVpcInterfacesInput) (*AddFlowVpcInterfacesOutput, error) {
+	req, out := c.AddFlowVpcInterfacesRequest(input)
+	return out, req.Send()
+}
+
+// AddFlowVpcInterfacesWithContext is the same as AddFlowVpcInterfaces with the addition of
+// the ability to pass a context and additional request options.
+//
+// See AddFlowVpcInterfaces for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaConnect) AddFlowVpcInterfacesWithContext(ctx aws.Context, input *AddFlowVpcInterfacesInput, opts ...request.Option) (*AddFlowVpcInterfacesOutput, error) {
+	req, out := c.AddFlowVpcInterfacesRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -168,7 +380,7 @@ func (c *MediaConnect) CreateFlowRequest(input *CreateFlowInput) (req *request.R
 // CreateFlow API operation for AWS MediaConnect.
 //
 // Creates a new flow. The request must include one source. The request optionally
-// can include outputs (up to 20) and entitlements (up to 50).
+// can include outputs (up to 50) and entitlements (up to 50).
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -177,33 +389,33 @@ func (c *MediaConnect) CreateFlowRequest(input *CreateFlowInput) (req *request.R
 // See the AWS API reference guide for AWS MediaConnect's
 // API operation CreateFlow for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeCreateFlow420Exception "CreateFlow420Exception"
+// Returned Error Types:
+//   * CreateFlow420Exception
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeForbiddenException "ForbiddenException"
+//   * ForbiddenException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
@@ -283,33 +495,33 @@ func (c *MediaConnect) DeleteFlowRequest(input *DeleteFlowInput) (req *request.R
 // See the AWS API reference guide for AWS MediaConnect's
 // API operation DeleteFlow for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeForbiddenException "ForbiddenException"
+//   * ForbiddenException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
@@ -391,33 +603,33 @@ func (c *MediaConnect) DescribeFlowRequest(input *DescribeFlowInput) (req *reque
 // See the AWS API reference guide for AWS MediaConnect's
 // API operation DescribeFlow for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeForbiddenException "ForbiddenException"
+//   * ForbiddenException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
@@ -439,6 +651,211 @@ func (c *MediaConnect) DescribeFlow(input *DescribeFlowInput) (*DescribeFlowOutp
 // for more information on using Contexts.
 func (c *MediaConnect) DescribeFlowWithContext(ctx aws.Context, input *DescribeFlowInput, opts ...request.Option) (*DescribeFlowOutput, error) {
 	req, out := c.DescribeFlowRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeOffering = "DescribeOffering"
+
+// DescribeOfferingRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeOffering operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeOffering for more information on using the DescribeOffering
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeOfferingRequest method.
+//    req, resp := client.DescribeOfferingRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediaconnect-2018-11-14/DescribeOffering
+func (c *MediaConnect) DescribeOfferingRequest(input *DescribeOfferingInput) (req *request.Request, output *DescribeOfferingOutput) {
+	op := &request.Operation{
+		Name:       opDescribeOffering,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v1/offerings/{offeringArn}",
+	}
+
+	if input == nil {
+		input = &DescribeOfferingInput{}
+	}
+
+	output = &DescribeOfferingOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeOffering API operation for AWS MediaConnect.
+//
+// Displays the details of an offering. The response includes the offering description,
+// duration, outbound bandwidth, price, and Amazon Resource Name (ARN).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS MediaConnect's
+// API operation DescribeOffering for usage and error information.
+//
+// Returned Error Types:
+//   * NotFoundException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * ServiceUnavailableException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * TooManyRequestsException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * BadRequestException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * InternalServerErrorException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediaconnect-2018-11-14/DescribeOffering
+func (c *MediaConnect) DescribeOffering(input *DescribeOfferingInput) (*DescribeOfferingOutput, error) {
+	req, out := c.DescribeOfferingRequest(input)
+	return out, req.Send()
+}
+
+// DescribeOfferingWithContext is the same as DescribeOffering with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeOffering for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaConnect) DescribeOfferingWithContext(ctx aws.Context, input *DescribeOfferingInput, opts ...request.Option) (*DescribeOfferingOutput, error) {
+	req, out := c.DescribeOfferingRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opDescribeReservation = "DescribeReservation"
+
+// DescribeReservationRequest generates a "aws/request.Request" representing the
+// client's request for the DescribeReservation operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See DescribeReservation for more information on using the DescribeReservation
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the DescribeReservationRequest method.
+//    req, resp := client.DescribeReservationRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediaconnect-2018-11-14/DescribeReservation
+func (c *MediaConnect) DescribeReservationRequest(input *DescribeReservationInput) (req *request.Request, output *DescribeReservationOutput) {
+	op := &request.Operation{
+		Name:       opDescribeReservation,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v1/reservations/{reservationArn}",
+	}
+
+	if input == nil {
+		input = &DescribeReservationInput{}
+	}
+
+	output = &DescribeReservationOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// DescribeReservation API operation for AWS MediaConnect.
+//
+// Displays the details of a reservation. The response includes the reservation
+// name, state, start date and time, and the details of the offering that make
+// up the rest of the reservation (such as price, duration, and outbound bandwidth).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS MediaConnect's
+// API operation DescribeReservation for usage and error information.
+//
+// Returned Error Types:
+//   * NotFoundException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * ServiceUnavailableException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * TooManyRequestsException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * BadRequestException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * InternalServerErrorException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediaconnect-2018-11-14/DescribeReservation
+func (c *MediaConnect) DescribeReservation(input *DescribeReservationInput) (*DescribeReservationOutput, error) {
+	req, out := c.DescribeReservationRequest(input)
+	return out, req.Send()
+}
+
+// DescribeReservationWithContext is the same as DescribeReservation with the addition of
+// the ability to pass a context and additional request options.
+//
+// See DescribeReservation for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaConnect) DescribeReservationWithContext(ctx aws.Context, input *DescribeReservationInput, opts ...request.Option) (*DescribeReservationOutput, error) {
+	req, out := c.DescribeReservationRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -497,38 +914,38 @@ func (c *MediaConnect) GrantFlowEntitlementsRequest(input *GrantFlowEntitlements
 // See the AWS API reference guide for AWS MediaConnect's
 // API operation GrantFlowEntitlements for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeGrantFlowEntitlements420Exception "GrantFlowEntitlements420Exception"
+// Returned Error Types:
+//   * GrantFlowEntitlements420Exception
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeForbiddenException "ForbiddenException"
+//   * ForbiddenException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
@@ -615,23 +1032,23 @@ func (c *MediaConnect) ListEntitlementsRequest(input *ListEntitlementsInput) (re
 // See the AWS API reference guide for AWS MediaConnect's
 // API operation ListEntitlements for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+// Returned Error Types:
+//   * ServiceUnavailableException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
@@ -770,23 +1187,23 @@ func (c *MediaConnect) ListFlowsRequest(input *ListFlowsInput) (req *request.Req
 // See the AWS API reference guide for AWS MediaConnect's
 // API operation ListFlows for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+// Returned Error Types:
+//   * ServiceUnavailableException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
@@ -865,6 +1282,319 @@ func (c *MediaConnect) ListFlowsPagesWithContext(ctx aws.Context, input *ListFlo
 	return p.Err()
 }
 
+const opListOfferings = "ListOfferings"
+
+// ListOfferingsRequest generates a "aws/request.Request" representing the
+// client's request for the ListOfferings operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListOfferings for more information on using the ListOfferings
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListOfferingsRequest method.
+//    req, resp := client.ListOfferingsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediaconnect-2018-11-14/ListOfferings
+func (c *MediaConnect) ListOfferingsRequest(input *ListOfferingsInput) (req *request.Request, output *ListOfferingsOutput) {
+	op := &request.Operation{
+		Name:       opListOfferings,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v1/offerings",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListOfferingsInput{}
+	}
+
+	output = &ListOfferingsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListOfferings API operation for AWS MediaConnect.
+//
+// Displays a list of all offerings that are available to this account in the
+// current AWS Region. If you have an active reservation (which means you've
+// purchased an offering that has already started and hasn't expired yet), your
+// account isn't eligible for other offerings.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS MediaConnect's
+// API operation ListOfferings for usage and error information.
+//
+// Returned Error Types:
+//   * ServiceUnavailableException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * TooManyRequestsException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * BadRequestException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * InternalServerErrorException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediaconnect-2018-11-14/ListOfferings
+func (c *MediaConnect) ListOfferings(input *ListOfferingsInput) (*ListOfferingsOutput, error) {
+	req, out := c.ListOfferingsRequest(input)
+	return out, req.Send()
+}
+
+// ListOfferingsWithContext is the same as ListOfferings with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListOfferings for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaConnect) ListOfferingsWithContext(ctx aws.Context, input *ListOfferingsInput, opts ...request.Option) (*ListOfferingsOutput, error) {
+	req, out := c.ListOfferingsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListOfferingsPages iterates over the pages of a ListOfferings operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListOfferings method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListOfferings operation.
+//    pageNum := 0
+//    err := client.ListOfferingsPages(params,
+//        func(page *mediaconnect.ListOfferingsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *MediaConnect) ListOfferingsPages(input *ListOfferingsInput, fn func(*ListOfferingsOutput, bool) bool) error {
+	return c.ListOfferingsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListOfferingsPagesWithContext same as ListOfferingsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaConnect) ListOfferingsPagesWithContext(ctx aws.Context, input *ListOfferingsInput, fn func(*ListOfferingsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListOfferingsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListOfferingsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListOfferingsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
+const opListReservations = "ListReservations"
+
+// ListReservationsRequest generates a "aws/request.Request" representing the
+// client's request for the ListReservations operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See ListReservations for more information on using the ListReservations
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the ListReservationsRequest method.
+//    req, resp := client.ListReservationsRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediaconnect-2018-11-14/ListReservations
+func (c *MediaConnect) ListReservationsRequest(input *ListReservationsInput) (req *request.Request, output *ListReservationsOutput) {
+	op := &request.Operation{
+		Name:       opListReservations,
+		HTTPMethod: "GET",
+		HTTPPath:   "/v1/reservations",
+		Paginator: &request.Paginator{
+			InputTokens:     []string{"NextToken"},
+			OutputTokens:    []string{"NextToken"},
+			LimitToken:      "MaxResults",
+			TruncationToken: "",
+		},
+	}
+
+	if input == nil {
+		input = &ListReservationsInput{}
+	}
+
+	output = &ListReservationsOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// ListReservations API operation for AWS MediaConnect.
+//
+// Displays a list of all reservations that have been purchased by this account
+// in the current AWS Region. This list includes all reservations in all states
+// (such as active and expired).
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS MediaConnect's
+// API operation ListReservations for usage and error information.
+//
+// Returned Error Types:
+//   * ServiceUnavailableException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * TooManyRequestsException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * BadRequestException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * InternalServerErrorException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediaconnect-2018-11-14/ListReservations
+func (c *MediaConnect) ListReservations(input *ListReservationsInput) (*ListReservationsOutput, error) {
+	req, out := c.ListReservationsRequest(input)
+	return out, req.Send()
+}
+
+// ListReservationsWithContext is the same as ListReservations with the addition of
+// the ability to pass a context and additional request options.
+//
+// See ListReservations for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaConnect) ListReservationsWithContext(ctx aws.Context, input *ListReservationsInput, opts ...request.Option) (*ListReservationsOutput, error) {
+	req, out := c.ListReservationsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+// ListReservationsPages iterates over the pages of a ListReservations operation,
+// calling the "fn" function with the response data for each page. To stop
+// iterating, return false from the fn function.
+//
+// See ListReservations method for more information on how to use this operation.
+//
+// Note: This operation can generate multiple requests to a service.
+//
+//    // Example iterating over at most 3 pages of a ListReservations operation.
+//    pageNum := 0
+//    err := client.ListReservationsPages(params,
+//        func(page *mediaconnect.ListReservationsOutput, lastPage bool) bool {
+//            pageNum++
+//            fmt.Println(page)
+//            return pageNum <= 3
+//        })
+//
+func (c *MediaConnect) ListReservationsPages(input *ListReservationsInput, fn func(*ListReservationsOutput, bool) bool) error {
+	return c.ListReservationsPagesWithContext(aws.BackgroundContext(), input, fn)
+}
+
+// ListReservationsPagesWithContext same as ListReservationsPages except
+// it takes a Context and allows setting request options on the pages.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaConnect) ListReservationsPagesWithContext(ctx aws.Context, input *ListReservationsInput, fn func(*ListReservationsOutput, bool) bool, opts ...request.Option) error {
+	p := request.Pagination{
+		NewRequest: func() (*request.Request, error) {
+			var inCpy *ListReservationsInput
+			if input != nil {
+				tmp := *input
+				inCpy = &tmp
+			}
+			req, _ := c.ListReservationsRequest(inCpy)
+			req.SetContext(ctx)
+			req.ApplyOptions(opts...)
+			return req, nil
+		},
+	}
+
+	for p.Next() {
+		if !fn(p.Page().(*ListReservationsOutput), !p.HasNextPage()) {
+			break
+		}
+	}
+
+	return p.Err()
+}
+
 const opListTagsForResource = "ListTagsForResource"
 
 // ListTagsForResourceRequest generates a "aws/request.Request" representing the
@@ -918,18 +1648,18 @@ func (c *MediaConnect) ListTagsForResourceRequest(input *ListTagsForResourceInpu
 // See the AWS API reference guide for AWS MediaConnect's
 // API operation ListTagsForResource for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
@@ -951,6 +1681,113 @@ func (c *MediaConnect) ListTagsForResource(input *ListTagsForResourceInput) (*Li
 // for more information on using Contexts.
 func (c *MediaConnect) ListTagsForResourceWithContext(ctx aws.Context, input *ListTagsForResourceInput, opts ...request.Option) (*ListTagsForResourceOutput, error) {
 	req, out := c.ListTagsForResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opPurchaseOffering = "PurchaseOffering"
+
+// PurchaseOfferingRequest generates a "aws/request.Request" representing the
+// client's request for the PurchaseOffering operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See PurchaseOffering for more information on using the PurchaseOffering
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the PurchaseOfferingRequest method.
+//    req, resp := client.PurchaseOfferingRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediaconnect-2018-11-14/PurchaseOffering
+func (c *MediaConnect) PurchaseOfferingRequest(input *PurchaseOfferingInput) (req *request.Request, output *PurchaseOfferingOutput) {
+	op := &request.Operation{
+		Name:       opPurchaseOffering,
+		HTTPMethod: "POST",
+		HTTPPath:   "/v1/offerings/{offeringArn}",
+	}
+
+	if input == nil {
+		input = &PurchaseOfferingInput{}
+	}
+
+	output = &PurchaseOfferingOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// PurchaseOffering API operation for AWS MediaConnect.
+//
+// Submits a request to purchase an offering. If you already have an active
+// reservation, you can't purchase another offering.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS MediaConnect's
+// API operation PurchaseOffering for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * InternalServerErrorException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * ForbiddenException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * NotFoundException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * ServiceUnavailableException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * TooManyRequestsException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediaconnect-2018-11-14/PurchaseOffering
+func (c *MediaConnect) PurchaseOffering(input *PurchaseOfferingInput) (*PurchaseOfferingOutput, error) {
+	req, out := c.PurchaseOfferingRequest(input)
+	return out, req.Send()
+}
+
+// PurchaseOfferingWithContext is the same as PurchaseOffering with the addition of
+// the ability to pass a context and additional request options.
+//
+// See PurchaseOffering for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaConnect) PurchaseOfferingWithContext(ctx aws.Context, input *PurchaseOfferingInput, opts ...request.Option) (*PurchaseOfferingOutput, error) {
+	req, out := c.PurchaseOfferingRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1013,33 +1850,33 @@ func (c *MediaConnect) RemoveFlowOutputRequest(input *RemoveFlowOutputInput) (re
 // See the AWS API reference guide for AWS MediaConnect's
 // API operation RemoveFlowOutput for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeForbiddenException "ForbiddenException"
+//   * ForbiddenException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
@@ -1061,6 +1898,222 @@ func (c *MediaConnect) RemoveFlowOutput(input *RemoveFlowOutputInput) (*RemoveFl
 // for more information on using Contexts.
 func (c *MediaConnect) RemoveFlowOutputWithContext(ctx aws.Context, input *RemoveFlowOutputInput, opts ...request.Option) (*RemoveFlowOutputOutput, error) {
 	req, out := c.RemoveFlowOutputRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opRemoveFlowSource = "RemoveFlowSource"
+
+// RemoveFlowSourceRequest generates a "aws/request.Request" representing the
+// client's request for the RemoveFlowSource operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See RemoveFlowSource for more information on using the RemoveFlowSource
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the RemoveFlowSourceRequest method.
+//    req, resp := client.RemoveFlowSourceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediaconnect-2018-11-14/RemoveFlowSource
+func (c *MediaConnect) RemoveFlowSourceRequest(input *RemoveFlowSourceInput) (req *request.Request, output *RemoveFlowSourceOutput) {
+	op := &request.Operation{
+		Name:       opRemoveFlowSource,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/v1/flows/{flowArn}/source/{sourceArn}",
+	}
+
+	if input == nil {
+		input = &RemoveFlowSourceInput{}
+	}
+
+	output = &RemoveFlowSourceOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// RemoveFlowSource API operation for AWS MediaConnect.
+//
+// Removes a source from an existing flow. This request can be made only if
+// there is more than one source on the flow.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS MediaConnect's
+// API operation RemoveFlowSource for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * InternalServerErrorException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * ForbiddenException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * NotFoundException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * ServiceUnavailableException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * TooManyRequestsException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediaconnect-2018-11-14/RemoveFlowSource
+func (c *MediaConnect) RemoveFlowSource(input *RemoveFlowSourceInput) (*RemoveFlowSourceOutput, error) {
+	req, out := c.RemoveFlowSourceRequest(input)
+	return out, req.Send()
+}
+
+// RemoveFlowSourceWithContext is the same as RemoveFlowSource with the addition of
+// the ability to pass a context and additional request options.
+//
+// See RemoveFlowSource for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaConnect) RemoveFlowSourceWithContext(ctx aws.Context, input *RemoveFlowSourceInput, opts ...request.Option) (*RemoveFlowSourceOutput, error) {
+	req, out := c.RemoveFlowSourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opRemoveFlowVpcInterface = "RemoveFlowVpcInterface"
+
+// RemoveFlowVpcInterfaceRequest generates a "aws/request.Request" representing the
+// client's request for the RemoveFlowVpcInterface operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See RemoveFlowVpcInterface for more information on using the RemoveFlowVpcInterface
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the RemoveFlowVpcInterfaceRequest method.
+//    req, resp := client.RemoveFlowVpcInterfaceRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediaconnect-2018-11-14/RemoveFlowVpcInterface
+func (c *MediaConnect) RemoveFlowVpcInterfaceRequest(input *RemoveFlowVpcInterfaceInput) (req *request.Request, output *RemoveFlowVpcInterfaceOutput) {
+	op := &request.Operation{
+		Name:       opRemoveFlowVpcInterface,
+		HTTPMethod: "DELETE",
+		HTTPPath:   "/v1/flows/{flowArn}/vpcInterfaces/{vpcInterfaceName}",
+	}
+
+	if input == nil {
+		input = &RemoveFlowVpcInterfaceInput{}
+	}
+
+	output = &RemoveFlowVpcInterfaceOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// RemoveFlowVpcInterface API operation for AWS MediaConnect.
+//
+// Removes a VPC Interface from an existing flow. This request can be made only
+// on a VPC interface that does not have a Source or Output associated with
+// it. If the VPC interface is referenced by a Source or Output, you must first
+// delete or update the Source or Output to no longer reference the VPC interface.
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS MediaConnect's
+// API operation RemoveFlowVpcInterface for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * InternalServerErrorException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * ForbiddenException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * NotFoundException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * ServiceUnavailableException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * TooManyRequestsException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediaconnect-2018-11-14/RemoveFlowVpcInterface
+func (c *MediaConnect) RemoveFlowVpcInterface(input *RemoveFlowVpcInterfaceInput) (*RemoveFlowVpcInterfaceOutput, error) {
+	req, out := c.RemoveFlowVpcInterfaceRequest(input)
+	return out, req.Send()
+}
+
+// RemoveFlowVpcInterfaceWithContext is the same as RemoveFlowVpcInterface with the addition of
+// the ability to pass a context and additional request options.
+//
+// See RemoveFlowVpcInterface for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaConnect) RemoveFlowVpcInterfaceWithContext(ctx aws.Context, input *RemoveFlowVpcInterfaceInput, opts ...request.Option) (*RemoveFlowVpcInterfaceOutput, error) {
+	req, out := c.RemoveFlowVpcInterfaceRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1120,33 +2173,33 @@ func (c *MediaConnect) RevokeFlowEntitlementRequest(input *RevokeFlowEntitlement
 // See the AWS API reference guide for AWS MediaConnect's
 // API operation RevokeFlowEntitlement for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeForbiddenException "ForbiddenException"
+//   * ForbiddenException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
@@ -1226,33 +2279,33 @@ func (c *MediaConnect) StartFlowRequest(input *StartFlowInput) (req *request.Req
 // See the AWS API reference guide for AWS MediaConnect's
 // API operation StartFlow for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeForbiddenException "ForbiddenException"
+//   * ForbiddenException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
@@ -1332,33 +2385,33 @@ func (c *MediaConnect) StopFlowRequest(input *StopFlowInput) (req *request.Reque
 // See the AWS API reference guide for AWS MediaConnect's
 // API operation StopFlow for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeForbiddenException "ForbiddenException"
+//   * ForbiddenException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
@@ -1442,18 +2495,18 @@ func (c *MediaConnect) TagResourceRequest(input *TagResourceInput) (req *request
 // See the AWS API reference guide for AWS MediaConnect's
 // API operation TagResource for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
@@ -1534,18 +2587,18 @@ func (c *MediaConnect) UntagResourceRequest(input *UntagResourceInput) (req *req
 // See the AWS API reference guide for AWS MediaConnect's
 // API operation UntagResource for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeNotFoundException "NotFoundException"
+// Returned Error Types:
+//   * NotFoundException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
@@ -1567,6 +2620,112 @@ func (c *MediaConnect) UntagResource(input *UntagResourceInput) (*UntagResourceO
 // for more information on using Contexts.
 func (c *MediaConnect) UntagResourceWithContext(ctx aws.Context, input *UntagResourceInput, opts ...request.Option) (*UntagResourceOutput, error) {
 	req, out := c.UntagResourceRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
+	return out, req.Send()
+}
+
+const opUpdateFlow = "UpdateFlow"
+
+// UpdateFlowRequest generates a "aws/request.Request" representing the
+// client's request for the UpdateFlow operation. The "output" return
+// value will be populated with the request's response once the request completes
+// successfully.
+//
+// Use "Send" method on the returned Request to send the API call to the service.
+// the "output" return value is not valid until after Send returns without error.
+//
+// See UpdateFlow for more information on using the UpdateFlow
+// API call, and error handling.
+//
+// This method is useful when you want to inject custom logic or configuration
+// into the SDK's request lifecycle. Such as custom headers, or retry logic.
+//
+//
+//    // Example sending a request using the UpdateFlowRequest method.
+//    req, resp := client.UpdateFlowRequest(params)
+//
+//    err := req.Send()
+//    if err == nil { // resp is now filled
+//        fmt.Println(resp)
+//    }
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediaconnect-2018-11-14/UpdateFlow
+func (c *MediaConnect) UpdateFlowRequest(input *UpdateFlowInput) (req *request.Request, output *UpdateFlowOutput) {
+	op := &request.Operation{
+		Name:       opUpdateFlow,
+		HTTPMethod: "PUT",
+		HTTPPath:   "/v1/flows/{flowArn}",
+	}
+
+	if input == nil {
+		input = &UpdateFlowInput{}
+	}
+
+	output = &UpdateFlowOutput{}
+	req = c.newRequest(op, input, output)
+	return
+}
+
+// UpdateFlow API operation for AWS MediaConnect.
+//
+// Updates flow
+//
+// Returns awserr.Error for service API and SDK errors. Use runtime type assertions
+// with awserr.Error's Code and Message methods to get detailed information about
+// the error.
+//
+// See the AWS API reference guide for AWS MediaConnect's
+// API operation UpdateFlow for usage and error information.
+//
+// Returned Error Types:
+//   * BadRequestException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * InternalServerErrorException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * ForbiddenException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * NotFoundException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * ServiceUnavailableException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+//   * TooManyRequestsException
+//   Exception raised by AWS Elemental MediaConnect. See the error message and
+//   documentation for the operation for more information on the cause of this
+//   exception.
+//
+// See also, https://docs.aws.amazon.com/goto/WebAPI/mediaconnect-2018-11-14/UpdateFlow
+func (c *MediaConnect) UpdateFlow(input *UpdateFlowInput) (*UpdateFlowOutput, error) {
+	req, out := c.UpdateFlowRequest(input)
+	return out, req.Send()
+}
+
+// UpdateFlowWithContext is the same as UpdateFlow with the addition of
+// the ability to pass a context and additional request options.
+//
+// See UpdateFlow for details on how to use this API operation.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *MediaConnect) UpdateFlowWithContext(ctx aws.Context, input *UpdateFlowInput, opts ...request.Option) (*UpdateFlowOutput, error) {
+	req, out := c.UpdateFlowRequest(input)
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
@@ -1627,33 +2786,33 @@ func (c *MediaConnect) UpdateFlowEntitlementRequest(input *UpdateFlowEntitlement
 // See the AWS API reference guide for AWS MediaConnect's
 // API operation UpdateFlowEntitlement for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeForbiddenException "ForbiddenException"
+//   * ForbiddenException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
@@ -1733,33 +2892,33 @@ func (c *MediaConnect) UpdateFlowOutputRequest(input *UpdateFlowOutputInput) (re
 // See the AWS API reference guide for AWS MediaConnect's
 // API operation UpdateFlowOutput for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeForbiddenException "ForbiddenException"
+//   * ForbiddenException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
@@ -1839,33 +2998,33 @@ func (c *MediaConnect) UpdateFlowSourceRequest(input *UpdateFlowSourceInput) (re
 // See the AWS API reference guide for AWS MediaConnect's
 // API operation UpdateFlowSource for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeForbiddenException "ForbiddenException"
+//   * ForbiddenException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeServiceUnavailableException "ServiceUnavailableException"
+//   * ServiceUnavailableException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //   Exception raised by AWS Elemental MediaConnect. See the error message and
 //   documentation for the operation for more information on the cause of this
 //   exception.
@@ -1892,7 +3051,65 @@ func (c *MediaConnect) UpdateFlowSourceWithContext(ctx aws.Context, input *Updat
 	return out, req.Send()
 }
 
-// Adds outputs to an existing flow. You can create up to 20 outputs per flow.
+// Exception raised by AWS Elemental MediaConnect. See the error message and
+// documentation for the operation for more information on the cause of this
+// exception.
+type AddFlowOutputs420Exception struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s AddFlowOutputs420Exception) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AddFlowOutputs420Exception) GoString() string {
+	return s.String()
+}
+
+func newErrorAddFlowOutputs420Exception(v protocol.ResponseMetadata) error {
+	return &AddFlowOutputs420Exception{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *AddFlowOutputs420Exception) Code() string {
+	return "AddFlowOutputs420Exception"
+}
+
+// Message returns the exception's message.
+func (s *AddFlowOutputs420Exception) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *AddFlowOutputs420Exception) OrigErr() error {
+	return nil
+}
+
+func (s *AddFlowOutputs420Exception) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *AddFlowOutputs420Exception) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *AddFlowOutputs420Exception) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// Adds outputs to an existing flow. You can create up to 50 outputs per flow.
 type AddFlowOutputsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -1990,6 +3207,202 @@ func (s *AddFlowOutputsOutput) SetOutputs(v []*Output) *AddFlowOutputsOutput {
 	return s
 }
 
+// Adds sources to an existing flow.
+type AddFlowSourcesInput struct {
+	_ struct{} `type:"structure"`
+
+	// FlowArn is a required field
+	FlowArn *string `location:"uri" locationName:"flowArn" type:"string" required:"true"`
+
+	// A list of sources that you want to add.
+	//
+	// Sources is a required field
+	Sources []*SetSourceRequest `locationName:"sources" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s AddFlowSourcesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AddFlowSourcesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AddFlowSourcesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AddFlowSourcesInput"}
+	if s.FlowArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("FlowArn"))
+	}
+	if s.FlowArn != nil && len(*s.FlowArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FlowArn", 1))
+	}
+	if s.Sources == nil {
+		invalidParams.Add(request.NewErrParamRequired("Sources"))
+	}
+	if s.Sources != nil {
+		for i, v := range s.Sources {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Sources", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFlowArn sets the FlowArn field's value.
+func (s *AddFlowSourcesInput) SetFlowArn(v string) *AddFlowSourcesInput {
+	s.FlowArn = &v
+	return s
+}
+
+// SetSources sets the Sources field's value.
+func (s *AddFlowSourcesInput) SetSources(v []*SetSourceRequest) *AddFlowSourcesInput {
+	s.Sources = v
+	return s
+}
+
+// The result of a successful AddFlowSources request. The response includes
+// the details of the newly added sources.
+type AddFlowSourcesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the flow that these sources were added to.
+	FlowArn *string `locationName:"flowArn" type:"string"`
+
+	// The details of the newly added sources.
+	Sources []*Source `locationName:"sources" type:"list"`
+}
+
+// String returns the string representation
+func (s AddFlowSourcesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AddFlowSourcesOutput) GoString() string {
+	return s.String()
+}
+
+// SetFlowArn sets the FlowArn field's value.
+func (s *AddFlowSourcesOutput) SetFlowArn(v string) *AddFlowSourcesOutput {
+	s.FlowArn = &v
+	return s
+}
+
+// SetSources sets the Sources field's value.
+func (s *AddFlowSourcesOutput) SetSources(v []*Source) *AddFlowSourcesOutput {
+	s.Sources = v
+	return s
+}
+
+// Adds VPC interfaces to an existing flow.
+type AddFlowVpcInterfacesInput struct {
+	_ struct{} `type:"structure"`
+
+	// FlowArn is a required field
+	FlowArn *string `location:"uri" locationName:"flowArn" type:"string" required:"true"`
+
+	// A list of VPC interfaces that you want to add.
+	//
+	// VpcInterfaces is a required field
+	VpcInterfaces []*VpcInterfaceRequest `locationName:"vpcInterfaces" type:"list" required:"true"`
+}
+
+// String returns the string representation
+func (s AddFlowVpcInterfacesInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AddFlowVpcInterfacesInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *AddFlowVpcInterfacesInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "AddFlowVpcInterfacesInput"}
+	if s.FlowArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("FlowArn"))
+	}
+	if s.FlowArn != nil && len(*s.FlowArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FlowArn", 1))
+	}
+	if s.VpcInterfaces == nil {
+		invalidParams.Add(request.NewErrParamRequired("VpcInterfaces"))
+	}
+	if s.VpcInterfaces != nil {
+		for i, v := range s.VpcInterfaces {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "VpcInterfaces", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFlowArn sets the FlowArn field's value.
+func (s *AddFlowVpcInterfacesInput) SetFlowArn(v string) *AddFlowVpcInterfacesInput {
+	s.FlowArn = &v
+	return s
+}
+
+// SetVpcInterfaces sets the VpcInterfaces field's value.
+func (s *AddFlowVpcInterfacesInput) SetVpcInterfaces(v []*VpcInterfaceRequest) *AddFlowVpcInterfacesInput {
+	s.VpcInterfaces = v
+	return s
+}
+
+// The result of a successful AddFlowVpcInterfaces request. The response includes
+// the details of the newly added VPC interfaces.
+type AddFlowVpcInterfacesOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the flow that these VPC interfaces were added to.
+	FlowArn *string `locationName:"flowArn" type:"string"`
+
+	// The details of the newly added VPC interfaces.
+	VpcInterfaces []*VpcInterface `locationName:"vpcInterfaces" type:"list"`
+}
+
+// String returns the string representation
+func (s AddFlowVpcInterfacesOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AddFlowVpcInterfacesOutput) GoString() string {
+	return s.String()
+}
+
+// SetFlowArn sets the FlowArn field's value.
+func (s *AddFlowVpcInterfacesOutput) SetFlowArn(v string) *AddFlowVpcInterfacesOutput {
+	s.FlowArn = &v
+	return s
+}
+
+// SetVpcInterfaces sets the VpcInterfaces field's value.
+func (s *AddFlowVpcInterfacesOutput) SetVpcInterfaces(v []*VpcInterface) *AddFlowVpcInterfacesOutput {
+	s.VpcInterfaces = v
+	return s
+}
+
 // The output that you want to add to this flow.
 type AddOutputRequest struct {
 	_ struct{} `type:"structure"`
@@ -2033,6 +3446,9 @@ type AddOutputRequest struct {
 	// The stream ID that you want to use for this transport. This parameter applies
 	// only to Zixi-based streams.
 	StreamId *string `locationName:"streamId" type:"string"`
+
+	// The name of the VPC interface attachment to use for this output.
+	VpcInterfaceAttachment *VpcInterfaceAttachment `locationName:"vpcInterfaceAttachment" type:"structure"`
 }
 
 // String returns the string representation
@@ -2129,8 +3545,130 @@ func (s *AddOutputRequest) SetStreamId(v string) *AddOutputRequest {
 	return s
 }
 
+// SetVpcInterfaceAttachment sets the VpcInterfaceAttachment field's value.
+func (s *AddOutputRequest) SetVpcInterfaceAttachment(v *VpcInterfaceAttachment) *AddOutputRequest {
+	s.VpcInterfaceAttachment = v
+	return s
+}
+
+// Exception raised by AWS Elemental MediaConnect. See the error message and
+// documentation for the operation for more information on the cause of this
+// exception.
+type BadRequestException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s BadRequestException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BadRequestException) GoString() string {
+	return s.String()
+}
+
+func newErrorBadRequestException(v protocol.ResponseMetadata) error {
+	return &BadRequestException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *BadRequestException) Code() string {
+	return "BadRequestException"
+}
+
+// Message returns the exception's message.
+func (s *BadRequestException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *BadRequestException) OrigErr() error {
+	return nil
+}
+
+func (s *BadRequestException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *BadRequestException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *BadRequestException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// Exception raised by AWS Elemental MediaConnect. See the error message and
+// documentation for the operation for more information on the cause of this
+// exception.
+type CreateFlow420Exception struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s CreateFlow420Exception) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s CreateFlow420Exception) GoString() string {
+	return s.String()
+}
+
+func newErrorCreateFlow420Exception(v protocol.ResponseMetadata) error {
+	return &CreateFlow420Exception{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *CreateFlow420Exception) Code() string {
+	return "CreateFlow420Exception"
+}
+
+// Message returns the exception's message.
+func (s *CreateFlow420Exception) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *CreateFlow420Exception) OrigErr() error {
+	return nil
+}
+
+func (s *CreateFlow420Exception) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *CreateFlow420Exception) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *CreateFlow420Exception) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // Creates a new flow. The request must include one source. The request optionally
-// can include outputs (up to 20) and one entitlement.
+// can include outputs (up to 50) and one entitlement.
 type CreateFlowInput struct {
 	_ struct{} `type:"structure"`
 
@@ -2150,9 +3688,15 @@ type CreateFlowInput struct {
 	Outputs []*AddOutputRequest `locationName:"outputs" type:"list"`
 
 	// The settings for the source of the flow.
-	//
-	// Source is a required field
-	Source *SetSourceRequest `locationName:"source" type:"structure" required:"true"`
+	Source *SetSourceRequest `locationName:"source" type:"structure"`
+
+	// The settings for source failover
+	SourceFailoverConfig *FailoverConfig `locationName:"sourceFailoverConfig" type:"structure"`
+
+	Sources []*SetSourceRequest `locationName:"sources" type:"list"`
+
+	// The VPC interfaces you want on the flow.
+	VpcInterfaces []*VpcInterfaceRequest `locationName:"vpcInterfaces" type:"list"`
 }
 
 // String returns the string representation
@@ -2170,9 +3714,6 @@ func (s *CreateFlowInput) Validate() error {
 	invalidParams := request.ErrInvalidParams{Context: "CreateFlowInput"}
 	if s.Name == nil {
 		invalidParams.Add(request.NewErrParamRequired("Name"))
-	}
-	if s.Source == nil {
-		invalidParams.Add(request.NewErrParamRequired("Source"))
 	}
 	if s.Entitlements != nil {
 		for i, v := range s.Entitlements {
@@ -2197,6 +3738,26 @@ func (s *CreateFlowInput) Validate() error {
 	if s.Source != nil {
 		if err := s.Source.Validate(); err != nil {
 			invalidParams.AddNested("Source", err.(request.ErrInvalidParams))
+		}
+	}
+	if s.Sources != nil {
+		for i, v := range s.Sources {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "Sources", i), err.(request.ErrInvalidParams))
+			}
+		}
+	}
+	if s.VpcInterfaces != nil {
+		for i, v := range s.VpcInterfaces {
+			if v == nil {
+				continue
+			}
+			if err := v.Validate(); err != nil {
+				invalidParams.AddNested(fmt.Sprintf("%s[%v]", "VpcInterfaces", i), err.(request.ErrInvalidParams))
+			}
 		}
 	}
 
@@ -2233,6 +3794,24 @@ func (s *CreateFlowInput) SetOutputs(v []*AddOutputRequest) *CreateFlowInput {
 // SetSource sets the Source field's value.
 func (s *CreateFlowInput) SetSource(v *SetSourceRequest) *CreateFlowInput {
 	s.Source = v
+	return s
+}
+
+// SetSourceFailoverConfig sets the SourceFailoverConfig field's value.
+func (s *CreateFlowInput) SetSourceFailoverConfig(v *FailoverConfig) *CreateFlowInput {
+	s.SourceFailoverConfig = v
+	return s
+}
+
+// SetSources sets the Sources field's value.
+func (s *CreateFlowInput) SetSources(v []*SetSourceRequest) *CreateFlowInput {
+	s.Sources = v
+	return s
+}
+
+// SetVpcInterfaces sets the VpcInterfaces field's value.
+func (s *CreateFlowInput) SetVpcInterfaces(v []*VpcInterfaceRequest) *CreateFlowInput {
+	s.VpcInterfaces = v
 	return s
 }
 
@@ -2404,6 +3983,138 @@ func (s *DescribeFlowOutput) SetMessages(v *Messages) *DescribeFlowOutput {
 	return s
 }
 
+type DescribeOfferingInput struct {
+	_ struct{} `type:"structure"`
+
+	// OfferingArn is a required field
+	OfferingArn *string `location:"uri" locationName:"offeringArn" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeOfferingInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeOfferingInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeOfferingInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeOfferingInput"}
+	if s.OfferingArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("OfferingArn"))
+	}
+	if s.OfferingArn != nil && len(*s.OfferingArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("OfferingArn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetOfferingArn sets the OfferingArn field's value.
+func (s *DescribeOfferingInput) SetOfferingArn(v string) *DescribeOfferingInput {
+	s.OfferingArn = &v
+	return s
+}
+
+// The result of a successful DescribeOffering request.
+type DescribeOfferingOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A savings plan that reserves a certain amount of outbound bandwidth usage
+	// at a discounted rate each month over a period of time.
+	Offering *Offering `locationName:"offering" type:"structure"`
+}
+
+// String returns the string representation
+func (s DescribeOfferingOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeOfferingOutput) GoString() string {
+	return s.String()
+}
+
+// SetOffering sets the Offering field's value.
+func (s *DescribeOfferingOutput) SetOffering(v *Offering) *DescribeOfferingOutput {
+	s.Offering = v
+	return s
+}
+
+type DescribeReservationInput struct {
+	_ struct{} `type:"structure"`
+
+	// ReservationArn is a required field
+	ReservationArn *string `location:"uri" locationName:"reservationArn" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s DescribeReservationInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeReservationInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *DescribeReservationInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "DescribeReservationInput"}
+	if s.ReservationArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("ReservationArn"))
+	}
+	if s.ReservationArn != nil && len(*s.ReservationArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("ReservationArn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetReservationArn sets the ReservationArn field's value.
+func (s *DescribeReservationInput) SetReservationArn(v string) *DescribeReservationInput {
+	s.ReservationArn = &v
+	return s
+}
+
+// The result of a successful DescribeReservation request.
+type DescribeReservationOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A pricing agreement for a discounted rate for a specific outbound bandwidth
+	// that your MediaConnect account will use each month over a specific time period.
+	// The discounted rate in the reservation applies to outbound bandwidth for
+	// all flows from your account until your account reaches the amount of bandwidth
+	// in your reservation. If you use more outbound bandwidth than the agreed upon
+	// amount in a single month, the overage is charged at the on-demand rate.
+	Reservation *Reservation `locationName:"reservation" type:"structure"`
+}
+
+// String returns the string representation
+func (s DescribeReservationOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s DescribeReservationOutput) GoString() string {
+	return s.String()
+}
+
+// SetReservation sets the Reservation field's value.
+func (s *DescribeReservationOutput) SetReservation(v *Reservation) *DescribeReservationOutput {
+	s.Reservation = v
+	return s
+}
+
 // Information about the encryption of the flow.
 type Encryption struct {
 	_ struct{} `type:"structure"`
@@ -2554,6 +4265,9 @@ type Entitlement struct {
 	// EntitlementArn is a required field
 	EntitlementArn *string `locationName:"entitlementArn" type:"string" required:"true"`
 
+	// An indication of whether the entitlement is enabled.
+	EntitlementStatus *string `locationName:"entitlementStatus" type:"string" enum:"EntitlementStatus"`
+
 	// The name of the entitlement.
 	//
 	// Name is a required field
@@ -2601,6 +4315,12 @@ func (s *Entitlement) SetEntitlementArn(v string) *Entitlement {
 	return s
 }
 
+// SetEntitlementStatus sets the EntitlementStatus field's value.
+func (s *Entitlement) SetEntitlementStatus(v string) *Entitlement {
+	s.EntitlementStatus = &v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *Entitlement) SetName(v string) *Entitlement {
 	s.Name = &v
@@ -2610,6 +4330,38 @@ func (s *Entitlement) SetName(v string) *Entitlement {
 // SetSubscribers sets the Subscribers field's value.
 func (s *Entitlement) SetSubscribers(v []*string) *Entitlement {
 	s.Subscribers = v
+	return s
+}
+
+// The settings for source failover
+type FailoverConfig struct {
+	_ struct{} `type:"structure"`
+
+	// Search window time to look for dash-7 packets
+	RecoveryWindow *int64 `locationName:"recoveryWindow" type:"integer"`
+
+	State *string `locationName:"state" type:"string" enum:"State"`
+}
+
+// String returns the string representation
+func (s FailoverConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s FailoverConfig) GoString() string {
+	return s.String()
+}
+
+// SetRecoveryWindow sets the RecoveryWindow field's value.
+func (s *FailoverConfig) SetRecoveryWindow(v int64) *FailoverConfig {
+	s.RecoveryWindow = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *FailoverConfig) SetState(v string) *FailoverConfig {
+	s.State = &v
 	return s
 }
 
@@ -2656,10 +4408,18 @@ type Flow struct {
 	// Source is a required field
 	Source *Source `locationName:"source" type:"structure" required:"true"`
 
+	// The settings for source failover
+	SourceFailoverConfig *FailoverConfig `locationName:"sourceFailoverConfig" type:"structure"`
+
+	Sources []*Source `locationName:"sources" type:"list"`
+
 	// The current status of the flow.
 	//
 	// Status is a required field
 	Status *string `locationName:"status" type:"string" required:"true" enum:"Status"`
+
+	// The VPC Interfaces for this flow.
+	VpcInterfaces []*VpcInterface `locationName:"vpcInterfaces" type:"list"`
 }
 
 // String returns the string representation
@@ -2720,10 +4480,86 @@ func (s *Flow) SetSource(v *Source) *Flow {
 	return s
 }
 
+// SetSourceFailoverConfig sets the SourceFailoverConfig field's value.
+func (s *Flow) SetSourceFailoverConfig(v *FailoverConfig) *Flow {
+	s.SourceFailoverConfig = v
+	return s
+}
+
+// SetSources sets the Sources field's value.
+func (s *Flow) SetSources(v []*Source) *Flow {
+	s.Sources = v
+	return s
+}
+
 // SetStatus sets the Status field's value.
 func (s *Flow) SetStatus(v string) *Flow {
 	s.Status = &v
 	return s
+}
+
+// SetVpcInterfaces sets the VpcInterfaces field's value.
+func (s *Flow) SetVpcInterfaces(v []*VpcInterface) *Flow {
+	s.VpcInterfaces = v
+	return s
+}
+
+// Exception raised by AWS Elemental MediaConnect. See the error message and
+// documentation for the operation for more information on the cause of this
+// exception.
+type ForbiddenException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s ForbiddenException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ForbiddenException) GoString() string {
+	return s.String()
+}
+
+func newErrorForbiddenException(v protocol.ResponseMetadata) error {
+	return &ForbiddenException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ForbiddenException) Code() string {
+	return "ForbiddenException"
+}
+
+// Message returns the exception's message.
+func (s *ForbiddenException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ForbiddenException) OrigErr() error {
+	return nil
+}
+
+func (s *ForbiddenException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ForbiddenException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ForbiddenException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 // The entitlements that you want to grant on a flow.
@@ -2741,6 +4577,11 @@ type GrantEntitlementRequest struct {
 	// The type of encryption that will be used on the output that is associated
 	// with this entitlement.
 	Encryption *Encryption `locationName:"encryption" type:"structure"`
+
+	// An indication of whether the new entitlement should be enabled or disabled
+	// as soon as it is created. If you don’t specify the entitlementStatus field
+	// in your request, MediaConnect sets it to ENABLED.
+	EntitlementStatus *string `locationName:"entitlementStatus" type:"string" enum:"EntitlementStatus"`
 
 	// The name of the entitlement. This value must be unique within the current
 	// flow.
@@ -2800,6 +4641,12 @@ func (s *GrantEntitlementRequest) SetEncryption(v *Encryption) *GrantEntitlement
 	return s
 }
 
+// SetEntitlementStatus sets the EntitlementStatus field's value.
+func (s *GrantEntitlementRequest) SetEntitlementStatus(v string) *GrantEntitlementRequest {
+	s.EntitlementStatus = &v
+	return s
+}
+
 // SetName sets the Name field's value.
 func (s *GrantEntitlementRequest) SetName(v string) *GrantEntitlementRequest {
 	s.Name = &v
@@ -2810,6 +4657,64 @@ func (s *GrantEntitlementRequest) SetName(v string) *GrantEntitlementRequest {
 func (s *GrantEntitlementRequest) SetSubscribers(v []*string) *GrantEntitlementRequest {
 	s.Subscribers = v
 	return s
+}
+
+// Exception raised by AWS Elemental MediaConnect. See the error message and
+// documentation for the operation for more information on the cause of this
+// exception.
+type GrantFlowEntitlements420Exception struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s GrantFlowEntitlements420Exception) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s GrantFlowEntitlements420Exception) GoString() string {
+	return s.String()
+}
+
+func newErrorGrantFlowEntitlements420Exception(v protocol.ResponseMetadata) error {
+	return &GrantFlowEntitlements420Exception{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *GrantFlowEntitlements420Exception) Code() string {
+	return "GrantFlowEntitlements420Exception"
+}
+
+// Message returns the exception's message.
+func (s *GrantFlowEntitlements420Exception) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *GrantFlowEntitlements420Exception) OrigErr() error {
+	return nil
+}
+
+func (s *GrantFlowEntitlements420Exception) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *GrantFlowEntitlements420Exception) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *GrantFlowEntitlements420Exception) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 // Grants an entitlement on a flow.
@@ -2907,6 +4812,64 @@ func (s *GrantFlowEntitlementsOutput) SetEntitlements(v []*Entitlement) *GrantFl
 func (s *GrantFlowEntitlementsOutput) SetFlowArn(v string) *GrantFlowEntitlementsOutput {
 	s.FlowArn = &v
 	return s
+}
+
+// Exception raised by AWS Elemental MediaConnect. See the error message and
+// documentation for the operation for more information on the cause of this
+// exception.
+type InternalServerErrorException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s InternalServerErrorException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InternalServerErrorException) GoString() string {
+	return s.String()
+}
+
+func newErrorInternalServerErrorException(v protocol.ResponseMetadata) error {
+	return &InternalServerErrorException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *InternalServerErrorException) Code() string {
+	return "InternalServerErrorException"
+}
+
+// Message returns the exception's message.
+func (s *InternalServerErrorException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *InternalServerErrorException) OrigErr() error {
+	return nil
+}
+
+func (s *InternalServerErrorException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *InternalServerErrorException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *InternalServerErrorException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 type ListEntitlementsInput struct {
@@ -3069,6 +5032,176 @@ func (s *ListFlowsOutput) SetFlows(v []*ListedFlow) *ListFlowsOutput {
 // SetNextToken sets the NextToken field's value.
 func (s *ListFlowsOutput) SetNextToken(v string) *ListFlowsOutput {
 	s.NextToken = &v
+	return s
+}
+
+type ListOfferingsInput struct {
+	_ struct{} `type:"structure"`
+
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation
+func (s ListOfferingsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListOfferingsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListOfferingsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListOfferingsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListOfferingsInput) SetMaxResults(v int64) *ListOfferingsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListOfferingsInput) SetNextToken(v string) *ListOfferingsInput {
+	s.NextToken = &v
+	return s
+}
+
+// The result of a successful ListOfferings request. The response includes the
+// details of each offering that your account is eligible for. The response
+// includes the following information for each offering: description, duration,
+// outbound bandwidth, price, Amazon Resource Name (ARN), and the NextToken
+// to use in a subsequent ListOfferings request.
+type ListOfferingsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The token that identifies which batch of results that you want to see. For
+	// example, you submit a ListOfferings request with MaxResults set at 5. The
+	// service returns the first batch of results (up to 5) and a NextToken value.
+	// To see the next batch of results, you can submit the ListOfferings request
+	// a second time and specify the NextToken value.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// A list of offerings that are available to this account in the current AWS
+	// Region.
+	Offerings []*Offering `locationName:"offerings" type:"list"`
+}
+
+// String returns the string representation
+func (s ListOfferingsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListOfferingsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListOfferingsOutput) SetNextToken(v string) *ListOfferingsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetOfferings sets the Offerings field's value.
+func (s *ListOfferingsOutput) SetOfferings(v []*Offering) *ListOfferingsOutput {
+	s.Offerings = v
+	return s
+}
+
+type ListReservationsInput struct {
+	_ struct{} `type:"structure"`
+
+	MaxResults *int64 `location:"querystring" locationName:"maxResults" min:"1" type:"integer"`
+
+	NextToken *string `location:"querystring" locationName:"nextToken" type:"string"`
+}
+
+// String returns the string representation
+func (s ListReservationsInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListReservationsInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *ListReservationsInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "ListReservationsInput"}
+	if s.MaxResults != nil && *s.MaxResults < 1 {
+		invalidParams.Add(request.NewErrParamMinValue("MaxResults", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetMaxResults sets the MaxResults field's value.
+func (s *ListReservationsInput) SetMaxResults(v int64) *ListReservationsInput {
+	s.MaxResults = &v
+	return s
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListReservationsInput) SetNextToken(v string) *ListReservationsInput {
+	s.NextToken = &v
+	return s
+}
+
+// The result of a successful ListReservations request. The response includes
+// the details of each offering that your account is eligible for. The response
+// includes the following information for each offering: description, duration,
+// outbound bandwidth, price, Amazon Resource Name (ARN), and the NextToken
+// to use in a subsequent ListOfferings request.
+type ListReservationsOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The token that identifies which batch of results that you want to see. For
+	// example, you submit a ListReservations request with MaxResults set at 5.
+	// The service returns the first batch of results (up to 5) and a NextToken
+	// value. To see the next batch of results, you can submit the ListReservations
+	// request a second time and specify the NextToken value.
+	NextToken *string `locationName:"nextToken" type:"string"`
+
+	// A list of all reservations that have been purchased by this account in the
+	// current AWS Region.
+	Reservations []*Reservation `locationName:"reservations" type:"list"`
+}
+
+// String returns the string representation
+func (s ListReservationsOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ListReservationsOutput) GoString() string {
+	return s.String()
+}
+
+// SetNextToken sets the NextToken field's value.
+func (s *ListReservationsOutput) SetNextToken(v string) *ListReservationsOutput {
+	s.NextToken = &v
+	return s
+}
+
+// SetReservations sets the Reservations field's value.
+func (s *ListReservationsOutput) SetReservations(v []*Reservation) *ListReservationsOutput {
+	s.Reservations = v
 	return s
 }
 
@@ -3293,6 +5426,172 @@ func (s *Messages) SetErrors(v []*string) *Messages {
 	return s
 }
 
+// Exception raised by AWS Elemental MediaConnect. See the error message and
+// documentation for the operation for more information on the cause of this
+// exception.
+type NotFoundException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s NotFoundException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s NotFoundException) GoString() string {
+	return s.String()
+}
+
+func newErrorNotFoundException(v protocol.ResponseMetadata) error {
+	return &NotFoundException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *NotFoundException) Code() string {
+	return "NotFoundException"
+}
+
+// Message returns the exception's message.
+func (s *NotFoundException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *NotFoundException) OrigErr() error {
+	return nil
+}
+
+func (s *NotFoundException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *NotFoundException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *NotFoundException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// A savings plan that reserves a certain amount of outbound bandwidth usage
+// at a discounted rate each month over a period of time.
+type Offering struct {
+	_ struct{} `type:"structure"`
+
+	// The type of currency that is used for billing. The currencyCode used for
+	// all reservations is US dollars.
+	//
+	// CurrencyCode is a required field
+	CurrencyCode *string `locationName:"currencyCode" type:"string" required:"true"`
+
+	// The length of time that your reservation would be active.
+	//
+	// Duration is a required field
+	Duration *int64 `locationName:"duration" type:"integer" required:"true"`
+
+	// The unit of measurement for the duration of the offering.
+	//
+	// DurationUnits is a required field
+	DurationUnits *string `locationName:"durationUnits" type:"string" required:"true" enum:"DurationUnits"`
+
+	// The Amazon Resource Name (ARN) that MediaConnect assigns to the offering.
+	//
+	// OfferingArn is a required field
+	OfferingArn *string `locationName:"offeringArn" type:"string" required:"true"`
+
+	// A description of the offering.
+	//
+	// OfferingDescription is a required field
+	OfferingDescription *string `locationName:"offeringDescription" type:"string" required:"true"`
+
+	// The cost of a single unit. This value, in combination with priceUnits, makes
+	// up the rate.
+	//
+	// PricePerUnit is a required field
+	PricePerUnit *string `locationName:"pricePerUnit" type:"string" required:"true"`
+
+	// The unit of measurement that is used for billing. This value, in combination
+	// with pricePerUnit, makes up the rate.
+	//
+	// PriceUnits is a required field
+	PriceUnits *string `locationName:"priceUnits" type:"string" required:"true" enum:"PriceUnits"`
+
+	// A definition of the amount of outbound bandwidth that you would be reserving
+	// if you purchase the offering.
+	//
+	// ResourceSpecification is a required field
+	ResourceSpecification *ResourceSpecification `locationName:"resourceSpecification" type:"structure" required:"true"`
+}
+
+// String returns the string representation
+func (s Offering) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Offering) GoString() string {
+	return s.String()
+}
+
+// SetCurrencyCode sets the CurrencyCode field's value.
+func (s *Offering) SetCurrencyCode(v string) *Offering {
+	s.CurrencyCode = &v
+	return s
+}
+
+// SetDuration sets the Duration field's value.
+func (s *Offering) SetDuration(v int64) *Offering {
+	s.Duration = &v
+	return s
+}
+
+// SetDurationUnits sets the DurationUnits field's value.
+func (s *Offering) SetDurationUnits(v string) *Offering {
+	s.DurationUnits = &v
+	return s
+}
+
+// SetOfferingArn sets the OfferingArn field's value.
+func (s *Offering) SetOfferingArn(v string) *Offering {
+	s.OfferingArn = &v
+	return s
+}
+
+// SetOfferingDescription sets the OfferingDescription field's value.
+func (s *Offering) SetOfferingDescription(v string) *Offering {
+	s.OfferingDescription = &v
+	return s
+}
+
+// SetPricePerUnit sets the PricePerUnit field's value.
+func (s *Offering) SetPricePerUnit(v string) *Offering {
+	s.PricePerUnit = &v
+	return s
+}
+
+// SetPriceUnits sets the PriceUnits field's value.
+func (s *Offering) SetPriceUnits(v string) *Offering {
+	s.PriceUnits = &v
+	return s
+}
+
+// SetResourceSpecification sets the ResourceSpecification field's value.
+func (s *Offering) SetResourceSpecification(v *ResourceSpecification) *Offering {
+	s.ResourceSpecification = v
+	return s
+}
+
 // The settings for an output.
 type Output struct {
 	_ struct{} `type:"structure"`
@@ -3333,6 +5632,9 @@ type Output struct {
 
 	// Attributes related to the transport stream that are used in the output.
 	Transport *Transport `locationName:"transport" type:"structure"`
+
+	// The name of the VPC interface attachment to use for this output.
+	VpcInterfaceAttachment *VpcInterfaceAttachment `locationName:"vpcInterfaceAttachment" type:"structure"`
 }
 
 // String returns the string representation
@@ -3402,6 +5704,116 @@ func (s *Output) SetPort(v int64) *Output {
 // SetTransport sets the Transport field's value.
 func (s *Output) SetTransport(v *Transport) *Output {
 	s.Transport = v
+	return s
+}
+
+// SetVpcInterfaceAttachment sets the VpcInterfaceAttachment field's value.
+func (s *Output) SetVpcInterfaceAttachment(v *VpcInterfaceAttachment) *Output {
+	s.VpcInterfaceAttachment = v
+	return s
+}
+
+// Submits a request to purchase an offering, which creates a reservation in
+// your AWS account. If you already have an active reservation, you can't purchase
+// another offering.
+type PurchaseOfferingInput struct {
+	_ struct{} `type:"structure"`
+
+	// OfferingArn is a required field
+	OfferingArn *string `location:"uri" locationName:"offeringArn" type:"string" required:"true"`
+
+	// The name that you want to use for the reservation.
+	//
+	// ReservationName is a required field
+	ReservationName *string `locationName:"reservationName" type:"string" required:"true"`
+
+	// The date and time that you want the reservation to begin, in Coordinated
+	// Universal Time (UTC). You can specify any date and time between 12:00am on
+	// the first day of the current month to the current time on today's date, inclusive.
+	// Specify the start in a 24-hour notation. Use the following format: YYYY-MM-DDTHH:mm:SSZ,
+	// where T and Z are literal characters. For example, to specify 11:30pm on
+	// March 5, 2020, enter 2020-03-05T23:30:00Z.
+	//
+	// Start is a required field
+	Start *string `locationName:"start" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s PurchaseOfferingInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PurchaseOfferingInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *PurchaseOfferingInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "PurchaseOfferingInput"}
+	if s.OfferingArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("OfferingArn"))
+	}
+	if s.OfferingArn != nil && len(*s.OfferingArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("OfferingArn", 1))
+	}
+	if s.ReservationName == nil {
+		invalidParams.Add(request.NewErrParamRequired("ReservationName"))
+	}
+	if s.Start == nil {
+		invalidParams.Add(request.NewErrParamRequired("Start"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetOfferingArn sets the OfferingArn field's value.
+func (s *PurchaseOfferingInput) SetOfferingArn(v string) *PurchaseOfferingInput {
+	s.OfferingArn = &v
+	return s
+}
+
+// SetReservationName sets the ReservationName field's value.
+func (s *PurchaseOfferingInput) SetReservationName(v string) *PurchaseOfferingInput {
+	s.ReservationName = &v
+	return s
+}
+
+// SetStart sets the Start field's value.
+func (s *PurchaseOfferingInput) SetStart(v string) *PurchaseOfferingInput {
+	s.Start = &v
+	return s
+}
+
+// The result of a successful PurchaseOffering request.
+type PurchaseOfferingOutput struct {
+	_ struct{} `type:"structure"`
+
+	// A pricing agreement for a discounted rate for a specific outbound bandwidth
+	// that your MediaConnect account will use each month over a specific time period.
+	// The discounted rate in the reservation applies to outbound bandwidth for
+	// all flows from your account until your account reaches the amount of bandwidth
+	// in your reservation. If you use more outbound bandwidth than the agreed upon
+	// amount in a single month, the overage is charged at the on-demand rate.
+	Reservation *Reservation `locationName:"reservation" type:"structure"`
+}
+
+// String returns the string representation
+func (s PurchaseOfferingOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s PurchaseOfferingOutput) GoString() string {
+	return s.String()
+}
+
+// SetReservation sets the Reservation field's value.
+func (s *PurchaseOfferingOutput) SetReservation(v *Reservation) *PurchaseOfferingOutput {
+	s.Reservation = v
 	return s
 }
 
@@ -3490,6 +5902,401 @@ func (s *RemoveFlowOutputOutput) SetFlowArn(v string) *RemoveFlowOutputOutput {
 // SetOutputArn sets the OutputArn field's value.
 func (s *RemoveFlowOutputOutput) SetOutputArn(v string) *RemoveFlowOutputOutput {
 	s.OutputArn = &v
+	return s
+}
+
+type RemoveFlowSourceInput struct {
+	_ struct{} `type:"structure"`
+
+	// FlowArn is a required field
+	FlowArn *string `location:"uri" locationName:"flowArn" type:"string" required:"true"`
+
+	// SourceArn is a required field
+	SourceArn *string `location:"uri" locationName:"sourceArn" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s RemoveFlowSourceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RemoveFlowSourceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RemoveFlowSourceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RemoveFlowSourceInput"}
+	if s.FlowArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("FlowArn"))
+	}
+	if s.FlowArn != nil && len(*s.FlowArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FlowArn", 1))
+	}
+	if s.SourceArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("SourceArn"))
+	}
+	if s.SourceArn != nil && len(*s.SourceArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("SourceArn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFlowArn sets the FlowArn field's value.
+func (s *RemoveFlowSourceInput) SetFlowArn(v string) *RemoveFlowSourceInput {
+	s.FlowArn = &v
+	return s
+}
+
+// SetSourceArn sets the SourceArn field's value.
+func (s *RemoveFlowSourceInput) SetSourceArn(v string) *RemoveFlowSourceInput {
+	s.SourceArn = &v
+	return s
+}
+
+// The result of a successful RemoveFlowSource request including the flow ARN
+// and the source ARN that was removed.
+type RemoveFlowSourceOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the flow that is associated with the source you removed.
+	FlowArn *string `locationName:"flowArn" type:"string"`
+
+	// The ARN of the source that was removed.
+	SourceArn *string `locationName:"sourceArn" type:"string"`
+}
+
+// String returns the string representation
+func (s RemoveFlowSourceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RemoveFlowSourceOutput) GoString() string {
+	return s.String()
+}
+
+// SetFlowArn sets the FlowArn field's value.
+func (s *RemoveFlowSourceOutput) SetFlowArn(v string) *RemoveFlowSourceOutput {
+	s.FlowArn = &v
+	return s
+}
+
+// SetSourceArn sets the SourceArn field's value.
+func (s *RemoveFlowSourceOutput) SetSourceArn(v string) *RemoveFlowSourceOutput {
+	s.SourceArn = &v
+	return s
+}
+
+type RemoveFlowVpcInterfaceInput struct {
+	_ struct{} `type:"structure"`
+
+	// FlowArn is a required field
+	FlowArn *string `location:"uri" locationName:"flowArn" type:"string" required:"true"`
+
+	// VpcInterfaceName is a required field
+	VpcInterfaceName *string `location:"uri" locationName:"vpcInterfaceName" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s RemoveFlowVpcInterfaceInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RemoveFlowVpcInterfaceInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *RemoveFlowVpcInterfaceInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "RemoveFlowVpcInterfaceInput"}
+	if s.FlowArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("FlowArn"))
+	}
+	if s.FlowArn != nil && len(*s.FlowArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FlowArn", 1))
+	}
+	if s.VpcInterfaceName == nil {
+		invalidParams.Add(request.NewErrParamRequired("VpcInterfaceName"))
+	}
+	if s.VpcInterfaceName != nil && len(*s.VpcInterfaceName) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("VpcInterfaceName", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFlowArn sets the FlowArn field's value.
+func (s *RemoveFlowVpcInterfaceInput) SetFlowArn(v string) *RemoveFlowVpcInterfaceInput {
+	s.FlowArn = &v
+	return s
+}
+
+// SetVpcInterfaceName sets the VpcInterfaceName field's value.
+func (s *RemoveFlowVpcInterfaceInput) SetVpcInterfaceName(v string) *RemoveFlowVpcInterfaceInput {
+	s.VpcInterfaceName = &v
+	return s
+}
+
+// The result of a successful RemoveFlowVpcInterface request including the flow
+// ARN and the VPC interface name that was removed.
+type RemoveFlowVpcInterfaceOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The ARN of the flow that is associated with the VPC interface you removed.
+	FlowArn *string `locationName:"flowArn" type:"string"`
+
+	// IDs of network interfaces associated with the removed VPC interface that
+	// Media Connect was unable to remove.
+	NonDeletedNetworkInterfaceIds []*string `locationName:"nonDeletedNetworkInterfaceIds" type:"list"`
+
+	// The name of the VPC interface that was removed.
+	VpcInterfaceName *string `locationName:"vpcInterfaceName" type:"string"`
+}
+
+// String returns the string representation
+func (s RemoveFlowVpcInterfaceOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RemoveFlowVpcInterfaceOutput) GoString() string {
+	return s.String()
+}
+
+// SetFlowArn sets the FlowArn field's value.
+func (s *RemoveFlowVpcInterfaceOutput) SetFlowArn(v string) *RemoveFlowVpcInterfaceOutput {
+	s.FlowArn = &v
+	return s
+}
+
+// SetNonDeletedNetworkInterfaceIds sets the NonDeletedNetworkInterfaceIds field's value.
+func (s *RemoveFlowVpcInterfaceOutput) SetNonDeletedNetworkInterfaceIds(v []*string) *RemoveFlowVpcInterfaceOutput {
+	s.NonDeletedNetworkInterfaceIds = v
+	return s
+}
+
+// SetVpcInterfaceName sets the VpcInterfaceName field's value.
+func (s *RemoveFlowVpcInterfaceOutput) SetVpcInterfaceName(v string) *RemoveFlowVpcInterfaceOutput {
+	s.VpcInterfaceName = &v
+	return s
+}
+
+// A pricing agreement for a discounted rate for a specific outbound bandwidth
+// that your MediaConnect account will use each month over a specific time period.
+// The discounted rate in the reservation applies to outbound bandwidth for
+// all flows from your account until your account reaches the amount of bandwidth
+// in your reservation. If you use more outbound bandwidth than the agreed upon
+// amount in a single month, the overage is charged at the on-demand rate.
+type Reservation struct {
+	_ struct{} `type:"structure"`
+
+	// The type of currency that is used for billing. The currencyCode used for
+	// your reservation is US dollars.
+	//
+	// CurrencyCode is a required field
+	CurrencyCode *string `locationName:"currencyCode" type:"string" required:"true"`
+
+	// The length of time that this reservation is active. MediaConnect defines
+	// this value in the offering.
+	//
+	// Duration is a required field
+	Duration *int64 `locationName:"duration" type:"integer" required:"true"`
+
+	// The unit of measurement for the duration of the reservation. MediaConnect
+	// defines this value in the offering.
+	//
+	// DurationUnits is a required field
+	DurationUnits *string `locationName:"durationUnits" type:"string" required:"true" enum:"DurationUnits"`
+
+	// The day and time that this reservation expires. This value is calculated
+	// based on the start date and time that you set and the offering's duration.
+	//
+	// End is a required field
+	End *string `locationName:"end" type:"string" required:"true"`
+
+	// The Amazon Resource Name (ARN) that MediaConnect assigns to the offering.
+	//
+	// OfferingArn is a required field
+	OfferingArn *string `locationName:"offeringArn" type:"string" required:"true"`
+
+	// A description of the offering. MediaConnect defines this value in the offering.
+	//
+	// OfferingDescription is a required field
+	OfferingDescription *string `locationName:"offeringDescription" type:"string" required:"true"`
+
+	// The cost of a single unit. This value, in combination with priceUnits, makes
+	// up the rate. MediaConnect defines this value in the offering.
+	//
+	// PricePerUnit is a required field
+	PricePerUnit *string `locationName:"pricePerUnit" type:"string" required:"true"`
+
+	// The unit of measurement that is used for billing. This value, in combination
+	// with pricePerUnit, makes up the rate. MediaConnect defines this value in
+	// the offering.
+	//
+	// PriceUnits is a required field
+	PriceUnits *string `locationName:"priceUnits" type:"string" required:"true" enum:"PriceUnits"`
+
+	// The Amazon Resource Name (ARN) that MediaConnect assigns to the reservation
+	// when you purchase an offering.
+	//
+	// ReservationArn is a required field
+	ReservationArn *string `locationName:"reservationArn" type:"string" required:"true"`
+
+	// The name that you assigned to the reservation when you purchased the offering.
+	//
+	// ReservationName is a required field
+	ReservationName *string `locationName:"reservationName" type:"string" required:"true"`
+
+	// The status of your reservation.
+	//
+	// ReservationState is a required field
+	ReservationState *string `locationName:"reservationState" type:"string" required:"true" enum:"ReservationState"`
+
+	// A definition of the amount of outbound bandwidth that you would be reserving
+	// if you purchase the offering. MediaConnect defines the values that make up
+	// the resourceSpecification in the offering.
+	//
+	// ResourceSpecification is a required field
+	ResourceSpecification *ResourceSpecification `locationName:"resourceSpecification" type:"structure" required:"true"`
+
+	// The day and time that the reservation becomes active. You set this value
+	// when you purchase the offering.
+	//
+	// Start is a required field
+	Start *string `locationName:"start" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s Reservation) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s Reservation) GoString() string {
+	return s.String()
+}
+
+// SetCurrencyCode sets the CurrencyCode field's value.
+func (s *Reservation) SetCurrencyCode(v string) *Reservation {
+	s.CurrencyCode = &v
+	return s
+}
+
+// SetDuration sets the Duration field's value.
+func (s *Reservation) SetDuration(v int64) *Reservation {
+	s.Duration = &v
+	return s
+}
+
+// SetDurationUnits sets the DurationUnits field's value.
+func (s *Reservation) SetDurationUnits(v string) *Reservation {
+	s.DurationUnits = &v
+	return s
+}
+
+// SetEnd sets the End field's value.
+func (s *Reservation) SetEnd(v string) *Reservation {
+	s.End = &v
+	return s
+}
+
+// SetOfferingArn sets the OfferingArn field's value.
+func (s *Reservation) SetOfferingArn(v string) *Reservation {
+	s.OfferingArn = &v
+	return s
+}
+
+// SetOfferingDescription sets the OfferingDescription field's value.
+func (s *Reservation) SetOfferingDescription(v string) *Reservation {
+	s.OfferingDescription = &v
+	return s
+}
+
+// SetPricePerUnit sets the PricePerUnit field's value.
+func (s *Reservation) SetPricePerUnit(v string) *Reservation {
+	s.PricePerUnit = &v
+	return s
+}
+
+// SetPriceUnits sets the PriceUnits field's value.
+func (s *Reservation) SetPriceUnits(v string) *Reservation {
+	s.PriceUnits = &v
+	return s
+}
+
+// SetReservationArn sets the ReservationArn field's value.
+func (s *Reservation) SetReservationArn(v string) *Reservation {
+	s.ReservationArn = &v
+	return s
+}
+
+// SetReservationName sets the ReservationName field's value.
+func (s *Reservation) SetReservationName(v string) *Reservation {
+	s.ReservationName = &v
+	return s
+}
+
+// SetReservationState sets the ReservationState field's value.
+func (s *Reservation) SetReservationState(v string) *Reservation {
+	s.ReservationState = &v
+	return s
+}
+
+// SetResourceSpecification sets the ResourceSpecification field's value.
+func (s *Reservation) SetResourceSpecification(v *ResourceSpecification) *Reservation {
+	s.ResourceSpecification = v
+	return s
+}
+
+// SetStart sets the Start field's value.
+func (s *Reservation) SetStart(v string) *Reservation {
+	s.Start = &v
+	return s
+}
+
+// A definition of what is being billed for, including the type and amount.
+type ResourceSpecification struct {
+	_ struct{} `type:"structure"`
+
+	// The amount of outbound bandwidth that is discounted in the offering.
+	ReservedBitrate *int64 `locationName:"reservedBitrate" type:"integer"`
+
+	// The type of resource and the unit that is being billed for.
+	//
+	// ResourceType is a required field
+	ResourceType *string `locationName:"resourceType" type:"string" required:"true" enum:"ResourceType"`
+}
+
+// String returns the string representation
+func (s ResourceSpecification) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ResourceSpecification) GoString() string {
+	return s.String()
+}
+
+// SetReservedBitrate sets the ReservedBitrate field's value.
+func (s *ResourceSpecification) SetReservedBitrate(v int64) *ResourceSpecification {
+	s.ReservedBitrate = &v
+	return s
+}
+
+// SetResourceType sets the ResourceType field's value.
+func (s *ResourceSpecification) SetResourceType(v string) *ResourceSpecification {
+	s.ResourceType = &v
 	return s
 }
 
@@ -3582,6 +6389,64 @@ func (s *RevokeFlowEntitlementOutput) SetFlowArn(v string) *RevokeFlowEntitlemen
 	return s
 }
 
+// Exception raised by AWS Elemental MediaConnect. See the error message and
+// documentation for the operation for more information on the cause of this
+// exception.
+type ServiceUnavailableException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s ServiceUnavailableException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ServiceUnavailableException) GoString() string {
+	return s.String()
+}
+
+func newErrorServiceUnavailableException(v protocol.ResponseMetadata) error {
+	return &ServiceUnavailableException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ServiceUnavailableException) Code() string {
+	return "ServiceUnavailableException"
+}
+
+// Message returns the exception's message.
+func (s *ServiceUnavailableException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ServiceUnavailableException) OrigErr() error {
+	return nil
+}
+
+func (s *ServiceUnavailableException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ServiceUnavailableException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ServiceUnavailableException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // The settings for the source of the flow.
 type SetSourceRequest struct {
 	_ struct{} `type:"structure"`
@@ -3617,6 +6482,9 @@ type SetSourceRequest struct {
 	// The stream ID that you want to use for this transport. This parameter applies
 	// only to Zixi-based streams.
 	StreamId *string `locationName:"streamId" type:"string"`
+
+	// The name of the VPC interface to use for this source.
+	VpcInterfaceName *string `locationName:"vpcInterfaceName" type:"string"`
 
 	// The range of IP addresses that should be allowed to contribute content to
 	// your source. These IP addresses should be in the form of a Classless Inter-Domain
@@ -3703,6 +6571,12 @@ func (s *SetSourceRequest) SetStreamId(v string) *SetSourceRequest {
 	return s
 }
 
+// SetVpcInterfaceName sets the VpcInterfaceName field's value.
+func (s *SetSourceRequest) SetVpcInterfaceName(v string) *SetSourceRequest {
+	s.VpcInterfaceName = &v
+	return s
+}
+
 // SetWhitelistCidr sets the WhitelistCidr field's value.
 func (s *SetSourceRequest) SetWhitelistCidr(v string) *SetSourceRequest {
 	s.WhitelistCidr = &v
@@ -3746,6 +6620,9 @@ type Source struct {
 
 	// Attributes related to the transport stream that are used in the source.
 	Transport *Transport `locationName:"transport" type:"structure"`
+
+	// The name of the VPC Interface this Source is configured with.
+	VpcInterfaceName *string `locationName:"vpcInterfaceName" type:"string"`
 
 	// The range of IP addresses that should be allowed to contribute content to
 	// your source. These IP addresses should be in the form of a Classless Inter-Domain
@@ -3814,6 +6691,12 @@ func (s *Source) SetSourceArn(v string) *Source {
 // SetTransport sets the Transport field's value.
 func (s *Source) SetTransport(v *Transport) *Source {
 	s.Transport = v
+	return s
+}
+
+// SetVpcInterfaceName sets the VpcInterfaceName field's value.
+func (s *Source) SetVpcInterfaceName(v string) *Source {
+	s.VpcInterfaceName = &v
 	return s
 }
 
@@ -4035,6 +6918,64 @@ func (s TagResourceOutput) String() string {
 // GoString returns the string representation
 func (s TagResourceOutput) GoString() string {
 	return s.String()
+}
+
+// Exception raised by AWS Elemental MediaConnect. See the error message and
+// documentation for the operation for more information on the cause of this
+// exception.
+type TooManyRequestsException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s TooManyRequestsException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TooManyRequestsException) GoString() string {
+	return s.String()
+}
+
+func newErrorTooManyRequestsException(v protocol.ResponseMetadata) error {
+	return &TooManyRequestsException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *TooManyRequestsException) Code() string {
+	return "TooManyRequestsException"
+}
+
+// Message returns the exception's message.
+func (s *TooManyRequestsException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *TooManyRequestsException) OrigErr() error {
+	return nil
+}
+
+func (s *TooManyRequestsException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *TooManyRequestsException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *TooManyRequestsException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 // Attributes related to the transport stream that are used in a source or output.
@@ -4297,6 +7238,38 @@ func (s *UpdateEncryption) SetUrl(v string) *UpdateEncryption {
 	return s
 }
 
+// The settings for source failover
+type UpdateFailoverConfig struct {
+	_ struct{} `type:"structure"`
+
+	// Recovery window time to look for dash-7 packets
+	RecoveryWindow *int64 `locationName:"recoveryWindow" type:"integer"`
+
+	State *string `locationName:"state" type:"string" enum:"State"`
+}
+
+// String returns the string representation
+func (s UpdateFailoverConfig) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateFailoverConfig) GoString() string {
+	return s.String()
+}
+
+// SetRecoveryWindow sets the RecoveryWindow field's value.
+func (s *UpdateFailoverConfig) SetRecoveryWindow(v int64) *UpdateFailoverConfig {
+	s.RecoveryWindow = &v
+	return s
+}
+
+// SetState sets the State field's value.
+func (s *UpdateFailoverConfig) SetState(v string) *UpdateFailoverConfig {
+	s.State = &v
+	return s
+}
+
 // The updates that you want to make to a specific entitlement.
 type UpdateFlowEntitlementInput struct {
 	_ struct{} `type:"structure"`
@@ -4312,6 +7285,12 @@ type UpdateFlowEntitlementInput struct {
 
 	// EntitlementArn is a required field
 	EntitlementArn *string `location:"uri" locationName:"entitlementArn" type:"string" required:"true"`
+
+	// An indication of whether you want to enable the entitlement to allow access,
+	// or disable it to stop streaming content to the subscriber’s flow temporarily.
+	// If you don’t specify the entitlementStatus field in your request, MediaConnect
+	// leaves the value unchanged.
+	EntitlementStatus *string `locationName:"entitlementStatus" type:"string" enum:"EntitlementStatus"`
 
 	// FlowArn is a required field
 	FlowArn *string `location:"uri" locationName:"flowArn" type:"string" required:"true"`
@@ -4372,6 +7351,12 @@ func (s *UpdateFlowEntitlementInput) SetEntitlementArn(v string) *UpdateFlowEnti
 	return s
 }
 
+// SetEntitlementStatus sets the EntitlementStatus field's value.
+func (s *UpdateFlowEntitlementInput) SetEntitlementStatus(v string) *UpdateFlowEntitlementInput {
+	s.EntitlementStatus = &v
+	return s
+}
+
 // SetFlowArn sets the FlowArn field's value.
 func (s *UpdateFlowEntitlementInput) SetFlowArn(v string) *UpdateFlowEntitlementInput {
 	s.FlowArn = &v
@@ -4389,7 +7374,7 @@ func (s *UpdateFlowEntitlementInput) SetSubscribers(v []*string) *UpdateFlowEnti
 type UpdateFlowEntitlementOutput struct {
 	_ struct{} `type:"structure"`
 
-	// The settings for a flow entitlement.
+	// The new configuration of the entitlement that you updated.
 	Entitlement *Entitlement `locationName:"entitlement" type:"structure"`
 
 	// The ARN of the flow that this entitlement was granted on.
@@ -4415,6 +7400,79 @@ func (s *UpdateFlowEntitlementOutput) SetEntitlement(v *Entitlement) *UpdateFlow
 // SetFlowArn sets the FlowArn field's value.
 func (s *UpdateFlowEntitlementOutput) SetFlowArn(v string) *UpdateFlowEntitlementOutput {
 	s.FlowArn = &v
+	return s
+}
+
+// Updates an existing flow.
+type UpdateFlowInput struct {
+	_ struct{} `type:"structure"`
+
+	// FlowArn is a required field
+	FlowArn *string `location:"uri" locationName:"flowArn" type:"string" required:"true"`
+
+	// The settings for source failover
+	SourceFailoverConfig *UpdateFailoverConfig `locationName:"sourceFailoverConfig" type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateFlowInput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateFlowInput) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *UpdateFlowInput) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "UpdateFlowInput"}
+	if s.FlowArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("FlowArn"))
+	}
+	if s.FlowArn != nil && len(*s.FlowArn) < 1 {
+		invalidParams.Add(request.NewErrParamMinLen("FlowArn", 1))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetFlowArn sets the FlowArn field's value.
+func (s *UpdateFlowInput) SetFlowArn(v string) *UpdateFlowInput {
+	s.FlowArn = &v
+	return s
+}
+
+// SetSourceFailoverConfig sets the SourceFailoverConfig field's value.
+func (s *UpdateFlowInput) SetSourceFailoverConfig(v *UpdateFailoverConfig) *UpdateFlowInput {
+	s.SourceFailoverConfig = v
+	return s
+}
+
+// Updates an existing flow.
+type UpdateFlowOutput struct {
+	_ struct{} `type:"structure"`
+
+	// The settings for a flow, including its source, outputs, and entitlements.
+	Flow *Flow `locationName:"flow" type:"structure"`
+}
+
+// String returns the string representation
+func (s UpdateFlowOutput) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UpdateFlowOutput) GoString() string {
+	return s.String()
+}
+
+// SetFlow sets the Flow field's value.
+func (s *UpdateFlowOutput) SetFlow(v *Flow) *UpdateFlowOutput {
+	s.Flow = v
 	return s
 }
 
@@ -4462,6 +7520,9 @@ type UpdateFlowOutputInput struct {
 	// The stream ID that you want to use for this transport. This parameter applies
 	// only to Zixi-based streams.
 	StreamId *string `locationName:"streamId" type:"string"`
+
+	// The name of the VPC interface attachment to use for this output.
+	VpcInterfaceAttachment *VpcInterfaceAttachment `locationName:"vpcInterfaceAttachment" type:"structure"`
 }
 
 // String returns the string representation
@@ -4568,6 +7629,12 @@ func (s *UpdateFlowOutputInput) SetStreamId(v string) *UpdateFlowOutputInput {
 	return s
 }
 
+// SetVpcInterfaceAttachment sets the VpcInterfaceAttachment field's value.
+func (s *UpdateFlowOutputInput) SetVpcInterfaceAttachment(v *VpcInterfaceAttachment) *UpdateFlowOutputInput {
+	s.VpcInterfaceAttachment = v
+	return s
+}
+
 // The result of a successful UpdateFlowOutput request including the flow ARN
 // and the updated output.
 type UpdateFlowOutputOutput struct {
@@ -4576,7 +7643,7 @@ type UpdateFlowOutputOutput struct {
 	// The ARN of the flow that is associated with the updated output.
 	FlowArn *string `locationName:"flowArn" type:"string"`
 
-	// The settings for an output.
+	// The new settings of the output that you updated.
 	Output *Output `locationName:"output" type:"structure"`
 }
 
@@ -4640,6 +7707,9 @@ type UpdateFlowSourceInput struct {
 	// The stream ID that you want to use for this transport. This parameter applies
 	// only to Zixi-based streams.
 	StreamId *string `locationName:"streamId" type:"string"`
+
+	// The name of the VPC Interface to configure this Source with.
+	VpcInterfaceName *string `locationName:"vpcInterfaceName" type:"string"`
 
 	// The range of IP addresses that should be allowed to contribute content to
 	// your source. These IP addresses should be in the form of a Classless Inter-Domain
@@ -4739,6 +7809,12 @@ func (s *UpdateFlowSourceInput) SetStreamId(v string) *UpdateFlowSourceInput {
 	return s
 }
 
+// SetVpcInterfaceName sets the VpcInterfaceName field's value.
+func (s *UpdateFlowSourceInput) SetVpcInterfaceName(v string) *UpdateFlowSourceInput {
+	s.VpcInterfaceName = &v
+	return s
+}
+
 // SetWhitelistCidr sets the WhitelistCidr field's value.
 func (s *UpdateFlowSourceInput) SetWhitelistCidr(v string) *UpdateFlowSourceInput {
 	s.WhitelistCidr = &v
@@ -4779,6 +7855,182 @@ func (s *UpdateFlowSourceOutput) SetSource(v *Source) *UpdateFlowSourceOutput {
 	return s
 }
 
+// The settings for a VPC Source.
+type VpcInterface struct {
+	_ struct{} `type:"structure"`
+
+	// Immutable and has to be a unique against other VpcInterfaces in this Flow
+	//
+	// Name is a required field
+	Name *string `locationName:"name" type:"string" required:"true"`
+
+	// IDs of the network interfaces created in customer's account by MediaConnect.
+	//
+	// NetworkInterfaceIds is a required field
+	NetworkInterfaceIds []*string `locationName:"networkInterfaceIds" type:"list" required:"true"`
+
+	// Role Arn MediaConnect can assumes to create ENIs in customer's account
+	//
+	// RoleArn is a required field
+	RoleArn *string `locationName:"roleArn" type:"string" required:"true"`
+
+	// Security Group IDs to be used on ENI.
+	//
+	// SecurityGroupIds is a required field
+	SecurityGroupIds []*string `locationName:"securityGroupIds" type:"list" required:"true"`
+
+	// Subnet must be in the AZ of the Flow
+	//
+	// SubnetId is a required field
+	SubnetId *string `locationName:"subnetId" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s VpcInterface) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s VpcInterface) GoString() string {
+	return s.String()
+}
+
+// SetName sets the Name field's value.
+func (s *VpcInterface) SetName(v string) *VpcInterface {
+	s.Name = &v
+	return s
+}
+
+// SetNetworkInterfaceIds sets the NetworkInterfaceIds field's value.
+func (s *VpcInterface) SetNetworkInterfaceIds(v []*string) *VpcInterface {
+	s.NetworkInterfaceIds = v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *VpcInterface) SetRoleArn(v string) *VpcInterface {
+	s.RoleArn = &v
+	return s
+}
+
+// SetSecurityGroupIds sets the SecurityGroupIds field's value.
+func (s *VpcInterface) SetSecurityGroupIds(v []*string) *VpcInterface {
+	s.SecurityGroupIds = v
+	return s
+}
+
+// SetSubnetId sets the SubnetId field's value.
+func (s *VpcInterface) SetSubnetId(v string) *VpcInterface {
+	s.SubnetId = &v
+	return s
+}
+
+// The settings for attaching a VPC interface to an output.
+type VpcInterfaceAttachment struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the VPC interface to use for this output.
+	VpcInterfaceName *string `locationName:"vpcInterfaceName" type:"string"`
+}
+
+// String returns the string representation
+func (s VpcInterfaceAttachment) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s VpcInterfaceAttachment) GoString() string {
+	return s.String()
+}
+
+// SetVpcInterfaceName sets the VpcInterfaceName field's value.
+func (s *VpcInterfaceAttachment) SetVpcInterfaceName(v string) *VpcInterfaceAttachment {
+	s.VpcInterfaceName = &v
+	return s
+}
+
+// Desired VPC Interface for a Flow
+type VpcInterfaceRequest struct {
+	_ struct{} `type:"structure"`
+
+	// The name of the VPC Interface. This value must be unique within the current
+	// flow.
+	//
+	// Name is a required field
+	Name *string `locationName:"name" type:"string" required:"true"`
+
+	// Role Arn MediaConnect can assumes to create ENIs in customer's account
+	//
+	// RoleArn is a required field
+	RoleArn *string `locationName:"roleArn" type:"string" required:"true"`
+
+	// Security Group IDs to be used on ENI.
+	//
+	// SecurityGroupIds is a required field
+	SecurityGroupIds []*string `locationName:"securityGroupIds" type:"list" required:"true"`
+
+	// Subnet must be in the AZ of the Flow
+	//
+	// SubnetId is a required field
+	SubnetId *string `locationName:"subnetId" type:"string" required:"true"`
+}
+
+// String returns the string representation
+func (s VpcInterfaceRequest) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s VpcInterfaceRequest) GoString() string {
+	return s.String()
+}
+
+// Validate inspects the fields of the type to determine if they are valid.
+func (s *VpcInterfaceRequest) Validate() error {
+	invalidParams := request.ErrInvalidParams{Context: "VpcInterfaceRequest"}
+	if s.Name == nil {
+		invalidParams.Add(request.NewErrParamRequired("Name"))
+	}
+	if s.RoleArn == nil {
+		invalidParams.Add(request.NewErrParamRequired("RoleArn"))
+	}
+	if s.SecurityGroupIds == nil {
+		invalidParams.Add(request.NewErrParamRequired("SecurityGroupIds"))
+	}
+	if s.SubnetId == nil {
+		invalidParams.Add(request.NewErrParamRequired("SubnetId"))
+	}
+
+	if invalidParams.Len() > 0 {
+		return invalidParams
+	}
+	return nil
+}
+
+// SetName sets the Name field's value.
+func (s *VpcInterfaceRequest) SetName(v string) *VpcInterfaceRequest {
+	s.Name = &v
+	return s
+}
+
+// SetRoleArn sets the RoleArn field's value.
+func (s *VpcInterfaceRequest) SetRoleArn(v string) *VpcInterfaceRequest {
+	s.RoleArn = &v
+	return s
+}
+
+// SetSecurityGroupIds sets the SecurityGroupIds field's value.
+func (s *VpcInterfaceRequest) SetSecurityGroupIds(v []*string) *VpcInterfaceRequest {
+	s.SecurityGroupIds = v
+	return s
+}
+
+// SetSubnetId sets the SubnetId field's value.
+func (s *VpcInterfaceRequest) SetSubnetId(v string) *VpcInterfaceRequest {
+	s.SubnetId = &v
+	return s
+}
+
 const (
 	// AlgorithmAes128 is a Algorithm enum value
 	AlgorithmAes128 = "aes128"
@@ -4790,6 +8042,43 @@ const (
 	AlgorithmAes256 = "aes256"
 )
 
+// Algorithm_Values returns all elements of the Algorithm enum
+func Algorithm_Values() []string {
+	return []string{
+		AlgorithmAes128,
+		AlgorithmAes192,
+		AlgorithmAes256,
+	}
+}
+
+const (
+	// DurationUnitsMonths is a DurationUnits enum value
+	DurationUnitsMonths = "MONTHS"
+)
+
+// DurationUnits_Values returns all elements of the DurationUnits enum
+func DurationUnits_Values() []string {
+	return []string{
+		DurationUnitsMonths,
+	}
+}
+
+const (
+	// EntitlementStatusEnabled is a EntitlementStatus enum value
+	EntitlementStatusEnabled = "ENABLED"
+
+	// EntitlementStatusDisabled is a EntitlementStatus enum value
+	EntitlementStatusDisabled = "DISABLED"
+)
+
+// EntitlementStatus_Values returns all elements of the EntitlementStatus enum
+func EntitlementStatus_Values() []string {
+	return []string{
+		EntitlementStatusEnabled,
+		EntitlementStatusDisabled,
+	}
+}
+
 const (
 	// KeyTypeSpeke is a KeyType enum value
 	KeyTypeSpeke = "speke"
@@ -4797,6 +8086,26 @@ const (
 	// KeyTypeStaticKey is a KeyType enum value
 	KeyTypeStaticKey = "static-key"
 )
+
+// KeyType_Values returns all elements of the KeyType enum
+func KeyType_Values() []string {
+	return []string{
+		KeyTypeSpeke,
+		KeyTypeStaticKey,
+	}
+}
+
+const (
+	// PriceUnitsHourly is a PriceUnits enum value
+	PriceUnitsHourly = "HOURLY"
+)
+
+// PriceUnits_Values returns all elements of the PriceUnits enum
+func PriceUnits_Values() []string {
+	return []string{
+		PriceUnitsHourly,
+	}
+}
 
 const (
 	// ProtocolZixiPush is a Protocol enum value
@@ -4815,6 +8124,53 @@ const (
 	ProtocolRist = "rist"
 )
 
+// Protocol_Values returns all elements of the Protocol enum
+func Protocol_Values() []string {
+	return []string{
+		ProtocolZixiPush,
+		ProtocolRtpFec,
+		ProtocolRtp,
+		ProtocolZixiPull,
+		ProtocolRist,
+	}
+}
+
+const (
+	// ReservationStateActive is a ReservationState enum value
+	ReservationStateActive = "ACTIVE"
+
+	// ReservationStateExpired is a ReservationState enum value
+	ReservationStateExpired = "EXPIRED"
+
+	// ReservationStateProcessing is a ReservationState enum value
+	ReservationStateProcessing = "PROCESSING"
+
+	// ReservationStateCanceled is a ReservationState enum value
+	ReservationStateCanceled = "CANCELED"
+)
+
+// ReservationState_Values returns all elements of the ReservationState enum
+func ReservationState_Values() []string {
+	return []string{
+		ReservationStateActive,
+		ReservationStateExpired,
+		ReservationStateProcessing,
+		ReservationStateCanceled,
+	}
+}
+
+const (
+	// ResourceTypeMbpsOutboundBandwidth is a ResourceType enum value
+	ResourceTypeMbpsOutboundBandwidth = "Mbps_Outbound_Bandwidth"
+)
+
+// ResourceType_Values returns all elements of the ResourceType enum
+func ResourceType_Values() []string {
+	return []string{
+		ResourceTypeMbpsOutboundBandwidth,
+	}
+}
+
 const (
 	// SourceTypeOwned is a SourceType enum value
 	SourceTypeOwned = "OWNED"
@@ -4822,6 +8178,30 @@ const (
 	// SourceTypeEntitled is a SourceType enum value
 	SourceTypeEntitled = "ENTITLED"
 )
+
+// SourceType_Values returns all elements of the SourceType enum
+func SourceType_Values() []string {
+	return []string{
+		SourceTypeOwned,
+		SourceTypeEntitled,
+	}
+}
+
+const (
+	// StateEnabled is a State enum value
+	StateEnabled = "ENABLED"
+
+	// StateDisabled is a State enum value
+	StateDisabled = "DISABLED"
+)
+
+// State_Values returns all elements of the State enum
+func State_Values() []string {
+	return []string{
+		StateEnabled,
+		StateDisabled,
+	}
+}
 
 const (
 	// StatusStandby is a Status enum value
@@ -4845,3 +8225,16 @@ const (
 	// StatusError is a Status enum value
 	StatusError = "ERROR"
 )
+
+// Status_Values returns all elements of the Status enum
+func Status_Values() []string {
+	return []string{
+		StatusStandby,
+		StatusActive,
+		StatusUpdating,
+		StatusDeleting,
+		StatusStarting,
+		StatusStopping,
+		StatusError,
+	}
+}

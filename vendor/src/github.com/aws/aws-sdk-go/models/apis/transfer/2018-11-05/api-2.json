@@ -6,7 +6,7 @@
     "jsonVersion":"1.1",
     "protocol":"json",
     "serviceAbbreviation":"AWS Transfer",
-    "serviceFullName":"AWS Transfer for SFTP",
+    "serviceFullName":"AWS Transfer Family",
     "serviceId":"Transfer",
     "signatureVersion":"v4",
     "signingName":"transfer",
@@ -23,10 +23,12 @@
       "input":{"shape":"CreateServerRequest"},
       "output":{"shape":"CreateServerResponse"},
       "errors":[
+        {"shape":"AccessDeniedException"},
         {"shape":"ServiceUnavailableException"},
         {"shape":"InternalServiceError"},
         {"shape":"InvalidRequestException"},
-        {"shape":"ResourceExistsException"}
+        {"shape":"ResourceExistsException"},
+        {"shape":"ThrottlingException"}
       ]
     },
     "CreateUser":{
@@ -53,6 +55,7 @@
       },
       "input":{"shape":"DeleteServerRequest"},
       "errors":[
+        {"shape":"AccessDeniedException"},
         {"shape":"ServiceUnavailableException"},
         {"shape":"InternalServiceError"},
         {"shape":"InvalidRequestException"},
@@ -81,6 +84,21 @@
         "requestUri":"/"
       },
       "input":{"shape":"DeleteUserRequest"},
+      "errors":[
+        {"shape":"ServiceUnavailableException"},
+        {"shape":"InternalServiceError"},
+        {"shape":"InvalidRequestException"},
+        {"shape":"ResourceNotFoundException"}
+      ]
+    },
+    "DescribeSecurityPolicy":{
+      "name":"DescribeSecurityPolicy",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DescribeSecurityPolicyRequest"},
+      "output":{"shape":"DescribeSecurityPolicyResponse"},
       "errors":[
         {"shape":"ServiceUnavailableException"},
         {"shape":"InternalServiceError"},
@@ -133,6 +151,21 @@
         {"shape":"ResourceExistsException"},
         {"shape":"ResourceNotFoundException"},
         {"shape":"ThrottlingException"}
+      ]
+    },
+    "ListSecurityPolicies":{
+      "name":"ListSecurityPolicies",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"ListSecurityPoliciesRequest"},
+      "output":{"shape":"ListSecurityPoliciesResponse"},
+      "errors":[
+        {"shape":"ServiceUnavailableException"},
+        {"shape":"InternalServiceError"},
+        {"shape":"InvalidNextTokenException"},
+        {"shape":"InvalidRequestException"}
       ]
     },
     "ListServers":{
@@ -263,7 +296,9 @@
       "input":{"shape":"UpdateServerRequest"},
       "output":{"shape":"UpdateServerResponse"},
       "errors":[
+        {"shape":"AccessDeniedException"},
         {"shape":"ServiceUnavailableException"},
+        {"shape":"ConflictException"},
         {"shape":"InternalServiceError"},
         {"shape":"InvalidRequestException"},
         {"shape":"ResourceExistsException"},
@@ -289,21 +324,49 @@
     }
   },
   "shapes":{
+    "AccessDeniedException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"ServiceErrorMessage"}
+      },
+      "exception":true,
+      "synthetic":true
+    },
+    "AddressAllocationId":{"type":"string"},
+    "AddressAllocationIds":{
+      "type":"list",
+      "member":{"shape":"AddressAllocationId"}
+    },
     "Arn":{
       "type":"string",
       "max":1600,
       "min":20,
       "pattern":"arn:.*"
     },
+    "Certificate":{
+      "type":"string",
+      "max":1600
+    },
+    "ConflictException":{
+      "type":"structure",
+      "required":["Message"],
+      "members":{
+        "Message":{"shape":"Message"}
+      },
+      "exception":true
+    },
     "CreateServerRequest":{
       "type":"structure",
       "members":{
+        "Certificate":{"shape":"Certificate"},
         "EndpointDetails":{"shape":"EndpointDetails"},
         "EndpointType":{"shape":"EndpointType"},
         "HostKey":{"shape":"HostKey"},
         "IdentityProviderDetails":{"shape":"IdentityProviderDetails"},
         "IdentityProviderType":{"shape":"IdentityProviderType"},
         "LoggingRole":{"shape":"Role"},
+        "Protocols":{"shape":"Protocols"},
+        "SecurityPolicyName":{"shape":"SecurityPolicyName"},
         "Tags":{"shape":"Tags"}
       }
     },
@@ -376,6 +439,20 @@
         "UserName":{"shape":"UserName"}
       }
     },
+    "DescribeSecurityPolicyRequest":{
+      "type":"structure",
+      "required":["SecurityPolicyName"],
+      "members":{
+        "SecurityPolicyName":{"shape":"SecurityPolicyName"}
+      }
+    },
+    "DescribeSecurityPolicyResponse":{
+      "type":"structure",
+      "required":["SecurityPolicy"],
+      "members":{
+        "SecurityPolicy":{"shape":"DescribedSecurityPolicy"}
+      }
+    },
     "DescribeServerRequest":{
       "type":"structure",
       "required":["ServerId"],
@@ -412,17 +489,32 @@
         "User":{"shape":"DescribedUser"}
       }
     },
+    "DescribedSecurityPolicy":{
+      "type":"structure",
+      "required":["SecurityPolicyName"],
+      "members":{
+        "Fips":{"shape":"Fips"},
+        "SecurityPolicyName":{"shape":"SecurityPolicyName"},
+        "SshCiphers":{"shape":"SecurityPolicyOptions"},
+        "SshKexs":{"shape":"SecurityPolicyOptions"},
+        "SshMacs":{"shape":"SecurityPolicyOptions"},
+        "TlsCiphers":{"shape":"SecurityPolicyOptions"}
+      }
+    },
     "DescribedServer":{
       "type":"structure",
       "required":["Arn"],
       "members":{
         "Arn":{"shape":"Arn"},
+        "Certificate":{"shape":"Certificate"},
         "EndpointDetails":{"shape":"EndpointDetails"},
         "EndpointType":{"shape":"EndpointType"},
         "HostKeyFingerprint":{"shape":"HostKeyFingerprint"},
         "IdentityProviderDetails":{"shape":"IdentityProviderDetails"},
         "IdentityProviderType":{"shape":"IdentityProviderType"},
         "LoggingRole":{"shape":"Role"},
+        "Protocols":{"shape":"Protocols"},
+        "SecurityPolicyName":{"shape":"SecurityPolicyName"},
         "ServerId":{"shape":"ServerId"},
         "State":{"shape":"State"},
         "Tags":{"shape":"Tags"},
@@ -447,16 +539,22 @@
     "EndpointDetails":{
       "type":"structure",
       "members":{
-        "VpcEndpointId":{"shape":"VpcEndpointId"}
+        "AddressAllocationIds":{"shape":"AddressAllocationIds"},
+        "SubnetIds":{"shape":"SubnetIds"},
+        "VpcEndpointId":{"shape":"VpcEndpointId"},
+        "VpcId":{"shape":"VpcId"},
+        "SecurityGroupIds":{"shape":"SecurityGroupIds"}
       }
     },
     "EndpointType":{
       "type":"string",
       "enum":[
         "PUBLIC",
+        "VPC",
         "VPC_ENDPOINT"
       ]
     },
+    "Fips":{"type":"boolean"},
     "HomeDirectory":{
       "type":"string",
       "max":1024,
@@ -556,6 +654,21 @@
         "Message":{"shape":"Message"}
       },
       "exception":true
+    },
+    "ListSecurityPoliciesRequest":{
+      "type":"structure",
+      "members":{
+        "MaxResults":{"shape":"MaxResults"},
+        "NextToken":{"shape":"NextToken"}
+      }
+    },
+    "ListSecurityPoliciesResponse":{
+      "type":"structure",
+      "required":["SecurityPolicyNames"],
+      "members":{
+        "NextToken":{"shape":"NextToken"},
+        "SecurityPolicyNames":{"shape":"SecurityPolicyNames"}
+      }
     },
     "ListServersRequest":{
       "type":"structure",
@@ -673,6 +786,20 @@
       "type":"string",
       "max":2048
     },
+    "Protocol":{
+      "type":"string",
+      "enum":[
+        "SFTP",
+        "FTP",
+        "FTPS"
+      ]
+    },
+    "Protocols":{
+      "type":"list",
+      "member":{"shape":"Protocol"},
+      "max":3,
+      "min":1
+    },
     "Resource":{"type":"string"},
     "ResourceExistsException":{
       "type":"structure",
@@ -711,6 +838,33 @@
       "min":20,
       "pattern":"arn:.*role/.*"
     },
+    "SecurityGroupId":{
+      "type":"string",
+      "max":20,
+      "min":11,
+      "pattern":"^sg-[0-9a-f]{8,17}$"
+    },
+    "SecurityGroupIds":{
+      "type":"list",
+      "member":{"shape":"SecurityGroupId"}
+    },
+    "SecurityPolicyName":{
+      "type":"string",
+      "max":100,
+      "pattern":"TransferSecurityPolicy-.+"
+    },
+    "SecurityPolicyNames":{
+      "type":"list",
+      "member":{"shape":"SecurityPolicyName"}
+    },
+    "SecurityPolicyOption":{
+      "type":"string",
+      "max":50
+    },
+    "SecurityPolicyOptions":{
+      "type":"list",
+      "member":{"shape":"SecurityPolicyOption"}
+    },
     "ServerId":{
       "type":"string",
       "max":19,
@@ -726,6 +880,11 @@
       "exception":true,
       "fault":true,
       "synthetic":true
+    },
+    "SourceIp":{
+      "type":"string",
+      "max":32,
+      "pattern":"^\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}$"
     },
     "SshPublicKey":{
       "type":"structure",
@@ -783,6 +942,11 @@
         "ServerId":{"shape":"ServerId"}
       }
     },
+    "SubnetId":{"type":"string"},
+    "SubnetIds":{
+      "type":"list",
+      "member":{"shape":"SubnetId"}
+    },
     "Tag":{
       "type":"structure",
       "required":[
@@ -833,6 +997,8 @@
       ],
       "members":{
         "ServerId":{"shape":"ServerId"},
+        "ServerProtocol":{"shape":"Protocol"},
+        "SourceIp":{"shape":"SourceIp"},
         "UserName":{"shape":"UserName"},
         "UserPassword":{"shape":"UserPassword"}
       }
@@ -872,11 +1038,14 @@
       "type":"structure",
       "required":["ServerId"],
       "members":{
+        "Certificate":{"shape":"Certificate"},
         "EndpointDetails":{"shape":"EndpointDetails"},
         "EndpointType":{"shape":"EndpointType"},
         "HostKey":{"shape":"HostKey"},
         "IdentityProviderDetails":{"shape":"IdentityProviderDetails"},
         "LoggingRole":{"shape":"NullableRole"},
+        "Protocols":{"shape":"Protocols"},
+        "SecurityPolicyName":{"shape":"SecurityPolicyName"},
         "ServerId":{"shape":"ServerId"}
       }
     },
@@ -921,9 +1090,9 @@
     "UserCount":{"type":"integer"},
     "UserName":{
       "type":"string",
-      "max":32,
+      "max":100,
       "min":3,
-      "pattern":"^[a-zA-Z0-9_][a-zA-Z0-9_-]{2,31}$"
+      "pattern":"^[\\w][\\w@.-]{2,99}$"
     },
     "UserPassword":{
       "type":"string",
@@ -935,6 +1104,7 @@
       "max":22,
       "min":22,
       "pattern":"^vpce-[0-9a-f]{17}$"
-    }
+    },
+    "VpcId":{"type":"string"}
   }
 }

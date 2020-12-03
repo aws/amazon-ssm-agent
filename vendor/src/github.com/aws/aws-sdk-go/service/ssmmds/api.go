@@ -3,6 +3,8 @@
 package ssmmds
 
 import (
+	"fmt"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
@@ -62,14 +64,14 @@ func (c *SSMMDS) AcknowledgeMessageRequest(input *AcknowledgeMessageInput) (req 
 // See the AWS API reference guide for Amazon Simple Systems Management Message Delivery Service's
 // API operation AcknowledgeMessage for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInvalidMessageIdException "InvalidMessageIdException"
+// Returned Error Types:
+//   * InvalidMessageIdException
 //
-//   * ErrCodeUnsupportedMessageOperationException "UnsupportedMessageOperationException"
+//   * UnsupportedMessageOperationException
 //
-//   * ErrCodeAuthorizationFailureException "AuthorizationFailureException"
+//   * AuthorizationFailureException
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/AcknowledgeMessage
 func (c *SSMMDS) AcknowledgeMessage(input *AcknowledgeMessageInput) (*AcknowledgeMessageOutput, error) {
@@ -145,14 +147,14 @@ func (c *SSMMDS) DeleteMessageRequest(input *DeleteMessageInput) (req *request.R
 // See the AWS API reference guide for Amazon Simple Systems Management Message Delivery Service's
 // API operation DeleteMessage for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInvalidMessageIdException "InvalidMessageIdException"
+// Returned Error Types:
+//   * InvalidMessageIdException
 //
-//   * ErrCodeUnsupportedMessageOperationException "UnsupportedMessageOperationException"
+//   * UnsupportedMessageOperationException
 //
-//   * ErrCodeAuthorizationFailureException "AuthorizationFailureException"
+//   * AuthorizationFailureException
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/DeleteMessage
 func (c *SSMMDS) DeleteMessage(input *DeleteMessageInput) (*DeleteMessageOutput, error) {
@@ -228,14 +230,14 @@ func (c *SSMMDS) FailMessageRequest(input *FailMessageInput) (req *request.Reque
 // See the AWS API reference guide for Amazon Simple Systems Management Message Delivery Service's
 // API operation FailMessage for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInvalidMessageIdException "InvalidMessageIdException"
+// Returned Error Types:
+//   * InvalidMessageIdException
 //
-//   * ErrCodeUnsupportedMessageOperationException "UnsupportedMessageOperationException"
+//   * UnsupportedMessageOperationException
 //
-//   * ErrCodeAuthorizationFailureException "AuthorizationFailureException"
+//   * AuthorizationFailureException
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/FailMessage
 func (c *SSMMDS) FailMessage(input *FailMessageInput) (*FailMessageOutput, error) {
@@ -310,12 +312,12 @@ func (c *SSMMDS) GetEndpointRequest(input *GetEndpointInput) (req *request.Reque
 // See the AWS API reference guide for Amazon Simple Systems Management Message Delivery Service's
 // API operation GetEndpoint for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+// Returned Error Types:
+//   * TooManyRequestsException
 //
-//   * ErrCodeAuthorizationFailureException "AuthorizationFailureException"
+//   * AuthorizationFailureException
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/GetEndpoint
 func (c *SSMMDS) GetEndpoint(input *GetEndpointInput) (*GetEndpointOutput, error) {
@@ -390,16 +392,16 @@ func (c *SSMMDS) GetMessagesRequest(input *GetMessagesInput) (req *request.Reque
 // See the AWS API reference guide for Amazon Simple Systems Management Message Delivery Service's
 // API operation GetMessages for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInvalidDestinationException "InvalidDestinationException"
+// Returned Error Types:
+//   * InvalidDestinationException
 //
-//   * ErrCodeRequestTimeoutException "RequestTimeoutException"
+//   * RequestTimeoutException
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //
-//   * ErrCodeAuthorizationFailureException "AuthorizationFailureException"
+//   * AuthorizationFailureException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/GetMessages
 func (c *SSMMDS) GetMessages(input *GetMessagesInput) (*GetMessagesOutput, error) {
@@ -474,16 +476,16 @@ func (c *SSMMDS) SendReplyRequest(input *SendReplyInput) (req *request.Request, 
 // See the AWS API reference guide for Amazon Simple Systems Management Message Delivery Service's
 // API operation SendReply for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeUnsupportedMessageOperationException "UnsupportedMessageOperationException"
+// Returned Error Types:
+//   * UnsupportedMessageOperationException
 //
-//   * ErrCodeInvalidMessageIdException "InvalidMessageIdException"
+//   * InvalidMessageIdException
 //
-//   * ErrCodeTooManyRequestsException "TooManyRequestsException"
+//   * TooManyRequestsException
 //
-//   * ErrCodeAuthorizationFailureException "AuthorizationFailureException"
+//   * AuthorizationFailureException
 //
-//   * ErrCodeInternalServerException "InternalServerException"
+//   * InternalServerException
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/mds-2015-06-19/SendReply
 func (c *SSMMDS) SendReply(input *SendReplyInput) (*SendReplyOutput, error) {
@@ -558,6 +560,61 @@ func (s AcknowledgeMessageOutput) String() string {
 // GoString returns the string representation
 func (s AcknowledgeMessageOutput) GoString() string {
 	return s.String()
+}
+
+type AuthorizationFailureException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s AuthorizationFailureException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AuthorizationFailureException) GoString() string {
+	return s.String()
+}
+
+func newErrorAuthorizationFailureException(v protocol.ResponseMetadata) error {
+	return &AuthorizationFailureException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *AuthorizationFailureException) Code() string {
+	return "AuthorizationFailureException"
+}
+
+// Message returns the exception's message.
+func (s *AuthorizationFailureException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *AuthorizationFailureException) OrigErr() error {
+	return nil
+}
+
+func (s *AuthorizationFailureException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *AuthorizationFailureException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *AuthorizationFailureException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 type DeleteMessageInput struct {
@@ -885,6 +942,171 @@ func (s *GetMessagesOutput) SetMessagesRequestId(v string) *GetMessagesOutput {
 	return s
 }
 
+type InternalServerException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s InternalServerException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InternalServerException) GoString() string {
+	return s.String()
+}
+
+func newErrorInternalServerException(v protocol.ResponseMetadata) error {
+	return &InternalServerException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *InternalServerException) Code() string {
+	return "InternalServerException"
+}
+
+// Message returns the exception's message.
+func (s *InternalServerException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *InternalServerException) OrigErr() error {
+	return nil
+}
+
+func (s *InternalServerException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *InternalServerException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *InternalServerException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+type InvalidDestinationException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s InvalidDestinationException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InvalidDestinationException) GoString() string {
+	return s.String()
+}
+
+func newErrorInvalidDestinationException(v protocol.ResponseMetadata) error {
+	return &InvalidDestinationException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *InvalidDestinationException) Code() string {
+	return "InvalidDestinationException"
+}
+
+// Message returns the exception's message.
+func (s *InvalidDestinationException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *InvalidDestinationException) OrigErr() error {
+	return nil
+}
+
+func (s *InvalidDestinationException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *InvalidDestinationException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *InvalidDestinationException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+type InvalidMessageIdException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s InvalidMessageIdException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InvalidMessageIdException) GoString() string {
+	return s.String()
+}
+
+func newErrorInvalidMessageIdException(v protocol.ResponseMetadata) error {
+	return &InvalidMessageIdException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *InvalidMessageIdException) Code() string {
+	return "InvalidMessageIdException"
+}
+
+// Message returns the exception's message.
+func (s *InvalidMessageIdException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *InvalidMessageIdException) OrigErr() error {
+	return nil
+}
+
+func (s *InvalidMessageIdException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *InvalidMessageIdException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *InvalidMessageIdException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 type Message struct {
 	_ struct{} `type:"structure"`
 
@@ -953,6 +1175,61 @@ func (s *Message) SetPayloadDigest(v string) *Message {
 func (s *Message) SetTopic(v string) *Message {
 	s.Topic = &v
 	return s
+}
+
+type RequestTimeoutException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s RequestTimeoutException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s RequestTimeoutException) GoString() string {
+	return s.String()
+}
+
+func newErrorRequestTimeoutException(v protocol.ResponseMetadata) error {
+	return &RequestTimeoutException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *RequestTimeoutException) Code() string {
+	return "RequestTimeoutException"
+}
+
+// Message returns the exception's message.
+func (s *RequestTimeoutException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *RequestTimeoutException) OrigErr() error {
+	return nil
+}
+
+func (s *RequestTimeoutException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *RequestTimeoutException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *RequestTimeoutException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 type SendReplyInput struct {
@@ -1075,6 +1352,116 @@ func (s *SendReplyOutput) SetReplyStatus(v string) *SendReplyOutput {
 	return s
 }
 
+type TooManyRequestsException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s TooManyRequestsException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s TooManyRequestsException) GoString() string {
+	return s.String()
+}
+
+func newErrorTooManyRequestsException(v protocol.ResponseMetadata) error {
+	return &TooManyRequestsException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *TooManyRequestsException) Code() string {
+	return "TooManyRequestsException"
+}
+
+// Message returns the exception's message.
+func (s *TooManyRequestsException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *TooManyRequestsException) OrigErr() error {
+	return nil
+}
+
+func (s *TooManyRequestsException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *TooManyRequestsException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *TooManyRequestsException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+type UnsupportedMessageOperationException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s UnsupportedMessageOperationException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s UnsupportedMessageOperationException) GoString() string {
+	return s.String()
+}
+
+func newErrorUnsupportedMessageOperationException(v protocol.ResponseMetadata) error {
+	return &UnsupportedMessageOperationException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *UnsupportedMessageOperationException) Code() string {
+	return "UnsupportedMessageOperationException"
+}
+
+// Message returns the exception's message.
+func (s *UnsupportedMessageOperationException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *UnsupportedMessageOperationException) OrigErr() error {
+	return nil
+}
+
+func (s *UnsupportedMessageOperationException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *UnsupportedMessageOperationException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *UnsupportedMessageOperationException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 const (
 	// FailureTypeNoHandlerExists is a FailureType enum value
 	FailureTypeNoHandlerExists = "NoHandlerExists"
@@ -1082,6 +1469,14 @@ const (
 	// FailureTypeInternalHandlerException is a FailureType enum value
 	FailureTypeInternalHandlerException = "InternalHandlerException"
 )
+
+// FailureType_Values returns all elements of the FailureType enum
+func FailureType_Values() []string {
+	return []string{
+		FailureTypeNoHandlerExists,
+		FailureTypeInternalHandlerException,
+	}
+}
 
 const (
 	// ReplyStatusCreated is a ReplyStatus enum value
@@ -1097,6 +1492,16 @@ const (
 	ReplyStatusNoActionTaken = "NoActionTaken"
 )
 
+// ReplyStatus_Values returns all elements of the ReplyStatus enum
+func ReplyStatus_Values() []string {
+	return []string{
+		ReplyStatusCreated,
+		ReplyStatusQueued,
+		ReplyStatusAcknowledged,
+		ReplyStatusNoActionTaken,
+	}
+}
+
 const (
 	// SchedulePushEventually is a SchedulePush enum value
 	SchedulePushEventually = "EVENTUALLY"
@@ -1104,3 +1509,11 @@ const (
 	// SchedulePushAsap is a SchedulePush enum value
 	SchedulePushAsap = "ASAP"
 )
+
+// SchedulePush_Values returns all elements of the SchedulePush enum
+func SchedulePush_Values() []string {
+	return []string{
+		SchedulePushEventually,
+		SchedulePushAsap,
+	}
+}

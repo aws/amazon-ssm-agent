@@ -2,7 +2,17 @@
 
 package connect
 
+import (
+	"github.com/aws/aws-sdk-go/private/protocol"
+)
+
 const (
+
+	// ErrCodeContactFlowNotPublishedException for service response error code
+	// "ContactFlowNotPublishedException".
+	//
+	// The contact flow has not been published.
+	ErrCodeContactFlowNotPublishedException = "ContactFlowNotPublishedException"
 
 	// ErrCodeContactNotFoundException for service response error code
 	// "ContactNotFoundException".
@@ -27,6 +37,12 @@ const (
 	//
 	// Request processing failed due to an error or failure with the service.
 	ErrCodeInternalServiceException = "InternalServiceException"
+
+	// ErrCodeInvalidContactFlowException for service response error code
+	// "InvalidContactFlowException".
+	//
+	// The contact flow is not valid.
+	ErrCodeInvalidContactFlowException = "InvalidContactFlowException"
 
 	// ErrCodeInvalidParameterException for service response error code
 	// "InvalidParameterException".
@@ -70,3 +86,19 @@ const (
 	// No user with the specified credentials was found in the Amazon Connect instance.
 	ErrCodeUserNotFoundException = "UserNotFoundException"
 )
+
+var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
+	"ContactFlowNotPublishedException":     newErrorContactFlowNotPublishedException,
+	"ContactNotFoundException":             newErrorContactNotFoundException,
+	"DestinationNotAllowedException":       newErrorDestinationNotAllowedException,
+	"DuplicateResourceException":           newErrorDuplicateResourceException,
+	"InternalServiceException":             newErrorInternalServiceException,
+	"InvalidContactFlowException":          newErrorInvalidContactFlowException,
+	"InvalidParameterException":            newErrorInvalidParameterException,
+	"InvalidRequestException":              newErrorInvalidRequestException,
+	"LimitExceededException":               newErrorLimitExceededException,
+	"OutboundContactNotPermittedException": newErrorOutboundContactNotPermittedException,
+	"ResourceNotFoundException":            newErrorResourceNotFoundException,
+	"ThrottlingException":                  newErrorThrottlingException,
+	"UserNotFoundException":                newErrorUserNotFoundException,
+}

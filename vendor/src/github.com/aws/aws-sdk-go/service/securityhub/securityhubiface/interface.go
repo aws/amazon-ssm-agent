@@ -76,6 +76,10 @@ type SecurityHubAPI interface {
 	BatchImportFindingsWithContext(aws.Context, *securityhub.BatchImportFindingsInput, ...request.Option) (*securityhub.BatchImportFindingsOutput, error)
 	BatchImportFindingsRequest(*securityhub.BatchImportFindingsInput) (*request.Request, *securityhub.BatchImportFindingsOutput)
 
+	BatchUpdateFindings(*securityhub.BatchUpdateFindingsInput) (*securityhub.BatchUpdateFindingsOutput, error)
+	BatchUpdateFindingsWithContext(aws.Context, *securityhub.BatchUpdateFindingsInput, ...request.Option) (*securityhub.BatchUpdateFindingsOutput, error)
+	BatchUpdateFindingsRequest(*securityhub.BatchUpdateFindingsInput) (*request.Request, *securityhub.BatchUpdateFindingsOutput)
+
 	CreateActionTarget(*securityhub.CreateActionTargetInput) (*securityhub.CreateActionTargetOutput, error)
 	CreateActionTargetWithContext(aws.Context, *securityhub.CreateActionTargetInput, ...request.Option) (*securityhub.CreateActionTargetOutput, error)
 	CreateActionTargetRequest(*securityhub.CreateActionTargetInput) (*request.Request, *securityhub.CreateActionTargetOutput)
@@ -126,6 +130,20 @@ type SecurityHubAPI interface {
 	DescribeProductsPages(*securityhub.DescribeProductsInput, func(*securityhub.DescribeProductsOutput, bool) bool) error
 	DescribeProductsPagesWithContext(aws.Context, *securityhub.DescribeProductsInput, func(*securityhub.DescribeProductsOutput, bool) bool, ...request.Option) error
 
+	DescribeStandards(*securityhub.DescribeStandardsInput) (*securityhub.DescribeStandardsOutput, error)
+	DescribeStandardsWithContext(aws.Context, *securityhub.DescribeStandardsInput, ...request.Option) (*securityhub.DescribeStandardsOutput, error)
+	DescribeStandardsRequest(*securityhub.DescribeStandardsInput) (*request.Request, *securityhub.DescribeStandardsOutput)
+
+	DescribeStandardsPages(*securityhub.DescribeStandardsInput, func(*securityhub.DescribeStandardsOutput, bool) bool) error
+	DescribeStandardsPagesWithContext(aws.Context, *securityhub.DescribeStandardsInput, func(*securityhub.DescribeStandardsOutput, bool) bool, ...request.Option) error
+
+	DescribeStandardsControls(*securityhub.DescribeStandardsControlsInput) (*securityhub.DescribeStandardsControlsOutput, error)
+	DescribeStandardsControlsWithContext(aws.Context, *securityhub.DescribeStandardsControlsInput, ...request.Option) (*securityhub.DescribeStandardsControlsOutput, error)
+	DescribeStandardsControlsRequest(*securityhub.DescribeStandardsControlsInput) (*request.Request, *securityhub.DescribeStandardsControlsOutput)
+
+	DescribeStandardsControlsPages(*securityhub.DescribeStandardsControlsInput, func(*securityhub.DescribeStandardsControlsOutput, bool) bool) error
+	DescribeStandardsControlsPagesWithContext(aws.Context, *securityhub.DescribeStandardsControlsInput, func(*securityhub.DescribeStandardsControlsOutput, bool) bool, ...request.Option) error
+
 	DisableImportFindingsForProduct(*securityhub.DisableImportFindingsForProductInput) (*securityhub.DisableImportFindingsForProductOutput, error)
 	DisableImportFindingsForProductWithContext(aws.Context, *securityhub.DisableImportFindingsForProductInput, ...request.Option) (*securityhub.DisableImportFindingsForProductOutput, error)
 	DisableImportFindingsForProductRequest(*securityhub.DisableImportFindingsForProductInput) (*request.Request, *securityhub.DisableImportFindingsForProductOutput)
@@ -153,6 +171,9 @@ type SecurityHubAPI interface {
 	GetEnabledStandards(*securityhub.GetEnabledStandardsInput) (*securityhub.GetEnabledStandardsOutput, error)
 	GetEnabledStandardsWithContext(aws.Context, *securityhub.GetEnabledStandardsInput, ...request.Option) (*securityhub.GetEnabledStandardsOutput, error)
 	GetEnabledStandardsRequest(*securityhub.GetEnabledStandardsInput) (*request.Request, *securityhub.GetEnabledStandardsOutput)
+
+	GetEnabledStandardsPages(*securityhub.GetEnabledStandardsInput, func(*securityhub.GetEnabledStandardsOutput, bool) bool) error
+	GetEnabledStandardsPagesWithContext(aws.Context, *securityhub.GetEnabledStandardsInput, func(*securityhub.GetEnabledStandardsOutput, bool) bool, ...request.Option) error
 
 	GetFindings(*securityhub.GetFindingsInput) (*securityhub.GetFindingsOutput, error)
 	GetFindingsWithContext(aws.Context, *securityhub.GetFindingsInput, ...request.Option) (*securityhub.GetFindingsOutput, error)
@@ -199,9 +220,15 @@ type SecurityHubAPI interface {
 	ListInvitationsWithContext(aws.Context, *securityhub.ListInvitationsInput, ...request.Option) (*securityhub.ListInvitationsOutput, error)
 	ListInvitationsRequest(*securityhub.ListInvitationsInput) (*request.Request, *securityhub.ListInvitationsOutput)
 
+	ListInvitationsPages(*securityhub.ListInvitationsInput, func(*securityhub.ListInvitationsOutput, bool) bool) error
+	ListInvitationsPagesWithContext(aws.Context, *securityhub.ListInvitationsInput, func(*securityhub.ListInvitationsOutput, bool) bool, ...request.Option) error
+
 	ListMembers(*securityhub.ListMembersInput) (*securityhub.ListMembersOutput, error)
 	ListMembersWithContext(aws.Context, *securityhub.ListMembersInput, ...request.Option) (*securityhub.ListMembersOutput, error)
 	ListMembersRequest(*securityhub.ListMembersInput) (*request.Request, *securityhub.ListMembersOutput)
+
+	ListMembersPages(*securityhub.ListMembersInput, func(*securityhub.ListMembersOutput, bool) bool) error
+	ListMembersPagesWithContext(aws.Context, *securityhub.ListMembersInput, func(*securityhub.ListMembersOutput, bool) bool, ...request.Option) error
 
 	ListTagsForResource(*securityhub.ListTagsForResourceInput) (*securityhub.ListTagsForResourceOutput, error)
 	ListTagsForResourceWithContext(aws.Context, *securityhub.ListTagsForResourceInput, ...request.Option) (*securityhub.ListTagsForResourceOutput, error)
@@ -226,6 +253,14 @@ type SecurityHubAPI interface {
 	UpdateInsight(*securityhub.UpdateInsightInput) (*securityhub.UpdateInsightOutput, error)
 	UpdateInsightWithContext(aws.Context, *securityhub.UpdateInsightInput, ...request.Option) (*securityhub.UpdateInsightOutput, error)
 	UpdateInsightRequest(*securityhub.UpdateInsightInput) (*request.Request, *securityhub.UpdateInsightOutput)
+
+	UpdateSecurityHubConfiguration(*securityhub.UpdateSecurityHubConfigurationInput) (*securityhub.UpdateSecurityHubConfigurationOutput, error)
+	UpdateSecurityHubConfigurationWithContext(aws.Context, *securityhub.UpdateSecurityHubConfigurationInput, ...request.Option) (*securityhub.UpdateSecurityHubConfigurationOutput, error)
+	UpdateSecurityHubConfigurationRequest(*securityhub.UpdateSecurityHubConfigurationInput) (*request.Request, *securityhub.UpdateSecurityHubConfigurationOutput)
+
+	UpdateStandardsControl(*securityhub.UpdateStandardsControlInput) (*securityhub.UpdateStandardsControlOutput, error)
+	UpdateStandardsControlWithContext(aws.Context, *securityhub.UpdateStandardsControlInput, ...request.Option) (*securityhub.UpdateStandardsControlOutput, error)
+	UpdateStandardsControlRequest(*securityhub.UpdateStandardsControlInput) (*request.Request, *securityhub.UpdateStandardsControlOutput)
 }
 
 var _ SecurityHubAPI = (*securityhub.SecurityHub)(nil)

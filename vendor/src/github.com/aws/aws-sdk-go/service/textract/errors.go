@@ -2,18 +2,24 @@
 
 package textract
 
+import (
+	"github.com/aws/aws-sdk-go/private/protocol"
+)
+
 const (
 
 	// ErrCodeAccessDeniedException for service response error code
 	// "AccessDeniedException".
 	//
-	// You aren't authorized to perform the action.
+	// You aren't authorized to perform the action. Use the Amazon Resource Name
+	// (ARN) of an authorized user or IAM role to perform the operation.
 	ErrCodeAccessDeniedException = "AccessDeniedException"
 
 	// ErrCodeBadDocumentException for service response error code
 	// "BadDocumentException".
 	//
-	// Amazon Textract isn't able to read the document.
+	// Amazon Textract isn't able to read the document. For more information on
+	// the document limits in Amazon Textract, see limits.
 	ErrCodeBadDocumentException = "BadDocumentException"
 
 	// ErrCodeDocumentTooLargeException for service response error code
@@ -21,8 +27,15 @@ const (
 	//
 	// The document can't be processed because it's too large. The maximum document
 	// size for synchronous operations 5 MB. The maximum document size for asynchronous
-	// operations is 500 MB for PDF format files.
+	// operations is 500 MB for PDF files.
 	ErrCodeDocumentTooLargeException = "DocumentTooLargeException"
+
+	// ErrCodeHumanLoopQuotaExceededException for service response error code
+	// "HumanLoopQuotaExceededException".
+	//
+	// Indicates you have exceeded the maximum number of active human in the loop
+	// workflows available
+	ErrCodeHumanLoopQuotaExceededException = "HumanLoopQuotaExceededException"
 
 	// ErrCodeIdempotentParameterMismatchException for service response error code
 	// "IdempotentParameterMismatchException".
@@ -57,7 +70,8 @@ const (
 	// "InvalidS3ObjectException".
 	//
 	// Amazon Textract is unable to access the S3 object that's specified in the
-	// request.
+	// request. for more information, Configure Access to Amazon S3 (https://docs.aws.amazon.com/AmazonS3/latest/dev/s3-access-control.html)
+	// For troubleshooting information, see Troubleshooting Amazon S3 (https://docs.aws.amazon.com/AmazonS3/latest/dev/troubleshooting.html)
 	ErrCodeInvalidS3ObjectException = "InvalidS3ObjectException"
 
 	// ErrCodeLimitExceededException for service response error code
@@ -87,7 +101,24 @@ const (
 	// ErrCodeUnsupportedDocumentException for service response error code
 	// "UnsupportedDocumentException".
 	//
-	// The format of the input document isn't supported. Amazon Textract supports
-	// documents that are .png or .jpg format.
+	// The format of the input document isn't supported. Documents for synchronous
+	// operations can be in PNG or JPEG format. Documents for asynchronous operations
+	// can also be in PDF format.
 	ErrCodeUnsupportedDocumentException = "UnsupportedDocumentException"
 )
+
+var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
+	"AccessDeniedException":                  newErrorAccessDeniedException,
+	"BadDocumentException":                   newErrorBadDocumentException,
+	"DocumentTooLargeException":              newErrorDocumentTooLargeException,
+	"HumanLoopQuotaExceededException":        newErrorHumanLoopQuotaExceededException,
+	"IdempotentParameterMismatchException":   newErrorIdempotentParameterMismatchException,
+	"InternalServerError":                    newErrorInternalServerError,
+	"InvalidJobIdException":                  newErrorInvalidJobIdException,
+	"InvalidParameterException":              newErrorInvalidParameterException,
+	"InvalidS3ObjectException":               newErrorInvalidS3ObjectException,
+	"LimitExceededException":                 newErrorLimitExceededException,
+	"ProvisionedThroughputExceededException": newErrorProvisionedThroughputExceededException,
+	"ThrottlingException":                    newErrorThrottlingException,
+	"UnsupportedDocumentException":           newErrorUnsupportedDocumentException,
+}

@@ -1708,8 +1708,14 @@ type OutputService10TestShapeOutputService10TestCaseOperation1Input struct {
 type OutputService10TestShapeOutputService10TestCaseOperation1Output struct {
 	_ struct{} `type:"structure"`
 
+	// By default unmarshaled keys are written as a map keys in following canonicalized format:
+	// the first letter and any letter following a hyphen will be capitalized, and the rest as lowercase.
+	// Set `aws.Config.LowerCaseHeaderMaps` to `true` to write unmarshaled keys to the map as lowercase.
 	AllHeaders map[string]*string `location:"headers" type:"map"`
 
+	// By default unmarshaled keys are written as a map keys in following canonicalized format:
+	// the first letter and any letter following a hyphen will be capitalized, and the rest as lowercase.
+	// Set `aws.Config.LowerCaseHeaderMaps` to `true` to write unmarshaled keys to the map as lowercase.
 	PrefixedHeaders map[string]*string `location:"headers" locationName:"X-" type:"map"`
 }
 
@@ -2581,6 +2587,16 @@ const (
 	// RESTJSONEnumType1 is a OutputService14TestShapeRESTJSONEnumType enum value
 	RESTJSONEnumType1 = "1"
 )
+
+// OutputService14TestShapeRESTJSONEnumType_Values returns all elements of the OutputService14TestShapeRESTJSONEnumType enum
+func OutputService14TestShapeRESTJSONEnumType_Values() []string {
+	return []string{
+		RESTJSONEnumTypeFoo,
+		RESTJSONEnumTypeBar,
+		RESTJSONEnumType0,
+		RESTJSONEnumType1,
+	}
+}
 
 //
 // Tests begin here

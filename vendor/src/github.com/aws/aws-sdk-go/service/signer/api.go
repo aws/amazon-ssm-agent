@@ -3,6 +3,7 @@
 package signer
 
 import (
+	"fmt"
 	"time"
 
 	"github.com/aws/aws-sdk-go/aws"
@@ -68,17 +69,17 @@ func (c *Signer) CancelSigningProfileRequest(input *CancelSigningProfileInput) (
 // See the AWS API reference guide for AWS Signer's
 // API operation CancelSigningProfile for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+// Returned Error Types:
+//   * ResourceNotFoundException
 //   A specified resource could not be found.
 //
-//   * ErrCodeAccessDeniedException "AccessDeniedException"
+//   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   The signing job has been throttled.
 //
-//   * ErrCodeInternalServiceErrorException "InternalServiceErrorException"
+//   * InternalServiceErrorException
 //   An internal error occurred.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/signer-2017-08-25/CancelSigningProfile
@@ -157,14 +158,14 @@ func (c *Signer) DescribeSigningJobRequest(input *DescribeSigningJobInput) (req 
 // See the AWS API reference guide for AWS Signer's
 // API operation DescribeSigningJob for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+// Returned Error Types:
+//   * ResourceNotFoundException
 //   A specified resource could not be found.
 //
-//   * ErrCodeAccessDeniedException "AccessDeniedException"
+//   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
 //
-//   * ErrCodeInternalServiceErrorException "InternalServiceErrorException"
+//   * InternalServiceErrorException
 //   An internal error occurred.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/signer-2017-08-25/DescribeSigningJob
@@ -242,14 +243,14 @@ func (c *Signer) GetSigningPlatformRequest(input *GetSigningPlatformInput) (req 
 // See the AWS API reference guide for AWS Signer's
 // API operation GetSigningPlatform for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+// Returned Error Types:
+//   * ResourceNotFoundException
 //   A specified resource could not be found.
 //
-//   * ErrCodeAccessDeniedException "AccessDeniedException"
+//   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
 //
-//   * ErrCodeInternalServiceErrorException "InternalServiceErrorException"
+//   * InternalServiceErrorException
 //   An internal error occurred.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/signer-2017-08-25/GetSigningPlatform
@@ -327,17 +328,17 @@ func (c *Signer) GetSigningProfileRequest(input *GetSigningProfileInput) (req *r
 // See the AWS API reference guide for AWS Signer's
 // API operation GetSigningProfile for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+// Returned Error Types:
+//   * ResourceNotFoundException
 //   A specified resource could not be found.
 //
-//   * ErrCodeAccessDeniedException "AccessDeniedException"
+//   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   The signing job has been throttled.
 //
-//   * ErrCodeInternalServiceErrorException "InternalServiceErrorException"
+//   * InternalServiceErrorException
 //   An internal error occurred.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/signer-2017-08-25/GetSigningProfile
@@ -427,17 +428,17 @@ func (c *Signer) ListSigningJobsRequest(input *ListSigningJobsInput) (req *reque
 // See the AWS API reference guide for AWS Signer's
 // API operation ListSigningJobs for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeValidationException "ValidationException"
+// Returned Error Types:
+//   * ValidationException
 //   You signing certificate could not be validated.
 //
-//   * ErrCodeAccessDeniedException "AccessDeniedException"
+//   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   The signing job has been throttled.
 //
-//   * ErrCodeInternalServiceErrorException "InternalServiceErrorException"
+//   * InternalServiceErrorException
 //   An internal error occurred.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/signer-2017-08-25/ListSigningJobs
@@ -578,17 +579,17 @@ func (c *Signer) ListSigningPlatformsRequest(input *ListSigningPlatformsInput) (
 // See the AWS API reference guide for AWS Signer's
 // API operation ListSigningPlatforms for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeValidationException "ValidationException"
+// Returned Error Types:
+//   * ValidationException
 //   You signing certificate could not be validated.
 //
-//   * ErrCodeAccessDeniedException "AccessDeniedException"
+//   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   The signing job has been throttled.
 //
-//   * ErrCodeInternalServiceErrorException "InternalServiceErrorException"
+//   * InternalServiceErrorException
 //   An internal error occurred.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/signer-2017-08-25/ListSigningPlatforms
@@ -730,14 +731,14 @@ func (c *Signer) ListSigningProfilesRequest(input *ListSigningProfilesInput) (re
 // See the AWS API reference guide for AWS Signer's
 // API operation ListSigningProfiles for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeAccessDeniedException "AccessDeniedException"
+// Returned Error Types:
+//   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   The signing job has been throttled.
 //
-//   * ErrCodeInternalServiceErrorException "InternalServiceErrorException"
+//   * InternalServiceErrorException
 //   An internal error occurred.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/signer-2017-08-25/ListSigningProfiles
@@ -867,15 +868,15 @@ func (c *Signer) ListTagsForResourceRequest(input *ListTagsForResourceInput) (re
 // See the AWS API reference guide for AWS Signer's
 // API operation ListTagsForResource for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInternalServiceErrorException "InternalServiceErrorException"
+// Returned Error Types:
+//   * InternalServiceErrorException
 //   An internal error occurred.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The request contains invalid parameters for the ARN or tags. This exception
 //   also occurs when you call a tagging API on a cancelled signing profile.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The signing profile was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/signer-2017-08-25/ListTagsForResource
@@ -956,20 +957,20 @@ func (c *Signer) PutSigningProfileRequest(input *PutSigningProfileInput) (req *r
 // See the AWS API reference guide for AWS Signer's
 // API operation PutSigningProfile for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+// Returned Error Types:
+//   * ResourceNotFoundException
 //   A specified resource could not be found.
 //
-//   * ErrCodeAccessDeniedException "AccessDeniedException"
+//   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
 //
-//   * ErrCodeValidationException "ValidationException"
+//   * ValidationException
 //   You signing certificate could not be validated.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   The signing job has been throttled.
 //
-//   * ErrCodeInternalServiceErrorException "InternalServiceErrorException"
+//   * InternalServiceErrorException
 //   An internal error occurred.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/signer-2017-08-25/PutSigningProfile
@@ -1070,20 +1071,20 @@ func (c *Signer) StartSigningJobRequest(input *StartSigningJobInput) (req *reque
 // See the AWS API reference guide for AWS Signer's
 // API operation StartSigningJob for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeValidationException "ValidationException"
+// Returned Error Types:
+//   * ValidationException
 //   You signing certificate could not be validated.
 //
-//   * ErrCodeResourceNotFoundException "ResourceNotFoundException"
+//   * ResourceNotFoundException
 //   A specified resource could not be found.
 //
-//   * ErrCodeAccessDeniedException "AccessDeniedException"
+//   * AccessDeniedException
 //   You do not have sufficient access to perform this action.
 //
-//   * ErrCodeThrottlingException "ThrottlingException"
+//   * ThrottlingException
 //   The signing job has been throttled.
 //
-//   * ErrCodeInternalServiceErrorException "InternalServiceErrorException"
+//   * InternalServiceErrorException
 //   An internal error occurred.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/signer-2017-08-25/StartSigningJob
@@ -1155,8 +1156,8 @@ func (c *Signer) TagResourceRequest(input *TagResourceInput) (req *request.Reque
 //
 // Adds one or more tags to a signing profile. Tags are labels that you can
 // use to identify and organize your AWS resources. Each tag consists of a key
-// and an optional value. You specify the signing profile using its Amazon Resource
-// Name (ARN). You specify the tag by using a key-value pair.
+// and an optional value. To specify the signing profile, use its Amazon Resource
+// Name (ARN). To specify the tag, use a key-value pair.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1165,15 +1166,15 @@ func (c *Signer) TagResourceRequest(input *TagResourceInput) (req *request.Reque
 // See the AWS API reference guide for AWS Signer's
 // API operation TagResource for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInternalServiceErrorException "InternalServiceErrorException"
+// Returned Error Types:
+//   * InternalServiceErrorException
 //   An internal error occurred.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The request contains invalid parameters for the ARN or tags. This exception
 //   also occurs when you call a tagging API on a cancelled signing profile.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The signing profile was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/signer-2017-08-25/TagResource
@@ -1243,8 +1244,8 @@ func (c *Signer) UntagResourceRequest(input *UntagResourceInput) (req *request.R
 
 // UntagResource API operation for AWS Signer.
 //
-// Remove one or more tags from a signing profile. Specify a list of tag keys
-// to remove the tags.
+// Removes one or more tags from a signing profile. To remove the tags, specify
+// a list of tag keys.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -1253,15 +1254,15 @@ func (c *Signer) UntagResourceRequest(input *UntagResourceInput) (req *request.R
 // See the AWS API reference guide for AWS Signer's
 // API operation UntagResource for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeInternalServiceErrorException "InternalServiceErrorException"
+// Returned Error Types:
+//   * InternalServiceErrorException
 //   An internal error occurred.
 //
-//   * ErrCodeBadRequestException "BadRequestException"
+//   * BadRequestException
 //   The request contains invalid parameters for the ARN or tags. This exception
 //   also occurs when you call a tagging API on a cancelled signing profile.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The signing profile was not found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/signer-2017-08-25/UntagResource
@@ -1284,6 +1285,119 @@ func (c *Signer) UntagResourceWithContext(ctx aws.Context, input *UntagResourceI
 	req.SetContext(ctx)
 	req.ApplyOptions(opts...)
 	return out, req.Send()
+}
+
+// You do not have sufficient access to perform this action.
+type AccessDeniedException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s AccessDeniedException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s AccessDeniedException) GoString() string {
+	return s.String()
+}
+
+func newErrorAccessDeniedException(v protocol.ResponseMetadata) error {
+	return &AccessDeniedException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *AccessDeniedException) Code() string {
+	return "AccessDeniedException"
+}
+
+// Message returns the exception's message.
+func (s *AccessDeniedException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *AccessDeniedException) OrigErr() error {
+	return nil
+}
+
+func (s *AccessDeniedException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *AccessDeniedException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *AccessDeniedException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// The request contains invalid parameters for the ARN or tags. This exception
+// also occurs when you call a tagging API on a cancelled signing profile.
+type BadRequestException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s BadRequestException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BadRequestException) GoString() string {
+	return s.String()
+}
+
+func newErrorBadRequestException(v protocol.ResponseMetadata) error {
+	return &BadRequestException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *BadRequestException) Code() string {
+	return "BadRequestException"
+}
+
+// Message returns the exception's message.
+func (s *BadRequestException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *BadRequestException) OrigErr() error {
+	return nil
+}
+
+func (s *BadRequestException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *BadRequestException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *BadRequestException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 type CancelSigningProfileInput struct {
@@ -1409,7 +1523,7 @@ type DescribeSigningJobOutput struct {
 	// Name of the S3 bucket where the signed code image is saved by code signing.
 	SignedObject *SignedObject `locationName:"signedObject" type:"structure"`
 
-	// Amazon Resource Name (ARN) of your code signing certificate.
+	// The Amazon Resource Name (ARN) of your code signing certificate.
 	SigningMaterial *SigningMaterial `locationName:"signingMaterial" type:"structure"`
 
 	// Map of user-assigned key-value pairs used during signing. These values contain
@@ -1870,6 +1984,62 @@ func (s *HashAlgorithmOptions) SetDefaultValue(v string) *HashAlgorithmOptions {
 	return s
 }
 
+// An internal error occurred.
+type InternalServiceErrorException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s InternalServiceErrorException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InternalServiceErrorException) GoString() string {
+	return s.String()
+}
+
+func newErrorInternalServiceErrorException(v protocol.ResponseMetadata) error {
+	return &InternalServiceErrorException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *InternalServiceErrorException) Code() string {
+	return "InternalServiceErrorException"
+}
+
+// Message returns the exception's message.
+func (s *InternalServiceErrorException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *InternalServiceErrorException) OrigErr() error {
+	return nil
+}
+
+func (s *InternalServiceErrorException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *InternalServiceErrorException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *InternalServiceErrorException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 type ListSigningJobsInput struct {
 	_ struct{} `type:"structure"`
 
@@ -2242,6 +2412,62 @@ func (s *ListTagsForResourceOutput) SetTags(v map[string]*string) *ListTagsForRe
 	return s
 }
 
+// The signing profile was not found.
+type NotFoundException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s NotFoundException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s NotFoundException) GoString() string {
+	return s.String()
+}
+
+func newErrorNotFoundException(v protocol.ResponseMetadata) error {
+	return &NotFoundException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *NotFoundException) Code() string {
+	return "NotFoundException"
+}
+
+// Message returns the exception's message.
+func (s *NotFoundException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *NotFoundException) OrigErr() error {
+	return nil
+}
+
+func (s *NotFoundException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *NotFoundException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *NotFoundException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 type PutSigningProfileInput struct {
 	_ struct{} `type:"structure"`
 
@@ -2250,7 +2476,7 @@ type PutSigningProfileInput struct {
 	// or signing-algorithm).
 	Overrides *SigningPlatformOverrides `locationName:"overrides" type:"structure"`
 
-	// The ID of the signing profile to be created.
+	// The ID of the signing platform to be created.
 	//
 	// PlatformId is a required field
 	PlatformId *string `locationName:"platformId" type:"string" required:"true"`
@@ -2270,7 +2496,7 @@ type PutSigningProfileInput struct {
 	// you want to use during signing.
 	SigningParameters map[string]*string `locationName:"signingParameters" type:"map"`
 
-	// Tags to be associated with the signing profile being created.
+	// Tags to be associated with the signing profile that is being created.
 	Tags map[string]*string `locationName:"tags" min:"1" type:"map"`
 }
 
@@ -2371,6 +2597,62 @@ func (s PutSigningProfileOutput) GoString() string {
 func (s *PutSigningProfileOutput) SetArn(v string) *PutSigningProfileOutput {
 	s.Arn = &v
 	return s
+}
+
+// A specified resource could not be found.
+type ResourceNotFoundException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s ResourceNotFoundException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ResourceNotFoundException) GoString() string {
+	return s.String()
+}
+
+func newErrorResourceNotFoundException(v protocol.ResponseMetadata) error {
+	return &ResourceNotFoundException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ResourceNotFoundException) Code() string {
+	return "ResourceNotFoundException"
+}
+
+// Message returns the exception's message.
+func (s *ResourceNotFoundException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ResourceNotFoundException) OrigErr() error {
+	return nil
+}
+
+func (s *ResourceNotFoundException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ResourceNotFoundException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ResourceNotFoundException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 // The name and prefix of the S3 bucket where code signing saves your signed
@@ -2542,7 +2824,7 @@ type SigningConfiguration struct {
 	// EncryptionAlgorithmOptions is a required field
 	EncryptionAlgorithmOptions *EncryptionAlgorithmOptions `locationName:"encryptionAlgorithmOptions" type:"structure" required:"true"`
 
-	// The hash algorithm options that are available for a a code signing job.
+	// The hash algorithm options that are available for a code signing job.
 	//
 	// HashAlgorithmOptions is a required field
 	HashAlgorithmOptions *HashAlgorithmOptions `locationName:"hashAlgorithmOptions" type:"structure" required:"true"`
@@ -2610,12 +2892,12 @@ func (s *SigningConfigurationOverrides) SetHashAlgorithm(v string) *SigningConfi
 type SigningImageFormat struct {
 	_ struct{} `type:"structure"`
 
-	// The default format of a code signing signing image.
+	// The default format of a code signing image.
 	//
 	// DefaultFormat is a required field
 	DefaultFormat *string `locationName:"defaultFormat" type:"string" required:"true" enum:"ImageFormat"`
 
-	// The supported formats of a code signing signing image.
+	// The supported formats of a code signing image.
 	//
 	// SupportedFormats is a required field
 	SupportedFormats []*string `locationName:"supportedFormats" type:"list" required:"true"`
@@ -2755,7 +3037,7 @@ func (s *SigningMaterial) SetCertificateArn(v string) *SigningMaterial {
 }
 
 // Contains information about the signing configurations and parameters that
-// is used to perform a code signing job.
+// are used to perform a code signing job.
 type SigningPlatform struct {
 	_ struct{} `type:"structure"`
 
@@ -2851,6 +3133,13 @@ type SigningPlatformOverrides struct {
 	// A signing configuration that overrides the default encryption or hash algorithm
 	// of a signing job.
 	SigningConfiguration *SigningConfigurationOverrides `locationName:"signingConfiguration" type:"structure"`
+
+	// A signed image is a JSON object. When overriding the default signing platform
+	// configuration, a customer can select either of two signing formats, JSONEmbedded
+	// or JSONDetached. (A third format value, JSON, is reserved for future use.)
+	// With JSONEmbedded, the signing image has the payload embedded in it. With
+	// JSONDetached, the payload is not be embedded in the signing image.
+	SigningImageFormat *string `locationName:"signingImageFormat" type:"string" enum:"ImageFormat"`
 }
 
 // String returns the string representation
@@ -2869,12 +3158,18 @@ func (s *SigningPlatformOverrides) SetSigningConfiguration(v *SigningConfigurati
 	return s
 }
 
+// SetSigningImageFormat sets the SigningImageFormat field's value.
+func (s *SigningPlatformOverrides) SetSigningImageFormat(v string) *SigningPlatformOverrides {
+	s.SigningImageFormat = &v
+	return s
+}
+
 // Contains information about the ACM certificates and code signing configuration
 // parameters that can be used by a given code signing user.
 type SigningProfile struct {
 	_ struct{} `type:"structure"`
 
-	// Amazon Resource Name (ARN) for the signing profile.
+	// The Amazon Resource Name (ARN) for the signing profile.
 	Arn *string `locationName:"arn" type:"string"`
 
 	// The ID of a platform that is available for use by a signing profile.
@@ -3095,7 +3390,7 @@ func (s *StartSigningJobOutput) SetJobId(v string) *StartSigningJobOutput {
 type TagResourceInput struct {
 	_ struct{} `type:"structure"`
 
-	// Amazon Resource Name (ARN) for the signing profile.
+	// The Amazon Resource Name (ARN) for the signing profile.
 	//
 	// ResourceArn is a required field
 	ResourceArn *string `location:"uri" locationName:"resourceArn" type:"string" required:"true"`
@@ -3164,15 +3459,71 @@ func (s TagResourceOutput) GoString() string {
 	return s.String()
 }
 
+// The signing job has been throttled.
+type ThrottlingException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s ThrottlingException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ThrottlingException) GoString() string {
+	return s.String()
+}
+
+func newErrorThrottlingException(v protocol.ResponseMetadata) error {
+	return &ThrottlingException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ThrottlingException) Code() string {
+	return "ThrottlingException"
+}
+
+// Message returns the exception's message.
+func (s *ThrottlingException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ThrottlingException) OrigErr() error {
+	return nil
+}
+
+func (s *ThrottlingException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ThrottlingException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ThrottlingException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 type UntagResourceInput struct {
 	_ struct{} `type:"structure"`
 
-	// Amazon Resource Name (ARN) for the signing profile .
+	// The Amazon Resource Name (ARN) for the signing profile.
 	//
 	// ResourceArn is a required field
 	ResourceArn *string `location:"uri" locationName:"resourceArn" type:"string" required:"true"`
 
-	// A list of tag keys to be removed from the signing profile .
+	// A list of tag keys to be removed from the signing profile.
 	//
 	// TagKeys is a required field
 	TagKeys []*string `location:"querystring" locationName:"tagKeys" min:"1" type:"list" required:"true"`
@@ -3236,10 +3587,73 @@ func (s UntagResourceOutput) GoString() string {
 	return s.String()
 }
 
+// You signing certificate could not be validated.
+type ValidationException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s ValidationException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ValidationException) GoString() string {
+	return s.String()
+}
+
+func newErrorValidationException(v protocol.ResponseMetadata) error {
+	return &ValidationException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ValidationException) Code() string {
+	return "ValidationException"
+}
+
+// Message returns the exception's message.
+func (s *ValidationException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ValidationException) OrigErr() error {
+	return nil
+}
+
+func (s *ValidationException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ValidationException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ValidationException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 const (
 	// CategoryAwsioT is a Category enum value
 	CategoryAwsioT = "AWSIoT"
 )
+
+// Category_Values returns all elements of the Category enum
+func Category_Values() []string {
+	return []string{
+		CategoryAwsioT,
+	}
+}
 
 const (
 	// EncryptionAlgorithmRsa is a EncryptionAlgorithm enum value
@@ -3249,6 +3663,14 @@ const (
 	EncryptionAlgorithmEcdsa = "ECDSA"
 )
 
+// EncryptionAlgorithm_Values returns all elements of the EncryptionAlgorithm enum
+func EncryptionAlgorithm_Values() []string {
+	return []string{
+		EncryptionAlgorithmRsa,
+		EncryptionAlgorithmEcdsa,
+	}
+}
+
 const (
 	// HashAlgorithmSha1 is a HashAlgorithm enum value
 	HashAlgorithmSha1 = "SHA1"
@@ -3257,10 +3679,33 @@ const (
 	HashAlgorithmSha256 = "SHA256"
 )
 
+// HashAlgorithm_Values returns all elements of the HashAlgorithm enum
+func HashAlgorithm_Values() []string {
+	return []string{
+		HashAlgorithmSha1,
+		HashAlgorithmSha256,
+	}
+}
+
 const (
 	// ImageFormatJson is a ImageFormat enum value
 	ImageFormatJson = "JSON"
+
+	// ImageFormatJsonembedded is a ImageFormat enum value
+	ImageFormatJsonembedded = "JSONEmbedded"
+
+	// ImageFormatJsondetached is a ImageFormat enum value
+	ImageFormatJsondetached = "JSONDetached"
 )
+
+// ImageFormat_Values returns all elements of the ImageFormat enum
+func ImageFormat_Values() []string {
+	return []string{
+		ImageFormatJson,
+		ImageFormatJsonembedded,
+		ImageFormatJsondetached,
+	}
+}
 
 const (
 	// SigningProfileStatusActive is a SigningProfileStatus enum value
@@ -3269,6 +3714,14 @@ const (
 	// SigningProfileStatusCanceled is a SigningProfileStatus enum value
 	SigningProfileStatusCanceled = "Canceled"
 )
+
+// SigningProfileStatus_Values returns all elements of the SigningProfileStatus enum
+func SigningProfileStatus_Values() []string {
+	return []string{
+		SigningProfileStatusActive,
+		SigningProfileStatusCanceled,
+	}
+}
 
 const (
 	// SigningStatusInProgress is a SigningStatus enum value
@@ -3280,3 +3733,12 @@ const (
 	// SigningStatusSucceeded is a SigningStatus enum value
 	SigningStatusSucceeded = "Succeeded"
 )
+
+// SigningStatus_Values returns all elements of the SigningStatus enum
+func SigningStatus_Values() []string {
+	return []string{
+		SigningStatusInProgress,
+		SigningStatusFailed,
+		SigningStatusSucceeded,
+	}
+}

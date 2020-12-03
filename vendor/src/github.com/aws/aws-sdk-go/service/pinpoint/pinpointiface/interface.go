@@ -88,6 +88,10 @@ type PinpointAPI interface {
 	CreatePushTemplateWithContext(aws.Context, *pinpoint.CreatePushTemplateInput, ...request.Option) (*pinpoint.CreatePushTemplateOutput, error)
 	CreatePushTemplateRequest(*pinpoint.CreatePushTemplateInput) (*request.Request, *pinpoint.CreatePushTemplateOutput)
 
+	CreateRecommenderConfiguration(*pinpoint.CreateRecommenderConfigurationInput) (*pinpoint.CreateRecommenderConfigurationOutput, error)
+	CreateRecommenderConfigurationWithContext(aws.Context, *pinpoint.CreateRecommenderConfigurationInput, ...request.Option) (*pinpoint.CreateRecommenderConfigurationOutput, error)
+	CreateRecommenderConfigurationRequest(*pinpoint.CreateRecommenderConfigurationInput) (*request.Request, *pinpoint.CreateRecommenderConfigurationOutput)
+
 	CreateSegment(*pinpoint.CreateSegmentInput) (*pinpoint.CreateSegmentOutput, error)
 	CreateSegmentWithContext(aws.Context, *pinpoint.CreateSegmentInput, ...request.Option) (*pinpoint.CreateSegmentOutput, error)
 	CreateSegmentRequest(*pinpoint.CreateSegmentInput) (*request.Request, *pinpoint.CreateSegmentOutput)
@@ -159,6 +163,10 @@ type PinpointAPI interface {
 	DeletePushTemplate(*pinpoint.DeletePushTemplateInput) (*pinpoint.DeletePushTemplateOutput, error)
 	DeletePushTemplateWithContext(aws.Context, *pinpoint.DeletePushTemplateInput, ...request.Option) (*pinpoint.DeletePushTemplateOutput, error)
 	DeletePushTemplateRequest(*pinpoint.DeletePushTemplateInput) (*request.Request, *pinpoint.DeletePushTemplateOutput)
+
+	DeleteRecommenderConfiguration(*pinpoint.DeleteRecommenderConfigurationInput) (*pinpoint.DeleteRecommenderConfigurationOutput, error)
+	DeleteRecommenderConfigurationWithContext(aws.Context, *pinpoint.DeleteRecommenderConfigurationInput, ...request.Option) (*pinpoint.DeleteRecommenderConfigurationOutput, error)
+	DeleteRecommenderConfigurationRequest(*pinpoint.DeleteRecommenderConfigurationInput) (*request.Request, *pinpoint.DeleteRecommenderConfigurationOutput)
 
 	DeleteSegment(*pinpoint.DeleteSegmentInput) (*pinpoint.DeleteSegmentOutput, error)
 	DeleteSegmentWithContext(aws.Context, *pinpoint.DeleteSegmentInput, ...request.Option) (*pinpoint.DeleteSegmentOutput, error)
@@ -308,6 +316,14 @@ type PinpointAPI interface {
 	GetPushTemplateWithContext(aws.Context, *pinpoint.GetPushTemplateInput, ...request.Option) (*pinpoint.GetPushTemplateOutput, error)
 	GetPushTemplateRequest(*pinpoint.GetPushTemplateInput) (*request.Request, *pinpoint.GetPushTemplateOutput)
 
+	GetRecommenderConfiguration(*pinpoint.GetRecommenderConfigurationInput) (*pinpoint.GetRecommenderConfigurationOutput, error)
+	GetRecommenderConfigurationWithContext(aws.Context, *pinpoint.GetRecommenderConfigurationInput, ...request.Option) (*pinpoint.GetRecommenderConfigurationOutput, error)
+	GetRecommenderConfigurationRequest(*pinpoint.GetRecommenderConfigurationInput) (*request.Request, *pinpoint.GetRecommenderConfigurationOutput)
+
+	GetRecommenderConfigurations(*pinpoint.GetRecommenderConfigurationsInput) (*pinpoint.GetRecommenderConfigurationsOutput, error)
+	GetRecommenderConfigurationsWithContext(aws.Context, *pinpoint.GetRecommenderConfigurationsInput, ...request.Option) (*pinpoint.GetRecommenderConfigurationsOutput, error)
+	GetRecommenderConfigurationsRequest(*pinpoint.GetRecommenderConfigurationsInput) (*request.Request, *pinpoint.GetRecommenderConfigurationsOutput)
+
 	GetSegment(*pinpoint.GetSegmentInput) (*pinpoint.GetSegmentOutput, error)
 	GetSegmentWithContext(aws.Context, *pinpoint.GetSegmentInput, ...request.Option) (*pinpoint.GetSegmentOutput, error)
 	GetSegmentRequest(*pinpoint.GetSegmentInput) (*request.Request, *pinpoint.GetSegmentOutput)
@@ -359,6 +375,10 @@ type PinpointAPI interface {
 	ListTagsForResource(*pinpoint.ListTagsForResourceInput) (*pinpoint.ListTagsForResourceOutput, error)
 	ListTagsForResourceWithContext(aws.Context, *pinpoint.ListTagsForResourceInput, ...request.Option) (*pinpoint.ListTagsForResourceOutput, error)
 	ListTagsForResourceRequest(*pinpoint.ListTagsForResourceInput) (*request.Request, *pinpoint.ListTagsForResourceOutput)
+
+	ListTemplateVersions(*pinpoint.ListTemplateVersionsInput) (*pinpoint.ListTemplateVersionsOutput, error)
+	ListTemplateVersionsWithContext(aws.Context, *pinpoint.ListTemplateVersionsInput, ...request.Option) (*pinpoint.ListTemplateVersionsOutput, error)
+	ListTemplateVersionsRequest(*pinpoint.ListTemplateVersionsInput) (*request.Request, *pinpoint.ListTemplateVersionsOutput)
 
 	ListTemplates(*pinpoint.ListTemplatesInput) (*pinpoint.ListTemplatesOutput, error)
 	ListTemplatesWithContext(aws.Context, *pinpoint.ListTemplatesInput, ...request.Option) (*pinpoint.ListTemplatesOutput, error)
@@ -460,6 +480,10 @@ type PinpointAPI interface {
 	UpdatePushTemplateWithContext(aws.Context, *pinpoint.UpdatePushTemplateInput, ...request.Option) (*pinpoint.UpdatePushTemplateOutput, error)
 	UpdatePushTemplateRequest(*pinpoint.UpdatePushTemplateInput) (*request.Request, *pinpoint.UpdatePushTemplateOutput)
 
+	UpdateRecommenderConfiguration(*pinpoint.UpdateRecommenderConfigurationInput) (*pinpoint.UpdateRecommenderConfigurationOutput, error)
+	UpdateRecommenderConfigurationWithContext(aws.Context, *pinpoint.UpdateRecommenderConfigurationInput, ...request.Option) (*pinpoint.UpdateRecommenderConfigurationOutput, error)
+	UpdateRecommenderConfigurationRequest(*pinpoint.UpdateRecommenderConfigurationInput) (*request.Request, *pinpoint.UpdateRecommenderConfigurationOutput)
+
 	UpdateSegment(*pinpoint.UpdateSegmentInput) (*pinpoint.UpdateSegmentOutput, error)
 	UpdateSegmentWithContext(aws.Context, *pinpoint.UpdateSegmentInput, ...request.Option) (*pinpoint.UpdateSegmentOutput, error)
 	UpdateSegmentRequest(*pinpoint.UpdateSegmentInput) (*request.Request, *pinpoint.UpdateSegmentOutput)
@@ -471,6 +495,10 @@ type PinpointAPI interface {
 	UpdateSmsTemplate(*pinpoint.UpdateSmsTemplateInput) (*pinpoint.UpdateSmsTemplateOutput, error)
 	UpdateSmsTemplateWithContext(aws.Context, *pinpoint.UpdateSmsTemplateInput, ...request.Option) (*pinpoint.UpdateSmsTemplateOutput, error)
 	UpdateSmsTemplateRequest(*pinpoint.UpdateSmsTemplateInput) (*request.Request, *pinpoint.UpdateSmsTemplateOutput)
+
+	UpdateTemplateActiveVersion(*pinpoint.UpdateTemplateActiveVersionInput) (*pinpoint.UpdateTemplateActiveVersionOutput, error)
+	UpdateTemplateActiveVersionWithContext(aws.Context, *pinpoint.UpdateTemplateActiveVersionInput, ...request.Option) (*pinpoint.UpdateTemplateActiveVersionOutput, error)
+	UpdateTemplateActiveVersionRequest(*pinpoint.UpdateTemplateActiveVersionInput) (*request.Request, *pinpoint.UpdateTemplateActiveVersionOutput)
 
 	UpdateVoiceChannel(*pinpoint.UpdateVoiceChannelInput) (*pinpoint.UpdateVoiceChannelOutput, error)
 	UpdateVoiceChannelWithContext(aws.Context, *pinpoint.UpdateVoiceChannelInput, ...request.Option) (*pinpoint.UpdateVoiceChannelOutput, error)

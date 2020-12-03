@@ -96,9 +96,17 @@ type LambdaAPI interface {
 	DeleteFunctionConcurrencyWithContext(aws.Context, *lambda.DeleteFunctionConcurrencyInput, ...request.Option) (*lambda.DeleteFunctionConcurrencyOutput, error)
 	DeleteFunctionConcurrencyRequest(*lambda.DeleteFunctionConcurrencyInput) (*request.Request, *lambda.DeleteFunctionConcurrencyOutput)
 
+	DeleteFunctionEventInvokeConfig(*lambda.DeleteFunctionEventInvokeConfigInput) (*lambda.DeleteFunctionEventInvokeConfigOutput, error)
+	DeleteFunctionEventInvokeConfigWithContext(aws.Context, *lambda.DeleteFunctionEventInvokeConfigInput, ...request.Option) (*lambda.DeleteFunctionEventInvokeConfigOutput, error)
+	DeleteFunctionEventInvokeConfigRequest(*lambda.DeleteFunctionEventInvokeConfigInput) (*request.Request, *lambda.DeleteFunctionEventInvokeConfigOutput)
+
 	DeleteLayerVersion(*lambda.DeleteLayerVersionInput) (*lambda.DeleteLayerVersionOutput, error)
 	DeleteLayerVersionWithContext(aws.Context, *lambda.DeleteLayerVersionInput, ...request.Option) (*lambda.DeleteLayerVersionOutput, error)
 	DeleteLayerVersionRequest(*lambda.DeleteLayerVersionInput) (*request.Request, *lambda.DeleteLayerVersionOutput)
+
+	DeleteProvisionedConcurrencyConfig(*lambda.DeleteProvisionedConcurrencyConfigInput) (*lambda.DeleteProvisionedConcurrencyConfigOutput, error)
+	DeleteProvisionedConcurrencyConfigWithContext(aws.Context, *lambda.DeleteProvisionedConcurrencyConfigInput, ...request.Option) (*lambda.DeleteProvisionedConcurrencyConfigOutput, error)
+	DeleteProvisionedConcurrencyConfigRequest(*lambda.DeleteProvisionedConcurrencyConfigInput) (*request.Request, *lambda.DeleteProvisionedConcurrencyConfigOutput)
 
 	GetAccountSettings(*lambda.GetAccountSettingsInput) (*lambda.GetAccountSettingsOutput, error)
 	GetAccountSettingsWithContext(aws.Context, *lambda.GetAccountSettingsInput, ...request.Option) (*lambda.GetAccountSettingsOutput, error)
@@ -116,9 +124,17 @@ type LambdaAPI interface {
 	GetFunctionWithContext(aws.Context, *lambda.GetFunctionInput, ...request.Option) (*lambda.GetFunctionOutput, error)
 	GetFunctionRequest(*lambda.GetFunctionInput) (*request.Request, *lambda.GetFunctionOutput)
 
+	GetFunctionConcurrency(*lambda.GetFunctionConcurrencyInput) (*lambda.GetFunctionConcurrencyOutput, error)
+	GetFunctionConcurrencyWithContext(aws.Context, *lambda.GetFunctionConcurrencyInput, ...request.Option) (*lambda.GetFunctionConcurrencyOutput, error)
+	GetFunctionConcurrencyRequest(*lambda.GetFunctionConcurrencyInput) (*request.Request, *lambda.GetFunctionConcurrencyOutput)
+
 	GetFunctionConfiguration(*lambda.GetFunctionConfigurationInput) (*lambda.FunctionConfiguration, error)
 	GetFunctionConfigurationWithContext(aws.Context, *lambda.GetFunctionConfigurationInput, ...request.Option) (*lambda.FunctionConfiguration, error)
 	GetFunctionConfigurationRequest(*lambda.GetFunctionConfigurationInput) (*request.Request, *lambda.FunctionConfiguration)
+
+	GetFunctionEventInvokeConfig(*lambda.GetFunctionEventInvokeConfigInput) (*lambda.GetFunctionEventInvokeConfigOutput, error)
+	GetFunctionEventInvokeConfigWithContext(aws.Context, *lambda.GetFunctionEventInvokeConfigInput, ...request.Option) (*lambda.GetFunctionEventInvokeConfigOutput, error)
+	GetFunctionEventInvokeConfigRequest(*lambda.GetFunctionEventInvokeConfigInput) (*request.Request, *lambda.GetFunctionEventInvokeConfigOutput)
 
 	GetLayerVersion(*lambda.GetLayerVersionInput) (*lambda.GetLayerVersionOutput, error)
 	GetLayerVersionWithContext(aws.Context, *lambda.GetLayerVersionInput, ...request.Option) (*lambda.GetLayerVersionOutput, error)
@@ -135,6 +151,10 @@ type LambdaAPI interface {
 	GetPolicy(*lambda.GetPolicyInput) (*lambda.GetPolicyOutput, error)
 	GetPolicyWithContext(aws.Context, *lambda.GetPolicyInput, ...request.Option) (*lambda.GetPolicyOutput, error)
 	GetPolicyRequest(*lambda.GetPolicyInput) (*request.Request, *lambda.GetPolicyOutput)
+
+	GetProvisionedConcurrencyConfig(*lambda.GetProvisionedConcurrencyConfigInput) (*lambda.GetProvisionedConcurrencyConfigOutput, error)
+	GetProvisionedConcurrencyConfigWithContext(aws.Context, *lambda.GetProvisionedConcurrencyConfigInput, ...request.Option) (*lambda.GetProvisionedConcurrencyConfigOutput, error)
+	GetProvisionedConcurrencyConfigRequest(*lambda.GetProvisionedConcurrencyConfigInput) (*request.Request, *lambda.GetProvisionedConcurrencyConfigOutput)
 
 	Invoke(*lambda.InvokeInput) (*lambda.InvokeOutput, error)
 	InvokeWithContext(aws.Context, *lambda.InvokeInput, ...request.Option) (*lambda.InvokeOutput, error)
@@ -158,6 +178,13 @@ type LambdaAPI interface {
 	ListEventSourceMappingsPages(*lambda.ListEventSourceMappingsInput, func(*lambda.ListEventSourceMappingsOutput, bool) bool) error
 	ListEventSourceMappingsPagesWithContext(aws.Context, *lambda.ListEventSourceMappingsInput, func(*lambda.ListEventSourceMappingsOutput, bool) bool, ...request.Option) error
 
+	ListFunctionEventInvokeConfigs(*lambda.ListFunctionEventInvokeConfigsInput) (*lambda.ListFunctionEventInvokeConfigsOutput, error)
+	ListFunctionEventInvokeConfigsWithContext(aws.Context, *lambda.ListFunctionEventInvokeConfigsInput, ...request.Option) (*lambda.ListFunctionEventInvokeConfigsOutput, error)
+	ListFunctionEventInvokeConfigsRequest(*lambda.ListFunctionEventInvokeConfigsInput) (*request.Request, *lambda.ListFunctionEventInvokeConfigsOutput)
+
+	ListFunctionEventInvokeConfigsPages(*lambda.ListFunctionEventInvokeConfigsInput, func(*lambda.ListFunctionEventInvokeConfigsOutput, bool) bool) error
+	ListFunctionEventInvokeConfigsPagesWithContext(aws.Context, *lambda.ListFunctionEventInvokeConfigsInput, func(*lambda.ListFunctionEventInvokeConfigsOutput, bool) bool, ...request.Option) error
+
 	ListFunctions(*lambda.ListFunctionsInput) (*lambda.ListFunctionsOutput, error)
 	ListFunctionsWithContext(aws.Context, *lambda.ListFunctionsInput, ...request.Option) (*lambda.ListFunctionsOutput, error)
 	ListFunctionsRequest(*lambda.ListFunctionsInput) (*request.Request, *lambda.ListFunctionsOutput)
@@ -178,6 +205,13 @@ type LambdaAPI interface {
 
 	ListLayersPages(*lambda.ListLayersInput, func(*lambda.ListLayersOutput, bool) bool) error
 	ListLayersPagesWithContext(aws.Context, *lambda.ListLayersInput, func(*lambda.ListLayersOutput, bool) bool, ...request.Option) error
+
+	ListProvisionedConcurrencyConfigs(*lambda.ListProvisionedConcurrencyConfigsInput) (*lambda.ListProvisionedConcurrencyConfigsOutput, error)
+	ListProvisionedConcurrencyConfigsWithContext(aws.Context, *lambda.ListProvisionedConcurrencyConfigsInput, ...request.Option) (*lambda.ListProvisionedConcurrencyConfigsOutput, error)
+	ListProvisionedConcurrencyConfigsRequest(*lambda.ListProvisionedConcurrencyConfigsInput) (*request.Request, *lambda.ListProvisionedConcurrencyConfigsOutput)
+
+	ListProvisionedConcurrencyConfigsPages(*lambda.ListProvisionedConcurrencyConfigsInput, func(*lambda.ListProvisionedConcurrencyConfigsOutput, bool) bool) error
+	ListProvisionedConcurrencyConfigsPagesWithContext(aws.Context, *lambda.ListProvisionedConcurrencyConfigsInput, func(*lambda.ListProvisionedConcurrencyConfigsOutput, bool) bool, ...request.Option) error
 
 	ListTags(*lambda.ListTagsInput) (*lambda.ListTagsOutput, error)
 	ListTagsWithContext(aws.Context, *lambda.ListTagsInput, ...request.Option) (*lambda.ListTagsOutput, error)
@@ -201,6 +235,14 @@ type LambdaAPI interface {
 	PutFunctionConcurrency(*lambda.PutFunctionConcurrencyInput) (*lambda.PutFunctionConcurrencyOutput, error)
 	PutFunctionConcurrencyWithContext(aws.Context, *lambda.PutFunctionConcurrencyInput, ...request.Option) (*lambda.PutFunctionConcurrencyOutput, error)
 	PutFunctionConcurrencyRequest(*lambda.PutFunctionConcurrencyInput) (*request.Request, *lambda.PutFunctionConcurrencyOutput)
+
+	PutFunctionEventInvokeConfig(*lambda.PutFunctionEventInvokeConfigInput) (*lambda.PutFunctionEventInvokeConfigOutput, error)
+	PutFunctionEventInvokeConfigWithContext(aws.Context, *lambda.PutFunctionEventInvokeConfigInput, ...request.Option) (*lambda.PutFunctionEventInvokeConfigOutput, error)
+	PutFunctionEventInvokeConfigRequest(*lambda.PutFunctionEventInvokeConfigInput) (*request.Request, *lambda.PutFunctionEventInvokeConfigOutput)
+
+	PutProvisionedConcurrencyConfig(*lambda.PutProvisionedConcurrencyConfigInput) (*lambda.PutProvisionedConcurrencyConfigOutput, error)
+	PutProvisionedConcurrencyConfigWithContext(aws.Context, *lambda.PutProvisionedConcurrencyConfigInput, ...request.Option) (*lambda.PutProvisionedConcurrencyConfigOutput, error)
+	PutProvisionedConcurrencyConfigRequest(*lambda.PutProvisionedConcurrencyConfigInput) (*request.Request, *lambda.PutProvisionedConcurrencyConfigOutput)
 
 	RemoveLayerVersionPermission(*lambda.RemoveLayerVersionPermissionInput) (*lambda.RemoveLayerVersionPermissionOutput, error)
 	RemoveLayerVersionPermissionWithContext(aws.Context, *lambda.RemoveLayerVersionPermissionInput, ...request.Option) (*lambda.RemoveLayerVersionPermissionOutput, error)
@@ -234,8 +276,18 @@ type LambdaAPI interface {
 	UpdateFunctionConfigurationWithContext(aws.Context, *lambda.UpdateFunctionConfigurationInput, ...request.Option) (*lambda.FunctionConfiguration, error)
 	UpdateFunctionConfigurationRequest(*lambda.UpdateFunctionConfigurationInput) (*request.Request, *lambda.FunctionConfiguration)
 
+	UpdateFunctionEventInvokeConfig(*lambda.UpdateFunctionEventInvokeConfigInput) (*lambda.UpdateFunctionEventInvokeConfigOutput, error)
+	UpdateFunctionEventInvokeConfigWithContext(aws.Context, *lambda.UpdateFunctionEventInvokeConfigInput, ...request.Option) (*lambda.UpdateFunctionEventInvokeConfigOutput, error)
+	UpdateFunctionEventInvokeConfigRequest(*lambda.UpdateFunctionEventInvokeConfigInput) (*request.Request, *lambda.UpdateFunctionEventInvokeConfigOutput)
+
+	WaitUntilFunctionActive(*lambda.GetFunctionConfigurationInput) error
+	WaitUntilFunctionActiveWithContext(aws.Context, *lambda.GetFunctionConfigurationInput, ...request.WaiterOption) error
+
 	WaitUntilFunctionExists(*lambda.GetFunctionInput) error
 	WaitUntilFunctionExistsWithContext(aws.Context, *lambda.GetFunctionInput, ...request.WaiterOption) error
+
+	WaitUntilFunctionUpdated(*lambda.GetFunctionConfigurationInput) error
+	WaitUntilFunctionUpdatedWithContext(aws.Context, *lambda.GetFunctionConfigurationInput, ...request.WaiterOption) error
 }
 
 var _ LambdaAPI = (*lambda.Lambda)(nil)

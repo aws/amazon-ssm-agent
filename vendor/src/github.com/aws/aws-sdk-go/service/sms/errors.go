@@ -2,7 +2,18 @@
 
 package sms
 
+import (
+	"github.com/aws/aws-sdk-go/private/protocol"
+)
+
 const (
+
+	// ErrCodeDryRunOperationException for service response error code
+	// "DryRunOperationException".
+	//
+	// The user has the required permissions, so the request would have succeeded,
+	// but a dry run was performed.
+	ErrCodeDryRunOperationException = "DryRunOperationException"
 
 	// ErrCodeInternalError for service response error code
 	// "InternalError".
@@ -72,3 +83,18 @@ const (
 	// and ensure that you are using the correct access keys.
 	ErrCodeUnauthorizedOperationException = "UnauthorizedOperationException"
 )
+
+var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
+	"DryRunOperationException":             newErrorDryRunOperationException,
+	"InternalError":                        newErrorInternalError,
+	"InvalidParameterException":            newErrorInvalidParameterException,
+	"MissingRequiredParameterException":    newErrorMissingRequiredParameterException,
+	"NoConnectorsAvailableException":       newErrorNoConnectorsAvailableException,
+	"OperationNotPermittedException":       newErrorOperationNotPermittedException,
+	"ReplicationJobAlreadyExistsException": newErrorReplicationJobAlreadyExistsException,
+	"ReplicationJobNotFoundException":      newErrorReplicationJobNotFoundException,
+	"ReplicationRunLimitExceededException": newErrorReplicationRunLimitExceededException,
+	"ServerCannotBeReplicatedException":    newErrorServerCannotBeReplicatedException,
+	"TemporarilyUnavailableException":      newErrorTemporarilyUnavailableException,
+	"UnauthorizedOperationException":       newErrorUnauthorizedOperationException,
+}

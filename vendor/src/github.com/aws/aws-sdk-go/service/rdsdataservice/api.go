@@ -3,9 +3,12 @@
 package rdsdataservice
 
 import (
+	"fmt"
+
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
+	"github.com/aws/aws-sdk-go/private/protocol"
 )
 
 const opBatchExecuteStatement = "BatchExecuteStatement"
@@ -68,20 +71,20 @@ func (c *RDSDataService) BatchExecuteStatementRequest(input *BatchExecuteStateme
 // See the AWS API reference guide for AWS RDS DataService's
 // API operation BatchExecuteStatement for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   There is an error in the call or in a SQL statement.
 //
-//   * ErrCodeStatementTimeoutException "StatementTimeoutException"
+//   * StatementTimeoutException
 //   The execution of the SQL statement timed out.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //   An internal error occurred.
 //
-//   * ErrCodeForbiddenException "ForbiddenException"
+//   * ForbiddenException
 //   There are insufficient privileges to make the call.
 //
-//   * ErrCodeServiceUnavailableError "ServiceUnavailableError"
+//   * ServiceUnavailableError
 //   The service specified by the resourceArn parameter is not available.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rds-data-2018-08-01/BatchExecuteStatement
@@ -167,20 +170,20 @@ func (c *RDSDataService) BeginTransactionRequest(input *BeginTransactionInput) (
 // See the AWS API reference guide for AWS RDS DataService's
 // API operation BeginTransaction for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   There is an error in the call or in a SQL statement.
 //
-//   * ErrCodeStatementTimeoutException "StatementTimeoutException"
+//   * StatementTimeoutException
 //   The execution of the SQL statement timed out.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //   An internal error occurred.
 //
-//   * ErrCodeForbiddenException "ForbiddenException"
+//   * ForbiddenException
 //   There are insufficient privileges to make the call.
 //
-//   * ErrCodeServiceUnavailableError "ServiceUnavailableError"
+//   * ServiceUnavailableError
 //   The service specified by the resourceArn parameter is not available.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rds-data-2018-08-01/BeginTransaction
@@ -259,20 +262,23 @@ func (c *RDSDataService) CommitTransactionRequest(input *CommitTransactionInput)
 // See the AWS API reference guide for AWS RDS DataService's
 // API operation CommitTransaction for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   There is an error in the call or in a SQL statement.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * StatementTimeoutException
+//   The execution of the SQL statement timed out.
+//
+//   * InternalServerErrorException
 //   An internal error occurred.
 //
-//   * ErrCodeForbiddenException "ForbiddenException"
+//   * ForbiddenException
 //   There are insufficient privileges to make the call.
 //
-//   * ErrCodeServiceUnavailableError "ServiceUnavailableError"
+//   * ServiceUnavailableError
 //   The service specified by the resourceArn parameter is not available.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The resourceArn, secretArn, or transactionId value can't be found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rds-data-2018-08-01/CommitTransaction
@@ -358,17 +364,17 @@ func (c *RDSDataService) ExecuteSqlRequest(input *ExecuteSqlInput) (req *request
 // See the AWS API reference guide for AWS RDS DataService's
 // API operation ExecuteSql for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   There is an error in the call or in a SQL statement.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //   An internal error occurred.
 //
-//   * ErrCodeForbiddenException "ForbiddenException"
+//   * ForbiddenException
 //   There are insufficient privileges to make the call.
 //
-//   * ErrCodeServiceUnavailableError "ServiceUnavailableError"
+//   * ServiceUnavailableError
 //   The service specified by the resourceArn parameter is not available.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rds-data-2018-08-01/ExecuteSql
@@ -446,8 +452,8 @@ func (c *RDSDataService) ExecuteStatementRequest(input *ExecuteStatementInput) (
 // If a call isn't part of a transaction because it doesn't include the transactionID
 // parameter, changes that result from the call are committed automatically.
 //
-// The response size limit is 1 MB or 1,000 records. If the call returns more
-// than 1 MB of response data or over 1,000 records, the call is terminated.
+// The response size limit is 1 MB. If the call returns more than 1 MB of response
+// data, the call is terminated.
 //
 // Returns awserr.Error for service API and SDK errors. Use runtime type assertions
 // with awserr.Error's Code and Message methods to get detailed information about
@@ -456,20 +462,20 @@ func (c *RDSDataService) ExecuteStatementRequest(input *ExecuteStatementInput) (
 // See the AWS API reference guide for AWS RDS DataService's
 // API operation ExecuteStatement for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   There is an error in the call or in a SQL statement.
 //
-//   * ErrCodeStatementTimeoutException "StatementTimeoutException"
+//   * StatementTimeoutException
 //   The execution of the SQL statement timed out.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * InternalServerErrorException
 //   An internal error occurred.
 //
-//   * ErrCodeForbiddenException "ForbiddenException"
+//   * ForbiddenException
 //   There are insufficient privileges to make the call.
 //
-//   * ErrCodeServiceUnavailableError "ServiceUnavailableError"
+//   * ServiceUnavailableError
 //   The service specified by the resourceArn parameter is not available.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rds-data-2018-08-01/ExecuteStatement
@@ -548,20 +554,23 @@ func (c *RDSDataService) RollbackTransactionRequest(input *RollbackTransactionIn
 // See the AWS API reference guide for AWS RDS DataService's
 // API operation RollbackTransaction for usage and error information.
 //
-// Returned Error Codes:
-//   * ErrCodeBadRequestException "BadRequestException"
+// Returned Error Types:
+//   * BadRequestException
 //   There is an error in the call or in a SQL statement.
 //
-//   * ErrCodeInternalServerErrorException "InternalServerErrorException"
+//   * StatementTimeoutException
+//   The execution of the SQL statement timed out.
+//
+//   * InternalServerErrorException
 //   An internal error occurred.
 //
-//   * ErrCodeForbiddenException "ForbiddenException"
+//   * ForbiddenException
 //   There are insufficient privileges to make the call.
 //
-//   * ErrCodeServiceUnavailableError "ServiceUnavailableError"
+//   * ServiceUnavailableError
 //   The service specified by the resourceArn parameter is not available.
 //
-//   * ErrCodeNotFoundException "NotFoundException"
+//   * NotFoundException
 //   The resourceArn, secretArn, or transactionId value can't be found.
 //
 // See also, https://docs.aws.amazon.com/goto/WebAPI/rds-data-2018-08-01/RollbackTransaction
@@ -646,6 +655,63 @@ func (s *ArrayValue) SetStringValues(v []*string) *ArrayValue {
 	return s
 }
 
+// There is an error in the call or in a SQL statement.
+type BadRequestException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	// The error message returned by this BadRequestException error.
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s BadRequestException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s BadRequestException) GoString() string {
+	return s.String()
+}
+
+func newErrorBadRequestException(v protocol.ResponseMetadata) error {
+	return &BadRequestException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *BadRequestException) Code() string {
+	return "BadRequestException"
+}
+
+// Message returns the exception's message.
+func (s *BadRequestException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *BadRequestException) OrigErr() error {
+	return nil
+}
+
+func (s *BadRequestException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *BadRequestException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *BadRequestException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // The request parameters represent the input of a SQL statement over an array
 // of data.
 type BatchExecuteStatementInput struct {
@@ -655,6 +721,17 @@ type BatchExecuteStatementInput struct {
 	Database *string `locationName:"database" type:"string"`
 
 	// The parameter set for the batch operation.
+	//
+	// The SQL statement is executed as many times as the number of parameter sets
+	// provided. To execute a SQL statement with no parameters, use one of the following
+	// options:
+	//
+	//    * Specify one or more empty parameter sets.
+	//
+	//    * Use the ExecuteStatement operation instead of the BatchExecuteStatement
+	//    operation.
+	//
+	// Array parameters are not supported.
 	ParameterSets [][]*SqlParameter `locationName:"parameterSets" type:"list"`
 
 	// The Amazon Resource Name (ARN) of the Aurora Serverless DB cluster.
@@ -1267,6 +1344,8 @@ type ExecuteStatementInput struct {
 	IncludeResultMetadata *bool `locationName:"includeResultMetadata" type:"boolean"`
 
 	// The parameters for the SQL statement.
+	//
+	// Array parameters are not supported.
 	Parameters []*SqlParameter `locationName:"parameters" type:"list"`
 
 	// The Amazon Resource Name (ARN) of the Aurora Serverless DB cluster.
@@ -1530,6 +1609,176 @@ func (s *Field) SetStringValue(v string) *Field {
 	return s
 }
 
+// There are insufficient privileges to make the call.
+type ForbiddenException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	// The error message returned by this ForbiddenException error.
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s ForbiddenException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ForbiddenException) GoString() string {
+	return s.String()
+}
+
+func newErrorForbiddenException(v protocol.ResponseMetadata) error {
+	return &ForbiddenException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ForbiddenException) Code() string {
+	return "ForbiddenException"
+}
+
+// Message returns the exception's message.
+func (s *ForbiddenException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ForbiddenException) OrigErr() error {
+	return nil
+}
+
+func (s *ForbiddenException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ForbiddenException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ForbiddenException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// An internal error occurred.
+type InternalServerErrorException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s InternalServerErrorException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s InternalServerErrorException) GoString() string {
+	return s.String()
+}
+
+func newErrorInternalServerErrorException(v protocol.ResponseMetadata) error {
+	return &InternalServerErrorException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *InternalServerErrorException) Code() string {
+	return "InternalServerErrorException"
+}
+
+// Message returns the exception's message.
+func (s *InternalServerErrorException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *InternalServerErrorException) OrigErr() error {
+	return nil
+}
+
+func (s *InternalServerErrorException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *InternalServerErrorException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *InternalServerErrorException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
+// The resourceArn, secretArn, or transactionId value can't be found.
+type NotFoundException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	// The error message returned by this NotFoundException error.
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s NotFoundException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s NotFoundException) GoString() string {
+	return s.String()
+}
+
+func newErrorNotFoundException(v protocol.ResponseMetadata) error {
+	return &NotFoundException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *NotFoundException) Code() string {
+	return "NotFoundException"
+}
+
+// Message returns the exception's message.
+func (s *NotFoundException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *NotFoundException) OrigErr() error {
+	return nil
+}
+
+func (s *NotFoundException) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *NotFoundException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *NotFoundException) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // A record returned by a call.
 type Record struct {
 	_ struct{} `type:"structure"`
@@ -1750,12 +1999,85 @@ func (s *RollbackTransactionOutput) SetTransactionStatus(v string) *RollbackTran
 	return s
 }
 
+// The service specified by the resourceArn parameter is not available.
+type ServiceUnavailableError struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s ServiceUnavailableError) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s ServiceUnavailableError) GoString() string {
+	return s.String()
+}
+
+func newErrorServiceUnavailableError(v protocol.ResponseMetadata) error {
+	return &ServiceUnavailableError{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *ServiceUnavailableError) Code() string {
+	return "ServiceUnavailableError"
+}
+
+// Message returns the exception's message.
+func (s *ServiceUnavailableError) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *ServiceUnavailableError) OrigErr() error {
+	return nil
+}
+
+func (s *ServiceUnavailableError) Error() string {
+	return fmt.Sprintf("%s: %s", s.Code(), s.Message())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *ServiceUnavailableError) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *ServiceUnavailableError) RequestID() string {
+	return s.RespMetadata.RequestID
+}
+
 // A parameter used in a SQL statement.
 type SqlParameter struct {
 	_ struct{} `type:"structure"`
 
 	// The name of the parameter.
 	Name *string `locationName:"name" type:"string"`
+
+	// A hint that specifies the correct object type for data type mapping.
+	//
+	// Values:
+	//
+	//    * DECIMAL - The corresponding String parameter value is sent as an object
+	//    of DECIMAL type to the database.
+	//
+	//    * TIMESTAMP - The corresponding String parameter value is sent as an object
+	//    of TIMESTAMP type to the database. The accepted format is YYYY-MM-DD HH:MM:SS[.FFF].
+	//
+	//    * TIME - The corresponding String parameter value is sent as an object
+	//    of TIME type to the database. The accepted format is HH:MM:SS[.FFF].
+	//
+	//    * DATE - The corresponding String parameter value is sent as an object
+	//    of DATE type to the database. The accepted format is YYYY-MM-DD.
+	TypeHint *string `locationName:"typeHint" type:"string" enum:"TypeHint"`
 
 	// The value of the parameter.
 	Value *Field `locationName:"value" type:"structure"`
@@ -1774,6 +2096,12 @@ func (s SqlParameter) GoString() string {
 // SetName sets the Name field's value.
 func (s *SqlParameter) SetName(v string) *SqlParameter {
 	s.Name = &v
+	return s
+}
+
+// SetTypeHint sets the TypeHint field's value.
+func (s *SqlParameter) SetTypeHint(v string) *SqlParameter {
+	s.TypeHint = &v
 	return s
 }
 
@@ -1816,6 +2144,66 @@ func (s *SqlStatementResult) SetNumberOfRecordsUpdated(v int64) *SqlStatementRes
 func (s *SqlStatementResult) SetResultFrame(v *ResultFrame) *SqlStatementResult {
 	s.ResultFrame = v
 	return s
+}
+
+// The execution of the SQL statement timed out.
+type StatementTimeoutException struct {
+	_            struct{}                  `type:"structure"`
+	RespMetadata protocol.ResponseMetadata `json:"-" xml:"-"`
+
+	// The database connection ID that executed the SQL statement.
+	DbConnectionId *int64 `locationName:"dbConnectionId" type:"long"`
+
+	// The error message returned by this StatementTimeoutException error.
+	Message_ *string `locationName:"message" type:"string"`
+}
+
+// String returns the string representation
+func (s StatementTimeoutException) String() string {
+	return awsutil.Prettify(s)
+}
+
+// GoString returns the string representation
+func (s StatementTimeoutException) GoString() string {
+	return s.String()
+}
+
+func newErrorStatementTimeoutException(v protocol.ResponseMetadata) error {
+	return &StatementTimeoutException{
+		RespMetadata: v,
+	}
+}
+
+// Code returns the exception type name.
+func (s *StatementTimeoutException) Code() string {
+	return "StatementTimeoutException"
+}
+
+// Message returns the exception's message.
+func (s *StatementTimeoutException) Message() string {
+	if s.Message_ != nil {
+		return *s.Message_
+	}
+	return ""
+}
+
+// OrigErr always returns nil, satisfies awserr.Error interface.
+func (s *StatementTimeoutException) OrigErr() error {
+	return nil
+}
+
+func (s *StatementTimeoutException) Error() string {
+	return fmt.Sprintf("%s: %s\n%s", s.Code(), s.Message(), s.String())
+}
+
+// Status code returns the HTTP status code for the request's response error.
+func (s *StatementTimeoutException) StatusCode() int {
+	return s.RespMetadata.StatusCode
+}
+
+// RequestID returns the service's response RequestID for request.
+func (s *StatementTimeoutException) RequestID() string {
+	return s.RespMetadata.RequestID
 }
 
 // A structure value returned by a call.
@@ -1982,3 +2370,35 @@ const (
 	// DecimalReturnTypeString is a DecimalReturnType enum value
 	DecimalReturnTypeString = "STRING"
 )
+
+// DecimalReturnType_Values returns all elements of the DecimalReturnType enum
+func DecimalReturnType_Values() []string {
+	return []string{
+		DecimalReturnTypeDoubleOrLong,
+		DecimalReturnTypeString,
+	}
+}
+
+const (
+	// TypeHintDate is a TypeHint enum value
+	TypeHintDate = "DATE"
+
+	// TypeHintDecimal is a TypeHint enum value
+	TypeHintDecimal = "DECIMAL"
+
+	// TypeHintTime is a TypeHint enum value
+	TypeHintTime = "TIME"
+
+	// TypeHintTimestamp is a TypeHint enum value
+	TypeHintTimestamp = "TIMESTAMP"
+)
+
+// TypeHint_Values returns all elements of the TypeHint enum
+func TypeHint_Values() []string {
+	return []string{
+		TypeHintDate,
+		TypeHintDecimal,
+		TypeHintTime,
+		TypeHintTimestamp,
+	}
+}

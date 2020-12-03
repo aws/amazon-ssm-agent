@@ -250,6 +250,20 @@
         {"shape":"InternalServerErrorException"}
       ]
     },
+    "DescribeOrganizationConfiguration":{
+      "name":"DescribeOrganizationConfiguration",
+      "http":{
+        "method":"GET",
+        "requestUri":"/detector/{detectorId}/admin",
+        "responseCode":200
+      },
+      "input":{"shape":"DescribeOrganizationConfigurationRequest"},
+      "output":{"shape":"DescribeOrganizationConfigurationResponse"},
+      "errors":[
+        {"shape":"BadRequestException"},
+        {"shape":"InternalServerErrorException"}
+      ]
+    },
     "DescribePublishingDestination":{
       "name":"DescribePublishingDestination",
       "http":{
@@ -259,6 +273,20 @@
       },
       "input":{"shape":"DescribePublishingDestinationRequest"},
       "output":{"shape":"DescribePublishingDestinationResponse"},
+      "errors":[
+        {"shape":"BadRequestException"},
+        {"shape":"InternalServerErrorException"}
+      ]
+    },
+    "DisableOrganizationAdminAccount":{
+      "name":"DisableOrganizationAdminAccount",
+      "http":{
+        "method":"POST",
+        "requestUri":"/admin/disable",
+        "responseCode":200
+      },
+      "input":{"shape":"DisableOrganizationAdminAccountRequest"},
+      "output":{"shape":"DisableOrganizationAdminAccountResponse"},
       "errors":[
         {"shape":"BadRequestException"},
         {"shape":"InternalServerErrorException"}
@@ -287,6 +315,20 @@
       },
       "input":{"shape":"DisassociateMembersRequest"},
       "output":{"shape":"DisassociateMembersResponse"},
+      "errors":[
+        {"shape":"BadRequestException"},
+        {"shape":"InternalServerErrorException"}
+      ]
+    },
+    "EnableOrganizationAdminAccount":{
+      "name":"EnableOrganizationAdminAccount",
+      "http":{
+        "method":"POST",
+        "requestUri":"/admin/enable",
+        "responseCode":200
+      },
+      "input":{"shape":"EnableOrganizationAdminAccountRequest"},
+      "output":{"shape":"EnableOrganizationAdminAccountResponse"},
       "errors":[
         {"shape":"BadRequestException"},
         {"shape":"InternalServerErrorException"}
@@ -390,6 +432,20 @@
         {"shape":"InternalServerErrorException"}
       ]
     },
+    "GetMemberDetectors":{
+      "name":"GetMemberDetectors",
+      "http":{
+        "method":"POST",
+        "requestUri":"/detector/{detectorId}/member/detector/get",
+        "responseCode":200
+      },
+      "input":{"shape":"GetMemberDetectorsRequest"},
+      "output":{"shape":"GetMemberDetectorsResponse"},
+      "errors":[
+        {"shape":"BadRequestException"},
+        {"shape":"InternalServerErrorException"}
+      ]
+    },
     "GetMembers":{
       "name":"GetMembers",
       "http":{
@@ -413,6 +469,20 @@
       },
       "input":{"shape":"GetThreatIntelSetRequest"},
       "output":{"shape":"GetThreatIntelSetResponse"},
+      "errors":[
+        {"shape":"BadRequestException"},
+        {"shape":"InternalServerErrorException"}
+      ]
+    },
+    "GetUsageStatistics":{
+      "name":"GetUsageStatistics",
+      "http":{
+        "method":"POST",
+        "requestUri":"/detector/{detectorId}/usage/statistics",
+        "responseCode":200
+      },
+      "input":{"shape":"GetUsageStatisticsRequest"},
+      "output":{"shape":"GetUsageStatisticsResponse"},
       "errors":[
         {"shape":"BadRequestException"},
         {"shape":"InternalServerErrorException"}
@@ -511,6 +581,20 @@
       },
       "input":{"shape":"ListMembersRequest"},
       "output":{"shape":"ListMembersResponse"},
+      "errors":[
+        {"shape":"BadRequestException"},
+        {"shape":"InternalServerErrorException"}
+      ]
+    },
+    "ListOrganizationAdminAccounts":{
+      "name":"ListOrganizationAdminAccounts",
+      "http":{
+        "method":"GET",
+        "requestUri":"/admin",
+        "responseCode":200
+      },
+      "input":{"shape":"ListOrganizationAdminAccountsRequest"},
+      "output":{"shape":"ListOrganizationAdminAccountsResponse"},
       "errors":[
         {"shape":"BadRequestException"},
         {"shape":"InternalServerErrorException"}
@@ -684,6 +768,34 @@
         {"shape":"InternalServerErrorException"}
       ]
     },
+    "UpdateMemberDetectors":{
+      "name":"UpdateMemberDetectors",
+      "http":{
+        "method":"POST",
+        "requestUri":"/detector/{detectorId}/member/detector/update",
+        "responseCode":200
+      },
+      "input":{"shape":"UpdateMemberDetectorsRequest"},
+      "output":{"shape":"UpdateMemberDetectorsResponse"},
+      "errors":[
+        {"shape":"BadRequestException"},
+        {"shape":"InternalServerErrorException"}
+      ]
+    },
+    "UpdateOrganizationConfiguration":{
+      "name":"UpdateOrganizationConfiguration",
+      "http":{
+        "method":"POST",
+        "requestUri":"/detector/{detectorId}/admin",
+        "responseCode":200
+      },
+      "input":{"shape":"UpdateOrganizationConfigurationRequest"},
+      "output":{"shape":"UpdateOrganizationConfigurationResponse"},
+      "errors":[
+        {"shape":"BadRequestException"},
+        {"shape":"InternalServerErrorException"}
+      ]
+    },
     "UpdatePublishingDestination":{
       "name":"UpdatePublishingDestination",
       "http":{
@@ -742,6 +854,19 @@
       "members":{
       }
     },
+    "AccessControlList":{
+      "type":"structure",
+      "members":{
+        "AllowsPublicReadAccess":{
+          "shape":"Boolean",
+          "locationName":"allowsPublicReadAccess"
+        },
+        "AllowsPublicWriteAccess":{
+          "shape":"Boolean",
+          "locationName":"allowsPublicWriteAccess"
+        }
+      }
+    },
     "AccessKeyDetails":{
       "type":"structure",
       "members":{
@@ -797,6 +922,15 @@
       "max":50,
       "min":1
     },
+    "AccountLevelPermissions":{
+      "type":"structure",
+      "members":{
+        "BlockPublicAccess":{
+          "shape":"BlockPublicAccess",
+          "locationName":"blockPublicAccess"
+        }
+      }
+    },
     "Action":{
       "type":"structure",
       "members":{
@@ -821,6 +955,34 @@
           "locationName":"portProbeAction"
         }
       }
+    },
+    "AdminAccount":{
+      "type":"structure",
+      "members":{
+        "AdminAccountId":{
+          "shape":"String",
+          "locationName":"adminAccountId"
+        },
+        "AdminStatus":{
+          "shape":"AdminStatus",
+          "locationName":"adminStatus"
+        }
+      }
+    },
+    "AdminAccounts":{
+      "type":"list",
+      "member":{"shape":"AdminAccount"},
+      "max":1,
+      "min":0
+    },
+    "AdminStatus":{
+      "type":"string",
+      "enum":[
+        "ENABLED",
+        "DISABLE_IN_PROGRESS"
+      ],
+      "max":300,
+      "min":1
     },
     "ArchiveFindingsRequest":{
       "type":"structure",
@@ -860,6 +1022,10 @@
           "shape":"DomainDetails",
           "locationName":"domainDetails"
         },
+        "ErrorCode":{
+          "shape":"String",
+          "locationName":"errorCode"
+        },
         "RemoteIpDetails":{
           "shape":"RemoteIpDetails",
           "locationName":"remoteIpDetails"
@@ -885,7 +1051,58 @@
       "error":{"httpStatusCode":400},
       "exception":true
     },
+    "BlockPublicAccess":{
+      "type":"structure",
+      "members":{
+        "IgnorePublicAcls":{
+          "shape":"Boolean",
+          "locationName":"ignorePublicAcls"
+        },
+        "RestrictPublicBuckets":{
+          "shape":"Boolean",
+          "locationName":"restrictPublicBuckets"
+        },
+        "BlockPublicAcls":{
+          "shape":"Boolean",
+          "locationName":"blockPublicAcls"
+        },
+        "BlockPublicPolicy":{
+          "shape":"Boolean",
+          "locationName":"blockPublicPolicy"
+        }
+      }
+    },
     "Boolean":{"type":"boolean"},
+    "BucketLevelPermissions":{
+      "type":"structure",
+      "members":{
+        "AccessControlList":{
+          "shape":"AccessControlList",
+          "locationName":"accessControlList"
+        },
+        "BucketPolicy":{
+          "shape":"BucketPolicy",
+          "locationName":"bucketPolicy"
+        },
+        "BlockPublicAccess":{
+          "shape":"BlockPublicAccess",
+          "locationName":"blockPublicAccess"
+        }
+      }
+    },
+    "BucketPolicy":{
+      "type":"structure",
+      "members":{
+        "AllowsPublicReadAccess":{
+          "shape":"Boolean",
+          "locationName":"allowsPublicReadAccess"
+        },
+        "AllowsPublicWriteAccess":{
+          "shape":"Boolean",
+          "locationName":"allowsPublicWriteAccess"
+        }
+      }
+    },
     "City":{
       "type":"structure",
       "members":{
@@ -899,6 +1116,16 @@
       "type":"string",
       "max":64,
       "min":0
+    },
+    "CloudTrailConfigurationResult":{
+      "type":"structure",
+      "required":["Status"],
+      "members":{
+        "Status":{
+          "shape":"DataSourceStatus",
+          "locationName":"status"
+        }
+      }
     },
     "Condition":{
       "type":"structure",
@@ -993,6 +1220,10 @@
         "FindingPublishingFrequency":{
           "shape":"FindingPublishingFrequency",
           "locationName":"findingPublishingFrequency"
+        },
+        "DataSources":{
+          "shape":"DataSourceConfigurations",
+          "locationName":"dataSources"
         },
         "Tags":{
           "shape":"TagMap",
@@ -1258,6 +1489,74 @@
       "key":{"shape":"String"},
       "value":{"shape":"Condition"}
     },
+    "DNSLogsConfigurationResult":{
+      "type":"structure",
+      "required":["Status"],
+      "members":{
+        "Status":{
+          "shape":"DataSourceStatus",
+          "locationName":"status"
+        }
+      }
+    },
+    "DataSource":{
+      "type":"string",
+      "enum":[
+        "FLOW_LOGS",
+        "CLOUD_TRAIL",
+        "DNS_LOGS",
+        "S3_LOGS"
+      ]
+    },
+    "DataSourceConfigurations":{
+      "type":"structure",
+      "members":{
+        "S3Logs":{
+          "shape":"S3LogsConfiguration",
+          "locationName":"s3Logs"
+        }
+      }
+    },
+    "DataSourceConfigurationsResult":{
+      "type":"structure",
+      "required":[
+        "CloudTrail",
+        "DNSLogs",
+        "FlowLogs",
+        "S3Logs"
+      ],
+      "members":{
+        "CloudTrail":{
+          "shape":"CloudTrailConfigurationResult",
+          "locationName":"cloudTrail"
+        },
+        "DNSLogs":{
+          "shape":"DNSLogsConfigurationResult",
+          "locationName":"dnsLogs"
+        },
+        "FlowLogs":{
+          "shape":"FlowLogsConfigurationResult",
+          "locationName":"flowLogs"
+        },
+        "S3Logs":{
+          "shape":"S3LogsConfigurationResult",
+          "locationName":"s3Logs"
+        }
+      }
+    },
+    "DataSourceList":{
+      "type":"list",
+      "member":{"shape":"DataSource"}
+    },
+    "DataSourceStatus":{
+      "type":"string",
+      "enum":[
+        "ENABLED",
+        "DISABLED"
+      ],
+      "max":300,
+      "min":1
+    },
     "DeclineInvitationsRequest":{
       "type":"structure",
       "required":["AccountIds"],
@@ -1275,6 +1574,19 @@
         "UnprocessedAccounts":{
           "shape":"UnprocessedAccounts",
           "locationName":"unprocessedAccounts"
+        }
+      }
+    },
+    "DefaultServerSideEncryption":{
+      "type":"structure",
+      "members":{
+        "EncryptionType":{
+          "shape":"String",
+          "locationName":"encryptionType"
+        },
+        "KmsMasterKeyArn":{
+          "shape":"String",
+          "locationName":"kmsMasterKeyArn"
         }
       }
     },
@@ -1438,6 +1750,38 @@
       "members":{
       }
     },
+    "DescribeOrganizationConfigurationRequest":{
+      "type":"structure",
+      "required":["DetectorId"],
+      "members":{
+        "DetectorId":{
+          "shape":"DetectorId",
+          "location":"uri",
+          "locationName":"detectorId"
+        }
+      }
+    },
+    "DescribeOrganizationConfigurationResponse":{
+      "type":"structure",
+      "required":[
+        "AutoEnable",
+        "MemberAccountLimitReached"
+      ],
+      "members":{
+        "AutoEnable":{
+          "shape":"Boolean",
+          "locationName":"autoEnable"
+        },
+        "MemberAccountLimitReached":{
+          "shape":"Boolean",
+          "locationName":"memberAccountLimitReached"
+        },
+        "DataSources":{
+          "shape":"OrganizationDataSourceConfigurationsResult",
+          "locationName":"dataSources"
+        }
+      }
+    },
     "DescribePublishingDestinationRequest":{
       "type":"structure",
       "required":[
@@ -1554,6 +1898,21 @@
       "max":300,
       "min":1
     },
+    "DisableOrganizationAdminAccountRequest":{
+      "type":"structure",
+      "required":["AdminAccountId"],
+      "members":{
+        "AdminAccountId":{
+          "shape":"String",
+          "locationName":"adminAccountId"
+        }
+      }
+    },
+    "DisableOrganizationAdminAccountResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
     "DisassociateFromMasterAccountRequest":{
       "type":"structure",
       "required":["DetectorId"],
@@ -1621,6 +1980,21 @@
       "type":"string",
       "max":64,
       "min":1
+    },
+    "EnableOrganizationAdminAccountRequest":{
+      "type":"structure",
+      "required":["AdminAccountId"],
+      "members":{
+        "AdminAccountId":{
+          "shape":"String",
+          "locationName":"adminAccountId"
+        }
+      }
+    },
+    "EnableOrganizationAdminAccountResponse":{
+      "type":"structure",
+      "members":{
+      }
     },
     "Eq":{
       "type":"list",
@@ -1817,6 +2191,16 @@
       "max":50,
       "min":0
     },
+    "FlowLogsConfigurationResult":{
+      "type":"structure",
+      "required":["Status"],
+      "members":{
+        "Status":{
+          "shape":"DataSourceStatus",
+          "locationName":"status"
+        }
+      }
+    },
     "GeoLocation":{
       "type":"structure",
       "members":{
@@ -1867,6 +2251,10 @@
         "UpdatedAt":{
           "shape":"String",
           "locationName":"updatedAt"
+        },
+        "DataSources":{
+          "shape":"DataSourceConfigurationsResult",
+          "locationName":"dataSources"
         },
         "Tags":{
           "shape":"TagMap",
@@ -2076,6 +2464,41 @@
         }
       }
     },
+    "GetMemberDetectorsRequest":{
+      "type":"structure",
+      "required":[
+        "DetectorId",
+        "AccountIds"
+      ],
+      "members":{
+        "DetectorId":{
+          "shape":"DetectorId",
+          "location":"uri",
+          "locationName":"detectorId"
+        },
+        "AccountIds":{
+          "shape":"AccountIds",
+          "locationName":"accountIds"
+        }
+      }
+    },
+    "GetMemberDetectorsResponse":{
+      "type":"structure",
+      "required":[
+        "MemberDataSourceConfigurations",
+        "UnprocessedAccounts"
+      ],
+      "members":{
+        "MemberDataSourceConfigurations":{
+          "shape":"MemberDataSourceConfigurations",
+          "locationName":"members"
+        },
+        "UnprocessedAccounts":{
+          "shape":"UnprocessedAccounts",
+          "locationName":"unprocessedAccounts"
+        }
+      }
+    },
     "GetMembersRequest":{
       "type":"structure",
       "required":[
@@ -2161,6 +2584,54 @@
         }
       }
     },
+    "GetUsageStatisticsRequest":{
+      "type":"structure",
+      "required":[
+        "DetectorId",
+        "UsageStatisticType",
+        "UsageCriteria"
+      ],
+      "members":{
+        "DetectorId":{
+          "shape":"DetectorId",
+          "location":"uri",
+          "locationName":"detectorId"
+        },
+        "UsageStatisticType":{
+          "shape":"UsageStatisticType",
+          "locationName":"usageStatisticsType"
+        },
+        "UsageCriteria":{
+          "shape":"UsageCriteria",
+          "locationName":"usageCriteria"
+        },
+        "Unit":{
+          "shape":"String",
+          "locationName":"unit"
+        },
+        "MaxResults":{
+          "shape":"MaxResults",
+          "locationName":"maxResults"
+        },
+        "NextToken":{
+          "shape":"String",
+          "locationName":"nextToken"
+        }
+      }
+    },
+    "GetUsageStatisticsResponse":{
+      "type":"structure",
+      "members":{
+        "UsageStatistics":{
+          "shape":"UsageStatistics",
+          "locationName":"usageStatistics"
+        },
+        "NextToken":{
+          "shape":"String",
+          "locationName":"nextToken"
+        }
+      }
+    },
     "GuardDutyArn":{
       "type":"string",
       "pattern":"^arn:[A-Za-z_.-]{1,20}:guardduty:[A-Za-z0-9_/.-]{0,63}:\\d+:detector/[A-Za-z0-9_/.-]{32,264}$"
@@ -2208,6 +2679,10 @@
         "InstanceType":{
           "shape":"String",
           "locationName":"instanceType"
+        },
+        "OutpostArn":{
+          "shape":"String",
+          "locationName":"outpostArn"
         },
         "LaunchTime":{
           "shape":"String",
@@ -2554,6 +3029,34 @@
         }
       }
     },
+    "ListOrganizationAdminAccountsRequest":{
+      "type":"structure",
+      "members":{
+        "MaxResults":{
+          "shape":"MaxResults",
+          "location":"querystring",
+          "locationName":"maxResults"
+        },
+        "NextToken":{
+          "shape":"String",
+          "location":"querystring",
+          "locationName":"nextToken"
+        }
+      }
+    },
+    "ListOrganizationAdminAccountsResponse":{
+      "type":"structure",
+      "members":{
+        "AdminAccounts":{
+          "shape":"AdminAccounts",
+          "locationName":"adminAccounts"
+        },
+        "NextToken":{
+          "shape":"String",
+          "locationName":"nextToken"
+        }
+      }
+    },
     "ListPublishingDestinationsRequest":{
       "type":"structure",
       "required":["DetectorId"],
@@ -2644,6 +3147,15 @@
         }
       }
     },
+    "LocalIpDetails":{
+      "type":"structure",
+      "members":{
+        "IpAddressV4":{
+          "shape":"String",
+          "locationName":"ipAddressV4"
+        }
+      }
+    },
     "LocalPortDetails":{
       "type":"structure",
       "members":{
@@ -2729,6 +3241,29 @@
         }
       }
     },
+    "MemberDataSourceConfiguration":{
+      "type":"structure",
+      "required":[
+        "AccountId",
+        "DataSources"
+      ],
+      "members":{
+        "AccountId":{
+          "shape":"AccountId",
+          "locationName":"accountId"
+        },
+        "DataSources":{
+          "shape":"DataSourceConfigurationsResult",
+          "locationName":"dataSources"
+        }
+      }
+    },
+    "MemberDataSourceConfigurations":{
+      "type":"list",
+      "member":{"shape":"MemberDataSourceConfiguration"},
+      "max":50,
+      "min":1
+    },
     "Members":{
       "type":"list",
       "member":{"shape":"Member"},
@@ -2762,6 +3297,10 @@
         "Protocol":{
           "shape":"String",
           "locationName":"protocol"
+        },
+        "LocalIpDetails":{
+          "shape":"LocalIpDetails",
+          "locationName":"localIpDetails"
         },
         "RemoteIpDetails":{
           "shape":"RemoteIpDetails",
@@ -2854,6 +3393,67 @@
         }
       }
     },
+    "OrganizationDataSourceConfigurations":{
+      "type":"structure",
+      "members":{
+        "S3Logs":{
+          "shape":"OrganizationS3LogsConfiguration",
+          "locationName":"s3Logs"
+        }
+      }
+    },
+    "OrganizationDataSourceConfigurationsResult":{
+      "type":"structure",
+      "required":["S3Logs"],
+      "members":{
+        "S3Logs":{
+          "shape":"OrganizationS3LogsConfigurationResult",
+          "locationName":"s3Logs"
+        }
+      }
+    },
+    "OrganizationS3LogsConfiguration":{
+      "type":"structure",
+      "required":["AutoEnable"],
+      "members":{
+        "AutoEnable":{
+          "shape":"Boolean",
+          "locationName":"autoEnable"
+        }
+      }
+    },
+    "OrganizationS3LogsConfigurationResult":{
+      "type":"structure",
+      "required":["AutoEnable"],
+      "members":{
+        "AutoEnable":{
+          "shape":"Boolean",
+          "locationName":"autoEnable"
+        }
+      }
+    },
+    "Owner":{
+      "type":"structure",
+      "members":{
+        "Id":{
+          "shape":"String",
+          "locationName":"id"
+        }
+      }
+    },
+    "PermissionConfiguration":{
+      "type":"structure",
+      "members":{
+        "BucketLevelPermissions":{
+          "shape":"BucketLevelPermissions",
+          "locationName":"bucketLevelPermissions"
+        },
+        "AccountLevelPermissions":{
+          "shape":"AccountLevelPermissions",
+          "locationName":"accountLevelPermissions"
+        }
+      }
+    },
     "PortProbeAction":{
       "type":"structure",
       "members":{
@@ -2873,6 +3473,10 @@
         "LocalPortDetails":{
           "shape":"LocalPortDetails",
           "locationName":"localPortDetails"
+        },
+        "LocalIpDetails":{
+          "shape":"LocalIpDetails",
+          "locationName":"localIpDetails"
         },
         "RemoteIpDetails":{
           "shape":"RemoteIpDetails",
@@ -2917,6 +3521,19 @@
     "ProductCodes":{
       "type":"list",
       "member":{"shape":"ProductCode"}
+    },
+    "PublicAccess":{
+      "type":"structure",
+      "members":{
+        "PermissionConfiguration":{
+          "shape":"PermissionConfiguration",
+          "locationName":"permissionConfiguration"
+        },
+        "EffectivePermission":{
+          "shape":"String",
+          "locationName":"effectivePermission"
+        }
+      }
     },
     "PublishingStatus":{
       "type":"string",
@@ -2974,6 +3591,10 @@
           "shape":"AccessKeyDetails",
           "locationName":"accessKeyDetails"
         },
+        "S3BucketDetails":{
+          "shape":"S3BucketDetails",
+          "locationName":"s3BucketDetails"
+        },
         "InstanceDetails":{
           "shape":"InstanceDetails",
           "locationName":"instanceDetails"
@@ -2981,6 +3602,71 @@
         "ResourceType":{
           "shape":"String",
           "locationName":"resourceType"
+        }
+      }
+    },
+    "ResourceList":{
+      "type":"list",
+      "member":{"shape":"String"}
+    },
+    "S3BucketDetail":{
+      "type":"structure",
+      "members":{
+        "Arn":{
+          "shape":"String",
+          "locationName":"arn"
+        },
+        "Name":{
+          "shape":"String",
+          "locationName":"name"
+        },
+        "Type":{
+          "shape":"String",
+          "locationName":"type"
+        },
+        "CreatedAt":{
+          "shape":"Timestamp",
+          "locationName":"createdAt"
+        },
+        "Owner":{
+          "shape":"Owner",
+          "locationName":"owner"
+        },
+        "Tags":{
+          "shape":"Tags",
+          "locationName":"tags"
+        },
+        "DefaultServerSideEncryption":{
+          "shape":"DefaultServerSideEncryption",
+          "locationName":"defaultServerSideEncryption"
+        },
+        "PublicAccess":{
+          "shape":"PublicAccess",
+          "locationName":"publicAccess"
+        }
+      }
+    },
+    "S3BucketDetails":{
+      "type":"list",
+      "member":{"shape":"S3BucketDetail"}
+    },
+    "S3LogsConfiguration":{
+      "type":"structure",
+      "required":["Enable"],
+      "members":{
+        "Enable":{
+          "shape":"Boolean",
+          "locationName":"enable"
+        }
+      }
+    },
+    "S3LogsConfigurationResult":{
+      "type":"structure",
+      "required":["Status"],
+      "members":{
+        "Status":{
+          "shape":"DataSourceStatus",
+          "locationName":"status"
         }
       }
     },
@@ -3233,6 +3919,20 @@
       "type":"list",
       "member":{"shape":"String"}
     },
+    "Timestamp":{"type":"timestamp"},
+    "Total":{
+      "type":"structure",
+      "members":{
+        "Amount":{
+          "shape":"String",
+          "locationName":"amount"
+        },
+        "Unit":{
+          "shape":"String",
+          "locationName":"unit"
+        }
+      }
+    },
     "UnarchiveFindingsRequest":{
       "type":"structure",
       "required":[
@@ -3319,6 +4019,10 @@
         "FindingPublishingFrequency":{
           "shape":"FindingPublishingFrequency",
           "locationName":"findingPublishingFrequency"
+        },
+        "DataSources":{
+          "shape":"DataSourceConfigurations",
+          "locationName":"dataSources"
         }
       }
     },
@@ -3440,6 +4144,65 @@
       "members":{
       }
     },
+    "UpdateMemberDetectorsRequest":{
+      "type":"structure",
+      "required":[
+        "DetectorId",
+        "AccountIds"
+      ],
+      "members":{
+        "DetectorId":{
+          "shape":"DetectorId",
+          "location":"uri",
+          "locationName":"detectorId"
+        },
+        "AccountIds":{
+          "shape":"AccountIds",
+          "locationName":"accountIds"
+        },
+        "DataSources":{
+          "shape":"DataSourceConfigurations",
+          "locationName":"dataSources"
+        }
+      }
+    },
+    "UpdateMemberDetectorsResponse":{
+      "type":"structure",
+      "required":["UnprocessedAccounts"],
+      "members":{
+        "UnprocessedAccounts":{
+          "shape":"UnprocessedAccounts",
+          "locationName":"unprocessedAccounts"
+        }
+      }
+    },
+    "UpdateOrganizationConfigurationRequest":{
+      "type":"structure",
+      "required":[
+        "DetectorId",
+        "AutoEnable"
+      ],
+      "members":{
+        "DetectorId":{
+          "shape":"DetectorId",
+          "location":"uri",
+          "locationName":"detectorId"
+        },
+        "AutoEnable":{
+          "shape":"Boolean",
+          "locationName":"autoEnable"
+        },
+        "DataSources":{
+          "shape":"OrganizationDataSourceConfigurations",
+          "locationName":"dataSources"
+        }
+      }
+    },
+    "UpdateOrganizationConfigurationResponse":{
+      "type":"structure",
+      "members":{
+      }
+    },
     "UpdatePublishingDestinationRequest":{
       "type":"structure",
       "required":[
@@ -3502,6 +4265,105 @@
     "UpdateThreatIntelSetResponse":{
       "type":"structure",
       "members":{
+      }
+    },
+    "UsageAccountResult":{
+      "type":"structure",
+      "members":{
+        "AccountId":{
+          "shape":"AccountId",
+          "locationName":"accountId"
+        },
+        "Total":{
+          "shape":"Total",
+          "locationName":"total"
+        }
+      }
+    },
+    "UsageAccountResultList":{
+      "type":"list",
+      "member":{"shape":"UsageAccountResult"}
+    },
+    "UsageCriteria":{
+      "type":"structure",
+      "required":["DataSources"],
+      "members":{
+        "AccountIds":{
+          "shape":"AccountIds",
+          "locationName":"accountIds"
+        },
+        "DataSources":{
+          "shape":"DataSourceList",
+          "locationName":"dataSources"
+        },
+        "Resources":{
+          "shape":"ResourceList",
+          "locationName":"resources"
+        }
+      }
+    },
+    "UsageDataSourceResult":{
+      "type":"structure",
+      "members":{
+        "DataSource":{
+          "shape":"DataSource",
+          "locationName":"dataSource"
+        },
+        "Total":{
+          "shape":"Total",
+          "locationName":"total"
+        }
+      }
+    },
+    "UsageDataSourceResultList":{
+      "type":"list",
+      "member":{"shape":"UsageDataSourceResult"}
+    },
+    "UsageResourceResult":{
+      "type":"structure",
+      "members":{
+        "Resource":{
+          "shape":"String",
+          "locationName":"resource"
+        },
+        "Total":{
+          "shape":"Total",
+          "locationName":"total"
+        }
+      }
+    },
+    "UsageResourceResultList":{
+      "type":"list",
+      "member":{"shape":"UsageResourceResult"}
+    },
+    "UsageStatisticType":{
+      "type":"string",
+      "enum":[
+        "SUM_BY_ACCOUNT",
+        "SUM_BY_DATA_SOURCE",
+        "SUM_BY_RESOURCE",
+        "TOP_RESOURCES"
+      ]
+    },
+    "UsageStatistics":{
+      "type":"structure",
+      "members":{
+        "SumByAccount":{
+          "shape":"UsageAccountResultList",
+          "locationName":"sumByAccount"
+        },
+        "SumByDataSource":{
+          "shape":"UsageDataSourceResultList",
+          "locationName":"sumByDataSource"
+        },
+        "SumByResource":{
+          "shape":"UsageResourceResultList",
+          "locationName":"sumByResource"
+        },
+        "TopResources":{
+          "shape":"UsageResourceResultList",
+          "locationName":"topResources"
+        }
       }
     }
   }

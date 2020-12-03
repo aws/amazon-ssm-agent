@@ -96,6 +96,22 @@
         {"shape":"InvalidRequestException"}
       ]
     },
+    "AddApplicationVpcConfiguration":{
+      "name":"AddApplicationVpcConfiguration",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"AddApplicationVpcConfigurationRequest"},
+      "output":{"shape":"AddApplicationVpcConfigurationResponse"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"ResourceInUseException"},
+        {"shape":"InvalidArgumentException"},
+        {"shape":"ConcurrentModificationException"},
+        {"shape":"InvalidApplicationConfigurationException"}
+      ]
+    },
     "CreateApplication":{
       "name":"CreateApplication",
       "http":{
@@ -128,7 +144,8 @@
         {"shape":"LimitExceededException"},
         {"shape":"InvalidArgumentException"},
         {"shape":"UnsupportedOperationException"},
-        {"shape":"InvalidRequestException"}
+        {"shape":"InvalidRequestException"},
+        {"shape":"InvalidApplicationConfigurationException"}
       ]
     },
     "DeleteApplication":{
@@ -227,6 +244,22 @@
         {"shape":"UnsupportedOperationException"},
         {"shape":"InvalidRequestException"},
         {"shape":"ResourceNotFoundException"}
+      ]
+    },
+    "DeleteApplicationVpcConfiguration":{
+      "name":"DeleteApplicationVpcConfiguration",
+      "http":{
+        "method":"POST",
+        "requestUri":"/"
+      },
+      "input":{"shape":"DeleteApplicationVpcConfigurationRequest"},
+      "output":{"shape":"DeleteApplicationVpcConfigurationResponse"},
+      "errors":[
+        {"shape":"ResourceNotFoundException"},
+        {"shape":"ResourceInUseException"},
+        {"shape":"InvalidArgumentException"},
+        {"shape":"ConcurrentModificationException"},
+        {"shape":"InvalidApplicationConfigurationException"}
       ]
     },
     "DescribeApplication":{
@@ -341,7 +374,8 @@
         {"shape":"ResourceInUseException"},
         {"shape":"InvalidArgumentException"},
         {"shape":"InvalidRequestException"},
-        {"shape":"InvalidApplicationConfigurationException"}
+        {"shape":"InvalidApplicationConfigurationException"},
+        {"shape":"ConcurrentModificationException"}
       ]
     },
     "TagResource":{
@@ -504,6 +538,27 @@
         "ReferenceDataSourceDescriptions":{"shape":"ReferenceDataSourceDescriptions"}
       }
     },
+    "AddApplicationVpcConfigurationRequest":{
+      "type":"structure",
+      "required":[
+        "ApplicationName",
+        "CurrentApplicationVersionId",
+        "VpcConfiguration"
+      ],
+      "members":{
+        "ApplicationName":{"shape":"ApplicationName"},
+        "CurrentApplicationVersionId":{"shape":"ApplicationVersionId"},
+        "VpcConfiguration":{"shape":"VpcConfiguration"}
+      }
+    },
+    "AddApplicationVpcConfigurationResponse":{
+      "type":"structure",
+      "members":{
+        "ApplicationARN":{"shape":"ResourceARN"},
+        "ApplicationVersionId":{"shape":"ApplicationVersionId"},
+        "VpcConfigurationDescription":{"shape":"VpcConfigurationDescription"}
+      }
+    },
     "ApplicationCodeConfiguration":{
       "type":"structure",
       "required":["CodeContentType"],
@@ -535,7 +590,8 @@
         "FlinkApplicationConfiguration":{"shape":"FlinkApplicationConfiguration"},
         "EnvironmentProperties":{"shape":"EnvironmentProperties"},
         "ApplicationCodeConfiguration":{"shape":"ApplicationCodeConfiguration"},
-        "ApplicationSnapshotConfiguration":{"shape":"ApplicationSnapshotConfiguration"}
+        "ApplicationSnapshotConfiguration":{"shape":"ApplicationSnapshotConfiguration"},
+        "VpcConfigurations":{"shape":"VpcConfigurations"}
       }
     },
     "ApplicationConfigurationDescription":{
@@ -546,7 +602,8 @@
         "RunConfigurationDescription":{"shape":"RunConfigurationDescription"},
         "FlinkApplicationConfigurationDescription":{"shape":"FlinkApplicationConfigurationDescription"},
         "EnvironmentPropertyDescriptions":{"shape":"EnvironmentPropertyDescriptions"},
-        "ApplicationSnapshotConfigurationDescription":{"shape":"ApplicationSnapshotConfigurationDescription"}
+        "ApplicationSnapshotConfigurationDescription":{"shape":"ApplicationSnapshotConfigurationDescription"},
+        "VpcConfigurationDescriptions":{"shape":"VpcConfigurationDescriptions"}
       }
     },
     "ApplicationConfigurationUpdate":{
@@ -556,7 +613,8 @@
         "ApplicationCodeConfigurationUpdate":{"shape":"ApplicationCodeConfigurationUpdate"},
         "FlinkApplicationConfigurationUpdate":{"shape":"FlinkApplicationConfigurationUpdate"},
         "EnvironmentPropertyUpdates":{"shape":"EnvironmentPropertyUpdates"},
-        "ApplicationSnapshotConfigurationUpdate":{"shape":"ApplicationSnapshotConfigurationUpdate"}
+        "ApplicationSnapshotConfigurationUpdate":{"shape":"ApplicationSnapshotConfigurationUpdate"},
+        "VpcConfigurationUpdates":{"shape":"VpcConfigurationUpdates"}
       }
     },
     "ApplicationDescription":{
@@ -638,7 +696,9 @@
         "STOPPING",
         "READY",
         "RUNNING",
-        "UPDATING"
+        "UPDATING",
+        "AUTOSCALING",
+        "FORCE_STOPPING"
       ]
     },
     "ApplicationSummaries":{
@@ -715,7 +775,7 @@
     },
     "CheckpointInterval":{
       "type":"long",
-      "min":0
+      "min":1
     },
     "CloudWatchLoggingOption":{
       "type":"structure",
@@ -971,6 +1031,26 @@
       "members":{
       }
     },
+    "DeleteApplicationVpcConfigurationRequest":{
+      "type":"structure",
+      "required":[
+        "ApplicationName",
+        "CurrentApplicationVersionId",
+        "VpcConfigurationId"
+      ],
+      "members":{
+        "ApplicationName":{"shape":"ApplicationName"},
+        "CurrentApplicationVersionId":{"shape":"ApplicationVersionId"},
+        "VpcConfigurationId":{"shape":"Id"}
+      }
+    },
+    "DeleteApplicationVpcConfigurationResponse":{
+      "type":"structure",
+      "members":{
+        "ApplicationARN":{"shape":"ResourceARN"},
+        "ApplicationVersionId":{"shape":"ApplicationVersionId"}
+      }
+    },
     "DescribeApplicationRequest":{
       "type":"structure",
       "required":["ApplicationName"],
@@ -1082,6 +1162,12 @@
         "ParallelismConfigurationUpdate":{"shape":"ParallelismConfigurationUpdate"}
       }
     },
+    "FlinkRunConfiguration":{
+      "type":"structure",
+      "members":{
+        "AllowNonRestoredState":{"shape":"BooleanObject"}
+      }
+    },
     "Id":{
       "type":"string",
       "max":50,
@@ -1091,7 +1177,8 @@
     "InAppStreamName":{
       "type":"string",
       "max":32,
-      "min":1
+      "min":1,
+      "pattern":"[^-\\s<>&]*"
     },
     "InAppStreamNames":{
       "type":"list",
@@ -1271,7 +1358,7 @@
       "type":"string",
       "max":2048,
       "min":1,
-      "pattern":"arn:aws:kinesisanalytics:[a-z]{2}-[a-z]+-\\d{1}+:\\d{12}+:application/[a-zA-Z0-9_.-]{1,128}"
+      "pattern":"arn:.*"
     },
     "KinesisFirehoseInput":{
       "type":"structure",
@@ -1509,7 +1596,11 @@
       "max":512,
       "min":1
     },
-    "ObjectVersion":{"type":"string"},
+    "ObjectVersion":{
+      "type":"string",
+      "max":1024,
+      "min":0
+    },
     "Output":{
       "type":"structure",
       "required":[
@@ -1662,12 +1753,23 @@
     },
     "RecordColumnDelimiter":{
       "type":"string",
+      "max":1024,
       "min":1
     },
-    "RecordColumnMapping":{"type":"string"},
-    "RecordColumnName":{"type":"string"},
+    "RecordColumnMapping":{
+      "type":"string",
+      "max":65535,
+      "min":0
+    },
+    "RecordColumnName":{
+      "type":"string",
+      "max":256,
+      "min":1,
+      "pattern":"[^-\\s<>&]*"
+    },
     "RecordColumnSqlType":{
       "type":"string",
+      "max":100,
       "min":1
     },
     "RecordColumns":{
@@ -1678,6 +1780,8 @@
     },
     "RecordEncoding":{
       "type":"string",
+      "max":5,
+      "min":5,
       "pattern":"UTF-8"
     },
     "RecordFormat":{
@@ -1697,11 +1801,14 @@
     },
     "RecordRowDelimiter":{
       "type":"string",
+      "max":1024,
       "min":1
     },
     "RecordRowPath":{
       "type":"string",
-      "min":1
+      "max":65535,
+      "min":1,
+      "pattern":"^(?=^\\$)(?=^\\S+$).*$"
     },
     "ReferenceDataSource":{
       "type":"structure",
@@ -1782,11 +1889,12 @@
       "type":"string",
       "max":2048,
       "min":1,
-      "pattern":"arn:aws:iam::\\d{12}:role/?[a-zA-Z_0-9+=,.@\\-_/]+"
+      "pattern":"arn:.*"
     },
     "RunConfiguration":{
       "type":"structure",
       "members":{
+        "FlinkRunConfiguration":{"shape":"FlinkRunConfiguration"},
         "SqlRunConfigurations":{"shape":"SqlRunConfigurations"},
         "ApplicationRestoreConfiguration":{"shape":"ApplicationRestoreConfiguration"}
       }
@@ -1794,12 +1902,14 @@
     "RunConfigurationDescription":{
       "type":"structure",
       "members":{
-        "ApplicationRestoreConfigurationDescription":{"shape":"ApplicationRestoreConfiguration"}
+        "ApplicationRestoreConfigurationDescription":{"shape":"ApplicationRestoreConfiguration"},
+        "FlinkRunConfigurationDescription":{"shape":"FlinkRunConfiguration"}
       }
     },
     "RunConfigurationUpdate":{
       "type":"structure",
       "members":{
+        "FlinkRunConfiguration":{"shape":"FlinkRunConfiguration"},
         "ApplicationRestoreConfiguration":{"shape":"ApplicationRestoreConfiguration"}
       }
     },
@@ -1807,7 +1917,8 @@
       "type":"string",
       "enum":[
         "SQL-1_0",
-        "FLINK-1_6"
+        "FLINK-1_6",
+        "FLINK-1_8"
       ]
     },
     "S3ApplicationCodeLocationDescription":{
@@ -1879,6 +1990,13 @@
         "FileKeyUpdate":{"shape":"FileKey"}
       }
     },
+    "SecurityGroupId":{"type":"string"},
+    "SecurityGroupIds":{
+      "type":"list",
+      "member":{"shape":"SecurityGroupId"},
+      "max":5,
+      "min":1
+    },
     "ServiceUnavailableException":{
       "type":"structure",
       "members":{
@@ -1903,7 +2021,7 @@
     },
     "SnapshotName":{
       "type":"string",
-      "max":128,
+      "max":256,
       "min":1,
       "pattern":"[a-zA-Z0-9_.-]+"
     },
@@ -1991,13 +2109,21 @@
       "type":"structure",
       "required":["ApplicationName"],
       "members":{
-        "ApplicationName":{"shape":"ApplicationName"}
+        "ApplicationName":{"shape":"ApplicationName"},
+        "Force":{"shape":"BooleanObject"}
       }
     },
     "StopApplicationResponse":{
       "type":"structure",
       "members":{
       }
+    },
+    "SubnetId":{"type":"string"},
+    "SubnetIds":{
+      "type":"list",
+      "member":{"shape":"SubnetId"},
+      "max":16,
+      "min":1
     },
     "Tag":{
       "type":"structure",
@@ -2112,6 +2238,54 @@
         "ApplicationDetail":{"shape":"ApplicationDetail"}
       }
     },
+    "VpcConfiguration":{
+      "type":"structure",
+      "required":[
+        "SubnetIds",
+        "SecurityGroupIds"
+      ],
+      "members":{
+        "SubnetIds":{"shape":"SubnetIds"},
+        "SecurityGroupIds":{"shape":"SecurityGroupIds"}
+      }
+    },
+    "VpcConfigurationDescription":{
+      "type":"structure",
+      "required":[
+        "VpcConfigurationId",
+        "VpcId",
+        "SubnetIds",
+        "SecurityGroupIds"
+      ],
+      "members":{
+        "VpcConfigurationId":{"shape":"Id"},
+        "VpcId":{"shape":"VpcId"},
+        "SubnetIds":{"shape":"SubnetIds"},
+        "SecurityGroupIds":{"shape":"SecurityGroupIds"}
+      }
+    },
+    "VpcConfigurationDescriptions":{
+      "type":"list",
+      "member":{"shape":"VpcConfigurationDescription"}
+    },
+    "VpcConfigurationUpdate":{
+      "type":"structure",
+      "required":["VpcConfigurationId"],
+      "members":{
+        "VpcConfigurationId":{"shape":"Id"},
+        "SubnetIdUpdates":{"shape":"SubnetIds"},
+        "SecurityGroupIdUpdates":{"shape":"SecurityGroupIds"}
+      }
+    },
+    "VpcConfigurationUpdates":{
+      "type":"list",
+      "member":{"shape":"VpcConfigurationUpdate"}
+    },
+    "VpcConfigurations":{
+      "type":"list",
+      "member":{"shape":"VpcConfiguration"}
+    },
+    "VpcId":{"type":"string"},
     "ZipFileContent":{
       "type":"blob",
       "max":52428800,

@@ -2,6 +2,10 @@
 
 package kinesisanalyticsv2
 
+import (
+	"github.com/aws/aws-sdk-go/private/protocol"
+)
+
 const (
 
 	// ErrCodeCodeValidationException for service response error code
@@ -59,7 +63,7 @@ const (
 	// "ResourceProvisionedThroughputExceededException".
 	//
 	// Discovery failed to get a record from the streaming source because of the
-	// Amazon Kinesis Streams ProvisionedThroughputExceededException. For more information,
+	// Kinesis Streams ProvisionedThroughputExceededException. For more information,
 	// see GetRecords (http://docs.aws.amazon.com/kinesis/latest/APIReference/API_GetRecords.html)
 	// in the Amazon Kinesis Streams API Reference.
 	ErrCodeResourceProvisionedThroughputExceededException = "ResourceProvisionedThroughputExceededException"
@@ -81,8 +85,8 @@ const (
 	// ErrCodeUnableToDetectSchemaException for service response error code
 	// "UnableToDetectSchemaException".
 	//
-	// The data format is not valid. Amazon Kinesis Data Analytics cannot detect
-	// the schema for the given streaming source.
+	// The data format is not valid. Kinesis Data Analytics cannot detect the schema
+	// for the given streaming source.
 	ErrCodeUnableToDetectSchemaException = "UnableToDetectSchemaException"
 
 	// ErrCodeUnsupportedOperationException for service response error code
@@ -92,3 +96,19 @@ const (
 	// a specified resource is not valid for this operation.
 	ErrCodeUnsupportedOperationException = "UnsupportedOperationException"
 )
+
+var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
+	"CodeValidationException":                        newErrorCodeValidationException,
+	"ConcurrentModificationException":                newErrorConcurrentModificationException,
+	"InvalidApplicationConfigurationException":       newErrorInvalidApplicationConfigurationException,
+	"InvalidArgumentException":                       newErrorInvalidArgumentException,
+	"InvalidRequestException":                        newErrorInvalidRequestException,
+	"LimitExceededException":                         newErrorLimitExceededException,
+	"ResourceInUseException":                         newErrorResourceInUseException,
+	"ResourceNotFoundException":                      newErrorResourceNotFoundException,
+	"ResourceProvisionedThroughputExceededException": newErrorResourceProvisionedThroughputExceededException,
+	"ServiceUnavailableException":                    newErrorServiceUnavailableException,
+	"TooManyTagsException":                           newErrorTooManyTagsException,
+	"UnableToDetectSchemaException":                  newErrorUnableToDetectSchemaException,
+	"UnsupportedOperationException":                  newErrorUnsupportedOperationException,
+}

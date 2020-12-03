@@ -68,6 +68,10 @@ type WorkMailAPI interface {
 	AssociateMemberToGroupWithContext(aws.Context, *workmail.AssociateMemberToGroupInput, ...request.Option) (*workmail.AssociateMemberToGroupOutput, error)
 	AssociateMemberToGroupRequest(*workmail.AssociateMemberToGroupInput) (*request.Request, *workmail.AssociateMemberToGroupOutput)
 
+	CancelMailboxExportJob(*workmail.CancelMailboxExportJobInput) (*workmail.CancelMailboxExportJobOutput, error)
+	CancelMailboxExportJobWithContext(aws.Context, *workmail.CancelMailboxExportJobInput, ...request.Option) (*workmail.CancelMailboxExportJobOutput, error)
+	CancelMailboxExportJobRequest(*workmail.CancelMailboxExportJobInput) (*request.Request, *workmail.CancelMailboxExportJobOutput)
+
 	CreateAlias(*workmail.CreateAliasInput) (*workmail.CreateAliasOutput, error)
 	CreateAliasWithContext(aws.Context, *workmail.CreateAliasInput, ...request.Option) (*workmail.CreateAliasOutput, error)
 	CreateAliasRequest(*workmail.CreateAliasInput) (*request.Request, *workmail.CreateAliasOutput)
@@ -76,6 +80,10 @@ type WorkMailAPI interface {
 	CreateGroupWithContext(aws.Context, *workmail.CreateGroupInput, ...request.Option) (*workmail.CreateGroupOutput, error)
 	CreateGroupRequest(*workmail.CreateGroupInput) (*request.Request, *workmail.CreateGroupOutput)
 
+	CreateOrganization(*workmail.CreateOrganizationInput) (*workmail.CreateOrganizationOutput, error)
+	CreateOrganizationWithContext(aws.Context, *workmail.CreateOrganizationInput, ...request.Option) (*workmail.CreateOrganizationOutput, error)
+	CreateOrganizationRequest(*workmail.CreateOrganizationInput) (*request.Request, *workmail.CreateOrganizationOutput)
+
 	CreateResource(*workmail.CreateResourceInput) (*workmail.CreateResourceOutput, error)
 	CreateResourceWithContext(aws.Context, *workmail.CreateResourceInput, ...request.Option) (*workmail.CreateResourceOutput, error)
 	CreateResourceRequest(*workmail.CreateResourceInput) (*request.Request, *workmail.CreateResourceOutput)
@@ -83,6 +91,10 @@ type WorkMailAPI interface {
 	CreateUser(*workmail.CreateUserInput) (*workmail.CreateUserOutput, error)
 	CreateUserWithContext(aws.Context, *workmail.CreateUserInput, ...request.Option) (*workmail.CreateUserOutput, error)
 	CreateUserRequest(*workmail.CreateUserInput) (*request.Request, *workmail.CreateUserOutput)
+
+	DeleteAccessControlRule(*workmail.DeleteAccessControlRuleInput) (*workmail.DeleteAccessControlRuleOutput, error)
+	DeleteAccessControlRuleWithContext(aws.Context, *workmail.DeleteAccessControlRuleInput, ...request.Option) (*workmail.DeleteAccessControlRuleOutput, error)
+	DeleteAccessControlRuleRequest(*workmail.DeleteAccessControlRuleInput) (*request.Request, *workmail.DeleteAccessControlRuleOutput)
 
 	DeleteAlias(*workmail.DeleteAliasInput) (*workmail.DeleteAliasOutput, error)
 	DeleteAliasWithContext(aws.Context, *workmail.DeleteAliasInput, ...request.Option) (*workmail.DeleteAliasOutput, error)
@@ -96,9 +108,17 @@ type WorkMailAPI interface {
 	DeleteMailboxPermissionsWithContext(aws.Context, *workmail.DeleteMailboxPermissionsInput, ...request.Option) (*workmail.DeleteMailboxPermissionsOutput, error)
 	DeleteMailboxPermissionsRequest(*workmail.DeleteMailboxPermissionsInput) (*request.Request, *workmail.DeleteMailboxPermissionsOutput)
 
+	DeleteOrganization(*workmail.DeleteOrganizationInput) (*workmail.DeleteOrganizationOutput, error)
+	DeleteOrganizationWithContext(aws.Context, *workmail.DeleteOrganizationInput, ...request.Option) (*workmail.DeleteOrganizationOutput, error)
+	DeleteOrganizationRequest(*workmail.DeleteOrganizationInput) (*request.Request, *workmail.DeleteOrganizationOutput)
+
 	DeleteResource(*workmail.DeleteResourceInput) (*workmail.DeleteResourceOutput, error)
 	DeleteResourceWithContext(aws.Context, *workmail.DeleteResourceInput, ...request.Option) (*workmail.DeleteResourceOutput, error)
 	DeleteResourceRequest(*workmail.DeleteResourceInput) (*request.Request, *workmail.DeleteResourceOutput)
+
+	DeleteRetentionPolicy(*workmail.DeleteRetentionPolicyInput) (*workmail.DeleteRetentionPolicyOutput, error)
+	DeleteRetentionPolicyWithContext(aws.Context, *workmail.DeleteRetentionPolicyInput, ...request.Option) (*workmail.DeleteRetentionPolicyOutput, error)
+	DeleteRetentionPolicyRequest(*workmail.DeleteRetentionPolicyInput) (*request.Request, *workmail.DeleteRetentionPolicyOutput)
 
 	DeleteUser(*workmail.DeleteUserInput) (*workmail.DeleteUserOutput, error)
 	DeleteUserWithContext(aws.Context, *workmail.DeleteUserInput, ...request.Option) (*workmail.DeleteUserOutput, error)
@@ -111,6 +131,10 @@ type WorkMailAPI interface {
 	DescribeGroup(*workmail.DescribeGroupInput) (*workmail.DescribeGroupOutput, error)
 	DescribeGroupWithContext(aws.Context, *workmail.DescribeGroupInput, ...request.Option) (*workmail.DescribeGroupOutput, error)
 	DescribeGroupRequest(*workmail.DescribeGroupInput) (*request.Request, *workmail.DescribeGroupOutput)
+
+	DescribeMailboxExportJob(*workmail.DescribeMailboxExportJobInput) (*workmail.DescribeMailboxExportJobOutput, error)
+	DescribeMailboxExportJobWithContext(aws.Context, *workmail.DescribeMailboxExportJobInput, ...request.Option) (*workmail.DescribeMailboxExportJobOutput, error)
+	DescribeMailboxExportJobRequest(*workmail.DescribeMailboxExportJobInput) (*request.Request, *workmail.DescribeMailboxExportJobOutput)
 
 	DescribeOrganization(*workmail.DescribeOrganizationInput) (*workmail.DescribeOrganizationOutput, error)
 	DescribeOrganizationWithContext(aws.Context, *workmail.DescribeOrganizationInput, ...request.Option) (*workmail.DescribeOrganizationOutput, error)
@@ -132,9 +156,21 @@ type WorkMailAPI interface {
 	DisassociateMemberFromGroupWithContext(aws.Context, *workmail.DisassociateMemberFromGroupInput, ...request.Option) (*workmail.DisassociateMemberFromGroupOutput, error)
 	DisassociateMemberFromGroupRequest(*workmail.DisassociateMemberFromGroupInput) (*request.Request, *workmail.DisassociateMemberFromGroupOutput)
 
+	GetAccessControlEffect(*workmail.GetAccessControlEffectInput) (*workmail.GetAccessControlEffectOutput, error)
+	GetAccessControlEffectWithContext(aws.Context, *workmail.GetAccessControlEffectInput, ...request.Option) (*workmail.GetAccessControlEffectOutput, error)
+	GetAccessControlEffectRequest(*workmail.GetAccessControlEffectInput) (*request.Request, *workmail.GetAccessControlEffectOutput)
+
+	GetDefaultRetentionPolicy(*workmail.GetDefaultRetentionPolicyInput) (*workmail.GetDefaultRetentionPolicyOutput, error)
+	GetDefaultRetentionPolicyWithContext(aws.Context, *workmail.GetDefaultRetentionPolicyInput, ...request.Option) (*workmail.GetDefaultRetentionPolicyOutput, error)
+	GetDefaultRetentionPolicyRequest(*workmail.GetDefaultRetentionPolicyInput) (*request.Request, *workmail.GetDefaultRetentionPolicyOutput)
+
 	GetMailboxDetails(*workmail.GetMailboxDetailsInput) (*workmail.GetMailboxDetailsOutput, error)
 	GetMailboxDetailsWithContext(aws.Context, *workmail.GetMailboxDetailsInput, ...request.Option) (*workmail.GetMailboxDetailsOutput, error)
 	GetMailboxDetailsRequest(*workmail.GetMailboxDetailsInput) (*request.Request, *workmail.GetMailboxDetailsOutput)
+
+	ListAccessControlRules(*workmail.ListAccessControlRulesInput) (*workmail.ListAccessControlRulesOutput, error)
+	ListAccessControlRulesWithContext(aws.Context, *workmail.ListAccessControlRulesInput, ...request.Option) (*workmail.ListAccessControlRulesOutput, error)
+	ListAccessControlRulesRequest(*workmail.ListAccessControlRulesInput) (*request.Request, *workmail.ListAccessControlRulesOutput)
 
 	ListAliases(*workmail.ListAliasesInput) (*workmail.ListAliasesOutput, error)
 	ListAliasesWithContext(aws.Context, *workmail.ListAliasesInput, ...request.Option) (*workmail.ListAliasesOutput, error)
@@ -156,6 +192,13 @@ type WorkMailAPI interface {
 
 	ListGroupsPages(*workmail.ListGroupsInput, func(*workmail.ListGroupsOutput, bool) bool) error
 	ListGroupsPagesWithContext(aws.Context, *workmail.ListGroupsInput, func(*workmail.ListGroupsOutput, bool) bool, ...request.Option) error
+
+	ListMailboxExportJobs(*workmail.ListMailboxExportJobsInput) (*workmail.ListMailboxExportJobsOutput, error)
+	ListMailboxExportJobsWithContext(aws.Context, *workmail.ListMailboxExportJobsInput, ...request.Option) (*workmail.ListMailboxExportJobsOutput, error)
+	ListMailboxExportJobsRequest(*workmail.ListMailboxExportJobsInput) (*request.Request, *workmail.ListMailboxExportJobsOutput)
+
+	ListMailboxExportJobsPages(*workmail.ListMailboxExportJobsInput, func(*workmail.ListMailboxExportJobsOutput, bool) bool) error
+	ListMailboxExportJobsPagesWithContext(aws.Context, *workmail.ListMailboxExportJobsInput, func(*workmail.ListMailboxExportJobsOutput, bool) bool, ...request.Option) error
 
 	ListMailboxPermissions(*workmail.ListMailboxPermissionsInput) (*workmail.ListMailboxPermissionsOutput, error)
 	ListMailboxPermissionsWithContext(aws.Context, *workmail.ListMailboxPermissionsInput, ...request.Option) (*workmail.ListMailboxPermissionsOutput, error)
@@ -185,6 +228,10 @@ type WorkMailAPI interface {
 	ListResourcesPages(*workmail.ListResourcesInput, func(*workmail.ListResourcesOutput, bool) bool) error
 	ListResourcesPagesWithContext(aws.Context, *workmail.ListResourcesInput, func(*workmail.ListResourcesOutput, bool) bool, ...request.Option) error
 
+	ListTagsForResource(*workmail.ListTagsForResourceInput) (*workmail.ListTagsForResourceOutput, error)
+	ListTagsForResourceWithContext(aws.Context, *workmail.ListTagsForResourceInput, ...request.Option) (*workmail.ListTagsForResourceOutput, error)
+	ListTagsForResourceRequest(*workmail.ListTagsForResourceInput) (*request.Request, *workmail.ListTagsForResourceOutput)
+
 	ListUsers(*workmail.ListUsersInput) (*workmail.ListUsersOutput, error)
 	ListUsersWithContext(aws.Context, *workmail.ListUsersInput, ...request.Option) (*workmail.ListUsersOutput, error)
 	ListUsersRequest(*workmail.ListUsersInput) (*request.Request, *workmail.ListUsersOutput)
@@ -192,9 +239,17 @@ type WorkMailAPI interface {
 	ListUsersPages(*workmail.ListUsersInput, func(*workmail.ListUsersOutput, bool) bool) error
 	ListUsersPagesWithContext(aws.Context, *workmail.ListUsersInput, func(*workmail.ListUsersOutput, bool) bool, ...request.Option) error
 
+	PutAccessControlRule(*workmail.PutAccessControlRuleInput) (*workmail.PutAccessControlRuleOutput, error)
+	PutAccessControlRuleWithContext(aws.Context, *workmail.PutAccessControlRuleInput, ...request.Option) (*workmail.PutAccessControlRuleOutput, error)
+	PutAccessControlRuleRequest(*workmail.PutAccessControlRuleInput) (*request.Request, *workmail.PutAccessControlRuleOutput)
+
 	PutMailboxPermissions(*workmail.PutMailboxPermissionsInput) (*workmail.PutMailboxPermissionsOutput, error)
 	PutMailboxPermissionsWithContext(aws.Context, *workmail.PutMailboxPermissionsInput, ...request.Option) (*workmail.PutMailboxPermissionsOutput, error)
 	PutMailboxPermissionsRequest(*workmail.PutMailboxPermissionsInput) (*request.Request, *workmail.PutMailboxPermissionsOutput)
+
+	PutRetentionPolicy(*workmail.PutRetentionPolicyInput) (*workmail.PutRetentionPolicyOutput, error)
+	PutRetentionPolicyWithContext(aws.Context, *workmail.PutRetentionPolicyInput, ...request.Option) (*workmail.PutRetentionPolicyOutput, error)
+	PutRetentionPolicyRequest(*workmail.PutRetentionPolicyInput) (*request.Request, *workmail.PutRetentionPolicyOutput)
 
 	RegisterToWorkMail(*workmail.RegisterToWorkMailInput) (*workmail.RegisterToWorkMailOutput, error)
 	RegisterToWorkMailWithContext(aws.Context, *workmail.RegisterToWorkMailInput, ...request.Option) (*workmail.RegisterToWorkMailOutput, error)
@@ -203,6 +258,18 @@ type WorkMailAPI interface {
 	ResetPassword(*workmail.ResetPasswordInput) (*workmail.ResetPasswordOutput, error)
 	ResetPasswordWithContext(aws.Context, *workmail.ResetPasswordInput, ...request.Option) (*workmail.ResetPasswordOutput, error)
 	ResetPasswordRequest(*workmail.ResetPasswordInput) (*request.Request, *workmail.ResetPasswordOutput)
+
+	StartMailboxExportJob(*workmail.StartMailboxExportJobInput) (*workmail.StartMailboxExportJobOutput, error)
+	StartMailboxExportJobWithContext(aws.Context, *workmail.StartMailboxExportJobInput, ...request.Option) (*workmail.StartMailboxExportJobOutput, error)
+	StartMailboxExportJobRequest(*workmail.StartMailboxExportJobInput) (*request.Request, *workmail.StartMailboxExportJobOutput)
+
+	TagResource(*workmail.TagResourceInput) (*workmail.TagResourceOutput, error)
+	TagResourceWithContext(aws.Context, *workmail.TagResourceInput, ...request.Option) (*workmail.TagResourceOutput, error)
+	TagResourceRequest(*workmail.TagResourceInput) (*request.Request, *workmail.TagResourceOutput)
+
+	UntagResource(*workmail.UntagResourceInput) (*workmail.UntagResourceOutput, error)
+	UntagResourceWithContext(aws.Context, *workmail.UntagResourceInput, ...request.Option) (*workmail.UntagResourceOutput, error)
+	UntagResourceRequest(*workmail.UntagResourceInput) (*request.Request, *workmail.UntagResourceOutput)
 
 	UpdateMailboxQuota(*workmail.UpdateMailboxQuotaInput) (*workmail.UpdateMailboxQuotaOutput, error)
 	UpdateMailboxQuotaWithContext(aws.Context, *workmail.UpdateMailboxQuotaInput, ...request.Option) (*workmail.UpdateMailboxQuotaOutput, error)

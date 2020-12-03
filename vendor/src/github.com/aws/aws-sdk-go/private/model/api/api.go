@@ -62,6 +62,14 @@ type API struct {
 	HasEventStream bool `json:"-"`
 
 	EndpointDiscoveryOp *Operation
+
+	HasEndpointARN bool `json:"-"`
+
+	HasOutpostID bool `json:"-"`
+
+	HasAccountIdWithARN bool `json:"-"`
+
+	WithGeneratedTypedErrors bool
 }
 
 // A Metadata is the metadata about an API's definition.
@@ -280,20 +288,27 @@ func (a *API) importsGoCode() string {
 
 // A tplAPI is the top level template for the API
 var tplAPI = template.Must(template.New("api").Parse(`
-{{ range $_, $o := .OperationList }}
-{{ $o.GoCode }}
+{{- range $_, $o := .OperationList }}
 
-{{ end }}
+	{{ $o.GoCode }}
+{{- end }}
 
-{{ range $_, $s := .ShapeList }}
-{{ if and $s.IsInternal (eq $s.Type "structure") }}{{ $s.GoCode }}{{ end }}
+{{- range $_, $s := $.Shapes }}
+	{{- if and $s.IsInternal (eq $s.Type "structure") (not $s.Exception) }}
 
-{{ end }}
+		{{ $s.GoCode }}
+	{{- else if and $s.Exception (or $.WithGeneratedTypedErrors $s.EventFor) }}
 
-{{ range $_, $s := .ShapeList }}
-{{ if $s.IsEnum }}{{ $s.GoCode }}{{ end }}
+		{{ $s.GoCode }}
+	{{- end }}
+{{- end }}
 
-{{ end }}
+{{- range $_, $s := $.Shapes }}
+	{{- if $s.IsEnum }}
+
+		{{ $s.GoCode }}
+	{{- end }}
+{{- end }}
 `))
 
 // AddImport adds the import path to the generated file's import.
@@ -319,6 +334,15 @@ func (a *API) APIGoCode() string {
 	a.AddSDKImport("aws/awsutil")
 	a.AddSDKImport("aws/request")
 
+	if a.HasEndpointARN {
+		a.AddImport("fmt")
+		if a.PackageName() == "s3" || a.PackageName() == "s3control" {
+			a.AddSDKImport("internal/s3shared/arn")
+		} else {
+			a.AddSDKImport("service", a.PackageName(), "internal", "arn")
+		}
+	}
+
 	var buf bytes.Buffer
 	err := tplAPI.Execute(&buf, a)
 	if err != nil {
@@ -330,20 +354,20 @@ func (a *API) APIGoCode() string {
 }
 
 var noCrossLinkServices = map[string]struct{}{
-	"apigateway":        {},
-	"budgets":           {},
-	"cloudsearch":       {},
-	"cloudsearchdomain": {},
-	"elastictranscoder": {},
-	"es":                {},
-	"glacier":           {},
-	"importexport":      {},
-	"iot":               {},
-	"iot-data":          {},
-	"machinelearning":   {},
-	"rekognition":       {},
-	"sdb":               {},
-	"swf":               {},
+	"apigateway":           {},
+	"budgets":              {},
+	"cloudsearch":          {},
+	"cloudsearchdomain":    {},
+	"elastictranscoder":    {},
+	"elasticsearchservice": {},
+	"glacier":              {},
+	"importexport":         {},
+	"iot":                  {},
+	"iotdataplane":         {},
+	"machinelearning":      {},
+	"rekognition":          {},
+	"sdb":                  {},
+	"swf":                  {},
 }
 
 // HasCrosslinks will return whether or not a service has crosslinking .
@@ -354,12 +378,15 @@ func HasCrosslinks(service string) bool {
 
 // GetCrosslinkURL returns the crosslinking URL for the shape based on the name and
 // uid provided. Empty string is returned if no crosslink link could be determined.
-func GetCrosslinkURL(baseURL, uid string, params ...string) string {
-	if uid == "" || baseURL == "" {
+func (a *API) GetCrosslinkURL(params ...string) string {
+	baseURL := a.BaseCrosslinkURL
+	uid := a.Metadata.UID
+
+	if a.Metadata.UID == "" || a.BaseCrosslinkURL == "" {
 		return ""
 	}
 
-	if !HasCrosslinks(strings.ToLower(ServiceIDFromUID(uid))) {
+	if !HasCrosslinks(strings.ToLower(a.PackageName())) {
 		return ""
 	}
 
@@ -389,9 +416,7 @@ func (a *API) APIName() string {
 	return a.name
 }
 
-var tplServiceDoc = template.Must(template.New("service docs").Funcs(template.FuncMap{
-	"GetCrosslinkURL": GetCrosslinkURL,
-}).
+var tplServiceDoc = template.Must(template.New("service docs").
 	Parse(`
 // Package {{ .PackageName }} provides the client and types for making API
 // requests to {{ .Metadata.ServiceFullName }}.
@@ -399,7 +424,7 @@ var tplServiceDoc = template.Must(template.New("service docs").Funcs(template.Fu
 //
 {{ .Documentation }}
 {{ end -}}
-{{ $crosslinkURL := GetCrosslinkURL $.BaseCrosslinkURL $.Metadata.UID -}}
+{{ $crosslinkURL := $.GetCrosslinkURL -}}
 {{ if $crosslinkURL -}}
 //
 // See {{ $crosslinkURL }} for more information on this service.
@@ -508,7 +533,7 @@ var initRequest func(*request.Request)
 const (
 	ServiceName = "{{ ServiceNameConstValue . }}" // Name of service.
 	EndpointsID = {{ EndpointsIDConstValue . }} // ID to lookup a service endpoint with.
-	ServiceID = "{{ ServiceID . }}" // ServiceID is a unique identifer of a specific service.
+	ServiceID = "{{ ServiceID . }}" // ServiceID is a unique identifier of a specific service.
 )
 {{- end }}
 
@@ -590,16 +615,29 @@ func newClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint,
 	svc.Handlers.Build.PushBackNamed({{ .ProtocolPackage }}.BuildHandler)
 	svc.Handlers.Unmarshal.PushBackNamed({{ .ProtocolPackage }}.UnmarshalHandler)
 	svc.Handlers.UnmarshalMeta.PushBackNamed({{ .ProtocolPackage }}.UnmarshalMetaHandler)
-	svc.Handlers.UnmarshalError.PushBackNamed({{ .ProtocolPackage }}.UnmarshalErrorHandler)
-	{{ if .HasEventStream }}
-	svc.Handlers.UnmarshalStream.PushBackNamed({{ .ProtocolPackage }}.UnmarshalHandler)
-	{{ end }}
 
-	{{ if .UseInitMethods }}// Run custom client initialization if present
-	if initClient != nil {
-		initClient(svc.Client)
-	}
-	{{ end  }}
+	{{- if and $.WithGeneratedTypedErrors (gt (len $.ShapeListErrors) 0) }}
+		{{- $_ := $.AddSDKImport "private/protocol" }}
+		svc.Handlers.UnmarshalError.PushBackNamed(
+			protocol.NewUnmarshalErrorHandler({{ .ProtocolPackage }}.NewUnmarshalTypedError(exceptionFromCode)).NamedHandler(),
+		)
+	{{- else }}
+		svc.Handlers.UnmarshalError.PushBackNamed({{ .ProtocolPackage }}.UnmarshalErrorHandler)
+	{{- end }}
+
+	{{- if .HasEventStream }}
+
+		svc.Handlers.BuildStream.PushBackNamed({{ .ProtocolPackage }}.BuildHandler)
+		svc.Handlers.UnmarshalStream.PushBackNamed({{ .ProtocolPackage }}.UnmarshalHandler)
+	{{- end }}
+
+	{{- if .UseInitMethods }}
+
+		// Run custom client initialization if present
+		if initClient != nil {
+			initClient(svc.Client)
+		}
+	{{- end  }}
 
 	return svc
 }
@@ -609,11 +647,13 @@ func newClient(cfg aws.Config, handlers request.Handlers, partitionID, endpoint,
 func (c *{{ .StructName }}) newRequest(op *request.Operation, params, data interface{}) *request.Request {
 	req := c.NewRequest(op, params, data)
 
-	{{ if .UseInitMethods }}// Run custom request initialization if present
-	if initRequest != nil {
-		initRequest(req)
-	}
-	{{ end }}
+	{{- if .UseInitMethods }}
+
+		// Run custom request initialization if present
+		if initRequest != nil {
+			initRequest(req)
+		}
+	{{- end }}
 
 	return req
 }
@@ -823,7 +863,7 @@ func resolveShapeValidations(s *Shape, ancestry ...*Shape) {
 		ref := s.MemberRefs[name]
 		// Since this is a grab bag we will just continue since
 		// we can't validate because we don't know the valued shape.
-		if ref.JSONValue {
+		if ref.JSONValue || (s.UsedAsInput && ref.Shape.IsEventStream) {
 			continue
 		}
 
@@ -853,19 +893,33 @@ func resolveShapeValidations(s *Shape, ancestry ...*Shape) {
 // A tplAPIErrors is the top level template for the API
 var tplAPIErrors = template.Must(template.New("api").Parse(`
 const (
-{{ range $_, $s := $.ShapeListErrors }}
-	// {{ $s.ErrorCodeName }} for service response error code
-	// {{ printf "%q" $s.ErrorName }}.
-	{{ if $s.Docstring -}}
-	//
-	{{ $s.Docstring }}
-	{{ end -}}
-	{{ $s.ErrorCodeName }} = {{ printf "%q" $s.ErrorName }}
-{{ end }}
+	{{- range $_, $s := $.ShapeListErrors }}
+
+		// {{ $s.ErrorCodeName }} for service response error code
+		// {{ printf "%q" $s.ErrorName }}.
+		{{ if $s.Docstring -}}
+		//
+		{{ $s.Docstring }}
+		{{ end -}}
+		{{ $s.ErrorCodeName }} = {{ printf "%q" $s.ErrorName }}
+	{{- end }}
 )
+
+{{- if $.WithGeneratedTypedErrors }}
+	{{- $_ := $.AddSDKImport "private/protocol" }}
+
+	var exceptionFromCode = map[string]func(protocol.ResponseMetadata)error {
+		{{- range $_, $s := $.ShapeListErrors }}
+			"{{ $s.ErrorName }}": newError{{ $s.ShapeName }},
+		{{- end }}
+	}
+{{- end }}
 `))
 
+// APIErrorsGoCode returns the Go code for the errors.go file.
 func (a *API) APIErrorsGoCode() string {
+	a.resetImports()
+
 	var buf bytes.Buffer
 	err := tplAPIErrors.Execute(&buf, a)
 
@@ -873,7 +927,7 @@ func (a *API) APIErrorsGoCode() string {
 		panic(err)
 	}
 
-	return strings.TrimSpace(buf.String())
+	return a.importsGoCode() + strings.TrimSpace(buf.String())
 }
 
 // removeOperation removes an operation, its input/output shapes, as well as
@@ -938,6 +992,29 @@ func (a *API) writeInputOutputLocationName() {
 		}
 		if setOutput {
 			o.OutputRef.LocationName = o.OutputRef.Shape.OrigShapeName
+		}
+	}
+}
+
+func (a *API) addHeaderMapDocumentation() {
+	for _, shape := range a.Shapes {
+		if !shape.UsedAsOutput {
+			continue
+		}
+		for _, shapeRef := range shape.MemberRefs {
+			if shapeRef.Location == "headers" {
+				if dLen := len(shapeRef.Documentation); dLen > 0 {
+					if shapeRef.Documentation[dLen-1] != '\n' {
+						shapeRef.Documentation += "\n"
+					}
+					shapeRef.Documentation += "//"
+				}
+				shapeRef.Documentation += `
+// By default unmarshaled keys are written as a map keys in following canonicalized format:
+// the first letter and any letter following a hyphen will be capitalized, and the rest as lowercase.
+// Set ` + "`aws.Config.LowerCaseHeaderMaps`" + ` to ` + "`true`" + ` to write unmarshaled keys to the map as lowercase.
+`
+			}
 		}
 	}
 }

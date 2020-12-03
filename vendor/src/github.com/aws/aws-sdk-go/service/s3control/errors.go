@@ -8,6 +8,20 @@ const (
 	// "BadRequestException".
 	ErrCodeBadRequestException = "BadRequestException"
 
+	// ErrCodeBucketAlreadyExists for service response error code
+	// "BucketAlreadyExists".
+	//
+	// The requested Outposts bucket name is not available. The bucket namespace
+	// is shared by all users of the AWS Outposts in this Region. Select a different
+	// name and try again.
+	ErrCodeBucketAlreadyExists = "BucketAlreadyExists"
+
+	// ErrCodeBucketAlreadyOwnedByYou for service response error code
+	// "BucketAlreadyOwnedByYou".
+	//
+	// The Outposts bucket you tried to create already exists, and you own it.
+	ErrCodeBucketAlreadyOwnedByYou = "BucketAlreadyOwnedByYou"
+
 	// ErrCodeIdempotencyException for service response error code
 	// "IdempotencyException".
 	ErrCodeIdempotencyException = "IdempotencyException"
@@ -30,6 +44,9 @@ const (
 
 	// ErrCodeNoSuchPublicAccessBlockConfiguration for service response error code
 	// "NoSuchPublicAccessBlockConfiguration".
+	//
+	// Amazon S3 throws this exception if you make a GetPublicAccessBlock request
+	// against an account that doesn't have a PublicAccessBlockConfiguration set.
 	ErrCodeNoSuchPublicAccessBlockConfiguration = "NoSuchPublicAccessBlockConfiguration"
 
 	// ErrCodeNotFoundException for service response error code
@@ -39,4 +56,10 @@ const (
 	// ErrCodeTooManyRequestsException for service response error code
 	// "TooManyRequestsException".
 	ErrCodeTooManyRequestsException = "TooManyRequestsException"
+
+	// ErrCodeTooManyTagsException for service response error code
+	// "TooManyTagsException".
+	//
+	// Amazon S3 throws this exception if you have too many tags in your tag set.
+	ErrCodeTooManyTagsException = "TooManyTagsException"
 )

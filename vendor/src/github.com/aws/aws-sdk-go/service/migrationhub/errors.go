@@ -2,6 +2,10 @@
 
 package migrationhub
 
+import (
+	"github.com/aws/aws-sdk-go/private/protocol"
+)
+
 const (
 
 	// ErrCodeAccessDeniedException for service response error code
@@ -61,6 +65,12 @@ const (
 	// error encountered.
 	ErrCodeServiceUnavailableException = "ServiceUnavailableException"
 
+	// ErrCodeThrottlingException for service response error code
+	// "ThrottlingException".
+	//
+	// The request was denied due to request throttling.
+	ErrCodeThrottlingException = "ThrottlingException"
+
 	// ErrCodeUnauthorizedOperation for service response error code
 	// "UnauthorizedOperation".
 	//
@@ -68,3 +78,16 @@ const (
 	// flag is set to "true".
 	ErrCodeUnauthorizedOperation = "UnauthorizedOperation"
 )
+
+var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
+	"AccessDeniedException":       newErrorAccessDeniedException,
+	"DryRunOperation":             newErrorDryRunOperation,
+	"HomeRegionNotSetException":   newErrorHomeRegionNotSetException,
+	"InternalServerError":         newErrorInternalServerError,
+	"InvalidInputException":       newErrorInvalidInputException,
+	"PolicyErrorException":        newErrorPolicyErrorException,
+	"ResourceNotFoundException":   newErrorResourceNotFoundException,
+	"ServiceUnavailableException": newErrorServiceUnavailableException,
+	"ThrottlingException":         newErrorThrottlingException,
+	"UnauthorizedOperation":       newErrorUnauthorizedOperation,
+}

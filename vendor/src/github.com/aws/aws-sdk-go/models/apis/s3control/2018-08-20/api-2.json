@@ -11,6 +11,36 @@
     "uid":"s3control-2018-08-20"
   },
   "operations":{
+    "CreateAccessPoint":{
+      "name":"CreateAccessPoint",
+      "http":{
+        "method":"PUT",
+        "requestUri":"/v20180820/accesspoint/{name}"
+      },
+      "input":{
+        "shape":"CreateAccessPointRequest",
+        "locationName":"CreateAccessPointRequest",
+        "xmlNamespace":{"uri":"http://awss3control.amazonaws.com/doc/2018-08-20/"}
+      },
+      "output":{"shape":"CreateAccessPointResult"},
+      "endpoint":{
+        "hostPrefix":"{AccountId}."
+      }
+    },
+    "CreateBucket":{
+      "name":"CreateBucket",
+      "http":{
+        "method":"PUT",
+        "requestUri":"/v20180820/bucket/{name}"
+      },
+      "input":{"shape":"CreateBucketRequest"},
+      "output":{"shape":"CreateBucketResult"},
+      "errors":[
+        {"shape":"BucketAlreadyExists"},
+        {"shape":"BucketAlreadyOwnedByYou"}
+      ],
+      "httpChecksumRequired":true
+    },
     "CreateJob":{
       "name":"CreateJob",
       "http":{
@@ -28,7 +58,94 @@
         {"shape":"BadRequestException"},
         {"shape":"IdempotencyException"},
         {"shape":"InternalServiceException"}
-      ]
+      ],
+      "endpoint":{
+        "hostPrefix":"{AccountId}."
+      }
+    },
+    "DeleteAccessPoint":{
+      "name":"DeleteAccessPoint",
+      "http":{
+        "method":"DELETE",
+        "requestUri":"/v20180820/accesspoint/{name}"
+      },
+      "input":{"shape":"DeleteAccessPointRequest"},
+      "endpoint":{
+        "hostPrefix":"{AccountId}."
+      }
+    },
+    "DeleteAccessPointPolicy":{
+      "name":"DeleteAccessPointPolicy",
+      "http":{
+        "method":"DELETE",
+        "requestUri":"/v20180820/accesspoint/{name}/policy"
+      },
+      "input":{"shape":"DeleteAccessPointPolicyRequest"},
+      "endpoint":{
+        "hostPrefix":"{AccountId}."
+      }
+    },
+    "DeleteBucket":{
+      "name":"DeleteBucket",
+      "http":{
+        "method":"DELETE",
+        "requestUri":"/v20180820/bucket/{name}"
+      },
+      "input":{"shape":"DeleteBucketRequest"},
+      "endpoint":{
+        "hostPrefix":"{AccountId}."
+      }
+    },
+    "DeleteBucketLifecycleConfiguration":{
+      "name":"DeleteBucketLifecycleConfiguration",
+      "http":{
+        "method":"DELETE",
+        "requestUri":"/v20180820/bucket/{name}/lifecycleconfiguration"
+      },
+      "input":{"shape":"DeleteBucketLifecycleConfigurationRequest"},
+      "endpoint":{
+        "hostPrefix":"{AccountId}."
+      }
+    },
+    "DeleteBucketPolicy":{
+      "name":"DeleteBucketPolicy",
+      "http":{
+        "method":"DELETE",
+        "requestUri":"/v20180820/bucket/{name}/policy"
+      },
+      "input":{"shape":"DeleteBucketPolicyRequest"},
+      "endpoint":{
+        "hostPrefix":"{AccountId}."
+      }
+    },
+    "DeleteBucketTagging":{
+      "name":"DeleteBucketTagging",
+      "http":{
+        "method":"DELETE",
+        "requestUri":"/v20180820/bucket/{name}/tagging",
+        "responseCode":204
+      },
+      "input":{"shape":"DeleteBucketTaggingRequest"},
+      "endpoint":{
+        "hostPrefix":"{AccountId}."
+      }
+    },
+    "DeleteJobTagging":{
+      "name":"DeleteJobTagging",
+      "http":{
+        "method":"DELETE",
+        "requestUri":"/v20180820/jobs/{id}/tagging"
+      },
+      "input":{"shape":"DeleteJobTaggingRequest"},
+      "output":{"shape":"DeleteJobTaggingResult"},
+      "errors":[
+        {"shape":"InternalServiceException"},
+        {"shape":"TooManyRequestsException"},
+        {"shape":"NotFoundException"}
+      ],
+      "endpoint":{
+        "hostPrefix":"{AccountId}."
+      }
     },
     "DeletePublicAccessBlock":{
       "name":"DeletePublicAccessBlock",
@@ -36,7 +153,10 @@
         "method":"DELETE",
         "requestUri":"/v20180820/configuration/publicAccessBlock"
       },
-      "input":{"shape":"DeletePublicAccessBlockRequest"}
+      "input":{"shape":"DeletePublicAccessBlockRequest"},
+      "endpoint":{
+        "hostPrefix":"{AccountId}."
+      }
     },
     "DescribeJob":{
       "name":"DescribeJob",
@@ -51,7 +171,111 @@
         {"shape":"TooManyRequestsException"},
         {"shape":"NotFoundException"},
         {"shape":"InternalServiceException"}
-      ]
+      ],
+      "endpoint":{
+        "hostPrefix":"{AccountId}."
+      }
+    },
+    "GetAccessPoint":{
+      "name":"GetAccessPoint",
+      "http":{
+        "method":"GET",
+        "requestUri":"/v20180820/accesspoint/{name}"
+      },
+      "input":{"shape":"GetAccessPointRequest"},
+      "output":{"shape":"GetAccessPointResult"},
+      "endpoint":{
+        "hostPrefix":"{AccountId}."
+      }
+    },
+    "GetAccessPointPolicy":{
+      "name":"GetAccessPointPolicy",
+      "http":{
+        "method":"GET",
+        "requestUri":"/v20180820/accesspoint/{name}/policy"
+      },
+      "input":{"shape":"GetAccessPointPolicyRequest"},
+      "output":{"shape":"GetAccessPointPolicyResult"},
+      "endpoint":{
+        "hostPrefix":"{AccountId}."
+      }
+    },
+    "GetAccessPointPolicyStatus":{
+      "name":"GetAccessPointPolicyStatus",
+      "http":{
+        "method":"GET",
+        "requestUri":"/v20180820/accesspoint/{name}/policyStatus"
+      },
+      "input":{"shape":"GetAccessPointPolicyStatusRequest"},
+      "output":{"shape":"GetAccessPointPolicyStatusResult"},
+      "endpoint":{
+        "hostPrefix":"{AccountId}."
+      }
+    },
+    "GetBucket":{
+      "name":"GetBucket",
+      "http":{
+        "method":"GET",
+        "requestUri":"/v20180820/bucket/{name}"
+      },
+      "input":{"shape":"GetBucketRequest"},
+      "output":{"shape":"GetBucketResult"},
+      "endpoint":{
+        "hostPrefix":"{AccountId}."
+      }
+    },
+    "GetBucketLifecycleConfiguration":{
+      "name":"GetBucketLifecycleConfiguration",
+      "http":{
+        "method":"GET",
+        "requestUri":"/v20180820/bucket/{name}/lifecycleconfiguration"
+      },
+      "input":{"shape":"GetBucketLifecycleConfigurationRequest"},
+      "output":{"shape":"GetBucketLifecycleConfigurationResult"},
+      "endpoint":{
+        "hostPrefix":"{AccountId}."
+      }
+    },
+    "GetBucketPolicy":{
+      "name":"GetBucketPolicy",
+      "http":{
+        "method":"GET",
+        "requestUri":"/v20180820/bucket/{name}/policy"
+      },
+      "input":{"shape":"GetBucketPolicyRequest"},
+      "output":{"shape":"GetBucketPolicyResult"},
+      "endpoint":{
+        "hostPrefix":"{AccountId}."
+      }
+    },
+    "GetBucketTagging":{
+      "name":"GetBucketTagging",
+      "http":{
+        "method":"GET",
+        "requestUri":"/v20180820/bucket/{name}/tagging"
+      },
+      "input":{"shape":"GetBucketTaggingRequest"},
+      "output":{"shape":"GetBucketTaggingResult"},
+      "endpoint":{
+        "hostPrefix":"{AccountId}."
+      }
+    },
+    "GetJobTagging":{
+      "name":"GetJobTagging",
+      "http":{
+        "method":"GET",
+        "requestUri":"/v20180820/jobs/{id}/tagging"
+      },
+      "input":{"shape":"GetJobTaggingRequest"},
+      "output":{"shape":"GetJobTaggingResult"},
+      "errors":[
+        {"shape":"InternalServiceException"},
+        {"shape":"TooManyRequestsException"},
+        {"shape":"NotFoundException"}
+      ],
+      "endpoint":{
+        "hostPrefix":"{AccountId}."
+      }
     },
     "GetPublicAccessBlock":{
       "name":"GetPublicAccessBlock",
@@ -63,7 +287,22 @@
       "output":{"shape":"GetPublicAccessBlockOutput"},
       "errors":[
         {"shape":"NoSuchPublicAccessBlockConfiguration"}
-      ]
+      ],
+      "endpoint":{
+        "hostPrefix":"{AccountId}."
+      }
+    },
+    "ListAccessPoints":{
+      "name":"ListAccessPoints",
+      "http":{
+        "method":"GET",
+        "requestUri":"/v20180820/accesspoint"
+      },
+      "input":{"shape":"ListAccessPointsRequest"},
+      "output":{"shape":"ListAccessPointsResult"},
+      "endpoint":{
+        "hostPrefix":"{AccountId}."
+      }
     },
     "ListJobs":{
       "name":"ListJobs",
@@ -77,7 +316,99 @@
         {"shape":"InvalidRequestException"},
         {"shape":"InternalServiceException"},
         {"shape":"InvalidNextTokenException"}
-      ]
+      ],
+      "endpoint":{
+        "hostPrefix":"{AccountId}."
+      }
+    },
+    "ListRegionalBuckets":{
+      "name":"ListRegionalBuckets",
+      "http":{
+        "method":"GET",
+        "requestUri":"/v20180820/bucket"
+      },
+      "input":{"shape":"ListRegionalBucketsRequest"},
+      "output":{"shape":"ListRegionalBucketsResult"},
+      "endpoint":{
+        "hostPrefix":"{AccountId}."
+      }
+    },
+    "PutAccessPointPolicy":{
+      "name":"PutAccessPointPolicy",
+      "http":{
+        "method":"PUT",
+        "requestUri":"/v20180820/accesspoint/{name}/policy"
+      },
+      "input":{
+        "shape":"PutAccessPointPolicyRequest",
+        "locationName":"PutAccessPointPolicyRequest",
+        "xmlNamespace":{"uri":"http://awss3control.amazonaws.com/doc/2018-08-20/"}
+      },
+      "endpoint":{
+        "hostPrefix":"{AccountId}."
+      }
+    },
+    "PutBucketLifecycleConfiguration":{
+      "name":"PutBucketLifecycleConfiguration",
+      "http":{
+        "method":"PUT",
+        "requestUri":"/v20180820/bucket/{name}/lifecycleconfiguration"
+      },
+      "input":{"shape":"PutBucketLifecycleConfigurationRequest"},
+      "endpoint":{
+        "hostPrefix":"{AccountId}."
+      },
+      "httpChecksumRequired":true
+    },
+    "PutBucketPolicy":{
+      "name":"PutBucketPolicy",
+      "http":{
+        "method":"PUT",
+        "requestUri":"/v20180820/bucket/{name}/policy"
+      },
+      "input":{
+        "shape":"PutBucketPolicyRequest",
+        "locationName":"PutBucketPolicyRequest",
+        "xmlNamespace":{"uri":"http://awss3control.amazonaws.com/doc/2018-08-20/"}
+      },
+      "endpoint":{
+        "hostPrefix":"{AccountId}."
+      },
+      "httpChecksumRequired":true
+    },
+    "PutBucketTagging":{
+      "name":"PutBucketTagging",
+      "http":{
+        "method":"PUT",
+        "requestUri":"/v20180820/bucket/{name}/tagging"
+      },
+      "input":{"shape":"PutBucketTaggingRequest"},
+      "endpoint":{
+        "hostPrefix":"{AccountId}."
+      },
+      "httpChecksumRequired":true
+    },
+    "PutJobTagging":{
+      "name":"PutJobTagging",
+      "http":{
+        "method":"PUT",
+        "requestUri":"/v20180820/jobs/{id}/tagging"
+      },
+      "input":{
+        "shape":"PutJobTaggingRequest",
+        "locationName":"PutJobTaggingRequest",
+        "xmlNamespace":{"uri":"http://awss3control.amazonaws.com/doc/2018-08-20/"}
+      },
+      "output":{"shape":"PutJobTaggingResult"},
+      "errors":[
+        {"shape":"InternalServiceException"},
+        {"shape":"TooManyRequestsException"},
+        {"shape":"NotFoundException"},
+        {"shape":"TooManyTagsException"}
+      ],
+      "endpoint":{
+        "hostPrefix":"{AccountId}."
+      }
     },
     "PutPublicAccessBlock":{
       "name":"PutPublicAccessBlock",
@@ -85,7 +416,10 @@
         "method":"PUT",
         "requestUri":"/v20180820/configuration/publicAccessBlock"
       },
-      "input":{"shape":"PutPublicAccessBlockRequest"}
+      "input":{"shape":"PutPublicAccessBlockRequest"},
+      "endpoint":{
+        "hostPrefix":"{AccountId}."
+      }
     },
     "UpdateJobPriority":{
       "name":"UpdateJobPriority",
@@ -100,7 +434,10 @@
         {"shape":"TooManyRequestsException"},
         {"shape":"NotFoundException"},
         {"shape":"InternalServiceException"}
-      ]
+      ],
+      "endpoint":{
+        "hostPrefix":"{AccountId}."
+      }
     },
     "UpdateJobStatus":{
       "name":"UpdateJobStatus",
@@ -116,13 +453,50 @@
         {"shape":"NotFoundException"},
         {"shape":"JobStatusException"},
         {"shape":"InternalServiceException"}
-      ]
+      ],
+      "endpoint":{
+        "hostPrefix":"{AccountId}."
+      }
     }
   },
   "shapes":{
+    "AbortIncompleteMultipartUpload":{
+      "type":"structure",
+      "members":{
+        "DaysAfterInitiation":{"shape":"DaysAfterInitiation"}
+      }
+    },
+    "AccessPoint":{
+      "type":"structure",
+      "required":[
+        "Name",
+        "NetworkOrigin",
+        "Bucket"
+      ],
+      "members":{
+        "Name":{"shape":"AccessPointName"},
+        "NetworkOrigin":{"shape":"NetworkOrigin"},
+        "VpcConfiguration":{"shape":"VpcConfiguration"},
+        "Bucket":{"shape":"BucketName"},
+        "AccessPointArn":{"shape":"S3AccessPointArn"}
+      }
+    },
+    "AccessPointList":{
+      "type":"list",
+      "member":{
+        "shape":"AccessPoint",
+        "locationName":"AccessPoint"
+      }
+    },
+    "AccessPointName":{
+      "type":"string",
+      "max":50,
+      "min":3
+    },
     "AccountId":{
       "type":"string",
-      "max":64
+      "max":64,
+      "pattern":"^\\d{12}$"
     },
     "BadRequestException":{
       "type":"structure",
@@ -132,7 +506,154 @@
       "exception":true
     },
     "Boolean":{"type":"boolean"},
+    "BucketAlreadyExists":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true
+    },
+    "BucketAlreadyOwnedByYou":{
+      "type":"structure",
+      "members":{
+      },
+      "exception":true
+    },
+    "BucketCannedACL":{
+      "type":"string",
+      "enum":[
+        "private",
+        "public-read",
+        "public-read-write",
+        "authenticated-read"
+      ]
+    },
+    "BucketLocationConstraint":{
+      "type":"string",
+      "enum":[
+        "EU",
+        "eu-west-1",
+        "us-west-1",
+        "us-west-2",
+        "ap-south-1",
+        "ap-southeast-1",
+        "ap-southeast-2",
+        "ap-northeast-1",
+        "sa-east-1",
+        "cn-north-1",
+        "eu-central-1"
+      ]
+    },
+    "BucketName":{
+      "type":"string",
+      "max":255,
+      "min":3
+    },
+    "ConfirmRemoveSelfBucketAccess":{"type":"boolean"},
     "ConfirmationRequired":{"type":"boolean"},
+    "CreateAccessPointRequest":{
+      "type":"structure",
+      "required":[
+        "AccountId",
+        "Name",
+        "Bucket"
+      ],
+      "members":{
+        "AccountId":{
+          "shape":"AccountId",
+          "hostLabel":true,
+          "location":"header",
+          "locationName":"x-amz-account-id"
+        },
+        "Name":{
+          "shape":"AccessPointName",
+          "location":"uri",
+          "locationName":"name"
+        },
+        "Bucket":{"shape":"BucketName"},
+        "VpcConfiguration":{"shape":"VpcConfiguration"},
+        "PublicAccessBlockConfiguration":{"shape":"PublicAccessBlockConfiguration"}
+      }
+    },
+    "CreateAccessPointResult":{
+      "type":"structure",
+      "members":{
+        "AccessPointArn":{"shape":"S3AccessPointArn"}
+      }
+    },
+    "CreateBucketConfiguration":{
+      "type":"structure",
+      "members":{
+        "LocationConstraint":{"shape":"BucketLocationConstraint"}
+      }
+    },
+    "CreateBucketRequest":{
+      "type":"structure",
+      "required":["Bucket"],
+      "members":{
+        "ACL":{
+          "shape":"BucketCannedACL",
+          "location":"header",
+          "locationName":"x-amz-acl"
+        },
+        "Bucket":{
+          "shape":"BucketName",
+          "location":"uri",
+          "locationName":"name"
+        },
+        "CreateBucketConfiguration":{
+          "shape":"CreateBucketConfiguration",
+          "locationName":"CreateBucketConfiguration",
+          "xmlNamespace":{"uri":"http://awss3control.amazonaws.com/doc/2018-08-20/"}
+        },
+        "GrantFullControl":{
+          "shape":"GrantFullControl",
+          "location":"header",
+          "locationName":"x-amz-grant-full-control"
+        },
+        "GrantRead":{
+          "shape":"GrantRead",
+          "location":"header",
+          "locationName":"x-amz-grant-read"
+        },
+        "GrantReadACP":{
+          "shape":"GrantReadACP",
+          "location":"header",
+          "locationName":"x-amz-grant-read-acp"
+        },
+        "GrantWrite":{
+          "shape":"GrantWrite",
+          "location":"header",
+          "locationName":"x-amz-grant-write"
+        },
+        "GrantWriteACP":{
+          "shape":"GrantWriteACP",
+          "location":"header",
+          "locationName":"x-amz-grant-write-acp"
+        },
+        "ObjectLockEnabledForBucket":{
+          "shape":"ObjectLockEnabledForBucket",
+          "location":"header",
+          "locationName":"x-amz-bucket-object-lock-enabled"
+        },
+        "OutpostId":{
+          "shape":"NonEmptyMaxLength64String",
+          "location":"header",
+          "locationName":"x-amz-outpost-id"
+        }
+      },
+      "payload":"CreateBucketConfiguration"
+    },
+    "CreateBucketResult":{
+      "type":"structure",
+      "members":{
+        "Location":{
+          "shape":"Location",
+          "location":"header",
+          "locationName":"Location"
+        },
+        "BucketArn":{"shape":"S3RegionalBucketArn"}
+      }
+    },
     "CreateJobRequest":{
       "type":"structure",
       "required":[
@@ -147,6 +668,7 @@
       "members":{
         "AccountId":{
           "shape":"AccountId",
+          "hostLabel":true,
           "location":"header",
           "locationName":"x-amz-account-id"
         },
@@ -166,7 +688,8 @@
           "shape":"JobPriority",
           "box":true
         },
-        "RoleArn":{"shape":"IAMRoleArn"}
+        "RoleArn":{"shape":"IAMRoleArn"},
+        "Tags":{"shape":"S3TagSet"}
       }
     },
     "CreateJobResult":{
@@ -175,12 +698,162 @@
         "JobId":{"shape":"JobId"}
       }
     },
+    "CreationDate":{"type":"timestamp"},
+    "Date":{"type":"timestamp"},
+    "Days":{"type":"integer"},
+    "DaysAfterInitiation":{"type":"integer"},
+    "DeleteAccessPointPolicyRequest":{
+      "type":"structure",
+      "required":[
+        "AccountId",
+        "Name"
+      ],
+      "members":{
+        "AccountId":{
+          "shape":"AccountId",
+          "hostLabel":true,
+          "location":"header",
+          "locationName":"x-amz-account-id"
+        },
+        "Name":{
+          "shape":"AccessPointName",
+          "location":"uri",
+          "locationName":"name"
+        }
+      }
+    },
+    "DeleteAccessPointRequest":{
+      "type":"structure",
+      "required":[
+        "AccountId",
+        "Name"
+      ],
+      "members":{
+        "AccountId":{
+          "shape":"AccountId",
+          "hostLabel":true,
+          "location":"header",
+          "locationName":"x-amz-account-id"
+        },
+        "Name":{
+          "shape":"AccessPointName",
+          "location":"uri",
+          "locationName":"name"
+        }
+      }
+    },
+    "DeleteBucketLifecycleConfigurationRequest":{
+      "type":"structure",
+      "required":[
+        "AccountId",
+        "Bucket"
+      ],
+      "members":{
+        "AccountId":{
+          "shape":"AccountId",
+          "hostLabel":true,
+          "location":"header",
+          "locationName":"x-amz-account-id"
+        },
+        "Bucket":{
+          "shape":"BucketName",
+          "location":"uri",
+          "locationName":"name"
+        }
+      }
+    },
+    "DeleteBucketPolicyRequest":{
+      "type":"structure",
+      "required":[
+        "AccountId",
+        "Bucket"
+      ],
+      "members":{
+        "AccountId":{
+          "shape":"AccountId",
+          "hostLabel":true,
+          "location":"header",
+          "locationName":"x-amz-account-id"
+        },
+        "Bucket":{
+          "shape":"BucketName",
+          "location":"uri",
+          "locationName":"name"
+        }
+      }
+    },
+    "DeleteBucketRequest":{
+      "type":"structure",
+      "required":[
+        "AccountId",
+        "Bucket"
+      ],
+      "members":{
+        "AccountId":{
+          "shape":"AccountId",
+          "hostLabel":true,
+          "location":"header",
+          "locationName":"x-amz-account-id"
+        },
+        "Bucket":{
+          "shape":"BucketName",
+          "location":"uri",
+          "locationName":"name"
+        }
+      }
+    },
+    "DeleteBucketTaggingRequest":{
+      "type":"structure",
+      "required":[
+        "AccountId",
+        "Bucket"
+      ],
+      "members":{
+        "AccountId":{
+          "shape":"AccountId",
+          "hostLabel":true,
+          "location":"header",
+          "locationName":"x-amz-account-id"
+        },
+        "Bucket":{
+          "shape":"BucketName",
+          "location":"uri",
+          "locationName":"name"
+        }
+      }
+    },
+    "DeleteJobTaggingRequest":{
+      "type":"structure",
+      "required":[
+        "AccountId",
+        "JobId"
+      ],
+      "members":{
+        "AccountId":{
+          "shape":"AccountId",
+          "hostLabel":true,
+          "location":"header",
+          "locationName":"x-amz-account-id"
+        },
+        "JobId":{
+          "shape":"JobId",
+          "location":"uri",
+          "locationName":"id"
+        }
+      }
+    },
+    "DeleteJobTaggingResult":{
+      "type":"structure",
+      "members":{
+      }
+    },
     "DeletePublicAccessBlockRequest":{
       "type":"structure",
       "required":["AccountId"],
       "members":{
         "AccountId":{
           "shape":"AccountId",
+          "hostLabel":true,
           "location":"header",
           "locationName":"x-amz-account-id"
         }
@@ -195,6 +868,7 @@
       "members":{
         "AccountId":{
           "shape":"AccountId",
+          "hostLabel":true,
           "location":"header",
           "locationName":"x-amz-account-id"
         },
@@ -216,6 +890,236 @@
       "max":1024,
       "min":1
     },
+    "ExpirationStatus":{
+      "type":"string",
+      "enum":[
+        "Enabled",
+        "Disabled"
+      ]
+    },
+    "ExpiredObjectDeleteMarker":{"type":"boolean"},
+    "FunctionArnString":{
+      "type":"string",
+      "max":1024,
+      "min":1,
+      "pattern":"(arn:(aws[a-zA-Z-]*)?:lambda:)?([a-z]{2}((-gov)|(-iso(b?)))?-[a-z]+-\\d{1}:)?(\\d{12}:)?(function:)?([a-zA-Z0-9-_]+)(:(\\$LATEST|[a-zA-Z0-9-_]+))?"
+    },
+    "GetAccessPointPolicyRequest":{
+      "type":"structure",
+      "required":[
+        "AccountId",
+        "Name"
+      ],
+      "members":{
+        "AccountId":{
+          "shape":"AccountId",
+          "hostLabel":true,
+          "location":"header",
+          "locationName":"x-amz-account-id"
+        },
+        "Name":{
+          "shape":"AccessPointName",
+          "location":"uri",
+          "locationName":"name"
+        }
+      }
+    },
+    "GetAccessPointPolicyResult":{
+      "type":"structure",
+      "members":{
+        "Policy":{"shape":"Policy"}
+      }
+    },
+    "GetAccessPointPolicyStatusRequest":{
+      "type":"structure",
+      "required":[
+        "AccountId",
+        "Name"
+      ],
+      "members":{
+        "AccountId":{
+          "shape":"AccountId",
+          "hostLabel":true,
+          "location":"header",
+          "locationName":"x-amz-account-id"
+        },
+        "Name":{
+          "shape":"AccessPointName",
+          "location":"uri",
+          "locationName":"name"
+        }
+      }
+    },
+    "GetAccessPointPolicyStatusResult":{
+      "type":"structure",
+      "members":{
+        "PolicyStatus":{"shape":"PolicyStatus"}
+      }
+    },
+    "GetAccessPointRequest":{
+      "type":"structure",
+      "required":[
+        "AccountId",
+        "Name"
+      ],
+      "members":{
+        "AccountId":{
+          "shape":"AccountId",
+          "hostLabel":true,
+          "location":"header",
+          "locationName":"x-amz-account-id"
+        },
+        "Name":{
+          "shape":"AccessPointName",
+          "location":"uri",
+          "locationName":"name"
+        }
+      }
+    },
+    "GetAccessPointResult":{
+      "type":"structure",
+      "members":{
+        "Name":{"shape":"AccessPointName"},
+        "Bucket":{"shape":"BucketName"},
+        "NetworkOrigin":{"shape":"NetworkOrigin"},
+        "VpcConfiguration":{"shape":"VpcConfiguration"},
+        "PublicAccessBlockConfiguration":{"shape":"PublicAccessBlockConfiguration"},
+        "CreationDate":{"shape":"CreationDate"}
+      }
+    },
+    "GetBucketLifecycleConfigurationRequest":{
+      "type":"structure",
+      "required":[
+        "AccountId",
+        "Bucket"
+      ],
+      "members":{
+        "AccountId":{
+          "shape":"AccountId",
+          "hostLabel":true,
+          "location":"header",
+          "locationName":"x-amz-account-id"
+        },
+        "Bucket":{
+          "shape":"BucketName",
+          "location":"uri",
+          "locationName":"name"
+        }
+      }
+    },
+    "GetBucketLifecycleConfigurationResult":{
+      "type":"structure",
+      "members":{
+        "Rules":{"shape":"LifecycleRules"}
+      }
+    },
+    "GetBucketPolicyRequest":{
+      "type":"structure",
+      "required":[
+        "AccountId",
+        "Bucket"
+      ],
+      "members":{
+        "AccountId":{
+          "shape":"AccountId",
+          "hostLabel":true,
+          "location":"header",
+          "locationName":"x-amz-account-id"
+        },
+        "Bucket":{
+          "shape":"BucketName",
+          "location":"uri",
+          "locationName":"name"
+        }
+      }
+    },
+    "GetBucketPolicyResult":{
+      "type":"structure",
+      "members":{
+        "Policy":{"shape":"Policy"}
+      }
+    },
+    "GetBucketRequest":{
+      "type":"structure",
+      "required":[
+        "AccountId",
+        "Bucket"
+      ],
+      "members":{
+        "AccountId":{
+          "shape":"AccountId",
+          "hostLabel":true,
+          "location":"header",
+          "locationName":"x-amz-account-id"
+        },
+        "Bucket":{
+          "shape":"BucketName",
+          "location":"uri",
+          "locationName":"name"
+        }
+      }
+    },
+    "GetBucketResult":{
+      "type":"structure",
+      "members":{
+        "Bucket":{"shape":"BucketName"},
+        "PublicAccessBlockEnabled":{"shape":"PublicAccessBlockEnabled"},
+        "CreationDate":{"shape":"CreationDate"}
+      }
+    },
+    "GetBucketTaggingRequest":{
+      "type":"structure",
+      "required":[
+        "AccountId",
+        "Bucket"
+      ],
+      "members":{
+        "AccountId":{
+          "shape":"AccountId",
+          "hostLabel":true,
+          "location":"header",
+          "locationName":"x-amz-account-id"
+        },
+        "Bucket":{
+          "shape":"BucketName",
+          "location":"uri",
+          "locationName":"name"
+        }
+      }
+    },
+    "GetBucketTaggingResult":{
+      "type":"structure",
+      "required":["TagSet"],
+      "members":{
+        "TagSet":{"shape":"S3TagSet"}
+      }
+    },
+    "GetJobTaggingRequest":{
+      "type":"structure",
+      "required":[
+        "AccountId",
+        "JobId"
+      ],
+      "members":{
+        "AccountId":{
+          "shape":"AccountId",
+          "hostLabel":true,
+          "location":"header",
+          "locationName":"x-amz-account-id"
+        },
+        "JobId":{
+          "shape":"JobId",
+          "location":"uri",
+          "locationName":"id"
+        }
+      }
+    },
+    "GetJobTaggingResult":{
+      "type":"structure",
+      "members":{
+        "Tags":{"shape":"S3TagSet"}
+      }
+    },
     "GetPublicAccessBlockOutput":{
       "type":"structure",
       "members":{
@@ -229,16 +1133,24 @@
       "members":{
         "AccountId":{
           "shape":"AccountId",
+          "hostLabel":true,
           "location":"header",
           "locationName":"x-amz-account-id"
         }
       }
     },
+    "GrantFullControl":{"type":"string"},
+    "GrantRead":{"type":"string"},
+    "GrantReadACP":{"type":"string"},
+    "GrantWrite":{"type":"string"},
+    "GrantWriteACP":{"type":"string"},
     "IAMRoleArn":{
       "type":"string",
       "max":2048,
-      "min":1
+      "min":1,
+      "pattern":"arn:[^:]+:iam::\\d{12}:role/.*"
     },
+    "ID":{"type":"string"},
     "IdempotencyException":{
       "type":"structure",
       "members":{
@@ -268,10 +1180,12 @@
       },
       "exception":true
     },
+    "IsPublic":{"type":"boolean"},
     "JobArn":{
       "type":"string",
       "max":1024,
-      "min":1
+      "min":1,
+      "pattern":"arn:[^:]+:s3:[a-zA-Z0-9\\-]+:\\d{12}:job\\/.*"
     },
     "JobCreationTime":{"type":"timestamp"},
     "JobDescriptor":{
@@ -359,7 +1273,8 @@
     "JobId":{
       "type":"string",
       "max":36,
-      "min":5
+      "min":5,
+      "pattern":"[a-zA-Z0-9\\-\\_]+"
     },
     "JobListDescriptor":{
       "type":"structure",
@@ -464,6 +1379,14 @@
         },
         "S3InitiateRestoreObject":{
           "shape":"S3InitiateRestoreObjectOperation",
+          "box":true
+        },
+        "S3PutObjectLegalHold":{
+          "shape":"S3SetObjectLegalHoldOperation",
+          "box":true
+        },
+        "S3PutObjectRetention":{
+          "shape":"S3SetObjectRetentionOperation",
           "box":true
         }
       }
@@ -571,7 +1494,91 @@
     "LambdaInvokeOperation":{
       "type":"structure",
       "members":{
-        "FunctionArn":{"shape":"NonEmptyMaxLength1024String"}
+        "FunctionArn":{"shape":"FunctionArnString"}
+      }
+    },
+    "LifecycleConfiguration":{
+      "type":"structure",
+      "members":{
+        "Rules":{"shape":"LifecycleRules"}
+      }
+    },
+    "LifecycleExpiration":{
+      "type":"structure",
+      "members":{
+        "Date":{"shape":"Date"},
+        "Days":{"shape":"Days"},
+        "ExpiredObjectDeleteMarker":{"shape":"ExpiredObjectDeleteMarker"}
+      }
+    },
+    "LifecycleRule":{
+      "type":"structure",
+      "required":["Status"],
+      "members":{
+        "Expiration":{"shape":"LifecycleExpiration"},
+        "ID":{"shape":"ID"},
+        "Filter":{"shape":"LifecycleRuleFilter"},
+        "Status":{"shape":"ExpirationStatus"},
+        "Transitions":{"shape":"TransitionList"},
+        "NoncurrentVersionTransitions":{"shape":"NoncurrentVersionTransitionList"},
+        "NoncurrentVersionExpiration":{"shape":"NoncurrentVersionExpiration"},
+        "AbortIncompleteMultipartUpload":{"shape":"AbortIncompleteMultipartUpload"}
+      }
+    },
+    "LifecycleRuleAndOperator":{
+      "type":"structure",
+      "members":{
+        "Prefix":{"shape":"Prefix"},
+        "Tags":{"shape":"S3TagSet"}
+      }
+    },
+    "LifecycleRuleFilter":{
+      "type":"structure",
+      "members":{
+        "Prefix":{"shape":"Prefix"},
+        "Tag":{"shape":"S3Tag"},
+        "And":{"shape":"LifecycleRuleAndOperator"}
+      }
+    },
+    "LifecycleRules":{
+      "type":"list",
+      "member":{
+        "shape":"LifecycleRule",
+        "locationName":"Rule"
+      }
+    },
+    "ListAccessPointsRequest":{
+      "type":"structure",
+      "required":["AccountId"],
+      "members":{
+        "AccountId":{
+          "shape":"AccountId",
+          "hostLabel":true,
+          "location":"header",
+          "locationName":"x-amz-account-id"
+        },
+        "Bucket":{
+          "shape":"BucketName",
+          "location":"querystring",
+          "locationName":"bucket"
+        },
+        "NextToken":{
+          "shape":"NonEmptyMaxLength1024String",
+          "location":"querystring",
+          "locationName":"nextToken"
+        },
+        "MaxResults":{
+          "shape":"MaxResults",
+          "location":"querystring",
+          "locationName":"maxResults"
+        }
+      }
+    },
+    "ListAccessPointsResult":{
+      "type":"structure",
+      "members":{
+        "AccessPointList":{"shape":"AccessPointList"},
+        "NextToken":{"shape":"NonEmptyMaxLength1024String"}
       }
     },
     "ListJobsRequest":{
@@ -580,6 +1587,7 @@
       "members":{
         "AccountId":{
           "shape":"AccountId",
+          "hostLabel":true,
           "location":"header",
           "locationName":"x-amz-account-id"
         },
@@ -589,7 +1597,7 @@
           "locationName":"jobStatuses"
         },
         "NextToken":{
-          "shape":"NonEmptyMaxLength1024String",
+          "shape":"StringForNextToken",
           "location":"querystring",
           "locationName":"nextToken"
         },
@@ -604,10 +1612,45 @@
     "ListJobsResult":{
       "type":"structure",
       "members":{
-        "NextToken":{"shape":"NonEmptyMaxLength1024String"},
+        "NextToken":{"shape":"StringForNextToken"},
         "Jobs":{"shape":"JobListDescriptorList"}
       }
     },
+    "ListRegionalBucketsRequest":{
+      "type":"structure",
+      "required":["AccountId"],
+      "members":{
+        "AccountId":{
+          "shape":"AccountId",
+          "hostLabel":true,
+          "location":"header",
+          "locationName":"x-amz-account-id"
+        },
+        "NextToken":{
+          "shape":"NonEmptyMaxLength1024String",
+          "location":"querystring",
+          "locationName":"nextToken"
+        },
+        "MaxResults":{
+          "shape":"MaxResults",
+          "location":"querystring",
+          "locationName":"maxResults"
+        },
+        "OutpostId":{
+          "shape":"NonEmptyMaxLength64String",
+          "location":"header",
+          "locationName":"x-amz-outpost-id"
+        }
+      }
+    },
+    "ListRegionalBucketsResult":{
+      "type":"structure",
+      "members":{
+        "RegionalBucketList":{"shape":"RegionalBucketList"},
+        "NextToken":{"shape":"NonEmptyMaxLength1024String"}
+      }
+    },
+    "Location":{"type":"string"},
     "MaxLength1024String":{
       "type":"string",
       "max":1024
@@ -615,7 +1658,14 @@
     "MaxResults":{
       "type":"integer",
       "max":1000,
-      "min":1
+      "min":0
+    },
+    "NetworkOrigin":{
+      "type":"string",
+      "enum":[
+        "Internet",
+        "VPC"
+      ]
     },
     "NoSuchPublicAccessBlockConfiguration":{
       "type":"structure",
@@ -646,6 +1696,26 @@
       "max":64,
       "min":1
     },
+    "NoncurrentVersionExpiration":{
+      "type":"structure",
+      "members":{
+        "NoncurrentDays":{"shape":"Days"}
+      }
+    },
+    "NoncurrentVersionTransition":{
+      "type":"structure",
+      "members":{
+        "NoncurrentDays":{"shape":"Days"},
+        "StorageClass":{"shape":"TransitionStorageClass"}
+      }
+    },
+    "NoncurrentVersionTransitionList":{
+      "type":"list",
+      "member":{
+        "shape":"NoncurrentVersionTransition",
+        "locationName":"NoncurrentVersionTransition"
+      }
+    },
     "NotFoundException":{
       "type":"structure",
       "members":{
@@ -653,6 +1723,7 @@
       },
       "exception":true
     },
+    "ObjectLockEnabledForBucket":{"type":"boolean"},
     "OperationName":{
       "type":"string",
       "enum":[
@@ -660,9 +1731,22 @@
         "S3PutObjectCopy",
         "S3PutObjectAcl",
         "S3PutObjectTagging",
-        "S3InitiateRestoreObject"
+        "S3InitiateRestoreObject",
+        "S3PutObjectLegalHold",
+        "S3PutObjectRetention"
       ]
     },
+    "Policy":{"type":"string"},
+    "PolicyStatus":{
+      "type":"structure",
+      "members":{
+        "IsPublic":{
+          "shape":"IsPublic",
+          "locationName":"IsPublic"
+        }
+      }
+    },
+    "Prefix":{"type":"string"},
     "PublicAccessBlockConfiguration":{
       "type":"structure",
       "members":{
@@ -684,6 +1768,136 @@
         }
       }
     },
+    "PublicAccessBlockEnabled":{"type":"boolean"},
+    "PutAccessPointPolicyRequest":{
+      "type":"structure",
+      "required":[
+        "AccountId",
+        "Name",
+        "Policy"
+      ],
+      "members":{
+        "AccountId":{
+          "shape":"AccountId",
+          "hostLabel":true,
+          "location":"header",
+          "locationName":"x-amz-account-id"
+        },
+        "Name":{
+          "shape":"AccessPointName",
+          "location":"uri",
+          "locationName":"name"
+        },
+        "Policy":{"shape":"Policy"}
+      }
+    },
+    "PutBucketLifecycleConfigurationRequest":{
+      "type":"structure",
+      "required":[
+        "AccountId",
+        "Bucket"
+      ],
+      "members":{
+        "AccountId":{
+          "shape":"AccountId",
+          "hostLabel":true,
+          "location":"header",
+          "locationName":"x-amz-account-id"
+        },
+        "Bucket":{
+          "shape":"BucketName",
+          "location":"uri",
+          "locationName":"name"
+        },
+        "LifecycleConfiguration":{
+          "shape":"LifecycleConfiguration",
+          "locationName":"LifecycleConfiguration",
+          "xmlNamespace":{"uri":"http://awss3control.amazonaws.com/doc/2018-08-20/"}
+        }
+      },
+      "payload":"LifecycleConfiguration"
+    },
+    "PutBucketPolicyRequest":{
+      "type":"structure",
+      "required":[
+        "AccountId",
+        "Bucket",
+        "Policy"
+      ],
+      "members":{
+        "AccountId":{
+          "shape":"AccountId",
+          "hostLabel":true,
+          "location":"header",
+          "locationName":"x-amz-account-id"
+        },
+        "Bucket":{
+          "shape":"BucketName",
+          "location":"uri",
+          "locationName":"name"
+        },
+        "ConfirmRemoveSelfBucketAccess":{
+          "shape":"ConfirmRemoveSelfBucketAccess",
+          "location":"header",
+          "locationName":"x-amz-confirm-remove-self-bucket-access"
+        },
+        "Policy":{"shape":"Policy"}
+      }
+    },
+    "PutBucketTaggingRequest":{
+      "type":"structure",
+      "required":[
+        "AccountId",
+        "Bucket",
+        "Tagging"
+      ],
+      "members":{
+        "AccountId":{
+          "shape":"AccountId",
+          "hostLabel":true,
+          "location":"header",
+          "locationName":"x-amz-account-id"
+        },
+        "Bucket":{
+          "shape":"BucketName",
+          "location":"uri",
+          "locationName":"name"
+        },
+        "Tagging":{
+          "shape":"Tagging",
+          "locationName":"Tagging",
+          "xmlNamespace":{"uri":"http://awss3control.amazonaws.com/doc/2018-08-20/"}
+        }
+      },
+      "payload":"Tagging"
+    },
+    "PutJobTaggingRequest":{
+      "type":"structure",
+      "required":[
+        "AccountId",
+        "JobId",
+        "Tags"
+      ],
+      "members":{
+        "AccountId":{
+          "shape":"AccountId",
+          "hostLabel":true,
+          "location":"header",
+          "locationName":"x-amz-account-id"
+        },
+        "JobId":{
+          "shape":"JobId",
+          "location":"uri",
+          "locationName":"id"
+        },
+        "Tags":{"shape":"S3TagSet"}
+      }
+    },
+    "PutJobTaggingResult":{
+      "type":"structure",
+      "members":{
+      }
+    },
     "PutPublicAccessBlockRequest":{
       "type":"structure",
       "required":[
@@ -698,11 +1912,34 @@
         },
         "AccountId":{
           "shape":"AccountId",
+          "hostLabel":true,
           "location":"header",
           "locationName":"x-amz-account-id"
         }
       },
       "payload":"PublicAccessBlockConfiguration"
+    },
+    "RegionalBucket":{
+      "type":"structure",
+      "required":[
+        "Bucket",
+        "PublicAccessBlockEnabled",
+        "CreationDate"
+      ],
+      "members":{
+        "Bucket":{"shape":"BucketName"},
+        "BucketArn":{"shape":"S3RegionalBucketArn"},
+        "PublicAccessBlockEnabled":{"shape":"PublicAccessBlockEnabled"},
+        "CreationDate":{"shape":"CreationDate"},
+        "OutpostId":{"shape":"NonEmptyMaxLength64String"}
+      }
+    },
+    "RegionalBucketList":{
+      "type":"list",
+      "member":{
+        "shape":"RegionalBucket",
+        "locationName":"RegionalBucket"
+      }
     },
     "ReportPrefixString":{
       "type":"string",
@@ -737,10 +1974,16 @@
         }
       }
     },
+    "S3AccessPointArn":{
+      "type":"string",
+      "max":128,
+      "min":4
+    },
     "S3BucketArnString":{
       "type":"string",
       "max":128,
-      "min":1
+      "min":1,
+      "pattern":"arn:[^:]+:s3:.*"
     },
     "S3CannedAccessControlList":{
       "type":"string",
@@ -836,7 +2079,8 @@
     "S3KeyArnString":{
       "type":"string",
       "max":2000,
-      "min":1
+      "min":1,
+      "pattern":"arn:[^:]+:s3:.*"
     },
     "S3MetadataDirective":{
       "type":"string",
@@ -844,6 +2088,13 @@
         "COPY",
         "REPLACE"
       ]
+    },
+    "S3ObjectLockLegalHold":{
+      "type":"structure",
+      "required":["Status"],
+      "members":{
+        "Status":{"shape":"S3ObjectLockLegalHoldStatus"}
+      }
     },
     "S3ObjectLockLegalHoldStatus":{
       "type":"string",
@@ -853,6 +2104,13 @@
       ]
     },
     "S3ObjectLockMode":{
+      "type":"string",
+      "enum":[
+        "COMPLIANCE",
+        "GOVERNANCE"
+      ]
+    },
+    "S3ObjectLockRetentionMode":{
       "type":"string",
       "enum":[
         "COMPLIANCE",
@@ -900,6 +2158,18 @@
         "WRITE_ACP"
       ]
     },
+    "S3RegionalBucketArn":{
+      "type":"string",
+      "max":128,
+      "min":4
+    },
+    "S3Retention":{
+      "type":"structure",
+      "members":{
+        "RetainUntilDate":{"shape":"TimeStamp"},
+        "Mode":{"shape":"S3ObjectLockRetentionMode"}
+      }
+    },
     "S3SSEAlgorithm":{
       "type":"string",
       "enum":[
@@ -911,6 +2181,24 @@
       "type":"structure",
       "members":{
         "AccessControlPolicy":{"shape":"S3AccessControlPolicy"}
+      }
+    },
+    "S3SetObjectLegalHoldOperation":{
+      "type":"structure",
+      "required":["LegalHold"],
+      "members":{
+        "LegalHold":{"shape":"S3ObjectLockLegalHold"}
+      }
+    },
+    "S3SetObjectRetentionOperation":{
+      "type":"structure",
+      "required":["Retention"],
+      "members":{
+        "BypassGovernanceRetention":{
+          "shape":"Boolean",
+          "box":true
+        },
+        "Retention":{"shape":"S3Retention"}
       }
     },
     "S3SetObjectTaggingOperation":{
@@ -937,8 +2225,8 @@
         "Value"
       ],
       "members":{
-        "Key":{"shape":"NonEmptyMaxLength1024String"},
-        "Value":{"shape":"MaxLength1024String"}
+        "Key":{"shape":"TagKeyString"},
+        "Value":{"shape":"TagValueString"}
       }
     },
     "S3TagSet":{
@@ -952,12 +2240,36 @@
       "max":8192
     },
     "Setting":{"type":"boolean"},
+    "StringForNextToken":{
+      "type":"string",
+      "max":1024,
+      "min":1,
+      "pattern":"^[A-Za-z0-9\\+\\:\\/\\=\\?\\#-_]+$"
+    },
     "SuspendedCause":{
       "type":"string",
       "max":1024,
       "min":1
     },
     "SuspendedDate":{"type":"timestamp"},
+    "TagKeyString":{
+      "type":"string",
+      "max":1024,
+      "min":1,
+      "pattern":"^([\\p{L}\\p{Z}\\p{N}_.:=+\\-@%]*)$"
+    },
+    "TagValueString":{
+      "type":"string",
+      "max":1024,
+      "pattern":"^([\\p{L}\\p{Z}\\p{N}_.:=+\\-@%]*)$"
+    },
+    "Tagging":{
+      "type":"structure",
+      "required":["TagSet"],
+      "members":{
+        "TagSet":{"shape":"S3TagSet"}
+      }
+    },
     "TimeStamp":{"type":"timestamp"},
     "TooManyRequestsException":{
       "type":"structure",
@@ -965,6 +2277,38 @@
         "Message":{"shape":"ExceptionMessage"}
       },
       "exception":true
+    },
+    "TooManyTagsException":{
+      "type":"structure",
+      "members":{
+        "Message":{"shape":"ExceptionMessage"}
+      },
+      "exception":true
+    },
+    "Transition":{
+      "type":"structure",
+      "members":{
+        "Date":{"shape":"Date"},
+        "Days":{"shape":"Days"},
+        "StorageClass":{"shape":"TransitionStorageClass"}
+      }
+    },
+    "TransitionList":{
+      "type":"list",
+      "member":{
+        "shape":"Transition",
+        "locationName":"Transition"
+      }
+    },
+    "TransitionStorageClass":{
+      "type":"string",
+      "enum":[
+        "GLACIER",
+        "STANDARD_IA",
+        "ONEZONE_IA",
+        "INTELLIGENT_TIERING",
+        "DEEP_ARCHIVE"
+      ]
     },
     "UpdateJobPriorityRequest":{
       "type":"structure",
@@ -976,6 +2320,7 @@
       "members":{
         "AccountId":{
           "shape":"AccountId",
+          "hostLabel":true,
           "location":"header",
           "locationName":"x-amz-account-id"
         },
@@ -1012,6 +2357,7 @@
       "members":{
         "AccountId":{
           "shape":"AccountId",
+          "hostLabel":true,
           "location":"header",
           "locationName":"x-amz-account-id"
         },
@@ -1039,6 +2385,18 @@
         "Status":{"shape":"JobStatus"},
         "StatusUpdateReason":{"shape":"JobStatusUpdateReason"}
       }
+    },
+    "VpcConfiguration":{
+      "type":"structure",
+      "required":["VpcId"],
+      "members":{
+        "VpcId":{"shape":"VpcId"}
+      }
+    },
+    "VpcId":{
+      "type":"string",
+      "max":1024,
+      "min":1
     }
   }
 }

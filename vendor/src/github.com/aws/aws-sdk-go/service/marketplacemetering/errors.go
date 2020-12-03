@@ -2,6 +2,10 @@
 
 package marketplacemetering
 
+import (
+	"github.com/aws/aws-sdk-go/private/protocol"
+)
+
 const (
 
 	// ErrCodeCustomerNotEntitledException for service response error code
@@ -77,11 +81,24 @@ const (
 	// when calling RegisterUsage.
 	ErrCodeInvalidRegionException = "InvalidRegionException"
 
+	// ErrCodeInvalidTagException for service response error code
+	// "InvalidTagException".
+	//
+	// The tag is invalid, or the number of tags is greater than 5.
+	ErrCodeInvalidTagException = "InvalidTagException"
+
 	// ErrCodeInvalidTokenException for service response error code
 	// "InvalidTokenException".
 	//
 	// Registration token is invalid.
 	ErrCodeInvalidTokenException = "InvalidTokenException"
+
+	// ErrCodeInvalidUsageAllocationsException for service response error code
+	// "InvalidUsageAllocationsException".
+	//
+	// The usage allocation objects are invalid, or the number of allocations is
+	// greater than 500 for a single usage record.
+	ErrCodeInvalidUsageAllocationsException = "InvalidUsageAllocationsException"
 
 	// ErrCodeInvalidUsageDimensionException for service response error code
 	// "InvalidUsageDimensionException".
@@ -94,7 +111,7 @@ const (
 	// "PlatformNotSupportedException".
 	//
 	// AWS Marketplace does not support metering usage from the underlying platform.
-	// Currently, only Amazon ECS is supported.
+	// Currently, Amazon ECS, Amazon EKS, and AWS Fargate are supported.
 	ErrCodePlatformNotSupportedException = "PlatformNotSupportedException"
 
 	// ErrCodeThrottlingException for service response error code
@@ -109,3 +126,23 @@ const (
 	// The timestamp value passed in the meterUsage() is out of allowed range.
 	ErrCodeTimestampOutOfBoundsException = "TimestampOutOfBoundsException"
 )
+
+var exceptionFromCode = map[string]func(protocol.ResponseMetadata) error{
+	"CustomerNotEntitledException":       newErrorCustomerNotEntitledException,
+	"DisabledApiException":               newErrorDisabledApiException,
+	"DuplicateRequestException":          newErrorDuplicateRequestException,
+	"ExpiredTokenException":              newErrorExpiredTokenException,
+	"InternalServiceErrorException":      newErrorInternalServiceErrorException,
+	"InvalidCustomerIdentifierException": newErrorInvalidCustomerIdentifierException,
+	"InvalidEndpointRegionException":     newErrorInvalidEndpointRegionException,
+	"InvalidProductCodeException":        newErrorInvalidProductCodeException,
+	"InvalidPublicKeyVersionException":   newErrorInvalidPublicKeyVersionException,
+	"InvalidRegionException":             newErrorInvalidRegionException,
+	"InvalidTagException":                newErrorInvalidTagException,
+	"InvalidTokenException":              newErrorInvalidTokenException,
+	"InvalidUsageAllocationsException":   newErrorInvalidUsageAllocationsException,
+	"InvalidUsageDimensionException":     newErrorInvalidUsageDimensionException,
+	"PlatformNotSupportedException":      newErrorPlatformNotSupportedException,
+	"ThrottlingException":                newErrorThrottlingException,
+	"TimestampOutOfBoundsException":      newErrorTimestampOutOfBoundsException,
+}

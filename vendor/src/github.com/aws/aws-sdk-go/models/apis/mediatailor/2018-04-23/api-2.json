@@ -125,6 +125,25 @@
         }
     }, 
     "shapes": {
+        "AdMarkerPassthrough" : {
+          "type" : "structure",
+           "members" : {
+            "Enabled" : {
+              "shape" : "__boolean"
+            }
+          }
+        },
+        "AvailSuppression": {
+          "type": "structure",
+          "members": {
+            "Mode": {
+              "shape": "Mode"
+            },
+            "Value": {
+              "shape": "__string"
+            }
+          }
+        },
         "BadRequestException": {
             "error": {
                 "httpStatusCode": 400
@@ -137,6 +156,17 @@
             }, 
             "type": "structure"
         }, 
+        "Bumper": {
+            "type": "structure",
+            "members": {
+                "EndUrl": {
+                    "shape": "__string"
+                },
+                "StartUrl": {
+                    "shape": "__string"
+                }
+            }
+        },
         "CdnConfiguration": {
             "members": {
                 "AdSegmentUrlPrefix": {
@@ -207,16 +237,31 @@
             "members": {
                 "AdDecisionServerUrl": {
                     "shape": "__string"
-                }, 
+                },
+                "AvailSuppression": {
+                  "shape": "AvailSuppression"
+                },
+                "Bumper": {
+                    "shape": "Bumper"
+                },
                 "CdnConfiguration": {
                     "shape": "CdnConfiguration"
-                }, 
+                },
+                "PersonalizationThresholdSeconds" : {
+                    "shape" : "__integerMin1"
+                },
                 "DashConfiguration": {
                     "shape": "DashConfiguration"
                 }, 
                 "HlsConfiguration": {
                     "shape": "HlsConfiguration"
-                }, 
+                },
+                "LivePreRollConfiguration" : {
+                    "shape" : "LivePreRollConfiguration"
+                },
+                "ManifestProcessingRules":{
+                    "shape" : "ManifestProcessingRules"
+                },
                 "Name": {
                     "shape": "__string"
                 }, 
@@ -231,7 +276,7 @@
                 }, 
                 "SlateAdUrl": {
                     "shape": "__string"
-                }, 
+                },
                 "Tags": {
                     "locationName": "tags", 
                     "shape": "__mapOf__string"
@@ -308,14 +353,32 @@
             ], 
             "type": "string"
         }, 
+        "ManifestProcessingRules" : {
+          "type" : "structure",
+          "members" : {
+            "AdMarkerPassthrough" : {
+              "shape" : "AdMarkerPassthrough"
+            }
+          }
+        },
+        "Mode": {
+          "enum": [
+            "OFF",
+            "BEHIND_LIVE_EDGE"
+          ],
+          "type": "string"
+        },
         "PlaybackConfiguration": {
             "members": {
                 "AdDecisionServerUrl": {
                     "shape": "__string"
-                }, 
+                },
                 "CdnConfiguration": {
                     "shape": "CdnConfiguration"
-                }, 
+                },
+                "PersonalizationThresholdSeconds" : {
+                    "shape" : "__integerMin1"
+                },
                 "DashConfiguration": {
                     "shape": "DashConfiguration"
                 }, 
@@ -349,24 +412,50 @@
                 }
             }, 
             "type": "structure"
-        }, 
+        },
+        "LivePreRollConfiguration" : {
+            "type" : "structure",
+            "members" : {
+                "AdDecisionServerUrl" : {
+                    "shape" : "__string"
+                },
+                "MaxDurationSeconds" : {
+                    "shape" : "__integer"
+                }
+            }
+        },
         "PutPlaybackConfigurationRequest": {
             "members": {
                 "AdDecisionServerUrl": {
                     "shape": "__string"
-                }, 
+                },
+                "AvailSuppression": {
+                  "shape": "AvailSuppression"
+                },
+                "Bumper": {
+                    "shape": "Bumper"
+                },
                 "CdnConfiguration": {
                     "shape": "CdnConfiguration"
-                }, 
+                },
+                "PersonalizationThresholdSeconds" : {
+                    "shape" : "__integerMin1"
+                },
                 "DashConfiguration": {
                     "shape": "DashConfigurationForPut"
-                }, 
+                },
+                "LivePreRollConfiguration" : {
+                    "shape" : "LivePreRollConfiguration"
+                },
+                "ManifestProcessingRules": {
+                    "shape": "ManifestProcessingRules"
+                },
                 "Name": {
                     "shape": "__string"
                 }, 
                 "SlateAdUrl": {
                     "shape": "__string"
-                }, 
+                },
                 "Tags": {
                     "locationName": "tags", 
                     "shape": "__mapOf__string"
@@ -384,19 +473,31 @@
             "members": {
                 "AdDecisionServerUrl": {
                     "shape": "__string"
-                }, 
+                },
+                "AvailSuppression": {
+                  "shape": "AvailSuppression"
+                },
+                "Bumper": {
+                    "shape": "Bumper"
+                },
                 "CdnConfiguration": {
                     "shape": "CdnConfiguration"
                 }, 
                 "DashConfiguration": {
                     "shape": "DashConfiguration"
-                }, 
+                },
                 "HlsConfiguration": {
                     "shape": "HlsConfiguration"
-                }, 
+                },
+                "LivePreRollConfiguration" : {
+                    "shape" : "LivePreRollConfiguration"
+                },
                 "Name": {
                     "shape": "__string"
                 }, 
+                "ManifestProcessingRules": {
+                    "shape": "ManifestProcessingRules"
+                },
                 "PlaybackConfigurationArn": {
                     "shape": "__string"
                 }, 
@@ -479,6 +580,10 @@
         }, 
         "__integer": {
             "type": "integer"
+        },
+        "__integerMin1": {
+            "type": "integer",
+            "min": 1
         }, 
         "__integerMin1Max100": {
             "max": 100, 
