@@ -9,25 +9,12 @@ GO_CORE_SRC_TYPE?=unix
 GO_WORKER_SRC_TYPE?=unix
 GO_BUILD?=$(GO_BUILD_NOPIE)
 
-# Initailize workspace if it's empty
-ifeq ($(WORKSPACE),)
-	WORKSPACE := $(shell pwd)/../../../../
-endif
-
-# Initailize GO_SPACE
-export GO_SPACE=$(CURDIR)
-GOTEMPPATH := $(GO_SPACE)/build/private
-GOTEMPCOPYPATH := $(GOTEMPPATH)/src/github.com/aws/amazon-ssm-agent
-
-path := $(GOTEMPPATH):$(GO_SPACE)/vendor
-ifneq ($(GOPATH),)
-	GOPATH := $(path):$(GOPATH)
-else
-	GOPATH := $(path)
-endif
-
-
+GO_SPACE?=$(CURDIR)
+GOTEMPPATH?=$(GO_SPACE)/build/private
+GOTEMPCOPYPATH?=$(GOTEMPPATH)/src/github.com/aws/amazon-ssm-agent
+GOPATH:=$(GOTEMPPATH):$(GO_SPACE)/vendor:$(GOPATH)
 export GOPATH
+export GO_SPACE
 
 checkstyle::
 #   Run checkstyle script
@@ -50,7 +37,7 @@ release:: clean quick-integtest checkstyle pre-release build-darwin cpy-plugins 
 
 package-src:: clean quick-integtest checkstyle pre-release cpy-plugins finalize
 
-finalize:: copy-package-dep
+finalize:: build-tests copy-package-dep
 
 .PHONY: dev-build-linux
 dev-build-linux: clean quick-integtest checkstyle pre-release build-linux
@@ -119,7 +106,6 @@ pre-build:
 	GOARCH= GOOS= go run $(GO_SPACE)/agent/version/versiongenerator/version-gen.go
 	$(COPY) $(GO_SPACE)/VERSION $(GO_SPACE)/bin/
 
-
 # General build recipe. Defaults to generating a linux/amd64 non-PIE build, but can be overriden
 # by setting appropriate variables.
 .PHONY: build-any-%
@@ -139,6 +125,7 @@ build-any-%: checkstyle copy-src pre-build
 	    $(GO_SPACE)/agent/session/logging/main.go
 	GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO_BUILD) -o $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/ssm-session-worker$(EXE_EXT) -v \
 	    $(GO_SPACE)/agent/framework/processor/executer/outofproc/sessionworker/main.go
+	@echo "Finished building $(GOARCH) $(GOOS) agent"
 
 # Pre-defined recipes for various supported builds:
 
@@ -160,7 +147,6 @@ build-darwin: GOARCH=amd64
 build-darwin: GOOS=darwin
 build-darwin: GO_BUILD=$(GO_BUILD_NOPIE)
 build-darwin: GO_CORE_SRC_TYPE=darwin
-build-darwin: GO_WORKER_SRC_TYPE=unix
 build-darwin: build-any-darwin-amd64
 
 .PHONY: build-windows
@@ -207,13 +193,6 @@ copy-src:
 	$(COPY) -r $(GO_SPACE)/agent $(GOTEMPCOPYPATH)
 	$(COPY) -r $(GO_SPACE)/core $(GOTEMPCOPYPATH)
 	$(COPY) -r $(GO_SPACE)/common $(GOTEMPCOPYPATH)
-
-.PHONY: copy-tests-src
-copy-tests-src:
-ifeq ($(BRAZIL_BUILD), true)
-	@echo "copying test files to $(GOTEMPCOPYPATH)"
-	$(COPY) -r $(GO_SPACE)/internal $(GOTEMPCOPYPATH)
-endif
 
 .PHONY: copy-package-dep
 copy-package-dep: copy-src pre-build
@@ -368,6 +347,29 @@ get-tools:
 	go get -u golang.org/x/tools/cmd/oracle
 	go get -u golang.org/x/tools/go/loader
 	go get -u golang.org/x/tools/go/types
+
+.PHONY: copy-tests-src
+copy-tests-src:
+	@echo "copying test files to $(GOTEMPCOPYPATH)"
+	$(COPY) -r $(GO_SPACE)/internal $(GOTEMPCOPYPATH)
+
+.PHONY: build-tests
+build-tests: build-tests-linux build-tests-windows
+
+.PHONY: build-tests-linux
+build-tests-linux: copy-src copy-tests-src pre-build
+	GOOS=linux GOARCH=amd64 go test -c -gcflags "-N -l" -tags=tests \
+		github.com/aws/amazon-ssm-agent/internal/tests \
+		-o bin/agent-tests/linux_amd64/agent-tests.test
+	GOOS=linux GOARCH=arm64 go test -c -gcflags "-N -l" -tags=tests \
+		github.com/aws/amazon-ssm-agent/internal/tests \
+		-o bin/agent-tests/linux_arm64/agent-tests.test
+
+.PHONY: build-tests-windows
+build-tests-windows: copy-src copy-tests-src pre-build
+	GOOS=windows GOARCH=amd64 go test -c -gcflags "-N -l" -tags=tests \
+		github.com/aws/amazon-ssm-agent/internal/tests \
+		-o bin/agent-tests/windows_amd64/agent-tests.test
 
 .PHONY: --quick-integtest
 --quick-integtest:

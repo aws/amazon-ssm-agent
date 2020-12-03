@@ -31,7 +31,7 @@ func MakeInstanceIdentityDocument() InstanceIdentityDocument {
 		Version:             "2010-08-31",
 		Region:              "us-east-1",
 		InstanceID:          "i-31497ee2",
-		AccountID:           "405584108566",
+		AccountID:           "999999999999",
 		InstanceType:        "m3.large",
 		ImageID:             "ami-15984f7e",
 		PendingTimeAsString: "2015-08-06T17:06:28Z",

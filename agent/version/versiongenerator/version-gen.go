@@ -15,7 +15,6 @@ package main
 
 import (
 	"bytes"
-	"encoding/base64"
 	"fmt"
 	"io/ioutil"
 	"log"
@@ -56,20 +55,9 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error reading VERSION file. %v", err)
 	}
-	// Package version is used to set the last two bits of the agent version.
-	packageVersionString, err := base64.StdEncoding.DecodeString("QlJBWklMX1BBQ0tBR0VfVkVSU0lPTg==")
-	if err != nil {
-		log.Fatalf("Error decoding package version string. %v", err)
-	}
 
-	packageVersionValue := os.Getenv(string(packageVersionString))
-	versionStr := ""
-	if packageVersionValue == "" {
-		versionStr = strings.TrimSpace(string(versionContent))
-	} else {
-		packageVersionNum := strings.Split(packageVersionValue, ".")
-		versionStr = packageVersionNum[0] + "." + packageVersionNum[1] + "." + packageVersionNum[2] + "." + packageVersionNum[3]
-	}
+	versionStr := strings.TrimSpace(string(versionContent))
+
 	fmt.Printf("Agent Version: %v", versionStr)
 	if err := ioutil.WriteFile(filepath.Join("VERSION"), []byte(versionStr), appconfig.ReadWriteAccess); err != nil {
 		log.Fatalf("Error writing to VERSION file. %v", err)
