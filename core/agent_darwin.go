@@ -28,15 +28,17 @@ const (
 )
 
 func main() {
+	// parse input parameters
+	parseFlags()
+	handleAgentVersionFlag()
+
 	// initialize logger
 	log := logger.SSMLogger(true)
 	defer log.Close()
 	defer log.Flush()
 
-	// parse input parameters
-	parseFlags(log)
-
 	setProxySettings(log)
+	handleRegistrationAndFingerprintFlags(log)
 
 	// run agent
 	run(log)

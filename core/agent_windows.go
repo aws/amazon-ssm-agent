@@ -47,6 +47,11 @@ func getServiceStartType(service *mgr.Service) (starttype uint32, err error) {
 
 func main() {
 	// initialize logger
+
+	// parse input parameters
+	parseFlags()
+	handleAgentVersionFlag()
+
 	log := ssmlog.SSMLogger(true)
 	defer log.Close()
 	defer log.Flush()
@@ -58,8 +63,7 @@ func main() {
 		log.Infof(name + ": " + os.Getenv(name))
 	}
 
-	// parse input parameters
-	parseFlags(log)
+	handleRegistrationAndFingerprintFlags(log)
 
 	// check whether this is an interactive session
 	isIntSess, err := svc.IsAnInteractiveSession()
