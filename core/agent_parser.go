@@ -29,10 +29,11 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/ssm/anonauth"
+	"github.com/aws/amazon-ssm-agent/agent/version"
 )
 
 // parseFlags displays flags and handles them
-func parseFlags(log logger.T) {
+func parseFlags() {
 	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError)
 	flag.Usage = flagUsage
 
@@ -45,6 +46,7 @@ func parseFlags(log logger.T) {
 	flag.StringVar(&activationCode, activationCodeFlag, "", "")
 	flag.StringVar(&activationID, activationIDFlag, "", "")
 	flag.StringVar(&region, regionFlag, "", "")
+	flag.BoolVar(&agentVersionFlag, versionFlag, false, "")
 
 	// clear registration
 	flag.BoolVar(&clear, "clear", false, "")
@@ -57,7 +59,10 @@ func parseFlags(log logger.T) {
 	flag.BoolVar(&force, "y", false, "")
 
 	flag.Parse()
+}
 
+// handles registration and fingerprint flags
+func handleRegistrationAndFingerprintFlags(log logger.T) {
 	if flag.NFlag() > 0 {
 		exitCode := 1
 		if register {
@@ -70,6 +75,17 @@ func parseFlags(log logger.T) {
 		log.Flush()
 		log.Close()
 		os.Exit(exitCode)
+	}
+}
+
+// handles agent version flag.
+// This function is without logger and will not print extra statements
+func handleAgentVersionFlag() {
+	if flag.NFlag() == 1 {
+		if agentVersionFlag {
+			fmt.Println("SSM Agent version: " + version.Version)
+			os.Exit(0)
+		}
 	}
 }
 
