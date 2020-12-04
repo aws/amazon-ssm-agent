@@ -54,6 +54,7 @@ DOMAIN_PASSWORD=""
 # Secrets Manager Secret ID needs to be of the form aws/directory-services/d-91673491b6/seamless-domain-join
 SECRET_ID_PREFIX="aws/directory-services"
 KEEP_HOSTNAME=""
+AWS_CLI_INSTALL_DIR="$PWD/"
 
 ##################################################
 ## Set hostname to NETBIOS computer name #########
@@ -88,6 +89,82 @@ set_hostname() {
 ##################################################
 get_region() {
     REGION=$(curl http://169.254.169.254/latest/dynamic/instance-identity/document 2>/dev/null | grep region | awk -F: '{ print $2 }' | tr -d '\", ')
+}
+
+##################################################
+## Download AWS CLI zip file #####################
+##################################################
+download_awscli_zipfile() {
+    MAX_RETRIES=3
+    CURL_DOWNLOAD_URL="$1"
+    if [ -z "$1" ]; then
+       echo "***Failed: No URL argument provided for curl"
+       exit 1
+    fi
+    echo "CURL download url is $CURL_DOWNLOAD_URL"
+
+    MAX_RETRIES=3
+    STATUS=1
+    for i in $(seq 1 $MAX_RETRIES)
+    do
+       echo "[$i] Attempt installing AWS CLI by using curl"
+       curl --fail $CURL_DOWNLOAD_URL -o "$AWS_CLI_INSTALL_DIR/awscliv2.zip"
+       STATUS=$?
+       if [ $STATUS -eq 0 ]; then
+          break
+       else
+           curl -1 --fail $CURL_DOWNLOAD_URL -o "$AWS_CLI_INSTALL_DIR/awscliv2.zip"
+           STATUS=$?
+           if [ $STATUS -eq 0 ]; then
+              break
+           fi
+       fi
+       sleep 3
+    done
+
+    if [ $STATUS -ne 0 ]; then
+       echo "***Failed: curl $CURL_DOWNLOAD_URL failed."
+       exit 1
+    fi
+}
+
+###################################################
+## Check permissions of AWS CLI install directory #
+###################################################
+check_awscli_install_dir() {
+   if [ ! -d $AWS_CLI_INSTALL_DIR ]; then
+       echo "***Failed: AWS CLI install dir $AWS_CLI_INSTALL_DIR does not exist"
+       exit 1
+   fi
+
+   # POSIX ls specification - https://pubs.opengroup.org/onlinepubs/9699919799/
+   # If the -l option is specified, the following information
+   # shall be written for files other than character special
+   # and block special files: "%s %u %s %s %u %s %s\n", <file mode>, <number of links>, <owner name>, <group name>, <size>, <date and time>, <pathname>
+   ls -ld $AWS_CLI_INSTALL_DIR
+   if [ $? -ne 0 ]; then
+       echo "***Failed: ls -ld $AWS_CLI_INSTALL_DIR"
+       exit 1
+   fi
+   AWS_CLI_INSTALL_DIR_LS_LD=$(ls -ld $AWS_CLI_INSTALL_DIR)
+   AWS_CLI_INSTALL_DIR_OWNER=$(echo $AWS_CLI_INSTALL_DIR_LS_LD | awk '{print $3}')
+   id -u $AWS_CLI_INSTALL_DIR_OWNER
+   if [ $? -ne 0 ]; then
+       echo "***Failed: id command"
+       exit 1
+   fi
+   ID=$(id -u $AWS_CLI_INSTALL_DIR_OWNER)
+   if [ $ID != "0" ]; then
+       echo "***Failed: AWS CLI install dir user is not root"
+       exit 1
+   fi
+   AWS_CLI_INSTALL_DIR_PERMISSIONS=$(echo $AWS_CLI_INSTALL_DIR_LS_LD | awk '{print $1}')
+   if echo $AWS_CLI_INSTALL_DIR_PERMISSIONS | grep "drwx------"; then
+       echo "Permissions check successful for AWS CLI install directory"
+   else
+       echo "***Failed: Wrong permissions for $AWS_CLI_INSTALL_DIR_PERMISSIONS"
+       exit 1
+   fi
 }
 
 ##################################################
@@ -198,31 +275,19 @@ install_components() {
          fi
     fi
 
+    check_awscli_install_dir
     if uname -a | grep -e "x86_64" -e "amd64"; then
-        curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip"
-        if [ $? -ne 0 ]; then
-                curl -1 "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "/tmp/awscliv2.zip"
-                if [ $? -ne 0 ]; then
-                    echo "***Failed: install_components curl -1 https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip failed." && exit 1
-                fi
-        fi
+        download_awscli_zipfile "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip"
     elif uname -a | grep "aarch64"; then
-        curl "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "/tmp/awscliv2.zip"
-        if [ $? -ne 0 ]; then
-                curl -1 "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip" -o "/tmp/awscliv2.zip"
-                if [ $? -ne 0 ]; then
-                    echo "***Failed: install_components curl -1 https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip failed." && exit 1
-                fi
-        fi
+        download_awscli_zipfile "https://awscli.amazonaws.com/awscli-exe-linux-aarch64.zip"
     else
         echo "***Failed: install_components processor type is unsupported." && exit 1
     fi
 
-    cd /tmp
-    unzip -o awscliv2.zip 1>/dev/null
-    ./aws/install -u 1>/dev/null
+    unzip -o "$AWS_CLI_INSTALL_DIR"/awscliv2.zip 1>/dev/null
+    if [ $? -ne 0 ]; then echo "***Failed: unzip of awscliv2.zip" && exit 1; fi
+    "$AWS_CLI_INSTALL_DIR"/aws/install -u 1>/dev/null
     if [ $? -ne 0 ]; then echo "***Failed: aws cli install" && exit 1; fi
-    cd -
     return 0
 }
 
