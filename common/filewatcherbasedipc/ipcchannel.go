@@ -91,3 +91,16 @@ func CreateFileWatcherChannel(log log.T, mode Mode, filename string, shouldReadR
 	f, err := NewFileWatcherChannel(log, mode, path.Join(appconfig.DefaultDataStorePath, instanceID, DefaultFileChannelPath, filename), shouldReadRetry)
 	return f, err, false
 }
+
+// RemoveFileWatcherChannel removes the channel folder specific to the command
+func RemoveFileWatcherChannel(channelName string) error {
+	instanceID, err := platform.InstanceID()
+	if err == nil {
+		channelPath := path.Join(appconfig.DefaultDataStorePath, instanceID, DefaultFileChannelPath, channelName)
+		if _, fileStatErr := os.Stat(channelPath); os.IsNotExist(fileStatErr) {
+			return nil
+		}
+		err = os.RemoveAll(channelPath)
+	}
+	return err
+}

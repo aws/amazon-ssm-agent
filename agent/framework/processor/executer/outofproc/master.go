@@ -152,6 +152,14 @@ func (e *OutOfProcExecuter) initialize(stopTimer chan bool) (ipc filewatcherbase
 	var found bool
 	documentID := e.docState.DocumentInformation.DocumentID
 	instanceID := e.docState.DocumentInformation.InstanceID
+
+	// this fix is added to delete channels which were not deleted in previous execution
+	if e.docState.DocumentInformation.DocumentStatus == contracts.ResultStatusSuccessAndReboot {
+		log.Info("deleting channel for reboot document")
+		if channelErr := filewatcherbasedipc.RemoveFileWatcherChannel(documentID); channelErr != nil {
+			log.Warnf("failed to remove channel directory: %v", channelErr)
+		}
+	}
 	ipc, err, found = channelCreator(log, filewatcherbasedipc.ModeMaster, documentID)
 
 	if err != nil {
