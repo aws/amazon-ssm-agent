@@ -485,8 +485,7 @@ func (p *ShellPlugin) InputStreamMessageHandler(log log.T, streamDataMessage mgs
 			// From windows machine, do nothing
 		} else if strings.Contains(payloadString, "\n") {
 			// From linux machine, replace \n with \r
-			num := strings.Index(payloadString, "\n")
-			payloadString = strings.Replace(payloadString, "\n", "\r", num-1)
+			payloadString = strings.Replace(payloadString, "\n", "\r", -1)
 		}
 
 		if _, err := p.stdin.Write([]byte(payloadString)); err != nil {
