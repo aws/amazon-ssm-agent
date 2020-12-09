@@ -52,6 +52,8 @@ const (
 
 	downloadsDir = "downloads" //Directory under the orchestration directory where the downloaded resource resides
 
+	noopDocument = "AWS-Noop"
+
 	FailExitCode = 1
 	PassExitCode = 0
 )
@@ -137,6 +139,11 @@ func (p *Plugin) runDocument(context context.T, input *RunDocumentPluginInput, c
 		}
 	}
 	log.Info("Depth of execution - ", execDepth)
+
+	if input.DocumentPath == noopDocument {
+		output.MarkAsSucceeded()
+		return
+	}
 
 	if input.DocumentType == SSMDocumentType {
 		if documentPath, err = p.downloadDocumentFromSSM(log, config, input); err != nil {
@@ -245,6 +252,14 @@ func (p *Plugin) prepareDocumentForExecution(log log.T, pathToFile string, confi
 		}
 		log.Info("Parameters passed in are ", parameters)
 	}
+
+	for k, v := range parameters {
+		if v == nil {
+			delete(parameters, k)
+			log.Debugf("Drop nil parameter %v, and let it pick up default value ", k)
+		}
+	}
+
 	var rawDocument []byte
 	if rawDocument, err = readFileContents(log, p.filesys, pathToFile); err != nil {
 		log.Error("Could not read document from remote resource - ", err)

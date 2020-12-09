@@ -28,6 +28,7 @@ import (
 )
 
 const (
+	testPlugin0           = "plugin0"
 	testPlugin1           = "plugin1"
 	testPlugin2           = "plugin2"
 	testUnknownPlugin     = "plugin3"
@@ -3172,4 +3173,418 @@ func TestGetStepNameError(t *testing.T) {
 	}
 	_, err := getStepName(inputPluginName, config)
 	assert.Nil(t, err)
+}
+
+func TestGetShouldPluginSkipBasedOnControlFlow(t *testing.T) {
+	pluginNames := []string{testPlugin0, testPlugin1, testPlugin2, testUnknownPlugin}
+	plugins := make([]contracts.PluginState, len(pluginNames))
+	pluginResults := make(map[string]*contracts.PluginResult)
+	testProperties := make([]interface{}, len(pluginNames))
+	config := make([]contracts.Configuration, len(pluginNames))
+	ctx := context.NewMockDefault()
+	defaultStatus := contracts.ResultStatusSuccess
+	defaultStatus2 := contracts.ResultStatusSuccess
+	pluginCode := []int{0, 0, 1, 168, 169}
+	pluginCode2 := []int{1, 0, 168, 169, 0}
+	// plugin config properties
+	testProperties[0] = map[string]interface{}{
+		contracts.OnFailureModifier: "exit",
+	}
+	testProperties[1] = map[string]interface{}{
+		contracts.OnSuccessModifier:   "exit",
+		contracts.FinallyStepModifier: "false",
+	}
+	testProperties[2] = map[string]interface{}{
+		contracts.OnFailureModifier:   "exit",
+		contracts.FinallyStepModifier: "true",
+	}
+	testProperties[3] = map[string]interface{}{
+		contracts.OnFailureModifier:   "exit",
+		contracts.FinallyStepModifier: "true",
+	}
+	for index, name := range pluginNames {
+		config[index] = contracts.Configuration{
+			PluginID:   name,
+			PluginName: name,
+			Properties: testProperties[index],
+		}
+		plugins[index] = contracts.PluginState{
+			Name:          name,
+			Id:            name,
+			Configuration: config[index],
+		}
+	}
+
+	for index, code := range pluginCode {
+		if code == 1 || code == 169 {
+			defaultStatus = contracts.ResultStatusFailed
+		} else {
+			defaultStatus = contracts.ResultStatusSuccess
+		}
+		pluginResults[testPlugin0] = &contracts.PluginResult{
+			PluginID:   testPlugin0,
+			PluginName: testPlugin0,
+			Status:     defaultStatus,
+			Code:       code,
+		}
+		// plugin 1
+		if pluginCode2[index] == 1 || pluginCode2[index] == 169 {
+			defaultStatus2 = contracts.ResultStatusFailed
+		} else {
+			defaultStatus2 = contracts.ResultStatusSuccess
+		}
+		pluginResults[testPlugin1] = &contracts.PluginResult{
+			PluginID:   testPlugin1,
+			PluginName: testPlugin1,
+			Status:     defaultStatus2,
+			Code:       pluginCode2[index],
+		}
+		// plugin 2
+		pluginResults[testPlugin2] = &contracts.PluginResult{
+			PluginID:   testPlugin2,
+			PluginName: testPlugin2,
+			Status:     contracts.ResultStatusSuccess,
+			Code:       0,
+		}
+		// plugin testUnknownPlugin
+		pluginResults[testUnknownPlugin] = &contracts.PluginResult{
+			PluginID:   testUnknownPlugin,
+			PluginName: testUnknownPlugin,
+			Status:     contracts.ResultStatusSuccess,
+			Code:       0,
+		}
+
+		shouldPluginSkipBasedOnControlFlow0 := getShouldPluginSkipBasedOnControlFlow(ctx, plugins, 0, pluginResults)
+		shouldPluginSkipBasedOnControlFlow1 := getShouldPluginSkipBasedOnControlFlow(ctx, plugins, 1, pluginResults)
+		shouldPluginSkipBasedOnControlFlow2 := getShouldPluginSkipBasedOnControlFlow(ctx, plugins, 2, pluginResults)
+		shouldPluginSkipBasedOnControlFlow3 := getShouldPluginSkipBasedOnControlFlow(ctx, plugins, 3, pluginResults)
+		assert.Equal(t, shouldPluginSkipBasedOnControlFlow0, false)
+		assert.Equal(t, shouldPluginSkipBasedOnControlFlow3, false)
+		// test getShouldPluginSkipBasedOnControlFlow
+		if index == 0 {
+			assert.Equal(t, shouldPluginSkipBasedOnControlFlow1, false)
+			assert.Equal(t, shouldPluginSkipBasedOnControlFlow2, false)
+		} else if index == 1 {
+			assert.Equal(t, shouldPluginSkipBasedOnControlFlow1, false)
+			assert.Equal(t, shouldPluginSkipBasedOnControlFlow2, true)
+		} else {
+			assert.Equal(t, shouldPluginSkipBasedOnControlFlow1, true)
+			assert.Equal(t, shouldPluginSkipBasedOnControlFlow2, true)
+		}
+	}
+}
+
+func TestGetStringPropByName(t *testing.T) {
+	testProperties := map[string]interface{}{
+		contracts.OnFailureModifier:   "exit",
+		contracts.OnSuccessModifier:   "exit",
+		contracts.FinallyStepModifier: "true",
+	}
+	config := contracts.Configuration{
+		PluginID:   testPlugin1,
+		PluginName: testPlugin1,
+		Properties: testProperties,
+	}
+	pluginState := contracts.PluginState{
+		Name:          testPlugin1,
+		Id:            testPlugin1,
+		Configuration: config,
+	}
+	// test getStringPropByName
+	onFailureOutput := getStringPropByName(config.Properties, contracts.OnFailureModifier)
+	onSuccessOutput := getStringPropByName(config.Properties, contracts.OnSuccessModifier)
+	finallyStepOutput := getStringPropByName(pluginState.Configuration.Properties, contracts.FinallyStepModifier)
+	assert.Equal(t, onFailureOutput, "exit")
+	assert.Equal(t, onSuccessOutput, "exit")
+	assert.Equal(t, finallyStepOutput, "true")
+}
+
+func TestRunPluginWithOnFailureProperty168(t *testing.T) {
+	setIsSupportedMock()
+	defer restoreIsSupported()
+	pluginNames := []string{testPlugin1}
+	pluginConfigs := make(map[string]contracts.PluginState)
+	pluginResults := make(map[string]*contracts.PluginResult)
+	pluginInstances := make(map[string]*PluginMock)
+	pluginRegistry := PluginRegistry{}
+	var cancelFlag task.CancelFlag
+	ctx := context.NewMockDefault()
+	defaultTime := time.Now()
+	ioConfig := contracts.IOConfiguration{}
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
+
+	for index, name := range pluginNames {
+		// create mock plugin instance for testing
+		pluginInstances[name] = new(PluginMock)
+
+		// create configuration for execution
+		config := contracts.Configuration{
+			PluginID:   name,
+			PluginName: name,
+		}
+		// setup expectations
+		pluginConfigs[name] = contracts.PluginState{
+			Name:          name,
+			Id:            name,
+			Configuration: config,
+		}
+		standardOutput := "\nStep exited with code 168. Therefore, marking step as succeeded. Further document steps will be skipped."
+		standardError := ""
+		defaultCode := contracts.ExitWithSuccess
+		defaultStatus := contracts.ResultStatusSuccess
+		outputMessage := ""
+
+		pluginResults[name] = &contracts.PluginResult{
+			PluginID:       name,
+			PluginName:     name,
+			StartDateTime:  defaultTime,
+			EndDateTime:    defaultTime,
+			Status:         defaultStatus,
+			Code:           defaultCode,
+			StandardOutput: standardOutput,
+			StandardError:  standardError,
+			Output:         outputMessage,
+		}
+
+		oldRunPlugin := runPlugin
+		runPlugin = func(context context.T,
+			factory PluginFactory,
+			pluginName string,
+			config contracts.Configuration,
+			cancelFlag task.CancelFlag,
+			ioConfig contracts.IOConfiguration,
+		) (res contracts.PluginResult) {
+			res.Code = defaultCode
+			res.Status = defaultStatus
+			res.Output = ""
+			return
+		}
+		defer func() { runPlugin = oldRunPlugin }()
+
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
+		pluginRegistry[name] = pluginFactory
+		pluginConfigs2[index] = pluginConfigs[name]
+	}
+
+	called := 0
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
+			result.EndDateTime = defaultTime
+			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
+		}
+	}()
+	// call the code we are testing
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	close(ch)
+	// fix the times expectation.
+	for _, result := range outputs {
+		result.EndDateTime = defaultTime
+		result.StartDateTime = defaultTime
+	}
+
+	ctx.AssertCalled(t, "Log")
+	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
+}
+
+func TestRunPluginWithOnFailureProperty169(t *testing.T) {
+	setIsSupportedMock()
+	defer restoreIsSupported()
+	pluginNames := []string{testPlugin1}
+	pluginConfigs := make(map[string]contracts.PluginState)
+	pluginResults := make(map[string]*contracts.PluginResult)
+	pluginInstances := make(map[string]*PluginMock)
+	pluginRegistry := PluginRegistry{}
+	var cancelFlag task.CancelFlag
+	ctx := context.NewMockDefault()
+	defaultTime := time.Now()
+	ioConfig := contracts.IOConfiguration{}
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
+
+	for index, name := range pluginNames {
+		// create mock plugin instance for testing
+		pluginInstances[name] = new(PluginMock)
+
+		// create configuration for execution
+		config := contracts.Configuration{
+			PluginID:   name,
+			PluginName: name,
+		}
+		// setup expectations
+		pluginConfigs[name] = contracts.PluginState{
+			Name:          name,
+			Id:            name,
+			Configuration: config,
+		}
+		standardOutput := "\nStep exited with code 169. Therefore, marking step as Failed. Further document steps will be skipped."
+		standardError := standardOutput
+		defaultCode := contracts.ExitWithFailure
+		defaultStatus := contracts.ResultStatusFailed
+		outputMessage := ""
+
+		pluginResults[name] = &contracts.PluginResult{
+			PluginID:       name,
+			PluginName:     name,
+			StartDateTime:  defaultTime,
+			EndDateTime:    defaultTime,
+			Status:         defaultStatus,
+			Code:           defaultCode,
+			StandardOutput: standardOutput,
+			StandardError:  standardError,
+			Output:         outputMessage,
+		}
+
+		oldRunPlugin := runPlugin
+		runPlugin = func(context context.T,
+			factory PluginFactory,
+			pluginName string,
+			config contracts.Configuration,
+			cancelFlag task.CancelFlag,
+			ioConfig contracts.IOConfiguration,
+		) (res contracts.PluginResult) {
+			res.Code = defaultCode
+			res.Status = defaultStatus
+			res.Output = ""
+			return
+		}
+		defer func() { runPlugin = oldRunPlugin }()
+
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
+		pluginRegistry[name] = pluginFactory
+		pluginConfigs2[index] = pluginConfigs[name]
+	}
+
+	called := 0
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
+			result.EndDateTime = defaultTime
+			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
+		}
+	}()
+	// call the code we are testing
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	close(ch)
+	// fix the times expectation.
+	for _, result := range outputs {
+		result.EndDateTime = defaultTime
+		result.StartDateTime = defaultTime
+	}
+
+	ctx.AssertCalled(t, "Log")
+	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
+}
+
+func TestRunPluginWithOnFailureProperty1(t *testing.T) {
+	setIsSupportedMock()
+	defer restoreIsSupported()
+	pluginNames := []string{testPlugin1}
+	pluginConfigs := make(map[string]contracts.PluginState)
+	pluginResults := make(map[string]*contracts.PluginResult)
+	pluginInstances := make(map[string]*PluginMock)
+	pluginRegistry := PluginRegistry{}
+	var cancelFlag task.CancelFlag
+	ctx := context.NewMockDefault()
+	defaultTime := time.Now()
+	ioConfig := contracts.IOConfiguration{}
+	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
+
+	for index, name := range pluginNames {
+		// create mock plugin instance for testing
+		pluginInstances[name] = new(PluginMock)
+
+		// create properties
+		testProperties := map[string]interface{}{
+			contracts.OnFailureModifier: contracts.ModifierValueSuccessAndExit,
+		}
+		// create configuration for execution
+		config := contracts.Configuration{
+			PluginID:   name,
+			PluginName: name,
+			Properties: testProperties,
+		}
+		// setup expectations
+		pluginConfigs[name] = contracts.PluginState{
+			Name:          name,
+			Id:            name,
+			Configuration: config,
+		}
+		standardOutput := "\nStep was found to have onFailure property. Further document steps will be skipped."
+		standardError := standardOutput
+		defaultCode := 1
+		defaultStatus := contracts.ResultStatusFailed
+		outputMessage := ""
+
+		pluginResults[name] = &contracts.PluginResult{
+			PluginID:       name,
+			PluginName:     name,
+			StartDateTime:  defaultTime,
+			EndDateTime:    defaultTime,
+			Status:         contracts.ResultStatusSuccess,
+			Code:           contracts.ExitWithSuccess,
+			StandardOutput: standardOutput,
+			StandardError:  standardError,
+			Output:         outputMessage,
+		}
+
+		oldRunPlugin := runPlugin
+		runPlugin = func(context context.T,
+			factory PluginFactory,
+			pluginName string,
+			config contracts.Configuration,
+			cancelFlag task.CancelFlag,
+			ioConfig contracts.IOConfiguration,
+		) (res contracts.PluginResult) {
+			res.Code = defaultCode
+			res.Status = defaultStatus
+			res.Output = ""
+			return
+		}
+		defer func() { runPlugin = oldRunPlugin }()
+
+		pluginFactory := new(PluginFactoryMock)
+		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
+		pluginRegistry[name] = pluginFactory
+		pluginConfigs2[index] = pluginConfigs[name]
+	}
+
+	called := 0
+	ch := make(chan contracts.PluginResult)
+	go func() {
+		for result := range ch {
+			result.EndDateTime = defaultTime
+			result.StartDateTime = defaultTime
+			if called == 0 {
+				assert.Equal(t, result, *pluginResults[testPlugin1])
+			} else {
+				assert.Fail(t, "there shouldn't be more than 2 update")
+			}
+			called++
+		}
+	}()
+	// call the code we are testing
+	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
+	close(ch)
+	// fix the times expectation.
+	for _, result := range outputs {
+		result.EndDateTime = defaultTime
+		result.StartDateTime = defaultTime
+	}
+
+	ctx.AssertCalled(t, "Log")
+	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
 }
