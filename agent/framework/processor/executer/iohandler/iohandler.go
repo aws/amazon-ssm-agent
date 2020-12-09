@@ -227,6 +227,11 @@ func (out *DefaultIOHandler) Close(log log.T) {
 
 // String returns the output by concatenating stdout and stderr
 func (out DefaultIOHandler) String() (response string) {
+	// exit code 168 is a successful execution signaling all future steps should be ignored
+	// therefore, we remove the error message of exit status 168 which would be confusing in the output
+	if out.ExitCode == contracts.ExitWithSuccess {
+		out.stderr = ""
+	}
 	return TruncateOutput(out.stdout, out.stderr, MaximumPluginOutputSize)
 }
 

@@ -16,6 +16,7 @@ package runpluginutil
 
 import (
 	"fmt"
+	"strconv"
 	"strings"
 	"time"
 
@@ -101,44 +102,46 @@ func RunPlugins(
 
 	//Contains the logStreamPrefix without the pluginID
 	logStreamPrefix := ioConfig.CloudWatchConfig.LogStreamPrefix
+	log := context.Log()
 
-	for _, pluginState := range plugins {
+	for pluginIndex, pluginState := range plugins {
 		pluginID := pluginState.Id     // the identifier of the plugin
 		pluginName := pluginState.Name // the name of the plugin
 		pluginOutput := pluginState.Result
 		pluginOutput.PluginID = pluginID
 		pluginOutput.PluginName = pluginName
 		pluginOutputs[pluginID] = &pluginOutput
+		log.Debugf("Checking Status for plugin %s - %s", pluginName, pluginOutput.Status)
 		switch pluginOutput.Status {
 		//TODO properly initialize the plugin status
 		case "":
-			context.Log().Debugf("plugin - %v has empty state, initialize as NotStarted",
+			log.Debugf("plugin - %v has empty state, initialize as NotStarted",
 				pluginName)
 			pluginOutput.StartDateTime = time.Now()
 			pluginOutput.Status = contracts.ResultStatusNotStarted
 
 		case contracts.ResultStatusNotStarted, contracts.ResultStatusInProgress:
-			context.Log().Debugf("plugin - %v status %v",
+			log.Debugf("plugin - %v status %v",
 				pluginName,
 				pluginOutput.Status)
 			pluginOutput.StartDateTime = time.Now()
 
 		case contracts.ResultStatusSuccessAndReboot:
-			context.Log().Debugf("plugin - %v just experienced reboot, reset to InProgress...",
+			log.Debugf("plugin - %v just experienced reboot, reset to InProgress...",
 				pluginName)
 			pluginOutput.Status = contracts.ResultStatusInProgress
 		case contracts.ResultStatusFailed:
-			context.Log().Debugf("plugin - %v already executed with failed status, skipping...",
+			log.Debugf("plugin - %v already executed with failed status, skipping...",
 				pluginName)
 			resChan <- *pluginOutputs[pluginID]
 			continue
 		default:
-			context.Log().Debugf("plugin - %v already executed, skipping...",
+			log.Debugf("plugin - %v already executed, skipping...",
 				pluginName)
 			continue
 		}
 
-		context.Log().Debugf("Executing plugin - %v", pluginName)
+		log.Debugf("Executing plugin - %v", pluginName)
 
 		// populate plugin start time and status
 		configuration := pluginState.Configuration
@@ -166,31 +169,64 @@ func RunPlugins(
 		)
 
 		pluginFactory, pluginHandlerFound = registry[pluginName]
-		isKnown, isSupported, _ = isSupportedPlugin(context.Log(), pluginName)
+		isKnown, isSupported, _ = isSupportedPlugin(log, pluginName)
+		// checking if a prior step returned exit codes 168 or 169 to exit document.
+		// If so we need to skip every other step
+		shouldSkipStepDueToPriorFailedStep := getShouldPluginSkipBasedOnControlFlow(
+			context,
+			plugins,
+			pluginIndex,
+			pluginOutputs,
+		)
+
 		operation, logMessage := getStepExecutionOperation(
-			context.Log(),
+			log,
 			pluginName,
 			pluginID,
 			isKnown,
 			isSupported,
 			pluginHandlerFound,
 			configuration.IsPreconditionEnabled,
-			configuration.Preconditions)
+			configuration.Preconditions,
+			shouldSkipStepDueToPriorFailedStep)
 
 		switch operation {
 		case executeStep:
-			context.Log().Infof("Running plugin %s", pluginName)
+			log.Infof("Running plugin %s %s", pluginName, pluginID)
 			r = runPlugin(context, pluginFactory, pluginName, configuration, cancelFlag, ioConfig)
 			pluginOutputs[pluginID].Code = r.Code
 			pluginOutputs[pluginID].Status = r.Status
 			pluginOutputs[pluginID].Error = r.Error
-			pluginOutputs[pluginID].Output = r.Output
-			pluginOutputs[pluginID].StandardOutput = r.StandardOutput
 			pluginOutputs[pluginID].StandardError = r.StandardError
+			pluginOutputs[pluginID].StandardOutput = r.StandardOutput
+			pluginOutputs[pluginID].Output = r.Output
 			pluginOutputs[pluginID].StepName = r.StepName
 
+			onFailureProp := getStringPropByName(pluginState.Configuration.Properties, contracts.OnFailureModifier)
+			hasOnFailureProp := onFailureProp == contracts.ModifierValueExit || onFailureProp == contracts.ModifierValueSuccessAndExit
+			outputAddition := ""
+			if pluginOutputs[pluginID].Code == contracts.ExitWithSuccess {
+				outputAddition = "\nStep exited with code 168. Therefore, marking step as succeeded. Further document steps will be skipped."
+				pluginOutputs[pluginID].Status = contracts.ResultStatusSuccess
+				pluginOutputs[pluginID].Error = ""
+				pluginOutputs[pluginID].StandardError = ""
+				pluginOutputs[pluginID].StandardOutput = r.StandardOutput + outputAddition
+			} else if pluginOutputs[pluginID].Code == contracts.ExitWithFailure {
+				outputAddition = "\nStep exited with code 169. Therefore, marking step as Failed. Further document steps will be skipped."
+				pluginOutputs[pluginID].StandardError = r.StandardError + outputAddition
+				pluginOutputs[pluginID].StandardOutput = r.StandardOutput + outputAddition
+			} else if pluginOutputs[pluginID].Status == contracts.ResultStatusFailed && hasOnFailureProp {
+				outputAddition = "\nStep was found to have onFailure property. Further document steps will be skipped."
+				pluginOutputs[pluginID].StandardError = r.StandardError + outputAddition
+				pluginOutputs[pluginID].StandardOutput = r.StandardOutput + outputAddition
+				if onFailureProp == contracts.ModifierValueSuccessAndExit {
+					pluginOutputs[pluginID].Status = contracts.ResultStatusSuccess
+					pluginOutputs[pluginID].Code = contracts.ExitWithSuccess
+				}
+			}
+
 		case skipStep:
-			context.Log().Info(logMessage)
+			log.Info(logMessage)
 			pluginOutputs[pluginID].Status = contracts.ResultStatusSkipped
 			pluginOutputs[pluginID].Code = 0
 			pluginOutputs[pluginID].Output = logMessage
@@ -198,17 +234,17 @@ func RunPlugins(
 			err := fmt.Errorf(logMessage)
 			pluginOutputs[pluginID].Status = contracts.ResultStatusFailed
 			pluginOutputs[pluginID].Error = err.Error()
-			context.Log().Error(err)
+			log.Error(err)
 		default:
 			err := fmt.Errorf("Unknown error, Operation: %s, Plugin name: %s", operation, pluginName)
 			pluginOutputs[pluginID].Status = contracts.ResultStatusFailed
 			pluginOutputs[pluginID].Error = err.Error()
-			context.Log().Error(err)
+			log.Error(err)
 		}
 
 		// set end time.
 		pluginOutputs[pluginID].EndDateTime = time.Now()
-		context.Log().Infof("Sending plugin %v completion message", pluginID)
+		log.Infof("Sending plugin %v completion message", pluginID)
 
 		// truncate the result and send it back to buffer channel.
 		result := *pluginOutputs[pluginID]
@@ -228,7 +264,7 @@ func RunPlugins(
 	return
 }
 
-func runPlugin(
+var runPlugin = func(
 	context context.T,
 	factory PluginFactory,
 	pluginName string,
@@ -252,14 +288,13 @@ func runPlugin(
 		}
 	}()
 
-	log.Debugf("Running %s", pluginName)
 	var err error
 	plugin, err := factory.Create(context)
 
 	if err != nil {
 		res.Status = contracts.ResultStatusFailed
 		res.Code = 1
-		res.Error = fmt.Errorf("failed to create plugin %v!", err).Error()
+		res.Error = fmt.Errorf("failed to create plugin %v", err).Error()
 		log.Error(res.Error)
 		return
 	}
@@ -351,10 +386,18 @@ func getStepExecutionOperation(
 	isPluginHandlerFound bool,
 	isPreconditionEnabled bool,
 	preconditions map[string][]contracts.PreconditionArgument,
+	shouldSkipStepDueToPriorFailedStep bool,
 ) (string, string) {
 	log.Debugf("isSupported flag = %t", isSupported)
 	log.Debugf("isPluginHandlerFound flag = %t", isPluginHandlerFound)
 	log.Debugf("isPreconditionEnabled flag = %t", isPreconditionEnabled)
+
+	if shouldSkipStepDueToPriorFailedStep {
+		return skipStep, fmt.Sprintf(
+			"Plugin with name %s and id %s skipped due to prior step with an exit condition",
+			pluginName,
+			pluginId)
+	}
 
 	if !isPreconditionEnabled {
 		// 1.x or 2.0 document
@@ -519,4 +562,73 @@ func getStepName(pluginName string, config contracts.Configuration) (stepName st
 	}
 
 	return
+}
+
+// Gets a property by name out of the plugin's inputs map, returns it as a string
+// Supports bool and string only
+func getStringPropByName(pluginProperties interface{}, propName string) string {
+	// type cast
+	pluginPropsMap, ok := pluginProperties.(map[string]interface{})
+	if !ok {
+		return ""
+	}
+	// get value from map
+	propValueInterface, okm := pluginPropsMap[propName]
+	if !okm {
+		return ""
+	}
+	//type cast to string
+	propValueStr, okString := propValueInterface.(string)
+	propValueBool, okBool := propValueInterface.(bool)
+	if !okString && !okBool {
+		return ""
+	}
+	if !okString {
+		return strconv.FormatBool(propValueBool)
+	}
+	return propValueStr
+}
+
+// This function handles deciding whether the current plugin should be skipped due to a prior plugin with onFailure
+// or onSuccess modifiers. It also handles the finally modifier.
+func getShouldPluginSkipBasedOnControlFlow(
+	context context.T,
+	plugins []contracts.PluginState,
+	pluginIndex int,
+	pluginOutputs map[string]*contracts.PluginResult,
+) bool {
+	log := context.Log()
+	pluginState := plugins[pluginIndex]
+	finallyProp := getStringPropByName(pluginState.Configuration.Properties, contracts.FinallyStepModifier)
+	if finallyProp == contracts.ModifierValueTrue && pluginIndex == len(plugins)-1 {
+		log.Infof(
+			"Finally step detected for plugin %v",
+			pluginState.Id,
+		)
+		// finally step, do not skip:
+		return false
+	}
+	if finallyProp == contracts.ModifierValueTrue && pluginIndex < len(plugins)-1 {
+		log.Infof(
+			"FinallyStep detected for plugin %v, which is not the last plugin in list. Ignoring FinallyStep.",
+			pluginState.Id,
+		)
+	}
+	for prvPluginStateIdx := 0; prvPluginStateIdx < pluginIndex; prvPluginStateIdx++ {
+		prevPluginId := plugins[prvPluginStateIdx].Id
+		prvPluginResultCode := pluginOutputs[prevPluginId].Code
+		onFailureProp := getStringPropByName(plugins[prvPluginStateIdx].Configuration.Properties, contracts.OnFailureModifier)
+		isFailedStep := pluginOutputs[prevPluginId].Status == contracts.ResultStatusFailed
+		isFailedAndExitStep := isFailedStep && onFailureProp == contracts.ModifierValueExit
+		onSuccessProp := getStringPropByName(plugins[prvPluginStateIdx].Configuration.Properties, contracts.OnSuccessModifier)
+		isSuccessStep := pluginOutputs[prevPluginId].Status == contracts.ResultStatusSuccess
+		isSuccessAndExitStep := isSuccessStep && onSuccessProp == contracts.ModifierValueExit
+		if prvPluginResultCode == contracts.ExitWithSuccess ||
+			prvPluginResultCode == contracts.ExitWithFailure ||
+			isFailedAndExitStep ||
+			isSuccessAndExitStep {
+			return true
+		}
+	}
+	return false
 }

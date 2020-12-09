@@ -42,6 +42,23 @@ const (
 	ResultStatusTestFailure ResultStatus = "TestFailure"
 )
 
+const (
+	ExitWithSuccess int = 168
+	ExitWithFailure int = 169
+)
+
+const (
+	OnFailureModifier   string = "onFailure"
+	OnSuccessModifier   string = "onSuccess"
+	FinallyStepModifier string = "finallyStep"
+)
+
+const (
+	ModifierValueExit           string = "exit"
+	ModifierValueSuccessAndExit string = "successAndExit"
+	ModifierValueTrue           string = "true"
+)
+
 // IsSuccess checks whether the result is success or not
 func (rs ResultStatus) IsSuccess() bool {
 	switch rs {
