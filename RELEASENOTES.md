@@ -1,5 +1,23 @@
 Latest
 ===============
+- Add agent version flag to retrieve agent version
+- Add onFailure/onSuccess/finallyStep support for plugins
+- Add SSE header for S3 Upload
+- Add SSM Agent support in MacOS
+- Extend use of default http transport
+- Fix for Agent not aquiring new instance role credentials after EC2 hibernation
+- Fix for shell profile powershell commands not being executed in the expected order
+- Fix to delete undeleted channel while using reboot document
+- Fix to consider status of all plugin steps in document after system restart
+- Fix bug capturing rpm install exit code
+- Handle sourceInfo json sent from CLI in downloadContent plugin
+- Optimize agent startup time by removing additional wait times 
+- Refactor makefile
+- Replace master branch with mainline branch
+- Upgrade aws-sdk-go to latest version(v1.35.23)
+
+3.0.431.0
+===============
 - Use DefaultTransport as underlying RoundTripper for S3 access
 
 3.0.413.0
