@@ -36,6 +36,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/session/shell/execcmd"
 	"github.com/aws/amazon-ssm-agent/agent/session/utility"
 	"github.com/creack/pty"
+	"github.com/google/shlex"
 )
 
 var ptyFile *os.File
@@ -74,7 +75,11 @@ func StartPty(
 	} else {
 		if appConfig.Agent.ContainerMode {
 
-			commands := strings.Split(shellProps.Linux.Commands, " ")
+			commands, err := shlex.Split(shellProps.Linux.Commands)
+			if err != nil {
+				log.Errorf("Failed to parse commands input: %s\n", err)
+				return fmt.Errorf("Failed to parse commands input: %s\n", err)
+			}
 			if len(commands) > 1 {
 				cmd = exec.Command(commands[0], commands[1:]...)
 			} else {
