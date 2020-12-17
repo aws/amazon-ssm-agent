@@ -34,6 +34,7 @@ import (
 	execcmdMock "github.com/aws/amazon-ssm-agent/agent/session/shell/execcmd/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/aws-sdk-go/service/cloudwatchlogs"
+	"github.com/google/shlex"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
@@ -625,4 +626,14 @@ func (suite *ShellTestSuite) TestValidateGetS3BucketEncryptionFailed() {
 	suite.mockS3.On("IsBucketEncrypted", mock.Anything, testS3BucketName).Return(false, errors.New("get encryption failed"))
 	err := suite.plugin.validate(suite.mockContext, configuration)
 	assert.NotNil(suite.T(), err)
+}
+
+func (suite *ShellTestSuite) TestCommandParser() {
+	command := "sh -c \"echo hello && echo world\""
+
+	commands, err := shlex.Split(command)
+	assert.Nil(suite.T(), err)
+	assert.Equal(suite.T(), commands[0], "sh")
+	assert.Equal(suite.T(), commands[1], "-c")
+	assert.Equal(suite.T(), commands[2], "echo hello && echo world")
 }
