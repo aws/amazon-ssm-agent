@@ -130,7 +130,6 @@ install_components() {
         yum -y  install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation python3 vim unzip >/dev/null
         alias python=python3
         if [ $? -ne 0 ]; then echo "install_components(): yum install errors for Red Hat" && return 1; fi
-        systemctl restart dbus
     elif grep -e 'Fedora' /etc/os-release 1>/dev/null 2>/dev/null; then
         LINUX_DISTRO='Fedora'
         ## yum update takes too long, but it is unavoidable here.
