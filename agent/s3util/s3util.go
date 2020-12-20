@@ -86,7 +86,9 @@ func (u *AmazonS3Util) S3Upload(log log.T, bucketName string, objectKey string, 
 			params.ServerSideEncryption = aws.String(sseAlgortihm)
 		case s3.ServerSideEncryptionAwsKms:
 			params.ServerSideEncryption = aws.String(sseAlgortihm)
-			params.SSEKMSKeyId = aws.String(encryptionKey)
+			if encryptionKey != "" {
+				params.SSEKMSKeyId = aws.String(encryptionKey)
+			}
 		}
 	}
 
@@ -127,6 +129,12 @@ func (u *AmazonS3Util) IsBucketEncrypted(log log.T, bucketName string) (bool, er
 }
 
 func getSSEAlgorithm(log log.T, u *AmazonS3Util, bucketName string) (bucketEncrypted bool, sseAlgortihm string, encryptionKey string) {
+	defer func() {
+		if msg := recover(); msg != nil {
+			log.Errorf("S3Upload panic: %v", msg)
+		}
+	}()
+
 	input := &s3.GetBucketEncryptionInput{
 		Bucket: aws.String(bucketName),
 	}
@@ -142,9 +150,13 @@ func getSSEAlgorithm(log log.T, u *AmazonS3Util, bucketName string) (bucketEncry
 
 	case s3.ServerSideEncryptionAwsKms:
 		// If bucket is KMS encrypted
-		kmsKeyId := *bucketEncryption.KMSMasterKeyID
 		log.Infof("Bucket %v has been encrypted with KMS", bucketName)
-		return true, s3.ServerSideEncryptionAwsKms, kmsKeyId
+		if bucketEncryption.KMSMasterKeyID != nil {
+			return true, s3.ServerSideEncryptionAwsKms, *bucketEncryption.KMSMasterKeyID
+		} else {
+			return true, s3.ServerSideEncryptionAwsKms, ""
+		}
+
 	case s3.ServerSideEncryptionAes256:
 		// If bucket is Aes256 encrypted
 		log.Infof("Bucket %v has been encrypted with AES256", bucketName)
