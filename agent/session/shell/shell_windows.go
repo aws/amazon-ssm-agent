@@ -457,7 +457,7 @@ func (p *ShellPlugin) isCleanupOfControlCharactersRequired() bool {
 }
 
 //cleanupLogFile cleans up temporary log file on disk created by PowerShell's transcript logging
-func (p *ShellPlugin) cleanupLogFile(log log.T) {
+func (p *ShellPlugin) cleanupLogFile(log log.T, ipcFile *os.File) {
 	if p.logger.transcriptDirPath != "" {
 		log.Debugf("Deleting transcript directory: %s", p.logger.transcriptDirPath)
 		if err := os.RemoveAll(p.logger.transcriptDirPath); err != nil {

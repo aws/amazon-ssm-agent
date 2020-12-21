@@ -637,3 +637,9 @@ func NewListener(log log.T, address string) (listener net.Listener, err error) {
 	}
 	return
 }
+
+// DeleteIpcTempFile resets file properties of ipcTempFile and tries deletion
+func (u *SessionUtil) DeleteIpcTempFile(sessionOrchestrationPath string) (bool, error) {
+	// no deletion needed for windows since ipcTempFile properties are default and no issues during deletion
+	return false, nil
+}

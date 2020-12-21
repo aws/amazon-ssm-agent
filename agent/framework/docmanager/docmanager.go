@@ -26,6 +26,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/session/utility"
 )
 
 const (
@@ -347,7 +348,16 @@ func DeleteSessionOrchestrationDirectories(log log.T, instanceID, orchestrationR
 			err := fileutil.DeleteDirectory(sessionOrchestrationPath)
 			if err != nil {
 				log.Debugf("Error deleting directory %v: %v", sessionOrchestrationPath, err)
-				continue
+
+				// With CloudWatch streaming of logs, a change was introduced to make ipcTempFile append only on linux.
+				// This append only mode results into error while deletion of the file.
+				// Below logic is to attempt to delete ipcTempFile in case of such errors.
+				u := &utility.SessionUtil{}
+				success, err := u.DeleteIpcTempFile(sessionOrchestrationPath)
+				if err != nil || !success {
+					log.Debugf("Retry attempt to delete session orchestration directory %s failed, %v", sessionOrchestrationPath, err)
+					continue
+				}
 			}
 
 			// Deletion of both document state and orchestration file was successful
