@@ -21,9 +21,13 @@ import (
 	"net"
 	"os"
 	"os/exec"
+	"path/filepath"
+	"syscall"
+	"unsafe"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/session/utility/model"
 )
@@ -31,8 +35,14 @@ import (
 var ShellPluginCommandName = "sh"
 var ShellPluginCommandArgs = []string{"-c"}
 
-const sudoersFile = "/etc/sudoers.d/ssm-agent-users"
-const sudoersFileMode = 0440
+const (
+	sudoersFile     = "/etc/sudoers.d/ssm-agent-users"
+	sudoersFileMode = 0440
+	fs_ioc_getflags = uintptr(0x80086601)
+	fs_ioc_setflags = uintptr(0x40086602)
+	FS_APPEND_FL    = 0x00000020 /* writes to file may only append */
+	FS_RESET_FL     = 0x00000000 /* reset file property */
+)
 
 // ResetPasswordIfDefaultUserExists resets default RunAs user password if user exists
 func (u *SessionUtil) ResetPasswordIfDefaultUserExists(context context.T) (err error) {
@@ -130,4 +140,56 @@ func (u *SessionUtil) DisableLocalUser(log log.T) (err error) {
 // NewListener starts a new socket listener on the address.
 func NewListener(log log.T, address string) (net.Listener, error) {
 	return net.Listen("unix", address)
+}
+
+// ioctl is used for making system calls to manipulate file attributes
+func ioctl(f *os.File, request uintptr, attrp *int32) error {
+	argp := uintptr(unsafe.Pointer(attrp))
+	_, _, errno := syscall.Syscall(syscall.SYS_IOCTL, f.Fd(), request, argp)
+	if errno != 0 {
+		return os.NewSyscallError("ioctl", errno)
+	}
+
+	return nil
+}
+
+// SetAttr sets the attributes of a file on a linux filesystem to the given value
+func (u *SessionUtil) SetAttr(f *os.File, attr int32) error {
+	return ioctl(f, fs_ioc_setflags, &attr)
+}
+
+// GetAttr retrieves the attributes of a file on a linux filesystem
+func (u *SessionUtil) GetAttr(f *os.File) (int32, error) {
+	attr := int32(-1)
+	err := ioctl(f, fs_ioc_getflags, &attr)
+	return attr, err
+}
+
+// DeleteIpcTempFile resets file properties of ipcTempFile and tries deletion
+func (u *SessionUtil) DeleteIpcTempFile(sessionOrchestrationPath string) (bool, error) {
+	ipcTempFilePath := filepath.Join(sessionOrchestrationPath, appconfig.PluginNameStandardStream, "ipcTempFile.log")
+
+	// check if ipcTempFile exists
+	if _, err := os.Stat(ipcTempFilePath); err != nil {
+		return false, fmt.Errorf("ipcTempFile does not exist, %v", err)
+	}
+
+	// open ipcTempFile
+	ipcFile, err := os.Open(ipcTempFilePath)
+	if err != nil {
+		return false, fmt.Errorf("failed to open ipcTempFile %s, %v", ipcTempFilePath, err)
+	}
+	defer ipcFile.Close()
+
+	// reset file attributes
+	if err := u.SetAttr(ipcFile, FS_RESET_FL); err != nil {
+		return false, fmt.Errorf("unable to reset file properties for %s, %v", ipcTempFilePath, err)
+	}
+
+	// delete the directory
+	if err := fileutil.DeleteDirectory(sessionOrchestrationPath); err != nil {
+		return false, err
+	}
+
+	return true, nil
 }

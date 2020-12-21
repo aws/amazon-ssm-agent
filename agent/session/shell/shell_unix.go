@@ -28,7 +28,6 @@ import (
 	"strings"
 	"syscall"
 	"time"
-	"unsafe"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	agentContracts "github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -50,9 +49,6 @@ const (
 	scriptFlag            = "-c"
 	homeEnvVariable       = "HOME=/home/"
 	groupsIdentifier      = "groups="
-	fs_ioc_setflags       = uintptr(0x40086602)
-	fs_append_fl          = 0x00000020 /* writes to file may only append */
-	fs_ioc_getflags       = uintptr(0x80086601)
 )
 
 //StartPty starts pty and provides handles to stdin and stdout
@@ -293,8 +289,9 @@ func (p *ShellPlugin) isCleanupOfControlCharactersRequired() bool {
 // checkForLoggingInterruption is used to detect if log streaming to CW has been interrupted
 var checkForLoggingInterruption = func(log log.T, ipcFile *os.File, plugin *ShellPlugin) {
 	// Enable append only mode for the ipcTempFile to protect it from being modified
+	u := &utility.SessionUtil{}
 	ticker := time.NewTicker(time.Second)
-	if err := setAttr(ipcFile, fs_append_fl); err != nil {
+	if err := u.SetAttr(ipcFile, utility.FS_APPEND_FL); err != nil {
 		log.Debugf("Unable to set FS_APPEND_FL flag, %v", err)
 		// Periodically check if ipcTempFile is missing
 		for range ticker.C {
@@ -306,10 +303,10 @@ var checkForLoggingInterruption = func(log log.T, ipcFile *os.File, plugin *Shel
 	} else {
 		// Periodically check if ipcTempFile's append only attribute has been modified
 		for range ticker.C {
-			if attr, err := getAttr(ipcFile); err != nil {
+			if attr, err := u.GetAttr(ipcFile); err != nil {
 				log.Warnf("Unable to get attributes of local temp log file, logging might be interrupted. Err: %v", err)
 				break
-			} else if attr != fs_append_fl {
+			} else if attr != utility.FS_APPEND_FL {
 				log.Warn("Append only attribute of local temp log file has been modified, logging might be interrupted.")
 				break
 			}
@@ -317,32 +314,13 @@ var checkForLoggingInterruption = func(log log.T, ipcFile *os.File, plugin *Shel
 	}
 }
 
-// ioctl is used for making system calls to manipulate file attributes
-func ioctl(f *os.File, request uintptr, attrp *int32) error {
-	argp := uintptr(unsafe.Pointer(attrp))
-	_, _, errno := syscall.Syscall(syscall.SYS_IOCTL, f.Fd(), request, argp)
-	if errno != 0 {
-		return os.NewSyscallError("ioctl", errno)
+//cleanupLogFile prepares temporary files for the cleanup
+func (p *ShellPlugin) cleanupLogFile(log log.T, ipcFile *os.File) {
+	// remove file property so deletion of the file can be done successfully
+	u := &utility.SessionUtil{}
+	if err := u.SetAttr(ipcFile, utility.FS_RESET_FL); err != nil {
+		log.Debugf("Unable to reset file properties, %v", err)
 	}
-
-	return nil
-}
-
-// setAttr sets the attributes of a file on a linux filesystem to the given value
-func setAttr(f *os.File, attr int32) error {
-	return ioctl(f, fs_ioc_setflags, &attr)
-}
-
-// getAttr retrieves the attributes of a file on a linux filesystem
-func getAttr(f *os.File) (int32, error) {
-	attr := int32(-1)
-	err := ioctl(f, fs_ioc_getflags, &attr)
-	return attr, err
-}
-
-//cleanupLogFile cleans up temporary log file on disk
-func (p *ShellPlugin) cleanupLogFile(log log.T) {
-	// no cleanup required for linux
 }
 
 // InputStreamMessageHandler passes payload byte stream to shell stdin

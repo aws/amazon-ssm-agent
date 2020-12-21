@@ -270,7 +270,7 @@ func (p *ShellPlugin) execute(context context.T,
 	}
 
 	// Finish logger activity like uploading logs to S3/CW
-	p.finishLogging(log, config, output, sessionPluginResultOutput)
+	p.finishLogging(log, config, output, sessionPluginResultOutput, ipcFile)
 
 	log.Debug("Shell session execution complete")
 }
@@ -457,7 +457,8 @@ func (p *ShellPlugin) finishLogging(
 	log log.T,
 	config agentContracts.Configuration,
 	output iohandler.IOHandler,
-	sessionPluginResultOutput mgsContracts.SessionPluginResultOutput) {
+	sessionPluginResultOutput mgsContracts.SessionPluginResultOutput,
+	ipcFile *os.File) {
 
 	// Generate log data only if customer has either enabled S3 logging or CW logging with streaming disabled
 	if config.OutputS3BucketName != "" || (config.CloudWatchLogGroup != "" && !config.CloudWatchStreamingEnabled) {
@@ -500,7 +501,7 @@ func (p *ShellPlugin) finishLogging(
 		<-p.logger.cloudWatchStreamingFinished
 		log.Debug("Streaming done, proceed to close session worker")
 
-		p.cleanupLogFile(log)
+		p.cleanupLogFile(log, ipcFile)
 	}
 
 	// Populate CW log group information
