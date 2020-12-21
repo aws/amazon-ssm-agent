@@ -1,5 +1,9 @@
 Latest
 ===============
+- Fix for encrypted s3 bucket upload
+
+3.0.502.0
+===============
 - Add agent version flag to retrieve agent version
 - Add onFailure/onSuccess/finallyStep support for plugins
 - Add SSE header for S3 Upload
