@@ -3,8 +3,6 @@ Copyright 2015-2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
 Amazon SSM Agent includes the following third-party software/licensing:
 
-* shlex - https://github.com/google/shlex
-Copyright 2012 Google Inc. All Rights Reserved.
 * creack/pty - https://github.com/creack/pty
 Copyright (c) 2011 Keith Rarick
 * rprichard/winpty - https://github.com/rprichard/winpty
@@ -148,6 +146,8 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 =============================
 
+* shlex - https://github.com/google/shlex
+Copyright 2012 Google Inc. All Rights Reserved.
 * mangos; version v3.0.0 -- https://github.com/nanomsg/mangos
 Copyright 2020 The Mangos Authors
 * coreos/go-semver - https://github.com/coreos/go-semver
