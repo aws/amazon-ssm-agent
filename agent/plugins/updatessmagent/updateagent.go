@@ -99,6 +99,7 @@ var fileDownload = artifact.Download
 var fileUncompress = fileutil.Uncompress
 var updateAgent = runUpdateAgent
 var getLockObj = lockfile.New
+var updateUtilRef updateutil.T // added mainly for testing
 
 // NewPlugin returns a new instance of the plugin.
 func NewPlugin(updatePluginConfig UpdatePluginConfig) (*Plugin, error) {
@@ -458,7 +459,9 @@ func (m *updateManager) validateUpdate(log log.T,
 func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
 	log := context.Log()
 	log.Info("RunCommand started with configuration ", config)
-	util := new(updateutil.Utility)
+	if updateUtilRef == nil {
+		updateUtilRef = new(updateutil.Utility)
+	}
 	manager := new(updateManager)
 
 	if cancelFlag.ShutDown() {
@@ -466,6 +469,10 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	} else if cancelFlag.Canceled() {
 		output.MarkAsCancelled()
 	} else {
+		// create update directory before creating locks
+		if _, directoryErr := updateUtilRef.CreateUpdateDownloadFolder(); directoryErr != nil {
+			log.Warnf("error while creating update directory: %v", directoryErr)
+		}
 
 		// First check if lock is locked by anyone
 		lock, _ := getLockObj(appconfig.UpdaterPidLockfile)
@@ -497,7 +504,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 			config,
 			log,
 			manager,
-			util,
+			updateUtilRef,
 			config.Properties,
 			cancelFlag,
 			output,

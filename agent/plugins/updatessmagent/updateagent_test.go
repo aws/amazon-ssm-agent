@@ -408,7 +408,6 @@ func TestExecute(t *testing.T) {
 	getLockObj = func(pth string) (lockfile.Lockfile, error) {
 		return mockLockfile, nil
 	}
-
 	// Setup mocks
 	mockCancelFlag.On("Canceled").Return(false)
 	mockCancelFlag.On("ShutDown").Return(false)
@@ -418,8 +417,10 @@ func TestExecute(t *testing.T) {
 	mockLockfile.On("ShouldRetry", nil).Return(false)
 	mockLockfile.On("ChangeOwner", 1).Return(nil)
 
+	updateUtilRef = &fakeUtility{
+		downloadErr: false,
+	}
 	plugin.Execute(mockContext, config, mockCancelFlag, &mockIOHandler)
-
 	if !methodCalled {
 		t.Fail()
 		fmt.Println("Error UpdateAgent method never called")
@@ -453,6 +454,9 @@ func TestExecuteUpdateLocked(t *testing.T) {
 	mockLockfile.On("TryLockExpireWithRetry", int64(60)).Return(lockfile.ErrBusy)
 	mockLockfile.On("ShouldRetry", lockfile.ErrBusy).Return(false)
 
+	updateUtilRef = &fakeUtility{
+		downloadErr: true,
+	}
 	plugin.Execute(mockContext, config, mockCancelFlag, &mockIOHandler)
 }
 
@@ -501,6 +505,9 @@ func TestExecutePanicDuringUpdate(t *testing.T) {
 	mockLockfile.On("ShouldRetry", nil).Return(false)
 	mockLockfile.On("Unlock").Return(nil)
 
+	updateUtilRef = &fakeUtility{
+		downloadErr: true,
+	}
 	plugin.Execute(mockContext, config, mockCancelFlag, &mockIOHandler)
 
 	if !methodCalled {
@@ -544,7 +551,6 @@ func TestExecuteFailureDuringUpdate(t *testing.T) {
 	getLockObj = func(pth string) (lockfile.Lockfile, error) {
 		return mockLockfile, nil
 	}
-
 	// Setup mocks
 	mockCancelFlag.On("Canceled").Return(false)
 	mockCancelFlag.On("ShutDown").Return(false)
@@ -554,6 +560,9 @@ func TestExecuteFailureDuringUpdate(t *testing.T) {
 	mockLockfile.On("ShouldRetry", nil).Return(false)
 	mockLockfile.On("Unlock").Return(nil)
 
+	updateUtilRef = &fakeUtility{
+		downloadErr: false,
+	}
 	plugin.Execute(mockContext, config, mockCancelFlag, &mockIOHandler)
 
 	if !methodCalled {
@@ -612,6 +621,7 @@ type fakeUtility struct {
 	retryCounter     int
 	pid              int
 	execCommandError error
+	downloadErr      bool
 }
 
 func (u *fakeUtility) CreateInstanceContext(log log.T) (context *updateutil.InstanceContext, err error) {
@@ -639,6 +649,9 @@ func (u *fakeUtility) WaitForServiceToStart(log log.T, i *updateutil.InstanceCon
 }
 
 func (u *fakeUtility) CreateUpdateDownloadFolder() (folder string, err error) {
+	if u.downloadErr {
+		return "", fmt.Errorf("download error")
+	}
 	return "", nil
 }
 
