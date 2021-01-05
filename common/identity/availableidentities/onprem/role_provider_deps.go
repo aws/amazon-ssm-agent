@@ -11,12 +11,12 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// package rolecreds contains functions that help procure the managed instance auth credentials
+// package onprem contains functions that help procure the managed instance auth credentials
 // dependencies
-package rolecreds
+package onprem
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
+"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
 )
 
 // dependency for managed instance registration
@@ -29,6 +29,7 @@ type instanceRegistration interface {
 	Fingerprint() (string, error)
 	GenerateKeyPair() (string, string, string, error)
 	UpdatePrivateKey(string, string) error
+	HasManagedInstancesCredentials() bool
 }
 
 type instanceInfo struct{}
@@ -53,4 +54,9 @@ func (instanceInfo) GenerateKeyPair() (publicKey, privateKey, keyType string, er
 // UpdatePrivateKey saves the private key into the registration persistence store
 func (instanceInfo) UpdatePrivateKey(privateKey, privateKeyType string) (err error) {
 	return registration.UpdatePrivateKey(privateKey, privateKeyType)
+}
+
+// HasManagedInstanceCredentials returns if the instance has registration
+func (instanceInfo) HasManagedInstancesCredentials() bool {
+	return registration.HasManagedInstancesCredentials()
 }

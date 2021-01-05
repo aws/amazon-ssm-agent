@@ -1,4 +1,4 @@
-// Copyright 2019 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License"). You may not
 // use this file except in compliance with the License. A copy of the
@@ -11,8 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-//Package provides container info
-package containers
+package ecs
 
 import (
 	"encoding/json"
@@ -21,79 +20,8 @@ import (
 	"net/http"
 	"os"
 	"strings"
-	"sync"
 	"time"
 )
-
-var cachedTaskResponse *TaskResponse
-var cachedContainerResponse *ContainerResponse
-var lock sync.RWMutex
-
-const (
-	ContainerMetadataEnvVar = "ECS_CONTAINER_METADATA_URI"
-	MaxRetries              = 2
-)
-
-// TaskResponse defines the schema for the task response JSON object
-type TaskResponse struct {
-	Cluster       string
-	TaskARN       string
-	Family        string
-	Revision      string
-	DesiredStatus string `json:",omitempty"`
-	KnownStatus   string
-}
-
-// ContainerResponse defines the schema for the container response
-// JSON object
-type ContainerResponse struct {
-	ID            string `json:"DockerId"`
-	Name          string
-	DockerName    string
-	Image         string
-	ImageID       string
-	Ports         []PortResponse    `json:",omitempty"`
-	Labels        map[string]string `json:",omitempty"`
-	DesiredStatus string
-	KnownStatus   string
-	ExitCode      *int `json:",omitempty"`
-	Limits        LimitsResponse
-	CreatedAt     *time.Time `json:",omitempty"`
-	StartedAt     *time.Time `json:",omitempty"`
-	FinishedAt    *time.Time `json:",omitempty"`
-	Type          string
-	Networks      []Network `json:",omitempty"`
-}
-
-// LimitsResponse defines the schema for task/cpu limits response
-// JSON object
-type LimitsResponse struct {
-	CPU    *float64 `json:"CPU,omitempty"`
-	Memory *int64   `json:"Memory,omitempty"`
-}
-
-// PortResponse defines the schema for portmapping response JSON
-// object.
-type PortResponse struct {
-	ContainerPort uint16 `json:"ContainerPort,omitempty"`
-	Protocol      string `json:"Protocol,omitempty"`
-	HostPort      uint16 `json:"HostPort,omitempty"`
-}
-
-// Network is a struct that keeps track of metadata of a network interface
-type Network struct {
-	NetworkMode   string   `json:"NetworkMode,omitempty"`
-	IPv4Addresses []string `json:"IPv4Addresses,omitempty"`
-	IPv6Addresses []string `json:"IPv6Addresses,omitempty"`
-}
-
-type Container struct{}
-
-type IContainer interface {
-	TargetID() (string, error)
-	ContainerID() (string, error)
-	Region() (string, error)
-}
 
 // metadataResponse returns metadata response with retries
 func metadataResponse(endpoint string, respType string) ([]byte, error) {
@@ -102,7 +30,7 @@ func metadataResponse(endpoint string, respType string) ([]byte, error) {
 	client := &http.Client{
 		Timeout: 2 * time.Second,
 	}
-	for i := 0; i < MaxRetries; i++ {
+	for i := 0; i < maxRetries; i++ {
 		resp, err = metadataResponseOnce(client, endpoint, respType)
 		if err == nil {
 			return resp, nil
@@ -134,30 +62,6 @@ var metadataResponseOnce = func(client *http.Client, endpoint string, respType s
 	return body, nil
 }
 
-// TargetID returns the current target identifier
-func (container *Container) TargetID() (string, error) {
-
-	clusterName, taskId, err := fetchClusterNameAndTaskId()
-	if err != nil {
-		return "", err
-	}
-	containerId, err := fetchContainerId()
-	if err != nil {
-		return "", err
-	}
-	return "ecs:" + clusterName + "_" + taskId + "_" + containerId, nil
-}
-
-// ContainerID returns the current container identifier
-func (container *Container) ContainerID() (string, error) {
-	return fetchContainerId()
-}
-
-// Region returns the target region
-func (container *Container) Region() (string, error) {
-	return fetchRegion()
-}
-
 // fetchRegion returns the region
 func fetchRegion() (string, error) {
 	taskMetadata, err := taskMetadataResponse()
@@ -171,8 +75,17 @@ func fetchRegion() (string, error) {
 	return region, nil
 }
 
-// fetchClusterNameAndTaskId returns the clusterName and taskId of the target
-func fetchClusterNameAndTaskId() (string, string, error) {
+func fetchAvailabilityZone() (string, error) {
+	taskMetadata, err := taskMetadataResponse()
+	if err != nil {
+		return "", err
+	}
+
+	return taskMetadata.AvailabilityZone, nil
+}
+
+// fetchClusterNameAndTaskID returns the clusterName and taskId of the target
+func fetchClusterNameAndTaskID() (string, string, error) {
 	taskMetadata, err := taskMetadataResponse()
 	//The TaskID itself is everything that comes after /
 	if err != nil {
@@ -187,8 +100,8 @@ func fetchClusterNameAndTaskId() (string, string, error) {
 	return clusterName, TaskID, nil
 }
 
-// fetchContainerId returns the containerId of the target
-func fetchContainerId() (string, error) {
+// fetchContainerID returns the containerId of the target
+func fetchContainerID() (string, error) {
 	containerMetadata, err := containerMetadataResponse()
 	if err != nil {
 		return "", err
@@ -197,7 +110,7 @@ func fetchContainerId() (string, error) {
 }
 
 // taskMetadataResponse returns taskMetadataResponse
-func taskMetadataResponse() (taskMetadata *TaskResponse, err error) {
+func taskMetadataResponse() (taskMetadata *taskResponse, err error) {
 	lock.RLock()
 	defer lock.RUnlock()
 	if cachedTaskResponse != nil {
@@ -209,7 +122,7 @@ func taskMetadataResponse() (taskMetadata *TaskResponse, err error) {
 }
 
 // containerMetadataResponse returns containerMetadataResponse
-func containerMetadataResponse() (containerMetadata *ContainerResponse, err error) {
+func containerMetadataResponse() (containerMetadata *containerResponse, err error) {
 	lock.RLock()
 	defer lock.RUnlock()
 	if cachedContainerResponse != nil {
@@ -221,7 +134,7 @@ func containerMetadataResponse() (containerMetadata *ContainerResponse, err erro
 }
 
 // getTaskMetadataResponse returns task metadata response
-func getTaskMetadataResponse() (taskMetadata *TaskResponse, err error) {
+func getTaskMetadataResponse() (taskMetadata *taskResponse, err error) {
 	var taskResp []byte
 	v3MetadataEndpoint, err := getV3MetadataEndpoint()
 	if err != nil {
@@ -241,7 +154,7 @@ func getTaskMetadataResponse() (taskMetadata *TaskResponse, err error) {
 }
 
 // getContainerMetadataResponse returns container metadata response
-func getContainerMetadataResponse() (containerMetadata *ContainerResponse, err error) {
+func getContainerMetadataResponse() (containerMetadata *containerResponse, err error) {
 	var containerResp []byte
 	v3MetadataEndpoint, err := getV3MetadataEndpoint()
 	if err != nil {
@@ -265,7 +178,7 @@ var getV3MetadataEndpoint = func() (string, error) {
 	// looks for the ECS_CONTAINER_METADATA_URI environment variables which contains the metadata endpoint V3
 	// Please refer more info about ECS metadata via the link below
 	// https://docs.aws.amazon.com/AmazonECS/latest/developerguide/task-metadata-endpoint-v3.html
-	metadataEndpoint := os.Getenv(ContainerMetadataEnvVar)
+	metadataEndpoint := os.Getenv(containerMetadataEnvVar)
 	if metadataEndpoint != "" {
 		return metadataEndpoint, nil
 	}

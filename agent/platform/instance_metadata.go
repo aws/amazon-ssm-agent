@@ -109,7 +109,7 @@ type EC2MetadataClient struct {
 
 var metadata_token = ""
 
-// NewEC2MetadataClient creates new EC2MetadataClient
+// NewEC2MetadataClient creates new EC2MetadataClient new EC2MetadataClient
 func NewEC2MetadataClient() *EC2MetadataClient {
 	httpClient := &http.Client{Timeout: EC2MetadataRequestTimeout}
 	return &EC2MetadataClient{client: httpClient}

@@ -11,9 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-//Package provides container info
-
-package containers
+package ecs
 
 import (
 	"fmt"
@@ -36,7 +34,7 @@ func TestFetchClusterNameAndTaskIdSuccess(t *testing.T) {
 		return fakeV3Endpoint, nil
 	}
 
-	clusterName, taskId, err := fetchClusterNameAndTaskId()
+	clusterName, taskId, err := fetchClusterNameAndTaskID()
 	assert.Nil(t, err)
 	assert.Equal(t, "clusterName", clusterName)
 	assert.Equal(t, "9781c248-0edd-4cdb-9a93-f63cb662a5d3", taskId)
@@ -51,7 +49,7 @@ func TestFetchClusterNameAndTaskIdSuccessForFargate(t *testing.T) {
 		return fakeV3Endpoint, nil
 	}
 
-	clusterName, taskId, err := fetchClusterNameAndTaskId()
+	clusterName, taskId, err := fetchClusterNameAndTaskID()
 	assert.Nil(t, err)
 	assert.Equal(t, "clusterName", clusterName)
 	assert.Equal(t, "9781c248-0edd-4cdb-9a93-f63cb662a5d3", taskId)
@@ -66,9 +64,9 @@ func TestFetchContainerIdSuccess(t *testing.T) {
 		return fakeV3Endpoint, nil
 	}
 
-	containerId, err := fetchContainerId()
+	containerID, err := fetchContainerID()
 	assert.Nil(t, err)
-	assert.Equal(t, "1234567890", containerId)
+	assert.Equal(t, "1234567890", containerID)
 }
 
 func TestFetchRegionSuccess(t *testing.T) {
