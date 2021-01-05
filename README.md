@@ -207,6 +207,18 @@ To set up your own custom configuration for the agent:
     * LogKey (string) - Ignored
 * Kms - represents configuration for Key Management Service if encryption is enabled for this session (i.e. kmsKeyId is set or using "Port" plugin) 
     * Endpoint (string)
+
+## Release
+
+After the SSM Agent source code has been released to github, it can take up to 2 weeks for the install packages to propagate to all AWS regions.
+
+The following commands can be used to pull the `VERSION` file and check the latest agent available in a region.
+* Regional Bucket *(Non-CN*) - `curl https://s3.{region}.amazonaws.com/amazon-ssm-{region}/latest/VERSION`
+  * Replace `{region}` with region code like `us-east-1`.
+* Regional Bucket *(CN)* - `curl https://s3.{region}.amazonaws.com.cn/amazon-ssm-{region}/latest/VERSION`
+  * Replace `{region}` with region code `cn-north-1`, `cn-northwest-1`.
+* Global Bucket - `curl https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/VERSION`
+
 ## License
 
 The Amazon SSM Agent is licensed under the Apache 2.0 License.
