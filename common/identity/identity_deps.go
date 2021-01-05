@@ -17,7 +17,20 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/aws-sdk-go/aws/credentials"
+	"sync"
 )
+
+// IAgentIdentity defines the interface identity cacher exposes
+type IAgentIdentity interface {
+	InstanceID() (string, error)
+	ShortInstanceID() (string, error)
+	Region() (string, error)
+	AvailabilityZone() (string, error)
+	InstanceType() (string, error)
+	Credentials() *credentials.Credentials
+	IdentityType() string
+	GetDefaultEndpoint(string) string
+}
 
 // IAgentIdentityInner defines the interface each identity needs to expose
 type IAgentIdentityInner interface {
@@ -29,6 +42,20 @@ type IAgentIdentityInner interface {
 	IsIdentityEnvironment() bool
 	Credentials() *credentials.Credentials
 	IdentityType() string
+}
+
+type agentIdentityCacher struct {
+	instanceID       string
+	shortInstanceID  string
+	region           string
+	availabilityZone string
+	instanceType     string
+	serviceDomain    string
+	creds            *credentials.Credentials
+	identityType     string
+	mutex            sync.Mutex
+	log              log.T
+	client           IAgentIdentityInner
 }
 
 type createIdentityFunc func(log.T, *appconfig.SsmagentConfig) []IAgentIdentityInner
