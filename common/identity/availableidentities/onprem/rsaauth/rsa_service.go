@@ -1,4 +1,4 @@
-// Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License"). You may not
 // use this file except in compliance with the License. A copy of the
@@ -37,14 +37,19 @@ type sdkService struct {
 }
 
 // NewRsaService creates a new SSM service instance.
-func NewRsaService(log log.T, serverId string, region string, encodedPrivateKey string) RsaSignedService {
+func NewRsaService(log log.T, appConfig *appconfig.SsmagentConfig, serverId, region, defaultEndpoint, encodedPrivateKey string) RsaSignedService {
 
 	awsConfig := util.AwsConfig(log)
 
 	awsConfig.Region = &region
 	awsConfig.Credentials = credentials.NewStaticCredentials(serverId, encodedPrivateKey, "")
 
-	appConfig, _ := appconfig.Config(false)
+	if appConfig.Ssm.Endpoint != "" {
+		awsConfig.Endpoint = &appConfig.Ssm.Endpoint
+	} else if defaultEndpoint != "" {
+		awsConfig.Endpoint = &defaultEndpoint
+	}
+
 	// Create a session to share service client config and handlers with
 	ssmSess, _ := session.NewSession(awsConfig)
 	ssmSess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(appConfig.Agent.Name, appConfig.Agent.Version))

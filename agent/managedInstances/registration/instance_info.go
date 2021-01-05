@@ -87,11 +87,11 @@ func Fingerprint() (string, error) {
 }
 
 // HasManagedInstancesCredentials returns true when the valid registration information is present
-func HasManagedInstancesCredentials() (bool, error) {
+func HasManagedInstancesCredentials() bool {
 	info := getInstanceInfo()
 
 	// check if we need to activate instance
-	return info.PrivateKey != "" && info.Region != "" && info.InstanceID != "", nil
+	return info.PrivateKey != "" && info.Region != "" && info.InstanceID != ""
 }
 
 // UpdatePrivateKey saves the private key into the registration persistence store

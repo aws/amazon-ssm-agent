@@ -20,7 +20,6 @@ import (
 	"sync"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/platform/containers"
 )
 
 var cachedRegion, cachedAvailabilityZone, cachedInstanceType, cachedInstanceID, cachedTargetID string
@@ -170,15 +169,6 @@ func fetchInstanceID() (string, error) {
 	var err error
 	var instanceID string
 
-	config, _ := getConfig(false)
-	if config.Agent.ContainerMode {
-		container := &containers.Container{}
-		targetID, err := container.TargetID()
-		infoArray := strings.Split(targetID, "_")
-		containerID := infoArray[len(infoArray)-1]
-		return containerID, err
-	}
-
 	// trying to get instance id from managed instance registration
 	if instanceID = managedInstance.InstanceID(); instanceID != "" {
 		return instanceID, nil
@@ -196,7 +186,8 @@ func fetchInstanceID() (string, error) {
 func fetchTargetID() (string, error) {
 	config, _ := getConfig(false)
 	if config.Agent.ContainerMode {
-		return container.TargetID()
+		// TODO: Temporary change to remove depencency on container folder, function will be removed later
+		return "", nil
 	} else {
 		return "", nil
 	}
@@ -230,12 +221,6 @@ func fetchInstanceType() (string, error) {
 func fetchRegion() (string, error) {
 	var err error
 	var region string
-
-	config, err := getConfig(false)
-	if err == nil && config.Agent.ContainerMode {
-		container := &containers.Container{}
-		return container.Region()
-	}
 
 	// trying to get region from managed instance registration
 	if region = managedInstance.Region(); region != "" {

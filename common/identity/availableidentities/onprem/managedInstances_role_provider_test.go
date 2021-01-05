@@ -1,4 +1,4 @@
-// Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License"). You may not
 // use this file except in compliance with the License. A copy of the
@@ -13,7 +13,7 @@
 
 // package rolecreds contains functions that help procure the managed instance auth credentials
 // tests
-package rolecreds
+package onprem
 
 import (
 	"fmt"
@@ -129,6 +129,7 @@ type registrationStub struct {
 	publicKey        string
 	privateKey       string
 	keyType          string
+	hasCreds         bool
 	err              error
 }
 
@@ -150,4 +151,8 @@ func (r registrationStub) GenerateKeyPair() (publicKey, privateKey, keyType stri
 
 func (r registrationStub) UpdatePrivateKey(privateKey, privateKeyType string) (err error) {
 	return r.err
+}
+
+func (r registrationStub) HasManagedInstancesCredentials() (bool) {
+	return r.hasCreds
 }
