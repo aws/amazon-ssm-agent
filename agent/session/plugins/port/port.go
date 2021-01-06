@@ -53,6 +53,7 @@ type IPortSession interface {
 	InitializeSession(log log.T) (err error)
 	HandleStreamMessage(log log.T, streamDataMessage mgsContracts.AgentMessage) (err error)
 	WritePump(log log.T, channel datachannel.IDataChannel) (errorCode int)
+	IsConnectionAvailable() (isAvailable bool)
 	Stop()
 }
 
@@ -197,11 +198,11 @@ func (p *PortPlugin) execute(context context.T,
 
 // InputStreamMessageHandler passes payload byte stream to port
 func (p *PortPlugin) InputStreamMessageHandler(log log.T, streamDataMessage mgsContracts.AgentMessage) error {
-	if p.session == nil {
+	if p.session == nil || !p.session.IsConnectionAvailable() {
 		// This is to handle scenario when cli/console starts sending data but session has not been initialized yet
 		// Since packets are rejected, cli/console will resend these packets until tcp starts successfully in separate thread
 		log.Tracef("TCP connection unavailable. Reject incoming message packet")
-		return nil
+		return mgsContracts.ErrHandlerNotReady
 	}
 	return p.session.HandleStreamMessage(log, streamDataMessage)
 }

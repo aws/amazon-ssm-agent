@@ -655,24 +655,26 @@ func (dataChannel *DataChannel) handleStreamDataMessage(log log.T,
 	// On receiving expected stream data message, send acknowledgement, process it and increment expected sequence number by 1.
 	// Further process messages from IncomingMessageBuffer
 	if streamDataMessage.SequenceNumber == dataChannel.ExpectedSequenceNumber {
+		log.Tracef("Process new incoming stream data message. Sequence Number: %d", streamDataMessage.SequenceNumber)
+		if err = dataChannel.processStreamDataMessage(log, streamDataMessage); err != nil {
+			if errors.Is(err, mgsContracts.ErrHandlerNotReady) {
+				return nil
+			}
+			log.Errorf("Unable to process stream data payload %v, err: %v.", streamDataMessage, err)
+			return err
+		}
+
 		if err = dataChannel.SendAcknowledgeMessage(log, streamDataMessage); err != nil {
 			return err
 		}
 
 		// Message is acknowledged so increment expected sequence number
 		dataChannel.ExpectedSequenceNumber = dataChannel.ExpectedSequenceNumber + 1
-
-		log.Tracef("Process new incoming stream data message. Sequence Number: %d", streamDataMessage.SequenceNumber)
-		if err = dataChannel.processStreamDataMessage(log, streamDataMessage); err != nil {
-			log.Errorf("Unable to process stream data payload %v, err: %v.", streamDataMessage, err)
-			return err
-		}
-
 		return dataChannel.processIncomingMessageBufferItems(log)
 
+	} else if streamDataMessage.SequenceNumber > dataChannel.ExpectedSequenceNumber {
 		// If incoming message sequence number is greater than expected sequence number and IncomingMessageBuffer has capacity,
 		// add message to IncomingMessageBuffer and send acknowledgement
-	} else if streamDataMessage.SequenceNumber > dataChannel.ExpectedSequenceNumber {
 		log.Debugf("Unexpected sequence message received. Received Sequence Number: %d. Expected Sequence Number: %d",
 			streamDataMessage.SequenceNumber, dataChannel.ExpectedSequenceNumber)
 
@@ -749,9 +751,6 @@ func (dataChannel *DataChannel) processIncomingMessageBufferItems(log log.T) (er
 
 			streamDataMessage := &mgsContracts.AgentMessage{}
 
-			// Bump expected sequence number. Each message is only processed once.
-			dataChannel.ExpectedSequenceNumber = dataChannel.ExpectedSequenceNumber + 1
-
 			if err = streamDataMessage.Deserialize(log, bufferedStreamMessage.Content); err != nil {
 				log.Errorf("Cannot deserialize raw message: %d, err: %v.", bufferedStreamMessage.SequenceNumber, err)
 				return err
@@ -760,6 +759,8 @@ func (dataChannel *DataChannel) processIncomingMessageBufferItems(log log.T) (er
 				log.Errorf("Unable to process stream data payload, err: %v.", err)
 				return err
 			}
+
+			dataChannel.ExpectedSequenceNumber = dataChannel.ExpectedSequenceNumber + 1
 
 			log.Debugf("Delete stream data from IncomingMessageBuffer. Sequence Number: %d", bufferedStreamMessage.SequenceNumber)
 			dataChannel.RemoveDataFromIncomingMessageBuffer(bufferedStreamMessage.SequenceNumber)

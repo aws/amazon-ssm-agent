@@ -230,11 +230,19 @@ func (suite *PortTestSuite) TestExecute() {
 func (suite *PortTestSuite) TestInputStreamHandler() {
 	suite.plugin.session = suite.mockPortSession
 	suite.mockPortSession.On("HandleStreamMessage", mock.Anything, getAgentMessage(uint32(mgsContracts.Output), payload)).Return(nil)
+	suite.mockPortSession.On("IsConnectionAvailable").Return(true)
 	suite.plugin.InputStreamMessageHandler(suite.mockLog, getAgentMessage(uint32(mgsContracts.Output), payload))
 	suite.mockPortSession.AssertExpectations(suite.T())
 }
 
 func (suite *PortTestSuite) TestInputStreamHandlerSessionNotReady() {
+	suite.plugin.InputStreamMessageHandler(suite.mockLog, getAgentMessage(uint32(mgsContracts.Output), payload))
+	suite.mockPortSession.AssertExpectations(suite.T())
+}
+
+func (suite *PortTestSuite) TestInputStreamHandlerConnectionNotReady() {
+	suite.plugin.session = suite.mockPortSession
+	suite.mockPortSession.On("IsConnectionAvailable").Return(false)
 	suite.plugin.InputStreamMessageHandler(suite.mockLog, getAgentMessage(uint32(mgsContracts.Output), payload))
 	suite.mockPortSession.AssertExpectations(suite.T())
 }

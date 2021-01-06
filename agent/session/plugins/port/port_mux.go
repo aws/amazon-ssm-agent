@@ -78,6 +78,11 @@ func NewMuxPortSession(cancelled chan struct{}, portNumber string, sessionId str
 	return &plugin, nil
 }
 
+// IsConnectionAvailable returns a boolean value indicating the availability of connection to destination
+func (p *MuxPortSession) IsConnectionAvailable() bool {
+	return p.mgsConn != nil && p.muxServer != nil
+}
+
 // HandleStreamMessage passes payload byte stream to smux server
 func (p *MuxPortSession) HandleStreamMessage(log log.T, streamDataMessage mgsContracts.AgentMessage) error {
 	switch mgsContracts.PayloadType(streamDataMessage.PayloadType) {

@@ -16,6 +16,7 @@ package contracts
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"time"
 
@@ -328,3 +329,6 @@ type HandshakeCompletePayload struct {
 	HandshakeTimeToComplete time.Duration `json:"HandshakeTimeToComplete"`
 	CustomerMessage         string        `json:"CustomerMessage"`
 }
+
+// ErrHandlerNotReady message indicates that the session plugin's incoming message handler is not ready
+var ErrHandlerNotReady = errors.New("message handler is not ready, rejecting incoming packet")

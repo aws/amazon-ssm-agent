@@ -67,6 +67,10 @@ var (
 	inputStreamMessageHandler                  = func(log log.T, streamDataMessage mgsContracts.AgentMessage) error {
 		return nil
 	}
+	inputStreamMessageHandlerNotReady = func(log log.T, streamDataMessage mgsContracts.AgentMessage) error {
+		return mgsContracts.ErrHandlerNotReady
+	}
+
 	sessionTypeRequest = mgsContracts.SessionTypeRequest{SessionType: appconfig.PluginNameStandardStream}
 )
 
@@ -380,6 +384,45 @@ func TestDataChannelIncomingMessageHandlerForUnexpectedInputStreamDataMessage(t 
 	assert.Equal(t, int64(2), bufferedStreamMessage.SequenceNumber)
 	bufferedStreamMessage = dataChannel.IncomingMessageBuffer.Messages[3]
 	assert.Nil(t, bufferedStreamMessage.Content)
+}
+
+func TestDataChannelIncomingMessageHandlerForExpectedInputStreamDataMessageWhenHandlerNotReady(t *testing.T) {
+	dataChannel := getDataChannel()
+	dataChannel.inputStreamMessageHandler = inputStreamMessageHandlerNotReady
+	dataChannel.Pause = true
+	mockChannel := &communicatorMocks.IWebSocketChannel{}
+	dataChannel.wsChannel = mockChannel
+
+	mockChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+
+	err := dataChannel.dataChannelIncomingMessageHandler(mockLog, serializedAgentMessages[0])
+	assert.Nil(t, err)
+	assert.Equal(t, int64(1), dataChannel.ExpectedSequenceNumber)
+	assert.Equal(t, 0, len(dataChannel.IncomingMessageBuffer.Messages))
+	mockChannel.AssertNumberOfCalls(t, "SendMessage", 1)
+	assert.Equal(t, false, dataChannel.Pause)
+
+	dataChannel.handshake.complete = true
+
+	dataChannel.AddDataToIncomingMessageBuffer(streamingMessages[2])
+	dataChannel.AddDataToIncomingMessageBuffer(streamingMessages[6])
+	dataChannel.AddDataToIncomingMessageBuffer(streamingMessages[4])
+	dataChannel.AddDataToIncomingMessageBuffer(streamingMessages[3])
+
+	err = dataChannel.dataChannelIncomingMessageHandler(mockLog, serializedAgentMessages[1])
+	assert.Nil(t, err)
+	assert.Equal(t, int64(1), dataChannel.ExpectedSequenceNumber)
+	// All messages except 1 should be in the buffer as handler is not ready to process
+	assert.Equal(t, 4, len(dataChannel.IncomingMessageBuffer.Messages))
+
+	// InputStreamMessageHandler is ready; resend the packet 1
+	dataChannel.inputStreamMessageHandler = inputStreamMessageHandler
+	err = dataChannel.dataChannelIncomingMessageHandler(mockLog, serializedAgentMessages[1])
+	assert.Nil(t, err)
+	assert.Equal(t, int64(5), dataChannel.ExpectedSequenceNumber)
+	// All messages should be processed except 6 in the buffer as packet 5 had not yet arrived
+	assert.Equal(t, 1, len(dataChannel.IncomingMessageBuffer.Messages))
+	mockChannel.AssertNumberOfCalls(t, "SendMessage", 2)
 }
 
 func TestDataChannelIncomingMessageHandlerForAcknowledgeMessage(t *testing.T) {
