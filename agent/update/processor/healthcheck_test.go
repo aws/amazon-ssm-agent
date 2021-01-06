@@ -23,6 +23,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	ssmService "github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/assert"
 )
@@ -57,6 +58,38 @@ func TestHealthCheck(t *testing.T) {
 
 		// check results
 		assert.Equal(t, result, tst.Output)
+	}
+}
+
+func TestUpdateHealthStatusWithNonAlarmingErrorCodes(t *testing.T) {
+	// generate test cases
+	testCases := map[updateutil.ErrorCode]string{
+		updateutil.ErrorUnsupportedServiceManager: fmt.Sprintf("%v_%v-%v", updateFailed, updateutil.ErrorUnsupportedServiceManager, noAlarm),
+		updateutil.ErrorEnvironmentIssue:          fmt.Sprintf("%v_%v", updateFailed, updateutil.ErrorEnvironmentIssue),
+	}
+
+	dummyTargetVersion := "dummyTargetVersion"
+	testCasesWithTargetVersion := map[updateutil.ErrorCode]string{
+		updateutil.ErrorUnsupportedServiceManager: fmt.Sprintf("%v_%v-%v-%v", updateFailed, updateutil.ErrorUnsupportedServiceManager, dummyTargetVersion, noAlarm),
+		updateutil.ErrorEnvironmentIssue:          fmt.Sprintf("%v_%v-%v", updateFailed, updateutil.ErrorEnvironmentIssue, dummyTargetVersion),
+	}
+
+	context := createUpdateContext(Installed)
+
+	// run tests
+	for errorCode, output := range testCases {
+		context.Current.Result = contracts.ResultStatusFailed
+		context.Current.State = Completed
+		result := PrepareHealthStatus(context.Current, string(errorCode), "")
+		assert.Equal(t, output, result)
+	}
+
+	// run tests
+	for errorCode, output := range testCasesWithTargetVersion {
+		context.Current.Result = contracts.ResultStatusFailed
+		context.Current.State = Completed
+		result := PrepareHealthStatus(context.Current, string(errorCode), dummyTargetVersion)
+		assert.Equal(t, output, result)
 	}
 }
 

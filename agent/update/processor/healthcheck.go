@@ -24,6 +24,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/health"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 )
 
 const (
@@ -45,6 +46,8 @@ const (
 	updateFailed = "UpdateFailed"
 	// testFailed represents tests fail during update
 	testFailed = "TestFailed"
+	// noAlarm represents suffix which will be added to unimportant error messages
+	noAlarm = "NoAlarm"
 )
 
 var ssmSvc ssm.Service
@@ -108,12 +111,17 @@ func PrepareHealthStatus(update *UpdateDetail, errorCode string, additionalStatu
 		result = rollBackCompleted
 	}
 
+	// please maintain the if condition order.
 	if len(errorCode) > 0 {
 		result = fmt.Sprintf("%v_%v", result, errorCode)
 	}
 
 	if len(additionalStatus) > 0 {
 		result = fmt.Sprintf("%v-%v", result, additionalStatus)
+	}
+
+	if _, ok := updateutil.NonAlarmingErrors[updateutil.ErrorCode(errorCode)]; ok {
+		result = fmt.Sprintf("%v-%v", result, noAlarm)
 	}
 
 	return result

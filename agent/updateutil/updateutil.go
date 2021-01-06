@@ -288,6 +288,11 @@ const (
 	UpdateSucceeded = "UpdateSucceeded_"
 )
 
+// NonAlarmingErrors contains error codes which are not important.
+var NonAlarmingErrors = map[ErrorCode]struct{}{
+	ErrorUnsupportedServiceManager: {},
+}
+
 type SelfUpdateState string
 
 const (
