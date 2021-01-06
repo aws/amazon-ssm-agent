@@ -329,7 +329,7 @@ func (p *ShellPlugin) InputStreamMessageHandler(log log.T, streamDataMessage mgs
 		// This is to handle scenario when cli/console starts sending size data but pty has not been started yet
 		// Since packets are rejected, cli/console will resend these packets until pty starts successfully in separate thread
 		log.Tracef("Pty unavailable. Reject incoming message packet")
-		return nil
+		return mgsContracts.ErrHandlerNotReady
 	}
 
 	switch mgsContracts.PayloadType(streamDataMessage.PayloadType) {

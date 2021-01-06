@@ -29,6 +29,20 @@ func (_m *IPortSession) HandleStreamMessage(_a0 log.T, streamDataMessage contrac
 	return r0
 }
 
+// IsConnectionAvailable provides a mock function with given fields:
+func (_m *IPortSession) IsConnectionAvailable() bool {
+	ret := _m.Called()
+
+	var r0 bool
+	if rf, ok := ret.Get(0).(func() bool); ok {
+		r0 = rf()
+	} else {
+		r0 = ret.Get(0).(bool)
+	}
+
+	return r0
+}
+
 // InitializeSession provides a mock function with given fields: _a0, serverPort
 func (_m *IPortSession) InitializeSession(_a0 log.T) error {
 	ret := _m.Called(_a0)

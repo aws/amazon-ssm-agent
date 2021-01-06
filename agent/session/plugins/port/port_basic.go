@@ -57,6 +57,11 @@ func NewBasicPortSession(cancelled chan struct{}, portNumber string, portType st
 	return &plugin, nil
 }
 
+// IsConnectionAvailable returns a boolean value indicating the availability of connection to destination
+func (p *BasicPortSession) IsConnectionAvailable() bool {
+	return p.conn != nil
+}
+
 // HandleStreamMessage passes payload byte stream to opened connection
 func (p *BasicPortSession) HandleStreamMessage(log log.T, streamDataMessage mgsContracts.AgentMessage) error {
 	switch mgsContracts.PayloadType(streamDataMessage.PayloadType) {
