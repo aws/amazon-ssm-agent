@@ -14,30 +14,43 @@
 package bootstrap
 
 import (
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/common/identity"
+	identityMock "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	fileSystemMock "github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/datastore/filesystem/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
 func TestBootstrap(t *testing.T) {
-	log := log.NewMockLog()
+	logger := log.NewMockLog()
 	fileSystem := &fileSystemMock.FileSystem{}
 
-	instanceId := "i-1234567890"
-	region := "us-west-1"
+	agentIdentity := &identityMock.IAgentIdentity{}
+	agentIdentity.On("InstanceID").Return("SomeInstanceId", nil)
+
+	newAgentIdentitySelector = func(log log.T) identity.IAgentIdentitySelector {
+		// Selector object does not matter since it is exclusively passed to newAgentIdentity function
+		return nil
+	}
+
+	newAgentIdentity = func(log log.T, config *appconfig.SsmagentConfig, selector identity.IAgentIdentitySelector) (identity.IAgentIdentity, error) {
+		return agentIdentity, nil
+	}
+
 	fileSystem.On("Stat", mock.Anything).Return(nil, nil)
 	fileSystem.On("IsNotExist", mock.Anything).Return(true)
 	fileSystem.On("MkdirAll", mock.Anything, mock.Anything).Return(nil)
 
-	bs := NewBootstrap(log, fileSystem)
+	bs := NewBootstrap(logger, fileSystem)
 
-	context, err := bs.Init(&instanceId, &region)
+	context, err := bs.Init()
 	assert.Nil(t, err)
 	assert.NotNil(t, context)
 
-	assert.Equal(t, context.Log(), log)
-	assert.Equal(t, context.AppVariable().InstanceId, instanceId)
+	assert.Equal(t, context.Log(), logger)
+	assert.Equal(t, context.Identity(), agentIdentity)
 }

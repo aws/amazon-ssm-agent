@@ -176,9 +176,8 @@ func (a *amazonSSMAgentService) Execute(args []string, r <-chan svc.ChangeReques
 	// notify service controller status is now StartPending
 	s <- svc.Status{State: svc.StartPending}
 
-	// start service, without specifying instance id or region
-	var emptyString string
-	agent, contextLog, err := start(a.log, &emptyString, &emptyString)
+	// start service
+	agent, contextLog, err := start(a.log)
 	if err != nil {
 		contextLog.Errorf("Failed to start agent. %v", err)
 		return true, appconfig.ErrorExitCode

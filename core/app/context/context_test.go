@@ -18,39 +18,38 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
+	identityMock "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestCreateContext(t *testing.T) {
-	log := log.NewMockLog()
+	logger := log.NewMockLog()
 	instanceId := "i-1234567890"
 	ssmAppconfig := &appconfig.SsmagentConfig{}
 
-	err := platform.SetInstanceID(instanceId)
-	assert.Nil(t, err)
+	agentIdentity := &identityMock.IAgentIdentity{}
+	agentIdentity.On("InstanceID").Return(instanceId, nil).Once()
 
-	context, err := NewCoreAgentContext(log, ssmAppconfig)
+	context, err := NewCoreAgentContext(logger, ssmAppconfig, agentIdentity)
 	assert.Nil(t, err)
-	assert.Equal(t, context.Log(), log)
+	assert.Equal(t, context.Log(), logger)
 	assert.Equal(t, context.AppConfig(), ssmAppconfig)
-	assert.Equal(t, context.AppVariable().InstanceId, instanceId)
+	assert.Equal(t, context.Identity(), agentIdentity)
 }
 
 func TestWithContext(t *testing.T) {
 	logger := log.NewMockLog()
-
 	instanceId := "i-1234567890"
 	ssmAppconfig := &appconfig.SsmagentConfig{}
 
-	err := platform.SetInstanceID(instanceId)
-	assert.Nil(t, err)
+	agentIdentity := &identityMock.IAgentIdentity{}
+	agentIdentity.On("InstanceID").Return(instanceId, nil).Once()
 
-	context, err := NewCoreAgentContext(logger, ssmAppconfig)
+	context, err := NewCoreAgentContext(logger, ssmAppconfig, agentIdentity)
 	assert.Nil(t, err)
 	assert.Equal(t, context.Log(), logger)
 	assert.Equal(t, context.AppConfig(), ssmAppconfig)
-	assert.Equal(t, context.AppVariable().InstanceId, instanceId)
+	assert.Equal(t, context.Identity(), agentIdentity)
 
 	loggerNew := log.NewMockLog()
 	logger.On("WithContext", []string{"test context"}).Return(loggerNew)

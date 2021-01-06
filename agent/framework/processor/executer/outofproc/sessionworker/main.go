@@ -27,6 +27,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/version"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc"
 )
 
@@ -65,13 +66,19 @@ func initialize(args []string) (context.T, string, error) {
 	}
 
 	logger.Debugf("Session worker parse args: %v", args)
-	channelName, _, err := proc.ParseArgv(args)
+	channelName, instanceID, err := proc.ParseArgv(args)
 	if err != nil {
 		logger.Errorf("Failed to parse argv: %v", err)
 	}
 
+	selector := identity.NewInstanceIDRegionAgentIdentitySelector(logger, instanceID, "")
+	agentIdentity, err := identity.NewAgentIdentity(logger, &config, selector)
+	if err != nil {
+		return nil, "", err
+	}
+
 	//use argsVal1 as context name which is either channelName or dataChannelId
-	return context.Default(logger, config).With(defaultSessionWorkerContextName).With("[" + channelName + "]"),
+	return context.Default(logger, config, agentIdentity).With(defaultSessionWorkerContextName).With("[" + channelName + "]"),
 		channelName,
 		err
 }

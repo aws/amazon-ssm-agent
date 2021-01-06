@@ -18,6 +18,7 @@ package context
 import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 )
 
 // T transfers context specific data across different execution boundaries.
@@ -29,16 +30,18 @@ type T interface {
 	With(context string) T
 	CurrentContext() []string
 	AppConstants() *appconfig.AppConstants
+	Identity() identity.IAgentIdentity
 }
 
 // Default returns an empty context that use the default logger and appconfig.
-func Default(logger log.T, ssmAppconfig appconfig.SsmagentConfig) T {
+func Default(logger log.T, ssmAppconfig appconfig.SsmagentConfig, agentIdentity identity.IAgentIdentity) T {
 	// Loading the maximum & minimum frequency minutes for healthcheck
 	appconst := appconfig.AppConstants{
 		MinHealthFrequencyMinutes: appconfig.DefaultSsmHealthFrequencyMinutesMin,
 		MaxHealthFrequencyMinutes: appconfig.DefaultSsmHealthFrequencyMinutesMax,
 	}
-	ctx := &defaultContext{log: logger, appconfig: ssmAppconfig, appconst: appconst}
+
+	ctx := &defaultContext{log: logger, appconfig: ssmAppconfig, appconst: appconst, identity: agentIdentity}
 	return ctx
 }
 
@@ -47,6 +50,7 @@ type defaultContext struct {
 	log       log.T
 	appconfig appconfig.SsmagentConfig
 	appconst  appconfig.AppConstants
+	identity  identity.IAgentIdentity
 }
 
 func (c *defaultContext) With(logContext string) T {
@@ -56,6 +60,7 @@ func (c *defaultContext) With(logContext string) T {
 		log:       c.log.WithContext(contextSlice...),
 		appconfig: c.appconfig,
 		appconst:  c.appconst,
+		identity:  c.identity,
 	}
 	return newContext
 }
@@ -74,4 +79,8 @@ func (c *defaultContext) CurrentContext() []string {
 
 func (c *defaultContext) AppConstants() *appconfig.AppConstants {
 	return &c.appconst
+}
+
+func (c *defaultContext) Identity() identity.IAgentIdentity {
+	return c.identity
 }
