@@ -41,18 +41,17 @@ const (
 )
 
 var (
-	instanceIDPtr, regionPtr                         *string
 	activationCode, activationID, region             string
 	register, clear, force, fpFlag, agentVersionFlag bool
 	similarityThreshold                              int
 	registrationFile                                 = filepath.Join(appconfig.DefaultDataStorePath, "registration")
 )
 
-func start(log logger.T, instanceIDPtr *string, regionPtr *string) (app.CoreAgent, logger.T, error) {
+func start(log logger.T) (app.CoreAgent, logger.T, error) {
 	log.WriteEvent(logger.AgentTelemetryMessage, "", logger.AmazonAgentStartEvent)
 
 	bs := bootstrap.NewBootstrap(log, filesystem.NewFileSystem())
-	context, err := bs.Init(instanceIDPtr, regionPtr)
+	context, err := bs.Init()
 	if err != nil {
 		return nil, log, err
 	}
@@ -98,7 +97,7 @@ func run(log logger.T) {
 	}()
 
 	// run ssm agent
-	coreAgent, contextLog, err := start(log, instanceIDPtr, regionPtr)
+	coreAgent, contextLog, err := start(log)
 	if err != nil {
 		contextLog.Errorf("error occurred when starting amazon-ssm-agent: %v", err)
 		return

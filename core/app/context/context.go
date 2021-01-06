@@ -17,14 +17,14 @@ package context
 import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 )
 
 // ICoreAgentContext defines a type that carries context specific data such as the logger.
 type ICoreAgentContext interface {
 	Log() log.T
 	AppConfig() *appconfig.SsmagentConfig
-	AppVariable() *AppVariable
+	Identity() identity.IAgentIdentity
 	With(context string) ICoreAgentContext
 }
 
@@ -33,12 +33,7 @@ type CoreAgentContext struct {
 	context     []string
 	log         log.T
 	appConfig   *appconfig.SsmagentConfig
-	appVariable *AppVariable
-}
-
-// AppVariable contains variable that needed by the application
-type AppVariable struct {
-	InstanceId string
+	identity    identity.IAgentIdentity
 }
 
 // With updates the contextSlice that changes the log prefix
@@ -48,7 +43,7 @@ func (c *CoreAgentContext) With(logContext string) ICoreAgentContext {
 		context:     contextSlice,
 		log:         c.log.WithContext(contextSlice...),
 		appConfig:   c.appConfig,
-		appVariable: c.appVariable,
+		identity:    c.identity,
 	}
 	return newContext
 }
@@ -63,26 +58,17 @@ func (c *CoreAgentContext) AppConfig() *appconfig.SsmagentConfig {
 	return c.appConfig
 }
 
-// AppVariable returns app variable
-func (c *CoreAgentContext) AppVariable() *AppVariable {
-	return c.appVariable
+// Identity returns identity object
+func (c *CoreAgentContext) Identity() identity.IAgentIdentity {
+	return c.identity
 }
 
 // NewCoreAgentContext creates and returns a new core agent context
-func NewCoreAgentContext(logger log.T, ssmAppconfig *appconfig.SsmagentConfig) (ICoreAgentContext, error) {
-	instanceID, err := platform.InstanceID()
-	if err != nil {
-		logger.Errorf("failed to load instance ID: %v", err)
-		return nil, err
-	}
-
-	appVariable := &AppVariable{
-		InstanceId: instanceID,
-	}
+func NewCoreAgentContext(logger log.T, ssmAppconfig *appconfig.SsmagentConfig, agentIdentity identity.IAgentIdentity) (ICoreAgentContext, error) {
 	coreContext := &CoreAgentContext{
 		appConfig:   ssmAppconfig,
-		appVariable: appVariable,
 		log:         logger,
+		identity:    agentIdentity,
 	}
 	return coreContext, nil
 }

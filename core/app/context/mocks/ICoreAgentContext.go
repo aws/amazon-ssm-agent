@@ -5,6 +5,7 @@ package mocks
 import (
 	appconfig "github.com/aws/amazon-ssm-agent/agent/appconfig"
 	log "github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/amazon-ssm-agent/core/app/context"
 	mock "github.com/stretchr/testify/mock"
 )
@@ -30,16 +31,16 @@ func (_m *ICoreAgentContext) AppConfig() *appconfig.SsmagentConfig {
 	return r0
 }
 
-// AppVariable provides a mock function with given fields:
-func (_m *ICoreAgentContext) AppVariable() *context.AppVariable {
+// Identity provides a mock function with given fields:
+func (_m *ICoreAgentContext) Identity() identity.IAgentIdentity {
 	ret := _m.Called()
 
-	var r0 *context.AppVariable
-	if rf, ok := ret.Get(0).(func() *context.AppVariable); ok {
+	var r0 identity.IAgentIdentity
+	if rf, ok := ret.Get(0).(func() identity.IAgentIdentity); ok {
 		r0 = rf()
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*context.AppVariable)
+			r0 = ret.Get(0).(identity.IAgentIdentity)
 		}
 	}
 

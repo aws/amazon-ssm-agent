@@ -22,7 +22,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/amazon-ssm-agent/core/app/context"
 	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/datastore/filesystem"
 )
@@ -32,9 +32,12 @@ const (
 	defaultFileCreateMode  = 0750
 )
 
+var newAgentIdentitySelector = identity.NewDefaultAgentIdentitySelector
+var newAgentIdentity = identity.NewAgentIdentity
+
 // IBootstrap is the interface for initializing the system for core agent
 type IBootstrap interface {
-	Init(instanceIdPtr *string, regionPtr *string) (context.ICoreAgentContext, error)
+	Init() (context.ICoreAgentContext, error)
 }
 
 // Bootstrap is the implementation for initializing the system for core agent
@@ -52,7 +55,7 @@ func NewBootstrap(log log.T, fileSystem filesystem.IFileSystem) IBootstrap {
 }
 
 // Init initialize the system for core agent
-func (bs *Bootstrap) Init(instanceIdPtr *string, regionPtr *string) (context.ICoreAgentContext, error) {
+func (bs *Bootstrap) Init() (context.ICoreAgentContext, error) {
 	logger := bs.log
 	defer func() {
 		if msg := recover(); msg != nil {
@@ -61,30 +64,22 @@ func (bs *Bootstrap) Init(instanceIdPtr *string, regionPtr *string) (context.ICo
 		}
 	}()
 
-	// initialize region
-	if *regionPtr != "" {
-		if err := platform.SetRegion(*regionPtr); err != nil {
-			return nil, fmt.Errorf("error occurred setting the region, %v", err)
-		}
+	config, err := appconfig.Config(true)
+	if err != nil {
+		return nil, fmt.Errorf("app config could not be loaded - %v", err)
 	}
 
-	// initialize instance ID
-	if *instanceIdPtr != "" {
-		if err := platform.SetInstanceID(*instanceIdPtr); err != nil {
-			return nil, fmt.Errorf("error occurred setting the instance ID, %v", err)
-		}
+	selector := newAgentIdentitySelector(logger)
+	agentIdentity, err := newAgentIdentity(logger, &config, selector)
+	if err != nil {
+		return nil, logger.Errorf("failed to get identity: %v", err)
 	}
 
-	instanceId, err := platform.InstanceID()
+	instanceId, err := agentIdentity.InstanceID()
 	if err != nil {
 		return nil, logger.Errorf("error fetching the instanceID, %v", err)
 	}
 	logger.Debug("Using instanceID:", instanceId)
-
-	config, err := appconfig.Config(true)
-	if err != nil {
-		return nil, logger.Errorf("app config could not be loaded - %v", err)
-	}
 
 	err = bs.createIPCFolder()
 	if err != nil {
@@ -92,7 +87,7 @@ func (bs *Bootstrap) Init(instanceIdPtr *string, regionPtr *string) (context.ICo
 	}
 
 	for i := 0; i < 3; i++ {
-		ctx, err := context.NewCoreAgentContext(logger, &config)
+		ctx, err := context.NewCoreAgentContext(logger, &config, agentIdentity)
 		if err == nil {
 			return ctx, nil
 		}

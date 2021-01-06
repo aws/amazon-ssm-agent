@@ -17,15 +17,17 @@ package main
 import (
 	"flag"
 	"fmt"
+	"os"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	ssmlog "github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/update/processor"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/nightlyone/lockfile"
 )
 
@@ -39,9 +41,9 @@ const (
 )
 
 var (
-	log     logger.T
-	updater processor.T
-	region  = platform.Region
+	log           logger.T
+	updater       processor.T
+	agentIdentity identity.IAgentIdentity
 )
 
 var (
@@ -64,11 +66,29 @@ var (
 )
 
 func init() {
+	var err error
 	log = ssmlog.GetUpdaterLogger(logger.DefaultLogDir, defaultLogFileName)
+
+	// Initialize agent config for agent identity
+	appConfig, err := appconfig.Config(true)
+	if err != nil {
+		log.Warnf("Failed to load agent config: %v", err)
+	}
+	// Create identity selector
+	selector := identity.NewDefaultAgentIdentitySelector(log)
+	agentIdentity, err = identity.NewAgentIdentity(log, &appConfig, selector)
+	if err != nil {
+		log.Errorf("Failed to assume agent identity: %v", err)
+		os.Exit(1)
+	}
+
+	agentContext := context.Default(log, appConfig, agentIdentity)
+
 
 	// Sleep 3 seconds to allow agent to finishing up it's work
 	time.Sleep(defaultWaitTimeForAgentToFinish * time.Second)
 
+	// TODO: Use agentContext in updater processor
 	updater = processor.NewUpdater()
 
 	// Load update detail from command line
@@ -102,8 +122,6 @@ type Config struct {
 func main() {
 	defer log.Close()
 	defer log.Flush()
-
-	log.Debug("Using region:", region)
 
 	// If the updater already owns the lockfile, no harm done
 	// If there is no lockfile, the updater will own it

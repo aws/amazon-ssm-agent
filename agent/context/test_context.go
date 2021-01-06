@@ -18,6 +18,8 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/common/identity"
+	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -34,6 +36,7 @@ func NewMockDefault() *Mock {
 	ctx := new(Mock)
 	log := log.NewMockLog()
 	config := appconfig.SsmagentConfig{}
+	agentIdentity := identityMocks.NewDefaultMockAgentIdentity()
 	appconst := appconfig.AppConstants{
 		MinHealthFrequencyMinutes: appconfig.DefaultSsmHealthFrequencyMinutesMin,
 		MaxHealthFrequencyMinutes: appconfig.DefaultSsmHealthFrequencyMinutesMax,
@@ -42,6 +45,7 @@ func NewMockDefault() *Mock {
 	ctx.On("AppConfig").Return(config)
 	ctx.On("With", mock.AnythingOfType("string")).Return(ctx)
 	ctx.On("CurrentContext").Return([]string{})
+	ctx.On("Identity").Return(agentIdentity)
 	ctx.On("AppConstants").Return(&appconst)
 	return ctx
 }
@@ -51,6 +55,7 @@ func NewMockDefaultWithContext(context []string) *Mock {
 	ctx := new(Mock)
 	log := log.NewMockLogWithContext(strings.Join(context, ""))
 	config := appconfig.SsmagentConfig{}
+	agentIdentity := identityMocks.NewDefaultMockAgentIdentity()
 	appconst := appconfig.AppConstants{
 		MinHealthFrequencyMinutes: appconfig.DefaultSsmHealthFrequencyMinutesMin,
 		MaxHealthFrequencyMinutes: appconfig.DefaultSsmHealthFrequencyMinutesMax,
@@ -59,6 +64,7 @@ func NewMockDefaultWithContext(context []string) *Mock {
 	ctx.On("AppConfig").Return(config)
 	ctx.On("With", mock.AnythingOfType("string")).Return(ctx)
 	ctx.On("CurrentContext").Return(context)
+	ctx.On("Identity").Return(agentIdentity)
 	ctx.On("AppConstants").Return(&appconst)
 	return ctx
 }
@@ -91,4 +97,10 @@ func (m *Mock) CurrentContext() []string {
 func (m *Mock) AppConstants() *appconfig.AppConstants {
 	args := m.Called()
 	return args.Get(0).(*appconfig.AppConstants)
+}
+
+// Identity mocks the Identity function.
+func (m *Mock) Identity() identity.IAgentIdentity {
+	args := m.Called()
+	return args.Get(0).(identity.IAgentIdentity)
 }

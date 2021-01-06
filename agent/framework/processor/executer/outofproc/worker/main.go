@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/aws/amazon-ssm-agent/common/identity"
 	"os"
 	"time"
 
@@ -13,7 +14,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc"
@@ -41,19 +41,21 @@ var pluginRunner = func(
 func initialize(args []string) (context.T, string, error) {
 	// intialize a light weight logger, use the default seelog config logger
 	logger := ssmlog.SSMLogger(false)
-	// initialize appconfig, use default config
-	config := appconfig.DefaultConfig()
+	// initialize appconfig, default config is provided in case of error
+	config, _ := appconfig.Config(true)
 	logger.Infof("ssm-document-worker - %v", version.String())
 	logger.Infof("parsing args: %v", args)
 	channelName, instanceID, err := proc.ParseArgv(args)
 	logger.Infof("using channelName %v, instanceID: %v", channelName, instanceID)
 	//cache the instanceID here in order to avoid throttle by metadata endpoint.
-	platform.SetInstanceID(instanceID)
+
+	selector := identity.NewInstanceIDRegionAgentIdentitySelector(logger, instanceID, "")
+	agentIdentity, err := identity.NewAgentIdentity(logger, &config, selector)
 	if err != nil {
-		logger.Errorf("failed to parse argv: %v", err)
+		return nil, "", err
 	}
 	//use process as context name
-	return context.Default(logger, config).With(defaultWorkerContextName).With("[" + channelName + "]"), channelName, err
+	return context.Default(logger, config, agentIdentity).With(defaultWorkerContextName).With("[" + channelName + "]"), channelName, err
 }
 
 func main() {

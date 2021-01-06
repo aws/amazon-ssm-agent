@@ -27,7 +27,6 @@ import (
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/fingerprint"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/ssm/anonauth"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 )
@@ -36,10 +35,6 @@ import (
 func parseFlags() {
 	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError)
 	flag.Usage = flagUsage
-
-	// instance id and region for overriding in dev test scenarios
-	instanceIDPtr = flag.String("i", "", "instance id")
-	regionPtr = flag.String("r", "", "instance region")
 
 	// managed instance registration
 	flag.BoolVar(&register, registerFlag, false, "")
@@ -112,8 +107,6 @@ func processRegistration(log logger.T) (exitCode int) {
 		flagUsage()
 		return 1
 	}
-
-	platform.SetRegion(region)
 
 	// check if previously registered
 	if !force && registration.InstanceID() != "" {

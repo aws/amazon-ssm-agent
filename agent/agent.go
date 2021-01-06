@@ -35,6 +35,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/session/utility"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
 	"github.com/aws/amazon-ssm-agent/agent/startup"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 )
 
 const (
@@ -63,7 +64,14 @@ func start(log logger.T, instanceIDPtr *string, regionPtr *string, shouldCheckHi
 		log.Debugf("appconfig could not be loaded - %v", err)
 		return
 	}
-	context := context.Default(log, config)
+
+	selector := identity.NewInstanceIDRegionAgentIdentitySelector(log, *instanceIDPtr, *regionPtr)
+	agentIdentity, err := identity.NewAgentIdentity(log, &config, selector)
+	if err != nil {
+		return nil, err
+	}
+
+	context := context.Default(log, config, agentIdentity)
 	context = context.With("[ssm-agent-worker]")
 
 	//Reset password for default RunAs user if already exists
@@ -129,7 +137,7 @@ func startAgent(ssmAgent agent.ISSMAgent, context context.T, log logger.T, insta
 	return
 }
 
-func blockUntilSignaled(ssmAgent agent.ISSMAgent, log logger.T) {
+func blockUntilSignaled(log logger.T) {
 	// Below channel will handle all machine initiated shutdown/reboot requests.
 
 	// Set up channel on which to receive signal notifications.
@@ -168,6 +176,6 @@ func run(log logger.T, shouldCheckHibernation bool) {
 		log.Errorf("error occurred when starting ssm-agent-worker: %v", err)
 		return
 	}
-	blockUntilSignaled(agent, log)
+	blockUntilSignaled(log)
 	agent.Stop()
 }
