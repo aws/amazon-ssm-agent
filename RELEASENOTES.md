@@ -1,5 +1,12 @@
 Latest
 ===============
+- Added instruction to README.md for getting the latest version of SSM Agent in a specific region
+- Fix for PowerShell stream data being executed in reverse order
+- Fix to create update lock folder before creating update locks
+- Fix to reset ipcTempFile properties at the end of session
+
+3.0.529.0
+===============
 - Fix for encrypted s3 bucket upload
 
 3.0.502.0
