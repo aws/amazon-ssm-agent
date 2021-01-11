@@ -262,7 +262,7 @@ func (ch *fileWatcherChannel) consumeAll() {
 			if ch.isReadable(name) {
 				ch.consume(path.Join(ch.path, name))
 			} else {
-				ch.logger.Warnf("IPC file not readable: %s", name)
+				ch.logger.Debugf("IPC file not readable: %s", name)
 			}
 		}
 	}
