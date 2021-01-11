@@ -45,6 +45,7 @@ const (
 	bucketRegionErrorMsg   = "AuthorizationHeaderMalformed: The authorization header is malformed; the region 'us-east-1' is wrong; expecting 'us-west-2' status code: 400, request id: []"
 	testDirectoryName      = "corp.test.com"
 	testDirectoryId        = "d-0123456789"
+	testKeepHostName       = true
 )
 
 var TestCases = []TestCase{
@@ -90,6 +91,15 @@ func generateDomainJoinPluginInput(id string, name string, ipAddress []string) D
 		DirectoryId:    id,
 		DirectoryName:  name,
 		DnsIpAddresses: ipAddress,
+	}
+}
+
+func generateDomainJoinPluginInputOptionalParamKeepHostName(id string, name string, ipAddress []string, keepHostName bool) DomainJoinPluginInput {
+	return DomainJoinPluginInput{
+		DirectoryId:    id,
+		DirectoryName:  name,
+		DnsIpAddresses: ipAddress,
+		KeepHostName:   keepHostName,
 	}
 }
 
@@ -181,5 +191,10 @@ func TestMakeArguments(t *testing.T) {
 	domainJoinInput = generateDomainJoinPluginInput(testDirectoryId, testDirectoryName, []string{"Hello `aws s3 ls`", "8.8.8.8"})
 	commandRes, _ = makeArguments(logger, "./aws_domainjoin.sh", domainJoinInput)
 	expected = ""
+	assert.Equal(t, expected, commandRes)
+
+	domainJoinInput = generateDomainJoinPluginInputOptionalParamKeepHostName(testDirectoryId, testDirectoryName, []string{"172.31.4.141", "172.31.21.240"}, testKeepHostName)
+	commandRes, _ = makeArguments(logger, "./aws_domainjoin.sh", domainJoinInput)
+	expected = "./aws_domainjoin.sh --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --dns-addresses 172.31.4.141,172.31.21.240 --keep-hostname  "
 	assert.Equal(t, expected, commandRes)
 }

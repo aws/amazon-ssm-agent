@@ -53,6 +53,7 @@ DOMAIN_USERNAME=""
 DOMAIN_PASSWORD=""
 # Secrets Manager Secret ID needs to be of the form aws/directory-services/d-91673491b6/seamless-domain-join
 SECRET_ID_PREFIX="aws/directory-services"
+KEEP_HOSTNAME=""
 
 ##################################################
 ## Set hostname to NETBIOS computer name #########
@@ -548,13 +549,21 @@ for i in "$@"; do
             NO_PROXY="$1"
             continue
             ;;
+        --keep-hostname)
+            shift;
+            KEEP_HOSTNAME="TRUE"
+            continue
+            ;;
     esac
     shift
 done
 
 REALM=$(echo "$DIRECTORY_NAME" | tr [a-z] [A-Z])
 
-set_hostname
+COMPUTER_NAME=$(hostname --short)
+if [ -z $KEEP_HOSTNAME ]; then
+   set_hostname
+fi
 configure_hosts_file
 if [ -z $REGION ]; then
     get_region

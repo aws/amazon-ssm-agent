@@ -59,6 +59,8 @@ const (
 	NoProxy = " --no-proxy "
 	// Default folder name for domain join plugin
 	DomainJoinFolderName = "awsDomainJoin"
+	// KeepHostName is a flag to retain instance hostnames as assigned (by customers).
+	KeepHostNameArgs = " --keep-hostname "
 )
 
 // Makes command as variables, so that we can mock this for unit tests
@@ -79,6 +81,7 @@ type DomainJoinPluginInput struct {
 	DirectoryName  string
 	DirectoryOU    string
 	DnsIpAddresses []string
+	KeepHostName   bool
 }
 
 // NewPlugin returns a new instance of the plugin.
@@ -303,6 +306,11 @@ func makeArguments(log log.T, scriptPath string, pluginInput DomainJoinPluginInp
 		} else {
 			return "", fmt.Errorf("Invalid DNS IP address " + pluginInput.DnsIpAddresses[index])
 		}
+	}
+
+	if pluginInput.KeepHostName {
+		buffer.WriteString(KeepHostNameArgs)
+		buffer.WriteString(" ")
 	}
 
 	return buffer.String(), nil
