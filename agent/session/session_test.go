@@ -15,7 +15,7 @@
 package session
 
 import (
-	"encoding/json"
+	"sync"
 	"testing"
 	"time"
 
@@ -23,6 +23,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor"
 	processorMock "github.com/aws/amazon-ssm-agent/agent/framework/processor/mock"
+	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
@@ -34,17 +35,31 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
+	"github.com/twinj/uuid"
 )
 
 var (
-	instanceId  = "i-1234"
-	messageId   = "2b196342-d7d4-436e-8f09-3883a1116ac3"
-	status      = contracts.ResultStatusInProgress
-	errorMsg    = "plugin failed"
-	s3Bucket    = "s3Bucket"
-	s3UrlSuffix = "s3UrlSuffix"
-	cwlGroup    = "cwlGroup"
-	cwlStream   = "cwlStream"
+	instanceId          = "i-1234"
+	messageId           = "2b196342-d7d4-436e-8f09-3883a1116ac3"
+	status              = contracts.ResultStatusInProgress
+	errorMsg            = "plugin failed"
+	s3Bucket            = "s3Bucket"
+	s3UrlSuffix         = "s3UrlSuffix"
+	cwlGroup            = "cwlGroup"
+	cwlStream           = "cwlStream"
+	taskCompletePayload = mgsContracts.AgentTaskCompletePayload{
+		SchemaVersion:   1,
+		TaskId:          messageId,
+		Topic:           mgsContracts.TaskCompleteMessage,
+		FinalTaskStatus: string(contracts.ResultStatusSuccess),
+		InstanceId:      instanceId,
+		Output:          errorMsg,
+		S3Bucket:        s3Bucket,
+		S3UrlSuffix:     s3UrlSuffix,
+		CwlGroup:        cwlGroup,
+		CwlStream:       cwlStream,
+		RetryNumber:     0,
+	}
 )
 
 type SessionTestSuite struct {
@@ -54,6 +69,8 @@ type SessionTestSuite struct {
 	session            contracts.ICoreModule
 	mockService        *serviceMock.Service
 	mockControlChannel *controlChannelMock.IControlChannel
+	mockTaskMsgChan    *sync.Map
+	mockTaskAckChan    chan mgsContracts.AcknowledgeTaskContent
 }
 
 func (suite *SessionTestSuite) SetupTest() {
@@ -64,18 +81,22 @@ func (suite *SessionTestSuite) SetupTest() {
 		InstanceID: instanceId,
 	}
 	mockControlChannel := &controlChannelMock.IControlChannel{}
+	mockTaskAckChan := make(chan mgsContracts.AcknowledgeTaskContent)
 
 	suite.mockControlChannel = mockControlChannel
 	suite.mockProcessor = mockProcessor
 	suite.mockService = mockService
 	suite.mockContext = mockContext
+	suite.mockTaskAckChan = mockTaskAckChan
 	suite.session = &Session{
 		name:           mgsConfig.SessionServiceName,
 		context:        mockContext,
 		agentConfig:    agentConfig,
 		service:        mockService,
 		processor:      mockProcessor,
-		controlChannel: mockControlChannel}
+		controlChannel: mockControlChannel,
+		taskAckChan:    mockTaskAckChan,
+	}
 }
 
 // Testing the module name
@@ -91,7 +112,7 @@ func (suite *SessionTestSuite) TestModuleExecute() {
 	suite.mockProcessor.On("Start").Return(resChan, nil)
 	suite.mockControlChannel.On("SendMessage", mock.Anything, mock.Anything, websocket.BinaryMessage).Return(nil)
 
-	setupControlChannel = func(context context.T, service service.Service, processor processor.Processor, instanceId string) (controlchannel.IControlChannel, error) {
+	setupControlChannel = func(context context.T, service service.Service, processor processor.Processor, instanceId string, taskAckChan chan mgsContracts.AcknowledgeTaskContent) (controlchannel.IControlChannel, error) {
 		return suite.mockControlChannel, nil
 	}
 
@@ -135,6 +156,17 @@ func (suite *SessionTestSuite) TestModuleRequestStop() {
 	suite.mockProcessor.AssertExpectations(suite.T())
 }
 
+func (suite *SessionTestSuite) TestModuleRequestStopClosingAlreadyClosedChannel() {
+	suite.mockControlChannel.On("Close", mock.Anything).Return(nil)
+	suite.mockProcessor.On("Stop", mock.Anything).Return(nil)
+	close(suite.mockTaskAckChan)
+
+	suite.session.ModuleRequestStop(contracts.StopTypeSoftStop)
+
+	suite.mockControlChannel.AssertExpectations(suite.T())
+	suite.mockProcessor.AssertExpectations(suite.T())
+}
+
 // Testing buildAgentTaskComplete.
 func (suite *SessionTestSuite) TestBuildAgentTaskComplete() {
 	log := log.NewMockLog()
@@ -155,15 +187,12 @@ func (suite *SessionTestSuite) TestBuildAgentTaskComplete() {
 		DocumentName:    "documentName",
 		DocumentVersion: "1",
 	}
-	msg, err := buildAgentTaskComplete(log, result, instanceId)
+	payloadInterface, err := buildAgentTaskComplete(log, result, instanceId, 1)
 	assert.Nil(suite.T(), err)
 
-	agentMessage := &mgsContracts.AgentMessage{}
-	agentMessage.Deserialize(log, msg)
-	assert.Equal(suite.T(), mgsContracts.TaskCompleteMessage, agentMessage.MessageType)
+	var payload mgsContracts.AgentTaskCompletePayload
+	jsonutil.Remarshal(payloadInterface, &payload)
 
-	payload := &mgsContracts.AgentTaskCompletePayload{}
-	json.Unmarshal(agentMessage.Payload, payload)
 	assert.Equal(suite.T(), instanceId, payload.InstanceId)
 	assert.Equal(suite.T(), string(status), payload.FinalTaskStatus)
 	assert.Equal(suite.T(), messageId, payload.TaskId)
@@ -172,6 +201,7 @@ func (suite *SessionTestSuite) TestBuildAgentTaskComplete() {
 	assert.Equal(suite.T(), "", payload.S3UrlSuffix)
 	assert.Equal(suite.T(), "", payload.CwlGroup)
 	assert.Equal(suite.T(), "", payload.CwlStream)
+	assert.Equal(suite.T(), 1, payload.RetryNumber)
 }
 
 // Testing buildAgentTaskComplete.
@@ -195,15 +225,12 @@ func (suite *SessionTestSuite) TestBuildAgentTaskCompleteWhenPluginResultOutputH
 		DocumentName:    "documentName",
 		DocumentVersion: "1",
 	}
-	msg, err := buildAgentTaskComplete(log, result, instanceId)
+	payloadInterface, err := buildAgentTaskComplete(log, result, instanceId, 1)
 	assert.Nil(suite.T(), err)
 
-	agentMessage := &mgsContracts.AgentMessage{}
-	agentMessage.Deserialize(log, msg)
-	assert.Equal(suite.T(), mgsContracts.TaskCompleteMessage, agentMessage.MessageType)
+	var payload mgsContracts.AgentTaskCompletePayload
+	jsonutil.Remarshal(payloadInterface, &payload)
 
-	payload := &mgsContracts.AgentTaskCompletePayload{}
-	json.Unmarshal(agentMessage.Payload, payload)
 	assert.Equal(suite.T(), instanceId, payload.InstanceId)
 	assert.Equal(suite.T(), string(contracts.ResultStatusFailed), payload.FinalTaskStatus)
 	assert.Equal(suite.T(), messageId, payload.TaskId)
@@ -212,6 +239,7 @@ func (suite *SessionTestSuite) TestBuildAgentTaskCompleteWhenPluginResultOutputH
 	assert.Equal(suite.T(), "", payload.S3UrlSuffix)
 	assert.Equal(suite.T(), "", payload.CwlGroup)
 	assert.Equal(suite.T(), "", payload.CwlStream)
+	assert.Equal(suite.T(), 1, payload.RetryNumber)
 }
 
 // Testing buildAgentTaskComplete.
@@ -242,15 +270,12 @@ func (suite *SessionTestSuite) TestBuildAgentTaskCompleteWhenPluginResultOutputH
 		DocumentName:    "documentName",
 		DocumentVersion: "1",
 	}
-	msg, err := buildAgentTaskComplete(log, result, instanceId)
+	payloadInterface, err := buildAgentTaskComplete(log, result, instanceId, 1)
 	assert.Nil(suite.T(), err)
 
-	agentMessage := &mgsContracts.AgentMessage{}
-	agentMessage.Deserialize(log, msg)
-	assert.Equal(suite.T(), mgsContracts.TaskCompleteMessage, agentMessage.MessageType)
+	var payload mgsContracts.AgentTaskCompletePayload
+	jsonutil.Remarshal(payloadInterface, &payload)
 
-	payload := &mgsContracts.AgentTaskCompletePayload{}
-	json.Unmarshal(agentMessage.Payload, payload)
 	assert.Equal(suite.T(), instanceId, payload.InstanceId)
 	assert.Equal(suite.T(), string(contracts.ResultStatusSuccess), payload.FinalTaskStatus)
 	assert.Equal(suite.T(), messageId, payload.TaskId)
@@ -259,6 +284,7 @@ func (suite *SessionTestSuite) TestBuildAgentTaskCompleteWhenPluginResultOutputH
 	assert.Equal(suite.T(), s3UrlSuffix, payload.S3UrlSuffix)
 	assert.Equal(suite.T(), cwlGroup, payload.CwlGroup)
 	assert.Equal(suite.T(), cwlStream, payload.CwlStream)
+	assert.Equal(suite.T(), 1, payload.RetryNumber)
 }
 
 func (suite *SessionTestSuite) TestBuildAgentTaskCompleteWhenPluginIdIsEmpty() {
@@ -280,9 +306,9 @@ func (suite *SessionTestSuite) TestBuildAgentTaskCompleteWhenPluginIdIsEmpty() {
 		DocumentName:    "documentName",
 		DocumentVersion: "1",
 	}
-	msg, err := buildAgentTaskComplete(log, result, instanceId)
+	payload, err := buildAgentTaskComplete(log, result, instanceId, 1)
 	assert.Nil(suite.T(), err)
-	assert.Nil(suite.T(), msg)
+	assert.Nil(suite.T(), payload)
 }
 
 // test case for document result when instance reboot happens.
@@ -313,18 +339,164 @@ func (suite *SessionTestSuite) TestBuildAgentTaskCompleteWhenPluginIdIsEmptyAndS
 		DocumentName:    "documentName",
 		DocumentVersion: "1",
 	}
-	msg, err := buildAgentTaskComplete(log, result, instanceId)
+	payloadInterface, err := buildAgentTaskComplete(log, result, instanceId, 1)
 	assert.Nil(suite.T(), err)
-	agentMessage := &mgsContracts.AgentMessage{}
-	agentMessage.Deserialize(log, msg)
-	assert.Equal(suite.T(), mgsContracts.TaskCompleteMessage, agentMessage.MessageType)
 
-	payload := &mgsContracts.AgentTaskCompletePayload{}
-	json.Unmarshal(agentMessage.Payload, payload)
+	var payload mgsContracts.AgentTaskCompletePayload
+	jsonutil.Remarshal(payloadInterface, &payload)
+
 	assert.Equal(suite.T(), instanceId, payload.InstanceId)
 	assert.Equal(suite.T(), string(contracts.ResultStatusFailed), payload.FinalTaskStatus)
 	assert.Equal(suite.T(), messageId, payload.TaskId)
 	assert.Equal(suite.T(), errorMsg, payload.Output)
+	assert.Equal(suite.T(), 1, payload.RetryNumber)
+}
+
+// Test SendAgentTaskCompleteWithRetry
+func TestSendAgentTaskCompleteWithRetryAckReceived(t *testing.T) {
+	mockControlChannel := &controlChannelMock.IControlChannel{}
+	mockTaskAckChan := make(chan mgsContracts.AcknowledgeTaskContent)
+	mockContext := context.NewMockDefault()
+
+	mockControlChannel.On("SendMessage", mock.Anything, mock.Anything, websocket.BinaryMessage).Return(nil)
+
+	session := &Session{
+		name:           mgsConfig.SessionServiceName,
+		controlChannel: mockControlChannel,
+		taskAckChan:    mockTaskAckChan,
+		context:        mockContext,
+	}
+
+	uuid.SwitchFormat(uuid.CleanHyphen)
+	msgId := uuid.NewV4()
+	GenerateUUID = func() uuid.UUID {
+		return msgId
+	}
+
+	go func() {
+		time.Sleep(3 * time.Millisecond)
+		taskChan, ok := session.taskMessageChan.Load(msgId.String())
+		if ok {
+			taskChan.(chan bool) <- true
+		}
+	}()
+	session.sendAgentTaskCompleteWithRetry(taskCompletePayload)
+
+	mockControlChannel.AssertNumberOfCalls(t, "SendMessage", 1)
+}
+
+func TestSendAgentTaskCompleteWithRetryAckReceivedAfterSecondRetry(t *testing.T) {
+	mockControlChannel := &controlChannelMock.IControlChannel{}
+	mockTaskAckChan := make(chan mgsContracts.AcknowledgeTaskContent)
+	mockContext := context.NewMockDefault()
+
+	mockControlChannel.On("SendMessage", mock.Anything, mock.Anything, websocket.BinaryMessage).Return(nil)
+
+	session := &Session{
+		name:           mgsConfig.SessionServiceName,
+		controlChannel: mockControlChannel,
+		taskAckChan:    mockTaskAckChan,
+		context:        mockContext,
+	}
+
+	uuid.SwitchFormat(uuid.CleanHyphen)
+	msgId := uuid.NewV4()
+	GenerateUUID = func() uuid.UUID {
+		return msgId
+	}
+
+	go func() {
+		time.Sleep(1500 * time.Millisecond)
+		taskChan, ok := session.taskMessageChan.Load(msgId.String())
+		if ok {
+			taskChan.(chan bool) <- true
+		}
+	}()
+	session.sendAgentTaskCompleteWithRetry(taskCompletePayload)
+
+	mockControlChannel.AssertNumberOfCalls(t, "SendMessage", 2)
+}
+
+func TestSendAgentTaskCompleteWithRetryAckNotReceived(t *testing.T) {
+	mockControlChannel := &controlChannelMock.IControlChannel{}
+	mockTaskAckChan := make(chan mgsContracts.AcknowledgeTaskContent)
+	mockContext := context.NewMockDefault()
+
+	mockControlChannel.On("SendMessage", mock.Anything, mock.Anything, websocket.BinaryMessage).Return(nil)
+
+	session := &Session{
+		name:           mgsConfig.SessionServiceName,
+		controlChannel: mockControlChannel,
+		taskAckChan:    mockTaskAckChan,
+		context:        mockContext,
+	}
+
+	uuid.SwitchFormat(uuid.CleanHyphen)
+	msgId := uuid.NewV4()
+	GenerateUUID = func() uuid.UUID {
+		return msgId
+	}
+	session.sendAgentTaskCompleteWithRetry(taskCompletePayload)
+
+	// 4 calls including the initial attempt and 3 retries
+	mockControlChannel.AssertNumberOfCalls(t, "SendMessage", 4)
+}
+
+// Test listenTaskAcknowledge
+func TestListenTaskAcknowledge(t *testing.T) {
+	mockTaskAckChan := make(chan mgsContracts.AcknowledgeTaskContent)
+	mockContext := context.NewMockDefault()
+
+	session := &Session{
+		name:        mgsConfig.SessionServiceName,
+		taskAckChan: mockTaskAckChan,
+		context:     mockContext,
+	}
+
+	uuid.SwitchFormat(uuid.CleanHyphen)
+	msgId := uuid.NewV4().String()
+	taskChan := make(chan bool)
+	session.taskMessageChan.Store(msgId, taskChan)
+	msg := mgsContracts.AcknowledgeTaskContent{
+		MessageId: msgId,
+		TaskId:    messageId,
+		Topic:     mgsContracts.TaskCompleteMessage,
+	}
+	go func() {
+		mockTaskAckChan <- msg
+		select {
+		case <-taskChan:
+			break
+		case <-time.After(time.Second):
+			assert.Fail(t, "channel should be true")
+		}
+		close(mockTaskAckChan)
+	}()
+	session.listenTaskAcknowledge()
+}
+
+func TestListenTaskAcknowledgeMsgDoesNotExist(t *testing.T) {
+	mockTaskAckChan := make(chan mgsContracts.AcknowledgeTaskContent)
+	mockContext := context.NewMockDefault()
+
+	session := &Session{
+		name:        mgsConfig.SessionServiceName,
+		taskAckChan: mockTaskAckChan,
+		context:     mockContext,
+	}
+
+	uuid.SwitchFormat(uuid.CleanHyphen)
+	msgId := uuid.NewV4().String()
+	msg := mgsContracts.AcknowledgeTaskContent{
+		MessageId: msgId,
+		TaskId:    messageId,
+		Topic:     mgsContracts.TaskCompleteMessage,
+	}
+	go func() {
+		mockTaskAckChan <- msg
+		close(mockTaskAckChan)
+	}()
+	session.listenTaskAcknowledge()
 }
 
 func (suite *SessionTestSuite) TestGetMgsEndpoint() {

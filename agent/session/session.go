@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"math/rand"
 	"runtime/debug"
+	"sync"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -39,15 +40,23 @@ import (
 	"github.com/twinj/uuid"
 )
 
+// Generate UUID
+var GenerateUUID = func() (id uuid.UUID) {
+	uuid.SwitchFormat(uuid.CleanHyphen)
+	return uuid.NewV4()
+}
+
 // Session encapsulates the logic on configuring, starting and stopping core modules
 type Session struct {
-	context        context.T
-	agentConfig    contracts.AgentConfiguration
-	name           string
-	mgsConfig      appconfig.MgsConfig
-	service        service.Service
-	controlChannel controlchannel.IControlChannel
-	processor      processor.Processor
+	context         context.T
+	agentConfig     contracts.AgentConfiguration
+	name            string
+	mgsConfig       appconfig.MgsConfig
+	service         service.Service
+	controlChannel  controlchannel.IControlChannel
+	processor       processor.Processor
+	taskAckChan     chan mgsContracts.AcknowledgeTaskContent
+	taskMessageChan sync.Map
 }
 
 // NewSession gets session core module that manages the web-socket connection between Agent and message gateway service.
@@ -111,6 +120,7 @@ func NewSession(context context.T) *Session {
 		[]contracts.DocumentType{contracts.StartSession, contracts.TerminateSession})
 
 	controlChannel := &controlchannel.ControlChannel{}
+	taskAckChan := make(chan mgsContracts.AcknowledgeTaskContent)
 
 	return &Session{
 		context:        sessionContext,
@@ -120,6 +130,7 @@ func NewSession(context context.T) *Session {
 		service:        mgsService,
 		processor:      processor,
 		controlChannel: controlChannel,
+		taskAckChan:    taskAckChan,
 	}
 }
 
@@ -130,11 +141,11 @@ func (s *Session) ModuleName() string {
 	return s.name
 }
 
-var setupControlChannel = func(context context.T, service service.Service, processor processor.Processor, instanceId string) (controlchannel.IControlChannel, error) {
+var setupControlChannel = func(context context.T, service service.Service, processor processor.Processor, instanceId string, taskAckChan chan mgsContracts.AcknowledgeTaskContent) (controlchannel.IControlChannel, error) {
 	retryer := retry.ExponentialRetryer{
 		CallableFunc: func() (channel interface{}, err error) {
 			controlChannel := &controlchannel.ControlChannel{}
-			controlChannel.Initialize(context, service, processor, instanceId)
+			controlChannel.Initialize(context, service, processor, instanceId, taskAckChan)
 			if err := controlChannel.SetWebSocket(context, service, processor, instanceId); err != nil {
 				return nil, err
 			}
@@ -182,9 +193,10 @@ func (s *Session) ModuleExecute() (err error) {
 	}
 
 	go s.listenReply(resultChan, instanceId)
+	go s.listenTaskAcknowledge()
 
 	log.Info("SSM Agent is trying to setup control channel for Session Manager module.")
-	s.controlChannel, err = setupControlChannel(s.context, s.service, s.processor, instanceId)
+	s.controlChannel, err = setupControlChannel(s.context, s.service, s.processor, instanceId, s.taskAckChan)
 	if err != nil {
 		log.Errorf("Failed to setup control channel, err: %v", err)
 		return
@@ -216,6 +228,14 @@ func (s *Session) ModuleRequestStop(stopType contracts.StopType) (err error) {
 			log.Errorf("stopping controlchannel with error, %s", err)
 		}
 	}
+
+	select {
+	case <-s.taskAckChan:
+		log.Debugf("taskAckChan channel is already closed")
+	default:
+		close(s.taskAckChan)
+	}
+
 	s.processor.Stop(stopType)
 
 	return nil
@@ -241,28 +261,110 @@ func (s *Session) listenReply(resultChan chan contracts.DocumentResult, instance
 				s.context.AppConfig().Ssm.SessionLogsRetentionDurationHours)
 		}
 
-		msg, err := buildAgentTaskComplete(log, res, instanceId)
+		payload, err := buildAgentTaskComplete(log, res, instanceId, 1)
 		if err != nil {
 			log.Errorf("Cannot build AgentTaskComplete message %s", err)
 			return
 		}
 
 		// For last document level result, no need to send reply because there will be only one plugin for shell plugin case.
-		if msg != nil {
-			err = s.controlChannel.SendMessage(log, msg, websocket.BinaryMessage)
-			if err != nil {
-				log.Errorf("Error sending reply message %v", err)
+		if payload != nil {
+			var agentTaskCompletePayload mgsContracts.AgentTaskCompletePayload
+			if err = jsonutil.Remarshal(payload, &agentTaskCompletePayload); err != nil {
+				// should never happen
+				log.Errorf("unable to parse AgentTaskCompletePayload: %v, err: %v", agentTaskCompletePayload, err)
+				return
+			}
+			go s.sendAgentTaskCompleteWithRetry(agentTaskCompletePayload)
+		}
+	}
+}
+
+// sendAgentTaskCompleteWithRetry sends AgentTaskComplete, waits for acknowledgement from MGS
+// and retries 3 times at 1 second intervals if the message is not acknowledged
+func (s *Session) sendAgentTaskCompleteWithRetry(agentTaskComplete mgsContracts.AgentTaskCompletePayload) {
+	messageUUID := GenerateUUID()
+	maxAttempts := 4
+	s.taskMessageChan.Store(messageUUID.String(), make(chan bool))
+
+	attemptsSoFar := 0
+	for {
+		if err := s.buildAgentMessageAndSend(agentTaskComplete, messageUUID); err != nil {
+			break
+		}
+		chanValue, ok := s.taskMessageChan.Load(messageUUID.String())
+		if !ok {
+			// should never happen
+			break
+		}
+		taskCompleteChan := chanValue.(chan bool)
+		attemptsSoFar++
+		select {
+		case <-taskCompleteChan:
+			close(taskCompleteChan)
+			s.taskMessageChan.Delete(messageUUID.String())
+			return
+		case <-time.After(time.Second):
+			// increment retry number in AgentTaskComplete
+			agentTaskComplete.RetryNumber += 1
+			if attemptsSoFar == maxAttempts {
+				close(taskCompleteChan)
+				s.taskMessageChan.Delete(messageUUID.String())
+				return
 			}
 		}
 	}
 }
 
+// buildAgentMessageAndSend builds AgentMessage with AgentTaskCompletePayload and sends on the control channel
+func (s *Session) buildAgentMessageAndSend(agentTaskComplete mgsContracts.AgentTaskCompletePayload, messageId uuid.UUID) error {
+	log := s.context.Log()
+
+	replyBytes, err := json.Marshal(agentTaskComplete)
+	if err != nil {
+		// should not happen
+		log.Errorf("Cannot build AgentTaskComplete message %s", err)
+		return err
+	}
+
+	log.Debug("Sending reply ", jsonutil.Indent(string(replyBytes)))
+
+	agentMessage := &mgsContracts.AgentMessage{
+		MessageType:    mgsContracts.TaskCompleteMessage,
+		SchemaVersion:  1,
+		CreatedDate:    uint64(time.Now().UnixNano() / 1000000),
+		SequenceNumber: 0,
+		Flags:          0,
+		MessageId:      messageId,
+		Payload:        replyBytes,
+	}
+
+	msg, err := agentMessage.Serialize(log)
+	if err = s.controlChannel.SendMessage(log, msg, websocket.BinaryMessage); err != nil {
+		log.Errorf("Error sending reply message, ID [%v], err: %v", messageId, err)
+		return err
+	}
+	return nil
+}
+
+// listenTaskAcknowledge listens to task acknowledgements from MGS.
+func (s *Session) listenTaskAcknowledge() {
+	log := s.context.Log()
+	log.Info("listening task acknowledge.")
+
+	// session module guarantees to close this channel upon stop
+	for ack := range s.taskAckChan {
+		log.Debugf("Received acknowledgement for %v message for session %v", ack.Topic, ack.TaskId)
+		messageChan, ok := s.taskMessageChan.Load(ack.MessageId)
+		if ok {
+			messageChan.(chan bool) <- true
+		}
+	}
+}
+
 // buildAgentTaskComplete builds AgentTaskComplete message.
-func buildAgentTaskComplete(log log.T, res contracts.DocumentResult, instanceId string) (result []byte, err error) {
-	uuid.SwitchFormat(uuid.CleanHyphen)
-	messageId := uuid.NewV4()
+func buildAgentTaskComplete(log log.T, res contracts.DocumentResult, instanceId string, retryNumber int) (payload interface{}, err error) {
 	pluginId := res.LastPlugin
-	var taskCompletePayload interface{}
 	var messageType string
 
 	// For SessionManager plugins, there is only one plugin in a document.
@@ -273,26 +375,8 @@ func buildAgentTaskComplete(log log.T, res contracts.DocumentResult, instanceId 
 	}
 
 	messageType = mgsContracts.TaskCompleteMessage
-	taskCompletePayload = formatAgentTaskCompletePayload(log, pluginId, res.PluginResults, res.MessageID, instanceId, messageType)
-	replyBytes, err := json.Marshal(taskCompletePayload)
-	if err != nil {
-		// should not happen
-		return nil, fmt.Errorf("cannot marshal AgentReply payload to json string: %s, err: %s", taskCompletePayload, err)
-	}
-	payload := string(replyBytes)
-	log.Info("Sending reply ", jsonutil.Indent(payload))
-
-	agentMessage := &mgsContracts.AgentMessage{
-		MessageType:    messageType,
-		SchemaVersion:  1,
-		CreatedDate:    uint64(time.Now().UnixNano() / 1000000),
-		SequenceNumber: 0,
-		Flags:          0,
-		MessageId:      messageId,
-		Payload:        replyBytes,
-	}
-
-	return agentMessage.Serialize(log)
+	taskCompletePayload := formatAgentTaskCompletePayload(log, pluginId, res.PluginResults, res.MessageID, instanceId, messageType, retryNumber)
+	return taskCompletePayload, nil
 }
 
 // formatAgentTaskCompletePayload builds AgentTaskComplete message Payload from the total task result.
@@ -301,7 +385,8 @@ func formatAgentTaskCompletePayload(log log.T,
 	pluginResults map[string]*contracts.PluginResult,
 	sessionId string,
 	instanceId string,
-	topic string) mgsContracts.AgentTaskCompletePayload {
+	topic string,
+	retryNumber int) mgsContracts.AgentTaskCompletePayload {
 
 	if len(pluginResults) < 1 {
 		log.Error("Error in FormatAgentTaskCompletePayload, the outputs map is empty!")
@@ -345,6 +430,7 @@ func formatAgentTaskCompletePayload(log log.T,
 		S3UrlSuffix:      sessionPluginResultOutput.S3UrlSuffix,
 		CwlGroup:         sessionPluginResultOutput.CwlGroup,
 		CwlStream:        sessionPluginResultOutput.CwlStream,
+		RetryNumber:      retryNumber,
 	}
 	return payload
 }

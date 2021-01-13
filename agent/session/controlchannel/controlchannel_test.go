@@ -17,6 +17,7 @@ package controlchannel
 import (
 	"encoding/json"
 	"testing"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	processorMock "github.com/aws/amazon-ssm-agent/agent/framework/processor/mock"
@@ -35,29 +36,31 @@ import (
 )
 
 var (
-	mockContext   = context.NewMockDefault()
-	mockLog       = log.NewMockLog()
-	mockProcessor = new(processorMock.MockedProcessor)
-	mockService   = &serviceMock.Service{}
-	mockWsChannel = &communicatorMocks.IWebSocketChannel{}
-	mockEventLog  = eventlogMock.IAuditLogTelemetry{}
-	messageId     = "dd01e56b-ff48-483e-a508-b5f073f31b16"
-	schemaVersion = uint32(1)
-	createdDate   = uint64(1503434274948)
-	topic         = "test"
-	taskId        = "2b196342-d7d4-436e-8f09-3883a1116ac3"
-	instanceId    = "i-1234"
-	token         = "token"
-	region        = "us-east-1"
-	signer        = &v4.Signer{Credentials: credentials.NewStaticCredentials("AKID", "SECRET", "SESSION")}
+	mockContext     = context.NewMockDefault()
+	mockLog         = log.NewMockLog()
+	mockProcessor   = new(processorMock.MockedProcessor)
+	mockService     = &serviceMock.Service{}
+	mockWsChannel   = &communicatorMocks.IWebSocketChannel{}
+	mockEventLog    = eventlogMock.IAuditLogTelemetry{}
+	messageId       = "dd01e56b-ff48-483e-a508-b5f073f31b16"
+	mockTaskAckChan = make(chan mgsContracts.AcknowledgeTaskContent)
+	schemaVersion   = uint32(1)
+	createdDate     = uint64(1503434274948)
+	topic           = "test"
+	taskId          = "2b196342-d7d4-436e-8f09-3883a1116ac3"
+	instanceId      = "i-1234"
+	token           = "token"
+	region          = "us-east-1"
+	signer          = &v4.Signer{Credentials: credentials.NewStaticCredentials("AKID", "SECRET", "SESSION")}
 )
 
 func TestInitialize(t *testing.T) {
 	controlChannel := &ControlChannel{}
 	controlChannel.AuditLogScheduler = &mockEventLog
-	controlChannel.Initialize(mockContext, mockService, mockProcessor, instanceId)
+	controlChannel.Initialize(mockContext, mockService, mockProcessor, instanceId, mockTaskAckChan)
 
 	assert.Equal(t, instanceId, controlChannel.ChannelId)
+	assert.Equal(t, mockTaskAckChan, controlChannel.taskAckChan)
 	assert.Equal(t, mockService, controlChannel.Service)
 	assert.Equal(t, mgsConfig.RoleSubscribe, controlChannel.channelType)
 	assert.Equal(t, mockProcessor, controlChannel.Processor)
@@ -167,7 +170,7 @@ func TestControlChannelIncomingMessageHandlerForStartSessionMessage(t *testing.T
 	serializedBytes, _ := agentMessage.Serialize(log.NewMockLog())
 	mockProcessor.On("Submit", mock.Anything).Return(nil)
 
-	err := controlChannelIncomingMessageHandler(mockContext, mockProcessor, serializedBytes, "", "")
+	err := controlChannelIncomingMessageHandler(mockContext, mockProcessor, serializedBytes, "", "", mockTaskAckChan)
 
 	assert.Nil(t, err)
 	mockProcessor.AssertExpectations(t)
@@ -192,16 +195,50 @@ func TestControlChannelIncomingMessageHandlerForTerminateSessionMessage(t *testi
 	serializedBytes, _ := agentMessage.Serialize(log.NewMockLog())
 	mockProcessor.On("Cancel", mock.Anything).Return(nil)
 
-	err := controlChannelIncomingMessageHandler(mockContext, mockProcessor, serializedBytes, "", "")
+	err := controlChannelIncomingMessageHandler(mockContext, mockProcessor, serializedBytes, "", "", mockTaskAckChan)
 
 	assert.Nil(t, err)
 	mockProcessor.AssertExpectations(t)
 }
 
+func TestControlChannelIncomingMessageHandlerForTaskAcknowledgeMessage(t *testing.T) {
+	u, _ := uuid.Parse(messageId)
+	msg := &mgsContracts.AcknowledgeTaskContent{
+		MessageId: messageId,
+		TaskId:    messageId,
+		Topic:     mgsContracts.TaskCompleteMessage,
+	}
+
+	payload, _ := msg.Serialize(log.NewMockLog())
+	agentMessage := &mgsContracts.AgentMessage{
+		MessageType:    mgsContracts.TaskAcknowledgeMessage,
+		SchemaVersion:  schemaVersion,
+		CreatedDate:    createdDate,
+		SequenceNumber: 1,
+		Flags:          2,
+		MessageId:      u,
+		Payload:        payload,
+	}
+	serializedBytes, _ := agentMessage.Serialize(log.NewMockLog())
+
+	go func() {
+		select {
+		case <-mockTaskAckChan:
+			break
+		case <-time.After(10 * time.Millisecond):
+			assert.Fail(t, "Channel should have the message")
+		}
+		close(mockTaskAckChan)
+	}()
+
+	err := controlChannelIncomingMessageHandler(mockContext, mockProcessor, serializedBytes, "", "", mockTaskAckChan)
+	assert.Nil(t, err)
+}
+
 func TestInitializeForContainer(t *testing.T) {
 	controlChannel := getControlChannel()
 	mockInstanceId := "9781c2480-edd4cdb9a93f6-3cb662a5d3"
-	controlChannel.Initialize(mockContext, mockService, mockProcessor, mockInstanceId)
+	controlChannel.Initialize(mockContext, mockService, mockProcessor, mockInstanceId, mockTaskAckChan)
 
 	assert.Equal(t, mockInstanceId, controlChannel.ChannelId)
 	assert.Equal(t, mockService, controlChannel.Service)

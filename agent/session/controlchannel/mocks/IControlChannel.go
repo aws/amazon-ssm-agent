@@ -18,6 +18,7 @@ import (
 	context "github.com/aws/amazon-ssm-agent/agent/context"
 	processor "github.com/aws/amazon-ssm-agent/agent/framework/processor"
 	log "github.com/aws/amazon-ssm-agent/agent/log"
+	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	service "github.com/aws/amazon-ssm-agent/agent/session/service"
 	mock "github.com/stretchr/testify/mock"
 )
@@ -42,8 +43,8 @@ func (_m *IControlChannel) Close(_a0 log.T) error {
 }
 
 // Initialize provides a mock function with given fields: _a0, mgsService, _a2, instanceId
-func (_m *IControlChannel) Initialize(_a0 context.T, mgsService service.Service, _a2 processor.Processor, instanceId string) {
-	_m.Called(_a0, mgsService, _a2, instanceId)
+func (_m *IControlChannel) Initialize(_a0 context.T, mgsService service.Service, _a2 processor.Processor, instanceId string, taskAckChan chan mgsContracts.AcknowledgeTaskContent) {
+	_m.Called(_a0, mgsService, _a2, instanceId, taskAckChan)
 }
 
 // Open provides a mock function with given fields: _a0
