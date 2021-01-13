@@ -65,13 +65,16 @@ cpy-plugins: copy-src pre-build
 	$(GO_SPACE)/Tools/src/copy_plugin_binaries.sh
 
 .PHONY: quick-integtest
-quick-integtest: copy-src pre-build pre-release --quick-integtest --quick-integtest-core
+quick-integtest: copy-src pre-build pre-release --quick-integtest --quick-integtest-core --quick-integtest-common
 
 .PHONY: quick-test
 quick-test: copy-src pre-build pre-release --quick-test
 
 .PHONY: quick-test-core
 quick-test-core: copy-src pre-build pre-release --quick-test-core
+
+.PHONY: quick-test-common
+quick-test-common: copy-src pre-build pre-release --quick-test-common
 
 .PHONY: quick-e2e
 quick-e2e: copy-src pre-build pre-release --quick-e2e --quick-e2e-core
@@ -383,6 +386,11 @@ build-tests-windows: copy-src copy-tests-src pre-build
 # go test -v -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/agent/fileutil/...
 	go test -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/core/...
 
+.PHONY: --quick-integtest-common
+--quick-integtest-common:
+# if you want to restrict to some specific package, sample below
+# go test -v -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/agent/common/task
+	go test -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/common/...
 
 .PHONY: --quick-test
 --quick-test:
@@ -394,6 +402,11 @@ build-tests-windows: copy-src copy-tests-src pre-build
 # if you want to test a specific package, you can add the package name instead of the dots. Sample below
 # go test -gcflags "-N -l" github.com/aws/amazon-ssm-agent/agent/task
 	go test -gcflags "-N -l" github.com/aws/amazon-ssm-agent/core/...
+
+--quick-test-common:
+# if you want to test a specific package, you can add the package name instead of the dots. Sample below
+# go test -gcflags "-N -l" github.com/aws/amazon-ssm-agent/agent/common/task
+	go test -gcflags "-N -l" github.com/aws/amazon-ssm-agent/common/...
 
 .PHONY: --quick-e2e
 --quick-e2e:

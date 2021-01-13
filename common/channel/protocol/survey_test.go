@@ -33,7 +33,7 @@ import (
 // ISurveySuite tests surveyor
 type ISurveySuite struct {
 	suite.Suite
-	respondentInstance utils.IFileChannelCommProtocol
+	surveyInstance *survey
 }
 
 // TestTesterSuite executes test suite
@@ -43,36 +43,40 @@ func TestSurveySuite(t *testing.T) {
 
 // SetupTest initializes Setup
 func (suite *ISurveySuite) SetupTest() {
-	suite.respondentInstance = GetRespondentInstance(log.NewMockLog())
+	suite.surveyInstance = GetSurveyInstance(log.NewMockLog())
 }
 
 // TestBasicTest tests basic functionality
 func (suite *ISurveySuite) TestBasic() {
-	suite.respondentInstance.Initialize()
-	assert.Equal(suite.T(), suite.respondentInstance.GetCommProtocolInfo(), utils.Surveyor)
+	suite.surveyInstance.Initialize()
 
-	suite.respondentInstance.fileChannel = channelmock.NewFakeChannel(log.NewMockLog(), filewatcherbasedipc.ModeSurveyor, "sample")
+	assert.Equal(suite.T(), suite.surveyInstance.GetCommProtocolInfo(), utils.Surveyor)
+
+	suite.surveyInstance.fileChannel = channelmock.NewFakeChannel(log.NewMockLog(), filewatcherbasedipc.ModeSurveyor, "sample")
 	dummyMsg := message.Message{
 		SchemaVersion: 1,
 		Topic:         "TestBasic",
 		Payload:       []byte("reply"),
 	}
-	suite.respondentInstance.Send(dummyMsg)
-	output := suite.respondentInstance.Recv()
-	_ := json.Unmarshal(output, &dummyMsg)
-	assert.Equal(suite.T(), output, dummyMsg.Topic)
+	dummyMsgOutput := dummyMsg
+	suite.surveyInstance.Send(&dummyMsg)
+	suite.surveyInstance.fileChannel = channelmock.NewFakeChannel(log.NewMockLog(), filewatcherbasedipc.ModeRespondent, "sample")
+	output, err := suite.surveyInstance.Recv()
+	_ = json.Unmarshal(output, &dummyMsg)
+	assert.Equal(suite.T(), dummyMsg.Topic, dummyMsgOutput.Topic)
+	assert.Nil(suite.T(), err)
 }
 
-// TestBasicTest tests timeout functionality
+// TestTimeout tests timeout functionality
 func (suite *ISurveySuite) TestTimeout() {
 	dummyMsg := message.Message{
 		SchemaVersion: 1,
 		Topic:         "TestTimeout",
 		Payload:       []byte("reply"),
 	}
-	suite.respondentInstance.Send(dummyMsg)
+	suite.surveyInstance.Send(&dummyMsg)
 	time.Sleep(3 * time.Second)
-	err := suite.respondentInstance.Recv()
+	_, err := suite.surveyInstance.Recv()
 	assert.NotNil(suite.T(), err)
 }
 
@@ -83,9 +87,9 @@ func (suite *ISurveySuite) TestPreListenDial() {
 		Topic:         "TestPreListenDial",
 		Payload:       []byte("reply"),
 	}
-	suite.respondentInstance.fileChannel = nil
-	err := suite.respondentInstance.Send(dummyMsg)
+	suite.surveyInstance.fileChannel = nil
+	err := suite.surveyInstance.Send(&dummyMsg)
 	assert.NotNil(suite.T(), err)
-	err = suite.respondentInstance.Recv(dummyMsg)
+	_, err = suite.surveyInstance.Recv()
 	assert.NotNil(suite.T(), err)
 }

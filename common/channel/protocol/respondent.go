@@ -27,7 +27,7 @@ import (
 )
 
 // GetRespondentInstance returns the respondent instance
-func GetRespondentInstance(log log.T) utils.IFileChannelCommProtocol {
+func GetRespondentInstance(log log.T) *respondent {
 	return &respondent{
 		log: log,
 	}

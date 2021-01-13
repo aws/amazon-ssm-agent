@@ -32,10 +32,10 @@ import (
 // IRespondentSuite tests respondent
 type IRespondentSuite struct {
 	suite.Suite
-	respondentInstance utils.IFileChannelCommProtocol
+	respondentInstance *respondent
 }
 
-// TestTesterSuite executes test suite
+// TestRespondentSuite executes test suite
 func TestRespondentSuite(t *testing.T) {
 	suite.Run(t, new(IRespondentSuite))
 }
@@ -49,16 +49,19 @@ func (suite *IRespondentSuite) SetupTest() {
 func (suite *IRespondentSuite) TestBasic() {
 	suite.respondentInstance.Initialize()
 	assert.Equal(suite.T(), suite.respondentInstance.GetCommProtocolInfo(), utils.Respondent)
-	suite.respondentInstance.fileChannel = channelmock.NewFakeChannel(log.NewMockLog(), filewatcherbasedipc.ModeRespondent, "sample")
+	suite.respondentInstance.fileChannel = channelmock.NewFakeChannel(log.NewMockLog(), filewatcherbasedipc.ModeSurveyor, "sample")
 	dummyMsg := message.Message{
 		SchemaVersion: 1,
 		Topic:         "TestBasic",
 		Payload:       []byte("reply"),
 	}
-	suite.respondentInstance.Send(dummyMsg)
-	output := suite.respondentInstance.Recv()
-	_ := json.Unmarshal(output, &dummyMsg)
-	assert.Equal(suite.T(), output, dummyMsg.Topic)
+	dummyMsgOutput := dummyMsg
+	suite.respondentInstance.Send(&dummyMsg)
+	suite.respondentInstance.fileChannel = channelmock.NewFakeChannel(log.NewMockLog(), filewatcherbasedipc.ModeRespondent, "sample")
+	output, err := suite.respondentInstance.Recv()
+	_ = json.Unmarshal(output, &dummyMsg)
+	assert.Equal(suite.T(), dummyMsgOutput.Topic, dummyMsg.Topic)
+	assert.Nil(suite.T(), err)
 }
 
 // TestPreListenDial tests pre listen and pre dial scenarios
@@ -69,8 +72,8 @@ func (suite *IRespondentSuite) TestPreListenDial() {
 		Payload:       []byte("reply"),
 	}
 	suite.respondentInstance.fileChannel = nil
-	err := suite.respondentInstance.Send(dummyMsg)
+	err := suite.respondentInstance.Send(&dummyMsg)
 	assert.NotNil(suite.T(), err)
-	err = suite.respondentInstance.Recv(dummyMsg)
+	_, err = suite.respondentInstance.Recv()
 	assert.NotNil(suite.T(), err)
 }
