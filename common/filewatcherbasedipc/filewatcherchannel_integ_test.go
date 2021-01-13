@@ -101,7 +101,7 @@ func TestChannelReopen(t *testing.T) {
 }
 
 //verify the given set of messages are received
-func verifyReceive(t *testing.T, ch Channel, messages []string, name string, done chan bool) {
+func verifyReceive(t *testing.T, ch IPCChannel, messages []string, name string, done chan bool) {
 
 	//timer := time.After(5 * time.Second)
 	for _, testMsg := range messages {
@@ -114,7 +114,7 @@ func verifyReceive(t *testing.T, ch Channel, messages []string, name string, don
 }
 
 //send a given set of messages
-func send(ch Channel, messages []string, name string) {
+func send(ch IPCChannel, messages []string, name string) {
 
 	for _, testMsg := range messages {
 		logger.Infof("%v sending messages: %v", name, testMsg)

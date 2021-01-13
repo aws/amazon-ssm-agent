@@ -29,7 +29,7 @@ import (
 )
 
 // GetRespondentInstance returns the surveyor instance
-func GetSurveyInstance(log log.T) utils.IFileChannelCommProtocol {
+func GetSurveyInstance(log log.T) *survey {
 	return &survey{
 		log: log,
 	}
@@ -47,7 +47,7 @@ type survey struct {
 
 // Initialize initializes survey properties
 func (sur *survey) Initialize() {
-	sur.optionSurveyTimeoutSeconds = 2
+	sur.optionSurveyTimeoutSeconds = 2 * time.Second
 	sur.socketType = utils.Surveyor
 }
 
