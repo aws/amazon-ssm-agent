@@ -191,9 +191,6 @@ func (p *ShellPlugin) execute(
 		output.SetOutput(sessionPluginResultOutput)
 		log.Errorf("Validation failed, err: %s", err)
 
-		// currently there is a race condition scenario in which error messages do not get propagated back to console/cli,
-		// while we are working on the permanent fix, adding some delay to resolve this issue as a temporary solution
-		time.Sleep(2 * time.Second)
 		return
 	}
 

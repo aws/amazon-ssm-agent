@@ -31,6 +31,8 @@ const (
 	TaskReplyMessage string = "agent_task_reply"
 	// TaskCompleteMessage represents message type for task complete
 	TaskCompleteMessage string = "agent_task_complete"
+	// TaskAcknowledgeMessage represents message type for acknowledge of tasks sent over control channel
+	TaskAcknowledgeMessage string = "agent_task_acknowledge"
 	// AcknowledgeMessage represents message type for acknowledge
 	AcknowledgeMessage string = "acknowledge"
 	// AgentSessionState represents status of session
@@ -202,6 +204,37 @@ type AgentTaskCompletePayload struct {
 	S3UrlSuffix      string `json:"S3UrlSuffix"`
 	CwlGroup         string `json:"CwlGroup"`
 	CwlStream        string `json:"CwlStream"`
+	RetryNumber      int    `json:"RetryNumber"`
+}
+
+// AcknowledgeTaskContent parallels the structure of acknowledgement to task message
+type AcknowledgeTaskContent struct {
+	SchemaVersion int    `json:"SchemaVersion"`
+	MessageId     string `json:"MessageId"`
+	TaskId        string `json:"TaskId"`
+	Topic         string `json:"Topic"`
+}
+
+// Deserialize parses taskAcknowledge message from payload of AgentMessage.
+func (taskAcknowledge *AcknowledgeTaskContent) Deserialize(log logger.T, agentMessage AgentMessage) (err error) {
+	if agentMessage.MessageType != TaskAcknowledgeMessage {
+		err = fmt.Errorf("AgentMessage is not of type TaskAcknowledgeMessage. Found message type: %s", agentMessage.MessageType)
+		return
+	}
+
+	if err = json.Unmarshal(agentMessage.Payload, taskAcknowledge); err != nil {
+		log.Errorf("Could not deserialize rawMessage to AcknowledgeTaskContent: %s", err)
+	}
+	return
+}
+
+// Serialize marshals AcknowledgeTaskContent as payload into bytes.
+func (taskAcknowledge *AcknowledgeTaskContent) Serialize(log logger.T) (result []byte, err error) {
+	result, err = json.Marshal(taskAcknowledge)
+	if err != nil {
+		log.Errorf("Could not serialize AcknowledgeTaskContent message: %v, err: %s", taskAcknowledge, err)
+	}
+	return
 }
 
 // SessionPluginResultOutput represents PluginResult output sent to MGS as part of AgentTaskComplete message

@@ -40,7 +40,7 @@ import (
 )
 
 type IControlChannel interface {
-	Initialize(context context.T, mgsService service.Service, processor processor.Processor, instanceId string)
+	Initialize(context context.T, mgsService service.Service, processor processor.Processor, instanceId string, taskAckChan chan mgsContracts.AcknowledgeTaskContent)
 	SetWebSocket(context context.T, mgsService service.Service, processor processor.Processor, instanceId string) error
 	SendMessage(log log.T, input []byte, inputType int) error
 	Reconnect(log log.T) error
@@ -56,13 +56,15 @@ type ControlChannel struct {
 	Service           service.Service
 	AuditLogScheduler telemetry.IAuditLogTelemetry
 	channelType       string
+	taskAckChan       chan mgsContracts.AcknowledgeTaskContent
 }
 
 // Initialize populates controlchannel object and opens controlchannel to communicate with mgs.
 func (controlChannel *ControlChannel) Initialize(context context.T,
 	mgsService service.Service,
 	processor processor.Processor,
-	instanceId string) {
+	instanceId string,
+	taskAckChan chan mgsContracts.AcknowledgeTaskContent) {
 
 	log := context.Log()
 	controlChannel.Service = mgsService
@@ -71,6 +73,7 @@ func (controlChannel *ControlChannel) Initialize(context context.T,
 	controlChannel.Processor = processor
 	controlChannel.wsChannel = &communicator.WebSocketChannel{}
 	controlChannel.AuditLogScheduler = telemetry.GetAuditLogTelemetryInstance(context, controlChannel.wsChannel)
+	controlChannel.taskAckChan = taskAckChan
 	log.Debugf("Initialized controlchannel for instance: %s", instanceId)
 }
 
@@ -96,7 +99,7 @@ func (controlChannel *ControlChannel) SetWebSocket(context context.T,
 	orchestrationRootDir := filepath.Join(appconfig.DefaultDataStorePath, shortInstanceId, appconfig.DefaultSessionRootDirName, config.Agent.OrchestrationRootDir)
 
 	onMessageHandler := func(input []byte) {
-		controlChannelIncomingMessageHandler(context, processor, input, orchestrationRootDir, instanceId)
+		controlChannelIncomingMessageHandler(context, processor, input, orchestrationRootDir, instanceId, controlChannel.taskAckChan)
 	}
 	onErrorHandler := func(err error) {
 		callable := func() (channel interface{}, err error) {
@@ -210,7 +213,8 @@ func controlChannelIncomingMessageHandler(context context.T,
 	processor processor.Processor,
 	rawMessage []byte,
 	orchestrationRootDir string,
-	instanceId string) error {
+	instanceId string,
+	taskAckChan chan mgsContracts.AcknowledgeTaskContent) error {
 
 	log := context.Log()
 
@@ -231,6 +235,8 @@ func controlChannelIncomingMessageHandler(context context.T,
 		return sendStartSessionMessageToProcessor(processor, context, agentMessage, orchestrationRootDir, instanceId, clientId)
 	} else if agentMessage.MessageType == mgsContracts.ChannelClosedMessage {
 		return sendTerminateSessionMessageToProcessor(processor, context, instanceId, *agentMessage)
+	} else if agentMessage.MessageType == mgsContracts.TaskAcknowledgeMessage {
+		return processAcknowledgeMessage(context, *agentMessage, taskAckChan)
 	}
 
 	return fmt.Errorf("invalid message type: %s", agentMessage.MessageType)
@@ -301,6 +307,26 @@ func sendTerminateSessionMessageToProcessor(
 
 	// Submit message to processor
 	processor.Cancel(docState)
+	return nil
+}
+
+// processAcknowledgeMessage sends the acknowledgment message on chan so session can process it.
+func processAcknowledgeMessage(
+	context context.T,
+	agentMessage mgsContracts.AgentMessage,
+	taskAckChan chan mgsContracts.AcknowledgeTaskContent) error {
+
+	log := context.Log()
+	log.Debugf("Processing Task Acknowledge message %s", agentMessage.MessageId.String())
+	taskAcknowledge := &mgsContracts.AcknowledgeTaskContent{}
+	if err := taskAcknowledge.Deserialize(log, agentMessage); err != nil {
+		log.Errorf("Cannot parse AgentTask message to TaskAcknowledgeMessage message: %s, err: %v.", agentMessage.MessageId.String(), err)
+		return err
+	}
+	log.Debugf("TaskAcknowledgeMessage for topic [%s] and sessionId [%s]", taskAcknowledge.Topic, taskAcknowledge.TaskId)
+
+	// handover to service
+	taskAckChan <- *taskAcknowledge
 	return nil
 }
 
