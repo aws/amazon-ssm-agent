@@ -51,6 +51,7 @@ func (suite *SessionPluginTestSuite) SetupTest() {
 	suite.mockIohandler = new(iohandlerMock.MockIOHandler)
 	suite.mockSessionPlugin = new(sessionPluginMock.ISessionPlugin)
 	suite.sessionPlugin = &SessionPlugin{
+		context:       suite.mockContext,
 		sessionPlugin: suite.mockSessionPlugin,
 	}
 }
@@ -69,12 +70,12 @@ func (suite *SessionPluginTestSuite) TestExecute() {
 		}
 	suite.mockDataChannel.On("SendAgentSessionStateMessage", suite.mockContext.Log(), mgsContracts.Connected).Return(nil)
 	suite.mockDataChannel.On("Close", suite.mockContext.Log()).Return(nil)
-	suite.mockSessionPlugin.On("Execute", suite.mockContext, mock.Anything, suite.mockCancelFlag, suite.mockIohandler, suite.mockDataChannel).Return()
+	suite.mockSessionPlugin.On("Execute", mock.Anything, suite.mockCancelFlag, suite.mockIohandler, suite.mockDataChannel).Return()
 	suite.mockSessionPlugin.On("RequireHandshake").Return(false)
 	suite.mockSessionPlugin.On("GetPluginParameters", config.Properties).Return(nil)
 
 	suite.mockDataChannel.On("SkipHandshake", suite.mockContext.Log()).Return()
-	suite.sessionPlugin.Execute(suite.mockContext,
+	suite.sessionPlugin.Execute(
 		config,
 		suite.mockCancelFlag,
 		suite.mockIohandler)
@@ -93,13 +94,13 @@ func (suite *SessionPluginTestSuite) TestExecuteHandshakeEncryptionDisabled() {
 		}
 	suite.mockDataChannel.On("SendAgentSessionStateMessage", suite.mockContext.Log(), mgsContracts.Connected).Return(nil)
 	suite.mockDataChannel.On("Close", suite.mockContext.Log()).Return(nil)
-	suite.mockSessionPlugin.On("Execute", suite.mockContext, mock.Anything, suite.mockCancelFlag, suite.mockIohandler, suite.mockDataChannel).Return()
+	suite.mockSessionPlugin.On("Execute", mock.Anything, suite.mockCancelFlag, suite.mockIohandler, suite.mockDataChannel).Return()
 	suite.mockSessionPlugin.On("RequireHandshake").Return(true)
 	suite.mockSessionPlugin.On("GetPluginParameters", config.Properties).Return(sessionProperties)
 
 	sessionTypeRequest := mgsContracts.SessionTypeRequest{SessionType: appconfig.PluginNamePort, Properties: sessionProperties}
 	suite.mockDataChannel.On("PerformHandshake", suite.mockContext.Log(), "", false, sessionTypeRequest).Return(nil)
-	suite.sessionPlugin.Execute(suite.mockContext,
+	suite.sessionPlugin.Execute(
 		config,
 		suite.mockCancelFlag,
 		suite.mockIohandler)
@@ -119,13 +120,13 @@ func (suite *SessionPluginTestSuite) TestExecuteHandshakeEncryptionEnabledPortPl
 		}
 	suite.mockDataChannel.On("SendAgentSessionStateMessage", suite.mockContext.Log(), mgsContracts.Connected).Return(nil)
 	suite.mockDataChannel.On("Close", suite.mockContext.Log()).Return(nil)
-	suite.mockSessionPlugin.On("Execute", suite.mockContext, mock.Anything, suite.mockCancelFlag, suite.mockIohandler, suite.mockDataChannel).Return()
+	suite.mockSessionPlugin.On("Execute", mock.Anything, suite.mockCancelFlag, suite.mockIohandler, suite.mockDataChannel).Return()
 	suite.mockSessionPlugin.On("RequireHandshake").Return(true)
 	suite.mockSessionPlugin.On("GetPluginParameters", config.Properties).Return(sessionProperties)
 
 	sessionTypeRequest := mgsContracts.SessionTypeRequest{SessionType: appconfig.PluginNamePort, Properties: sessionProperties}
 	suite.mockDataChannel.On("PerformHandshake", suite.mockContext.Log(), kmsKey, false, sessionTypeRequest).Return(nil)
-	suite.sessionPlugin.Execute(suite.mockContext,
+	suite.sessionPlugin.Execute(
 		config,
 		suite.mockCancelFlag,
 		suite.mockIohandler)
@@ -144,13 +145,13 @@ func (suite *SessionPluginTestSuite) TestExecuteEncryptionHandshakeSuccess() {
 		}
 	suite.mockDataChannel.On("SendAgentSessionStateMessage", suite.mockContext.Log(), mgsContracts.Connected).Return(nil)
 	suite.mockDataChannel.On("Close", suite.mockContext.Log()).Return(nil)
-	suite.mockSessionPlugin.On("Execute", suite.mockContext, mock.Anything, suite.mockCancelFlag, suite.mockIohandler, suite.mockDataChannel).Return()
+	suite.mockSessionPlugin.On("Execute", mock.Anything, suite.mockCancelFlag, suite.mockIohandler, suite.mockDataChannel).Return()
 	suite.mockSessionPlugin.On("RequireHandshake").Return(false)
 	suite.mockSessionPlugin.On("GetPluginParameters", config.Properties).Return(nil)
 
 	sessionTypeRequest := mgsContracts.SessionTypeRequest{SessionType: appconfig.PluginNameStandardStream}
 	suite.mockDataChannel.On("PerformHandshake", suite.mockContext.Log(), kmsKey, true, sessionTypeRequest).Return(nil)
-	suite.sessionPlugin.Execute(suite.mockContext,
+	suite.sessionPlugin.Execute(
 		config,
 		suite.mockCancelFlag,
 		suite.mockIohandler)
@@ -176,7 +177,7 @@ func (suite *SessionPluginTestSuite) TestExecuteEncryptionHandshakeFailed() {
 	error := errors.New("handshake failure")
 	suite.mockDataChannel.On("PerformHandshake", suite.mockContext.Log(), kmsKey, true, sessionTypeRequest).Return(error)
 	suite.mockIohandler.On("MarkAsFailed", mock.Anything).Return()
-	suite.sessionPlugin.Execute(suite.mockContext,
+	suite.sessionPlugin.Execute(
 		config,
 		suite.mockCancelFlag,
 		suite.mockIohandler)

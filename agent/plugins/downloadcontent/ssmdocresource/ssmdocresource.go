@@ -22,10 +22,10 @@ import (
 	"path/filepath"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager"
 	"github.com/aws/amazon-ssm-agent/agent/framework/docparser"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/remoteresource"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/system"
 	ssmsvc "github.com/aws/amazon-ssm-agent/agent/ssm"
@@ -34,6 +34,7 @@ import (
 
 // S3Resource is a struct for the remote resource of type git
 type SSMDocResource struct {
+	context   context.T
 	Info      SSMDocInfo
 	ssmdocdep ssmdeps
 }
@@ -44,16 +45,17 @@ type SSMDocInfo struct {
 }
 
 // NewS3Resource is a constructor of type GitResource
-func NewSSMDocResource(log log.T, info string) (*SSMDocResource, error) {
+func NewSSMDocResource(context context.T, info string) (*SSMDocResource, error) {
 	ssmDocInfo, err := parseSourceInfo(info)
 	if err != nil {
 		return nil, fmt.Errorf("SSMDocument SourceInfo parsing failed. %v", err)
 	}
 
 	return &SSMDocResource{
-		Info: ssmDocInfo,
+		context: context,
+		Info:    ssmDocInfo,
 		ssmdocdep: &ssmDocDepImpl{
-			ssmSvc: ssmsvc.NewService(log),
+			ssmSvc: ssmsvc.NewService(context),
 		},
 	}, nil
 }
@@ -69,7 +71,8 @@ func parseSourceInfo(sourceInfo string) (ssmdoc SSMDocInfo, err error) {
 }
 
 // DownloadRemoteResource calls download to pull down files or directory from s3
-func (ssmdoc *SSMDocResource) DownloadRemoteResource(log log.T, filesys filemanager.FileSystem, destinationPath string) (err error, result *remoteresource.DownloadResult) {
+func (ssmdoc *SSMDocResource) DownloadRemoteResource(filesys filemanager.FileSystem, destinationPath string) (err error, result *remoteresource.DownloadResult) {
+	log := ssmdoc.context.Log()
 	if destinationPath == "" {
 		destinationPath = appconfig.DownloadRoot
 	}

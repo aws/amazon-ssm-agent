@@ -151,9 +151,9 @@ func testRunScripts(t *testing.T, testCase TestCase, rawInput bool) {
 			err := jsonutil.Remarshal(testCase.Input, &rawPluginInput)
 			assert.Nil(t, err)
 
-			p.runCommandsRawInput(logger, pluginID, rawPluginInput, orchestrationDirectory, defaultWorkingDirectory, mockCancelFlag, mockIOHandler, runCommandID)
+			p.runCommandsRawInput(pluginID, rawPluginInput, orchestrationDirectory, defaultWorkingDirectory, mockCancelFlag, mockIOHandler, runCommandID)
 		} else {
-			p.runCommands(logger, pluginID, testCase.Input, orchestrationDirectory, defaultWorkingDirectory, mockCancelFlag, mockIOHandler)
+			p.runCommands(pluginID, testCase.Input, orchestrationDirectory, defaultWorkingDirectory, mockCancelFlag, mockIOHandler)
 		}
 	}
 
@@ -178,7 +178,7 @@ func testBucketsInDifferentRegions(t *testing.T, testCase TestCase, testingBucke
 		setIOHandlerExpectations(mockIOHandler, testCase)
 
 		// call method under test
-		p.runCommands(logger, pluginID, testCase.Input, orchestrationDirectory, defaultWorkingDirectory, mockCancelFlag, mockIOHandler)
+		p.runCommands(pluginID, testCase.Input, orchestrationDirectory, defaultWorkingDirectory, mockCancelFlag, mockIOHandler)
 	}
 
 	testExecution(t, runScriptTester)
@@ -245,7 +245,6 @@ func buildOutputs(testCases []TestCase) (out string, err string, combined string
 func testExecuteMultiInput(t *testing.T, testCases []TestCase) {
 	executeTester := func(p *Plugin, mockCancelFlag *task.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
 		// setup expectations and correct outputs
-		mockContext := context.NewMockDefault()
 
 		// set expectations
 		setCancelFlagExpectations(mockCancelFlag, len(testCases))
@@ -262,7 +261,6 @@ func testExecuteMultiInput(t *testing.T, testCases []TestCase) {
 
 		// call plugin
 		p.Execute(
-			mockContext,
 			contracts.Configuration{
 				Properties:             pluginProperties,
 				OutputS3BucketName:     s3BucketName,
@@ -281,7 +279,6 @@ func testExecuteMultiInput(t *testing.T, testCases []TestCase) {
 func testExecute(t *testing.T, testCase TestCase) {
 	executeTester := func(p *Plugin, mockCancelFlag *task.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
 		// setup expectations and correct outputs
-		mockContext := context.NewMockDefault()
 
 		// set expectations
 		setCancelFlagExpectations(mockCancelFlag, 1)
@@ -296,7 +293,6 @@ func testExecute(t *testing.T, testCase TestCase) {
 
 		// call plugin
 		p.Execute(
-			mockContext,
 			contracts.Configuration{
 				Properties:             pluginProperties,
 				OutputS3BucketName:     s3BucketName,
@@ -315,7 +311,6 @@ func testExecute(t *testing.T, testCase TestCase) {
 func testExecuteWithEnvironment(t *testing.T, testCase TestCase) {
 	executeTester := func(p *Plugin, mockCancelFlag *task.MockCancelFlag, mockExecuter *executers.MockCommandExecuter, mockIOHandler *iohandlermocks.MockIOHandler) {
 		// setup expectations and correct outputs
-		mockContext := context.NewMockDefault()
 
 		// set expectations
 		setCancelFlagExpectations(mockCancelFlag, 1)
@@ -330,7 +325,6 @@ func testExecuteWithEnvironment(t *testing.T, testCase TestCase) {
 
 		// call plugin
 		p.Execute(
-			mockContext,
 			contracts.Configuration{
 				Properties:             pluginProperties,
 				OutputS3BucketName:     s3BucketName,
@@ -357,6 +351,7 @@ func testExecution(t *testing.T, commandtester CommandTester) {
 
 	// create plugin
 	p := new(Plugin)
+	p.Context = context.NewMockDefault()
 	p.CommandExecuter = mockExecuter
 	p.Name = "aws:runShellScript"
 	p.ScriptName = "_script.sh"

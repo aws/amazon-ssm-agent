@@ -20,6 +20,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -74,8 +75,8 @@ func (DepWindows) UpdateUtilExeCommandOutput(
 	return util.ExeCommandOutput(log, cmd, parameters, workingDir, outputRoot, stdOut, stdErr, usePlatformSpecificCommand)
 }
 
-func (DepWindows) ArtifactDownload(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
-	return artifact.Download(log, input)
+func (DepWindows) ArtifactDownload(context context.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
+	return artifact.Download(context, input)
 }
 
 func openLocalRegistryKey(path string) (registry.Key, error) {

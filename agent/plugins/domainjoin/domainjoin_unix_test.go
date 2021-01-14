@@ -20,6 +20,7 @@ import (
 	"io"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	iohandlermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
 	multiwritermock "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/multiwriter/mock"
@@ -52,8 +53,6 @@ var TestCases = []TestCase{
 	generateTestCaseOk(testDirectoryId, testDirectoryName, []string{"10.0.0.0", "10.0.1.0"}),
 	generateTestCaseFail(testDirectoryId, testDirectoryName, []string{"10.0.0.2", "10.0.1.2"}),
 }
-
-var logger = log.NewMockLog()
 
 func generateTestCaseOk(id string, name string, ipAddress []string) TestCase {
 
@@ -113,8 +112,6 @@ func TestRunCommands(t *testing.T) {
 
 // testRunCommands tests the runCommands or the runCommandsRawInput method for one testcase.
 func testRunCommands(t *testing.T, testCase TestCase, rawInput bool) {
-	logger.On("Error", mock.Anything).Return(nil)
-	logger.Infof("test run commands %v", testCase)
 	var pluginString string = "domainjoin"
 
 	if testCase.mark {
@@ -130,7 +127,7 @@ func testRunCommands(t *testing.T, testCase TestCase, rawInput bool) {
 	makeDir = func(destinationDir string) (err error) {
 		return nil
 	}
-	makeArgs = func(log log.T, scriptPath string, pluginInput DomainJoinPluginInput) (commandArguments string, err error) {
+	makeArgs = func(context context.T, scriptPath string, pluginInput DomainJoinPluginInput) (commandArguments string, err error) {
 		return "cmd", err
 	}
 	createOrchesDir = func(log log.T, orchestrationDir string, pluginInput DomainJoinPluginInput) (scriptPath string, err error) {
@@ -139,7 +136,9 @@ func testRunCommands(t *testing.T, testCase TestCase, rawInput bool) {
 
 	mockCancelFlag := new(task.MockCancelFlag)
 	mockIOHandler := new(iohandlermocks.MockIOHandler)
-	p := new(Plugin)
+	p := &Plugin{
+		context: context.NewMockDefault(),
+	}
 
 	if rawInput {
 		// prepare plugin input
@@ -151,50 +150,46 @@ func testRunCommands(t *testing.T, testCase TestCase, rawInput bool) {
 		mockIOHandler.On("GetStdoutWriter", mock.Anything).Return(new(multiwritermock.MockDocumentIOMultiWriter))
 		mockIOHandler.On("GetStderrWriter", mock.Anything).Return(new(multiwritermock.MockDocumentIOMultiWriter))
 		mockIOHandler.On("MarkAsSucceeded").Return()
-		p.runCommandsRawInput(logger, pluginString, rawPluginInput, orchestrationDirectory, mockCancelFlag, mockIOHandler, utilExe)
+		p.runCommandsRawInput(pluginString, rawPluginInput, orchestrationDirectory, mockCancelFlag, mockIOHandler, utilExe)
 	} else {
 		mockIOHandler.On("SetStatus", mock.Anything).Return()
 		mockIOHandler.On("GetStdoutWriter", mock.Anything).Return(new(multiwritermock.MockDocumentIOMultiWriter))
 		mockIOHandler.On("GetStderrWriter", mock.Anything).Return(new(multiwritermock.MockDocumentIOMultiWriter))
 		mockIOHandler.On("MarkAsSucceeded").Return()
-		p.runCommands(logger, pluginString, testCase.Input, orchestrationDirectory, mockCancelFlag, mockIOHandler, utilExe)
+		p.runCommands(pluginString, testCase.Input, orchestrationDirectory, mockCancelFlag, mockIOHandler, utilExe)
 	}
 }
 
 // TestMakeArguments tests the makeArguments methods, which build up the command for domainJoin.exe
 func TestMakeArguments(t *testing.T) {
-	logger.On("Error", mock.Anything).Return(nil)
-	getRegion = func() (string, error) {
-		return "us-east-1", nil
-	}
-
+	context := context.NewMockDefault()
 	domainJoinInput := generateDomainJoinPluginInput(testDirectoryId, testDirectoryName, []string{"172.31.4.141", "172.31.21.240"})
-	commandRes, _ := makeArguments(logger, "./aws_domainjoin.sh", domainJoinInput)
+	commandRes, _ := makeArguments(context, "./aws_domainjoin.sh", domainJoinInput)
 	expected := "./aws_domainjoin.sh --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --dns-addresses 172.31.4.141,172.31.21.240"
 	assert.Equal(t, expected, commandRes)
 
 	domainJoinInput = generateDomainJoinPluginInput(testDirectoryId, testDirectoryName, []string{"8.8.8.8", "8.8.8.8[[["})
-	commandRes, _ = makeArguments(logger, "./aws_domainjoin.sh", domainJoinInput)
+	commandRes, _ = makeArguments(context, "./aws_domainjoin.sh", domainJoinInput)
 	expected = ""
 	assert.Equal(t, expected, commandRes)
 
 	domainJoinInput = generateDomainJoinPluginInput(testDirectoryId, testDirectoryName, []string{"8.8.8.8[[[", "8.8.8.8"})
-	commandRes, _ = makeArguments(logger, "./aws_domainjoin.sh", domainJoinInput)
+	commandRes, _ = makeArguments(context, "./aws_domainjoin.sh", domainJoinInput)
 	expected = ""
 	assert.Equal(t, expected, commandRes)
 
 	domainJoinInput = generateDomainJoinPluginInput(testDirectoryId, testDirectoryName, []string{"Hello $(aws s3 ls)", "8.8.8.8"})
-	commandRes, _ = makeArguments(logger, "./aws_domainjoin.sh", domainJoinInput)
+	commandRes, _ = makeArguments(context, "./aws_domainjoin.sh", domainJoinInput)
 	expected = ""
 	assert.Equal(t, expected, commandRes)
 
 	domainJoinInput = generateDomainJoinPluginInput(testDirectoryId, testDirectoryName, []string{"Hello `aws s3 ls`", "8.8.8.8"})
-	commandRes, _ = makeArguments(logger, "./aws_domainjoin.sh", domainJoinInput)
+	commandRes, _ = makeArguments(context, "./aws_domainjoin.sh", domainJoinInput)
 	expected = ""
 	assert.Equal(t, expected, commandRes)
 
 	domainJoinInput = generateDomainJoinPluginInputOptionalParamKeepHostName(testDirectoryId, testDirectoryName, []string{"172.31.4.141", "172.31.21.240"}, testKeepHostName)
-	commandRes, _ = makeArguments(logger, "./aws_domainjoin.sh", domainJoinInput)
+	commandRes, _ = makeArguments(context, "./aws_domainjoin.sh", domainJoinInput)
 	expected = "./aws_domainjoin.sh --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --dns-addresses 172.31.4.141,172.31.21.240 --keep-hostname  "
 	assert.Equal(t, expected, commandRes)
 }

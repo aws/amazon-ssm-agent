@@ -27,14 +27,14 @@ type RunShellScriptFactory struct {
 }
 
 func (f RunShellScriptFactory) Create(context context.T) (runpluginutil.T, error) {
-	return runscript.NewRunShellPlugin(context.Log())
+	return runscript.NewRunShellPlugin(context)
 }
 
 type DomainJoinFactory struct {
 }
 
 func (f DomainJoinFactory) Create(context context.T) (runpluginutil.T, error) {
-	return domainjoin.NewPlugin()
+	return domainjoin.NewPlugin(context)
 }
 
 // loadPlatformDependentPlugins registers platform dependent plugins

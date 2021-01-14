@@ -19,18 +19,21 @@ package rip
 import (
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
+
 	"github.com/stretchr/testify/assert"
 )
 
 func TestGetMgsEndpointForUnknownRegion(t *testing.T) {
-	endpoint := GetDefaultServiceEndpoint("unknown-region", MgsServiceName)
-	expected := MgsServiceName + ".unknown-region.amazonaws.com"
+	endpoint := endpoint.GetDefaultEndpoint(log.NewMockLog(), MgsServiceName, "unknown-region", "")
+	expected := ""
 
 	assert.Equal(t, expected, endpoint)
 }
 
 func TestGetMgsEndpointForCnRegion(t *testing.T) {
-	endpoint := GetDefaultServiceEndpoint("cn-north-1", MgsServiceName)
+	endpoint := endpoint.GetDefaultEndpoint(log.NewMockLog(), MgsServiceName, "cn-north-1", "")
 	expected := MgsServiceName + ".cn-north-1.amazonaws.com.cn"
 
 	assert.Equal(t, expected, endpoint)

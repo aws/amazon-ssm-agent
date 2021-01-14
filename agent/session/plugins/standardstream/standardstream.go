@@ -29,7 +29,8 @@ import (
 
 // StandardStreamPlugin is the type for the plugin.
 type StandardStreamPlugin struct {
-	shell shell.IShellPlugin
+	context context.T
+	shell   shell.IShellPlugin
 }
 
 // Returns parameters required for CLI/console to start session
@@ -43,14 +44,15 @@ func (p *StandardStreamPlugin) RequireHandshake() bool {
 }
 
 // NewPlugin returns a new instance of the Standard Stream Plugin
-func NewPlugin() (sessionplugin.ISessionPlugin, error) {
-	shellPlugin, err := shell.NewPlugin(appconfig.PluginNameStandardStream)
+func NewPlugin(context context.T) (sessionplugin.ISessionPlugin, error) {
+	shellPlugin, err := shell.NewPlugin(context, appconfig.PluginNameStandardStream)
 	if err != nil {
 		return nil, err
 	}
 
 	var plugin = StandardStreamPlugin{
-		shell: shellPlugin,
+		context: context,
+		shell:   shellPlugin,
 	}
 
 	return &plugin, nil
@@ -64,13 +66,13 @@ func (p *StandardStreamPlugin) name() string {
 // Execute starts pseudo terminal.
 // It reads incoming message from data channel and writes to pty.stdin.
 // It reads message from pty.stdout and writes to data channel
-func (p *StandardStreamPlugin) Execute(context context.T,
+func (p *StandardStreamPlugin) Execute(
 	config agentContracts.Configuration,
 	cancelFlag task.CancelFlag,
 	output iohandler.IOHandler,
 	dataChannel datachannel.IDataChannel) {
 
-	p.shell.Execute(context, config, cancelFlag, output, dataChannel, mgsContracts.ShellProperties{})
+	p.shell.Execute(config, cancelFlag, output, dataChannel, mgsContracts.ShellProperties{})
 }
 
 // InputStreamMessageHandler passes payload byte stream to shell stdin

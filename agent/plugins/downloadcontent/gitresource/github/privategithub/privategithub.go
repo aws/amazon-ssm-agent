@@ -21,6 +21,7 @@ import (
 	"net/http"
 	"regexp"
 
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/framework/docparser/parameterstore"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/gitresource/github/privategithub/githubclient"
@@ -113,8 +114,8 @@ func validateTokenParameter(tokenInfo string) (valid bool, err error) {
 }
 
 // NewTokenInfoImpl returns an object of type TokenInfoImpl
-func NewTokenInfoImpl(log log.T) TokenInfoImpl {
-	parameterService := ssmparameterresolver.NewService(log)
+func NewTokenInfoImpl(context context.T) TokenInfoImpl {
+	parameterService := ssmparameterresolver.NewService(context)
 	return TokenInfoImpl{
 		SsmParameter:   getSSMParameter,
 		paramAccess:    parameterService,

@@ -15,7 +15,7 @@
 package mocks
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	testCommon "github.com/aws/amazon-ssm-agent/agent/update/tester/common"
 	"github.com/stretchr/testify/mock"
 )
@@ -33,8 +33,8 @@ func (_m *ITestCase) CleanupTestCase() {
 
 // Initialize is a mock function for Initialize in
 // struct which implements ITestCase
-func (_m *ITestCase) Initialize(logger log.T) {
-	_m.Called(logger)
+func (_m *ITestCase) Initialize(context context.T) {
+	_m.Called(context)
 }
 
 // GetTestSetUpCleanupEventHandle is a mock function for GetTestSetUpCleanupEventHandle in

@@ -20,13 +20,15 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	commProtocol "github.com/aws/amazon-ssm-agent/common/channel/protocol"
 	"github.com/aws/amazon-ssm-agent/common/channel/utils"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/amazon-ssm-agent/common/message"
 )
 
 // NewFileChannel creates an new instance of FileChannel which internally uses file watcher based ipc channel
-func NewFileChannel(log log.T) IChannel {
+func NewFileChannel(log log.T, identity identity.IAgentIdentity) IChannel {
 	return &fileChannel{
 		log: log,
+		identity: identity,
 	}
 }
 
@@ -34,6 +36,7 @@ func NewFileChannel(log log.T) IChannel {
 // to implement various communication protocol
 type fileChannel struct {
 	log                      log.T
+	identity                 identity.IAgentIdentity
 	isFileChannelInitialized bool
 	msgProtocol              utils.IFileChannelCommProtocol
 }
@@ -42,9 +45,9 @@ type fileChannel struct {
 func (fc *fileChannel) Initialize(socketType utils.SocketType) error {
 	fc.log.Info("using file channel for IPC")
 	if socketType == utils.Surveyor {
-		fc.msgProtocol = commProtocol.GetSurveyInstance(fc.log)
+		fc.msgProtocol = commProtocol.GetSurveyInstance(fc.log, fc.identity)
 	} else if socketType == utils.Respondent {
-		fc.msgProtocol = commProtocol.GetRespondentInstance(fc.log)
+		fc.msgProtocol = commProtocol.GetRespondentInstance(fc.log, fc.identity)
 	} else {
 		return fmt.Errorf("unsupported socket type")
 	}

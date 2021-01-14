@@ -62,11 +62,12 @@ func TestInitializeParametersWhenPortTypeIsNil(t *testing.T) {
 	mockDataChannel.On("GetClientVersion").Return(clientVersion)
 
 	portPlugin := &PortPlugin{
+		context:     context.NewMockDefault(),
 		dataChannel: mockDataChannel,
 		cancelled:   make(chan struct{}),
 	}
 
-	portPlugin.initializeParameters(mockLog, configuration)
+	portPlugin.initializeParameters(configuration)
 	assert.IsType(t, &BasicPortSession{}, portPlugin.session)
 	mockDataChannel.AssertExpectations(t)
 }
@@ -76,11 +77,12 @@ func TestInitializeParametersWhenPortTypeIsLocalPortForwarding(t *testing.T) {
 	mockDataChannel.On("GetClientVersion").Return(clientVersion)
 
 	portPlugin := &PortPlugin{
+		context:     context.NewMockDefault(),
 		dataChannel: mockDataChannel,
 		cancelled:   make(chan struct{}),
 	}
 
-	portPlugin.initializeParameters(mockLog, configurationPF)
+	portPlugin.initializeParameters(configurationPF)
 	assert.IsType(t, &MuxPortSession{}, portPlugin.session)
 	mockDataChannel.AssertExpectations(t)
 }
@@ -90,11 +92,12 @@ func TestInitializeParametersWhenPortTypeIsLocalPortForwardingAndOldClient(t *te
 	mockDataChannel.On("GetClientVersion").Return("1.0.0")
 
 	portPlugin := &PortPlugin{
+		context:     context.NewMockDefault(),
 		dataChannel: mockDataChannel,
 		cancelled:   make(chan struct{}),
 	}
 
-	portPlugin.initializeParameters(mockLog, configurationPF)
+	portPlugin.initializeParameters(configurationPF)
 	assert.IsType(t, &BasicPortSession{}, portPlugin.session)
 	mockDataChannel.AssertExpectations(t)
 }
@@ -113,6 +116,7 @@ func (suite *PortTestSuite) SetupTest() {
 	suite.mockIohandler = mockIohandler
 	suite.mockPortSession = mockPortSession
 	suite.plugin = &PortPlugin{
+		context:     mockContext,
 		dataChannel: mockDataChannel,
 		cancelled:   make(chan struct{}),
 	}
@@ -135,7 +139,7 @@ func (suite *PortTestSuite) TestExecuteWhenCancelFlagIsShutDown() {
 	suite.mockCancelFlag.On("ShutDown").Return(true)
 	suite.mockIohandler.On("MarkAsShutdown").Return(nil)
 
-	suite.plugin.Execute(suite.mockContext,
+	suite.plugin.Execute(
 		configuration,
 		suite.mockCancelFlag,
 		suite.mockIohandler,
@@ -150,7 +154,7 @@ func (suite *PortTestSuite) TestExecuteWhenCancelFlagIsCancelled() {
 	suite.mockCancelFlag.On("ShutDown").Return(false)
 	suite.mockIohandler.On("MarkAsCancelled").Return(nil)
 
-	suite.plugin.Execute(suite.mockContext,
+	suite.plugin.Execute(
 		configuration,
 		suite.mockCancelFlag,
 		suite.mockIohandler,
@@ -167,7 +171,7 @@ func (suite *PortTestSuite) TestExecuteWithInvalidPortNumber() {
 	suite.mockIohandler.On("SetExitCode", 1).Return(nil)
 	suite.mockIohandler.On("SetOutput", mock.Anything).Return()
 
-	suite.plugin.Execute(suite.mockContext,
+	suite.plugin.Execute(
 		contracts.Configuration{Properties: map[string]interface{}{"portNumber": ""}, SessionId: "sessionId"},
 		suite.mockCancelFlag,
 		suite.mockIohandler,
@@ -185,11 +189,11 @@ func (suite *PortTestSuite) TestExecuteWhenInitializeSessionReturnsError() {
 	suite.mockIohandler.On("SetOutput", mock.Anything).Return()
 	suite.mockDataChannel.On("GetClientVersion").Return(clientVersion)
 
-	GetSession = func(parameters PortParameters, cancelled chan struct{}, clientVersion string, sessionId string) (IPortSession, error) {
+	GetSession = func(context context.T, parameters PortParameters, cancelled chan struct{}, clientVersion string, sessionId string) (IPortSession, error) {
 		return nil, errors.New("failed to initialize session")
 	}
 
-	suite.plugin.Execute(suite.mockContext,
+	suite.plugin.Execute(
 		configuration,
 		suite.mockCancelFlag,
 		suite.mockIohandler,
@@ -207,14 +211,14 @@ func (suite *PortTestSuite) TestExecute() {
 	suite.mockIohandler.On("SetStatus", contracts.ResultStatusSuccess).Return()
 	suite.mockDataChannel.On("GetClientVersion").Return(clientVersion)
 	suite.mockPortSession.On("InitializeSession", mock.Anything).Return(nil)
-	suite.mockPortSession.On("WritePump", mock.Anything, suite.mockDataChannel).WaitUntil(time.After(time.Second)).Return(0)
+	suite.mockPortSession.On("WritePump", suite.mockDataChannel).WaitUntil(time.After(time.Second)).Return(0)
 	suite.mockPortSession.On("Stop").Return()
 
-	GetSession = func(parameters PortParameters, cancelled chan struct{}, clientVersion string, sessionId string) (IPortSession, error) {
+	GetSession = func(context context.T, parameters PortParameters, cancelled chan struct{}, clientVersion string, sessionId string) (IPortSession, error) {
 		return suite.mockPortSession, nil
 	}
 
-	suite.plugin.Execute(suite.mockContext,
+	suite.plugin.Execute(
 		configuration,
 		suite.mockCancelFlag,
 		suite.mockIohandler,
@@ -229,7 +233,7 @@ func (suite *PortTestSuite) TestExecute() {
 // Testing InputStreamHandler
 func (suite *PortTestSuite) TestInputStreamHandler() {
 	suite.plugin.session = suite.mockPortSession
-	suite.mockPortSession.On("HandleStreamMessage", mock.Anything, getAgentMessage(uint32(mgsContracts.Output), payload)).Return(nil)
+	suite.mockPortSession.On("HandleStreamMessage", getAgentMessage(uint32(mgsContracts.Output), payload)).Return(nil)
 	suite.mockPortSession.On("IsConnectionAvailable").Return(true)
 	suite.plugin.InputStreamMessageHandler(suite.mockLog, getAgentMessage(uint32(mgsContracts.Output), payload))
 	suite.mockPortSession.AssertExpectations(suite.T())

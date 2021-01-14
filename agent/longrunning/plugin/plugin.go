@@ -49,9 +49,9 @@ type Plugin struct {
 
 //LongRunningPlugin is the interface that must be implemented by all long running plugins
 type LongRunningPlugin interface {
-	IsRunning(context context.T) bool
-	Start(context context.T, configuration string, orchestrationDir string, cancelFlag task.CancelFlag, out iohandler.IOHandler) error
-	Stop(context context.T, cancelFlag task.CancelFlag) error
+	IsRunning() bool
+	Start(configuration string, orchestrationDir string, cancelFlag task.CancelFlag, out iohandler.IOHandler) error
+	Stop(cancelFlag task.CancelFlag) error
 }
 
 //PluginSettings reflects settings that can be applied to long running plugins like aws:cloudWatch
@@ -136,6 +136,7 @@ func loadDaemonPlugins(context context.T) map[string]Plugin {
 						State:         PluginState{IsEnabled: true},
 					},
 					Handler: &rundaemon.Plugin{
+						Context:     context,
 						ExeLocation: input.PackageLocation,
 						Name:        input.Name,
 						CommandLine: input.Command,

@@ -29,9 +29,9 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/docparser"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/times"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/aws-sdk-go/service/ssmmds"
 	"github.com/gabs"
 )
@@ -121,22 +121,22 @@ func parseCancelCommandMessage(context context.T, msg *ssmmds.Message, messagesO
 }
 
 //generateCloudWatchLogStreamPrefix creates the LogStreamPrefix for cloudWatch output. LogStreamPrefix = <CommandID>/<InstanceID>
-func generateCloudWatchLogStreamPrefix(commandID string) (string, error) {
+func generateCloudWatchLogStreamPrefix(context context.T, commandID string) (string, error) {
 
-	instanceID, err := systemInfo.InstanceID()
+	instanceID, err := context.Identity().ShortInstanceID()
 	if err != nil {
 		return "", err
 	}
 	return fmt.Sprintf("%s/%s", commandID, instanceID), nil
 }
 
-func generateCloudWatchConfigFromPayload(parsedMessage messageContracts.SendCommandPayload) (contracts.CloudWatchConfiguration, error) {
+func generateCloudWatchConfigFromPayload(context context.T, parsedMessage messageContracts.SendCommandPayload) (contracts.CloudWatchConfiguration, error) {
 	cloudWatchOutputEnabled, err := strconv.ParseBool(parsedMessage.CloudWatchOutputEnabled)
 	cloudWatchConfig := contracts.CloudWatchConfiguration{}
 	if err != nil || !cloudWatchOutputEnabled {
 		return cloudWatchConfig, err
 	}
-	cloudWatchConfig.LogStreamPrefix, err = generateCloudWatchLogStreamPrefix(parsedMessage.CommandID)
+	cloudWatchConfig.LogStreamPrefix, err = generateCloudWatchLogStreamPrefix(context, parsedMessage.CommandID)
 	if err != nil {
 		return cloudWatchConfig, err
 	}
@@ -167,7 +167,7 @@ func parseSendCommandMessage(context context.T, msg *ssmmds.Message, messagesOrc
 	// adapt plugin configuration format from MDS to plugin expected format
 	s3KeyPrefix := path.Join(parsedMessage.OutputS3KeyPrefix, parsedMessage.CommandID, *msg.Destination)
 
-	cloudWatchConfig, err := generateCloudWatchConfigFromPayload(parsedMessage)
+	cloudWatchConfig, err := generateCloudWatchConfigFromPayload(context, parsedMessage)
 	if err != nil {
 		log.Errorf("Encountered error while generating cloudWatch config from send command payload, err: %s", err)
 	}
@@ -197,7 +197,7 @@ func parseSendCommandMessage(context context.T, msg *ssmmds.Message, messagesOrc
 		MainSteps:     parsedMessage.DocumentContent.MainSteps,
 		Parameters:    parsedMessage.DocumentContent.Parameters}
 	//Data format persisted in Current Folder is defined by the struct - CommandState
-	docState, err := docparser.InitializeDocState(log, documentType, docContent, documentInfo, parserInfo, parsedMessage.Parameters)
+	docState, err := docparser.InitializeDocState(context, documentType, docContent, documentInfo, parserInfo, parsedMessage.Parameters)
 	if err != nil {
 		return nil, err
 	}
@@ -233,10 +233,7 @@ func parseSendCommandMessage(context context.T, msg *ssmmds.Message, messagesOrc
 	// Check if it is a managed instance and its executing managed instance incompatible AWS SSM public document.
 	// A few public AWS SSM documents contain code which is not compatible when run on managed instances.
 	// isManagedInstanceIncompatibleAWSSSMDocument makes sure to find such documents at runtime and replace the incompatible code.
-	isMI, err := platform.IsManagedInstance()
-	if err != nil {
-		log.Errorf("Error determining managed instance. error: %v", err)
-	}
+	isMI := identity.IsOnPremInstance(context.Identity())
 
 	if isMI && contracts.IsManagedInstanceIncompatibleAWSSSMDocument(docState.DocumentInformation.DocumentName) {
 		log.Debugf("Running incompatible AWS SSM Document %v on managed instance", docState.DocumentInformation.DocumentName)

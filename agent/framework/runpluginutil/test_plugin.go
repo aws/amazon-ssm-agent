@@ -29,8 +29,8 @@ type PluginMock struct {
 	mock.Mock
 }
 
-func (m *PluginMock) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
-	_ = m.Called(context, config, cancelFlag, output)
+func (m *PluginMock) Execute(config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
+	_ = m.Called(config, cancelFlag, output)
 	return
 }
 

@@ -14,7 +14,6 @@
 package contracts
 
 import (
-	context "github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	mock "github.com/stretchr/testify/mock"
 )
@@ -25,12 +24,12 @@ type ICoreModule struct {
 }
 
 // ModuleExecute provides a mock function with given fields: _a0
-func (_m *ICoreModule) ModuleExecute(_a0 context.T) error {
-	ret := _m.Called(_a0)
+func (_m *ICoreModule) ModuleExecute() error {
+	ret := _m.Called()
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(context.T) error); ok {
-		r0 = rf(_a0)
+	if rf, ok := ret.Get(0).(func() error); ok {
+		r0 = rf()
 	} else {
 		r0 = ret.Error(0)
 	}

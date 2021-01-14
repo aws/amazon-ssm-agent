@@ -20,6 +20,7 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	iohandlermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
@@ -127,8 +128,9 @@ func testRunCommands(t *testing.T, testCase TestCase, rawInput bool) {
 	var res contracts.PluginOutput
 	mockCancelFlag := new(task.MockCancelFlag)
 	mockIOHandler := new(iohandlermocks.MockIOHandler)
-	p := new(Plugin)
-
+	p := &Plugin{
+		context: context.NewMockDefault(),
+	}
 	if rawInput {
 		// prepare plugin input
 		var rawPluginInput map[string]interface{}

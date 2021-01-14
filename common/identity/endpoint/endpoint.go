@@ -72,7 +72,6 @@ var ec2Metadata = newEC2MetadataClient()
 // getDefaultEndpoint returns the default endpoint for a service
 func GetDefaultEndpoint(log log.T, service, region, serviceDomain string) string {
 	var endpoint string
-
 	if serviceDomain != "" {
 		endpoint = serviceDomain
 	} else if val, ok := awsRegionServiceDomainMap[region]; ok {

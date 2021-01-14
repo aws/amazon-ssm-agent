@@ -47,7 +47,7 @@ func (suite *CoreManagerTestSuite) SetupTest() {
 	moduleMock := new(moduleMock.ICoreModule)
 	coreModulesMock[0] = moduleMock
 	rebootMock := new(rebootMock.IRebootType)
-	cloudwatchPublisher := &cloudwatchlogspublisher.CloudWatchPublisher{}
+	cloudwatchPublisher := cloudwatchlogspublisher.NewCloudWatchPublisher(contextMock)
 
 	suite.contextMock = contextMock
 	suite.logMock = logMock

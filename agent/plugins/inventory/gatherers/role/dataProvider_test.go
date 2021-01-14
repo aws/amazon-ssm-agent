@@ -18,7 +18,6 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/stretchr/testify/assert"
 )
@@ -95,11 +94,11 @@ func createMockReadAllText(output string, err error) func(string) (string, error
 	}
 }
 
-func testResultPath(log log.T) (path string, err error) {
+func testResultPath(context context.T) (path string, err error) {
 	return "path", nil
 }
 
-func testResultPathErr(log log.T) (path string, err error) {
+func testResultPathErr(context context.T) (path string, err error) {
 	return "", errors.New("error")
 }
 
@@ -126,11 +125,10 @@ func TestGetRoleDataUsingServerManager(t *testing.T) {
 	readFile = createMockReadAllText(testServerManagerOutput, nil)
 
 	contextMock := context.NewMockDefault()
-	mockLog := contextMock.Log()
 
 	var roleInfo []model.RoleData
 
-	err := collectDataUsingServerManager(mockLog, &roleInfo)
+	err := collectDataUsingServerManager(contextMock, &roleInfo)
 
 	assert.Nil(t, err)
 	assert.Equal(t, 17, len(roleInfo))
@@ -145,11 +143,10 @@ func TestGetRoleDataUsingServerManagerCmdError(t *testing.T) {
 	readFile = createMockReadAllText(testServerManagerOutput, nil)
 
 	contextMock := context.NewMockDefault()
-	mockLog := contextMock.Log()
 
 	var roleInfo []model.RoleData
 
-	err := collectDataUsingServerManager(mockLog, &roleInfo)
+	err := collectDataUsingServerManager(contextMock, &roleInfo)
 
 	assert.NotNil(t, err)
 }
@@ -160,11 +157,10 @@ func TestGetRoleDataUsingServerManagerXmlErr(t *testing.T) {
 	readFile = createMockReadAllText("unexpected output", nil)
 
 	contextMock := context.NewMockDefault()
-	mockLog := contextMock.Log()
 
 	var roleInfo []model.RoleData
 
-	err := collectDataUsingServerManager(mockLog, &roleInfo)
+	err := collectDataUsingServerManager(contextMock, &roleInfo)
 
 	assert.NotNil(t, err)
 }
@@ -175,11 +171,10 @@ func TestGetRoleDataUsingServerManagerReadError(t *testing.T) {
 	readFile = createMockReadAllText("", errors.New("error"))
 
 	contextMock := context.NewMockDefault()
-	mockLog := contextMock.Log()
 
 	var roleInfo []model.RoleData
 
-	err := collectDataUsingServerManager(mockLog, &roleInfo)
+	err := collectDataUsingServerManager(contextMock, &roleInfo)
 
 	assert.NotNil(t, err)
 }
@@ -190,11 +185,10 @@ func TestGetRoleDataUsingServerManagerFilePathError(t *testing.T) {
 	readFile = createMockReadAllText("", errors.New("error"))
 
 	contextMock := context.NewMockDefault()
-	mockLog := contextMock.Log()
 
 	var roleInfo []model.RoleData
 
-	err := collectDataUsingServerManager(mockLog, &roleInfo)
+	err := collectDataUsingServerManager(contextMock, &roleInfo)
 
 	assert.NotNil(t, err)
 }

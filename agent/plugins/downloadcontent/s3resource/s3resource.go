@@ -24,11 +24,11 @@ import (
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/remoteresource"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/system"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
@@ -36,6 +36,7 @@ import (
 
 // S3Resource is a struct for the remote resource of type git
 type S3Resource struct {
+	context  context.T
 	Info     S3Info
 	s3Object s3util.AmazonS3URL
 }
@@ -46,7 +47,7 @@ type S3Info struct {
 }
 
 // NewS3Resource is a constructor of type GitResource
-func NewS3Resource(log log.T, info string) (s3 *S3Resource, err error) {
+func NewS3Resource(context context.T, info string) (s3 *S3Resource, err error) {
 	var s3Info S3Info
 	var input artifact.DownloadInput
 
@@ -56,7 +57,8 @@ func NewS3Resource(log log.T, info string) (s3 *S3Resource, err error) {
 
 	input.SourceURL = s3Info.Path
 	return &S3Resource{
-		Info: s3Info,
+		context: context,
+		Info:    s3Info,
 	}, nil
 }
 
@@ -74,12 +76,13 @@ func parseSourceInfo(sourceInfo string) (s3Info S3Info, err error) {
 }
 
 // DownloadRemoteResource calls download to pull down files or directory from s3
-func (s3 *S3Resource) DownloadRemoteResource(log log.T, filesys filemanager.FileSystem, destPath string) (err error, result *remoteresource.DownloadResult) {
+func (s3 *S3Resource) DownloadRemoteResource(filesys filemanager.FileSystem, destPath string) (err error, result *remoteresource.DownloadResult) {
 	var fileURL *url.URL
 	var unescapedURL string
 	var folders []string
 	var localFilePath string
 
+	log := s3.context.Log()
 	result = &remoteresource.DownloadResult{}
 
 	isDirTypeDownloaded := true
@@ -104,7 +107,7 @@ func (s3 *S3Resource) DownloadRemoteResource(log log.T, filesys filemanager.File
 	log.Debug("S3 object - ", s3.s3Object.String())
 
 	// Create an object for the source URL. This can be used to list the objects in the folder
-	if folders, err = dep.ListS3Directory(log, s3.s3Object); err != nil {
+	if folders, err = dep.ListS3Directory(s3.context, s3.s3Object); err != nil {
 		if isPathType(s3.s3Object.Key) {
 			return err, nil
 		}
@@ -127,7 +130,7 @@ func (s3 *S3Resource) DownloadRemoteResource(log log.T, filesys filemanager.File
 		if !isPathType(files) { //Only download in case the URL is a file
 			subFolderPath := strings.TrimPrefix(files, s3.s3Object.Key)
 			var bucketURL *url.URL
-			if bucketURL, err = s3.getS3BucketURLString(log); err != nil {
+			if bucketURL, err = s3.getS3BucketURLString(); err != nil {
 				return fmt.Errorf("error while obtaining URL parsing - %v", bucketURL), nil
 			}
 			if bucketURL == nil {
@@ -168,7 +171,7 @@ func (s3 *S3Resource) DownloadRemoteResource(log log.T, filesys filemanager.File
 				}
 			}
 			input.DestinationDirectory = localFilePath
-			downloadOutput, err := dep.Download(log, input)
+			downloadOutput, err := dep.Download(s3.context, input)
 			if err != nil {
 				return err, nil
 			}
@@ -196,8 +199,8 @@ func (s3 *S3Resource) ValidateLocationInfo() (valid bool, err error) {
 }
 
 // getS3BucketURLString returns the URL up to the bucket name
-func (s3 *S3Resource) getS3BucketURLString(log log.T) (Url *url.URL, err error) {
-	endpoint := s3util.GetS3Endpoint(s3.s3Object.Region)
+func (s3 *S3Resource) getS3BucketURLString() (Url *url.URL, err error) {
+	endpoint := s3util.GetS3Endpoint(s3.context, s3.s3Object.Region)
 	bucketURL := "https://" + endpoint + "/" + s3.s3Object.Bucket
 	return url.Parse(bucketURL)
 }

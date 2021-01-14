@@ -185,7 +185,7 @@ func TestIsCloudWatchExeRunningTrue(t *testing.T) {
 	waitExe = execVar.Execute
 
 	var p, _ = NewPlugin(pluginConfig)
-	res := p.IsCloudWatchExeRunning(mocklog, "", "", cancelFlag)
+	res := p.IsCloudWatchExeRunning("", "", cancelFlag)
 	assert.True(t, res)
 }
 

@@ -25,7 +25,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/twinj/uuid"
@@ -149,12 +148,12 @@ func readAllText(path string) (xmlData string, err error) {
 	return
 }
 
-func getResultFilePath(log log.T) (path string, err error) {
+func getResultFilePath(context context.T) (path string, err error) {
 	var machineID string
-	machineID, err = platform.InstanceID()
+	machineID, err = context.Identity().InstanceID()
 
 	if err != nil {
-		log.Errorf("Error getting machineID")
+		context.Log().Errorf("Error getting machineID")
 		return
 	}
 	path = filepath.Join(appconfig.DefaultDataStorePath,
@@ -261,11 +260,12 @@ func collectDataFromPowershell(log log.T, powershellCommand string, roleInfo *[]
 }
 
 // Some early 2008 versions use ServerManager for role management, so use that for collecting data.
-func collectDataUsingServerManager(log log.T, roleInfo *[]model.RoleData) (err error) {
+func collectDataUsingServerManager(context context.T, roleInfo *[]model.RoleData) (err error) {
+	log := context.Log()
 	var xmlData, path string
 	var output []byte
 
-	path, err = resultPath(log)
+	path, err = resultPath(context)
 
 	if err != nil {
 		log.Errorf("Error getting path of file")
@@ -307,7 +307,7 @@ func collectRoleData(context context.T, config model.Config) (data []model.RoleD
 	// Some early 2008 releases uses server manager for getting role information
 	if err != nil {
 		log.Infof("Trying collecting role data using server manager")
-		err = collectDataUsingServerManager(log, &data)
+		err = collectDataUsingServerManager(context, &data)
 	}
 	// In some versions of 2003, roles information is stored as subcomponents in registry.
 	if err != nil {

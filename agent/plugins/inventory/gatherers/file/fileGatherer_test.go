@@ -1,9 +1,8 @@
 package file
 
 import (
-	"testing"
-
 	"os"
+	"testing"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"

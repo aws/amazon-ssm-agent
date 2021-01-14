@@ -56,10 +56,7 @@ func NewSession(context context.T) *Session {
 	log := sessionContext.Log()
 	appConfig := context.AppConfig()
 
-	instanceID, err := platform.InstanceID()
-
-	targetID, err := platform.TargetID()
-
+	instanceID, err := context.Identity().InstanceID()
 	if instanceID == "" {
 		log.Errorf("no instanceID provided, %s", err)
 		return nil
@@ -83,12 +80,11 @@ func NewSession(context context.T) *Session {
 	agentConfig := contracts.AgentConfiguration{
 		AgentInfo:  agentInfo,
 		InstanceID: instanceID,
-		TargetID:   targetID,
 	}
 
 	messageGatewayServiceConfig := appConfig.Mgs
 	if messageGatewayServiceConfig.Region == "" {
-		fetchedRegion, err := platform.Region()
+		fetchedRegion, err := context.Identity().Region()
 		if err != nil {
 			log.Errorf("Failed to get region with error: %s", err)
 			return nil
@@ -97,7 +93,7 @@ func NewSession(context context.T) *Session {
 	}
 
 	if messageGatewayServiceConfig.Endpoint == "" {
-		fetchedEndpoint, err := getMgsEndpoint(messageGatewayServiceConfig.Region)
+		fetchedEndpoint, err := getMgsEndpoint(context, messageGatewayServiceConfig.Region)
 		if err != nil {
 			log.Errorf("Failed to get MessageGatewayService endpoint with error: %s", err)
 			return nil
@@ -107,7 +103,7 @@ func NewSession(context context.T) *Session {
 
 	connectionTimeout := time.Duration(messageGatewayServiceConfig.StopTimeoutMillis) * time.Millisecond
 
-	mgsService := service.NewService(log, messageGatewayServiceConfig, connectionTimeout)
+	mgsService := service.NewService(context, messageGatewayServiceConfig, connectionTimeout)
 	processor := processor.NewEngineProcessor(
 		sessionContext,
 		messageGatewayServiceConfig.SessionWorkersLimit,
@@ -167,7 +163,7 @@ var setupControlChannel = func(context context.T, service service.Service, proce
 }
 
 // ModuleExecute starts the scheduling of the session module
-func (s *Session) ModuleExecute(context context.T) (err error) {
+func (s *Session) ModuleExecute() (err error) {
 	log := s.context.Log()
 	log.Info("Starting session document processing engine...")
 
@@ -238,15 +234,13 @@ func (s *Session) listenReply(resultChan chan contracts.DocumentResult, instance
 			log.Infof("session: %s complete", res.MessageID)
 
 			//Deleting Old Log Files
-			instanceID, _ := platform.InstanceID()
+			shortInstanceID, _ := s.context.Identity().ShortInstanceID()
 			go docmanager.DeleteSessionOrchestrationDirectories(log,
-				instanceID,
+				shortInstanceID,
 				s.context.AppConfig().Agent.OrchestrationRootDir,
 				s.context.AppConfig().Ssm.SessionLogsRetentionDurationHours)
 		}
-		if s.context.AppConfig().Agent.ContainerMode {
-			instanceId, _ = platform.TargetID()
-		}
+
 		msg, err := buildAgentTaskComplete(log, res, instanceId)
 		if err != nil {
 			log.Errorf("Cannot build AgentTaskComplete message %s", err)
@@ -356,8 +350,8 @@ func formatAgentTaskCompletePayload(log log.T,
 }
 
 // getMgsEndpoint builds mgs endpoint.
-func getMgsEndpoint(region string) (string, error) {
-	hostName := mgsConfig.GetMgsEndpointFromRip(region)
+func getMgsEndpoint(context context.T, region string) (string, error) {
+	hostName := mgsConfig.GetMgsEndpointFromRip(context, region)
 	if hostName == "" {
 		return "", fmt.Errorf("no MGS endpoint found for region %s", region)
 	}

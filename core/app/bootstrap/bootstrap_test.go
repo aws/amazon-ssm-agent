@@ -14,9 +14,9 @@
 package bootstrap
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	identityMock "github.com/aws/amazon-ssm-agent/common/identity/mocks"

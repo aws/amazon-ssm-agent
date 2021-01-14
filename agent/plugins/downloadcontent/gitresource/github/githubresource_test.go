@@ -23,6 +23,7 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	filemock "github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -32,7 +33,8 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-var logMock = log.NewMockLog()
+var contextMock = context.NewMockDefault()
+var logMock = contextMock.Log()
 
 func NewResourceWithMockedClient(mockClient *githubclientmock.ClientMock) *GitHubResource {
 	info := GitHubInfo{
@@ -42,8 +44,9 @@ func NewResourceWithMockedClient(mockClient *githubclientmock.ClientMock) *GitHu
 		GetOptions: "",
 	}
 	return &GitHubResource{
-		client: mockClient,
-		Info:   info,
+		context: contextMock,
+		client:  mockClient,
+		Info:    info,
 	}
 }
 
@@ -81,7 +84,7 @@ func TestGitResource_DownloadFile(t *testing.T) {
 	fileMock.On("MakeDirs", strings.TrimSuffix(appconfig.DownloadRoot, "/")).Return(nil)
 	fileMock.On("WriteFile", filepath.Join(appconfig.DownloadRoot, "file.ext"), mock.Anything).Return(nil)
 
-	err, result := resource.DownloadRemoteResource(logMock, fileMock, "")
+	err, result := resource.DownloadRemoteResource(fileMock, "")
 	clientMock.AssertExpectations(t)
 	fileMock.AssertExpectations(t)
 	assert.NoError(t, err)
@@ -116,8 +119,9 @@ func TestGitResource_DownloadDirectory(t *testing.T) {
 	nilDirMetadata = nil
 
 	resource := &GitHubResource{
-		client: &clientMock,
-		Info:   info,
+		context: contextMock,
+		client:  &clientMock,
+		Info:    info,
 	}
 	clientMock.On("ParseGetOptions", logMock, info.GetOptions).Return(opt, nil)
 	clientMock.On("GetRepositoryContents", logMock, info.Owner, info.Repository, info.Path, opt).Return(&nilFileMetadata, dirMetadata, nil).Once()
@@ -128,7 +132,7 @@ func TestGitResource_DownloadDirectory(t *testing.T) {
 	fileMock.On("MakeDirs", strings.TrimSuffix(appconfig.DownloadRoot, "/")).Return(nil)
 	fileMock.On("WriteFile", fileutil.BuildPath(appconfig.DownloadRoot, "file.rb"), mock.Anything).Return(nil)
 
-	err, result := resource.DownloadRemoteResource(logMock, fileMock, "")
+	err, result := resource.DownloadRemoteResource(fileMock, "")
 	clientMock.AssertExpectations(t)
 	fileMock.AssertExpectations(t)
 	assert.NoError(t, err)
@@ -161,7 +165,7 @@ func TestGitResource_DownloadFileMissing(t *testing.T) {
 
 	resource := NewResourceWithMockedClient(&clientMock)
 
-	err, result := resource.DownloadRemoteResource(logMock, fileMock, "")
+	err, result := resource.DownloadRemoteResource(fileMock, "")
 
 	clientMock.AssertExpectations(t)
 	assert.Error(t, err)
@@ -185,7 +189,7 @@ func TestGitResource_DownloadParseGetOptionFail(t *testing.T) {
 	resource := NewResourceWithMockedClient(&clientMock)
 
 	fileMock := filemock.FileSystemMock{}
-	err, result := resource.DownloadRemoteResource(logMock, fileMock, "")
+	err, result := resource.DownloadRemoteResource(fileMock, "")
 
 	clientMock.AssertExpectations(t)
 	assert.Error(t, err)
@@ -218,7 +222,7 @@ func TestGitResource_DownloadGetRepositoryContentsFail(t *testing.T) {
 
 	resource := NewResourceWithMockedClient(&clientMock)
 
-	err, result := resource.DownloadRemoteResource(logMock, fileMock, "")
+	err, result := resource.DownloadRemoteResource(fileMock, "")
 
 	clientMock.AssertExpectations(t)
 	assert.Error(t, err)
@@ -234,7 +238,7 @@ func TestGitResource_ValidateLocationInfoOwner(t *testing.T) {
 	}`
 
 	token := TokenMock{}
-	resource, _ := NewGitHubResource(logMock, locationInfo, token)
+	resource, _ := NewGitHubResource(contextMock, locationInfo, token)
 	_, err := resource.ValidateLocationInfo()
 
 	assert.Error(t, err)
@@ -248,7 +252,7 @@ func TestGitResource_ValidateLocationInfoRepo(t *testing.T) {
 		"getOptions": ""
 	}`
 	token := TokenMock{}
-	resource, _ := NewGitHubResource(logMock, locationInfo, token)
+	resource, _ := NewGitHubResource(contextMock, locationInfo, token)
 	_, err := resource.ValidateLocationInfo()
 
 	assert.Error(t, err)
@@ -264,7 +268,7 @@ func TestGitResource_ValidateLocationInfo(t *testing.T) {
 		"getOptions": ""
 	}`
 	token := TokenMock{}
-	resource, _ := NewGitHubResource(logMock, locationInfo, token)
+	resource, _ := NewGitHubResource(contextMock, locationInfo, token)
 	_, err := resource.ValidateLocationInfo()
 
 	assert.NoError(t, err)
@@ -291,7 +295,7 @@ func TestNewGitResource_GithubTokenInfo(t *testing.T) {
 	httpclient := http.Client{}
 	token.On("GetOAuthClient", logMock, "ssm:token").Return(&httpclient, nil)
 
-	resource, err := NewGitHubResource(logMock, locationInfo, token)
+	resource, err := NewGitHubResource(contextMock, locationInfo, token)
 	assert.NoError(t, err)
 	assert.Equal(t, "path", resource.Info.Path)
 	assert.Equal(t, "repository", resource.Info.Repository)
@@ -334,7 +338,7 @@ func TestGitResource_DownloadFileToDifferentName(t *testing.T) {
 	fileMock.On("MakeDirs", filepath.Dir(destPath)).Return(nil)
 	fileMock.On("WriteFile", destPath, mock.Anything).Return(nil)
 
-	err, result := resource.DownloadRemoteResource(logMock, fileMock, destPath)
+	err, result := resource.DownloadRemoteResource(fileMock, destPath)
 	clientMock.AssertExpectations(t)
 	fileMock.AssertExpectations(t)
 	assert.NoError(t, err)

@@ -31,6 +31,7 @@ import (
 	logger "github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/amazon-ssm-agent/internal/tests/testdata"
 	"github.com/aws/amazon-ssm-agent/internal/tests/testutils"
 	"github.com/aws/aws-sdk-go/aws/request"
@@ -43,6 +44,7 @@ import (
 
 // CrashWorkerTestSuite defines test suite for sending a command to the agent and handling the worker process crash
 type CrashWorkerTestSuite struct {
+	context    context.T
 	suite.Suite
 	ssmAgent   agent.ISSMAgent
 	mdsSdkMock *mdssdkmock.SSMMDSAPI
@@ -58,32 +60,39 @@ func (suite *CrashWorkerTestSuite) SetupTest() {
 		log.Debugf("appconfig could not be loaded - %v", err)
 		return
 	}
-	context := context.Default(log, config)
+	identitySelector := identity.NewDefaultAgentIdentitySelector(log)
+	agentIdentity, err := identity.NewAgentIdentity(log, &config, identitySelector)
+	if err != nil {
+		log.Debugf("unable to assume identity - %v", err)
+		return
+	}
+
+	suite.context = context.Default(log, config, agentIdentity)
 
 	// Mock MDS service to remove dependency on external service
 	sendMdsSdkRequest := func(req *request.Request) error {
 		return nil
 	}
 	mdsSdkMock := testutils.NewMdsSdkMock()
-	mdsService := testutils.NewMdsService(mdsSdkMock, sendMdsSdkRequest)
+	mdsService := testutils.NewMdsService(suite.context, mdsSdkMock, sendMdsSdkRequest)
 
 	suite.mdsSdkMock = mdsSdkMock
 
 	// The actual runcommand core module with mocked MDS service injected
-	runcommandService := testutils.NewRuncommandService(context, mdsService)
+	runcommandService := testutils.NewRuncommandService(suite.context, mdsService)
 	var modules []contracts.ICoreModule
 	modules = append(modules, runcommandService)
 
 	// Create core manager that accepts runcommand core module
 	// For this test we don't need to inject all the modules
 	var cpm *coremanager.CoreManager
-	if cpm, err = testutils.NewCoreManager(context, &modules, log); err != nil {
+	if cpm, err = testutils.NewCoreManager(suite.context, &modules); err != nil {
 		log.Errorf("error occurred when starting core manager: %v", err)
 		return
 	}
 	// Create core ssm agent
 	suite.ssmAgent = &agent.SSMAgent{}
-	suite.ssmAgent.SetContext(context)
+	suite.ssmAgent.SetContext(suite.context)
 	suite.ssmAgent.SetCoreManager(cpm)
 }
 

@@ -18,10 +18,10 @@ import (
 	"path/filepath"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/datastore"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/plugin"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 )
 
 // dataStoreT defines the operations that manager uses to interact with its data-store
@@ -32,12 +32,13 @@ type dataStoreT interface {
 
 // ds contains the implementation of long running plugin manager's dataStore
 type ds struct {
-	dsImpl datastore.FsStore
+	dsImpl  datastore.FsStore
+	context context.T
 }
 
 // Write writes new data in the data-store
 func (d ds) Write(data map[string]plugin.PluginInfo) error {
-	location, fileName, err := getDataStoreLocation()
+	location, fileName, err := getDataStoreLocation(d.context)
 	if err != nil {
 		return err
 	}
@@ -46,30 +47,26 @@ func (d ds) Write(data map[string]plugin.PluginInfo) error {
 
 // Read reads data from the data-store
 func (d ds) Read() (map[string]plugin.PluginInfo, error) {
-	_, fileName, err := getDataStoreLocation()
+	_, fileName, err := getDataStoreLocation(d.context)
 	if err != nil {
 		return nil, err
 	}
 	return d.dsImpl.Read(fileName)
 }
 
-var dataStore dataStoreT = ds{
-	dsImpl: datastore.FsStore{},
-}
-
 // getDataStoreLocation returns the absolute path where long running plugins data-store is saved.
-func getDataStoreLocation() (location, fileName string, err error) {
-	var instanceId string
+func getDataStoreLocation(context context.T) (location, fileName string, err error) {
+	var shortInstanceId string
 
-	if instanceId, err = platform.InstanceID(); err != nil {
+	if shortInstanceId, err = context.Identity().ShortInstanceID(); err != nil {
 		return
 	}
 	location = filepath.Join(appconfig.DefaultDataStorePath,
-		instanceId,
+		shortInstanceId,
 		appconfig.LongRunningPluginsLocation,
 		appconfig.LongRunningPluginDataStoreLocation)
 	fileName = filepath.Join(appconfig.DefaultDataStorePath,
-		instanceId,
+		shortInstanceId,
 		appconfig.LongRunningPluginsLocation,
 		appconfig.LongRunningPluginDataStoreLocation,
 		appconfig.LongRunningPluginDataStoreFileName)

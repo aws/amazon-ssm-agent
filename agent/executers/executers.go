@@ -27,6 +27,7 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -41,9 +42,9 @@ const (
 // T is the interface type for ShellCommandExecuter.
 type T interface {
 	//TODO: Remove Execute and rename NewExecute to Execute.
-	Execute(log.T, string, string, string, task.CancelFlag, int, string, []string, map[string]string) (io.Reader, io.Reader, int, []error)
-	NewExecute(log.T, string, io.Writer, io.Writer, task.CancelFlag, int, string, []string, map[string]string) (int, error)
-	StartExe(log.T, string, io.Writer, io.Writer, task.CancelFlag, string, []string) (*os.Process, int, error)
+	Execute(context.T, string, string, string, task.CancelFlag, int, string, []string, map[string]string) (io.Reader, io.Reader, int, []error)
+	NewExecute(context.T, string, io.Writer, io.Writer, task.CancelFlag, int, string, []string, map[string]string) (int, error)
+	StartExe(context.T, string, io.Writer, io.Writer, task.CancelFlag, string, []string) (*os.Process, int, error)
 }
 
 // ShellCommandExecuter is specially added for testing purposes
@@ -71,7 +72,7 @@ type timeoutSignal struct {
 // not to use the byte buffer approach for extremely large output (or unknown output) because it could take up a large amount
 // of memory.
 func (ShellCommandExecuter) Execute(
-	log log.T,
+	context context.T,
 	workingDir string,
 	stdoutFilePath string,
 	stderrFilePath string,
@@ -123,7 +124,7 @@ func (ShellCommandExecuter) Execute(
 	// writers as long as it is after the process starts.
 
 	var err error
-	exitCode, err = ExecuteCommand(log, cancelFlag, workingDir, stdoutWriter, stderrWriter, executionTimeout, commandName, commandArguments, envVars)
+	exitCode, err = ExecuteCommand(context, cancelFlag, workingDir, stdoutWriter, stderrWriter, executionTimeout, commandName, commandArguments, envVars)
 	if err != nil {
 		errs = append(errs, err)
 	}
@@ -161,7 +162,7 @@ func (ShellCommandExecuter) Execute(
 
 // NewExecute executes a list of shell commands in the given working directory and provides the stdout and stderr writers.
 func (ShellCommandExecuter) NewExecute(
-	log log.T,
+	context context.T,
 	workingDir string,
 	stdoutWriter io.Writer,
 	stderrWriter io.Writer,
@@ -171,7 +172,7 @@ func (ShellCommandExecuter) NewExecute(
 	commandArguments []string,
 	envVars map[string]string,
 ) (exitCode int, err error) {
-	exitCode, err = ExecuteCommand(log, cancelFlag, workingDir, stdoutWriter, stderrWriter, executionTimeout, commandName, commandArguments, envVars)
+	exitCode, err = ExecuteCommand(context, cancelFlag, workingDir, stdoutWriter, stderrWriter, executionTimeout, commandName, commandArguments, envVars)
 	return
 }
 
@@ -182,7 +183,7 @@ func (ShellCommandExecuter) NewExecute(
 // the streams will have whatever data was printed up to the kill point, and the errors will
 // indicate that the process got terminated.
 func (ShellCommandExecuter) StartExe(
-	log log.T,
+	context context.T,
 	workingDir string,
 	stdoutWriter io.Writer,
 	stderrWriter io.Writer,
@@ -190,7 +191,7 @@ func (ShellCommandExecuter) StartExe(
 	commandName string,
 	commandArguments []string,
 ) (process *os.Process, exitCode int, err error) {
-	process, exitCode, err = StartCommand(log, cancelFlag, workingDir, stdoutWriter, stderrWriter, commandName, commandArguments)
+	process, exitCode, err = StartCommand(context, cancelFlag, workingDir, stdoutWriter, stderrWriter, commandName, commandArguments)
 	return
 }
 
@@ -247,7 +248,8 @@ func (r *cancellableWriter) Write(p []byte) (n int, err error) {
 
 // ExecuteCommand executes the given commands using the given working directory.
 // Standard output and standard error are sent to the given writers.
-func ExecuteCommand(log log.T,
+func ExecuteCommand(
+	context context.T,
 	cancelFlag task.CancelFlag,
 	workingDir string,
 	stdoutWriter io.Writer,
@@ -257,6 +259,7 @@ func ExecuteCommand(log log.T,
 	commandArguments []string,
 	envVars map[string]string,
 ) (exitCode int, err error) {
+	log := context.Log()
 
 	stdoutInterruptable, stopStdout := newWriter(stdoutWriter)
 	stderrInterruptable, stopStderr := newWriter(stderrWriter)
@@ -286,7 +289,7 @@ func ExecuteCommand(log log.T,
 	prepareProcess(command)
 
 	// configure environment variables
-	prepareEnvironment(command, envVars)
+	prepareEnvironment(context, command, envVars)
 
 	log.Debug()
 	log.Debugf("Running in directory %v, command: %v %v", workingDir, commandName, commandArguments)
@@ -384,7 +387,7 @@ func ExecuteCommand(log log.T,
 
 // StartCommand starts the given commands using the given working directory.
 // Standard output and standard error are sent to the given writers.
-func StartCommand(log log.T,
+func StartCommand(context context.T,
 	cancelFlag task.CancelFlag,
 	workingDir string,
 	stdoutWriter io.Writer,
@@ -392,7 +395,7 @@ func StartCommand(log log.T,
 	commandName string,
 	commandArguments []string,
 ) (process *os.Process, exitCode int, err error) {
-
+	log := context.Log()
 	command := exec.Command(commandName, commandArguments...)
 	command.Dir = workingDir
 	command.Stdout = stdoutWriter
@@ -403,7 +406,7 @@ func StartCommand(log log.T,
 	prepareProcess(command)
 
 	// configure environment variables
-	prepareEnvironment(command, make(map[string]string))
+	prepareEnvironment(context, command, make(map[string]string))
 
 	log.Debug()
 	log.Debugf("Running in directory %v, command: %v %v", workingDir, commandName, commandArguments)
@@ -449,15 +452,15 @@ func killProcessOnCancel(log log.T, command *exec.Cmd, cancelStdout chan bool, c
 }
 
 // prepareEnvironment adds ssm agent standard environment variables or environment variables defined by customer/other plugins to the command
-func prepareEnvironment(command *exec.Cmd, envVars map[string]string) {
+func prepareEnvironment(context context.T, command *exec.Cmd, envVars map[string]string) {
 	env := os.Environ()
 	for key, val := range envVars {
 		env = append(env, fmtEnvVariable(key, val))
 	}
-	if instance, err := instance.InstanceID(); err == nil {
+	if instance, err := context.Identity().InstanceID(); err == nil {
 		env = append(env, fmtEnvVariable(envVarInstanceID, instance))
 	}
-	if region, err := instance.Region(); err == nil {
+	if region, err := context.Identity().Region(); err == nil {
 		env = append(env, fmtEnvVariable(envVarRegionName, region))
 	}
 	command.Env = env

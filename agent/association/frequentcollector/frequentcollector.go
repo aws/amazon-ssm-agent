@@ -27,7 +27,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/application"
@@ -100,7 +99,7 @@ func (collector *FrequentCollector) StartFrequentCollector(context context.T, do
 	defer collector.mutex.RUnlock()
 
 	log := context.Log()
-	changeDetectionFrequency, _ := collector.getFrequentCollectInformation(log, docState)
+	changeDetectionFrequency, _ := collector.getFrequentCollectInformation(context, docState)
 	_, intervalInSeconds := collector.GetIntervalInSeconds(changeDetectionFrequency, scheduledAssociation.ParsedExpression)
 
 	defer func() {
@@ -136,7 +135,7 @@ func (collector *FrequentCollector) IsFrequentCollectorEnabled(context context.T
 		return false
 	}
 
-	changeDetectionFrequency, namesOfGatherers := collector.getFrequentCollectInformation(log, docState)
+	changeDetectionFrequency, namesOfGatherers := collector.getFrequentCollectInformation(context, docState)
 	if changeDetectionFrequency <= 0 || len(namesOfGatherers) <= 0 {
 		log.Infof(" frequent collector is not enabled. changeDetectionFrequency: %d, len of gatherers: %d", changeDetectionFrequency, len(namesOfGatherers))
 		return false
@@ -163,10 +162,11 @@ func (collector *FrequentCollector) GetIntervalInSeconds(changeDetectionFrequenc
 }
 
 //getFrequentCollectInformation return frequent collector's frequency and watched inventory types.
-func (collector *FrequentCollector) getFrequentCollectInformation(log log.T, docState *contracts.DocumentState) (changeDetectionFrequency int, listOfGathererNames []string) {
+func (collector *FrequentCollector) getFrequentCollectInformation(context context.T, docState *contracts.DocumentState) (changeDetectionFrequency int, listOfGathererNames []string) {
 	var pluginState *contracts.PluginState = collector.getInventoryPluginState(docState)
+	log := context.Log()
 	if pluginState != nil {
-		output := iohandler.NewDefaultIOHandler(log, docState.IOConfig)
+		output := iohandler.NewDefaultIOHandler(context, docState.IOConfig)
 		parameterMap := pluginutil.LoadParametersAsMap(log, pluginState.Configuration.Properties, output)
 		gathererParameterMap := collector.getGathererParameterMap()
 
@@ -234,14 +234,14 @@ func (collector *FrequentCollector) collect(context context.T, docState *contrac
 	log := context.Log()
 
 	if inventoryPlugin, err := inventory.NewPlugin(context); err == nil {
-		output := iohandler.NewDefaultIOHandler(log, docState.IOConfig)
-		_, inventoryTypes := collector.getFrequentCollectInformation(log, docState)
+		output := iohandler.NewDefaultIOHandler(context, docState.IOConfig)
+		_, inventoryTypes := collector.getFrequentCollectInformation(context, docState)
 		gathererMap := collector.getGatherersForFrequentCollectTypes(context, docState, inventoryPlugin, inventoryTypes)
 		log.Debugf("show the value of gatherer map for frequent collector : %#v ", *gathererMap)
 
 		if len(*gathererMap) > 0 {
 			log.Debug("calling Inventory.Plugin.ApplyInventoryFrequentCollector")
-			inventoryPlugin.ApplyInventoryFrequentCollector(context, *gathererMap, output)
+			inventoryPlugin.ApplyInventoryFrequentCollector(*gathererMap, output)
 		} else {
 			log.Infof("no enabled gatherer found for frequent collector")
 		}

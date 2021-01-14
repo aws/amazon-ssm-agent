@@ -18,7 +18,8 @@ import (
 	"errors"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/context"
+
 	testCommon "github.com/aws/amazon-ssm-agent/agent/update/tester/common"
 	testerMock "github.com/aws/amazon-ssm-agent/agent/update/tester/stages/mocks"
 
@@ -41,7 +42,7 @@ func TestPreInstallTestSuite(t *testing.T) {
 
 // SetupTest initializes Setup
 func (suite *PreInstallTestSuite) SetupTest() {
-	suite.preInstallTestObj = GetPreInstallTestObj(log.NewMockLog())
+	suite.preInstallTestObj = GetPreInstallTestObj(context.NewMockDefault())
 	suite.preInstallTestObj.Initialize()
 }
 

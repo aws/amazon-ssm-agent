@@ -28,7 +28,7 @@ import (
 
 type IHealthCheck interface {
 	ModuleName() string
-	ModuleExecute(context context.T) (err error)
+	ModuleExecute() (err error)
 	ModuleRequestStop(stopType contracts.StopType) (err error)
 	GetAgentState() (a AgentState, err error)
 }
@@ -99,7 +99,7 @@ func (h *HealthCheck) updateHealth() {
 	}
 
 	if !h.healthCheckStopPolicy.IsHealthy() {
-		h.service = ssm.NewService(log)
+		h.service = ssm.NewService(h.context)
 		h.healthCheckStopPolicy.ResetErrorCount()
 	}
 
@@ -132,10 +132,10 @@ func (h *HealthCheck) ModuleName() string {
 }
 
 // ModuleExecute starts the scheduling of the health check module
-func (h *HealthCheck) ModuleExecute(context context.T) (err error) {
+func (h *HealthCheck) ModuleExecute() (err error) {
 	defer func() {
 		if msg := recover(); msg != nil {
-			context.Log().Errorf("health check ModuleExecute run panic: %v", msg)
+			h.context.Log().Errorf("health check ModuleExecute run panic: %v", msg)
 		}
 	}()
 	rand.Seed(time.Now().UTC().UnixNano())
@@ -170,7 +170,7 @@ func (h *HealthCheck) ModuleRequestStop(stopType contracts.StopType) (err error)
 //ping sends an empty ping to the health service to identify if the service exists
 func (h *HealthCheck) ping() (err error) {
 	if h.healthCheckStopPolicy.HasError() {
-		h.service = ssm.NewService(h.context.Log())
+		h.service = ssm.NewService(h.context)
 		h.healthCheckStopPolicy.ResetErrorCount()
 	}
 

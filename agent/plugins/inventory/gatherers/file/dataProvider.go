@@ -1,16 +1,13 @@
 package file
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
 	"os"
-
-	"strings"
-
-	"encoding/json"
-
 	"path/filepath"
+	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -165,8 +162,9 @@ func getFiles(log log.T, path string, pattern []string, recursive bool, fileLimi
 }
 
 //getAllMeta processes the filter, gets paths of all filtered files, and get file info of all files
-func getAllMeta(log log.T, config model.Config) (data []model.FileData, err error) {
+func getAllMeta(context context.T, config model.Config) (data []model.FileData, err error) {
 	jsonBody := []byte(strings.Replace(config.Filters, `\`, `/`, -1)) //this is to convert the backslash in windows path to slash
+	log := context.Log()
 	var filterList []filterObj
 	if err = json.Unmarshal(jsonBody, &filterList); err != nil {
 		LogError(log, err)
@@ -202,7 +200,7 @@ func getAllMeta(log log.T, config model.Config) (data []model.FileData, err erro
 	}
 
 	if len(fileList) > 0 {
-		data, err = getMetaDataFunc(log, fileList)
+		data, err = getMetaDataFunc(context, fileList)
 	}
 	log.Infof("Collected Files %d", len(data))
 	return
@@ -225,8 +223,7 @@ func fileMatchesAnyPattern(log log.T, pattern []string, fname string) bool {
 
 //collectFileData returns a list of file information based on the given configuration
 func collectFileData(context context.T, config model.Config) (data []model.FileData, err error) {
-	log := context.Log()
 	getFullPath = expand
-	data, err = getAllMeta(log, config)
+	data, err = getAllMeta(context, config)
 	return
 }

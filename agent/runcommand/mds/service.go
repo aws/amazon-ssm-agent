@@ -25,14 +25,14 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/network"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/aws-sdk-go/aws"
-	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ssmmds"
@@ -74,6 +74,7 @@ type CancelSdkRequest func(trans *http.Transport, req *request.Request)
 
 // sdkService is an service wrapper that delegates to the ssm sdk.
 type sdkService struct {
+	context          context.T
 	sdk              ssmmdsiface.SSMMDSAPI
 	tr               *http.Transport
 	lastRequest      *request.Request
@@ -85,26 +86,22 @@ type sdkService struct {
 var clientBasedErrorMessages, serverBasedErrorMessages []string
 
 // NewService creates a new MDS service instance.
-func NewService(log log.T, region string, endpoint string, creds *credentials.Credentials, connectionTimeout time.Duration) Service {
+func NewService(context context.T, connectionTimeout time.Duration) Service {
 
-	config := sdkutil.AwsConfig(log)
+	config := sdkutil.AwsConfig(context)
+	agentConfig := context.AppConfig()
+	identity := context.Identity()
 
-	if region != "" {
-		config.Region = &region
+	if agentConfig.Agent.Region != "" {
+		config.Region = &agentConfig.Agent.Region
 	}
 
-	if endpoint != "" {
-		config.Endpoint = &endpoint
+	if agentConfig.Mds.Endpoint != "" {
+		config.Endpoint = &agentConfig.Mds.Endpoint
 	} else {
-		if region, err := platform.Region(); err == nil {
-			if defaultEndpoint := platform.GetDefaultEndPoint(region, "ec2messages"); defaultEndpoint != "" {
-				config.Endpoint = &defaultEndpoint
-			}
+		if defaultEndpoint := identity.GetDefaultEndpoint("ec2messages"); defaultEndpoint != "" {
+			config.Endpoint = &defaultEndpoint
 		}
-	}
-
-	if creds != nil {
-		config.Credentials = creds
 	}
 
 	// capture Transport so we can use it to cancel requests
@@ -115,13 +112,12 @@ func NewService(log log.T, region string, endpoint string, creds *credentials.Cr
 			KeepAlive: 0,
 		}).Dial,
 		TLSHandshakeTimeout: 10 * time.Second,
-		TLSClientConfig:     network.GetDefaultTLSConfig(log),
+		TLSClientConfig:     network.GetDefaultTLSConfig(context.Log()),
 	}
 	config.HTTPClient = &http.Client{Transport: tr, Timeout: connectionTimeout}
 
-	appConfig, _ := appconfig.Config(false)
 	sess := session.New(config)
-	sess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(appConfig.Agent.Name, appConfig.Agent.Version))
+	sess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(agentConfig.Agent.Name, agentConfig.Agent.Version))
 
 	msgSvc := ssmmds.New(sess)
 
@@ -141,11 +137,11 @@ func NewService(log log.T, region string, endpoint string, creds *credentials.Cr
 		trans.CancelRequest(req.HTTPRequest)
 	}
 
-	return NewMdsSdkService(msgSvc, tr, sendMdsSdkRequest, cancelMdsSDKRequest)
+	return NewMdsSdkService(context, msgSvc, tr, sendMdsSdkRequest, cancelMdsSDKRequest)
 }
 
-func NewMdsSdkService(msgSvc ssmmdsiface.SSMMDSAPI, tr *http.Transport, sendMdsSdkRequest SendSdkRequest, cancelMdsSDKRequest CancelSdkRequest) Service {
-	return &sdkService{sdk: msgSvc, tr: tr, sendSdkRequest: sendMdsSdkRequest, cancelSdkRequest: cancelMdsSDKRequest}
+func NewMdsSdkService(context context.T, msgSvc ssmmdsiface.SSMMDSAPI, tr *http.Transport, sendMdsSdkRequest SendSdkRequest, cancelMdsSDKRequest CancelSdkRequest) Service {
+	return &sdkService{context: context, sdk: msgSvc, tr: tr, sendSdkRequest: sendMdsSdkRequest, cancelSdkRequest: cancelMdsSDKRequest}
 }
 
 // GetMessages calls the GetMessages MDS API.
@@ -298,9 +294,9 @@ func (mds *sdkService) DeleteMessage(log log.T, messageID string) (err error) {
 // LoadFailedReplies loads SendReplyInput objects from local replies folder on disk
 func (mds *sdkService) LoadFailedReplies(log log.T) []string {
 	log.Debug("Checking Replies folder for failed sent replies")
-	instanceID, _ := platform.InstanceID()
+	shortInstanceID, _ := mds.context.Identity().ShortInstanceID()
 	absoluteDirPath := path.Join(appconfig.DefaultDataStorePath,
-		instanceID,
+		shortInstanceID,
 		appconfig.RepliesRootDirName)
 
 	files, err := fileutil.GetFileNames(absoluteDirPath)
@@ -312,7 +308,7 @@ func (mds *sdkService) LoadFailedReplies(log log.T) []string {
 
 // DeleteFailedReply deletes failed reply from local replies folder on disk
 func (mds *sdkService) DeleteFailedReply(log log.T, fileName string) {
-	absoluteFileName := getFailedReplyLocation(fileName)
+	absoluteFileName := getFailedReplyLocation(mds.context.Identity(), fileName)
 	if fileutil.Exists(absoluteFileName) {
 		err := fileutil.DeleteFile(absoluteFileName)
 		if err != nil {
@@ -329,7 +325,7 @@ func (mds *sdkService) PersistFailedReply(log log.T, sendReply ssmmds.SendReplyI
 	if err != nil {
 		log.Errorf("encountered error with message %v while marshalling %v to string", err, sendReply)
 	} else {
-		files, _ := fileutil.GetFileNames(GetFailedReplyDirectory())
+		files, _ := fileutil.GetFileNames(GetFailedReplyDirectory(mds.context.Identity()))
 		for _, file := range files {
 			if strings.HasPrefix(file, *sendReply.ReplyId) {
 				log.Debugf("Reply %v already saved in file %v, skipping", *sendReply.ReplyId, file)
@@ -338,7 +334,7 @@ func (mds *sdkService) PersistFailedReply(log log.T, sendReply ssmmds.SendReplyI
 		}
 		t := time.Now().UTC()
 		fileName := fmt.Sprintf("%v_%v", *sendReply.ReplyId, t.Format("2006-01-02T15-04-05"))
-		absoluteFileName := getFailedReplyLocation(fileName)
+		absoluteFileName := getFailedReplyLocation(mds.context.Identity(), fileName)
 
 		log.Tracef("persisting reply %v in file %v", jsonutil.Indent(content), absoluteFileName)
 		if s, err := fileutil.WriteIntoFileWithPermissions(absoluteFileName, jsonutil.Indent(content), os.FileMode(int(appconfig.ReadWriteAccess))); s && err == nil {
@@ -352,7 +348,7 @@ func (mds *sdkService) PersistFailedReply(log log.T, sendReply ssmmds.SendReplyI
 
 // GetFailedReply load SendReplyInput object from replies folder given the reply id of the object
 func (mds *sdkService) GetFailedReply(log log.T, fileName string) (*ssmmds.SendReplyInput, error) {
-	absoluteFileName := getFailedReplyLocation(fileName)
+	absoluteFileName := getFailedReplyLocation(mds.context.Identity(), fileName)
 
 	var sendReply ssmmds.SendReplyInput
 	err := jsonutil.UnmarshalFile(absoluteFileName, &sendReply)
@@ -398,14 +394,14 @@ func (mds *sdkService) clearRequest() {
 }
 
 // getFailedReplyLocation returns path to reply file
-func getFailedReplyLocation(fileName string) string {
-	return path.Join(GetFailedReplyDirectory(), fileName)
+func getFailedReplyLocation(identity identity.IAgentIdentity, fileName string) string {
+	return path.Join(GetFailedReplyDirectory(identity), fileName)
 }
 
 // getFailedReplyDirectory returns path to replies folder
-func GetFailedReplyDirectory() string {
-	instanceID, _ := platform.InstanceID()
+func GetFailedReplyDirectory(identity identity.IAgentIdentity) string {
+	shortInstanceID, _ := identity.ShortInstanceID()
 	return path.Join(appconfig.DefaultDataStorePath,
-		instanceID,
+		shortInstanceID,
 		appconfig.RepliesRootDirName)
 }

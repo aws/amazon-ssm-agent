@@ -21,6 +21,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
@@ -34,7 +35,7 @@ const (
 	DOCKER_INSTALLED_DIRECTORY  = DOCKER_UNCOMPRESS_DIRECTORY + "\\docker"
 )
 
-func RunInstallCommands(log log.T, orchestrationDirectory string, out iohandler.IOHandler) {
+func RunInstallCommands(context context.T, orchestrationDirectory string, out iohandler.IOHandler) {
 	var err error
 	var command string
 	var platformVersion string
@@ -44,6 +45,7 @@ func RunInstallCommands(log log.T, orchestrationDirectory string, out iohandler.
 	var isNanoServer bool
 	var output string
 
+	log := context.Log()
 	platformVersion, err = dep.PlatformVersion(log)
 	if err != nil {
 		log.Error("Error detecting platform version", err)
@@ -176,7 +178,7 @@ func RunInstallCommands(log log.T, orchestrationDirectory string, out iohandler.
 
 	//Download docker
 	var downloadOutput artifact.DownloadOutput
-	downloadOutput, err = dep.ArtifactDownload(log, artifact.DownloadInput{SourceURL: DOCKER_DOWNLOAD_URL, DestinationDirectory: os.TempDir()})
+	downloadOutput, err = dep.ArtifactDownload(context, artifact.DownloadInput{SourceURL: DOCKER_DOWNLOAD_URL, DestinationDirectory: os.TempDir()})
 	_, installedErr := os.Stat(DOCKER_INSTALLED_DIRECTORY)
 	if downloadOutput.IsUpdated || installedErr != nil {
 		out.AppendInfo("Unzipping Docker to program files directory.")

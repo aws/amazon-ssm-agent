@@ -19,7 +19,7 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
@@ -77,49 +77,47 @@ var ssmStopPolicy *sdkutil.StopPolicy
 
 // sdkService is an service wrapper that delegates to the ssm sdk.
 type sdkService struct {
-	sdk ssmiface.SSMAPI
+	context context.T
+	sdk     ssmiface.SSMAPI
 }
 
 // NewService creates a new SSM service instance.
-func NewService(log log.T) Service {
+func NewService(context context.T) Service {
 	if ssmStopPolicy == nil {
 		// create a stop policy where we will stop after 10 consecutive errors and if time period expires.
 		ssmStopPolicy = sdkutil.NewStopPolicy("ssmService", 10)
 	}
 
-	awsConfig := sdkutil.AwsConfig(log)
+	awsConfig := sdkutil.AwsConfig(context)
 	// parse appConfig overrides
-	appConfig, err := appconfig.Config(false)
-	if err == nil {
-		if appConfig.Ssm.Endpoint != "" {
-			awsConfig.Endpoint = &appConfig.Ssm.Endpoint
-		} else {
-			if region, err := platform.Region(); err == nil {
-				if defaultEndpoint := platform.GetDefaultEndPoint(region, "ssm"); defaultEndpoint != "" {
-					awsConfig.Endpoint = &defaultEndpoint
-				}
-			}
-		}
-		if appConfig.Agent.Region != "" {
-			awsConfig.Region = &appConfig.Agent.Region
-		}
-
-		// TODO: test hook, can be removed before release
-		// this is to skip ssl verification for the beta self signed certs
-		if appConfig.Ssm.InsecureSkipVerify {
-			tlsConfig := awsConfig.HTTPClient.Transport.(*http.Transport).TLSClientConfig
-			tlsConfig.InsecureSkipVerify = true
+	appConfig := context.AppConfig()
+	if appConfig.Ssm.Endpoint != "" {
+		awsConfig.Endpoint = &appConfig.Ssm.Endpoint
+	} else {
+		if defaultEndpoint := context.Identity().GetDefaultEndpoint("ssm"); defaultEndpoint != "" {
+			awsConfig.Endpoint = &defaultEndpoint
 		}
 	}
+	if appConfig.Agent.Region != "" {
+		awsConfig.Region = &appConfig.Agent.Region
+	}
+
+	// TODO: test hook, can be removed before release
+	// this is to skip ssl verification for the beta self signed certs
+	if appConfig.Ssm.InsecureSkipVerify {
+		tlsConfig := awsConfig.HTTPClient.Transport.(*http.Transport).TLSClientConfig
+		tlsConfig.InsecureSkipVerify = true
+	}
+
 	sess := session.New(awsConfig)
 	sess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(appConfig.Agent.Name, appConfig.Agent.Version))
 
 	ssmService := ssm.New(sess)
-	return NewSSMService(ssmService)
+	return NewSSMService(context, ssmService)
 }
 
-func NewSSMService(ssmService ssmiface.SSMAPI) Service {
-	return &sdkService{sdk: ssmService}
+func NewSSMService(context context.T, ssmService ssmiface.SSMAPI) Service {
+	return &sdkService{context: context, sdk: ssmService}
 }
 
 func makeAwsStrings(strings []string) []*string {
@@ -281,7 +279,7 @@ func (svc *sdkService) UpdateInstanceInformation(
 	} else {
 		log.Warn(err)
 	}
-	if instID, err := platform.InstanceID(); err == nil {
+	if instID, err := svc.context.Identity().InstanceID(); err == nil {
 		params.InstanceId = aws.String(instID)
 	} else {
 		log.Warn(err)
@@ -332,7 +330,7 @@ func (svc *sdkService) UpdateEmptyInstanceInformation(
 	}
 
 	// InstanceId is a required parameter for UpdateInstanceInformation
-	if instID, err := platform.InstanceID(); err == nil {
+	if instID, err := svc.context.Identity().InstanceID(); err == nil {
 		params.InstanceId = aws.String(instID)
 	} else {
 		return nil, err

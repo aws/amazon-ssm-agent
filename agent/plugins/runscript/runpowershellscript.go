@@ -19,6 +19,7 @@ import (
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/executers"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 )
@@ -32,9 +33,10 @@ type runPowerShellPlugin struct {
 }
 
 // NewRunPowerShellPlugin returns a new instance of the PSPlugin.
-func NewRunPowerShellPlugin() (*runPowerShellPlugin, error) {
+func NewRunPowerShellPlugin(context context.T) (*runPowerShellPlugin, error) {
 	psplugin := runPowerShellPlugin{
 		Plugin{
+			Context:         context,
 			Name:            appconfig.PluginNameAwsRunPowerShellScript,
 			ScriptName:      powerShellScriptName,
 			ShellCommand:    appconfig.PowerShellPluginCommandName,

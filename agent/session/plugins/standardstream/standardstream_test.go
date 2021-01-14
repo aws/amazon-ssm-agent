@@ -66,7 +66,9 @@ func (suite *StandardStreamTestSuite) SetupTest() {
 	suite.mockCancelFlag = mockCancelFlag
 	suite.mockDataChannel = mockDataChannel
 	suite.mockIohandler = mockIohandler
-	suite.plugin = &StandardStreamPlugin{}
+	suite.plugin = &StandardStreamPlugin{
+		context: suite.mockContext,
+	}
 	suite.shellProps = shellProps
 }
 
@@ -90,9 +92,9 @@ func (suite *StandardStreamTestSuite) TestGetPluginParameters() {
 func (suite *StandardStreamTestSuite) TestExecuteWhenCancelFlagIsShutDown() {
 	suite.mockCancelFlag.On("ShutDown").Return(true)
 	suite.mockIohandler.On("MarkAsShutdown").Return(nil)
-	suite.plugin.shell, _ = shell.NewPlugin(suite.plugin.name())
+	suite.plugin.shell, _ = shell.NewPlugin(suite.mockContext, suite.plugin.name())
 
-	suite.plugin.Execute(suite.mockContext,
+	suite.plugin.Execute(
 		contracts.Configuration{Properties: suite.shellProps},
 		suite.mockCancelFlag,
 		suite.mockIohandler,
@@ -107,9 +109,9 @@ func (suite *StandardStreamTestSuite) TestExecuteWhenCancelFlagIsCancelled() {
 	suite.mockCancelFlag.On("Canceled").Return(true)
 	suite.mockCancelFlag.On("ShutDown").Return(false)
 	suite.mockIohandler.On("MarkAsCancelled").Return(nil)
-	suite.plugin.shell, _ = shell.NewPlugin(suite.plugin.name())
+	suite.plugin.shell, _ = shell.NewPlugin(suite.mockContext, suite.plugin.name())
 
-	suite.plugin.Execute(suite.mockContext,
+	suite.plugin.Execute(
 		contracts.Configuration{Properties: suite.shellProps},
 		suite.mockCancelFlag,
 		suite.mockIohandler,
@@ -121,12 +123,12 @@ func (suite *StandardStreamTestSuite) TestExecuteWhenCancelFlagIsCancelled() {
 
 // Testing Execute happy case when the exit code is 0.
 func (suite *StandardStreamTestSuite) TestExecute() {
-	newIOHandler := iohandler.NewDefaultIOHandler(suite.mockLog, contracts.IOConfiguration{})
+	newIOHandler := iohandler.NewDefaultIOHandler(suite.mockContext, contracts.IOConfiguration{})
 	mockShellPlugin := new(shell.IShellPluginMock)
-	mockShellPlugin.On("Execute", suite.mockContext, mock.Anything, suite.mockCancelFlag, newIOHandler, suite.mockDataChannel, mgsContracts.ShellProperties{}).Return()
+	mockShellPlugin.On("Execute", mock.Anything, suite.mockCancelFlag, newIOHandler, suite.mockDataChannel, mgsContracts.ShellProperties{}).Return()
 	suite.plugin.shell = mockShellPlugin
 
-	suite.plugin.Execute(suite.mockContext,
+	suite.plugin.Execute(
 		contracts.Configuration{Properties: suite.shellProps},
 		suite.mockCancelFlag,
 		newIOHandler,

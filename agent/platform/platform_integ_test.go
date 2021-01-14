@@ -47,27 +47,3 @@ func TestGetPlatformType(t *testing.T) {
 	t.Logf("platform type is %v ", data)
 	assert.NoError(t, err, "get platform type should not result in err")
 }
-
-//GetDefaultEndpointTests
-
-type GetDefaultEndPointTest struct {
-	Region  string
-	Service string
-	Output  string
-}
-
-var (
-	getDefaultEndPointTests = []GetDefaultEndPointTest{
-		{"", "", ""},
-		{"val", "test", ""},
-		{"us-east-1", "ssm", ""},
-		{"cn-north-1", "ssm", "ssm.cn-north-1.amazonaws.com.cn"},
-	}
-)
-
-func TestGetDefaultEndPoint(t *testing.T) {
-	for _, test := range getDefaultEndPointTests {
-		output := GetDefaultEndPoint(test.Region, test.Service)
-		assert.Equal(t, test.Output, output)
-	}
-}

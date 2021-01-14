@@ -26,7 +26,6 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/aws-sdk-go/aws/request"
@@ -43,9 +42,9 @@ const (
 
 // T represents contracts for SSM Inventory data uploader
 type T interface {
-	SendDataToSSM(context context.T, items []*ssm.InventoryItem) (err error)
-	ConvertToSsmInventoryItems(context context.T, items []model.Item) (optimizedInventoryItems, nonOptimizedInventoryItems []*ssm.InventoryItem, err error)
-	GetDirtySsmInventoryItems(context context.T, items []model.Item) (dirtyInventoryItems []*ssm.InventoryItem, err error)
+	SendDataToSSM(items []*ssm.InventoryItem) (err error)
+	ConvertToSsmInventoryItems(items []model.Item) (optimizedInventoryItems, nonOptimizedInventoryItems []*ssm.InventoryItem, err error)
+	GetDirtySsmInventoryItems(items []model.Item) (dirtyInventoryItems []*ssm.InventoryItem, err error)
 }
 
 type SSMCaller interface {
@@ -54,6 +53,7 @@ type SSMCaller interface {
 
 // InventoryUploader implements functionality to upload data to SSM Inventory.
 type InventoryUploader struct {
+	context   context.T
 	ssm       SSMCaller
 	optimizer Optimizer //helps inventory plugin to optimize PutInventory calls
 }
@@ -65,28 +65,21 @@ func NewInventoryUploader(context context.T) (*InventoryUploader, error) {
 	var err error
 
 	c := context.With("[" + Name + "]")
+	uploader.context = c
 	log := c.Log()
+	appCfg = c.AppConfig()
+	identity := c.Identity()
 
 	// setting ssm client config
-	cfg := sdkutil.AwsConfig(log)
+	cfg := sdkutil.AwsConfig(c)
 
-	// overrides ssm client config from appconfig if applicable
-	if appCfg, err = appconfig.Config(false); err == nil {
-
-		if appCfg.Ssm.Endpoint != "" {
-			cfg.Endpoint = &appCfg.Ssm.Endpoint
-		} else {
-			if region, err := platform.Region(); err == nil {
-				if defaultEndpoint := platform.GetDefaultEndPoint(region, "ssm"); defaultEndpoint != "" {
-					cfg.Endpoint = &defaultEndpoint
-				}
-			} else {
-				log.Errorf("error fetching the region, %v", err)
-			}
-		}
-		if appCfg.Agent.Region != "" {
-			cfg.Region = &appCfg.Agent.Region
-		}
+	if appCfg.Ssm.Endpoint != "" {
+		cfg.Endpoint = &appCfg.Ssm.Endpoint
+	} else if defaultEndpoint := identity.GetDefaultEndpoint("ssm"); defaultEndpoint != "" {
+		cfg.Endpoint = &defaultEndpoint
+	}
+	if appCfg.Agent.Region != "" {
+		cfg.Region = &appCfg.Agent.Region
 	}
 	sess := session.New(cfg)
 	sess.Handlers.Build.PushBack(request.MakeAddToUserAgentHandler(appCfg.Agent.Name, appCfg.Agent.Version))
@@ -102,8 +95,8 @@ func NewInventoryUploader(context context.T) (*InventoryUploader, error) {
 }
 
 // SendDataToSSM uploads given inventory items to SSM
-func (u *InventoryUploader) SendDataToSSM(context context.T, items []*ssm.InventoryItem) (err error) {
-	log := context.Log()
+func (u *InventoryUploader) SendDataToSSM(items []*ssm.InventoryItem) (err error) {
+	log := u.context.Log()
 	log.Debugf("Uploading following inventory data to SSM - %v", items)
 
 	var instanceID string
@@ -111,7 +104,7 @@ func (u *InventoryUploader) SendDataToSSM(context context.T, items []*ssm.Invent
 	log.Debugf("Inventory Items: %v", items)
 	log.Infof("Number of Inventory Items: %v", len(items))
 
-	if instanceID, err = machineIDProvider(); err != nil {
+	if instanceID, err = u.context.Identity().InstanceID(); err != nil {
 		log.Errorf("Unable to fetch InstanceId, instance information will not be sent to Inventory")
 		return
 	}
@@ -124,7 +117,7 @@ func (u *InventoryUploader) SendDataToSSM(context context.T, items []*ssm.Invent
 	var resp *ssm.PutInventoryOutput
 
 	// random back off before call PutInventory API
-	time.Sleep(time.Duration(getRandomBackOffTime(context, instanceID)) * time.Second)
+	time.Sleep(time.Duration(getRandomBackOffTime(u.context, instanceID)) * time.Second)
 	log.Debugf("Calling PutInventory API with parameters - %v", params)
 	if u.ssm != nil {
 		resp, err = u.ssm.PutInventory(params)
@@ -133,7 +126,7 @@ func (u *InventoryUploader) SendDataToSSM(context context.T, items []*ssm.Invent
 			log.Errorf("the following error occured while calling PutInventory API: %v", err)
 		} else {
 			log.Debugf("PutInventory was called successfully with response - %v", resp)
-			u.updateContentHash(context, items)
+			u.updateContentHash(items)
 		}
 	}
 
@@ -155,8 +148,8 @@ func getRandomBackOffTime(context context.T, instanceID string) (sleepTime int) 
 	return sleepTime
 }
 
-func (u *InventoryUploader) updateContentHash(context context.T, items []*ssm.InventoryItem) {
-	log := context.Log()
+func (u *InventoryUploader) updateContentHash(items []*ssm.InventoryItem) {
+	log := u.context.Log()
 	log.Debugf("Updating cache")
 	for _, item := range items {
 		if err := u.optimizer.UpdateContentHash(*item.TypeName, *item.ContentHash); err != nil {
@@ -176,9 +169,9 @@ func calculateCheckSum(data []byte) (checkSum string) {
 // which contains only contentHash for those inventory types where the dataset hasn't changed from previous collection. The other array is non-optimized array
 // which contains both contentHash & content. This is done to avoid iterating over the inventory data twice. It throws error when it encounters error during
 // conversion process.
-func (u *InventoryUploader) ConvertToSsmInventoryItems(context context.T, items []model.Item) (optimizedInventoryItems, nonOptimizedInventoryItems []*ssm.InventoryItem, err error) {
+func (u *InventoryUploader) ConvertToSsmInventoryItems(items []model.Item) (optimizedInventoryItems, nonOptimizedInventoryItems []*ssm.InventoryItem, err error) {
 
-	log := context.Log()
+	log := u.context.Log()
 
 	//NOTE: There can be multiple inventory type data.
 	//Each inventory type data => 1 inventory Item. Each inventory type, can contain multiple items
@@ -250,8 +243,8 @@ func (u *InventoryUploader) ConvertToSsmInventoryItems(context context.T, items 
 }
 
 // GetDirtySsmInventoryItems get the inventory item data for items that have changes since last successful report to SSM.
-func (u InventoryUploader) GetDirtySsmInventoryItems(context context.T, items []model.Item) (dirtyInventoryItems []*ssm.InventoryItem, err error) {
-	log := context.Log()
+func (u InventoryUploader) GetDirtySsmInventoryItems(items []model.Item) (dirtyInventoryItems []*ssm.InventoryItem, err error) {
+	log := u.context.Log()
 
 	//NOTE: There can be multiple inventory type data.
 	//Each inventory type data => 1 inventory Item. Each inventory type, can contain multiple items

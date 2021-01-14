@@ -18,11 +18,12 @@ import (
 	"fmt"
 	"math/rand"
 
+	"github.com/aws/amazon-ssm-agent/agent/log"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/session/datachannel"
@@ -30,37 +31,38 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
-type NewPluginFunc func() (ISessionPlugin, error)
+type NewPluginFunc func(context.T) (ISessionPlugin, error)
 
 // ISessionPlugin interface represents functions that need to be implemented by all session manager plugins
 type ISessionPlugin interface {
 	GetPluginParameters(parameters interface{}) interface{}
 	RequireHandshake() bool
-	Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler, dataChannel datachannel.IDataChannel)
+	Execute(config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler, dataChannel datachannel.IDataChannel)
 	InputStreamMessageHandler(log log.T, streamDataMessage mgsContracts.AgentMessage) error
 }
 
 // SessionPlugin is the wrapper for all session manager plugins and implements all functions of Runpluginutil.T interface
 type SessionPlugin struct {
+	context       context.T
 	sessionPlugin ISessionPlugin
 }
 
 // NewPlugin returns a new instance of SessionPlugin which wraps a plugin that implements ISessionPlugin
-func NewPlugin(newPluginFunc NewPluginFunc) (*SessionPlugin, error) {
-	sessionPlugin, err := newPluginFunc()
-	return &SessionPlugin{sessionPlugin}, err
+func NewPlugin(context context.T, newPluginFunc NewPluginFunc) (*SessionPlugin, error) {
+	sessionPlugin, err := newPluginFunc(context)
+	return &SessionPlugin{context, sessionPlugin}, err
 }
 
 // Execute sets up datachannel and starts execution of session manager plugin like shell
-func (p *SessionPlugin) Execute(context context.T,
+func (p *SessionPlugin) Execute(
 	config contracts.Configuration,
 	cancelFlag task.CancelFlag,
 	output iohandler.IOHandler) {
 
-	log := context.Log()
+	log := p.context.Log()
 	kmsKeyId := config.KmsKeyId
 
-	dataChannel, err := getDataChannelForSessionPlugin(context, config.SessionId, config.ClientId, cancelFlag, p.sessionPlugin.InputStreamMessageHandler)
+	dataChannel, err := getDataChannelForSessionPlugin(p.context, config.SessionId, config.ClientId, cancelFlag, p.sessionPlugin.InputStreamMessageHandler)
 	if err != nil {
 		errorString := fmt.Errorf("Setting up data channel with id %s failed: %s", config.SessionId, err)
 		output.MarkAsFailed(errorString)
@@ -69,7 +71,7 @@ func (p *SessionPlugin) Execute(context context.T,
 	}
 	defer dataChannel.Close(log)
 
-	if err = dataChannel.SendAgentSessionStateMessage(context.Log(), mgsContracts.Connected); err != nil {
+	if err = dataChannel.SendAgentSessionStateMessage(p.context.Log(), mgsContracts.Connected); err != nil {
 		log.Errorf("Unable to send AgentSessionState message with session status %s. %s", mgsContracts.Connected, err)
 	}
 
@@ -89,7 +91,7 @@ func (p *SessionPlugin) Execute(context context.T,
 		dataChannel.SkipHandshake(log)
 	}
 
-	p.sessionPlugin.Execute(context, config, cancelFlag, output, dataChannel)
+	p.sessionPlugin.Execute(config, cancelFlag, output, dataChannel)
 }
 
 // isEncryptionEnabled checks kmsKeyId and pluginName to determine if encryption is enabled for this session

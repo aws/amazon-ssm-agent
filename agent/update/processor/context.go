@@ -21,18 +21,18 @@ import (
 	"io/ioutil"
 	"os"
 	"path"
-	"time"
-
 	"regexp"
 	"strings"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 )
 
 // UpdateState represents the state of update process
@@ -75,7 +75,9 @@ type ContextMgr interface {
 	saveUpdateContext(log log.T, context *UpdateContext, contextLocation string) error
 }
 
-type contextManager struct{}
+type contextManager struct {
+	context context.T
+}
 
 // UpdateDetail Book keeping detail for Agent Update
 type UpdateDetail struct {
@@ -197,15 +199,15 @@ func getCommandID(messageID string) (string, error) {
 }
 
 // getOrchestrationDir returns the orchestration directory
-func getOrchestrationDir(log log.T, update *UpdateDetail) string {
+func getOrchestrationDir(identity identity.IAgentIdentity, log log.T, update *UpdateDetail) string {
 	var err error
-	var instanceId string
-	if instanceId, err = platform.InstanceID(); err != nil {
+	var shortInstanceId string
+	if shortInstanceId, err = identity.ShortInstanceID(); err != nil {
 		log.Errorf("Cannot get instance id.")
 	}
 	orchestrationDir := fileutil.BuildPath(
 		appconfig.DefaultDataStorePath,
-		instanceId,
+		shortInstanceId,
 		appconfig.DefaultDocumentRootDirName,
 		"orchestration")
 	var commandID string
@@ -269,7 +271,7 @@ func (c *contextManager) uploadOutput(log log.T, context *UpdateContext, orchest
 		stdoutPath := updateutil.UpdateStdOutPath(orchestrationDirectory, context.Current.StdoutFileName)
 		s3Key := path.Join(context.Current.OutputS3KeyPrefix, context.Current.StdoutFileName)
 		log.Debugf("Uploading %v to s3://%v/%v", stdoutPath, context.Current.OutputS3BucketName, s3Key)
-		if s3, err := s3util.NewAmazonS3Util(log, context.Current.OutputS3BucketName); err == nil {
+		if s3, err := s3util.NewAmazonS3Util(c.context, context.Current.OutputS3BucketName); err == nil {
 			if err := s3.S3Upload(log, context.Current.OutputS3BucketName, s3Key, stdoutPath); err != nil {
 				log.Errorf("failed uploading %v to s3://%v/%v \n err:%v",
 					stdoutPath,
@@ -285,7 +287,7 @@ func (c *contextManager) uploadOutput(log log.T, context *UpdateContext, orchest
 		stderrPath := updateutil.UpdateStdErrPath(orchestrationDirectory, context.Current.StderrFileName)
 		s3Key = path.Join(context.Current.OutputS3KeyPrefix, context.Current.StderrFileName)
 		log.Debugf("Uploading %v to s3://%v/%v", stderrPath, context.Current.OutputS3BucketName, s3Key)
-		if s3, err := s3util.NewAmazonS3Util(log, context.Current.OutputS3BucketName); err == nil {
+		if s3, err := s3util.NewAmazonS3Util(c.context, context.Current.OutputS3BucketName); err == nil {
 			if err := s3.S3Upload(log, context.Current.OutputS3BucketName, s3Key, stderrPath); err != nil {
 				log.Errorf("failed uploading %v to s3://%v/%v \n err:%v", stderrPath, context.Current.StderrFileName, s3Key, err)
 			}

@@ -20,8 +20,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher/cloudwatchlogsinterface"
 	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogsqueue"
-	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 )
 
 const (
@@ -36,13 +35,14 @@ const (
 
 // ICloudWatchPublisher interface for publishing logs to cloudwatchlogs
 type ICloudWatchPublisher interface {
-	Init(log log.T) (err error)
+	Init() (err error)
 	Start()
 	Stop()
 }
 
 // CloudWatchPublisher wrapper to publish logs to cloudwatchlogs
 type CloudWatchPublisher struct {
+	context                      context.T
 	cloudWatchLogsService        cloudwatchlogsinterface.ICloudWatchLogsService
 	cloudWatchLogsServiceSharing cloudwatchlogsinterface.ICloudWatchLogsService
 	selfDestination              *destinationConfigurations
@@ -52,8 +52,6 @@ type CloudWatchPublisher struct {
 	stopPollingChannel           chan bool
 	QueuePollingInterval         time.Duration // The interval after which the publisher polls the queue
 	QueuePollingWaitTime         time.Duration // The duration for which the publisher blocks while polling. For negative value will wait until enqueue
-	log                          log.T
-	instanceID                   string
 }
 
 // destinationConfigurations captures the cloudwatchlogs destination configurations required for pushing logs
@@ -64,9 +62,15 @@ type destinationConfigurations struct {
 	secretAccessKey string
 }
 
-// Init initializes the publisher
-func (cloudwatchPublisher *CloudWatchPublisher) Init(log log.T) {
+func NewCloudWatchPublisher(context context.T) *CloudWatchPublisher {
+	return &CloudWatchPublisher{
+		context: context,
+	}
+}
 
+// Init initializes the publisher
+func (cloudwatchPublisher *CloudWatchPublisher) Init() {
+	log := cloudwatchPublisher.context.Log()
 	defer func() {
 		// recover in case the init panics
 		if msg := recover(); msg != nil {
@@ -75,8 +79,6 @@ func (cloudwatchPublisher *CloudWatchPublisher) Init(log log.T) {
 	}()
 
 	log.Infof("Init the cloudwatchlogs publisher")
-
-	cloudwatchPublisher.log = log
 
 	// Setting the ticker interval for polling if not set or negatve
 	if cloudwatchPublisher.QueuePollingInterval <= 0 {
@@ -113,21 +115,21 @@ func (cloudwatchPublisher *CloudWatchPublisher) CloudWatchLogsEventsListener() {
 
 // createLogGroupAndStream checks if log group and log stream are present. If not, creates them
 func (cloudwatchPublisher *CloudWatchPublisher) createLogGroupAndStream(logGroup, logStream string) error {
-
-	if logGroupPresent, _ := cloudwatchPublisher.cloudWatchLogsService.IsLogGroupPresent(cloudwatchPublisher.log, logGroup); !logGroupPresent {
+	log := cloudwatchPublisher.context.Log()
+	if logGroupPresent, _ := cloudwatchPublisher.cloudWatchLogsService.IsLogGroupPresent(logGroup); !logGroupPresent {
 		//Create Log Group
-		if err := cloudwatchPublisher.cloudWatchLogsService.CreateLogGroup(cloudwatchPublisher.log, logGroup); err != nil {
+		if err := cloudwatchPublisher.cloudWatchLogsService.CreateLogGroup(logGroup); err != nil {
 			// Aborting Init
-			cloudwatchPublisher.log.Errorf("Error creating log group:%v", err)
+			log.Errorf("Error creating log group:%v", err)
 			return err
 		}
 	}
 
-	if !cloudwatchPublisher.cloudWatchLogsService.IsLogStreamPresent(cloudwatchPublisher.log, logGroup, logStream) {
+	if !cloudwatchPublisher.cloudWatchLogsService.IsLogStreamPresent(logGroup, logStream) {
 		//Create Log Stream
-		if err := cloudwatchPublisher.cloudWatchLogsService.CreateLogStream(cloudwatchPublisher.log, logGroup, logStream); err != nil {
+		if err := cloudwatchPublisher.cloudWatchLogsService.CreateLogStream(logGroup, logStream); err != nil {
 			// Aborting Init
-			cloudwatchPublisher.log.Errorf("Error creating log stream:%v", err)
+			log.Errorf("Error creating log stream:%v", err)
 			return err
 		}
 	}
@@ -136,29 +138,24 @@ func (cloudwatchPublisher *CloudWatchPublisher) createLogGroupAndStream(logGroup
 
 // Start starts the publisher to consume messages from the queue
 func (cloudwatchPublisher *CloudWatchPublisher) Start() {
-
-	cloudwatchPublisher.log.Infof("Start the cloudwatchlogs publisher")
+	log := cloudwatchPublisher.context.Log()
+	log.Infof("Start the cloudwatchlogs publisher")
 
 	var err error
 	// If service nil, create a new service, else use the existing one
 	if cloudwatchPublisher.cloudWatchLogsService == nil {
-		cloudwatchPublisher.cloudWatchLogsService = NewCloudWatchLogsService(cloudwatchPublisher.log)
+		cloudwatchPublisher.cloudWatchLogsService = NewCloudWatchLogsService(cloudwatchPublisher.context)
 	}
 
 	logGroup := cloudwatchlogsqueue.GetLogGroup()
-	if cloudwatchPublisher.instanceID == "" {
-		// Fetch the instance ID if empty
-		cloudwatchPublisher.instanceID, err = platform.InstanceID()
-		if err != nil {
-			cloudwatchPublisher.log.Errorf("Error in getting instance Id :%v. Aborting CloudWatchlogs publisher start", err)
-			return
-		}
+	logStream, err := cloudwatchPublisher.context.Identity().ShortInstanceID()
+	if err != nil {
+		log.Errorf("Error in getting instance Id :%v. Aborting CloudWatchlogs publisher start", err)
+		return
 	}
 
-	logStream := cloudwatchPublisher.instanceID
-
-	cloudwatchPublisher.log.Debugf("Cloudwatchlogs Publishing Logs to LogGroup: %v", logGroup)
-	cloudwatchPublisher.log.Debugf("Cloudwatchlogs Publishing Logs to LogStream: %v", logStream)
+	log.Debugf("Cloudwatchlogs Publishing Logs to LogGroup: %v", logGroup)
+	log.Debugf("Cloudwatchlogs Publishing Logs to LogStream: %v", logStream)
 
 	cloudwatchPublisher.selfDestination = &destinationConfigurations{
 		logGroup:  logGroup,
@@ -168,21 +165,21 @@ func (cloudwatchPublisher *CloudWatchPublisher) Start() {
 	// Create if the LogGroup and LogStream are not present
 	if err = cloudwatchPublisher.createLogGroupAndStream(logGroup, logStream); err != nil {
 		// Aborting Start
-		cloudwatchPublisher.log.Errorf("Error in ensuring log group and stream are present:%v", err)
+		log.Errorf("Error in ensuring log group and stream are present:%v", err)
 		return
 	}
 
 	// Get the sequence token required to publish events to stream
-	sequenceToken := cloudwatchPublisher.cloudWatchLogsService.GetSequenceTokenForStream(cloudwatchPublisher.log, logGroup, logStream)
+	sequenceToken := cloudwatchPublisher.cloudWatchLogsService.GetSequenceTokenForStream(logGroup, logStream)
 
 	// Setup sharing if enabled
 	cloudwatchPublisher.isSharingEnabled = cloudwatchlogsqueue.IsLogSharingEnabled()
 	var sequenceTokenSharing *string
-	cloudwatchPublisher.log.Debugf("Cloudwatchlogs Sharing Enabled: %v", cloudwatchPublisher.isSharingEnabled)
+	log.Debugf("Cloudwatchlogs Sharing Enabled: %v", cloudwatchPublisher.isSharingEnabled)
 
 	if cloudwatchPublisher.isSharingEnabled {
 		if cloudwatchPublisher.sharingDestination = getSharingConfigurations(); cloudwatchPublisher.sharingDestination == nil {
-			cloudwatchPublisher.log.Error("Sharing Configurations Incorrect. Abort Sharing.")
+			log.Error("Sharing Configurations Incorrect. Abort Sharing.")
 			cloudwatchPublisher.isSharingEnabled = false
 		} else {
 			sequenceTokenSharing = cloudwatchPublisher.setupSharing()
@@ -195,6 +192,7 @@ func (cloudwatchPublisher *CloudWatchPublisher) Start() {
 
 // startPolling creates a ticker and starts polling the queue
 func (cloudwatchPublisher *CloudWatchPublisher) startPolling(sequenceToken, sequenceTokenSharing *string) {
+	log := cloudwatchPublisher.context.Log()
 	// Create a ticker for every second
 	currentPollingInterval := cloudwatchPublisher.QueuePollingInterval
 	cloudwatchPublisher.publisherTicker = time.NewTicker(currentPollingInterval)
@@ -205,37 +203,37 @@ func (cloudwatchPublisher *CloudWatchPublisher) startPolling(sequenceToken, sequ
 			pollingShouldBackoff = false
 			select {
 			case <-cloudwatchPublisher.stopPollingChannel:
-				cloudwatchPublisher.log.Debugf("Received Stop Polling Signal")
+				log.Debugf("Received Stop Polling Signal")
 				cloudwatchPublisher.publisherTicker.Stop()
 				return
 			case <-cloudwatchPublisher.publisherTicker.C:
 				//Check If Messages are in the Queue. If Messages are there continue to Push them to CW until empty
 				messages, err := cloudwatchlogsqueue.Dequeue(cloudwatchPublisher.QueuePollingWaitTime)
 				if err != nil {
-					cloudwatchPublisher.log.Debugf("Error Dequeueing Messages from Cloudwatchlogs Queue : %v", err)
+					log.Debugf("Error Dequeueing Messages from Cloudwatchlogs Queue : %v", err)
 				}
 
 				if messages != nil {
 					// There are some messages. Call the PUT Api
-					if sequenceToken, err = cloudwatchPublisher.cloudWatchLogsService.PutLogEvents(cloudwatchPublisher.log, messages, cloudwatchPublisher.selfDestination.logGroup, cloudwatchPublisher.selfDestination.logStream, sequenceToken); err != nil {
+					if sequenceToken, err = cloudwatchPublisher.cloudWatchLogsService.PutLogEvents(messages, cloudwatchPublisher.selfDestination.logGroup, cloudwatchPublisher.selfDestination.logStream, sequenceToken); err != nil {
 						// Error pushing logs even after retries and fixing sequence token
 						// Skipping the batch and continuing
-						cloudwatchPublisher.log.Errorf("Error pushing logs, skipping the batch:%v", err)
+						log.Errorf("Error pushing logs, skipping the batch:%v", err)
 						pollingShouldBackoff = true
-						sequenceToken = cloudwatchPublisher.cloudWatchLogsService.GetSequenceTokenForStream(cloudwatchPublisher.log, cloudwatchPublisher.selfDestination.logGroup, cloudwatchPublisher.selfDestination.logStream)
+						sequenceToken = cloudwatchPublisher.cloudWatchLogsService.GetSequenceTokenForStream(cloudwatchPublisher.selfDestination.logGroup, cloudwatchPublisher.selfDestination.logStream)
 					}
 
 					if cloudwatchPublisher.isSharingEnabled {
 
-						if sequenceTokenSharing, err = cloudwatchPublisher.cloudWatchLogsServiceSharing.PutLogEvents(cloudwatchPublisher.log, messages, cloudwatchPublisher.sharingDestination.logGroup, cloudwatchPublisher.sharingDestination.logStream, sequenceTokenSharing); err != nil {
+						if sequenceTokenSharing, err = cloudwatchPublisher.cloudWatchLogsServiceSharing.PutLogEvents(messages, cloudwatchPublisher.sharingDestination.logGroup, cloudwatchPublisher.sharingDestination.logStream, sequenceTokenSharing); err != nil {
 							// Error pushing logs even after retries and fixing sequence token
 							// Skipping the batch and continuing
-							cloudwatchPublisher.log.Errorf("Error pushing logs (for sharing), skipping the batch:%v", err)
+							log.Errorf("Error pushing logs (for sharing), skipping the batch:%v", err)
 							pollingShouldBackoff = true
-							sequenceTokenSharing = cloudwatchPublisher.cloudWatchLogsServiceSharing.GetSequenceTokenForStream(cloudwatchPublisher.log, cloudwatchPublisher.sharingDestination.logGroup, cloudwatchPublisher.sharingDestination.logStream)
+							sequenceTokenSharing = cloudwatchPublisher.cloudWatchLogsServiceSharing.GetSequenceTokenForStream(cloudwatchPublisher.sharingDestination.logGroup, cloudwatchPublisher.sharingDestination.logStream)
 							if sequenceTokenSharing == nil {
 								// Access Error / Stream Does not exist while getting sequence token. Disabling sharing
-								cloudwatchPublisher.log.Errorf("Error while getting sequence token. Abort Sharing.")
+								log.Errorf("Error while getting sequence token. Abort Sharing.")
 								cloudwatchPublisher.isSharingEnabled = false
 							}
 						}
@@ -247,16 +245,16 @@ func (cloudwatchPublisher *CloudWatchPublisher) startPolling(sequenceToken, sequ
 							currentPollingInterval = currentPollingInterval * pollingBackoffMultiplier
 							if currentPollingInterval >= maxPollingInterval {
 								currentPollingInterval = maxPollingInterval
-								cloudwatchPublisher.log.Infof("Polling interval has reached max back off.")
+								log.Infof("Polling interval has reached max back off.")
 							}
-							cloudwatchPublisher.log.Infof("Polling interval backing off to every %v.", currentPollingInterval)
+							log.Infof("Polling interval backing off to every %v.", currentPollingInterval)
 							// Create new publisher ticker to reduce polling
 							cloudwatchPublisher.publisherTicker.Stop()
 							cloudwatchPublisher.publisherTicker = time.NewTicker(currentPollingInterval)
 						}
 					} else if currentPollingInterval != cloudwatchPublisher.QueuePollingInterval {
 						// No errors after pushing logs so reset original polling value
-						cloudwatchPublisher.log.Infof("Logs pushed successfully. Reset original polling interval")
+						log.Infof("Logs pushed successfully. Reset original polling interval")
 						currentPollingInterval = cloudwatchPublisher.QueuePollingInterval
 						cloudwatchPublisher.publisherTicker.Stop()
 						cloudwatchPublisher.publisherTicker = time.NewTicker(currentPollingInterval)
@@ -284,22 +282,23 @@ func getSharingConfigurations() *destinationConfigurations {
 
 // setupSharing creates a new service for sharing and gets the sequence token for publishing events. Returns nil if configurations incorrect
 func (cloudwatchPublisher *CloudWatchPublisher) setupSharing() *string {
+	log := cloudwatchPublisher.context.Log()
 	cloudwatchPublisher.cloudWatchLogsServiceSharing =
 		NewCloudWatchLogsServiceWithCredentials(
-			cloudwatchPublisher.log,
+			cloudwatchPublisher.context,
 			cloudwatchPublisher.sharingDestination.accessKeyId,
 			cloudwatchPublisher.sharingDestination.secretAccessKey)
 
 	// Sharing Log Group and Stream Must Already be created
-	cloudwatchPublisher.log.Debugf("Cloudwatchlogs Publisher Sharing Logs to LogGroup: %v", cloudwatchPublisher.sharingDestination.logGroup)
-	cloudwatchPublisher.log.Debugf("Cloudwatchlogs Publisher Sharing Logs to LogStream: %v", cloudwatchPublisher.sharingDestination.logStream)
+	log.Debugf("Cloudwatchlogs Publisher Sharing Logs to LogGroup: %v", cloudwatchPublisher.sharingDestination.logGroup)
+	log.Debugf("Cloudwatchlogs Publisher Sharing Logs to LogStream: %v", cloudwatchPublisher.sharingDestination.logStream)
 
-	return cloudwatchPublisher.cloudWatchLogsServiceSharing.GetSequenceTokenForStream(cloudwatchPublisher.log, cloudwatchPublisher.sharingDestination.logGroup, cloudwatchPublisher.sharingDestination.logStream)
+	return cloudwatchPublisher.cloudWatchLogsServiceSharing.GetSequenceTokenForStream(cloudwatchPublisher.sharingDestination.logGroup, cloudwatchPublisher.sharingDestination.logStream)
 }
 
 // Stop called to stop the publisher
 func (cloudwatchPublisher *CloudWatchPublisher) Stop() {
-	cloudwatchPublisher.log.Infof("Stop the cloudwatchlogs publisher")
+	cloudwatchPublisher.context.Log().Infof("Stop the cloudwatchlogs publisher")
 	if cloudwatchPublisher.stopPollingChannel != nil {
 		cloudwatchPublisher.stopPollingChannel <- true
 		close(cloudwatchPublisher.stopPollingChannel)

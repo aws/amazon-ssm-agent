@@ -15,14 +15,14 @@
 package pluginutil
 
 import (
+	"errors"
 	"io"
 	"io/ioutil"
 	"strconv"
 	"strings"
 
-	"errors"
-
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
@@ -90,7 +90,7 @@ func CreateScriptFile(log log.T, scriptPath string, runCommand []string, byteOrd
 }
 
 // DownloadFileFromSource downloads file from source
-func DownloadFileFromSource(log log.T, source string, sourceHash string, sourceHashType string) (artifact.DownloadOutput, error) {
+func DownloadFileFromSource(context context.T, source string, sourceHash string, sourceHashType string) (artifact.DownloadOutput, error) {
 	// download source and verify its integrity
 	downloadInput := artifact.DownloadInput{
 		SourceURL: source,
@@ -98,8 +98,8 @@ func DownloadFileFromSource(log log.T, source string, sourceHash string, sourceH
 			sourceHashType: sourceHash,
 		},
 	}
-	log.Debug("Downloading file")
-	return artifact.Download(log, downloadInput)
+	context.Log().Debug("Downloading file")
+	return artifact.Download(context, downloadInput)
 }
 
 // LoadParametersAsList returns properties as a list and appropriate PluginResult if error is encountered

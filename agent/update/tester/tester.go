@@ -17,8 +17,7 @@ package tester
 import (
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
-
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	testCommon "github.com/aws/amazon-ssm-agent/agent/update/tester/common"
 	testStage "github.com/aws/amazon-ssm-agent/agent/update/tester/stages"
 )
@@ -34,10 +33,11 @@ var (
 // StartTests starts the tests based on TestStage value
 // This function times out based on timeOut value passed
 // Returns failed or timed out test case
-func StartTests(logger log.T, stage testCommon.TestStage, timeOutSeconds int) (testOutput string) {
+func StartTests(context context.T, stage testCommon.TestStage, timeOutSeconds int) (testOutput string) {
+	context = context.With("[Preinstall Tests]")
 	defer func() {
 		if msg := recover(); msg != nil {
-			logger.Errorf("test framework panicked: %v", msg)
+			context.Log().Errorf("test framework panicked: %v", msg)
 		}
 	}()
 	var timeOutDuration time.Duration
@@ -52,7 +52,7 @@ func StartTests(logger log.T, stage testCommon.TestStage, timeOutSeconds int) (t
 	}
 
 	if stage == testCommon.PreInstallTest {
-		testerObj = getPreInstallTestObj(logger)
+		testerObj = getPreInstallTestObj(context)
 	} else {
 		return
 	}
@@ -64,7 +64,7 @@ func StartTests(logger log.T, stage testCommon.TestStage, timeOutSeconds int) (t
 	go func() {
 		defer func() {
 			if msg := recover(); msg != nil {
-				logger.Errorf("following test case panicked: %s", testerObj.GetCurrentRunningTest())
+				context.Log().Errorf("following test case panicked: %s", testerObj.GetCurrentRunningTest())
 			}
 		}()
 		testCompleted <- runTests()

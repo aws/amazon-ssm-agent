@@ -22,6 +22,7 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -43,7 +44,9 @@ type Service interface {
 	UpdateHealthCheck(log log.T, update *UpdateDetail, errorCode string) error
 }
 
-type svcManager struct{}
+type svcManager struct {
+	context context.T
+}
 
 // SendReply sends message back to the service
 func (s *svcManager) SendReply(log log.T, update *UpdateDetail) (err error) {
@@ -59,7 +62,7 @@ func (s *svcManager) SendReply(log log.T, update *UpdateDetail) (err error) {
 	if payloadB, err = json.Marshal(value); err != nil {
 		return fmt.Errorf("could not marshal reply payload %v", err.Error())
 	}
-	if svc, err = getMsgSvc(log, config); err != nil {
+	if svc, err = getMsgSvc(s.context, config); err != nil {
 		return fmt.Errorf("could not load message service %v", err.Error())
 	}
 
@@ -75,7 +78,7 @@ func (s *svcManager) DeleteMessage(log log.T, update *UpdateDetail) (err error) 
 	if config, err = getAppConfig(false); err != nil {
 		return fmt.Errorf("could not load config file %v", err.Error())
 	}
-	if svc, err = getMsgSvc(log, config); err != nil {
+	if svc, err = getMsgSvc(s.context, config); err != nil {
 		return fmt.Errorf("could not load message service %v", err)
 	}
 
@@ -83,14 +86,11 @@ func (s *svcManager) DeleteMessage(log log.T, update *UpdateDetail) (err error) 
 }
 
 // getMsgSvc gets cached message service
-func getMsgSvc(log log.T, config appconfig.SsmagentConfig) (svc messageService.Service, err error) {
+func getMsgSvc(context context.T, config appconfig.SsmagentConfig) (svc messageService.Service, err error) {
 	msgSvcOnce.Do(func() {
 		connectionTimeout := time.Duration(config.Mds.StopTimeoutMillis) * time.Millisecond
 		msgSvc = newMsgSvc(
-			log,
-			config.Agent.Region,
-			config.Mds.Endpoint,
-			nil,
+			context,
 			connectionTimeout)
 	})
 

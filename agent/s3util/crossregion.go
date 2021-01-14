@@ -24,6 +24,8 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/aws/amazon-ssm-agent/agent/context"
+
 	"github.com/Workiva/go-datastructures/cache"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/network"
@@ -62,32 +64,32 @@ const (
 //
 // In most cases, the best-effort attempt will initialize the session with the correct
 // region, and the custom Transport and Handler chain will not need to make any changes.
-func GetS3CrossRegionCapableSession(log log.T, bucketName string) (*session.Session, error) {
-	initialRegion, err := getRegion()
+func GetS3CrossRegionCapableSession(context context.T, bucketName string) (*session.Session, error) {
+	log := context.Log()
+
+	initialRegion, err := context.Identity().Region()
 	if err != nil {
 		log.Errorf("failed to get instance region: %v", err)
 		return nil, err
 	}
 
-	guessedBucketRegion := getBucketRegion(log, initialRegion, bucketName, getHttpProvider(log))
+	guessedBucketRegion := getBucketRegion(context, initialRegion, bucketName, getHttpProvider(log))
 	if guessedBucketRegion != "" {
 		initialRegion = guessedBucketRegion
 	} else {
 		log.Infof("using instance region %v for bucket %v", initialRegion, bucketName)
 	}
 
-	config := makeAwsConfig(log, initialRegion)
+	config := makeAwsConfig(context, initialRegion)
+
+	appConfig := context.AppConfig()
 
 	var agentName, agentVersion string
-	if appConfig, cfgErr := getAppConfig(); cfgErr == nil {
-		agentName = appConfig.Agent.Name
-		agentVersion = appConfig.Agent.Version
+	agentName = appConfig.Agent.Name
+	agentVersion = appConfig.Agent.Version
 
-		if appConfig.S3.Endpoint != "" {
-			config.Endpoint = &appConfig.S3.Endpoint
-		}
-	} else {
-		log.Errorf("failed to read appconfig: %v", cfgErr)
+	if appConfig.S3.Endpoint != "" {
+		config.Endpoint = &appConfig.S3.Endpoint
 	}
 
 	config.HTTPClient = &http.Client{
@@ -113,8 +115,9 @@ func GetS3CrossRegionCapableSession(log log.T, bucketName string) (*session.Sess
 // this header in the response, so this method works well for those regions.
 // S3 endpoints in the "aws-cn" partition may return a 401 or 403 response without
 // the header.
-func getBucketRegion(log log.T, instanceRegion, bucketName string, httpProvider HttpProvider) (region string) {
-	regionalEndpoint := getS3Endpoint(instanceRegion)
+func getBucketRegion(context context.T, instanceRegion, bucketName string, httpProvider HttpProvider) (region string) {
+	log := context.Log()
+	regionalEndpoint := getS3Endpoint(context, instanceRegion)
 
 	// When using virtual hosted–style buckets with SSL, the SSL wild-card certificate
 	// only matches buckets that do not contain dots (".").  To work around this, try
@@ -128,7 +131,7 @@ func getBucketRegion(log log.T, instanceRegion, bucketName string, httpProvider 
 	// endpoint.  This should enable the HEAD request to successfully discover the bucket
 	// region in CN regions, and may be helpful in other partitions as well.
 	endpoints := []string{regionalEndpoint}
-	fallbackEndpoint := getFallbackS3EndpointFunc(instanceRegion)
+	fallbackEndpoint := getFallbackS3EndpointFunc(context, instanceRegion)
 	if fallbackEndpoint != regionalEndpoint {
 		endpoints = append(endpoints, fallbackEndpoint)
 	}

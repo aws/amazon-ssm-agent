@@ -79,7 +79,7 @@ func TestAgentIdentityCacher_InstanceType(t *testing.T) {
 func TestAgentIdentityCacher_Credentials(t *testing.T) {
 	val := &credentials.Credentials{}
 	agentIdentityInner := identityMocks.IAgentIdentityInner{}
-	agentIdentityInner.On("Credentials").Return(val, nil).Once()
+	agentIdentityInner.On("Credentials").Return(val).Once()
 
 	cacher := agentIdentityCacher{log: log.NewMockLog(), client: &agentIdentityInner}
 

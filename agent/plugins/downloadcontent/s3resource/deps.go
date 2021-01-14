@@ -15,15 +15,15 @@
 package s3resource
 
 import (
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 )
 
 // dependency on S3 and downloaded artifacts
 type s3deps interface {
-	ListS3Directory(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []string, err error)
-	Download(log log.T, input artifact.DownloadInput) (artifact.DownloadOutput, error)
+	ListS3Directory(context context.T, amazonS3URL s3util.AmazonS3URL) (folderNames []string, err error)
+	Download(context context.T, input artifact.DownloadInput) (artifact.DownloadOutput, error)
 }
 
 type s3DepImpl struct{}
@@ -31,10 +31,10 @@ type s3DepImpl struct{}
 var dep s3deps = &s3DepImpl{}
 
 //TODO: Refactor the code to merge the s3 capabilities to one package
-func (s3DepImpl) ListS3Directory(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []string, err error) {
-	return artifact.ListS3Directory(log, amazonS3URL)
+func (s3DepImpl) ListS3Directory(context context.T, amazonS3URL s3util.AmazonS3URL) (folderNames []string, err error) {
+	return artifact.ListS3Directory(context, amazonS3URL)
 }
 
-func (s3DepImpl) Download(log log.T, input artifact.DownloadInput) (artifact.DownloadOutput, error) {
-	return artifact.Download(log, input)
+func (s3DepImpl) Download(context context.T, input artifact.DownloadInput) (artifact.DownloadOutput, error) {
+	return artifact.Download(context, input)
 }

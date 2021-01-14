@@ -25,8 +25,10 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/aws/amazon-ssm-agent/core/executor"
 	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/model"
 	"github.com/stretchr/testify/assert"
@@ -121,52 +123,60 @@ func TestCreateInstanceContext(t *testing.T) {
 		{"", "", nil, "", nil, "", "", true},
 	}
 
-	getRegion = RegionStub
 	getPlatformName = PlatformNameStub
 	getPlatformVersion = PlatformVersionStub
+
 	util := Utility{}
 
 	for _, test := range testCases {
 		// Setup stubs
-		context = test
+		testInstanceInfo = test
 
-		context, err := util.CreateInstanceContext(logger)
+		identityMock := identityMocks.IAgentIdentity{}
+		if test.region != "" {
+			identityMock.On("Region").Return(test.region, nil)
+		} else {
+			identityMock.On("Region").Return(test.region, fmt.Errorf("RegionIsEmpty"))
+
+		}
+
+		contextMock := &context.Mock{}
+		contextMock.On("Identity").Return(&identityMock)
+		contextMock.On("Log").Return(log.NewMockLog())
+
+		util.Context = contextMock
+
+		info, err := util.CreateInstanceInfo(logger)
 
 		if test.expectingError {
 			assert.Error(t, err)
 		} else {
 			assert.NoError(t, err)
-			assert.Equal(t, context.Platform, test.expectedPlatformName)
-			assert.Equal(t, context.InstallerName, test.expectedInstallerName)
+			assert.Equal(t, info.Platform, test.expectedPlatformName)
+			assert.Equal(t, info.Region, test.region)
+			assert.Equal(t, info.InstallerName, test.expectedInstallerName)
 		}
 	}
 }
 
-var context testInstanceContext
+var testInstanceInfo testInstanceContext
 
 func PlatformVersionStub(log log.T) (version string, err error) {
-	return context.platformVersion, context.platformVersionErr
+	return testInstanceInfo.platformVersion, testInstanceInfo.platformVersionErr
 }
 func PlatformNameStub(log log.T) (name string, err error) {
-	return context.platformName, context.platformNameErr
-}
-func RegionStub() (string, error) {
-	var err error = nil
-	if context.region == "" {
-		err = fmt.Errorf("error")
-	}
-	return context.region, err
+	return testInstanceInfo.platformName, testInstanceInfo.platformNameErr
 }
 
 func TestFileNameConstruction(t *testing.T) {
 	testCases := []struct {
-		context InstanceContext
+		context InstanceInfo
 		result  string
 	}{
-		{InstanceContext{"us-east-1", "linux", "2015.9", "linux", "amd64", "tar.gz"}, "amazon-ssm-agent-linux-amd64.tar.gz"},
-		{InstanceContext{"us-east-1", "linux", "2015.9", "linux", "386", "tar.gz"}, "amazon-ssm-agent-linux-386.tar.gz"},
-		{InstanceContext{"us-west-1", "ubuntu", "12", "ubuntu", "386", "tar.gz"}, "amazon-ssm-agent-ubuntu-386.tar.gz"},
-		{InstanceContext{"us-west-1", "max os x", "10.14.2", "darwin", "amd64", "tar.gz"}, "amazon-ssm-agent-darwin-amd64.tar.gz"},
+		{InstanceInfo{"us-east-1", "linux", "2015.9", "linux", "amd64", "tar.gz"}, "amazon-ssm-agent-linux-amd64.tar.gz"},
+		{InstanceInfo{"us-east-1", "linux", "2015.9", "linux", "386", "tar.gz"}, "amazon-ssm-agent-linux-386.tar.gz"},
+		{InstanceInfo{"us-west-1", "ubuntu", "12", "ubuntu", "386", "tar.gz"}, "amazon-ssm-agent-ubuntu-386.tar.gz"},
+		{InstanceInfo{"us-west-1", "max os x", "10.14.2", "darwin", "amd64", "tar.gz"}, "amazon-ssm-agent-darwin-amd64.tar.gz"},
 	}
 
 	for _, test := range testCases {
@@ -342,16 +352,16 @@ func TestUnInstallerFilePath(t *testing.T) {
 
 func TestIsPlatformUsingSystemD(t *testing.T) {
 	testCases := []struct {
-		context InstanceContext
+		context InstanceInfo
 		result  bool
 	}{
-		{InstanceContext{"us-east-1", PlatformRedHat, "6.5", "linux", "amd64", "tar.gz"}, false},
-		{InstanceContext{"us-east-1", PlatformRedHat, "7.0", "linux", "amd64", "tar.gz"}, true},
-		{InstanceContext{"us-east-1", PlatformOracleLinux, "7.7", "linux", "amd64", "tar.gz"}, true},
-		{InstanceContext{"us-east-1", PlatformOracleLinux, "6.10", "linux", "amd64", "tar.gz"}, false},
-		{InstanceContext{"us-west-1", PlatformCentOS, "6.1", "linux", "amd64", "tar.gz"}, false},
-		{InstanceContext{"us-east-1", PlatformSuseOS, "12", "linux", "amd64", "tar.gz"}, true},
-		{InstanceContext{"us-west-1", PlatformCentOS, "7", "linux", "amd64", "tar.gz"}, true},
+		{InstanceInfo{"us-east-1", PlatformRedHat, "6.5", "linux", "amd64", "tar.gz"}, false},
+		{InstanceInfo{"us-east-1", PlatformRedHat, "7.0", "linux", "amd64", "tar.gz"}, true},
+		{InstanceInfo{"us-east-1", PlatformOracleLinux, "7.7", "linux", "amd64", "tar.gz"}, true},
+		{InstanceInfo{"us-east-1", PlatformOracleLinux, "6.10", "linux", "amd64", "tar.gz"}, false},
+		{InstanceInfo{"us-west-1", PlatformCentOS, "6.1", "linux", "amd64", "tar.gz"}, false},
+		{InstanceInfo{"us-east-1", PlatformSuseOS, "12", "linux", "amd64", "tar.gz"}, true},
+		{InstanceInfo{"us-west-1", PlatformCentOS, "7", "linux", "amd64", "tar.gz"}, true},
 	}
 
 	for _, test := range testCases {
@@ -363,10 +373,10 @@ func TestIsPlatformUsingSystemD(t *testing.T) {
 
 func TestIsPlatformUsingSystemDWithInvalidVersionNumber(t *testing.T) {
 	testCases := []struct {
-		context InstanceContext
+		context InstanceInfo
 		result  bool
 	}{
-		{InstanceContext{"us-east-1", PlatformRedHat, "wrong version", "linux", "amd64", "tar.gz"}, false},
+		{InstanceInfo{"us-east-1", PlatformRedHat, "wrong version", "linux", "amd64", "tar.gz"}, false},
 	}
 
 	for _, test := range testCases {
@@ -377,10 +387,10 @@ func TestIsPlatformUsingSystemDWithInvalidVersionNumber(t *testing.T) {
 
 func TestIsPlatformUsingSystemDWithPossiblyUsingSystemD(t *testing.T) {
 	testCases := []struct {
-		context InstanceContext
+		context InstanceInfo
 		result  bool
 	}{
-		{InstanceContext{"us-east-1", PlatformRaspbian, "8", "linux", "amd64", "tar.gz"}, true},
+		{InstanceInfo{"us-east-1", PlatformRaspbian, "8", "linux", "amd64", "tar.gz"}, true},
 	}
 
 	// Stub exec.Command
@@ -396,13 +406,13 @@ func TestIsPlatformUsingSystemDWithPossiblyUsingSystemD(t *testing.T) {
 func TestIsServiceRunning(t *testing.T) {
 	util := Utility{}
 	testCases := []struct {
-		context InstanceContext
+		context InstanceInfo
 		result  bool
 	}{
 		// test system with upstart
-		{InstanceContext{"us-east-1", PlatformRedHat, "6.5", "linux", "amd64", "tar.gz"}, true},
+		{InstanceInfo{"us-east-1", PlatformRedHat, "6.5", "linux", "amd64", "tar.gz"}, true},
 		// test system with systemD
-		{InstanceContext{"us-east-1", PlatformRedHat, "7.1", "linux", "amd64", "tar.gz"}, true},
+		{InstanceInfo{"us-east-1", PlatformRedHat, "7.1", "linux", "amd64", "tar.gz"}, true},
 	}
 
 	// Stub exec.Command
@@ -417,12 +427,12 @@ func TestIsServiceRunning(t *testing.T) {
 func TestIsServiceRunningWithErrorMessageFromCommandExec(t *testing.T) {
 	util := Utility{}
 	testCases := []struct {
-		context InstanceContext
+		context InstanceInfo
 	}{
 		// test system with upstart
-		{InstanceContext{"us-east-1", PlatformRedHat, "6.5", "linux", "amd64", "tar.gz"}},
+		{InstanceInfo{"us-east-1", PlatformRedHat, "6.5", "linux", "amd64", "tar.gz"}},
 		// test system with systemD
-		{InstanceContext{"us-east-1", PlatformRedHat, "7.1", "linux", "amd64", "tar.gz"}},
+		{InstanceInfo{"us-east-1", PlatformRedHat, "7.1", "linux", "amd64", "tar.gz"}},
 	}
 
 	// Stub exec.Command
@@ -733,8 +743,8 @@ func loadManifestFromFile(t *testing.T, fileName string) (manifest *Manifest) {
 	return manifest
 }
 
-func mockInstanceContext() *InstanceContext {
-	return &InstanceContext{
+func mockInstanceContext() *InstanceInfo {
+	return &InstanceInfo{
 		Region:         "us-east-1",
 		Platform:       "linux",
 		InstallerName:  "linux",

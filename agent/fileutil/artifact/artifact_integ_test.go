@@ -16,12 +16,12 @@
 package artifact
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"testing"
 
-	"fmt"
-
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/stretchr/testify/assert"
 )
@@ -35,7 +35,8 @@ var (
 	localPathExist, _    = filepath.Abs(filepath.Join(".", "testdata", "CheckMyHash.txt"))
 	localPathNotExist, _ = filepath.Abs(filepath.Join(".", "testdata", "IDontExist.txt"))
 	downloadFolder, _    = filepath.Abs(filepath.Join(".", "testdata"))
-	mockLog              = log.NewMockLog()
+	mockContext          = context.NewMockDefault()
+	mockLog              = mockContext.Log()
 
 	downloadTests = []DownloadTest{
 		// {DownloadInput{SourceUrl, DestinationDirectory, SourceHashValue, SourceHashType},
@@ -219,7 +220,7 @@ var (
 
 func runDownloadTests(t *testing.T, tests []DownloadTest) {
 	for _, test := range tests {
-		output, err := Download(mockLog, test.input)
+		output, err := Download(mockContext, test.input)
 		t.Log(err)
 		assert.Equal(t, test.expectedOutput, output)
 	}
@@ -248,7 +249,7 @@ func TestHttpHttpsDownloadArtifact(t *testing.T) {
 		true,
 		true}
 
-	output, err := Download(mockLog, downloadInput)
+	output, err := Download(mockContext, downloadInput)
 	assert.NoError(t, err, "Failed to download %v", downloadInput)
 	mockLog.Infof("Download Result is %v and err:%v", output, err)
 	assert.Equal(t, expectedOutput, output)
@@ -258,7 +259,7 @@ func TestHttpHttpsDownloadArtifact(t *testing.T) {
 		expectedLocalPath,
 		false,
 		true}
-	output, err = Download(mockLog, downloadInput)
+	output, err = Download(mockContext, downloadInput)
 	assert.NoError(t, err, "Failed to download %v", downloadInput)
 	mockLog.Infof("Download Result is %v and err:%v", output, err)
 	assert.Equal(t, expectedOutput, output)

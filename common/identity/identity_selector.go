@@ -15,7 +15,6 @@ package identity
 
 import (
 	"fmt"
-
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
@@ -79,14 +78,24 @@ func newAgentIdentityInner(log log.T, config *appconfig.SsmagentConfig, selector
 		}
 	}
 
-	log.Error("Agent failed to assume any identity")
+	log.Errorf("Agent failed to assume any identity")
 	return nil, fmt.Errorf("failed to find agent identity")
 }
 
-func NewAgentIdentity(log log.T, config *appconfig.SsmagentConfig, selector IAgentIdentitySelector) (IAgentIdentity, error) {
+func NewAgentIdentity(log log.T, config *appconfig.SsmagentConfig, selector IAgentIdentitySelector) (identity IAgentIdentity, err error) {
 	// TODO: move order to config after removing container mode flag
 	var identitySelectionOrder = []string{"OnPrem", "EC2"}
-	return newAgentIdentityInner(log, config, selector, identitySelectionOrder, allIdentityGenerators)
+
+	for i := 0; i < MaxRetriesIdentitySelector; i++ {
+		identity, err = newAgentIdentityInner(log, config, selector, identitySelectionOrder, allIdentityGenerators)
+		if err == nil {
+			break
+		}
+		if i + 1 < MaxRetriesIdentitySelector {
+			log.Errorf("failed to find identity, retrying: %v", err)
+		}
+	}
+	return
 }
 
 func (d *defaultAgentIdentitySelector) selectAgentIdentity(agentIdentities []IAgentIdentityInner, identityKey string) IAgentIdentityInner {

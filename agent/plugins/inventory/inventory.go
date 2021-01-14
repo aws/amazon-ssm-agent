@@ -28,7 +28,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/datauploader"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/gatherers/application"
@@ -81,13 +80,6 @@ type PluginInput struct {
 	CustomInventoryDirectory    string
 }
 
-// decoupling platform.InstanceID for easy testability
-var machineIDProvider = machineInfoProvider
-
-func machineInfoProvider() (name string, err error) {
-	return platform.InstanceID()
-}
-
 // Plugin encapsulates the logic of configuring, starting and stopping inventory plugin
 type Plugin struct {
 	context    context.T
@@ -121,7 +113,7 @@ func NewPlugin(context context.T) (*Plugin, error) {
 	log := c.Log()
 
 	//get machineID - return if not able to detect machineID
-	if p.machineID, err = machineIDProvider(); err != nil {
+	if p.machineID, err = context.Identity().InstanceID(); err != nil {
 		err = fmt.Errorf("Unable to detect machineID because of %v - this will hamper execution of inventory plugin",
 			err.Error())
 		return &p, err
@@ -141,7 +133,7 @@ func NewPlugin(context context.T) (*Plugin, error) {
 }
 
 // ApplyInventoryPolicy applies given inventory policy regarding which gatherers to run
-func (p *Plugin) ApplyInventoryPolicy(context context.T, inventoryInput PluginInput, output iohandler.IOHandler) {
+func (p *Plugin) ApplyInventoryPolicy(inventoryInput PluginInput, output iohandler.IOHandler) {
 	log := p.context.Log()
 	var optimizedInventoryItems, nonOptimizedInventoryItems []*ssm.InventoryItem
 	var items []model.Item
@@ -152,7 +144,7 @@ func (p *Plugin) ApplyInventoryPolicy(context context.T, inventoryInput PluginIn
 	var gatherers map[gatherers.T]model.Config
 
 	//validate all gatherers
-	if gatherers, err = p.ValidateInventoryInput(context, inventoryInput); err != nil {
+	if gatherers, err = p.ValidateInventoryInput(p.context, inventoryInput); err != nil {
 		log.Info(err.Error())
 		output.SetExitCode(1)
 		output.AppendError(err.Error())
@@ -180,7 +172,7 @@ func (p *Plugin) ApplyInventoryPolicy(context context.T, inventoryInput PluginIn
 	d, _ := json.Marshal(items)
 	log.Debugf("Collected Inventory data: %v", string(d))
 
-	if optimizedInventoryItems, nonOptimizedInventoryItems, err = p.uploader.ConvertToSsmInventoryItems(p.context, items); err != nil {
+	if optimizedInventoryItems, nonOptimizedInventoryItems, err = p.uploader.ConvertToSsmInventoryItems(items); err != nil {
 		log.Infof("Encountered error in converting data to SSM InventoryItems - %v. Skipping upload to SSM", err.Error())
 		output.SetExitCode(1)
 		output.AppendError(err.Error())
@@ -193,7 +185,7 @@ func (p *Plugin) ApplyInventoryPolicy(context context.T, inventoryInput PluginIn
 
 	// uploadItemsToSSM uploads collected inventory data to SSM and returns true if the upload was successful
 	// else returns false.
-	if uploadFlag = p.uploadItemsToSSM(context, nonOptimizedInventoryItems, optimizedInventoryItems, output); uploadFlag != true {
+	if uploadFlag = p.uploadItemsToSSM(nonOptimizedInventoryItems, optimizedInventoryItems, output); uploadFlag != true {
 		output.SetExitCode(1)
 		return
 	}
@@ -206,7 +198,7 @@ func (p *Plugin) ApplyInventoryPolicy(context context.T, inventoryInput PluginIn
 }
 
 // uploadItemsToSSM uploads inventory data to SSM and returns boolean flag based on whether upload was successful or not.
-func (p *Plugin) uploadItemsToSSM(context context.T, nonOptimizedInventoryItems []*ssm.InventoryItem,
+func (p *Plugin) uploadItemsToSSM(nonOptimizedInventoryItems []*ssm.InventoryItem,
 	optimizedInventoryItems []*ssm.InventoryItem, output iohandler.IOHandler) bool {
 	/*
 		In order to optimize PutInventory calls to SSM, we use following algo:
@@ -225,7 +217,7 @@ func (p *Plugin) uploadItemsToSSM(context context.T, nonOptimizedInventoryItems 
 	optimizedNonFileItems = optimizedInventoryItems
 	nonOptimizedNonFileItems = nonOptimizedInventoryItems
 
-	inventoryItemIndex, err = p.getLargeItemIndex(nonOptimizedInventoryItems, context, fileInventoryItemName)
+	inventoryItemIndex, err = p.getLargeItemIndex(nonOptimizedInventoryItems, fileInventoryItemName)
 	log.Debugf("inventoryItemIndex  %v", inventoryItemIndex)
 	if err != nil {
 		log.Errorf("Encountered error. Skipping upload to SSM %v", err)
@@ -241,7 +233,7 @@ func (p *Plugin) uploadItemsToSSM(context context.T, nonOptimizedInventoryItems 
 			extractFileItems(nonOptimizedInventoryItems, optimizedInventoryItems, inventoryItemIndex)
 
 		// uploading AWS:File inventory data.
-		if err = p.uploadDataToSSM(context, nonOptimizedFileItems, optimizedFileItems, output); err != nil {
+		if err = p.uploadDataToSSM(nonOptimizedFileItems, optimizedFileItems, output); err != nil {
 			log.Errorf("Encountered error %v. Skip uploading %v to SSM", err, fileInventoryItemName)
 			dataUploadStatus = false
 			message := fmt.Sprintf(errorMsgForInabilityToSendFileDataToSSM, err.Error())
@@ -253,7 +245,7 @@ func (p *Plugin) uploadItemsToSSM(context context.T, nonOptimizedInventoryItems 
 	}
 
 	// uploading non-file inventory data
-	if err = p.uploadDataToSSM(context, nonOptimizedNonFileItems, optimizedNonFileItems, output); err != nil {
+	if err = p.uploadDataToSSM(nonOptimizedNonFileItems, optimizedNonFileItems, output); err != nil {
 		log.Errorf("error uploading inventory data %v", err)
 		dataUploadStatus = false
 		message := fmt.Sprintf(errorMsgForInabilityToSendDataToSSM, err.Error())
@@ -295,15 +287,15 @@ func extractFileItems(nonOptimizedInventoryItems, optimizedInventoryItems []*ssm
 
 // uploadDataToSSM uploads inventory data to SSM. First it tries to upload with optimizedInventoryItems
 // If that fails, it retries upload to SSM with the nonOptimizedInventoryItems.
-func (p *Plugin) uploadDataToSSM(context context.T, nonOptimizedInventoryItems []*ssm.InventoryItem,
+func (p *Plugin) uploadDataToSSM(nonOptimizedInventoryItems []*ssm.InventoryItem,
 	optimizedInventoryItems []*ssm.InventoryItem, output iohandler.IOHandler) error {
 	var err error
 	log := p.context.Log()
 	//first send data in optimized fashion
-	if err = p.uploader.SendDataToSSM(context, optimizedInventoryItems); err != nil {
+	if err = p.uploader.SendDataToSSM(optimizedInventoryItems); err != nil {
 		if shouldRetryWithNonOptimizedData(err, log) {
 			//call putinventory again with non-optimized dataset
-			if err = p.uploader.SendDataToSSM(context, nonOptimizedInventoryItems); err != nil {
+			if err = p.uploader.SendDataToSSM(nonOptimizedInventoryItems); err != nil {
 				//sending non-optimized data also failed
 				return err
 			}
@@ -317,8 +309,8 @@ func (p *Plugin) uploadDataToSSM(context context.T, nonOptimizedInventoryItems [
 
 // getLargeItemIndex returns index of the inventoryItem if inventoryItem is present in nonOptimizedInventoryItems
 // If not it returns default -1.
-func (p *Plugin) getLargeItemIndex(nonOptimizedInventoryItems []*ssm.InventoryItem, context context.T, itemName string) (int, error) {
-	log := context.Log()
+func (p *Plugin) getLargeItemIndex(nonOptimizedInventoryItems []*ssm.InventoryItem, itemName string) (int, error) {
+	log := p.context.Log()
 	itemIndexToReturn := -1
 	nonOptimizedInventoryItemsCheck, err := json.Marshal(nonOptimizedInventoryItems)
 
@@ -344,7 +336,7 @@ func (p *Plugin) getLargeItemIndex(nonOptimizedInventoryItems []*ssm.InventoryIt
 }
 
 // ApplyInventoryFrequentCollector applies frequent collector regarding which gatherers to run
-func (p Plugin) ApplyInventoryFrequentCollector(context context.T, gatherers map[gatherers.T]model.Config, output iohandler.IOHandler) {
+func (p Plugin) ApplyInventoryFrequentCollector(gatherers map[gatherers.T]model.Config, output iohandler.IOHandler) {
 	log := p.context.Log()
 
 	var dirtyItems []*ssm.InventoryItem
@@ -369,7 +361,7 @@ func (p Plugin) ApplyInventoryFrequentCollector(context context.T, gatherers map
 		return
 	}
 
-	if dirtyItems, err = p.uploader.GetDirtySsmInventoryItems(context, items); err != nil {
+	if dirtyItems, err = p.uploader.GetDirtySsmInventoryItems(items); err != nil {
 		log.Debugf("Encountered error in collecting dirty Inventory items - %#v. Skipping upload to SSM", err.Error())
 		output.SetExitCode(1)
 		output.AppendError(err.Error())
@@ -384,7 +376,7 @@ func (p Plugin) ApplyInventoryFrequentCollector(context context.T, gatherers map
 		return
 	}
 
-	if err = p.uploader.SendDataToSSM(context, dirtyItems); err != nil {
+	if err = p.uploader.SendDataToSSM(dirtyItems); err != nil {
 		//some other error happened for which there is no need to retry - upload failed
 		log.Debugf(" Error happened while p.uploader.SendDataToSSM")
 		propagateSSMError(output, err, log)
@@ -687,8 +679,8 @@ func (p *Plugin) ParseAssociationIdFromFileName(input string) string {
 // WorkerConfig plugin implementation
 
 // Execute runs the inventory plugin
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
-	log := context.Log()
+func (p *Plugin) Execute(config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
+	log := p.context.Log()
 
 	var errorMsg, associationID string
 	var dataB []byte
@@ -771,7 +763,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	dataB, _ = json.Marshal(inventoryInput)
 	log.Infof("Inventory configuration after parsing - %v", string(dataB))
 
-	p.ApplyInventoryPolicy(context, inventoryInput, output)
+	p.ApplyInventoryPolicy(inventoryInput, output)
 
 	//check inventory plugin output
 	if output.GetExitCode() != 0 {

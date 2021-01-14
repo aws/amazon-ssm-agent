@@ -30,6 +30,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/backoffconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
@@ -131,7 +132,8 @@ func httpDownload(log log.T, fileURL string, destFile string) (output DownloadOu
 }
 
 // CanGetS3Object returns true if it is possible to fetch an object because it exists, is not deleted, and read permissions exist for this request
-func CanGetS3Object(log log.T, amazonS3URL s3util.AmazonS3URL) bool {
+func CanGetS3Object(context context.T, amazonS3URL s3util.AmazonS3URL) bool {
+	log := context.Log()
 	bucketName := amazonS3URL.Bucket
 	objectKey := amazonS3URL.Key
 
@@ -140,7 +142,7 @@ func CanGetS3Object(log log.T, amazonS3URL s3util.AmazonS3URL) bool {
 		Key:    aws.String(objectKey),
 	}
 
-	sess, err := s3util.GetS3CrossRegionCapableSession(log, bucketName)
+	sess, err := s3util.GetS3CrossRegionCapableSession(context, bucketName)
 	if err != nil {
 		log.Errorf("failed to get S3 session: %v", err)
 		return false
@@ -158,7 +160,8 @@ func CanGetS3Object(log log.T, amazonS3URL s3util.AmazonS3URL) bool {
 
 // ListS3Folders returns the folders under a given S3 URL where folders are keys whose prefix is the URL key
 // and contain a / after the prefix.  The folder name is the part between the prefix and the /.
-func ListS3Folders(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []string, err error) {
+func ListS3Folders(context context.T, amazonS3URL s3util.AmazonS3URL) (folderNames []string, err error) {
+	log := context.Log()
 	prefix := amazonS3URL.Key
 	if !strings.HasSuffix(prefix, "/") {
 		prefix = prefix + "/"
@@ -168,7 +171,7 @@ func ListS3Folders(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []str
 		Prefix:    &prefix,
 		Delimiter: aws.String("/"),
 	}
-	sess, err := s3util.GetS3CrossRegionCapableSession(log, amazonS3URL.Bucket)
+	sess, err := s3util.GetS3CrossRegionCapableSession(context, amazonS3URL.Bucket)
 	if err != nil {
 		log.Errorf("failed to get S3 session: %v", err)
 		return
@@ -177,6 +180,7 @@ func ListS3Folders(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []str
 	s3client := s3.New(sess)
 	req, resp := s3client.ListObjectsRequest(params)
 	err = req.Send()
+
 	log.Debugf("ListS3Folders Bucket: %v, Prefix: %v, RequestID: %v", params.Bucket, params.Prefix, req.RequestID)
 	if err != nil {
 		log.Debugf("ListS3Folders error %v", err.Error())
@@ -193,7 +197,8 @@ func ListS3Folders(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []str
 
 // ListS3Directory returns all the objects (files and folders) under a given S3 URL where folders are keys whose prefix
 // is the URL key and contain a / after the prefix.
-func ListS3Directory(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []string, err error) {
+func ListS3Directory(context context.T, amazonS3URL s3util.AmazonS3URL) (folderNames []string, err error) {
+	log := context.Log()
 	var params *s3.ListObjectsInput
 	prefix := amazonS3URL.Key
 	if prefix != "" {
@@ -212,7 +217,7 @@ func ListS3Directory(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []s
 	}
 	log.Debugf("ListS3Object Bucket: %v, Prefix: %v", params.Bucket, params.Prefix)
 
-	sess, err := s3util.GetS3CrossRegionCapableSession(log, amazonS3URL.Bucket)
+	sess, err := s3util.GetS3CrossRegionCapableSession(context, amazonS3URL.Bucket)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get S3 session: %v", err)
 	}
@@ -233,7 +238,8 @@ func ListS3Directory(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []s
 }
 
 // s3Download attempts to download a file via the aws sdk.
-func s3Download(log log.T, amazonS3URL s3util.AmazonS3URL, destFile string) (output DownloadOutput, err error) {
+func s3Download(context context.T, amazonS3URL s3util.AmazonS3URL, destFile string) (output DownloadOutput, err error) {
+	log := context.Log()
 	log.Debugf("attempting to download as s3 download %v", destFile)
 	eTagFile := destFile + ".etag"
 
@@ -251,7 +257,7 @@ func s3Download(log log.T, amazonS3URL s3util.AmazonS3URL, destFile string) (out
 		}
 		params.IfNoneMatch = aws.String(existingETag)
 	}
-	sess, err := s3util.GetS3CrossRegionCapableSession(log, amazonS3URL.Bucket)
+	sess, err := s3util.GetS3CrossRegionCapableSession(context, amazonS3URL.Bucket)
 	if err != nil {
 		log.Errorf("failed to get S3 session: %v", err)
 		return output, err
@@ -312,7 +318,8 @@ func FileCopy(log log.T, destinationPath string, src io.Reader) (written int64, 
 }
 
 // Download is a generic utility which attempts to download smartly.
-func Download(log log.T, input DownloadInput) (output DownloadOutput, err error) {
+func Download(context context.T, input DownloadInput) (output DownloadOutput, err error) {
+	log := context.Log()
 	// parse the url
 	var fileURL *url.URL
 	fileURL, err = url.Parse(input.SourceURL)
@@ -358,7 +365,7 @@ func Download(log log.T, input DownloadInput) (output DownloadOutput, err error)
 		amazonS3URL := s3util.ParseAmazonS3URL(log, fileURL)
 		if amazonS3URL.IsBucketAndKeyPresent() {
 			var tempOutput DownloadOutput
-			tempOutput, err = s3Download(log, amazonS3URL, output.LocalFilePath)
+			tempOutput, err = s3Download(context, amazonS3URL, output.LocalFilePath)
 			if err != nil {
 				log.Info("An error occurred when attempting s3 download. Attempting http/https download as fallback.")
 				tempOutput, err = httpDownload(log, input.SourceURL, output.LocalFilePath)

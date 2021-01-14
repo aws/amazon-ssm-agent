@@ -33,9 +33,9 @@ func NewMockDefault() *Mock {
 }
 
 // CreateInstanceContext mocks the CreateInstanceContext function.
-func (m *Mock) CreateInstanceContext(log log.T) (context *InstanceContext, err error) {
+func (m *Mock) CreateInstanceContext(log log.T) (context *InstanceInfo, err error) {
 	args := m.Called(log)
-	return args.Get(0).(*InstanceContext), args.Error(1)
+	return args.Get(0).(*InstanceInfo), args.Error(1)
 }
 
 // CreateUpdateDownloadFolder mocks the CreateUpdateDownloadFolder function.

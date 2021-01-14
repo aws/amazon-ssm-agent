@@ -206,7 +206,9 @@ func testExecution(t *testing.T, commandtester CommandTester) {
 	mockIOHandler := new(iohandlermocks.MockIOHandler)
 
 	// create plugin
-	p := new(Plugin)
+	p := &Plugin{
+		context: context.NewMockDefault(),
+	}
 	p.CommandExecuter = mockExecuter
 
 	// run inner command tester

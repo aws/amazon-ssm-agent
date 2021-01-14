@@ -80,5 +80,6 @@ func initializeLogger() context.T {
 	// initialize appconfig, use default config
 	config := appconfig.DefaultConfig()
 
-	return context.Default(logger, config).With(defaultSessionLoggerContextName)
+	// agentIdentity is nil because session-logger does not use instanceId/Region/Credentials
+	return context.Default(logger, config, nil).With(defaultSessionLoggerContextName)
 }

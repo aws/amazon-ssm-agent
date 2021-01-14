@@ -19,19 +19,13 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/coremanager"
-	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 )
 
 // NewCoreManager creates coremanager with mock mds service injected
-func NewCoreManager(context context.T, coremodules *[]contracts.ICoreModule, log log.T) (cpm *coremanager.CoreManager, err error) {
-	instanceIDStr, _ := platform.InstanceID()
-	regionStr := TestRegion
-	instanceIDPtr := &instanceIDStr
-	regionPtr := &regionStr
-	cloudwatchPublisher := &cloudwatchlogspublisher.CloudWatchPublisher{}
+func NewCoreManager(context context.T, coremodules *[]contracts.ICoreModule) (cpm *coremanager.CoreManager, err error) {
+	cloudwatchPublisher := cloudwatchlogspublisher.NewCloudWatchPublisher(context)
 	reboot := &rebooter.SSMRebooter{}
-	cpm, err = coremanager.NewCoreManager(context, *coremodules, cloudwatchPublisher, instanceIDPtr, regionPtr, log, reboot)
+	cpm, err = coremanager.NewCoreManager(context, *coremodules, cloudwatchPublisher, reboot)
 	return
 }

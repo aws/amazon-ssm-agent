@@ -22,12 +22,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/association/converter"
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/assert"
@@ -41,12 +39,9 @@ const (
 )
 
 func TestParseAssociationWithAssociationVersion1_2(t *testing.T) {
-	log := log.DefaultLogger()
-	context := context.Default(log, appconfig.SsmagentConfig{})
 	processor := Processor{
-		context: context,
+		context: context.NewMockDefault(),
 	}
-	sys = &systemStub{}
 
 	sampleFile := readFile(FILE_VERSION_1_2)
 
@@ -113,13 +108,9 @@ func TestParseAssociationWithAssociationVersion1_2(t *testing.T) {
 }
 
 func TestParseAssociationWithAssociationVersion2_0(t *testing.T) {
-
-	log := log.DefaultLogger()
-	context := context.Default(log, appconfig.SsmagentConfig{})
 	processor := Processor{
-		context: context,
+		context: context.NewMockDefault(),
 	}
-	sys = &systemStub{}
 
 	sampleFile := readFile(FILE_VERSION_2_0)
 
@@ -203,13 +194,9 @@ func TestParseAssociationWithAssociationVersion2_0(t *testing.T) {
 }
 
 func TestParseAssociationWithAssociationVersion2_0_StringMapParams(t *testing.T) {
-
-	log := log.DefaultLogger()
-	context := context.Default(log, appconfig.SsmagentConfig{})
 	processor := Processor{
-		context: context,
+		context: context.NewMockDefault(),
 	}
-	sys = &systemStub{}
 
 	sampleFile := readFile(FILE_PARAM_2_0)
 

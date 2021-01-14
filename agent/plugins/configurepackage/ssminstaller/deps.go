@@ -15,14 +15,13 @@
 package ssminstaller
 
 import (
+	"encoding/json"
+	"io/ioutil"
+
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/docparser"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
-
-	"encoding/json"
-	"io/ioutil"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/framework/docmanager"
@@ -41,7 +40,6 @@ type execDepImp struct {
 }
 
 func (m *execDepImp) ParseDocument(context context.T, documentRaw []byte, orchestrationDir string, s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string) (pluginsInfo []contracts.PluginState, err error) {
-	log := context.Log()
 	parserInfo := docparser.DocumentParserInfo{
 		OrchestrationDir:  orchestrationDir,
 		S3Bucket:          s3Bucket,
@@ -57,7 +55,7 @@ func (m *execDepImp) ParseDocument(context context.T, documentRaw []byte, orches
 		return
 	}
 	// TODO Add parameters
-	return docContent.ParseDocument(log, contracts.DocumentInfo{}, parserInfo, nil)
+	return docContent.ParseDocument(context, contracts.DocumentInfo{}, parserInfo, nil)
 }
 
 func (m *execDepImp) ExecuteDocument(context context.T, pluginInput []contracts.PluginState, documentID string, documentCreatedDate string, orchestrationDirectory string) (pluginOutputs map[string]*contracts.PluginResult) {
@@ -75,7 +73,7 @@ func (m *execDepImp) ExecuteDocument(context context.T, pluginInput []contracts.
 		InstancePluginsInformation: pluginInput,
 	}
 	//specify the subdocument's bookkeeping location
-	instanceID, err := instance.InstanceID()
+	instanceID, err := context.Identity().InstanceID()
 	if err != nil {
 		log.Error("failed to load instance id")
 		return
@@ -109,19 +107,3 @@ func (fileSysDepImp) Exists(filePath string) bool {
 func (fileSysDepImp) ReadFile(filename string) ([]byte, error) {
 	return ioutil.ReadFile(filename)
 }
-
-var instance instanceInfo = &instanceInfoImp{}
-
-// system represents the dependency for platform
-type instanceInfo interface {
-	InstanceID() (string, error)
-	Region() (string, error)
-}
-
-type instanceInfoImp struct{}
-
-// InstanceID wraps platform InstanceID
-func (instanceInfoImp) InstanceID() (string, error) { return platform.InstanceID() }
-
-// Region wraps platform Region
-func (instanceInfoImp) Region() (string, error) { return platform.Region() }

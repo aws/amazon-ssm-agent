@@ -17,7 +17,6 @@ package network
 
 import (
 	"crypto/x509"
-	"fmt"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/network/certreader"
@@ -35,7 +34,8 @@ func getCustomCertificate() ([]byte, error) {
 	}
 
 	if !config.Agent.ContainerMode {
-		return nil, fmt.Errorf("Custom certificate only allowed in container mode")
+		// Custom certificate only supported in container mode
+		return nil, nil
 	}
 
 	return certreader.ReadCertificate(appconfig.CustomCertificatePath)

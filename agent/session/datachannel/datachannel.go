@@ -28,7 +28,6 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/rip"
 	"github.com/aws/amazon-ssm-agent/agent/session/communicator"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
@@ -158,11 +157,12 @@ func NewDataChannel(context context.T,
 	cancelFlag task.CancelFlag) (*DataChannel, error) {
 
 	log := context.Log()
+	identity := context.Identity()
 	appConfig := context.AppConfig()
 
 	messageGatewayServiceConfig := appConfig.Mgs
 	if messageGatewayServiceConfig.Region == "" {
-		fetchedRegion, err := platform.Region()
+		fetchedRegion, err := identity.Region()
 		if err != nil {
 			return nil, fmt.Errorf("failed to get region with error: %s", err)
 		}
@@ -170,7 +170,7 @@ func NewDataChannel(context context.T,
 	}
 
 	if messageGatewayServiceConfig.Endpoint == "" {
-		fetchedEndpoint, err := getMgsEndpoint(messageGatewayServiceConfig.Region)
+		fetchedEndpoint, err := getMgsEndpoint(context, messageGatewayServiceConfig.Region)
 		if err != nil {
 			return nil, fmt.Errorf("failed to get MessageGatewayService endpoint with error: %s", err)
 		}
@@ -178,13 +178,9 @@ func NewDataChannel(context context.T,
 	}
 
 	connectionTimeout := time.Duration(messageGatewayServiceConfig.StopTimeoutMillis) * time.Millisecond
-	mgsService := service.NewService(log, messageGatewayServiceConfig, connectionTimeout)
+	mgsService := service.NewService(context, messageGatewayServiceConfig, connectionTimeout)
 
-	instanceID, err := platform.InstanceID()
-
-	if appConfig.Agent.ContainerMode {
-		instanceID, err = platform.TargetID()
-	}
+	instanceID, err := identity.InstanceID()
 
 	if instanceID == "" {
 		return nil, fmt.Errorf("no instanceID provided, %s", err)
@@ -896,8 +892,8 @@ func (dataChannel *DataChannel) finalizeKMSEncryption(log log.T, actionResult js
 	return nil
 }
 
-var newBlockCipher = func(log log.T, kmsKeyId string) (blockCipher crypto.IBlockCipher, err error) {
-	return crypto.NewBlockCipher(log, kmsKeyId)
+var newBlockCipher = func(context context.T, kmsKeyId string) (blockCipher crypto.IBlockCipher, err error) {
+	return crypto.NewBlockCipher(context, kmsKeyId)
 }
 
 // PerformHandshake performs handshake to share version string and encryption information with clients like cli/console
@@ -907,7 +903,7 @@ func (dataChannel *DataChannel) PerformHandshake(log log.T,
 	sessionTypeRequest mgsContracts.SessionTypeRequest) (err error) {
 
 	if encryptionEnabled {
-		if dataChannel.blockCipher, err = newBlockCipher(log, kmsKeyId); err != nil {
+		if dataChannel.blockCipher, err = newBlockCipher(dataChannel.context, kmsKeyId); err != nil {
 			return fmt.Errorf("Initializing BlockCipher failed: %s", err)
 		}
 	}
@@ -1103,8 +1099,8 @@ func getDataChannelToken(log log.T,
 }
 
 // getMgsEndpoint builds mgs endpoint.
-func getMgsEndpoint(region string) (string, error) {
-	hostName := rip.GetMgsEndpoint(region)
+func getMgsEndpoint(context context.T, region string) (string, error) {
+	hostName := rip.GetMgsEndpoint(context, region)
 	if hostName == "" {
 		return "", fmt.Errorf("no MGS endpoint found in region %s", region)
 	}

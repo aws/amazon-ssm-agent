@@ -260,6 +260,9 @@ type TestCaseCancelCommand struct {
 }
 
 func GenerateDocStateFromFile(t *testing.T, messagePayloadFile string, instanceID string) (testCase TestCaseSendCommand) {
+	// create mock context and log
+	contextMock := context.NewMockDefault()
+
 	// load message payload and create MDS message from it
 	var payload messageContracts.SendCommandPayload
 	err := json.Unmarshal((loadFile(t, messagePayloadFile)), &payload)
@@ -340,7 +343,7 @@ func GenerateDocStateFromFile(t *testing.T, messagePayloadFile string, instanceI
 		Parameters:    payload.DocumentContent.Parameters,
 	}
 	//Data format persisted in Current Folder is defined by the struct - CommandState
-	testCase.DocState, err = docparser.InitializeDocState(loggers, documentType, docContent, documentInfo, parserInfo, payload.Parameters)
+	testCase.DocState, err = docparser.InitializeDocState(contextMock, documentType, docContent, documentInfo, parserInfo, payload.Parameters)
 	if err != nil {
 		t.Fatal(err)
 	}

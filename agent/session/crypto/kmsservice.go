@@ -18,7 +18,7 @@ import (
 	"fmt"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/request"
@@ -40,7 +40,7 @@ type KMSService struct {
 }
 
 // NewKMSService creates a new KMSService instance
-func NewKMSService(log log.T) (kmsService *KMSService, err error) {
+func NewKMSService(context context.T) (kmsService *KMSService, err error) {
 	var (
 		awsConfig        *aws.Config
 		appConfig        appconfig.SsmagentConfig
@@ -48,10 +48,11 @@ func NewKMSService(log log.T) (kmsService *KMSService, err error) {
 		agentName        string
 		agentVersion     string
 	)
-	awsConfig = sdkutil.AwsConfig(log)
-	if appConfig, err = appconfig.Config(false); err != nil {
-		log.Warnf("Failed to load appconfig: %s. Using default config.", err)
-	} else if appConfig.Kms.Endpoint != "" {
+
+	awsConfig = sdkutil.AwsConfig(context)
+
+	appConfig = context.AppConfig()
+	if appConfig.Kms.Endpoint != "" {
 		awsConfig.Endpoint = &appConfig.Kms.Endpoint
 	}
 	agentName = appConfig.Agent.Name

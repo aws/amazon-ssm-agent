@@ -24,7 +24,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 )
 
 var (
@@ -33,13 +32,6 @@ var (
 )
 
 //TODO: add unit tests
-
-// decoupling platform.InstanceID for easy testability
-var machineIDProvider = machineInfoProvider
-
-func machineInfoProvider() (name string, err error) {
-	return platform.InstanceID()
-}
 
 // Optimizer defines operations of content optimizer which inventory plugin makes use of
 type Optimizer interface {
@@ -54,18 +46,18 @@ type Impl struct {
 }
 
 func NewOptimizerImpl(context context.T) (*Impl, error) {
-	return NewOptimizerImplWithLocation(context.Log(), appconfig.InventoryRootDirName, appconfig.InventoryContentHashFileName)
+	return NewOptimizerImplWithLocation(context, appconfig.InventoryRootDirName, appconfig.InventoryContentHashFileName)
 }
 
-func NewOptimizerImplWithLocation(log log.T, rootDir string, fileName string) (*Impl, error) {
+func NewOptimizerImplWithLocation(context context.T, rootDir string, fileName string) (*Impl, error) {
 	var optimizer = Impl{}
 	var machineID, content string
 	var err error
 
-	optimizer.log = log
+	optimizer.log = context.Log()
 
 	//get machineID - return if not able to detect machineID
-	if machineID, err = machineIDProvider(); err != nil {
+	if machineID, err = context.Identity().InstanceID(); err != nil {
 		err = fmt.Errorf("Unable to detect machineID because of %v - this will hamper execution of inventory plugin",
 			err.Error())
 		return &optimizer, err

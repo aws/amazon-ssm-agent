@@ -639,7 +639,7 @@ func TestDataCHannelHandshakeInitiate(t *testing.T) {
 	dataChannel.handshake.encryptionConfirmedChan <- true
 
 	// This is necessary because PerformHandshake initializes the cipher
-	newBlockCipher = func(log log.T, kmsKeyId string) (blockCipher crypto.IBlockCipher, err error) {
+	newBlockCipher = func(context context.T, kmsKeyId string) (blockCipher crypto.IBlockCipher, err error) {
 		return mockCipher, nil
 	}
 

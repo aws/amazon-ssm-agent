@@ -81,7 +81,7 @@ func start(log logger.T, instanceIDPtr *string, regionPtr *string, shouldCheckHi
 	}
 
 	//Initializing the health module to send empty health pings to the service.
-	healthModule := health.NewHealthCheck(context, ssm.NewService(log))
+	healthModule := health.NewHealthCheck(context, ssm.NewService(context))
 	hibernateState := hibernation.NewHibernateMode(healthModule, context)
 	messageBusClient = messagebus.NewMessageBus(context)
 
@@ -93,7 +93,7 @@ func start(log logger.T, instanceIDPtr *string, regionPtr *string, shouldCheckHi
 	if !context.AppConfig().Agent.ContainerMode {
 		go func() {
 			process = startup.NewProcessor(context)
-			processErr := process.ModuleExecute(context)
+			processErr := process.ModuleExecute()
 			if processErr != nil {
 				log.Errorf("Error occurred during startup of processor: %v", processErr)
 			}
@@ -101,7 +101,7 @@ func start(log logger.T, instanceIDPtr *string, regionPtr *string, shouldCheckHi
 	}
 
 	if context.AppConfig().Agent.ContainerMode {
-		err = startAgent(ssmAgent, context, log, instanceIDPtr, regionPtr)
+		err = startAgent(ssmAgent, context)
 		return
 	}
 
@@ -113,22 +113,22 @@ func start(log logger.T, instanceIDPtr *string, regionPtr *string, shouldCheckHi
 		context.Log().Info("Entering SSM Agent hibernate - ", hibernationErr)
 		go func() {
 			hibernateState.ExecuteHibernation()
-			err = startAgent(ssmAgent, context, log, instanceIDPtr, regionPtr)
+			err = startAgent(ssmAgent, context)
 		}()
 	} else {
-		err = startAgent(ssmAgent, context, log, instanceIDPtr, regionPtr)
+		err = startAgent(ssmAgent, context)
 	}
 	return
 }
 
-func startAgent(ssmAgent agent.ISSMAgent, context context.T, log logger.T, instanceIDPtr *string, regionPtr *string) (err error) {
-	cloudwatchPublisher := &cloudwatchlogspublisher.CloudWatchPublisher{}
+func startAgent(ssmAgent agent.ISSMAgent, context context.T) (err error) {
+	cloudwatchPublisher := cloudwatchlogspublisher.NewCloudWatchPublisher(context)
 	coreModules := coremodules.RegisteredCoreModules(context)
 	reboot := &rebooter.SSMRebooter{}
 
 	var cpm *coremanager.CoreManager
-	if cpm, err = coremanager.NewCoreManager(context, *coreModules, cloudwatchPublisher, instanceIDPtr, regionPtr, log, reboot); err != nil {
-		log.Errorf("error occurred when starting core manager: %v", err)
+	if cpm, err = coremanager.NewCoreManager(context, *coreModules, cloudwatchPublisher, reboot); err != nil {
+		context.Log().Errorf("error occurred when starting core manager: %v", err)
 		return
 	}
 	ssmAgent.SetCoreManager(cpm)

@@ -17,7 +17,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/mock"
 )
@@ -31,7 +31,8 @@ type MockCommandExecuter struct {
 }
 
 // Execute is a mocked method that just returns what mock tells it to.
-func (m *MockCommandExecuter) Execute(log log.T,
+func (m *MockCommandExecuter) Execute(
+	context context.T,
 	workingDir string,
 	stdoutFilePath string,
 	stderrFilePath string,
@@ -41,14 +42,13 @@ func (m *MockCommandExecuter) Execute(log log.T,
 	commandArguments []string,
 	envVars map[string]string,
 ) (stdout io.Reader, stderr io.Reader, exitCode int, errs []error) {
-	args := m.Called(log, workingDir, stdoutFilePath, stderrFilePath, cancelFlag, executionTimeout, commandName, commandArguments, envVars)
-	log.Infof("args are %v", args)
+	args := m.Called(context, workingDir, stdoutFilePath, stderrFilePath, cancelFlag, executionTimeout, commandName, commandArguments, envVars)
 	return args.Get(0).(io.Reader), args.Get(1).(io.Reader), args.Get(2).(int), args.Get(3).([]error)
 }
 
 // NewExecute is a mocked method that just returns what mock tells it to.
 func (m *MockCommandExecuter) NewExecute(
-	log log.T,
+	context context.T,
 	workingDir string,
 	stdoutWriter io.Writer,
 	stderrWriter io.Writer,
@@ -58,13 +58,13 @@ func (m *MockCommandExecuter) NewExecute(
 	commandArguments []string,
 	envVars map[string]string,
 ) (exitCode int, err error) {
-	args := m.Called(log, workingDir, stdoutWriter, stderrWriter, cancelFlag, executionTimeout, commandName, commandArguments, envVars)
-	log.Infof("args are %v", args)
+	args := m.Called(context, workingDir, stdoutWriter, stderrWriter, cancelFlag, executionTimeout, commandName, commandArguments, envVars)
 	return args.Get(0).(int), args.Error(1)
 }
 
 // StartExe is a mocked method that just returns what mock tells it to.
-func (m *MockCommandExecuter) StartExe(log log.T,
+func (m *MockCommandExecuter) StartExe(
+	context context.T,
 	workingDir string,
 	stdoutWriter io.Writer,
 	stderrWriter io.Writer,
@@ -72,7 +72,6 @@ func (m *MockCommandExecuter) StartExe(log log.T,
 	commandName string,
 	commandArguments []string,
 ) (process *os.Process, exitCode int, errs error) {
-	args := m.Called(log, workingDir, stdoutWriter, stderrWriter, cancelFlag, commandName, commandArguments)
-	log.Infof("args are %v", args)
+	args := m.Called(context, workingDir, stdoutWriter, stderrWriter, cancelFlag, commandName, commandArguments)
 	return args.Get(0).(*os.Process), args.Get(1).(int), args.Error(2)
 }

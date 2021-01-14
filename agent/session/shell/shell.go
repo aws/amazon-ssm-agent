@@ -45,6 +45,7 @@ import (
 
 // Plugin is the type for the plugin.
 type ShellPlugin struct {
+	context     context.T
 	name        string
 	stdin       *os.File
 	stdout      *os.File
@@ -68,13 +69,14 @@ type logger struct {
 }
 
 type IShellPlugin interface {
-	Execute(context context.T, config agentContracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler, dataChannel datachannel.IDataChannel, shellProps mgsContracts.ShellProperties)
+	Execute(config agentContracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler, dataChannel datachannel.IDataChannel, shellProps mgsContracts.ShellProperties)
 	InputStreamMessageHandler(log log.T, streamDataMessage mgsContracts.AgentMessage) error
 }
 
 // NewPlugin returns a new instance of the Shell Plugin
-func NewPlugin(name string) (*ShellPlugin, error) {
+func NewPlugin(context context.T, name string) (*ShellPlugin, error) {
 	var plugin = ShellPlugin{
+		context:   context,
 		name:      name,
 		runAsUser: appconfig.DefaultRunAsUserName,
 		logger: logger{
@@ -86,20 +88,19 @@ func NewPlugin(name string) (*ShellPlugin, error) {
 }
 
 // validate validates the cloudwatch and s3 configurations.
-func (p *ShellPlugin) validate(context context.T, config agentContracts.Configuration) error {
-
-	log := context.Log()
+func (p *ShellPlugin) validate(config agentContracts.Configuration) error {
+	log := p.context.Log()
 	if config.CloudWatchLogGroup != "" {
 		var logGroup *cloudwatchlogs.LogGroup
 		var logGroupExists bool
-		if logGroupExists, logGroup = p.logger.cwl.IsLogGroupPresent(context.Log(), config.CloudWatchLogGroup); !logGroupExists {
+		if logGroupExists, logGroup = p.logger.cwl.IsLogGroupPresent(config.CloudWatchLogGroup); !logGroupExists {
 			log.Warnf("The CloudWatch log group specified in session preferences either does not exist or unable to validate its existence. " +
 				"This might result in no logging of session data to CloudWatch.")
 			p.logger.streamLogsToCloudWatch = false
 		}
 
 		if config.CloudWatchEncryptionEnabled {
-			if encrypted, err := p.logger.cwl.IsLogGroupEncryptedWithKMS(context.Log(), logGroup); err != nil {
+			if encrypted, err := p.logger.cwl.IsLogGroupEncryptedWithKMS(logGroup); err != nil {
 				return fmt.Errorf("Couldn't start the session because we are unable to validate encryption on CloudWatch Logs log group. Error: %v", err)
 			} else if !encrypted {
 				return errors.New(mgsConfig.CloudWatchEncryptionErrorMsg)
@@ -107,7 +108,7 @@ func (p *ShellPlugin) validate(context context.T, config agentContracts.Configur
 		}
 
 		if p.logger.streamLogsToCloudWatch {
-			if logStreamingSupported, err := p.isLogStreamingSupported(context.Log()); !logStreamingSupported {
+			if logStreamingSupported, err := p.isLogStreamingSupported(p.context.Log()); !logStreamingSupported {
 				log.Warn(err.Error())
 				p.logger.streamLogsToCloudWatch = false
 			}
@@ -115,7 +116,7 @@ func (p *ShellPlugin) validate(context context.T, config agentContracts.Configur
 	}
 
 	if config.OutputS3BucketName != "" && config.S3EncryptionEnabled {
-		if encrypted, err := p.logger.s3Util.IsBucketEncrypted(context.Log(), config.OutputS3BucketName); err != nil {
+		if encrypted, err := p.logger.s3Util.IsBucketEncrypted(p.context.Log(), config.OutputS3BucketName); err != nil {
 			return fmt.Errorf("Couldn't start the session because we are unable to validate encryption on Amazon S3 bucket. Error: %v", err)
 		} else if !encrypted {
 			return errors.New(mgsConfig.S3EncryptionErrorMsg)
@@ -127,14 +128,14 @@ func (p *ShellPlugin) validate(context context.T, config agentContracts.Configur
 // Execute starts pseudo terminal.
 // It reads incoming message from data channel and writes to pty.stdin.
 // It reads message from pty.stdout and writes to data channel
-func (p *ShellPlugin) Execute(context context.T,
+func (p *ShellPlugin) Execute(
 	config agentContracts.Configuration,
 	cancelFlag task.CancelFlag,
 	output iohandler.IOHandler,
 	dataChannel datachannel.IDataChannel,
 	shellProps mgsContracts.ShellProperties) {
 
-	log := context.Log()
+	log := p.context.Log()
 	p.dataChannel = dataChannel
 	defer func() {
 		if err := p.stop(log); err != nil {
@@ -152,7 +153,7 @@ func (p *ShellPlugin) Execute(context context.T,
 	} else if cancelFlag.Canceled() {
 		output.MarkAsCancelled()
 	} else {
-		p.execute(context, config, cancelFlag, output, shellProps)
+		p.execute(config, cancelFlag, output, shellProps)
 	}
 }
 
@@ -169,19 +170,19 @@ var startPty = func(
 // execute starts pseudo terminal.
 // It reads incoming message from data channel and writes to pty.stdin.
 // It reads message from pty.stdout and writes to data channel
-func (p *ShellPlugin) execute(context context.T,
+func (p *ShellPlugin) execute(
 	config agentContracts.Configuration,
 	cancelFlag task.CancelFlag,
 	output iohandler.IOHandler,
 	shellProps mgsContracts.ShellProperties) {
 
 	// Initialization
-	log := context.Log()
+	log := p.context.Log()
 	sessionPluginResultOutput := mgsContracts.SessionPluginResultOutput{}
 	p.initializeLogger(log, config)
 
 	// Validate session configuration before starting
-	if err := p.validate(context, config); err != nil {
+	if err := p.validate(config); err != nil {
 		output.SetExitCode(appconfig.ErrorExitCode)
 		output.SetStatus(agentContracts.ResultStatusFailed)
 		sessionPluginResultOutput.Output = err.Error()
@@ -253,7 +254,7 @@ func (p *ShellPlugin) execute(context context.T,
 	}
 
 	// Start logging activity like streaming to CW
-	p.startStreamingLogs(log, ipcFile, config)
+	p.startStreamingLogs(ipcFile, config)
 
 	// Wait for session to be completed/cancelled/interrupted
 	select {
@@ -308,7 +309,7 @@ func (p *ShellPlugin) execute(context context.T,
 	}
 
 	// Finish logger activity like uploading logs to S3/CW
-	p.finishLogging(log, config, output, sessionPluginResultOutput, ipcFile)
+	p.finishLogging(config, output, sessionPluginResultOutput, ipcFile)
 
 	log.Debug("Shell session execution complete")
 }
@@ -317,13 +318,13 @@ func (p *ShellPlugin) execute(context context.T,
 func (p *ShellPlugin) initializeLogger(log log.T, config agentContracts.Configuration) {
 	if config.OutputS3BucketName != "" {
 		var err error
-		p.logger.s3Util, err = s3util.NewAmazonS3Util(log, config.OutputS3BucketName)
+		p.logger.s3Util, err = s3util.NewAmazonS3Util(p.context, config.OutputS3BucketName)
 		if err != nil {
 			log.Warnf("S3 client initialization failed, err: %v", err)
 		}
 	}
 	if config.CloudWatchLogGroup != "" && p.logger.cwl == nil {
-		p.logger.cwl = cloudwatchlogspublisher.NewCloudWatchLogsService(log)
+		p.logger.cwl = cloudwatchlogspublisher.NewCloudWatchLogsService(p.context)
 	}
 
 	// Set CW streaming as true if log group provided and streaming enabled
@@ -445,9 +446,9 @@ func (p *ShellPlugin) processStdoutData(
 
 // startStreamingLogs starts streaming of logs to CloudWatch
 func (p *ShellPlugin) startStreamingLogs(
-	log log.T,
 	ipcFile *os.File,
 	config agentContracts.Configuration) (err error) {
+	log := p.context.Log()
 
 	// do nothing if streaming is disabled
 	if !p.logger.streamLogsToCloudWatch {
@@ -470,7 +471,6 @@ func (p *ShellPlugin) startStreamingLogs(
 	// starts streaming
 	go func() {
 		p.logger.cloudWatchStreamingFinished <- p.logger.cwl.StreamData(
-			log,
 			config.CloudWatchLogGroup,
 			config.SessionId,
 			streamingFilePath,
@@ -492,11 +492,11 @@ func (p *ShellPlugin) startStreamingLogs(
 
 // finishLogging generates and uploads logs to S3/CW, terminates streaming to CW if enabled
 func (p *ShellPlugin) finishLogging(
-	log log.T,
 	config agentContracts.Configuration,
 	output iohandler.IOHandler,
 	sessionPluginResultOutput mgsContracts.SessionPluginResultOutput,
 	ipcFile *os.File) {
+	log := p.context.Log()
 
 	// Generate log data only if customer has either enabled S3 logging or CW logging with streaming disabled
 	if config.OutputS3BucketName != "" || (config.CloudWatchLogGroup != "" && !config.CloudWatchStreamingEnabled) {
@@ -519,7 +519,6 @@ func (p *ShellPlugin) finishLogging(
 		if config.CloudWatchLogGroup != "" && !config.CloudWatchStreamingEnabled {
 			log.Debug("Starting CloudWatch logging")
 			p.logger.cwl.StreamData(
-				log,
 				config.CloudWatchLogGroup,
 				config.SessionId,
 				p.logger.logFilePath,

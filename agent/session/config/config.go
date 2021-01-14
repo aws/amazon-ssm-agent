@@ -17,6 +17,7 @@ package config
 import (
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/rip"
 )
 
@@ -81,6 +82,6 @@ const (
 	S3EncryptionErrorMsg                             = "We couldn't start the session because encryption is not set up on the selected Amazon S3 bucket. Either encrypt the bucket or choose an option to enable logging without encryption."
 )
 
-var GetMgsEndpointFromRip = func(region string) string {
-	return rip.GetMgsEndpoint(region)
+var GetMgsEndpointFromRip = func(context context.T, region string) string {
+	return rip.GetMgsEndpoint(context, region)
 }

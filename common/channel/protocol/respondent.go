@@ -17,25 +17,28 @@ package protocol
 import (
 	"errors"
 	"fmt"
+	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 	"path/filepath"
 
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/common/channel/utils"
 	"github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc"
 	"github.com/aws/amazon-ssm-agent/common/message"
 )
 
 // GetRespondentInstance returns the respondent instance
-func GetRespondentInstance(log log.T) *respondent {
+func GetRespondentInstance(log log.T, identity identity.IAgentIdentity) *respondent {
 	return &respondent{
-		log: log,
+		log:      log,
+		identity: identity,
 	}
 }
 
 // respondent implements respondent actions from surveyor-respondent pattern
 type respondent struct {
 	log         log.T
+	identity    identity.IAgentIdentity
 	fileChannel filewatcherbasedipc.IPCChannel
 	socketType  utils.SocketType
 }
@@ -102,10 +105,10 @@ func (res *respondent) Listen(path string) error {
 func (res *respondent) Dial(path string) error {
 	channelName := filepath.Base(path)
 	// added to make sure that respondent should not create file channel
-	if isPresent, err := filewatcherbasedipc.IsFileWatcherChannelPresent(channelName); !isPresent {
+	if isPresent, err := filewatcherbasedipc.IsFileWatcherChannelPresent(res.identity, channelName); !isPresent {
 		return fmt.Errorf("file channel not present to dial : %v", err)
 	}
-	channel, err, _ := filewatcherbasedipc.CreateFileWatcherChannel(res.log, filewatcherbasedipc.ModeRespondent, channelName, true)
+	channel, err, _ := filewatcherbasedipc.CreateFileWatcherChannel(res.log, res.identity, filewatcherbasedipc.ModeRespondent, channelName, true)
 	res.fileChannel = channel
 	return err
 }

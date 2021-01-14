@@ -26,13 +26,12 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/docmanager"
 	"github.com/aws/amazon-ssm-agent/agent/framework/docparser"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/go-yaml/yaml"
 )
 
 type ExecDocument interface {
-	ParseDocument(log log.T, documentRaw []byte, orchestrationDir string,
+	ParseDocument(context context.T, documentRaw []byte, orchestrationDir string,
 		s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string,
 		params map[string]interface{}) (pluginsInfo []contracts.PluginState, err error)
 	ExecuteDocument(config contracts.Configuration, context context.T, pluginInput []contracts.PluginState, documentID string,
@@ -45,9 +44,10 @@ type ExecDocumentImpl struct {
 
 // ParseDocument parses the remote document obtained to a format that the executor can use.
 // This function is also responsible for all the validation of document and replacement of parameters
-func (exec ExecDocumentImpl) ParseDocument(log log.T, documentRaw []byte, orchestrationDir string,
+func (exec ExecDocumentImpl) ParseDocument(context context.T, documentRaw []byte, orchestrationDir string,
 	s3Bucket string, s3KeyPrefix string, messageID string, documentID string, defaultWorkingDirectory string,
 	params map[string]interface{}) (pluginsInfo []contracts.PluginState, err error) {
+	log := context.Log()
 	docContent := docparser.DocContent{}
 	if err := json.Unmarshal(documentRaw, &docContent); err != nil {
 		if err := yaml.Unmarshal(documentRaw, &docContent); err != nil {
@@ -64,7 +64,7 @@ func (exec ExecDocumentImpl) ParseDocument(log log.T, documentRaw []byte, orches
 		DefaultWorkingDir: defaultWorkingDirectory,
 	}
 
-	pluginsInfo, err = docContent.ParseDocument(log, contracts.DocumentInfo{}, parserInfo, params)
+	pluginsInfo, err = docContent.ParseDocument(context, contracts.DocumentInfo{}, parserInfo, params)
 	log.Debug("Parsed document - ", docContent)
 	log.Debug("Plugins Info - ", pluginsInfo)
 	return
@@ -93,7 +93,7 @@ func (exec ExecDocumentImpl) ExecuteDocument(config contracts.Configuration, con
 		InstancePluginsInformation: pluginInput,
 	}
 	//specify the sub-document's bookkeeping location
-	instanceID, err := instance.InstanceID()
+	instanceID, err := context.Identity().InstanceID()
 	if err != nil {
 		log.Error("failed to load instance id")
 		return resultChannels, err

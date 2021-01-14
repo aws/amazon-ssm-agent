@@ -15,7 +15,6 @@
 package mocks
 
 import (
-	context "github.com/aws/amazon-ssm-agent/agent/context"
 	contracts "github.com/aws/amazon-ssm-agent/agent/contracts"
 	health "github.com/aws/amazon-ssm-agent/agent/health"
 	mock "github.com/stretchr/testify/mock"
@@ -48,12 +47,12 @@ func (_m *IHealthCheck) GetAgentState() (health.AgentState, error) {
 }
 
 // ModuleExecute provides a mock function with given fields: _a0
-func (_m *IHealthCheck) ModuleExecute(_a0 context.T) error {
-	ret := _m.Called(_a0)
+func (_m *IHealthCheck) ModuleExecute() error {
+	ret := _m.Called()
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(context.T) error); ok {
-		r0 = rf(_a0)
+	if rf, ok := ret.Get(0).(func() error); ok {
+		r0 = rf()
 	} else {
 		r0 = ret.Error(0)
 	}

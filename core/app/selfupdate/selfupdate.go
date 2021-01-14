@@ -59,8 +59,6 @@ type SelfUpdate struct {
 	updateSchedulerTimer chan bool
 }
 
-var regionGetter = platform.Region
-var instanceidGetter = platform.InstanceID
 var platformNameGetter = platform.PlatformName
 var nanoChecker = platform.IsPlatformNanoServer
 var execCommand = exec.Command
@@ -139,7 +137,7 @@ func (u *SelfUpdate) scheduleSelfUpdateS3Job(log logger.T) {
 func (u *SelfUpdate) selfupdateWithS3(log logger.T) {
 	log.Debugf("Start scheduling job for s3 based self update")
 
-	instanceId, _ := platform.InstanceID()
+	instanceId, _ := u.context.Identity().InstanceID()
 	hash := fnv.New32a()
 	hash.Write([]byte(instanceId))
 	rand.Seed(time.Now().UTC().UnixNano() + int64(hash.Sum32()))
@@ -205,13 +203,13 @@ func (u *SelfUpdate) updateFromS3() (err error) {
 		}
 	}()
 
-	if region, err = regionGetter(); err != nil {
+	if region, err = u.context.Identity().Region(); err != nil {
 		log.Errorf("Self update failed to get region from platform package, %s", err)
 		log.WriteEvent(logger.AgentUpdateResultMessage, "", u.generateEventCode(updateutil.ErrorInitializationFailed))
 		return
 	}
 
-	if instanceId, err = instanceidGetter(); err != nil {
+	if instanceId, err = u.context.Identity().InstanceID(); err != nil {
 		log.Errorf("Self update failed to get the instance id, %v", err)
 		log.WriteEvent(logger.AgentUpdateResultMessage, "", u.generateEventCode(updateutil.ErrorInitializationFailed))
 		return
@@ -392,7 +390,7 @@ func (u *SelfUpdate) unCompress(log logger.T,
 func (u *SelfUpdate) generateDownloadUpdaterURL(log logger.T, region string, fileName string) (url string) {
 	var urlFormat string
 
-	if dynamicS3Endpoint := platform.GetDefaultEndPoint(region, "s3"); dynamicS3Endpoint != "" {
+	if dynamicS3Endpoint := u.context.Identity().GetDefaultEndpoint("s3"); dynamicS3Endpoint != "" {
 		urlFormat = "https://" + dynamicS3Endpoint + UrlPath
 	} else {
 		// could not retrieve the default s3 endpoint, generate endpoint from region information
@@ -409,7 +407,7 @@ func (u *SelfUpdate) generateDownloadUpdaterURL(log logger.T, region string, fil
 
 func (u *SelfUpdate) generateDownloadManifestURL(log logger.T, region string) (manifestUrl string) {
 
-	if dynamicS3Endpoint := platform.GetDefaultEndPoint(region, "s3"); dynamicS3Endpoint != "" {
+	if dynamicS3Endpoint := u.context.Identity().GetDefaultEndpoint("s3"); dynamicS3Endpoint != "" {
 		manifestUrl = "https://" + dynamicS3Endpoint + ManifestPath
 	} else {
 		// could not retrieve the default s3 endpoint, generate endpoint from region information

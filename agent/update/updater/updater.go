@@ -24,7 +24,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
-	ssmlog "github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
+	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	"github.com/aws/amazon-ssm-agent/agent/update/processor"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/common/identity"
@@ -41,9 +41,9 @@ const (
 )
 
 var (
-	log           logger.T
-	updater       processor.T
-	agentIdentity identity.IAgentIdentity
+	updater      processor.T
+	log          logger.T
+	agentContext context.T
 )
 
 var (
@@ -65,31 +65,10 @@ var (
 	selfUpdate      *bool
 )
 
+var newAgentIdentity = identity.NewAgentIdentity
+
 func init() {
-	var err error
 	log = ssmlog.GetUpdaterLogger(logger.DefaultLogDir, defaultLogFileName)
-
-	// Initialize agent config for agent identity
-	appConfig, err := appconfig.Config(true)
-	if err != nil {
-		log.Warnf("Failed to load agent config: %v", err)
-	}
-	// Create identity selector
-	selector := identity.NewDefaultAgentIdentitySelector(log)
-	agentIdentity, err = identity.NewAgentIdentity(log, &appConfig, selector)
-	if err != nil {
-		log.Errorf("Failed to assume agent identity: %v", err)
-		os.Exit(1)
-	}
-
-	agentContext := context.Default(log, appConfig, agentIdentity)
-
-
-	// Sleep 3 seconds to allow agent to finishing up it's work
-	time.Sleep(defaultWaitTimeForAgentToFinish * time.Second)
-
-	// TODO: Use agentContext in updater processor
-	updater = processor.NewUpdater()
 
 	// Load update detail from command line
 	update = flag.Bool(updateutil.UpdateCmd, false, "current Agent Version")
@@ -114,20 +93,35 @@ func init() {
 
 }
 
-// Config holds Runtime info of plugins.
-type Config struct {
-	Instances map[string]string
-}
-
 func main() {
 	defer log.Close()
 	defer log.Flush()
+
+	// Initialize agent config for agent identity
+	appConfig, err := appconfig.Config(true)
+	if err != nil {
+		log.Warnf("Failed to load agent config: %v", err)
+	}
+	// Create identity selector
+	selector := identity.NewDefaultAgentIdentitySelector(log)
+	agentIdentity, err := newAgentIdentity(log, &appConfig, selector)
+	if err != nil {
+		log.Errorf("Failed to assume agent identity: %v", err)
+		os.Exit(1)
+	}
+
+	agentContext = context.Default(log, appConfig, agentIdentity)
+
+	// Sleep 3 seconds to allow agent to finishing up it's work
+	time.Sleep(defaultWaitTimeForAgentToFinish * time.Second)
+
+	updater = processor.NewUpdater(agentContext)
 
 	// If the updater already owns the lockfile, no harm done
 	// If there is no lockfile, the updater will own it
 	// If the updater is unable to lock the file, we retry and then fail
 	lock, _ := lockfile.New(appconfig.UpdaterPidLockfile)
-	err := lock.TryLockExpireWithRetry(updateutil.UpdateLockFileMinutes)
+	err = lock.TryLockExpireWithRetry(updateutil.UpdateLockFileMinutes)
 
 	if err != nil {
 		if err == lockfile.ErrBusy {
@@ -154,7 +148,7 @@ func main() {
 		log.Infof("Starting getting self update required information")
 
 		if *sourceLocation, *sourceHash, *targetVersion, *targetLocation, *targetHash, *manifestURL, *manifestPath, err =
-			updateutil.PrepareResourceForSelfUpdate(log, *manifestURL, *sourceVersion); err != nil {
+			updateutil.PrepareResourceForSelfUpdate(agentContext, *manifestURL, *sourceVersion); err != nil {
 			log.Errorf(err.Error())
 			return
 		}
@@ -237,21 +231,21 @@ func main() {
 	log.Infof("Update root is: %v", detail.UpdateRoot)
 
 	// Load UpdateContext from local storage, set current update with the new UpdateDetail
-	context, err := updater.InitializeUpdate(log, detail)
+	updateContext, err := updater.InitializeUpdate(log, detail)
 	if err != nil {
 		log.Errorf(err.Error())
 		return
 	}
 
 	// Recover updater if panic occurs and fail the updater
-	defer recoverUpdaterFromPanic(context)
+	defer recoverUpdaterFromPanic(updateContext)
 
 	// Start or resume update
-	if err = updater.StartOrResumeUpdate(log, context); err != nil { // We do not send any error above this to ICS/MGS except panic message
+	if err = updater.StartOrResumeUpdate(log, updateContext); err != nil { // We do not send any error above this to ICS/MGS except panic message
 		// Rolled back, but service cannot start, Update failed.
-		updater.Failed(context, log, updateutil.ErrorUnexpected, err.Error(), false)
+		updater.Failed(updateContext, log, updateutil.ErrorUnexpected, err.Error(), false)
 	} else {
-		log.Infof(context.Current.StandardOut)
+		log.Infof(updateContext.Current.StandardOut)
 	}
 
 }
@@ -278,7 +272,7 @@ func resolveUpdateDetail(detail *processor.UpdateDetail) error {
 func recoverUpdaterFromPanic(context *processor.UpdateContext) {
 	// recover in case the updater panics
 	if err := recover(); err != nil {
-		log.Errorf("recovered from panic for updater %v!", err)
-		updater.Failed(context, log, updateutil.ErrorUnexpectedThroughPanic, fmt.Sprintf("%v", err), false)
+		agentContext.Log().Errorf("recovered from panic for updater %v!", err)
+		updater.Failed(context, agentContext.Log(), updateutil.ErrorUnexpectedThroughPanic, fmt.Sprintf("%v", err), false)
 	}
 }

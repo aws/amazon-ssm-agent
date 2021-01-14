@@ -24,20 +24,23 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/common/channel/utils"
 	"github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/amazon-ssm-agent/common/message"
 	"go.nanomsg.org/mangos/v3"
 )
 
 // GetRespondentInstance returns the surveyor instance
-func GetSurveyInstance(log log.T) *survey {
+func GetSurveyInstance(log log.T, identity identity.IAgentIdentity) *survey {
 	return &survey{
-		log: log,
+		log:      log,
+		identity: identity,
 	}
 }
 
 // survey implements surveyor actions from surveyor-respondent pattern
 type survey struct {
 	log                        log.T
+	identity                   identity.IAgentIdentity
 	fileChannel                filewatcherbasedipc.IPCChannel
 	optionSurveyTimeoutSeconds time.Duration
 	socketType                 utils.SocketType
@@ -119,7 +122,7 @@ func (sur *survey) SetOption(name string, value interface{}) (err error) {
 // Listen creates a new channel in the main worker side
 func (sur *survey) Listen(address string) error {
 	sur.address = address
-	channel, err, _ := filewatcherbasedipc.CreateFileWatcherChannel(sur.log, filewatcherbasedipc.ModeSurveyor, filepath.Base(address), false)
+	channel, err, _ := filewatcherbasedipc.CreateFileWatcherChannel(sur.log, sur.identity, filewatcherbasedipc.ModeSurveyor, filepath.Base(address), false)
 	sur.fileChannel = channel
 	return err
 }

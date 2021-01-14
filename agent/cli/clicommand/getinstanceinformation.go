@@ -21,10 +21,12 @@ import (
 	"strings"
 	"text/template"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/cli/cliutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
+	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/version"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 )
 
 const (
@@ -77,14 +79,23 @@ func (c *GetInstanceInformationCommand) Execute(subcommands []string, parameters
 		return errors.New(strings.Join(validation, "\n")), ""
 	}
 
+	// TODO: Move this higher in the ssm-cli
+	log := logger.NewMockLog()
+	config, _ := appconfig.Config(true)
+	selector := identity.NewDefaultAgentIdentitySelector(log)
+	agentIdentity, err := identity.NewAgentIdentity(log, &config, selector)
+	if err != nil {
+		return err, ""
+	}
+
 	information := make(map[string]string)
-	if region, err := platform.Region(); err != nil {
+	if region, err := agentIdentity.Region(); err != nil {
 		return err, ""
 	} else {
 		information["region"] = region
 	}
 
-	if instanceId, err := platform.InstanceID(); err != nil {
+	if instanceId, err := agentIdentity.InstanceID(); err != nil {
 		return err, ""
 	} else {
 		information["instance-id"] = instanceId

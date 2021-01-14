@@ -19,8 +19,7 @@ import (
 	"path"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
-	"github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/amazon-ssm-agent/common/message"
 )
 
@@ -37,6 +36,10 @@ const (
 	ErrorListenDial = "invoke listen or dial before this call"
 )
 
+const (
+	DefaultFileChannelPath   = "channels"
+)
+
 // ICommProtocol interface is for implementing communication protocols
 type IFileChannelCommProtocol interface {
 	Initialize()
@@ -49,18 +52,18 @@ type IFileChannelCommProtocol interface {
 	GetCommProtocolInfo() SocketType
 }
 
-// getDefaultChannelPath returns channel path
-func getDefaultChannelPath(fileAddress string) (string, error) {
-	instanceID, err := platform.InstanceID()
+// GetDefaultChannelPath returns channel path
+func GetDefaultChannelPath(identity identity.IAgentIdentity, fileAddress string) (string, error) {
+	shortInstanceID, err := identity.ShortInstanceID()
 	if err != nil {
 		return "", err
 	}
-	return path.Join(appconfig.DefaultDataStorePath, instanceID, filewatcherbasedipc.DefaultFileChannelPath, path.Base(fileAddress)), nil
+	return path.Join(appconfig.DefaultDataStorePath, shortInstanceID, DefaultFileChannelPath, path.Base(fileAddress)), nil
 }
 
 // IsDefaultChannelPresent verifies whether the channel directory is present or not
-func IsDefaultChannelPresent() bool {
-	ipcPath, fileErr := getDefaultChannelPath(message.GetWorkerHealthChannel)
+func IsDefaultChannelPresent(identity identity.IAgentIdentity) bool {
+	ipcPath, fileErr := GetDefaultChannelPath(identity, message.GetWorkerHealthChannel)
 	if fileErr != nil {
 		return false
 	}

@@ -18,6 +18,7 @@ import (
 	"errors"
 	"strings"
 
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
 )
@@ -34,8 +35,8 @@ type SsmParameterService struct {
 }
 
 // NewService creates an instance of the SsmParameterService.
-func NewService(log log.T) (service ISsmParameterService) {
-	return &SsmParameterService{sdk: ssm.NewService(log)}
+func NewService(context context.T) (service ISsmParameterService) {
+	return &SsmParameterService{sdk: ssm.NewService(context)}
 }
 
 // This function takes a list of at most maxParametersRetrievedFromSsm(=10) ssm parameter name references like (ssm:name).

@@ -116,8 +116,8 @@ func loadManifestFromFile(t *testing.T, fileName string) (manifest *Manifest) {
 	return manifest
 }
 
-func mockInstanceContext() *updateutil.InstanceContext {
-	return &updateutil.InstanceContext{
+func mockInstanceContext() *updateutil.InstanceInfo {
+	return &updateutil.InstanceInfo{
 		Region:         "us-east-1",
 		Platform:       "linux",
 		InstallerName:  "linux",

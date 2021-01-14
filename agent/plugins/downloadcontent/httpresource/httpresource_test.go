@@ -26,8 +26,8 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	filemock "github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager/mock"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/httpresource/handler"
 	httpMock "github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/httpresource/handler/mock"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/types"
@@ -36,7 +36,8 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-var logMock = log.NewMockLog()
+var contextMock = context.NewMockDefault()
+var logMock = contextMock.Log()
 
 func getString(obj interface{}) string {
 	return fmt.Sprintf("%v", obj)
@@ -57,6 +58,7 @@ func getTestResource(url url.URL, authMethod, user, password string, allowInsecu
 	httpClient.CloseIdleConnections()
 
 	return HTTPResource{
+		context: contextMock,
 		Handler: handler.NewHTTPHandler(httpClient, url, allowInsecureDownload, handler.HTTPAuthConfig{
 			AuthMethod: types.NewTrimmedString(authMethod),
 			Username:   types.NewTrimmedString(user),
@@ -106,7 +108,7 @@ func TestNewHTTPResource(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		resource, err := NewHTTPResource(logMock, test.sourceInfo, bridgemock.GetSsmParamResolverBridge(map[string]string{}))
+		resource, err := NewHTTPResource(contextMock, test.sourceInfo, bridgemock.GetSsmParamResolverBridge(map[string]string{}))
 
 		if test.err != nil {
 			assert.Error(t, err, getString(test))
@@ -237,6 +239,7 @@ func TestHTTPResource_ValidateLocationInfo(t *testing.T) {
 	httpHandlerMock.On("Validate").Return(true, nil).Once()
 
 	resource := HTTPResource{
+		context: contextMock,
 		Handler: &httpHandlerMock,
 	}
 
@@ -256,9 +259,10 @@ func TestHTTPResource_DownloadRemoteResource(t *testing.T) {
 	httpHandlerMock.On("Download", logMock, fileSystemMock, destPath).Return(destPath, nil).Once()
 
 	resource := HTTPResource{
+		context: contextMock,
 		Handler: &httpHandlerMock,
 	}
-	err, result := resource.DownloadRemoteResource(logMock, fileSystemMock, destPath)
+	err, result := resource.DownloadRemoteResource(fileSystemMock, destPath)
 
 	assert.NoError(t, err)
 	assert.Equal(t, []string{destPath}, result.Files)

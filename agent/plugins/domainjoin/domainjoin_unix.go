@@ -31,7 +31,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
@@ -66,12 +65,12 @@ const (
 // Makes command as variables, so that we can mock this for unit tests
 var makeDir = fileutil.MakeDirs
 var makeArgs = makeArguments
-var getRegion = platform.Region
 var utilExe convert
 var createOrchesDir = createOrchestrationDir
 
 // Plugin is the type for the domain join plugin.
 type Plugin struct {
+	context context.T
 }
 
 // DomainJoinPluginInput represents one set of commands executed by the Domain join plugin.
@@ -85,9 +84,10 @@ type DomainJoinPluginInput struct {
 }
 
 // NewPlugin returns a new instance of the plugin.
-func NewPlugin() (*Plugin, error) {
-	var plugin Plugin
-	return &plugin, nil
+func NewPlugin(context context.T) (*Plugin, error) {
+	return &Plugin{
+		context: context,
+	}, nil
 }
 
 // Name returns the plugin name
@@ -97,8 +97,8 @@ func Name() string {
 
 type convert func(log.T, string, []string, string, string, io.Writer, io.Writer, bool) (string, error)
 
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
-	log := context.Log()
+func (p *Plugin) Execute(config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
+	log := p.context.Log()
 	log.Infof("%v started with configuration %v", Name(), config)
 
 	var properties map[string]interface{}
@@ -113,7 +113,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	} else {
 		util := updateutil.Utility{CustomUpdateExecutionTimeoutInSeconds: UpdateExecutionTimeoutInSeconds}
 		utilExe = util.NewExeCommandOutput
-		p.runCommandsRawInput(log, config.PluginID, properties, config.OrchestrationDirectory, cancelFlag, output, utilExe)
+		p.runCommandsRawInput(config.PluginID, properties, config.OrchestrationDirectory, cancelFlag, output, utilExe)
 
 		if output.GetStatus() == contracts.ResultStatusFailed {
 			output.AppendInfo("Domain join failed.")
@@ -127,17 +127,17 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 
 // runCommandsRawInput executes one set of commands and returns their output.
 // The input is in the default json unmarshal format (e.g. map[string]interface{}).
-func (p *Plugin) runCommandsRawInput(log log.T, pluginID string, rawPluginInput map[string]interface{}, orchestrationDirectory string, cancelFlag task.CancelFlag, output iohandler.IOHandler, utilExe convert) {
+func (p *Plugin) runCommandsRawInput(pluginID string, rawPluginInput map[string]interface{}, orchestrationDirectory string, cancelFlag task.CancelFlag, output iohandler.IOHandler, utilExe convert) {
 	var pluginInput DomainJoinPluginInput
 	err := jsonutil.Remarshal(rawPluginInput, &pluginInput)
-	log.Debugf("Plugin input %v", pluginInput)
+	p.context.Log().Debugf("Plugin input %v", pluginInput)
 
 	if err != nil {
 		errorString := fmt.Errorf("Invalid format in plugin properties %v;\nerror %v", rawPluginInput, err)
 		output.MarkAsFailed(errorString)
 		return
 	}
-	p.runCommands(log, pluginID, pluginInput, orchestrationDirectory, cancelFlag, output, utilExe)
+	p.runCommands(pluginID, pluginInput, orchestrationDirectory, cancelFlag, output, utilExe)
 }
 
 // createOrchestrationDir Make orchestration dir to copy domainjoin script
@@ -162,10 +162,10 @@ func createOrchestrationDir(log log.T, orchestrationDir string, pluginInput Doma
 }
 
 // runCommands executes the command and returns the output.
-func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput DomainJoinPluginInput, orchestrationDirectory string, cancelFlag task.CancelFlag, out iohandler.IOHandler, utilExe convert) {
+func (p *Plugin) runCommands(pluginID string, pluginInput DomainJoinPluginInput, orchestrationDirectory string, cancelFlag task.CancelFlag, out iohandler.IOHandler, utilExe convert) {
 	var err error
 	var scriptPath string
-
+	log := p.context.Log()
 	if scriptPath, err = createOrchesDir(log, orchestrationDirectory, pluginInput); err != nil {
 		out.MarkAsFailed(fmt.Errorf("Failed to create orchestration directory because : %v", err.Error()))
 		return
@@ -175,7 +175,7 @@ func (p *Plugin) runCommands(log log.T, pluginID string, pluginInput DomainJoinP
 
 	// Construct Command line with executable file name and parameters
 	var command string
-	if command, err = makeArgs(log, scriptPath, pluginInput); err != nil {
+	if command, err = makeArgs(p.context, scriptPath, pluginInput); err != nil {
 		out.MarkAsFailed(fmt.Errorf("Failed to build domain join command because : %v", err.Error()))
 		return
 	}
@@ -237,10 +237,11 @@ func isMatchingIPAddress(arg string) bool {
 }
 
 // makeArguments Build the arguments for domain join plugin
-func makeArguments(log log.T, scriptPath string, pluginInput DomainJoinPluginInput) (commandArguments string, err error) {
+func makeArguments(context context.T, scriptPath string, pluginInput DomainJoinPluginInput) (commandArguments string, err error) {
 
 	var buffer bytes.Buffer
 	buffer.WriteString(scriptPath)
+	log := context.Log()
 
 	// required parameters for the domain join plugin
 	if len(pluginInput.DirectoryId) == 0 {
@@ -265,7 +266,7 @@ func makeArguments(log log.T, scriptPath string, pluginInput DomainJoinPluginInp
 	buffer.WriteString(pluginInput.DirectoryName)
 
 	buffer.WriteString(InstanceRegionArg)
-	region, err := getRegion()
+	region, err := context.Identity().Region()
 	if err != nil {
 		return "", fmt.Errorf("cannot get the instance region information")
 	}

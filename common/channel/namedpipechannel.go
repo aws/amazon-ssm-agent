@@ -20,6 +20,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/common/channel/utils"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/amazon-ssm-agent/common/message"
 	"go.nanomsg.org/mangos/v3"
 	"go.nanomsg.org/mangos/v3/protocol/respondent"
@@ -32,7 +33,7 @@ type namedPipeChannel struct {
 }
 
 // NewChannel creates an new instance of Channel
-func NewNamedPipeChannel(log log.T) IChannel {
+func NewNamedPipeChannel(log log.T, identity identity.IAgentIdentity) IChannel {
 	return &namedPipeChannel{
 		log: log,
 	}

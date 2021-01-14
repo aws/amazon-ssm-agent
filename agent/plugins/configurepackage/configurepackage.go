@@ -28,8 +28,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/birdwatcherservice"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/facade"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/installer"
@@ -59,7 +57,8 @@ var getConfig = appconfig.Config
 
 // Plugin is the type for the configurepackage plugin.
 type Plugin struct {
-	packageServiceSelector func(tracer trace.Tracer, input *ConfigurePackagePluginInput, localrepo localpackages.Repository, appCfg *appconfig.SsmagentConfig, bwfacade facade.BirdwatcherFacade, isDocumentArchive *bool) (packageservice.PackageService, error)
+	context                context.T
+	packageServiceSelector func(context context.T, tracer trace.Tracer, input *ConfigurePackagePluginInput, localrepo localpackages.Repository, appCfg *appconfig.SsmagentConfig, bwfacade facade.BirdwatcherFacade, isDocumentArchive *bool) (packageservice.PackageService, error)
 	localRepository        localpackages.Repository
 	birdwatcherfacade      facade.BirdwatcherFacade
 	isDocumentArchive      bool
@@ -79,10 +78,11 @@ type ConfigurePackagePluginInput struct {
 }
 
 // NewPlugin returns a new instance of the plugin.
-func NewPlugin(log log.T) (*Plugin, error) {
+func NewPlugin(context context.T) (*Plugin, error) {
 	var plugin Plugin
 
-	plugin.birdwatcherfacade = facade.NewBirdwatcherFacade(log)
+	plugin.context = context
+	plugin.birdwatcherfacade = facade.NewBirdwatcherFacade(context)
 	plugin.localRepository = localpackages.NewRepository()
 	plugin.packageServiceSelector = selectService
 	plugin.isDocumentArchive = false
@@ -454,19 +454,19 @@ func checkAlreadyInstalled(
 }
 
 // selectService chooses the implementation of PackageService to use for a given execution of the plugin
-func selectService(tracer trace.Tracer, input *ConfigurePackagePluginInput, localrepo localpackages.Repository, appCfg *appconfig.SsmagentConfig, birdwatcherFacade facade.BirdwatcherFacade, isDocumentArchive *bool) (packageservice.PackageService, error) {
-	region, _ := platform.Region()
+func selectService(context context.T, tracer trace.Tracer, input *ConfigurePackagePluginInput, localrepo localpackages.Repository, appCfg *appconfig.SsmagentConfig, birdwatcherFacade facade.BirdwatcherFacade, isDocumentArchive *bool) (packageservice.PackageService, error) {
+	region, _ := context.Identity().Region()
 	serviceEndpoint := input.Repository
 	response := &ssm.GetManifestOutput{}
 	var err error
 
-	if (appCfg != nil && appCfg.Birdwatcher.ForceEnable) || !ssms3.UseSSMS3Service(tracer, serviceEndpoint, region) {
+	if (appCfg != nil && appCfg.Birdwatcher.ForceEnable) || !ssms3.UseSSMS3Service(context, tracer, serviceEndpoint, region) {
 		// This indicates that it would be the birdwatcher service.
 		// Before creating an object of type birdwatcher here, check if the name is of document arn. If it is, return with a Document type service
 		if regexp.MustCompile(documentArnPattern).MatchString(input.Name) {
 			*isDocumentArchive = true
 			// return a new object of type document
-			return birdwatcherservice.NewDocumentArchive(birdwatcherFacade, localrepo), nil
+			return birdwatcherservice.NewDocumentArchive(context, birdwatcherFacade, localrepo), nil
 		}
 		if input.Version != "" {
 			// Birdwatcher version pattern and document version name pattern is different. If the pattern doesn't match Birdwatcher,
@@ -475,7 +475,7 @@ func selectService(tracer trace.Tracer, input *ConfigurePackagePluginInput, loca
 			if !regexp.MustCompile(birdwatcherVersionPattern).MatchString(input.Version) {
 				*isDocumentArchive = true
 				// return a new object of type document
-				return birdwatcherservice.NewDocumentArchive(birdwatcherFacade, localrepo), nil
+				return birdwatcherservice.NewDocumentArchive(context, birdwatcherFacade, localrepo), nil
 			}
 		}
 
@@ -497,7 +497,7 @@ func selectService(tracer trace.Tracer, input *ConfigurePackagePluginInput, loca
 			if strings.Contains(err.Error(), resourceNotFoundException) {
 				*isDocumentArchive = true
 				// return a new object of type document
-				return birdwatcherservice.NewDocumentArchive(birdwatcherFacade, localrepo), nil
+				return birdwatcherservice.NewDocumentArchive(context, birdwatcherFacade, localrepo), nil
 			} else {
 				tracer.CurrentTrace().AppendErrorf("Error returned for GetManifest - %v.", err.Error())
 				return nil, err
@@ -511,21 +511,21 @@ func selectService(tracer trace.Tracer, input *ConfigurePackagePluginInput, loca
 		birdWatcherArchiveContext["packageName"] = input.Name
 		birdWatcherArchiveContext["packageVersion"] = input.Version
 		birdWatcherArchiveContext["manifest"] = *response.Manifest
-		return birdwatcherservice.NewBirdwatcherArchive(birdwatcherFacade, localrepo, birdWatcherArchiveContext), nil
+		return birdwatcherservice.NewBirdwatcherArchive(context, birdwatcherFacade, localrepo, birdWatcherArchiveContext), nil
 	}
 
 	tracer.CurrentTrace().AppendInfof("S3 repository is marked active")
-	return ssms3.New(serviceEndpoint, region), nil
+	return ssms3.New(context, serviceEndpoint, region), nil
 }
 
 // Execute runs the plugin operation and returns output
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
-	p.execute(context, config, cancelFlag, output)
+func (p *Plugin) Execute(config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
+	p.execute(config, cancelFlag, output)
 	return
 }
 
-func (p *Plugin) execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
-	log := context.Log()
+func (p *Plugin) execute(config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
+	log := p.context.Log()
 	log.Info("RunCommand started with configuration ", config)
 	tracer := trace.NewTracer(log)
 	defer tracer.BeginSection("configurePackage").End()
@@ -547,7 +547,7 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 		} else {
 			appConfig = &appCfg
 		}
-		packageService, err := p.packageServiceSelector(tracer, input, p.localRepository, appConfig, p.birdwatcherfacade, &p.isDocumentArchive)
+		packageService, err := p.packageServiceSelector(p.context, tracer, input, p.localRepository, appConfig, p.birdwatcherfacade, &p.isDocumentArchive)
 		if err != nil {
 			tracer.CurrentTrace().WithError(err).End()
 			out.MarkAsFailed(nil, nil)
@@ -590,7 +590,7 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 
 				//if the status is already decided as failed or succeeded, do not execute anything
 				if out.GetStatus() != contracts.ResultStatusFailed && out.GetStatus() != contracts.ResultStatusSuccess {
-					alreadyInstalled := checkAlreadyInstalled(tracer, context, p.localRepository, installedVersion, installState, inst, uninst, &out)
+					alreadyInstalled := checkAlreadyInstalled(tracer, p.context, p.localRepository, installedVersion, installState, inst, uninst, &out)
 					// if package is not installed, set isUpdateInPlace to false so as to execute install script to install
 					if installedVersion == "" || installState == localpackages.None {
 						isUpdateInPlace = false
@@ -601,7 +601,7 @@ func (p *Plugin) execute(context context.T, config contracts.Configuration, canc
 						log.Debugf("Calling execute, current status %v", out.GetStatus())
 						executeConfigurePackage(
 							tracer,
-							context,
+							p.context,
 							p.localRepository,
 							inst,
 							uninst,

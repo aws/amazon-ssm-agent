@@ -15,30 +15,30 @@
 package ssms3
 
 import (
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 )
 
 // dependency on S3 and downloaded artifacts
 type networkDep interface {
-	ListS3Folders(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []string, err error)
-	CanGetS3Object(log log.T, amazonS3URL s3util.AmazonS3URL) bool
-	Download(log log.T, input artifact.DownloadInput) (artifact.DownloadOutput, error)
+	ListS3Folders(context context.T, amazonS3URL s3util.AmazonS3URL) (folderNames []string, err error)
+	CanGetS3Object(context context.T, amazonS3URL s3util.AmazonS3URL) bool
+	Download(context context.T, input artifact.DownloadInput) (artifact.DownloadOutput, error)
 }
 
 type networkDepImp struct{}
 
 var networkdep networkDep = &networkDepImp{}
 
-func (networkDepImp) ListS3Folders(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []string, err error) {
-	return artifact.ListS3Folders(log, amazonS3URL)
+func (networkDepImp) ListS3Folders(context context.T, amazonS3URL s3util.AmazonS3URL) (folderNames []string, err error) {
+	return artifact.ListS3Folders(context, amazonS3URL)
 }
 
-func (networkDepImp) CanGetS3Object(log log.T, amazonS3URL s3util.AmazonS3URL) bool {
-	return artifact.CanGetS3Object(log, amazonS3URL)
+func (networkDepImp) CanGetS3Object(context context.T, amazonS3URL s3util.AmazonS3URL) bool {
+	return artifact.CanGetS3Object(context, amazonS3URL)
 }
 
-func (networkDepImp) Download(log log.T, input artifact.DownloadInput) (artifact.DownloadOutput, error) {
-	return artifact.Download(log, input)
+func (networkDepImp) Download(context context.T, input artifact.DownloadInput) (artifact.DownloadOutput, error) {
+	return artifact.Download(context, input)
 }

@@ -14,6 +14,7 @@
 package windowscontainerutil
 
 import (
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/stretchr/testify/mock"
@@ -81,7 +82,7 @@ func (m *DepMock) UpdateUtilExeCommandOutput(
 	return args.String(0), args.Error(1)
 }
 
-func (m *DepMock) ArtifactDownload(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
-	args := m.Called(log, input)
+func (m *DepMock) ArtifactDownload(context context.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
+	args := m.Called(context, input)
 	return args.Get(0).(artifact.DownloadOutput), args.Error(1)
 }

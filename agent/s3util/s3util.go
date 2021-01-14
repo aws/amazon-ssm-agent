@@ -19,20 +19,16 @@ import (
 	"os"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
+
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/aws/aws-sdk-go/service/s3/s3manager"
 )
 
-var getRegion = platform.Region
 var makeAwsConfig = sdkutil.AwsConfigForRegion
-var getAppConfig = func() (appconfig.SsmagentConfig, error) {
-	return appconfig.Config(false)
-}
 var getS3Endpoint = GetS3Endpoint
 var getFallbackS3EndpointFunc = getFallbackS3Endpoint
 var getHttpProvider = func(logger log.T) HttpProvider {
@@ -50,8 +46,9 @@ type AmazonS3Util struct {
 	myUploader *s3manager.Uploader
 }
 
-func NewAmazonS3Util(log log.T, bucketName string) (res *AmazonS3Util, err error) {
-	sess, err := GetS3CrossRegionCapableSession(log, bucketName)
+func NewAmazonS3Util(context context.T, bucketName string) (res *AmazonS3Util, err error) {
+	log := context.Log()
+	sess, err := GetS3CrossRegionCapableSession(context, bucketName)
 	if err == nil {
 		res = &AmazonS3Util{
 			myUploader: s3manager.NewUploader(sess),

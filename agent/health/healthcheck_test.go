@@ -86,7 +86,7 @@ func (suite *HealthCheckTestSuite) TestModuleExecute() {
 	// Turn on the mock method
 	suite.contextMock.On("AppConfig").Return(*appconfigMock)
 	suite.serviceMock.On("UpdateInstanceInformation", mock.Anything, version.Version, "Active", AgentName).Return(nil, nil)
-	suite.healthCheck.ModuleExecute(suite.contextMock)
+	suite.healthCheck.ModuleExecute()
 	// Because ModuleExecute will launch two new go routine, wait five second to make sure the updateHealth() has launched
 	time.Sleep(100 * time.Millisecond)
 	// Assert the UpdateInstanceInformation get called in updateHealth() function, and the agent status is same as input.

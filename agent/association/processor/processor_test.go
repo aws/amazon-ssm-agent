@@ -49,13 +49,12 @@ func TestProcessAssociationUnableToGetAssociation(t *testing.T) {
 	processor := createProcessor()
 	svcMock := service.NewMockDefault()
 	assocRawData := createAssociationRawData()
-	sys = &systemStub{}
 	complianceUploader := complianceUploader.NewMockDefault()
 
 	processor.assocSvc = svcMock
 	processor.complianceUploader = complianceUploader
 
-	svcMock.On("CreateNewServiceIfUnHealthy", mock.AnythingOfType("*log.Mock"))
+	svcMock.On("CreateNewServiceIfUnHealthy", mock.AnythingOfType("*context.Mock"))
 	svcMock.On(
 		"ListInstanceAssociations",
 		mock.AnythingOfType("*log.Mock"),
@@ -79,7 +78,6 @@ func TestProcessAssociationUnableToLoadAssociationDetail(t *testing.T) {
 	svcMock := service.NewMockDefault()
 	assocRawData := createAssociationRawData()
 	parserMock := parserMock{}
-	sys = &systemStub{}
 
 	complianceUploader := complianceUploader.NewMockDefault()
 
@@ -89,7 +87,7 @@ func TestProcessAssociationUnableToLoadAssociationDetail(t *testing.T) {
 	assocParser = &parserMock
 
 	// Mock service
-	svcMock.On("CreateNewServiceIfUnHealthy", mock.AnythingOfType("*log.Mock"))
+	svcMock.On("CreateNewServiceIfUnHealthy", mock.AnythingOfType("*context.Mock"))
 	svcMock.On(
 		"ListInstanceAssociations",
 		mock.AnythingOfType("*log.Mock"),
@@ -130,7 +128,6 @@ func TestProcessAssociationUnableToParseAssociation(t *testing.T) {
 	svcMock := service.NewMockDefault()
 	assocRawData := createAssociationRawData()
 	output := ssm.UpdateInstanceAssociationStatusOutput{}
-	sys = &systemStub{}
 	complianceUploader := complianceUploader.NewMockDefault()
 
 	parserMock := parserMock{}
@@ -163,7 +160,7 @@ func TestProcessAssociationUnableToParseAssociation(t *testing.T) {
 }
 
 func mockService(svcMock *service.AssociationServiceMock, assocRawData []*model.InstanceAssociation, output *ssm.UpdateInstanceAssociationStatusOutput) {
-	svcMock.On("CreateNewServiceIfUnHealthy", mock.AnythingOfType("*log.Mock"))
+	svcMock.On("CreateNewServiceIfUnHealthy", mock.AnythingOfType("*context.Mock"))
 	svcMock.On(
 		"ListInstanceAssociations",
 		mock.AnythingOfType("*log.Mock"),
@@ -187,7 +184,6 @@ func TestProcessAssociationSuccessful(t *testing.T) {
 	svcMock := service.NewMockDefault()
 	assocRawData := createAssociationRawData()
 	output := ssm.UpdateInstanceAssociationStatusOutput{}
-	sys = &systemStub{}
 
 	payload := messageContracts.SendCommandPayload{}
 	docState := contracts.DocumentState{}

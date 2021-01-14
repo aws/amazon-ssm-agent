@@ -14,6 +14,7 @@
 package linuxcontainerutil
 
 import (
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 )
@@ -31,5 +32,5 @@ type dependencies interface {
 		stdOut string,
 		stdErr string,
 		usePlatformSpecificCommand bool) (output string, err error)
-	GetInstanceContext(log log.T) (instanceContext *updateutil.InstanceContext, err error)
+	GetInstanceInfo(context context.T) (instanceInfo *updateutil.InstanceInfo, err error)
 }

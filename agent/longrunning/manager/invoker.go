@@ -44,9 +44,9 @@ func (m *Manager) StopPlugin(name string, cancelFlag task.CancelFlag) (err error
 
 	if isRegisteredPlugin && isRunningPlugin {
 		//stop the plugin
-		if err = p.Handler.Stop(m.context, cancelFlag); err != nil {
+		if err = p.Handler.Stop(cancelFlag); err != nil {
 			// check if cloud watch exe process has been terminated manually
-			if p.Handler.IsRunning(m.context) {
+			if p.Handler.IsRunning() {
 				log.Errorf("Failed to stop long running plugin - %s because of %s", name, err)
 				return
 			}
@@ -54,7 +54,7 @@ func (m *Manager) StopPlugin(name string, cancelFlag task.CancelFlag) (err error
 		//remove the entry from the map of running plugins
 		delete(m.runningPlugins, name)
 
-		if err = dataStore.Write(m.runningPlugins); err != nil {
+		if err = m.dataStore.Write(m.runningPlugins); err != nil {
 			log.Errorf("Failed to update datastore - because of %s", err)
 		}
 
@@ -88,7 +88,7 @@ func (m *Manager) StartPlugin(name, configuration string, orchestrationDir strin
 
 	//set the config path of the long running plugin
 	p.Info.Configuration = configuration
-	if err = p.Handler.Start(m.context, p.Info.Configuration, orchestrationDir, cancelFlag, out); err != nil {
+	if err = p.Handler.Start(p.Info.Configuration, orchestrationDir, cancelFlag, out); err != nil {
 		log.Errorf("Failed to start long running plugin - %s because of %s", name, err)
 		return
 	}
@@ -104,7 +104,7 @@ func (m *Manager) StartPlugin(name, configuration string, orchestrationDir strin
 	log.Debugf("Persisting info about %s in datastore", p.Info.Name)
 
 	// TODO separate persist part and actual running part
-	if err = dataStore.Write(m.runningPlugins); err != nil {
+	if err = m.dataStore.Write(m.runningPlugins); err != nil {
 		err = fmt.Errorf("Failed to persist info about %s in datastore because : %s", p.Info.Name, err.Error())
 		log.Errorf(err.Error())
 	}

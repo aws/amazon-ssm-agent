@@ -24,7 +24,7 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/session/datachannel"
@@ -37,6 +37,7 @@ var DialCall = func(network string, address string) (net.Conn, error) {
 // BasicPortSession is the type for the port session.
 // It supports only one connection to the destination server.
 type BasicPortSession struct {
+	context            context.T
 	portSession        IPortSession
 	conn               net.Conn
 	serverPortNumber   string
@@ -47,8 +48,9 @@ type BasicPortSession struct {
 }
 
 // NewBasicPortSession returns a new instance of the BasicPortSession.
-func NewBasicPortSession(cancelled chan struct{}, portNumber string, portType string) (IPortSession, error) {
+func NewBasicPortSession(context context.T, cancelled chan struct{}, portNumber string, portType string) (IPortSession, error) {
 	var plugin = BasicPortSession{
+		context:            context,
 		serverPortNumber:   portNumber,
 		portType:           portType,
 		reconnectToPortErr: make(chan error),
@@ -63,14 +65,15 @@ func (p *BasicPortSession) IsConnectionAvailable() bool {
 }
 
 // HandleStreamMessage passes payload byte stream to opened connection
-func (p *BasicPortSession) HandleStreamMessage(log log.T, streamDataMessage mgsContracts.AgentMessage) error {
+func (p *BasicPortSession) HandleStreamMessage(streamDataMessage mgsContracts.AgentMessage) error {
+	log := p.context.Log()
 	switch mgsContracts.PayloadType(streamDataMessage.PayloadType) {
 	case mgsContracts.Output:
 		log.Tracef("Output message received: %d", streamDataMessage.SequenceNumber)
 
 		if p.reconnectToPort {
 			log.Debugf("Reconnect to port: %s", p.serverPortNumber)
-			err := p.InitializeSession(log)
+			err := p.InitializeSession()
 
 			// Pass err to reconnectToPortErr chan to unblock writePump go routine to resume reading from localhost:p.serverPortNumber
 			p.reconnectToPortErr <- err
@@ -112,7 +115,8 @@ func (p *BasicPortSession) Stop() {
 }
 
 // WritePump reads from the instance's port and writes to datachannel
-func (p *BasicPortSession) WritePump(log log.T, dataChannel datachannel.IDataChannel) (errorCode int) {
+func (p *BasicPortSession) WritePump(dataChannel datachannel.IDataChannel) (errorCode int) {
+	log := p.context.Log()
 	defer func() {
 		if err := recover(); err != nil {
 			fmt.Println("WritePump thread crashed with message: \n", err)
@@ -125,7 +129,7 @@ func (p *BasicPortSession) WritePump(log log.T, dataChannel datachannel.IDataCha
 		numBytes, err := p.conn.Read(packet)
 		if err != nil {
 			var exitCode int
-			if exitCode = p.handleTCPReadError(log, err); exitCode == mgsConfig.ResumeReadExitCode {
+			if exitCode = p.handleTCPReadError(err); exitCode == mgsConfig.ResumeReadExitCode {
 				log.Debugf("Reconnection to port %v is successful, resume reading from port.", p.serverPortNumber)
 				continue
 			}
@@ -142,7 +146,7 @@ func (p *BasicPortSession) WritePump(log log.T, dataChannel datachannel.IDataCha
 }
 
 // InitializeSession dials a connection to port
-func (p *BasicPortSession) InitializeSession(log log.T) (err error) {
+func (p *BasicPortSession) InitializeSession() (err error) {
 	if p.conn, err = DialCall("tcp", "localhost:"+p.serverPortNumber); err != nil {
 		return errors.New(fmt.Sprintf("Unable to connect to specified port: %v", err))
 	}
@@ -150,16 +154,17 @@ func (p *BasicPortSession) InitializeSession(log log.T) (err error) {
 }
 
 // handleTCPReadError handles TCP read error
-func (p *BasicPortSession) handleTCPReadError(log log.T, err error) int {
+func (p *BasicPortSession) handleTCPReadError(err error) int {
 	if p.portType == mgsConfig.LocalPortForwarding {
-		log.Debugf("Initiating reconnection to port %s as existing connection resulted in read error: %v", p.serverPortNumber, err)
-		return p.handlePortError(log, err)
+		p.context.Log().Debugf("Initiating reconnection to port %s as existing connection resulted in read error: %v", p.serverPortNumber, err)
+		return p.handlePortError(err)
 	}
-	return p.handleSSHDPortError(log, err)
+	return p.handleSSHDPortError(err)
 }
 
 // handleSSHDPortError handles error by returning proper exit code based on error encountered
-func (p *BasicPortSession) handleSSHDPortError(log log.T, err error) int {
+func (p *BasicPortSession) handleSSHDPortError(err error) int {
+	log := p.context.Log()
 	if err == io.EOF {
 		log.Infof("TCP Connection was closed.")
 		return appconfig.SuccessExitCode
@@ -170,7 +175,8 @@ func (p *BasicPortSession) handleSSHDPortError(log log.T, err error) int {
 }
 
 // handlePortError handles error by initiating reconnection to port in case of read failure
-func (p *BasicPortSession) handlePortError(log log.T, err error) int {
+func (p *BasicPortSession) handlePortError(err error) int {
+	log := p.context.Log()
 	// Read from tcp connection to localhost:p.serverPortNumber resulted in error. Close existing connection and
 	// set reconnectToPort to true. ReconnectToPort is used when new steam data message arrives on
 	// web socket channel to trigger reconnection to localhost:p.serverPortNumber.

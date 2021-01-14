@@ -16,6 +16,7 @@ package service
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/mock"
@@ -38,8 +39,8 @@ func (m *AssociationServiceMock) ListInstanceAssociations(log log.T, instanceID 
 }
 
 // CreateNewServiceIfUnHealthy mocks implementation for CreateNewServiceIfUnHealthy
-func (m *AssociationServiceMock) CreateNewServiceIfUnHealthy(log log.T) {
-	m.Called(log)
+func (m *AssociationServiceMock) CreateNewServiceIfUnHealthy(context context.T) {
+	m.Called(context)
 }
 
 // LoadAssociationDetail mocks implementation for LoadAssociationDetail

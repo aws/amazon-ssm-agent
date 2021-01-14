@@ -17,6 +17,7 @@ package parameterstore
 import (
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/stretchr/testify/assert"
@@ -137,7 +138,7 @@ func TestResolve(t *testing.T) {
 
 func testResolveMethod(t *testing.T, testCase StringTestCase) {
 	callParameterService = func(
-		log log.T,
+		context context.T,
 		paramNames []string) (*GetParametersResponse, error) {
 		result := GetParametersResponse{}
 		result.Parameters = testCase.Parameters
@@ -145,7 +146,7 @@ func testResolveMethod(t *testing.T, testCase StringTestCase) {
 		return &result, nil
 	}
 
-	result, err := Resolve(logger, testCase.Input)
+	result, err := Resolve(context.NewMockDefault(), testCase.Input)
 
 	assert.Equal(t, testCase.Output, result)
 	assert.Nil(t, err)
@@ -153,7 +154,7 @@ func testResolveMethod(t *testing.T, testCase StringTestCase) {
 
 func testResolveMethodWithInvalidCase(t *testing.T, testCase StringTestCase) {
 	callParameterService = func(
-		log log.T,
+		context context.T,
 		paramNames []string) (*GetParametersResponse, error) {
 		result := GetParametersResponse{}
 		result.Parameters = testCase.Parameters
@@ -161,7 +162,7 @@ func testResolveMethodWithInvalidCase(t *testing.T, testCase StringTestCase) {
 		return &result, nil
 	}
 
-	_, err := Resolve(logger, testCase.Input)
+	_, err := Resolve(context.NewMockDefault(), testCase.Input)
 
 	assert.NotNil(t, err)
 }
@@ -202,7 +203,7 @@ func TestValidateSSMParameters(t *testing.T) {
 		"testDocument":     "testdash-p1",
 	}
 
-	err := ValidateSSMParameters(logger, documentParameters, parameters)
+	err := ValidateSSMParameters(context.NewMockDefault(), documentParameters, parameters)
 	assert.Nil(t, err)
 
 	// Test case 2 with SSM parameters and secure string SSM parameter type
@@ -237,7 +238,7 @@ func TestValidateSSMParameters(t *testing.T) {
 	invalidSSMParameters := []string{}
 
 	callParameterService = func(
-		log log.T,
+		context context.T,
 		paramNames []string) (*GetParametersResponse, error) {
 		result := GetParametersResponse{}
 		result.Parameters = ssmParameters
@@ -245,7 +246,7 @@ func TestValidateSSMParameters(t *testing.T) {
 		return &result, nil
 	}
 
-	err = ValidateSSMParameters(logger, documentParameters, parameters)
+	err = ValidateSSMParameters(context.NewMockDefault(), documentParameters, parameters)
 	assert.Equal(t, "Parameters [test test2] of type SecureString are not supported", err.Error())
 
 	// Test case 3 with SSM parameters and SSM parameter value doesn't match allowed pattern
@@ -278,7 +279,7 @@ func TestValidateSSMParameters(t *testing.T) {
 	}
 
 	callParameterService = func(
-		log log.T,
+		context context.T,
 		paramNames []string) (*GetParametersResponse, error) {
 		result := GetParametersResponse{}
 		result.Parameters = ssmParameters
@@ -286,7 +287,7 @@ func TestValidateSSMParameters(t *testing.T) {
 		return &result, nil
 	}
 
-	err = ValidateSSMParameters(logger, documentParameters, parameters)
+	err = ValidateSSMParameters(context.NewMockDefault(), documentParameters, parameters)
 	assert.Equal(t, "Parameter value for commands does not match the allowed pattern ^[a-zA-Z]+$", err.Error())
 
 	// Test case 4 with SSM parameter versions
@@ -341,7 +342,7 @@ func TestValidateSSMParameters(t *testing.T) {
 	}
 
 	callParameterService = func(
-		log log.T,
+		context context.T,
 		paramNames []string) (*GetParametersResponse, error) {
 		result := GetParametersResponse{}
 		result.Parameters = ssmParameters
@@ -349,7 +350,7 @@ func TestValidateSSMParameters(t *testing.T) {
 		return &result, nil
 	}
 
-	err = ValidateSSMParameters(logger, documentParameters, parameters)
+	err = ValidateSSMParameters(context.NewMockDefault(), documentParameters, parameters)
 	assert.Nil(t, err)
 
 	// Test case 4 with invalid SSM parameter versions
@@ -400,7 +401,7 @@ func TestValidateSSMParameters(t *testing.T) {
 	invalidSSMParameters = []string{"foo:7"}
 
 	callParameterService = func(
-		log log.T,
+		context context.T,
 		paramNames []string) (*GetParametersResponse, error) {
 		result := GetParametersResponse{}
 		result.Parameters = ssmParameters
@@ -408,7 +409,7 @@ func TestValidateSSMParameters(t *testing.T) {
 		return &result, nil
 	}
 
-	err = ValidateSSMParameters(logger, documentParameters, parameters)
+	err = ValidateSSMParameters(context.NewMockDefault(), documentParameters, parameters)
 	assert.Equal(t, "Input contains invalid parameters [foo:7]", err.Error())
 
 }

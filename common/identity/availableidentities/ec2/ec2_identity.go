@@ -14,8 +14,8 @@
 package ec2
 
 import (
+	"github.com/aws/amazon-ssm-agent/common/identity/creds"
 	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/aws/defaults"
 	"github.com/aws/aws-sdk-go/aws/ec2metadata"
 )
 
@@ -54,11 +54,7 @@ func (i *Identity) ServiceDomain() (string, error) {
 
 // Credentials returns the managed instance credentials
 func (i *Identity) Credentials() *credentials.Credentials {
-	cfg := defaults.Config()
-	handlers := defaults.Handlers()
-	remoteCreds := defaults.RemoteCredProvider(*cfg, handlers)
-
-	return credentials.NewCredentials(remoteCreds)
+	return creds.GetRemoteCreds()
 }
 
 // IsIdentityEnvironment returns if instance is a ec2 instance

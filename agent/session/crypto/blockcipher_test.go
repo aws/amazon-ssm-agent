@@ -62,7 +62,7 @@ func (suite *BlockCipherTestSuite) TestEncryptDecrypt() {
 	var encryptionContext = map[string]*string{"aws:ssm:SessionId": &suite.sessionId, "aws:ssm:TargetId": &suite.instanceId}
 	suite.mockKMSService.On("Decrypt", suite.cipherTextKey, encryptionContext).Return(suite.plainTextKey, nil)
 
-	blockCipher, err := NewBlockCipherKMS(suite.mockLog, suite.kmsKeyId, &suite.mockKMSService)
+	blockCipher, err := NewBlockCipherKMS(suite.kmsKeyId, &suite.mockKMSService)
 	assert.Nil(suite.T(), err)
 	err = blockCipher.UpdateEncryptionKey(suite.mockLog, suite.cipherTextKey, suite.sessionId, suite.instanceId)
 	assert.Nil(suite.T(), err)

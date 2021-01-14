@@ -19,8 +19,7 @@ package rip
 import (
 	"net/url"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 )
 
 const (
@@ -54,40 +53,26 @@ var awsMessageGatewayServiceEndpointMap = map[string]string{
 /* This function returns the mgs endpoint specified by the user in appconfig.
 If the user didn't specify one, it will return the Amazon MGS endpoint in a certain region
 */
-func GetMgsEndpoint(region string) (mgsEndpoint string) {
-	if appConfig, err := appconfig.Config(false); err == nil {
-		if appConfig.Mgs.Endpoint != "" {
-			// use net/url package to parse endpoint, if endpoint doesn't contain protocol,
-			// fullUrl.Host is empty, should return fullUrl.Path. For backwards compatible, return the non-empty one.
-			fullUrl, err := url.Parse(appConfig.Mgs.Endpoint)
-			if err != nil {
-				return ""
-			}
-			if fullUrl.Host != "" {
-				return fullUrl.Host
-			}
-			return fullUrl.Path
+func GetMgsEndpoint(context context.T, region string) (mgsEndpoint string) {
+	appConfig := context.AppConfig()
+	if appConfig.Mgs.Endpoint != "" {
+		// use net/url package to parse endpoint, if endpoint doesn't contain protocol,
+		// fullUrl.Host is empty, should return fullUrl.Path. For backwards compatible, return the non-empty one.
+		fullUrl, err := url.Parse(appConfig.Mgs.Endpoint)
+		if err != nil {
+			return ""
 		}
+		if fullUrl.Host != "" {
+			return fullUrl.Host
+		}
+		return fullUrl.Path
 	}
 
 	if mgsEndpoint, ok := awsMessageGatewayServiceEndpointMap[region]; ok {
 		return mgsEndpoint
 	}
 
-	mgsEndpoint = ""
-	if region, err := platform.Region(); err == nil {
-		mgsEndpoint = GetDefaultServiceEndpoint(region, MgsServiceName)
-	}
-	return mgsEndpoint
-}
+	mgsEndpoint = context.Identity().GetDefaultEndpoint(MgsServiceName)
 
-// GetDefaultServiceEndpoint returns the default endpoint for a service, it should not be empty.
-func GetDefaultServiceEndpoint(region string, service string) (endpoint string) {
-	defaultEndpoint := platform.GetDefaultEndPoint(region, service)
-	if defaultEndpoint != "" {
-		endpoint = defaultEndpoint
-	} else {
-		endpoint = service + "." + region + ".amazonaws.com"
-	}
-	return endpoint
+	return mgsEndpoint
 }

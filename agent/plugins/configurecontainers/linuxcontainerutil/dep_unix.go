@@ -16,6 +16,7 @@
 package linuxcontainerutil
 
 import (
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 )
@@ -26,9 +27,10 @@ func init() {
 
 type DepLinux struct{}
 
-func (DepLinux) GetInstanceContext(log log.T) (instanceContext *updateutil.InstanceContext, err error) {
+func (DepLinux) GetInstanceInfo(context context.T) (instancInfo *updateutil.InstanceInfo, err error) {
 	updateUtil := new(updateutil.Utility)
-	return updateUtil.CreateInstanceContext(log)
+	updateUtil.Context = context
+	return updateUtil.CreateInstanceInfo(context.Log())
 }
 
 func (DepLinux) UpdateUtilExeCommandOutput(

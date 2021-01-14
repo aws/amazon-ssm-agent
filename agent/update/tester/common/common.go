@@ -17,7 +17,7 @@ package common
 import (
 	"os"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/common/message"
 )
 
@@ -34,7 +34,7 @@ type ITestStage interface {
 // ITestCase interface should be implemented by test cases
 // to be picked up by test setup
 type ITestCase interface {
-	Initialize(log.T)
+	Initialize(context.T)
 	ExecuteTestCase() TestOutput
 	CleanupTestCase()
 	GetTestCaseName() string

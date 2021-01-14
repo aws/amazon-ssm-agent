@@ -22,16 +22,18 @@ import (
 	"github.com/aws/amazon-ssm-agent/common/channel/utils"
 	"github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc"
 	channelmock "github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc/mocks"
-
+	"github.com/aws/amazon-ssm-agent/common/identity"
+	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/aws/amazon-ssm-agent/common/message"
 	"github.com/stretchr/testify/assert"
-
 	"github.com/stretchr/testify/suite"
 )
 
 // IRespondentSuite tests respondent
 type IRespondentSuite struct {
 	suite.Suite
+	log log.T
+	identity identity.IAgentIdentity
 	respondentInstance *respondent
 }
 
@@ -42,14 +44,16 @@ func TestRespondentSuite(t *testing.T) {
 
 // SetupTest initializes Setup
 func (suite *IRespondentSuite) SetupTest() {
-	suite.respondentInstance = GetRespondentInstance(log.NewMockLog())
+	suite.log = log.NewMockLog()
+	suite.identity = identityMocks.NewDefaultMockAgentIdentity()
+	suite.respondentInstance = GetRespondentInstance(suite.log, suite.identity)
 }
 
 // TestBasicTest tests basic functionality
 func (suite *IRespondentSuite) TestBasic() {
 	suite.respondentInstance.Initialize()
 	assert.Equal(suite.T(), suite.respondentInstance.GetCommProtocolInfo(), utils.Respondent)
-	suite.respondentInstance.fileChannel = channelmock.NewFakeChannel(log.NewMockLog(), filewatcherbasedipc.ModeSurveyor, "sample")
+	suite.respondentInstance.fileChannel = channelmock.NewFakeChannel(suite.log, filewatcherbasedipc.ModeSurveyor, "sample")
 	dummyMsg := message.Message{
 		SchemaVersion: 1,
 		Topic:         "TestBasic",
@@ -57,7 +61,7 @@ func (suite *IRespondentSuite) TestBasic() {
 	}
 	dummyMsgOutput := dummyMsg
 	suite.respondentInstance.Send(&dummyMsg)
-	suite.respondentInstance.fileChannel = channelmock.NewFakeChannel(log.NewMockLog(), filewatcherbasedipc.ModeRespondent, "sample")
+	suite.respondentInstance.fileChannel = channelmock.NewFakeChannel(suite.log, filewatcherbasedipc.ModeRespondent, "sample")
 	output, err := suite.respondentInstance.Recv()
 	_ = json.Unmarshal(output, &dummyMsg)
 	assert.Equal(suite.T(), dummyMsgOutput.Topic, dummyMsg.Topic)

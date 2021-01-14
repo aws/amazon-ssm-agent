@@ -30,20 +30,20 @@ type ICoreAgentContext interface {
 
 // CoreAgentContext defines a type that carries context specific data such as the logger.
 type CoreAgentContext struct {
-	context     []string
-	log         log.T
-	appConfig   *appconfig.SsmagentConfig
-	identity    identity.IAgentIdentity
+	context   []string
+	log       log.T
+	appConfig *appconfig.SsmagentConfig
+	identity  identity.IAgentIdentity
 }
 
 // With updates the contextSlice that changes the log prefix
 func (c *CoreAgentContext) With(logContext string) ICoreAgentContext {
 	contextSlice := append(c.context, logContext)
 	newContext := &CoreAgentContext{
-		context:     contextSlice,
-		log:         c.log.WithContext(contextSlice...),
-		appConfig:   c.appConfig,
-		identity:    c.identity,
+		context:   contextSlice,
+		log:       c.log.WithContext(contextSlice...),
+		appConfig: c.appConfig,
+		identity:  c.identity,
 	}
 	return newContext
 }
@@ -66,9 +66,9 @@ func (c *CoreAgentContext) Identity() identity.IAgentIdentity {
 // NewCoreAgentContext creates and returns a new core agent context
 func NewCoreAgentContext(logger log.T, ssmAppconfig *appconfig.SsmagentConfig, agentIdentity identity.IAgentIdentity) (ICoreAgentContext, error) {
 	coreContext := &CoreAgentContext{
-		appConfig:   ssmAppconfig,
-		log:         logger,
-		identity:    agentIdentity,
+		appConfig: ssmAppconfig,
+		log:       logger,
+		identity:  agentIdentity,
 	}
 	return coreContext, nil
 }

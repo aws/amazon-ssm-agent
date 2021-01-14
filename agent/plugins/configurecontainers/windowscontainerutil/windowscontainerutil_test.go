@@ -16,14 +16,14 @@ package windowscontainerutil
 import (
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
 
-var loggerMock = log.NewMockLog()
+var contextMock = context.NewMockDefault()
 
 func successMock() *DepMock {
 	depmock := DepMock{}
@@ -48,7 +48,7 @@ func TestInstall(t *testing.T) {
 	defer func() { dep = depOrig }()
 
 	output := iohandler.DefaultIOHandler{}
-	RunInstallCommands(loggerMock, "", &output)
+	RunInstallCommands(contextMock, "", &output)
 
 	assert.Equal(t, output.GetExitCode(), 0)
 	assert.Contains(t, output.GetStdout(), "Installation complete")

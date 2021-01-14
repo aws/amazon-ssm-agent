@@ -23,10 +23,13 @@ import (
 	"strings"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/aws-sdk-go/aws"
 )
 
@@ -109,7 +112,20 @@ func main() {
 		}
 	}
 
-	ssmSvc := ssm.NewService(log)
+	config, err := appconfig.Config(false)
+	if err != nil {
+		log.Warnf("appconfig could not be loaded, using default config - %v", err)
+	}
+	selector := identity.NewInstanceIDRegionAgentIdentitySelector(log, *instanceIDPtr, *regionPtr)
+	agentIdentity, err := identity.NewAgentIdentity(log, &config, selector)
+	if err != nil {
+		log.Errorf("Failed to find agent identity: %v", err)
+		return
+	}
+
+	context := context.Default(log, config, agentIdentity).With("[agentconsole]")
+
+	ssmSvc := ssm.NewService(context)
 	if ssmSvc == nil {
 		log.Error("couldn't create ssm service.")
 		return

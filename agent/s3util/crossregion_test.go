@@ -24,11 +24,10 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/stretchr/testify/mock"
-
-	"github.com/aws/amazon-ssm-agent/agent/sdkutil/retryer"
-
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/sdkutil/retryer"
+	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/client/metadata"
 	"github.com/aws/aws-sdk-go/aws/credentials"
@@ -37,6 +36,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/s3"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 type MockedHttpProvider struct {
@@ -49,13 +49,13 @@ func (m *MockedHttpProvider) Head(url string) (*http.Response, error) {
 }
 
 func setS3Endpoint(region, endpoint string) {
-	getS3Endpoint = func(region string) string {
+	getS3Endpoint = func(context context.T, region string) string {
 		return endpoint
 	}
 }
 
 func setS3FallbackEndpoint(region, endpoint string) {
-	getFallbackS3EndpointFunc = func(region string) string {
+	getFallbackS3EndpointFunc = func(context context.T, region string) string {
 		return endpoint
 	}
 }
@@ -70,7 +70,7 @@ func TestGetBucketRegion_NoError_NoRegionInResponse_ReturnsEmptyString(t *testin
 	httpProvider := &MockedHttpProvider{}
 	httpProvider.On("Head", "https://bucket-1.s3.us-east-1.amazonaws.com").Return(resp, err)
 	httpProvider.On("Head", "https://bucket-1.s3.amazonaws.com").Return(resp, err)
-	actual := getBucketRegion(log.NewMockLog(), "us-east-1", "bucket-1", httpProvider)
+	actual := getBucketRegion(context.NewMockDefault(), "us-east-1", "bucket-1", httpProvider)
 	assert.Equal(t, "", actual)
 }
 
@@ -86,7 +86,7 @@ func TestGetBucketRegion_NoError_RegionInResponse_ReturnsRegion(t *testing.T) {
 	var err error = nil
 	httpProvider := &MockedHttpProvider{}
 	httpProvider.On("Head", "https://bucket-1.s3.us-east-1.amazonaws.com").Return(resp, err)
-	actual := getBucketRegion(log.NewMockLog(), "us-east-1", "bucket-1", httpProvider)
+	actual := getBucketRegion(context.NewMockDefault(), "us-east-1", "bucket-1", httpProvider)
 	assert.Equal(t, "eu-west-1", actual)
 }
 
@@ -100,14 +100,14 @@ func TestGetBucketRegion_AllUrlsFail_ReturnsEmptyString(t *testing.T) {
 	httpProvider.On("Head", "https://bucket-1.s3.amazonaws.com").Return(resp, err)
 	httpProvider.On("Head", "http://bucket-1.s3.us-east-1.amazonaws.com").Return(resp, err)
 	httpProvider.On("Head", "http://bucket-1.s3.amazonaws.com").Return(resp, err)
-	actual := getBucketRegion(log.NewMockLog(), "us-east-1", "bucket-1", httpProvider)
+	actual := getBucketRegion(context.NewMockDefault(), "us-east-1", "bucket-1", httpProvider)
 	assert.Equal(t, "", actual)
 	httpProvider.AssertExpectations(t)
 }
 
 func TestGetS3CrossRegionCapableSession_regionFromHead_noConfigOverrides(t *testing.T) {
-	setupMocksForGetS3CrossRegionCapableSession("us-east-1", "bucket-1", "eu-west-1", "")
-	sess, err := GetS3CrossRegionCapableSession(log.NewMockLog(), "bucket-1")
+	setupMocksForGetS3CrossRegionCapableSession("us-east-1", "bucket-1", "eu-west-1")
+	sess, err := GetS3CrossRegionCapableSession(context.NewMockDefault(), "bucket-1")
 	assert.NotNil(t, sess)
 	assert.Equal(t, *sess.Config.Region, "eu-west-1")
 	assert.Nil(t, sess.Config.Endpoint)
@@ -118,10 +118,18 @@ func TestGetS3CrossRegionCapableSession_regionFromHead_noConfigOverrides(t *test
 }
 
 func TestGetS3CrossRegionCapableSession_noRegionFromHead_noConfigOverrides(t *testing.T) {
-	setupMocksForGetS3CrossRegionCapableSession("cn-north-1", "bucket-1", "", "")
-	sess, err := GetS3CrossRegionCapableSession(log.NewMockLog(), "bucket-1")
+	identityMock := &identityMocks.IAgentIdentity{}
+	identityMock.On("Region").Return("cn-north-1", nil)
+
+	contextMock := new(context.Mock)
+	contextMock.On("Identity").Return(identityMock)
+	contextMock.On("Log").Return(log.NewMockLog())
+	contextMock.On("AppConfig").Return(appconfig.DefaultConfig())
+
+	setupMocksForGetS3CrossRegionCapableSession("cn-north-1", "bucket-1", "")
+	sess, err := GetS3CrossRegionCapableSession(contextMock, "bucket-1")
 	assert.NotNil(t, sess)
-	assert.Equal(t, *sess.Config.Region, "cn-north-1")
+	assert.Equal(t, "cn-north-1", *sess.Config.Region)
 	assert.Nil(t, sess.Config.Endpoint)
 	assert.NotNil(t, sess.Config.HTTPClient.Transport)
 	_, correctType := sess.Config.HTTPClient.Transport.(*s3BucketRegionHeaderCapturingTransport)
@@ -130,8 +138,19 @@ func TestGetS3CrossRegionCapableSession_noRegionFromHead_noConfigOverrides(t *te
 }
 
 func TestGetS3CrossRegionCapableSession_regionFromHead_withConfigOverrides(t *testing.T) {
-	setupMocksForGetS3CrossRegionCapableSession("us-east-1", "bucket-1", "eu-west-1", "https://custom.endpoint.com")
-	sess, err := GetS3CrossRegionCapableSession(log.NewMockLog(), "bucket-1")
+	appConfig := appconfig.DefaultConfig()
+	appConfig.S3.Endpoint = "https://custom.endpoint.com"
+
+	identityMock := &identityMocks.IAgentIdentity{}
+	identityMock.On("Region").Return("us-east-1", nil)
+
+	contextMock := new(context.Mock)
+	contextMock.On("Identity").Return(identityMock)
+	contextMock.On("Log").Return(log.NewMockLog())
+	contextMock.On("AppConfig").Return(appConfig)
+
+	setupMocksForGetS3CrossRegionCapableSession("us-east-1", "bucket-1", "eu-west-1")
+	sess, err := GetS3CrossRegionCapableSession(contextMock, "bucket-1")
 	assert.NotNil(t, sess)
 	assert.Equal(t, "eu-west-1", *sess.Config.Region)
 	assert.Equal(t, "https://custom.endpoint.com", *sess.Config.Endpoint)
@@ -142,10 +161,21 @@ func TestGetS3CrossRegionCapableSession_regionFromHead_withConfigOverrides(t *te
 }
 
 func TestGetS3CrossRegionCapableSession_noRegionFromHead_withConfigOverrides(t *testing.T) {
-	setupMocksForGetS3CrossRegionCapableSession("cn-north-1", "bucket-1", "", "https://custom.endpoint.com.cn")
-	sess, err := GetS3CrossRegionCapableSession(log.NewMockLog(), "bucket-1")
+	appConfig := appconfig.DefaultConfig()
+	appConfig.S3.Endpoint = "https://custom.endpoint.com.cn"
+
+	identityMock := &identityMocks.IAgentIdentity{}
+	identityMock.On("Region").Return("cn-north-1", nil)
+
+	contextMock := new(context.Mock)
+	contextMock.On("Identity").Return(identityMock)
+	contextMock.On("Log").Return(log.NewMockLog())
+	contextMock.On("AppConfig").Return(appConfig)
+
+	setupMocksForGetS3CrossRegionCapableSession("cn-north-1", "bucket-1", "")
+	sess, err := GetS3CrossRegionCapableSession(contextMock, "bucket-1")
 	assert.NotNil(t, sess)
-	assert.Equal(t, *sess.Config.Region, "cn-north-1")
+	assert.Equal(t, "cn-north-1", *sess.Config.Region)
 	assert.Equal(t, "https://custom.endpoint.com.cn", *sess.Config.Endpoint)
 	assert.NotNil(t, sess.Config.HTTPClient.Transport)
 	_, correctType := sess.Config.HTTPClient.Transport.(*s3BucketRegionHeaderCapturingTransport)
@@ -153,19 +183,9 @@ func TestGetS3CrossRegionCapableSession_noRegionFromHead_withConfigOverrides(t *
 	assert.Nil(t, err)
 }
 
-func setupMocksForGetS3CrossRegionCapableSession(instanceRegion, bucketName, headBucketResponse, configEndpoint string) {
+func setupMocksForGetS3CrossRegionCapableSession(instanceRegion, bucketName, headBucketResponse string) {
 	setupMockHeadBucketResponse(bucketName, instanceRegion, headBucketResponse)
-	getRegion = func() (string, error) {
-		return instanceRegion, nil
-	}
-	getAppConfig = func() (appconfig.SsmagentConfig, error) {
-		cfg := appconfig.DefaultConfig()
-		if configEndpoint != "" {
-			cfg.S3.Endpoint = configEndpoint
-		}
-		return cfg, nil
-	}
-	makeAwsConfig = func(log log.T, region string) *aws.Config {
+	makeAwsConfig = func(context context.T, region string) *aws.Config {
 		result := aws.NewConfig()
 		result.Region = aws.String(region)
 		result.Credentials = credentials.NewCredentials(&mockCredentialsProvider{})
@@ -199,8 +219,17 @@ func setupMockHeadBucketResponse(bucketName, instanceRegion, headBucketResponse 
 }
 
 func TestRedirect_RedirectResponse_RetryWithCorrectRegion(t *testing.T) {
-	setupMocksForGetS3CrossRegionCapableSession("cn-northwest-1", "bucket-1", "", "")
-	sess, err := GetS3CrossRegionCapableSession(log.NewMockLog(), "bucket-1")
+	appConfig := appconfig.DefaultConfig()
+	identityMock := &identityMocks.IAgentIdentity{}
+	identityMock.On("Region").Return("cn-northwest-1", nil)
+
+	contextMock := new(context.Mock)
+	contextMock.On("Identity").Return(identityMock)
+	contextMock.On("Log").Return(log.NewMockLog())
+	contextMock.On("AppConfig").Return(appConfig)
+
+	setupMocksForGetS3CrossRegionCapableSession("cn-northwest-1", "bucket-1", "")
+	sess, err := GetS3CrossRegionCapableSession(contextMock, "bucket-1")
 	assert.Nil(t, err)
 
 	trans, transTypeOk := sess.Config.HTTPClient.Transport.(*s3BucketRegionHeaderCapturingTransport)
@@ -250,8 +279,8 @@ func TestRedirect_RedirectResponse_RetryWithCorrectRegion(t *testing.T) {
 }
 
 func TestRedirect_BadSigningRegionResponse_RetryWithCorrectRegion(t *testing.T) {
-	setupMocksForGetS3CrossRegionCapableSession("us-east-1", "bucket-1", "", "")
-	sess, err := GetS3CrossRegionCapableSession(log.NewMockLog(), "bucket-1")
+	setupMocksForGetS3CrossRegionCapableSession("us-east-1", "bucket-1", "")
+	sess, err := GetS3CrossRegionCapableSession(context.NewMockDefault(), "bucket-1")
 	assert.Nil(t, err)
 
 	trans, transTypeOk := sess.Config.HTTPClient.Transport.(*s3BucketRegionHeaderCapturingTransport)
@@ -308,8 +337,8 @@ func TestRedirect_CachedBucketRegion_FirstRequestGoesToCorrectRegion(t *testing.
 	// attempt should go to the correct region.
 	getBucketRegionMap().Put("bucket-1", "cn-north-1")
 
-	setupMocksForGetS3CrossRegionCapableSession("cn-northwest-1", "bucket-1", "", "")
-	sess, err := GetS3CrossRegionCapableSession(log.NewMockLog(), "bucket-1")
+	setupMocksForGetS3CrossRegionCapableSession("cn-northwest-1", "bucket-1", "")
+	sess, err := GetS3CrossRegionCapableSession(context.NewMockDefault(), "bucket-1")
 	assert.Nil(t, err)
 
 	trans, transTypeOk := sess.Config.HTTPClient.Transport.(*s3BucketRegionHeaderCapturingTransport)
