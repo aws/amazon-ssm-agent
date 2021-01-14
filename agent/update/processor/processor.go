@@ -22,6 +22,7 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
@@ -41,12 +42,19 @@ var (
 )
 
 // NewUpdater creates an instance of Updater and other services it requires
-func NewUpdater() *Updater {
+func NewUpdater(context context.T) *Updater {
 	updater := &Updater{
 		mgr: &updateManager{
-			util:      &updateutil.Utility{},
-			svc:       &svcManager{},
-			ctxMgr:    &contextManager{},
+			Context: context,
+			util: &updateutil.Utility{
+				Context: context,
+			},
+			svc: &svcManager{
+				context: context,
+			},
+			ctxMgr: &contextManager{
+				context: context,
+			},
 			prepare:   prepareInstallationPackages,
 			update:    proceedUpdate,
 			verify:    verifyInstallation,
@@ -63,18 +71,18 @@ func NewUpdater() *Updater {
 }
 
 // StartOrResumeUpdate starts/resume update.
-func (u *Updater) StartOrResumeUpdate(log log.T, context *UpdateContext) (err error) {
+func (u *Updater) StartOrResumeUpdate(log log.T, updateContext *UpdateContext) (err error) {
 	switch {
-	case context.Current.State == Initialized:
-		return u.mgr.prepare(u.mgr, log, context)
-	case context.Current.State == Staged:
-		return u.mgr.update(u.mgr, log, context)
-	case context.Current.State == Installed:
-		return u.mgr.verify(u.mgr, log, context, false)
-	case context.Current.State == Rollback:
-		return u.mgr.rollback(u.mgr, log, context)
-	case context.Current.State == RolledBack:
-		return u.mgr.verify(u.mgr, log, context, true)
+	case updateContext.Current.State == Initialized:
+		return u.mgr.prepare(u.mgr, log, updateContext)
+	case updateContext.Current.State == Staged:
+		return u.mgr.update(u.mgr, log, updateContext)
+	case updateContext.Current.State == Installed:
+		return u.mgr.verify(u.mgr, log, updateContext, false)
+	case updateContext.Current.State == Rollback:
+		return u.mgr.rollback(u.mgr, log, updateContext)
+	case updateContext.Current.State == RolledBack:
+		return u.mgr.verify(u.mgr, log, updateContext, true)
 	}
 
 	return nil
@@ -119,7 +127,7 @@ func (u *Updater) Failed(context *UpdateContext, log log.T, code updateutil.Erro
 
 // validateUpdateVersion validates target version number base on the current platform
 // to avoid accidentally downgrade agent to the earlier version that doesn't support current platform
-func validateUpdateVersion(log log.T, detail *UpdateDetail, instanceContext *updateutil.InstanceContext) (err error) {
+func validateUpdateVersion(log log.T, detail *UpdateDetail, instanceContext *updateutil.InstanceInfo) (err error) {
 	compareResult := 0
 	minimumVersions := getMinimumVSupportedVersions()
 
@@ -137,9 +145,9 @@ func validateUpdateVersion(log log.T, detail *UpdateDetail, instanceContext *upd
 	return nil
 }
 
-func validateInactiveVersion(log log.T, detail *UpdateDetail) (err error) {
-	log.Info("Validating inactive version for amazon ssm agent")
-	if !versioncheck(log, detail.ManifestPath, detail.TargetVersion) {
+func validateInactiveVersion(context context.T, detail *UpdateDetail) (err error) {
+	context.Log().Info("Validating inactive version for amazon ssm agent")
+	if !versioncheck(context, detail.ManifestPath, detail.TargetVersion) {
 		err := fmt.Errorf("agent version %v is inactive", detail.TargetVersion)
 		return err
 	}
@@ -162,81 +170,81 @@ func getMinimumVSupportedVersions() (versions *map[string]string) {
 }
 
 // prepareInstallationPackages downloads artifacts from public s3 storage
-func prepareInstallationPackages(mgr *updateManager, log log.T, context *UpdateContext) (err error) {
-	log.Infof("Initiating download %v", context.Current.PackageName)
-	var instanceContext *updateutil.InstanceContext
+func prepareInstallationPackages(mgr *updateManager, log log.T, updateContext *UpdateContext) (err error) {
+	log.Infof("Initiating download %v", updateContext.Current.PackageName)
+	var instanceContext *updateutil.InstanceInfo
 
 	var manifestDownloadOutput *artifact.DownloadOutput
 	updateDownloadFolder := ""
 
 	updateDownload := ""
 
-	if instanceContext, err = mgr.util.CreateInstanceContext(log); err != nil {
-		return mgr.failed(context, log, updateutil.ErrorEnvironmentIssue, err.Error(), false)
+	if instanceContext, err = mgr.util.CreateInstanceInfo(log); err != nil {
+		return mgr.failed(updateContext, log, updateutil.ErrorEnvironmentIssue, err.Error(), false)
 	}
-	if err = validateUpdateVersion(log, context.Current, instanceContext); err != nil {
-		return mgr.failed(context, log, updateutil.ErrorUnsupportedVersion, err.Error(), true)
+	if err = validateUpdateVersion(log, updateContext.Current, instanceContext); err != nil {
+		return mgr.failed(updateContext, log, updateutil.ErrorUnsupportedVersion, err.Error(), true)
 	}
 
 	if updateDownload, err = mgr.util.CreateUpdateDownloadFolder(); err != nil {
 		message := updateutil.BuildMessage(
 			err,
 			"failed to create download folder %v %v",
-			context.Current.PackageName,
-			context.Current.TargetVersion)
-		return mgr.failed(context, log, updateutil.ErrorCreateUpdateFolder, message, true)
+			updateContext.Current.PackageName,
+			updateContext.Current.TargetVersion)
+		return mgr.failed(updateContext, log, updateutil.ErrorCreateUpdateFolder, message, true)
 	}
 
-	if context.Current.ManifestPath == "" {
-		if manifestDownloadOutput, context.Current.ManifestUrl, err =
-			mgr.util.DownloadManifestFile(log, updateDownloadFolder, context.Current.ManifestUrl, instanceContext.Region); err != nil {
+	if updateContext.Current.ManifestPath == "" {
+		if manifestDownloadOutput, updateContext.Current.ManifestUrl, err =
+			mgr.util.DownloadManifestFile(log, updateDownloadFolder, updateContext.Current.ManifestUrl, instanceContext.Region); err != nil {
 
 			message := updateutil.BuildMessage(err, "failed to download manifest file")
-			return mgr.failed(context, log, updateutil.ErrorInvalidManifest, message, true)
+			return mgr.failed(updateContext, log, updateutil.ErrorInvalidManifest, message, true)
 		}
-		context.Current.ManifestPath = manifestDownloadOutput.LocalFilePath
+		updateContext.Current.ManifestPath = manifestDownloadOutput.LocalFilePath
 	}
 
-	if err = validateInactiveVersion(log, context.Current); err != nil {
-		return mgr.inactive(context, log, updateutil.WarnInactiveVersion)
+	if err = validateInactiveVersion(mgr.Context, updateContext.Current); err != nil {
+		return mgr.inactive(updateContext, log, updateutil.WarnInactiveVersion)
 	}
 
 	// Download source
 	downloadInput := artifact.DownloadInput{
-		SourceURL: context.Current.SourceLocation,
+		SourceURL: updateContext.Current.SourceLocation,
 		SourceChecksums: map[string]string{
-			updateutil.HashType: context.Current.SourceHash,
+			updateutil.HashType: updateContext.Current.SourceHash,
 		},
 		DestinationDirectory: updateDownload,
 	}
-	if err = mgr.download(mgr, log, downloadInput, context, context.Current.SourceVersion); err != nil {
-		return mgr.failed(context, log, updateutil.ErrorSourcePkgDownload, err.Error(), true)
+	if err = mgr.download(mgr, log, downloadInput, updateContext, updateContext.Current.SourceVersion); err != nil {
+		return mgr.failed(updateContext, log, updateutil.ErrorSourcePkgDownload, err.Error(), true)
 	}
 	// Download target
 	downloadInput = artifact.DownloadInput{
-		SourceURL: context.Current.TargetLocation,
+		SourceURL: updateContext.Current.TargetLocation,
 		SourceChecksums: map[string]string{
-			updateutil.HashType: context.Current.TargetHash,
+			updateutil.HashType: updateContext.Current.TargetHash,
 		},
 		DestinationDirectory: updateDownload,
 	}
-	if err = mgr.download(mgr, log, downloadInput, context, context.Current.TargetVersion); err != nil {
-		return mgr.failed(context, log, updateutil.ErrorTargetPkgDownload, err.Error(), true)
+	if err = mgr.download(mgr, log, downloadInput, updateContext, updateContext.Current.TargetVersion); err != nil {
+		return mgr.failed(updateContext, log, updateutil.ErrorTargetPkgDownload, err.Error(), true)
 	}
 	// Update stdout
-	context.Current.AppendInfo(
+	updateContext.Current.AppendInfo(
 		log,
 		"Initiating %v update to %v",
-		context.Current.PackageName,
-		context.Current.TargetVersion)
+		updateContext.Current.PackageName,
+		updateContext.Current.TargetVersion)
 
 	// Update state to Staged
-	if err = mgr.inProgress(context, log, Staged); err != nil {
+	if err = mgr.inProgress(updateContext, log, Staged); err != nil {
 		return err
 	}
 
 	// Process update
-	return mgr.update(mgr, log, context)
+	return mgr.update(mgr, log, updateContext)
 }
 
 // proceedUpdate starts update process
@@ -262,7 +270,7 @@ func proceedUpdate(mgr *updateManager, log log.T, context *UpdateContext) (err e
 		}
 	}
 	preInstallTestTimeoutSeconds := 7
-	if testResult := mgr.runTests(log, testerCommon.PreInstallTest, preInstallTestTimeoutSeconds); testResult != "" {
+	if testResult := mgr.runTests(mgr.Context, testerCommon.PreInstallTest, preInstallTestTimeoutSeconds); testResult != "" {
 		mgr.reportTestFailure(context, log, testResult)
 	}
 	if exitCode, err := mgr.install(mgr, log, context.Current.TargetVersion, context); err != nil {
@@ -306,9 +314,9 @@ func proceedUpdate(mgr *updateManager, log log.T, context *UpdateContext) (err e
 func verifyInstallation(mgr *updateManager, log log.T, context *UpdateContext, isRollback bool) (err error) {
 	// Check if agent is running
 	var isRunning = false
-	var instanceContext *updateutil.InstanceContext
+	var instanceContext *updateutil.InstanceInfo
 
-	if instanceContext, err = mgr.util.CreateInstanceContext(log); err != nil {
+	if instanceContext, err = mgr.util.CreateInstanceInfo(log); err != nil {
 		return mgr.failed(context, log, updateutil.ErrorCreateInstanceContext, err.Error(), false)
 	}
 	version := context.Current.TargetVersion
@@ -550,12 +558,12 @@ func downloadAndUnzipArtifact(
 	mgr *updateManager,
 	log log.T,
 	downloadInput artifact.DownloadInput,
-	context *UpdateContext,
+	updateContext *UpdateContext,
 	version string) (err error) {
 
 	log.Infof("Preparing source for version %v", version)
 	// download installation zip files
-	downloadOutput, err := downloadArtifact(log, downloadInput)
+	downloadOutput, err := downloadArtifact(mgr.Context, downloadInput)
 	if err != nil ||
 		downloadOutput.IsHashMatched == false ||
 		downloadOutput.LocalFilePath == "" {
@@ -566,13 +574,13 @@ func downloadAndUnzipArtifact(
 	}
 
 	// downloaded successfully, append message
-	context.Current.AppendInfo(log, "Successfully downloaded %v", downloadInput.SourceURL)
+	updateContext.Current.AppendInfo(log, "Successfully downloaded %v", downloadInput.SourceURL)
 
 	// uncompress installation package
 	if err = uncompress(
 		log,
 		downloadOutput.LocalFilePath,
-		updateutil.UpdateArtifactFolder(context.Current.UpdateRoot, context.Current.PackageName, version)); err != nil {
+		updateutil.UpdateArtifactFolder(updateContext.Current.UpdateRoot, updateContext.Current.PackageName, version)); err != nil {
 		return fmt.Errorf("failed to uncompress installation package, %v", err.Error())
 	}
 

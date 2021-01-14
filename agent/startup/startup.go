@@ -46,7 +46,7 @@ func (p *Processor) ModuleName() string {
 }
 
 // Execute executes the startup tasks and return error if any.
-func (p *Processor) ModuleExecute(context context.T) (err error) {
+func (p *Processor) ModuleExecute() (err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			err = fmt.Errorf("Internal error occurred by startup processor: %v", r)

@@ -18,13 +18,11 @@ package file
 
 import (
 	"os"
-
 	"path/filepath"
-
 	"strconv"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 )
 
@@ -34,11 +32,11 @@ func expand(str string, mapping func(string) string) (newStr string, err error) 
 }
 
 //getMetaData gets metadata for the specified file paths
-func getMetaData(log log.T, paths []string) (fileInfo []model.FileData, err error) {
+func getMetaData(context context.T, paths []string) (fileInfo []model.FileData, err error) {
 	for _, p := range paths {
 		fi, err := os.Stat(p)
 		if err != nil {
-			LogError(log, err)
+			LogError(context.Log(), err)
 		} else {
 			var data model.FileData
 			data.Size = strconv.FormatInt(fi.Size(), 10)

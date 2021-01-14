@@ -56,7 +56,7 @@ type IPlugin interface {
 // The hardcoded plugins will implement the ICoreModule
 type ICoreModule interface {
 	ModuleName() string
-	ModuleExecute(context context.T) (err error)
+	ModuleExecute() (err error)
 	ModuleRequestStop(stopType StopType) (err error)
 }
 

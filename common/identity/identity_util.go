@@ -1,4 +1,4 @@
-// Copyright 2018 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+// Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License"). You may not
 // use this file except in compliance with the License. A copy of the
@@ -11,22 +11,11 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-package runcommand
+package identity
 
-import (
-	"github.com/aws/amazon-ssm-agent/agent/platform"
-)
+import "github.com/aws/amazon-ssm-agent/common/identity/availableidentities/onprem"
 
-var systemInfo system = &systemImp{}
-
-//Represents dependency for platform
-type system interface {
-	InstanceID() (string, error)
-}
-
-type systemImp struct{}
-
-// InstanceID wraps platform InstanceID
-func (systemImp) InstanceID() (string, error) {
-	return platform.InstanceID()
+// IsOnPremInstance returns true if the agent identity is onprem
+func IsOnPremInstance(agentIdentity IAgentIdentity) bool {
+	return agentIdentity != nil && agentIdentity.IdentityType() == onprem.IdentityType
 }

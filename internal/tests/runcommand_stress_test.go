@@ -19,6 +19,7 @@ import (
 	"runtime/debug"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/amazon-ssm-agent/agent/agent"
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -40,6 +41,7 @@ import (
 // functionality from testify - including a T() method which
 // returns the current testing context
 type AgentStressTestSuite struct {
+	context    context.T
 	suite.Suite
 	ssmAgent   agent.ISSMAgent
 	mdsSdkMock *mdssdkmock.SSMMDSAPI
@@ -57,32 +59,39 @@ func (suite *AgentStressTestSuite) SetupTest() {
 		log.Debugf("appconfig could not be loaded - %v", err)
 		return
 	}
-	context := context.Default(log, config)
+	identitySelector := identity.NewDefaultAgentIdentitySelector(log)
+	agentIdentity, err := identity.NewAgentIdentity(log, &config, identitySelector)
+	if err != nil {
+		log.Debugf("unable to assume identity - %v", err)
+		return
+	}
+
+	suite.context = context.Default(log, config, agentIdentity)
 
 	// Mock MDS service to remove dependency on external service
 	sendMdsSdkRequest := func(req *request.Request) error {
 		return nil
 	}
 	mdsSdkMock := testutils.NewMdsSdkMock()
-	mdsService := testutils.NewMdsService(mdsSdkMock, sendMdsSdkRequest)
+	mdsService := testutils.NewMdsService(suite.context, mdsSdkMock, sendMdsSdkRequest)
 
 	suite.mdsSdkMock = mdsSdkMock
 
 	// The actual runcommand core module with mocked MDS service injected
-	runcommandService := testutils.NewRuncommandService(context, mdsService)
+	runcommandService := testutils.NewRuncommandService(suite.context, mdsService)
 	var modules []contracts.ICoreModule
 	modules = append(modules, runcommandService)
 
 	// Create core manager that accepts runcommand core module
 	// For this test we don't need to inject all the modules
 	var cpm *coremanager.CoreManager
-	if cpm, err = testutils.NewCoreManager(context, &modules, log); err != nil {
+	if cpm, err = testutils.NewCoreManager(suite.context, &modules); err != nil {
 		log.Errorf("error occurred when starting core manager: %v", err)
 		return
 	}
 	// Create core ssm agent
 	suite.ssmAgent = &agent.SSMAgent{}
-	suite.ssmAgent.SetContext(context)
+	suite.ssmAgent.SetContext(suite.context)
 	suite.ssmAgent.SetCoreManager(cpm)
 }
 

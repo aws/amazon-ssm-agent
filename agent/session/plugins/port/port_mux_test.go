@@ -25,7 +25,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	iohandlermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	dataChannelMock "github.com/aws/amazon-ssm-agent/agent/session/datachannel/mocks"
 	portSessionMock "github.com/aws/amazon-ssm-agent/agent/session/plugins/port/mocks"
@@ -38,7 +37,6 @@ import (
 type MuxPortTestSuite struct {
 	suite.Suite
 	mockContext     *context.Mock
-	mockLog         log.T
 	mockCancelFlag  *task.MockCancelFlag
 	mockDataChannel *dataChannelMock.IDataChannel
 	mockIohandler   *iohandlermocks.MockIOHandler
@@ -47,9 +45,12 @@ type MuxPortTestSuite struct {
 }
 
 func (suite *MuxPortTestSuite) SetupTest() {
-	suite.mockLog = mockLog
+	suite.mockContext = context.NewMockDefault()
 	suite.mockDataChannel = &dataChannelMock.IDataChannel{}
-	suite.session = &MuxPortSession{cancelled: make(chan struct{})}
+
+	suite.session = &MuxPortSession{
+		context:   suite.mockContext,
+		cancelled: make(chan struct{})}
 }
 
 // Test HandleStreamMessage
@@ -66,7 +67,7 @@ func (suite *MuxPortTestSuite) TestHandleStreamMessage() {
 		assert.Equal(suite.T(), payload, output[:n])
 	}()
 
-	suite.session.HandleStreamMessage(suite.mockLog, getAgentMessage(uint32(mgsContracts.Output), payload))
+	suite.session.HandleStreamMessage(getAgentMessage(uint32(mgsContracts.Output), payload))
 }
 
 func (suite *MuxPortTestSuite) TestHandleStreamMessageWriteFailed() {
@@ -75,7 +76,7 @@ func (suite *MuxPortTestSuite) TestHandleStreamMessageWriteFailed() {
 	defer out.Close()
 	// Close the write pipe
 	in.Close()
-	assert.Error(suite.T(), suite.session.HandleStreamMessage(suite.mockLog, getAgentMessage(uint32(mgsContracts.Output), payload)))
+	assert.Error(suite.T(), suite.session.HandleStreamMessage(getAgentMessage(uint32(mgsContracts.Output), payload)))
 }
 
 func (suite *MuxPortTestSuite) TestHandleStreamMessageWhenTerminateSessionFlagIsReceived() {
@@ -94,7 +95,7 @@ func (suite *MuxPortTestSuite) TestHandleStreamMessageWhenTerminateSessionFlagIs
 		assert.Equal(suite.T(), struct{}{}, cancelled)
 	}()
 
-	suite.session.HandleStreamMessage(suite.mockLog, getAgentMessage(uint32(mgsContracts.Flag), flagBuf.Bytes()))
+	suite.session.HandleStreamMessage(getAgentMessage(uint32(mgsContracts.Flag), flagBuf.Bytes()))
 	wg.Wait()
 }
 
@@ -108,13 +109,13 @@ func (suite *MuxPortTestSuite) TestWritePumpFailsToRead() {
 
 	suite.session.mgsConn = &MgsConn{nil, out}
 	suite.session.muxServer = &MuxServer{in, session}
-	errCode := suite.session.WritePump(suite.mockLog, suite.mockDataChannel)
+	errCode := suite.session.WritePump(suite.mockDataChannel)
 
 	assert.Equal(suite.T(), appconfig.ErrorExitCode, errCode)
 }
 
 func (suite *MuxPortTestSuite) TestWritePump() {
-	suite.mockDataChannel.On("SendStreamDataMessage", suite.mockLog, mgsContracts.Output, payload).Return(nil)
+	suite.mockDataChannel.On("SendStreamDataMessage", suite.mockContext.Log(), mgsContracts.Output, payload).Return(nil)
 
 	out, in := net.Pipe()
 	session, _ := smux.Server(in, nil)
@@ -128,7 +129,7 @@ func (suite *MuxPortTestSuite) TestWritePump() {
 
 	suite.session.mgsConn = &MgsConn{nil, out}
 	suite.session.muxServer = &MuxServer{in, session}
-	suite.session.WritePump(suite.mockLog, suite.mockDataChannel)
+	suite.session.WritePump(suite.mockDataChannel)
 
 	// Assert if SendStreamDataMessage function was called with same data from stdout
 	suite.mockDataChannel.AssertExpectations(suite.T())

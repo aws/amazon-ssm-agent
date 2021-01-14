@@ -298,7 +298,7 @@ func (agentMessage *AgentMessage) ParseAgentMessage(context context.T,
 	}
 
 	docState, err := docparser.InitializeDocState(
-		log,
+		context,
 		contracts.StartSession,
 		docContent,
 		documentInfo,

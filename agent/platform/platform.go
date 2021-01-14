@@ -29,8 +29,6 @@ const (
 	commandOutputMessage          = "Command output %v"
 )
 
-
-
 var getPlatformNameFn = getPlatformName
 
 // PlatformName gets the OS specific platform name.
@@ -70,8 +68,6 @@ func PlatformSku(log log.T) (sku string, err error) {
 func Hostname(log log.T) (name string, err error) {
 	return fullyQualifiedDomainName(log), nil
 }
-
-
 
 // IP of the network interface
 func IP() (selected string, err error) {

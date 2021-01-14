@@ -161,8 +161,8 @@ func createStubManifest() *Manifest {
 }
 
 //createStubInstanceContext is a helper function to create a stub instance for testing
-func createStubInstanceContext() *updateutil.InstanceContext {
-	context := updateutil.InstanceContext{}
+func createStubInstanceContext() *updateutil.InstanceInfo {
+	context := updateutil.InstanceInfo{}
 	context.Region = "region"
 	return &context
 }

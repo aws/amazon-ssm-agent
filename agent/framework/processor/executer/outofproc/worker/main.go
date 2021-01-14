@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/aws/amazon-ssm-agent/common/identity"
 	"os"
 	"time"
 
@@ -17,6 +16,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 )
 
 const (
@@ -71,7 +71,7 @@ func main() {
 	}
 	logger.Infof("document: %v worker started", channelName)
 	//create channel from the given handle identifier by master
-	ipc, err, _ := filewatcherbasedipc.CreateFileWatcherChannel(logger, filewatcherbasedipc.ModeWorker, channelName, false)
+	ipc, err, _ := filewatcherbasedipc.CreateFileWatcherChannel(logger, ctx.Identity(), filewatcherbasedipc.ModeWorker, channelName, false)
 	if err != nil {
 		logger.Errorf("failed to create channel: %v", err)
 		logger.Close()

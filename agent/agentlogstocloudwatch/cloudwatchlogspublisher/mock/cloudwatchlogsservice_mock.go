@@ -76,55 +76,55 @@ func (m *CloudWatchLogsClientMock) DescribeLogStreams(input *cloudwatchlogs.Desc
 }
 
 // CreateNewServiceIfUnHealthy mocks CloudWatchLogsService CreateNewServiceIfUnHealthy method
-func (m *CloudWatchLogsServiceMock) CreateNewServiceIfUnHealthy(log log.T) {
+func (m *CloudWatchLogsServiceMock) CreateNewServiceIfUnHealthy() {
 
 }
 
 // CreateLogGroup mocks CloudWatchLogsService CreateLogGroup method
-func (m *CloudWatchLogsServiceMock) CreateLogGroup(log log.T, logGroup string) (err error) {
-	args := m.Called(log, logGroup)
+func (m *CloudWatchLogsServiceMock) CreateLogGroup(logGroup string) (err error) {
+	args := m.Called(logGroup)
 	return args.Error(0)
 }
 
 // CreateLogStream mocks CloudWatchLogsService CreateLogStream method
-func (m *CloudWatchLogsServiceMock) CreateLogStream(log log.T, logGroup, logStream string) (err error) {
-	args := m.Called(log, logGroup, logStream)
+func (m *CloudWatchLogsServiceMock) CreateLogStream(logGroup, logStream string) (err error) {
+	args := m.Called(logGroup, logStream)
 	return args.Error(0)
 }
 
 // DescribeLogGroups mocks CloudWatchLogsService DescribeLogGroups method
-func (m *CloudWatchLogsServiceMock) DescribeLogGroups(log log.T, logGroupPrefix, nextToken string) (response *cloudwatchlogs.DescribeLogGroupsOutput, err error) {
-	args := m.Called(log, logGroupPrefix, nextToken)
+func (m *CloudWatchLogsServiceMock) DescribeLogGroups(logGroupPrefix, nextToken string) (response *cloudwatchlogs.DescribeLogGroupsOutput, err error) {
+	args := m.Called(logGroupPrefix, nextToken)
 	return args.Get(0).(*cloudwatchlogs.DescribeLogGroupsOutput), args.Error(1)
 }
 
 // DescribeLogStreams mocks CloudWatchLogsService DescribeLogStreams method
-func (m *CloudWatchLogsServiceMock) DescribeLogStreams(log log.T, logGroup, logStreamPrefix, nextToken string) (response *cloudwatchlogs.DescribeLogStreamsOutput, err error) {
-	args := m.Called(log, logGroup, logStreamPrefix, nextToken)
+func (m *CloudWatchLogsServiceMock) DescribeLogStreams(logGroup, logStreamPrefix, nextToken string) (response *cloudwatchlogs.DescribeLogStreamsOutput, err error) {
+	args := m.Called(logGroup, logStreamPrefix, nextToken)
 	return args.Get(0).(*cloudwatchlogs.DescribeLogStreamsOutput), args.Error(1)
 }
 
 // GetLogGroupDetails mocks CloudWatchLogsService getLogGroupDetails method
-func (m *CloudWatchLogsServiceMock) GetLogGroupDetails(log log.T, logGroup string) (logGroupDetails *cloudwatchlogs.LogGroup, err error) {
-	args := m.Called(log, logGroup)
+func (m *CloudWatchLogsServiceMock) GetLogGroupDetails(logGroup string) (logGroupDetails *cloudwatchlogs.LogGroup, err error) {
+	args := m.Called(logGroup)
 	return args.Get(0).(*cloudwatchlogs.LogGroup), args.Error(1)
 }
 
 // IsLogGroupPresent mocks CloudWatchLogsService IsLogGroupPresent method
-func (m *CloudWatchLogsServiceMock) IsLogGroupPresent(log log.T, logGroup string) (bool, *cloudwatchlogs.LogGroup) {
-	args := m.Called(log, logGroup)
+func (m *CloudWatchLogsServiceMock) IsLogGroupPresent(logGroup string) (bool, *cloudwatchlogs.LogGroup) {
+	args := m.Called(logGroup)
 	return args.Bool(0), args.Get(1).(*cloudwatchlogs.LogGroup)
 }
 
 // IsLogStreamPresent mocks CloudWatchLogsService IsLogStreamPresent method
-func (m *CloudWatchLogsServiceMock) IsLogStreamPresent(log log.T, logGroupName, logStreamName string) bool {
-	args := m.Called(log, logGroupName, logStreamName)
+func (m *CloudWatchLogsServiceMock) IsLogStreamPresent(logGroupName, logStreamName string) bool {
+	args := m.Called(logGroupName, logStreamName)
 	return args.Bool(0)
 }
 
 // GetSequenceTokenForStream mocks CloudWatchLogsService GetSequenceTokenForStream method
-func (m *CloudWatchLogsServiceMock) GetSequenceTokenForStream(log log.T, logGroupName, logStreamName string) (sequenceToken *string) {
-	args := m.Called(log, logGroupName, logStreamName)
+func (m *CloudWatchLogsServiceMock) GetSequenceTokenForStream(logGroupName, logStreamName string) (sequenceToken *string) {
+	args := m.Called(logGroupName, logStreamName)
 	if args.Get(0) == nil {
 		return nil
 	}
@@ -132,14 +132,14 @@ func (m *CloudWatchLogsServiceMock) GetSequenceTokenForStream(log log.T, logGrou
 }
 
 // getLogStreamDetails mocks CloudWatchLogsService getLogStreamDetails method
-func (m *CloudWatchLogsServiceMock) getLogStreamDetails(log log.T, logGroupName, logStreamName string) (logStream *cloudwatchlogs.LogStream) {
-	args := m.Called(log, logGroupName, logStreamName)
+func (m *CloudWatchLogsServiceMock) getLogStreamDetails(logGroupName, logStreamName string) (logStream *cloudwatchlogs.LogStream) {
+	args := m.Called(logGroupName, logStreamName)
 	return args.Get(0).(*cloudwatchlogs.LogStream)
 }
 
 // PutLogEvents mocks CloudWatchLogsService PutLogEvents method
-func (m *CloudWatchLogsServiceMock) PutLogEvents(log log.T, messages []*cloudwatchlogs.InputLogEvent, logGroup, logStream string, sequenceToken *string) (nextSequenceToken *string, err error) {
-	args := m.Called(log, messages, logGroup, logStream, sequenceToken)
+func (m *CloudWatchLogsServiceMock) PutLogEvents(messages []*cloudwatchlogs.InputLogEvent, logGroup, logStream string, sequenceToken *string) (nextSequenceToken *string, err error) {
+	args := m.Called(messages, logGroup, logStream, sequenceToken)
 	if args.Get(0) == nil {
 		return nil, args.Error(1)
 	}
@@ -147,20 +147,20 @@ func (m *CloudWatchLogsServiceMock) PutLogEvents(log log.T, messages []*cloudwat
 }
 
 // retryPutWithNewSequenceToken mocks CloudWatchLogsService retryPutWithNewSequenceToken method
-func (m *CloudWatchLogsServiceMock) retryPutWithNewSequenceToken(log log.T, messages []*cloudwatchlogs.InputLogEvent, logGroupName, logStreamName string) (*string, error) {
-	args := m.Called(log, messages, logGroupName, logStreamName)
+func (m *CloudWatchLogsServiceMock) retryPutWithNewSequenceToken(messages []*cloudwatchlogs.InputLogEvent, logGroupName, logStreamName string) (*string, error) {
+	args := m.Called(messages, logGroupName, logStreamName)
 	return args.Get(0).(*string), args.Error(1)
 }
 
 // IsLogGroupEncryptedWithKMS mocks CloudWatchLogsService IsLogGroupEncryptedWithKMS method
-func (m *CloudWatchLogsServiceMock) IsLogGroupEncryptedWithKMS(log log.T, logGroup *cloudwatchlogs.LogGroup) (bool, error) {
-	args := m.Called(log, logGroup)
+func (m *CloudWatchLogsServiceMock) IsLogGroupEncryptedWithKMS(logGroup *cloudwatchlogs.LogGroup) (bool, error) {
+	args := m.Called(logGroup)
 	return args.Get(0).(bool), args.Error(1)
 }
 
 // StreamData mocks CloudWatchLogsService StreamData method
-func (m *CloudWatchLogsServiceMock) StreamData(log log.T, logGroupName string, logStreamName string, absoluteFilePath string, isFileComplete bool, isLogStreamCreated bool, fileCompleteSignal chan bool, processControlSequences bool, structuredLogs bool) (success bool) {
-	args := m.Called(log, logGroupName, logStreamName, absoluteFilePath, isFileComplete, isLogStreamCreated, fileCompleteSignal, processControlSequences, structuredLogs)
+func (m *CloudWatchLogsServiceMock) StreamData(logGroupName string, logStreamName string, absoluteFilePath string, isFileComplete bool, isLogStreamCreated bool, fileCompleteSignal chan bool, processControlSequences bool, structuredLogs bool) (success bool) {
+	args := m.Called(logGroupName, logStreamName, absoluteFilePath, isFileComplete, isLogStreamCreated, fileCompleteSignal, processControlSequences, structuredLogs)
 	return args.Bool(0)
 }
 

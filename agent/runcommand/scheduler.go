@@ -118,9 +118,8 @@ func (s *RunCommandService) reset() {
 
 	// creating a new mds service object for the retry
 	// this is extra insurance to avoid service object getting corrupted - adding resiliency
-	config := s.context.AppConfig()
 	if s.name == mdsName {
-		s.service = newMdsService(log, config)
+		s.service = newMdsService(s.context)
 	}
 }
 

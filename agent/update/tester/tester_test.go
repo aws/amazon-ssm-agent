@@ -18,12 +18,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	testCommon "github.com/aws/amazon-ssm-agent/agent/update/tester/common"
 	testerMock "github.com/aws/amazon-ssm-agent/agent/update/tester/stages/mocks"
-
 	"github.com/stretchr/testify/assert"
-
 	"github.com/stretchr/testify/suite"
 )
 
@@ -39,20 +37,20 @@ func TestTesterSuite(t *testing.T) {
 
 // SetupTest initializes Setup
 func (suite *ITesterSuite) SetupTest() {
-	getPreInstallTestObj = func(log log.T) testCommon.ITestStage {
+	getPreInstallTestObj = func(context context.T) testCommon.ITestStage {
 		return getPreInstallMock("")
 	}
 }
 
 // TestBasicTest tests basic functionality
 func (suite *ITesterSuite) TestBasicTest() {
-	output := StartTests(log.NewMockLog(), testCommon.PreInstallTest, 1)
+	output := StartTests(context.NewMockDefault(), testCommon.PreInstallTest, 1)
 	assert.Empty(suite.T(), output)
 }
 
 // TestUnknownTestStage tests StartTests function with unknown stage
 func (suite *ITesterSuite) TestUnknownTestStage() {
-	output := StartTests(log.NewMockLog(), testCommon.PostInstallTest, 1)
+	output := StartTests(context.NewMockDefault(), testCommon.PostInstallTest, 1)
 	assert.Empty(suite.T(), output)
 }
 
@@ -62,19 +60,19 @@ func (suite *ITesterSuite) TestTimeout() {
 		time.Sleep(4 * time.Second)
 		return true
 	}
-	getPreInstallTestObj = func(log log.T) testCommon.ITestStage {
+	getPreInstallTestObj = func(context context.T) testCommon.ITestStage {
 		return getPreInstallMock("listenPipeFailure")
 	}
-	output := StartTests(log.NewMockLog(), testCommon.PreInstallTest, 2)
+	output := StartTests(context.NewMockDefault(), testCommon.PreInstallTest, 2)
 	assert.Equal(suite.T(), output, "listenPipeFailure")
 }
 
 // TestFailedTest tests StartTests function with failed test case within PreInstallTest test stage
 func (suite *ITesterSuite) TestFailedTest() {
-	getPreInstallTestObj = func(log log.T) testCommon.ITestStage {
+	getPreInstallTestObj = func(context context.T) testCommon.ITestStage {
 		return getPreInstallMock("listenPipeFailure")
 	}
-	output := StartTests(log.NewMockLog(), testCommon.PreInstallTest, 1)
+	output := StartTests(context.NewMockDefault(), testCommon.PreInstallTest, 1)
 	assert.Equal(suite.T(), output, "listenPipeFailure")
 }
 

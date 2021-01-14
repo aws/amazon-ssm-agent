@@ -15,11 +15,11 @@ package iohandler
 
 import (
 	"fmt"
-	"testing"
-
 	"sync"
+	"testing"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	iomodulemock "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/iomodule/mock"
 	multiwritermock "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/multiwriter/mock"
@@ -72,6 +72,7 @@ var logger = log.NewMockLog()
 
 func TestRegisterOutputSource(t *testing.T) {
 	mockDocumentIOMultiWriter := new(multiwritermock.MockDocumentIOMultiWriter)
+	mockContext := context.NewMockDefault()
 
 	mockDocumentIOMultiWriter.On("AddWriter", mock.Anything).Times(2)
 	wg := new(sync.WaitGroup)
@@ -82,12 +83,13 @@ func TestRegisterOutputSource(t *testing.T) {
 
 	// Create multiple test IOModules
 	testModule1 := new(iomodulemock.MockIOModule)
-	testModule1.On("Read", logger, mock.Anything).Return()
+	testModule1.On("Read", mockContext, mock.Anything).Return()
 	testModule2 := new(iomodulemock.MockIOModule)
-	testModule2.On("Read", logger, mock.Anything).Return()
+	testModule2.On("Read", mockContext, mock.Anything).Return()
 
-	output := DefaultIOHandler{}
-	output.RegisterOutputSource(logger, mockDocumentIOMultiWriter, testModule1, testModule2)
+	output := NewDefaultIOHandler(mockContext, contracts.IOConfiguration{})
+
+	output.RegisterOutputSource(mockDocumentIOMultiWriter, testModule1, testModule2)
 
 	// Sleep a bit to allow threads to finish in RegisterOutputSource to check WaitGroup
 	time.Sleep(250 * time.Millisecond)

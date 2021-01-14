@@ -19,7 +19,6 @@ package outofproc
 import (
 	"errors"
 	"testing"
-
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -31,6 +30,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc"
 	channelmock "github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc/mocks"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/amazon-ssm-agent/core/executor"
 	"github.com/stretchr/testify/assert"
 )
@@ -43,7 +43,7 @@ var fakeProcess *FakeProcess
 func setup(t *testing.T) *TestCase {
 	logger.Info("initializing dependencies for integration testing...")
 	testCase := CreateTestCase()
-	channelCreator = func(log log.T, mode filewatcherbasedipc.Mode, documentID string) (filewatcherbasedipc.IPCChannel, error, bool) {
+	channelCreator = func(log log.T, identity identity.IAgentIdentity, mode filewatcherbasedipc.Mode, documentID string) (filewatcherbasedipc.IPCChannel, error, bool) {
 		isFound := channelmock.IsExists(documentID)
 		assert.Equal(t, testDocumentID, documentID)
 		fakeChannel := channelmock.NewFakeChannel(logger, mode, documentID)

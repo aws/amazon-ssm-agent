@@ -31,13 +31,12 @@ var serviceMock = cloudwatchlogspublisher_mock.NewServiceMockDefault(logMock)
 
 func TestCreateLogGroupError(t *testing.T) {
 	serviceMock := cloudwatchlogspublisher_mock.NewServiceMockDefault(logMock)
-	serviceMock.On("IsLogGroupPresent", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return(false, &cloudwatchlogs.LogGroup{})
-	serviceMock.On("CreateLogGroup", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return(errors.New("Log Group Creation Service Error"))
+	serviceMock.On("IsLogGroupPresent", mock.AnythingOfType("string")).Return(false, &cloudwatchlogs.LogGroup{})
+	serviceMock.On("CreateLogGroup", mock.AnythingOfType("string")).Return(errors.New("Log Group Creation Service Error"))
 
 	cwPublisher := CloudWatchPublisher{
-		log:                   logMock,
+		context:               contextMock,
 		cloudWatchLogsService: serviceMock,
-		instanceID:            "instanceID",
 	}
 
 	err := cwPublisher.createLogGroupAndStream("GroupDoesNotExist", "Stream")
@@ -47,14 +46,13 @@ func TestCreateLogGroupError(t *testing.T) {
 
 func TestCreateLogStreamError(t *testing.T) {
 	serviceMock := cloudwatchlogspublisher_mock.NewServiceMockDefault(logMock)
-	serviceMock.On("IsLogGroupPresent", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string")).Return(true, &cloudwatchlogs.LogGroup{})
-	serviceMock.On("IsLogStreamPresent", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(false)
-	serviceMock.On("CreateLogStream", mock.AnythingOfType("*log.Mock"), mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(errors.New("Log Stream Creation Service Error"))
+	serviceMock.On("IsLogGroupPresent", mock.AnythingOfType("string")).Return(true, &cloudwatchlogs.LogGroup{})
+	serviceMock.On("IsLogStreamPresent", mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(false)
+	serviceMock.On("CreateLogStream", mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(errors.New("Log Stream Creation Service Error"))
 
 	cwPublisher := CloudWatchPublisher{
-		log:                   logMock,
+		context:               contextMock,
 		cloudWatchLogsService: serviceMock,
-		instanceID:            "instanceID",
 	}
 
 	err := cwPublisher.createLogGroupAndStream("Group", "StreamDoesNotExist")

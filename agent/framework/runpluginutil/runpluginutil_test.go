@@ -96,7 +96,7 @@ func TestRunPluginsWithNewDocument(t *testing.T) {
 			Output:        "",
 		}
 
-		pluginInstances[name].On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return()
+		pluginInstances[name].On("Execute", pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return()
 
 		pluginFactory := new(PluginFactoryMock)
 		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
@@ -267,13 +267,13 @@ func TestRunPluginsWithCancelFlagShutdown(t *testing.T) {
 			EndDateTime:   defaultTime,
 		}
 		if name == testPlugin1 {
-			plugins[name].On("Execute", ctx, pluginState.Configuration, cancelFlag, mock.Anything).Run(func(args mock.Arguments) {
-				flag := args.Get(2).(task.CancelFlag)
+			plugins[name].On("Execute", pluginState.Configuration, cancelFlag, mock.Anything).Run(func(args mock.Arguments) {
+				flag := args.Get(1).(task.CancelFlag)
 				flag.Set(task.ShutDown)
 			}).Return()
 
 		} else {
-			plugins[name].On("Execute", ctx, pluginState.Configuration, cancelFlag, mock.Anything).Return()
+			plugins[name].On("Execute", pluginState.Configuration, cancelFlag, mock.Anything).Return()
 		}
 		pluginStates[index] = pluginState
 		pluginFactory := new(PluginFactoryMock)
@@ -340,7 +340,7 @@ func TestRunPluginsWithInProgressDocuments(t *testing.T) {
 			pluginState.Result = *pluginResults[name]
 		} else {
 			pluginState.Result.Status = contracts.ResultStatusNotStarted
-			plugins[name].On("Execute", ctx, pluginState.Configuration, cancelFlag, mock.Anything).Return()
+			plugins[name].On("Execute", pluginState.Configuration, cancelFlag, mock.Anything).Return()
 		}
 		pluginStates[index] = pluginState
 		pluginFactory := new(PluginFactoryMock)
@@ -439,7 +439,7 @@ func TestRunPluginsWithDuplicatePluginType(t *testing.T) {
 
 		pluginFactory := new(PluginFactoryMock)
 		pluginFactory.On("Create", mock.Anything).Return(plugin, nil)
-		plugin.On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return(*pluginResults[name])
+		plugin.On("Execute", pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return(*pluginResults[name])
 		pluginRegistry[pluginType] = pluginFactory
 
 		pluginConfigs2[index] = pluginConfigs[name]
@@ -544,7 +544,7 @@ func TestRunPluginsWithCompatiblePlatformPrecondition(t *testing.T) {
 		pluginFactory := new(PluginFactoryMock)
 		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
 		pluginRegistry[name] = pluginFactory
-		pluginInstances[name].On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return()
+		pluginInstances[name].On("Execute", pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return()
 
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
@@ -646,7 +646,7 @@ func TestRunPluginsWithCompatiblePlatformPreconditionWithValueFirst(t *testing.T
 		pluginFactory := new(PluginFactoryMock)
 		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
 		pluginRegistry[name] = pluginFactory
-		pluginInstances[name].On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return()
+		pluginInstances[name].On("Execute", pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return()
 
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
@@ -961,7 +961,7 @@ func TestRunPluginsWithCompatiblePreconditionButMissingPluginHandler(t *testing.
 				StartDateTime: defaultTime,
 				EndDateTime:   defaultTime,
 			}
-			pluginInstances[name].On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return(*pluginResults[name])
+			pluginInstances[name].On("Execute", pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return(*pluginResults[name])
 		}
 		pluginFactory := new(PluginFactoryMock)
 		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
@@ -2168,7 +2168,7 @@ func TestRunPluginsWithCompatibleParamParamPrecondition(t *testing.T) {
 		pluginFactory := new(PluginFactoryMock)
 		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
 		pluginRegistry[name] = pluginFactory
-		pluginInstances[name].On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return()
+		pluginInstances[name].On("Execute", pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return()
 
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
@@ -2372,7 +2372,7 @@ func TestRunPluginsWithCompatibleParamValuePrecondition(t *testing.T) {
 		pluginFactory := new(PluginFactoryMock)
 		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
 		pluginRegistry[name] = pluginFactory
-		pluginInstances[name].On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return()
+		pluginInstances[name].On("Execute", pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return()
 
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
@@ -2474,7 +2474,7 @@ func TestRunPluginsWithCompatibleValueParamPrecondition(t *testing.T) {
 		pluginFactory := new(PluginFactoryMock)
 		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
 		pluginRegistry[name] = pluginFactory
-		pluginInstances[name].On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return()
+		pluginInstances[name].On("Execute", pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return()
 
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
@@ -2678,7 +2678,7 @@ func TestRunPluginsWithCompatibleMixedPrecondition(t *testing.T) {
 		pluginFactory := new(PluginFactoryMock)
 		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
 		pluginRegistry[name] = pluginFactory
-		pluginInstances[name].On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return()
+		pluginInstances[name].On("Execute", pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return()
 
 		pluginConfigs2[index] = pluginConfigs[name]
 	}
@@ -3011,7 +3011,7 @@ func TestRunPluginsWithUnknownPlugin(t *testing.T) {
 				StartDateTime: defaultTime,
 				EndDateTime:   defaultTime,
 			}
-			pluginInstances[name].On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return(*pluginResults[name])
+			pluginInstances[name].On("Execute", pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return(*pluginResults[name])
 		}
 		pluginFactory := new(PluginFactoryMock)
 		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)
@@ -3092,7 +3092,7 @@ func TestRunPluginSuccessWithNonTruncatedResult(t *testing.T) {
 			StandardOutput: "",
 		}
 
-		pluginInstances[name].On("Execute", ctx, pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return()
+		pluginInstances[name].On("Execute", pluginConfigs[name].Configuration, cancelFlag, mock.Anything).Return()
 
 		pluginFactory := new(PluginFactoryMock)
 		pluginFactory.On("Create", mock.Anything).Return(pluginInstances[name], nil)

@@ -1,24 +1,22 @@
 package outofproc
 
 import (
+	"errors"
 	"testing"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/core/executor"
-
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	executermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/mock"
-	procmock "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/proc/mock"
-	"github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc"
-	channelmock "github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc/mocks"
-
-	"errors"
-
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/proc"
+	procmock "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc/proc/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
+	"github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc"
+	channelmock "github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc/mocks"
+	"github.com/aws/amazon-ssm-agent/common/identity"
+	"github.com/aws/amazon-ssm-agent/core/executor"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -104,7 +102,7 @@ func CreateTestCase() *TestCase {
 func TestInitializeNewProcess(t *testing.T) {
 	testCase := CreateTestCase()
 	channelMock := new(channelmock.MockedChannel)
-	channelCreator = func(log log.T, mode filewatcherbasedipc.Mode, documentID string) (filewatcherbasedipc.IPCChannel, error, bool) {
+	channelCreator = func(log log.T, identity identity.IAgentIdentity, mode filewatcherbasedipc.Mode, documentID string) (filewatcherbasedipc.IPCChannel, error, bool) {
 		assert.Equal(t, mode, filewatcherbasedipc.ModeMaster)
 		assert.Equal(t, testDocumentID, documentID)
 		return channelMock, nil, false
@@ -138,7 +136,7 @@ func TestInitializeNewProcess(t *testing.T) {
 func TestInitializeNewProcessForSession(t *testing.T) {
 	testCase := createTestCaseForStartSession()
 	channelMock := new(channelmock.MockedChannel)
-	channelCreator = func(log log.T, mode filewatcherbasedipc.Mode, documentID string) (filewatcherbasedipc.IPCChannel, error, bool) {
+	channelCreator = func(log log.T, identity identity.IAgentIdentity, mode filewatcherbasedipc.Mode, documentID string) (filewatcherbasedipc.IPCChannel, error, bool) {
 		assert.Equal(t, mode, filewatcherbasedipc.ModeMaster)
 		assert.Equal(t, testDocumentID, documentID)
 		return channelMock, nil, false
@@ -208,7 +206,7 @@ func TestCreateProcessFailed(t *testing.T) {
 	testCase := CreateTestCase()
 	channelMock := new(channelmock.MockedChannel)
 	channelMock.On("Destroy").Return(nil)
-	channelCreator = func(log log.T, mode filewatcherbasedipc.Mode, documentID string) (filewatcherbasedipc.IPCChannel, error, bool) {
+	channelCreator = func(log log.T, identity identity.IAgentIdentity, mode filewatcherbasedipc.Mode, documentID string) (filewatcherbasedipc.IPCChannel, error, bool) {
 		assert.Equal(t, mode, filewatcherbasedipc.ModeMaster)
 		assert.Equal(t, testDocumentID, documentID)
 		return channelMock, nil, false
@@ -234,7 +232,7 @@ func TestInitializeProcessUnexpectedExited(t *testing.T) {
 	testCase := CreateTestCase()
 	channelMock := new(channelmock.MockedChannel)
 	channelMock.On("Destroy").Return(nil)
-	channelCreator = func(log log.T, mode filewatcherbasedipc.Mode, documentID string) (filewatcherbasedipc.IPCChannel, error, bool) {
+	channelCreator = func(log log.T, identity identity.IAgentIdentity, mode filewatcherbasedipc.Mode, documentID string) (filewatcherbasedipc.IPCChannel, error, bool) {
 		assert.Equal(t, mode, filewatcherbasedipc.ModeMaster)
 		assert.Equal(t, testDocumentID, documentID)
 		return channelMock, nil, false
@@ -295,7 +293,7 @@ func TestInitializeProcessUnexpectedExited(t *testing.T) {
 func TestInitializeConnectOldOrphan(t *testing.T) {
 	testCase := CreateTestCase()
 	channelMock := new(channelmock.MockedChannel)
-	channelCreator = func(log log.T, mode filewatcherbasedipc.Mode, documentID string) (filewatcherbasedipc.IPCChannel, error, bool) {
+	channelCreator = func(log log.T, identity identity.IAgentIdentity, mode filewatcherbasedipc.Mode, documentID string) (filewatcherbasedipc.IPCChannel, error, bool) {
 		assert.Equal(t, mode, filewatcherbasedipc.ModeMaster)
 		assert.Equal(t, testDocumentID, documentID)
 		return channelMock, nil, true

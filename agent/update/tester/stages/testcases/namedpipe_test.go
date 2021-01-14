@@ -19,12 +19,14 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	channel "github.com/aws/amazon-ssm-agent/common/channel"
 	channelmocks "github.com/aws/amazon-ssm-agent/common/channel/mocks"
+	"github.com/aws/amazon-ssm-agent/common/identity"
+	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/aws/amazon-ssm-agent/common/message"
 	"github.com/stretchr/testify/assert"
-
 	"github.com/stretchr/testify/mock"
 	"github.com/stretchr/testify/suite"
 )
@@ -32,7 +34,7 @@ import (
 type NamedPipeTestCaseTestSuite struct {
 	suite.Suite
 	namedPipeTestCaseObj *NamedPipeTestCase
-	mockLog              log.T
+	mockContext          *context.Mock
 }
 
 //Execute the test suite
@@ -45,56 +47,59 @@ func (suite *NamedPipeTestCaseTestSuite) SetupTest() {
 	channelCreator = func() error {
 		return nil
 	}
+
 	suite.namedPipeTestCaseObj = &NamedPipeTestCase{}
-	logger := log.NewMockLog()
-	logger.On("WithContext", []string{"[Test" + suite.namedPipeTestCaseObj.GetTestCaseName() + "]"}).Return(logger)
-	suite.mockLog = logger
-	suite.namedPipeTestCaseObj.Initialize(suite.mockLog)
-	createChannel = func(logger log.T) channel.IChannel {
+	suite.mockContext = &context.Mock{}
+	suite.mockContext.On("Log").Return(log.NewMockLog())
+	suite.mockContext.On("With", "[TestNamedPipe]").Return(suite.mockContext)
+	suite.mockContext.On("Identity").Return(identityMocks.NewDefaultMockAgentIdentity())
+
+	suite.namedPipeTestCaseObj.Initialize(suite.mockContext)
+	createChannel = func(log.T, identity.IAgentIdentity) channel.IChannel {
 		return getChannelMock(nil, nil, nil, nil, nil)
 	}
 }
 
 // TestListenFail tests the listenPipe failure scenario
 func (suite *NamedPipeTestCaseTestSuite) TestListenFail() {
-	createChannel = func(logger log.T) channel.IChannel {
+	createChannel = func(log.T, identity.IAgentIdentity) channel.IChannel {
 		listenErr := errors.New("error")
 		return getChannelMock(nil, nil, listenErr, nil, nil)
 	}
-	suite.namedPipeTestCaseObj.Initialize(suite.mockLog)
+	suite.namedPipeTestCaseObj.Initialize(suite.mockContext)
 	output := suite.namedPipeTestCaseObj.ExecuteTestCase()
 	assert.Contains(suite.T(), output.Err.Error(), "listening to pipe failed")
 }
 
 // TestDialFail tests the Dial failure scenario
 func (suite *NamedPipeTestCaseTestSuite) TestDialFail() {
-	createChannel = func(logger log.T) channel.IChannel {
+	createChannel = func(log.T, identity.IAgentIdentity) channel.IChannel {
 		dialErr := errors.New("error")
 		return getChannelMock(nil, dialErr, nil, nil, nil)
 	}
-	suite.namedPipeTestCaseObj.Initialize(suite.mockLog)
+	suite.namedPipeTestCaseObj.Initialize(suite.mockContext)
 	output := suite.namedPipeTestCaseObj.ExecuteTestCase()
 	assert.Contains(suite.T(), output.Err.Error(), "dialing was unsuccessful")
 }
 
 // TestInitializeFail tests the initialization fail scenario
 func (suite *NamedPipeTestCaseTestSuite) TestInitializeFail() {
-	createChannel = func(logger log.T) channel.IChannel {
+	createChannel = func(log.T, identity.IAgentIdentity) channel.IChannel {
 		initErr := errors.New("error")
 		return getChannelMock(initErr, nil, nil, nil, nil)
 	}
-	suite.namedPipeTestCaseObj.Initialize(suite.mockLog)
+	suite.namedPipeTestCaseObj.Initialize(suite.mockContext)
 	output := suite.namedPipeTestCaseObj.ExecuteTestCase()
 	assert.NotNil(suite.T(), output.Err)
 }
 
 // TestInitializeFail tests the initialization fail scenario
 func (suite *NamedPipeTestCaseTestSuite) TestSendFail() {
-	createChannel = func(logger log.T) channel.IChannel {
+	createChannel = func(log.T, identity.IAgentIdentity) channel.IChannel {
 		sendErr := errors.New("error")
 		return getChannelMock(nil, nil, nil, nil, sendErr)
 	}
-	suite.namedPipeTestCaseObj.Initialize(suite.mockLog)
+	suite.namedPipeTestCaseObj.Initialize(suite.mockContext)
 	output := suite.namedPipeTestCaseObj.ExecuteTestCase()
 	assert.NotNil(suite.T(), output.Err)
 }

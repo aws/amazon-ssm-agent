@@ -16,28 +16,30 @@ package linuxcontainerutil
 import (
 	"fmt"
 
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 )
 
-func RunInstallCommands(log log.T, orchestrationDirectory string, out iohandler.IOHandler) {
+func RunInstallCommands(context context.T, orchestrationDirectory string, out iohandler.IOHandler) {
 	var err error
-	var context *updateutil.InstanceContext
-	context, err = dep.GetInstanceContext(log)
+	var info *updateutil.InstanceInfo
+	log := context.Log()
+	info, err = dep.GetInstanceInfo(context)
 	if err != nil {
 		log.Error("Error determining Linux variant", err)
 		out.MarkAsFailed(fmt.Errorf("Error determining Linux variant: %v", err))
 		return
 	}
-	if context.Platform == updateutil.PlatformUbuntu {
+	if info.Platform == updateutil.PlatformUbuntu {
 		log.Error("Ubuntu platform is not currently supported", err)
 		out.MarkAsFailed(fmt.Errorf("Ubuntu platform is not currently supported: %v", err))
 		return
-	} else if context.Platform == updateutil.PlatformLinux {
+	} else if info.Platform == updateutil.PlatformLinux {
 		runAmazonLinuxPlatformInstallCommands(log, orchestrationDirectory, out)
 		return
-	} else if context.Platform == updateutil.PlatformRedHat {
+	} else if info.Platform == updateutil.PlatformRedHat {
 		runRedhatLinuxPlatformInstallCommands(log, orchestrationDirectory, out)
 		return
 	} else {
@@ -157,23 +159,24 @@ func runRedhatLinuxPlatformInstallCommands(log log.T, orchestrationDirectory str
 	return
 }
 
-func RunUninstallCommands(log log.T, orchestrationDirectory string, out iohandler.IOHandler) {
+func RunUninstallCommands(context context.T, orchestrationDirectory string, out iohandler.IOHandler) {
 	var err error
-	var context *updateutil.InstanceContext
-	context, err = dep.GetInstanceContext(log)
+	var info *updateutil.InstanceInfo
+	log := context.Log()
+	info, err = dep.GetInstanceInfo(context)
 	if err != nil {
 		log.Error("Error determining Linux variant", err)
 		out.MarkAsFailed(fmt.Errorf("Error determining Linux variant: %v", err))
 		return
 	}
-	if context.Platform == updateutil.PlatformUbuntu {
+	if info.Platform == updateutil.PlatformUbuntu {
 		log.Error("Ubuntu platform is not currently supported", err)
 		out.MarkAsFailed(fmt.Errorf("Ubuntu platform is not currently supported: %v", err))
 		return
-	} else if context.Platform == updateutil.PlatformLinux {
+	} else if info.Platform == updateutil.PlatformLinux {
 		runAmazonLinuxPlatformUninstallCommands(log, orchestrationDirectory, out)
 		return
-	} else if context.Platform == updateutil.PlatformRedHat {
+	} else if info.Platform == updateutil.PlatformRedHat {
 		runRedhatLinuxPlatformUninstallCommands(log, orchestrationDirectory, out)
 		return
 	} else {

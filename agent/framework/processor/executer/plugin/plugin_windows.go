@@ -31,28 +31,28 @@ type PsModuleFactory struct {
 }
 
 func (f PsModuleFactory) Create(context context.T) (runpluginutil.T, error) {
-	return psmodule.NewPlugin()
+	return psmodule.NewPlugin(context)
 }
 
 type ApplicationFactory struct {
 }
 
 func (f ApplicationFactory) Create(context context.T) (runpluginutil.T, error) {
-	return application.NewPlugin()
+	return application.NewPlugin(context)
 }
 
 type DomainJoinFactory struct {
 }
 
 func (f DomainJoinFactory) Create(context context.T) (runpluginutil.T, error) {
-	return domainjoin.NewPlugin()
+	return domainjoin.NewPlugin(context)
 }
 
 type UpdateEc2ConfigFactory struct {
 }
 
 func (f UpdateEc2ConfigFactory) Create(context context.T) (runpluginutil.T, error) {
-	return updateec2config.NewPlugin(updateec2config.GetUpdatePluginConfig(context))
+	return updateec2config.NewPlugin(context, updateec2config.GetUpdatePluginConfig(context))
 }
 
 // loadPlatformDependentPlugins registers platform dependent plugins

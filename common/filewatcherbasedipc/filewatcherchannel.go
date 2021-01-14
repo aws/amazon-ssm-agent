@@ -23,6 +23,8 @@ import (
 )
 
 const (
+	defaultChannelBufferSize = 100
+
 	defaultFileCreateMode = 0750
 	//exclusive flag works on windows, while 660 blocks others access to the file
 	defaultFileWriteMode = os.ModeExclusive | 0660

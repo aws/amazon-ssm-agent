@@ -16,6 +16,7 @@
 package processor
 
 import (
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	testCommon "github.com/aws/amazon-ssm-agent/agent/update/tester/common"
@@ -25,7 +26,7 @@ import (
 // T represents the interface for agent update
 type T interface {
 	// StartOrResumeUpdate starts/resumes update.
-	StartOrResumeUpdate(log log.T, context *UpdateContext) (err error)
+	StartOrResumeUpdate(log log.T, updateContext *UpdateContext) (err error)
 
 	// InitializeUpdate initializes update, creates update context
 	InitializeUpdate(log log.T, detail *UpdateDetail) (context *UpdateContext, err error)
@@ -34,17 +35,18 @@ type T interface {
 	Failed(context *UpdateContext, log log.T, code updateutil.ErrorCode, errMessage string, noRollbackMessage bool) (err error)
 }
 
-type prepare func(mgr *updateManager, log log.T, context *UpdateContext) (err error)
-type update func(mgr *updateManager, log log.T, context *UpdateContext) (err error)
-type verify func(mgr *updateManager, log log.T, context *UpdateContext, isRollback bool) (err error)
-type rollback func(mgr *updateManager, log log.T, context *UpdateContext) (err error)
-type uninstall func(mgr *updateManager, log log.T, version string, context *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error)
-type install func(mgr *updateManager, log log.T, version string, context *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error)
-type download func(mgr *updateManager, log log.T, downloadInput artifact.DownloadInput, context *UpdateContext, version string) (err error)
-type clean func(mgr *updateManager, log log.T, context *UpdateContext) (err error)
-type runTests func(logger log.T, stage testCommon.TestStage, timeOutSeconds int) (testOutput string)
+type prepare func(mgr *updateManager, log log.T, updateContext *UpdateContext) (err error)
+type update func(mgr *updateManager, log log.T, updateContext *UpdateContext) (err error)
+type verify func(mgr *updateManager, log log.T, updateContext *UpdateContext, isRollback bool) (err error)
+type rollback func(mgr *updateManager, log log.T, updateContext *UpdateContext) (err error)
+type uninstall func(mgr *updateManager, log log.T, version string, updateContext *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error)
+type install func(mgr *updateManager, log log.T, version string, updateContext *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error)
+type download func(mgr *updateManager, log log.T, downloadInput artifact.DownloadInput, updateContext *UpdateContext, version string) (err error)
+type clean func(mgr *updateManager, log log.T, updateContext *UpdateContext) (err error)
+type runTests func(context context.T, stage testCommon.TestStage, timeOutSeconds int) (testOutput string)
 
 type updateManager struct {
+	Context   context.T
 	util      updateutil.T
 	svc       Service
 	ctxMgr    ContextMgr

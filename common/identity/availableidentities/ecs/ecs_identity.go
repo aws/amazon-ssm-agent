@@ -15,8 +15,8 @@ package ecs
 
 import (
 	"fmt"
+	"github.com/aws/amazon-ssm-agent/common/identity/creds"
 	"github.com/aws/aws-sdk-go/aws/credentials"
-	"github.com/aws/aws-sdk-go/aws/defaults"
 )
 
 // InstanceID returns the ecs Instance ID
@@ -48,9 +48,7 @@ func (e *Identity) ServiceDomain() (string, error) {
 
 // Credentials returns the managed instance credentials
 func (e *Identity) Credentials() *credentials.Credentials {
-	cfg := defaults.Config()
-	handlers := defaults.Handlers()
-	return defaults.CredChain(cfg, handlers)
+	return creds.GetDefaultCreds()
 }
 
 // IsIdentityEnvironment returns if instance has managed instance registration

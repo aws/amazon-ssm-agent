@@ -65,7 +65,7 @@ func ParseManifest(log log.T,
 }
 
 // HasVersion returns if manifest file has particular version for package
-func (m *Manifest) HasVersion(context *updateutil.InstanceContext, version string) bool {
+func (m *Manifest) HasVersion(context *updateutil.InstanceInfo, version string) bool {
 	for _, p := range m.Packages {
 		if p.Name == EC2UpdaterPackageName && p.FileName == EC2UpdaterFileName {
 			for _, v := range p.AvailableVersions {
@@ -80,7 +80,7 @@ func (m *Manifest) HasVersion(context *updateutil.InstanceContext, version strin
 }
 
 // LatestVersion returns latest version for specific package
-func (m *Manifest) LatestVersion(log log.T, context *updateutil.InstanceContext) (result string, err error) {
+func (m *Manifest) LatestVersion(log log.T, context *updateutil.InstanceInfo) (result string, err error) {
 	var version = minimumVersion
 	var compareResult = 0
 	for _, p := range m.Packages {
@@ -107,7 +107,7 @@ func (m *Manifest) LatestVersion(log log.T, context *updateutil.InstanceContext)
 
 // DownloadURLAndHash returns download source url and hash value
 func (m *Manifest) DownloadURLAndHash(
-	context *updateutil.InstanceContext,
+	context *updateutil.InstanceInfo,
 	packageName string,
 	version string, filename string, toformat string, fromformat string) (result string, hash string, err error) {
 

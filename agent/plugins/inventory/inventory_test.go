@@ -270,7 +270,7 @@ func TestVerifyPutInventoryCall(t *testing.T) {
 	p, _ := MockInventoryPlugin(gatherers, gatherers)
 
 	itemIndex := -1
-	itemIndex, _ = p.getLargeItemIndex(MockInventoryOptimizedItem(), context.NewMockDefault(), "AWS:File")
+	itemIndex, _ = p.getLargeItemIndex(MockInventoryOptimizedItem(), "AWS:File")
 
 	assert.NotEqual(t, -1, itemIndex)
 }
@@ -286,7 +286,7 @@ func TestVerifyNoPutInventoryCall(t *testing.T) {
 	p, _ := MockInventoryPlugin(gatherers, gatherers)
 
 	itemIndex := -1
-	itemIndex, _ = p.getLargeItemIndex(MockInventorySmallOptimizedItem(), context.NewMockDefault(), "AWS:File")
+	itemIndex, _ = p.getLargeItemIndex(MockInventorySmallOptimizedItem(), "AWS:File")
 
 	assert.Equal(t, -1, itemIndex)
 }
@@ -302,7 +302,7 @@ func TestVerifyOneItemNoPutInventoryCall(t *testing.T) {
 	p, _ := MockInventoryPlugin(gatherers, gatherers)
 
 	itemIndex := -1
-	itemIndex, _ = p.getLargeItemIndex(MockInventoryLargeFileItem(), context.NewMockDefault(), "AWS:File")
+	itemIndex, _ = p.getLargeItemIndex(MockInventoryLargeFileItem(), "AWS:File")
 
 	assert.Equal(t, -1, itemIndex)
 }

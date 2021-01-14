@@ -20,10 +20,10 @@ import (
 	"fmt"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/gitresource"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/gitresource/privategit/handler"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/gitresource/privategit/handler/core"
@@ -38,6 +38,7 @@ var moveFilesFunction = fileutil.MoveFiles
 // GitResource represents a git repository
 type GitResource struct {
 	Handler handler.IGitHandler
+	context context.T
 }
 
 // GitInfo defines the accepted SourceInfo attributes and their json definition
@@ -51,7 +52,7 @@ type GitInfo struct {
 }
 
 // NewGitResource creates a new git resource
-func NewGitResource(log log.T, info string, bridge ssmparameterresolver.ISsmParameterResolverBridge) (resource *GitResource, err error) {
+func NewGitResource(context context.T, info string, bridge ssmparameterresolver.ISsmParameterResolverBridge) (resource *GitResource, err error) {
 	var gitInfo GitInfo
 
 	errorPrefix := "SourceInfo could not be unmarshalled for source type Git"
@@ -59,7 +60,7 @@ func NewGitResource(log log.T, info string, bridge ssmparameterresolver.ISsmPara
 		return nil, fmt.Errorf("%s: %s", errorPrefix, err.Error())
 	}
 
-	getOptions, err := gitresource.ParseCheckoutOptions(log, gitInfo.GetOptions)
+	getOptions, err := gitresource.ParseCheckoutOptions(context.Log(), gitInfo.GetOptions)
 	if err != nil {
 		return nil, fmt.Errorf("%s: %s", errorPrefix, err.Error())
 	}
@@ -77,12 +78,14 @@ func NewGitResource(log log.T, info string, bridge ssmparameterresolver.ISsmPara
 	}
 
 	return &GitResource{
+		context: context,
 		Handler: gitHandler,
 	}, nil
 }
 
 // DownloadRemoteResource clones a git repository into a specific download path
-func (resource *GitResource) DownloadRemoteResource(log log.T, fileSystem filemanager.FileSystem, downloadPath string) (err error, result *remoteresource.DownloadResult) {
+func (resource *GitResource) DownloadRemoteResource(fileSystem filemanager.FileSystem, downloadPath string) (err error, result *remoteresource.DownloadResult) {
+	log := resource.context.Log()
 	if downloadPath == "" {
 		downloadPath = appconfig.DownloadRoot
 	}

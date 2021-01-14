@@ -28,7 +28,7 @@ import (
 
 func TestHibernation_ExecuteHibernation_AgentTurnsActive(t *testing.T) {
 	ctx := context.NewMockDefault()
-	healthMock := health.NewHealthCheck(ctx, ssm.NewService(ctx.Log()))
+	healthMock := health.NewHealthCheck(ctx, ssm.NewService(ctx))
 
 	hibernate := NewHibernateMode(healthMock, ctx)
 	hibernate.scheduleBackOff = fakeScheduler
@@ -45,7 +45,7 @@ func TestHibernation_ExecuteHibernation_AgentTurnsActive(t *testing.T) {
 
 func TestHibernation_scheduleBackOffStrategy(t *testing.T) {
 	ctx := context.NewMockDefault()
-	healthMock := health.NewHealthCheck(ctx, ssm.NewService(ctx.Log()))
+	healthMock := health.NewHealthCheck(ctx, ssm.NewService(ctx))
 
 	hibernate := NewHibernateMode(healthMock, ctx)
 	hibernate.schedulePing = fakeScheduler

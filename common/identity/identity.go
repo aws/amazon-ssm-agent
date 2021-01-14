@@ -67,6 +67,10 @@ func (c *agentIdentityCacher) ShortInstanceID() (string, error) {
 func (c *agentIdentityCacher) Region() (string, error) {
 	c.mutex.Lock()
 	defer c.mutex.Unlock()
+	return c.regionInner()
+}
+
+func (c *agentIdentityCacher) regionInner() (string, error) {
 	if c.region != "" {
 		return c.region, nil
 	}
@@ -128,11 +132,16 @@ func (c* agentIdentityCacher) GetDefaultEndpoint(service string) string {
 	var region, serviceDomain string
 	var err error
 
-	if region, err = c.Region(); err != nil {
+	if c.serviceDomain != "" {
+		return c.serviceDomain
+	}
+
+	if region, err = c.regionInner(); err != nil {
 		c.log.Warnf("failed to get region with err: %v", err)
 	}
 
 	serviceDomain, _ = c.client.ServiceDomain()
 
-	return endpoint.GetDefaultEndpoint(c.log, service, region, serviceDomain)
+	c.serviceDomain = endpoint.GetDefaultEndpoint(c.log, service, region, serviceDomain)
+	return c.serviceDomain
 }

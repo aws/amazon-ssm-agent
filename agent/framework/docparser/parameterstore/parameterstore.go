@@ -19,6 +19,7 @@ import (
 	"regexp"
 	"strings"
 
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -51,7 +52,8 @@ const (
 var callParameterService = callGetParameters
 
 // Resolve resolves ssm parameters of the format {{ssm:*}}
-func Resolve(log log.T, input interface{}) (interface{}, error) {
+func Resolve(context context.T, input interface{}) (interface{}, error) {
+	log := context.Log()
 	validSSMParam, err := getValidSSMParamRegexCompiler(log, defaultParamName)
 	if err != nil {
 		return input, err
@@ -66,7 +68,7 @@ func Resolve(log log.T, input interface{}) (interface{}, error) {
 	}
 
 	// Get ssm parameter values
-	resolvedSSMParamMap, err := getSSMParameterValues(log, ssmParams)
+	resolvedSSMParamMap, err := getSSMParameterValues(context, ssmParams)
 	if err != nil {
 		return input, err
 	}
@@ -83,9 +85,10 @@ func Resolve(log log.T, input interface{}) (interface{}, error) {
 
 // ValidateSSMParameters validates SSM parameters
 func ValidateSSMParameters(
-	log log.T,
+	context context.T,
 	documentParameters map[string]*contracts.Parameter,
 	parameters map[string]interface{}) error {
+	log := context.Log()
 
 	/*
 		This function validates the following things before the document is sent for execution
@@ -94,7 +97,7 @@ func ValidateSSMParameters(
 		2. SSM parameter values match the allowed pattern in the document
 	*/
 
-	resolvedParameters, err := Resolve(log, parameters)
+	resolvedParameters, err := Resolve(context, parameters)
 	if err != nil {
 		return err
 	}
@@ -165,7 +168,8 @@ func getValidSSMParamRegexCompiler(log log.T, paramName string) (*regexp.Regexp,
 }
 
 // getSSMParameterValues takes a list of strings and resolves them by calling the GetParameters API
-func getSSMParameterValues(log log.T, ssmParams []string) (map[string]Parameter, error) {
+func getSSMParameterValues(context context.T, ssmParams []string) (map[string]Parameter, error) {
+	log := context.Log()
 	var result *GetParametersResponse
 	var err error
 
@@ -188,7 +192,7 @@ func getSSMParameterValues(log log.T, ssmParams []string) (map[string]Parameter,
 		}
 	}
 
-	if result, err = callParameterService(log, paramNames); err != nil {
+	if result, err = callParameterService(context, paramNames); err != nil {
 		return nil, err
 	}
 
@@ -264,10 +268,11 @@ func getSSMParameterValues(log log.T, ssmParams []string) (map[string]Parameter,
 }
 
 // callGetParameters makes a GetParameters API call to the service
-func callGetParameters(log log.T, paramNames []string) (*GetParametersResponse, error) {
+func callGetParameters(context context.T, paramNames []string) (*GetParametersResponse, error) {
+	log := context.Log()
 	finalResult := GetParametersResponse{}
 
-	ssmSvc := ssm.NewService(log)
+	ssmSvc := ssm.NewService(context)
 
 	for i := 0; i < len(paramNames); i = i + MaxParametersPerCall {
 		limit := i + MaxParametersPerCall

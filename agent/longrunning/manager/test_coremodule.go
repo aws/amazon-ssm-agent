@@ -15,7 +15,6 @@
 package manager
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	managerContracts "github.com/aws/amazon-ssm-agent/agent/longrunning/plugin"
@@ -66,8 +65,8 @@ func (m *Mock) ModuleName() string {
 }
 
 // Execute starts long running plugin manager and returns encountered error - returns nil here for testing
-func (m *Mock) ModuleExecute(context context.T) (err error) {
-	args := m.Called(context)
+func (m *Mock) ModuleExecute() (err error) {
+	args := m.Called()
 	return args.Get(0).(error)
 }
 

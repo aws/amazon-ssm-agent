@@ -27,8 +27,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/version"
-	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 )
 
 const (
@@ -52,6 +52,8 @@ var sessionPluginRunner = func(
 	close(resChan)
 }
 
+var newAgentIdentity = identity.NewAgentIdentity
+
 // initialize populates session worker information.
 //rule of thumb is, do not trigger extra file operation or other intricate dependencies during this setup, make it light weight
 func initialize(args []string) (context.T, string, error) {
@@ -72,7 +74,7 @@ func initialize(args []string) (context.T, string, error) {
 	}
 
 	selector := identity.NewInstanceIDRegionAgentIdentitySelector(logger, instanceID, "")
-	agentIdentity, err := identity.NewAgentIdentity(logger, &config, selector)
+	agentIdentity, err := newAgentIdentity(logger, &config, selector)
 	if err != nil {
 		return nil, "", err
 	}
@@ -108,7 +110,7 @@ func createFileChannelAndExecutePlugin(context context.T, channelName string) {
 	log := context.Log()
 	log.Infof("document: %v worker started", channelName)
 	//create channel from the given handle identifier by master
-	ipc, err, _ := filewatcherbasedipc.CreateFileWatcherChannel(log, filewatcherbasedipc.ModeWorker, channelName, false)
+	ipc, err, _ := filewatcherbasedipc.CreateFileWatcherChannel(log, context.Identity(), filewatcherbasedipc.ModeWorker, channelName, false)
 	if err != nil {
 		log.Errorf("failed to create channel: %v", err)
 		return

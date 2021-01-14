@@ -15,8 +15,8 @@ package ssm
 import (
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/aws/aws-sdk-go/aws"
 	awsmock "github.com/aws/aws-sdk-go/awstesting/mock"
@@ -42,7 +42,6 @@ func (suite *SsmServiceTestSuite) SetupTest() {
 	logMock := log.NewMockLog()
 	awsConfig := &aws.Config{}
 	region := "us-east-1"
-	platform.SetInstanceID("i-12345678")
 	awsConfig.Region = &region
 	clientMock := awsmock.NewMockClient(awsConfig)
 	// This clientMock will connect to an aws mock server which will validate the input variable
@@ -52,7 +51,8 @@ func (suite *SsmServiceTestSuite) SetupTest() {
 	suite.logMock = logMock
 	suite.sdkMock = sdkMock
 	suite.sdkService = &sdkService{
-		sdk: sdkMock,
+		context: context.NewMockDefault(),
+		sdk:     sdkMock,
 	}
 }
 

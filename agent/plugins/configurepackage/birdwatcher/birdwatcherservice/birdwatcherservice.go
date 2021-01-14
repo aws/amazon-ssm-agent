@@ -21,6 +21,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher/archive"
@@ -47,6 +48,7 @@ func (t *TimeImpl) NowUnixNano() int64 {
 
 // PackageService is the concrete type for Birdwatcher PackageService
 type PackageService struct {
+	Context        context.T
 	pkgSvcName     string
 	facadeClient   facade.BirdwatcherFacade
 	manifestCache  packageservice.ManifestCache
@@ -55,22 +57,23 @@ type PackageService struct {
 	packageArchive archive.IPackageArchive
 }
 
-func NewBirdwatcherArchive(facadeClient facade.BirdwatcherFacade, manifestCache packageservice.ManifestCache, context map[string]string) packageservice.PackageService {
+func NewBirdwatcherArchive(ctx context.T, facadeClient facade.BirdwatcherFacade, manifestCache packageservice.ManifestCache, context map[string]string) packageservice.PackageService {
 	pkgArchive := birdwatcherarchive.New(facadeClient, context)
 	pkgArchive.SetManifestCache(manifestCache)
-	return New(pkgArchive, facadeClient, manifestCache, packageservice.PackageServiceName_birdwatcher)
+	return New(ctx, pkgArchive, facadeClient, manifestCache, packageservice.PackageServiceName_birdwatcher)
 }
 
-func NewDocumentArchive(facadeClient facade.BirdwatcherFacade, manifestCache packageservice.ManifestCache) packageservice.PackageService {
+func NewDocumentArchive(context context.T, facadeClient facade.BirdwatcherFacade, manifestCache packageservice.ManifestCache) packageservice.PackageService {
 	pkgArchive := documentarchive.New(facadeClient)
 	pkgArchive.SetManifestCache(manifestCache)
-	return New(pkgArchive, facadeClient, manifestCache, packageservice.PackageServiceName_document)
+	return New(context, pkgArchive, facadeClient, manifestCache, packageservice.PackageServiceName_document)
 }
 
 // New constructor for PackageService
-func New(pkgArchive archive.IPackageArchive, facadeClient facade.BirdwatcherFacade, manifestCache packageservice.ManifestCache, name string) packageservice.PackageService {
+func New(context context.T, pkgArchive archive.IPackageArchive, facadeClient facade.BirdwatcherFacade, manifestCache packageservice.ManifestCache, name string) packageservice.PackageService {
 
 	return &PackageService{
+		Context:        context,
 		pkgSvcName:     name,
 		facadeClient:   facadeClient,
 		manifestCache:  manifestCache,
@@ -111,8 +114,7 @@ func (ds *PackageService) DownloadArtifact(tracer trace.Tracer, packageName stri
 
 // ReportResult sents back the result of the install/upgrade/uninstall run back to Birdwatcher
 func (ds *PackageService) ReportResult(tracer trace.Tracer, result packageservice.PackageResult) error {
-	log := tracer.CurrentTrace().Logger
-	env, _ := ds.collector.CollectData(log)
+	env, _ := ds.collector.CollectData(ds.Context)
 
 	var previousPackageVersion *string
 	if result.PreviousPackageVersion != "" {
@@ -254,7 +256,7 @@ func downloadFile(ds *PackageService, tracer trace.Tracer, file *archive.File, p
 	}
 
 	log := tracer.CurrentTrace().Logger
-	downloadOutput, downloadErr := birdwatcher.Networkdep.Download(log, downloadInput)
+	downloadOutput, downloadErr := birdwatcher.Networkdep.Download(ds.Context, downloadInput)
 	if downloadErr != nil || downloadOutput.LocalFilePath == "" {
 		errMessage := fmt.Sprintf("failed to download installation package reliably, %v", downloadInput.SourceURL)
 		if downloadErr != nil {
@@ -284,8 +286,7 @@ func downloadFile(ds *PackageService, tracer trace.Tracer, file *archive.File, p
 
 // ExtractPackageInfo returns the correct PackageInfo for the current instances platform/version/arch
 func (ds *PackageService) extractPackageInfo(tracer trace.Tracer, manifest *birdwatcher.Manifest) (*birdwatcher.PackageInfo, error) {
-	log := tracer.CurrentTrace().Logger
-	env, err := ds.collector.CollectData(log)
+	env, err := ds.collector.CollectData(ds.Context)
 	if err != nil {
 		return nil, fmt.Errorf("failed to collect data: %v", err)
 	}

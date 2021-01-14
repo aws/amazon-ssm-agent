@@ -15,19 +15,19 @@
 package birdwatcher
 
 import (
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
 // dependency on S3 and downloaded artifacts
 type networkDep interface {
-	Download(log log.T, input artifact.DownloadInput) (artifact.DownloadOutput, error)
+	Download(context context.T, input artifact.DownloadInput) (artifact.DownloadOutput, error)
 }
 
 var Networkdep networkDep = &networkDepImp{}
 
 type networkDepImp struct{}
 
-func (networkDepImp) Download(log log.T, input artifact.DownloadInput) (artifact.DownloadOutput, error) {
-	return artifact.Download(log, input)
+func (networkDepImp) Download(context context.T, input artifact.DownloadInput) (artifact.DownloadOutput, error) {
+	return artifact.Download(context, input)
 }

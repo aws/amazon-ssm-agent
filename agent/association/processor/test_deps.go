@@ -23,18 +23,6 @@ import (
 	"github.com/stretchr/testify/mock"
 )
 
-type systemStub struct{}
-
-// InstanceID mocks implementation for InstanceID
-func (m *systemStub) InstanceID() (string, error) {
-	return "", nil
-}
-
-// IsManagedInstance mocks implementation for IsManagedInstance
-func (m *systemStub) IsManagedInstance() (bool, error) {
-	return false, nil
-}
-
 type bookkeepingMock struct {
 	mock.Mock
 }

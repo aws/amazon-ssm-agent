@@ -27,7 +27,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	iohandlermocks "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler/mock"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	dataChannelMock "github.com/aws/amazon-ssm-agent/agent/session/datachannel/mocks"
@@ -40,7 +39,6 @@ import (
 type BasicPortTestSuite struct {
 	suite.Suite
 	mockContext     *context.Mock
-	mockLog         log.T
 	mockCancelFlag  *task.MockCancelFlag
 	mockDataChannel *dataChannelMock.IDataChannel
 	mockIohandler   *iohandlermocks.MockIOHandler
@@ -49,9 +47,10 @@ type BasicPortTestSuite struct {
 }
 
 func (suite *BasicPortTestSuite) SetupTest() {
-	suite.mockLog = mockLog
+	suite.mockContext = context.NewMockDefault()
 	suite.mockDataChannel = &dataChannelMock.IDataChannel{}
 	suite.session = &BasicPortSession{
+		context:            suite.mockContext,
 		reconnectToPortErr: make(chan error),
 		cancelled:          make(chan struct{}),
 	}
@@ -71,7 +70,7 @@ func (suite *BasicPortTestSuite) TestHandleStreamMessage() {
 		assert.Equal(suite.T(), payload, output[:n])
 	}()
 
-	suite.session.HandleStreamMessage(suite.mockLog, getAgentMessage(uint32(mgsContracts.Output), payload))
+	suite.session.HandleStreamMessage(getAgentMessage(uint32(mgsContracts.Output), payload))
 }
 
 func (suite *BasicPortTestSuite) TestHandleStreamMessageWriteFailed() {
@@ -80,7 +79,7 @@ func (suite *BasicPortTestSuite) TestHandleStreamMessageWriteFailed() {
 	defer out.Close()
 	// Close the write pipe
 	in.Close()
-	assert.Error(suite.T(), suite.session.HandleStreamMessage(suite.mockLog, getAgentMessage(uint32(mgsContracts.Output), payload)))
+	assert.Error(suite.T(), suite.session.HandleStreamMessage(getAgentMessage(uint32(mgsContracts.Output), payload)))
 }
 
 func (suite *BasicPortTestSuite) TestHandleStreamMessageWhenTerminateSessionFlagIsReceived() {
@@ -99,7 +98,7 @@ func (suite *BasicPortTestSuite) TestHandleStreamMessageWhenTerminateSessionFlag
 		assert.Equal(suite.T(), struct{}{}, cancelled)
 	}()
 
-	suite.session.HandleStreamMessage(suite.mockLog, getAgentMessage(uint32(mgsContracts.Flag), flagBuf.Bytes()))
+	suite.session.HandleStreamMessage(getAgentMessage(uint32(mgsContracts.Flag), flagBuf.Bytes()))
 	wg.Wait()
 }
 
@@ -127,18 +126,18 @@ func (suite *BasicPortTestSuite) TestHandleStreamMessageWithReconnectToPortSetTo
 		assert.Equal(suite.T(), payload, output[:n])
 	}()
 
-	suite.session.HandleStreamMessage(suite.mockLog, getAgentMessage(uint32(mgsContracts.Output), payload))
+	suite.session.HandleStreamMessage(getAgentMessage(uint32(mgsContracts.Output), payload))
 	assert.Equal(suite.T(), false, suite.session.reconnectToPort)
 }
 
 // Testing handleTCPReadError
 func (suite *BasicPortTestSuite) TestHandleTCPReadNonEOFError() {
-	returnCode := suite.session.handleTCPReadError(suite.mockLog, errors.New("some error!!!"))
+	returnCode := suite.session.handleTCPReadError(errors.New("some error!!!"))
 	assert.Equal(suite.T(), appconfig.ErrorExitCode, returnCode)
 }
 
 func (suite *BasicPortTestSuite) TestHandleTCPReadErrorWhenEOFError() {
-	returnCode := suite.session.handleTCPReadError(suite.mockLog, io.EOF)
+	returnCode := suite.session.handleTCPReadError(io.EOF)
 	assert.Equal(suite.T(), appconfig.SuccessExitCode, returnCode)
 }
 
@@ -156,7 +155,7 @@ func (suite *BasicPortTestSuite) TestHandleTCPReadErrorWhenReconnectionToPortIsS
 		suite.session.reconnectToPortErr <- nil
 	}()
 
-	returnCode := suite.session.handleTCPReadError(suite.mockLog, errors.New("some error!!"))
+	returnCode := suite.session.handleTCPReadError(errors.New("some error!!"))
 	assert.Equal(suite.T(), true, suite.session.reconnectToPort)
 	assert.Equal(suite.T(), mgsConfig.ResumeReadExitCode, returnCode)
 }
@@ -175,14 +174,14 @@ func (suite *BasicPortTestSuite) TestHandleTCPReadErrorWhenReconnectionToPortFai
 		suite.session.reconnectToPortErr <- errors.New("failed to start tcp connection!!")
 	}()
 
-	returnCode := suite.session.handleTCPReadError(suite.mockLog, errors.New("some error!!"))
+	returnCode := suite.session.handleTCPReadError(errors.New("some error!!"))
 	assert.Equal(suite.T(), true, suite.session.reconnectToPort)
 	assert.Equal(suite.T(), appconfig.ErrorExitCode, returnCode)
 }
 
 // Testing writepump
 func (suite *BasicPortTestSuite) TestWritePump() {
-	suite.mockDataChannel.On("SendStreamDataMessage", suite.mockLog, mgsContracts.Output, payload).Return(nil)
+	suite.mockDataChannel.On("SendStreamDataMessage", suite.mockContext.Log(), mgsContracts.Output, payload).Return(nil)
 
 	out, in := net.Pipe()
 	defer out.Close()
@@ -193,7 +192,7 @@ func (suite *BasicPortTestSuite) TestWritePump() {
 	}()
 
 	suite.session.conn = out
-	suite.session.WritePump(suite.mockLog, suite.mockDataChannel)
+	suite.session.WritePump(suite.mockDataChannel)
 
 	// Assert if SendStreamDataMessage function was called with same data from stdout
 	suite.mockDataChannel.AssertExpectations(suite.T())

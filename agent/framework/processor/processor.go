@@ -32,7 +32,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/outofproc"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/manager"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/rebooter"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/times"
@@ -120,7 +119,7 @@ func (p *EngineProcessor) InitialProcessing(skipDocumentIfExpired bool) (err err
 	log := context.Log()
 
 	//process the older jobs from Current & Pending folder
-	instanceID, err := platform.InstanceID()
+	instanceID, err := p.context.Identity().InstanceID()
 	if err != nil {
 		log.Errorf("no instanceID provided, %v", err)
 		return
@@ -425,7 +424,7 @@ func processCancelCommand(context context.T, sendCommandPool task.Pool, docState
 //temporary solution on plugins with shared responsibility with agent
 func handleCloudwatchPlugin(context context.T, pluginResults map[string]*contracts.PluginResult, documentID string) {
 	log := context.Log()
-	instanceID, _ := platform.InstanceID()
+	instanceID, _ := context.Identity().InstanceID()
 	//TODO once association service switches to use RC and CW goes away, remove this block
 	for ID, pluginRes := range pluginResults {
 		if pluginRes.PluginName == appconfig.PluginNameCloudWatch {
@@ -436,7 +435,7 @@ func handleCloudwatchPlugin(context context.T, pluginResults map[string]*contrac
 				appconfig.DefaultDocumentRootDirName,
 				context.AppConfig().Agent.OrchestrationRootDir)
 			orchestrationDir := fileutil.BuildPath(orchestrationRootDir, documentID)
-			manager.Invoke(log, ID, pluginRes, orchestrationDir)
+			manager.Invoke(context, ID, pluginRes, orchestrationDir)
 		}
 	}
 

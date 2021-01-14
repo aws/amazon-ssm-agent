@@ -19,11 +19,6 @@ import (
 	"testing"
 	"time"
 
-	executormocks "github.com/aws/amazon-ssm-agent/core/executor/mocks"
-	"github.com/stretchr/testify/mock"
-
-	"github.com/aws/amazon-ssm-agent/core/executor"
-
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
@@ -32,8 +27,11 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/agent/version"
+	"github.com/aws/amazon-ssm-agent/core/executor"
+	executormocks "github.com/aws/amazon-ssm-agent/core/executor/mocks"
 	"github.com/nightlyone/lockfile"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 var logger = log.NewMockLog()
@@ -41,11 +39,11 @@ var logger = log.NewMockLog()
 func TestGenerateUpdateCmdWithV2(t *testing.T) {
 	plugin := createStubPluginInput()
 	plugin.Source = "testSource"
-	context := createStubInstanceContext()
-	manifest := createStubManifest(plugin, context, true, true)
+	info := createStubInstanceInfo()
+	manifest := createStubManifest(plugin, info, true, true)
 	manager := updateManager{}
 
-	result, err := manager.generateUpdateCmd(logger, manifest, plugin, context,
+	result, err := manager.generateUpdateCmd(logger, manifest, plugin, info,
 		"2.0.0.0", "messageID", "stdout", "stderr", "prefix", "bucket")
 
 	assert.NoError(t, err)
@@ -61,11 +59,11 @@ func TestGenerateUpdateCmdWithV2(t *testing.T) {
 func TestGenerateUpdateCmdWithV3(t *testing.T) {
 	plugin := createStubPluginInput()
 	plugin.Source = "testSource"
-	context := createStubInstanceContext()
-	manifest := createStubManifest(plugin, context, true, true)
+	info := createStubInstanceInfo()
+	manifest := createStubManifest(plugin, info, true, true)
 	manager := updateManager{}
 
-	result, err := manager.generateUpdateCmd(logger, manifest, plugin, context,
+	result, err := manager.generateUpdateCmd(logger, manifest, plugin, info,
 		"3.0.0.0", "messageID", "stdout", "stderr", "prefix", "bucket")
 
 	assert.NoError(t, err)
@@ -80,20 +78,21 @@ func TestGenerateUpdateCmdWithV3(t *testing.T) {
 
 func TestDownloadManifest(t *testing.T) {
 	plugin := createStubPluginInput()
-	context := createStubInstanceContext()
+	info := createStubInstanceInfo()
 
 	manager := updateManager{}
 	util := fakeUtility{}
 	out := iohandler.DefaultIOHandler{}
 
-	fileDownload = func(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
+	fileDownload = func(context context.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
 		result := artifact.DownloadOutput{}
 		result.IsHashMatched = true
 		result.LocalFilePath = "testdata/sampleManifest.json"
 		return result, nil
 	}
 
-	manifest, err := manager.downloadManifest(logger, &util, plugin, context, &out)
+	mockContext := context.NewMockDefault()
+	manifest, err := manager.downloadManifest(mockContext, &util, plugin, info, &out)
 
 	assert.NoError(t, err)
 	assert.NotNil(t, manifest)
@@ -101,14 +100,14 @@ func TestDownloadManifest(t *testing.T) {
 
 func TestDownloadUpdater(t *testing.T) {
 	plugin := createStubPluginInput()
-	context := createStubInstanceContext()
-	manifest := createStubManifest(plugin, context, true, true)
+	info := createStubInstanceInfo()
+	manifest := createStubManifest(plugin, info, true, true)
 
 	manager := updateManager{}
 	util := fakeUtility{}
 	out := iohandler.DefaultIOHandler{}
 
-	fileDownload = func(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
+	fileDownload = func(context context.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
 		result := artifact.DownloadOutput{}
 		result.IsHashMatched = true
 		result.LocalFilePath = "updater/location"
@@ -119,29 +118,31 @@ func TestDownloadUpdater(t *testing.T) {
 		return nil
 	}
 
-	_, err := manager.downloadUpdater(logger, &util, plugin.AgentName, manifest, &out, context)
+	mockContext := context.NewMockDefault()
+	_, err := manager.downloadUpdater(mockContext, &util, plugin.AgentName, manifest, &out, info)
 
 	assert.NoError(t, err)
 }
 
 func TestDownloadUpdater_HashDoesNotMatch(t *testing.T) {
 	plugin := createStubPluginInput()
-	context := createStubInstanceContext()
-	manifest := createStubManifest(plugin, context, true, true)
+	info := createStubInstanceInfo()
+	manifest := createStubManifest(plugin, info, true, true)
 
 	manager := updateManager{}
 	util := fakeUtility{}
 	out := iohandler.DefaultIOHandler{}
 
 	// file download failed
-	fileDownload = func(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
+	fileDownload = func(context context.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
 		result := artifact.DownloadOutput{}
 		result.IsHashMatched = false
 		result.LocalFilePath = ""
 		return result, fmt.Errorf("404")
 	}
+	mockContext := context.NewMockDefault()
 
-	_, err := manager.downloadUpdater(logger, &util, plugin.AgentName, manifest, &out, context)
+	_, err := manager.downloadUpdater(mockContext, &util, plugin.AgentName, manifest, &out, info)
 
 	assert.Error(t, err)
 	assert.Contains(t, err.Error(), "failed to download file reliably")
@@ -150,14 +151,14 @@ func TestDownloadUpdater_HashDoesNotMatch(t *testing.T) {
 
 func TestDownloadUpdater_FailedDuringUnCompress(t *testing.T) {
 	plugin := createStubPluginInput()
-	context := createStubInstanceContext()
-	manifest := createStubManifest(plugin, context, true, true)
+	info := createStubInstanceInfo()
+	manifest := createStubManifest(plugin, info, true, true)
 
 	manager := updateManager{}
 	util := fakeUtility{}
 	out := iohandler.DefaultIOHandler{}
 
-	fileDownload = func(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
+	fileDownload = func(context context.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error) {
 		result := artifact.DownloadOutput{}
 		result.IsHashMatched = true
 		result.LocalFilePath = "updater/location"
@@ -167,21 +168,22 @@ func TestDownloadUpdater_FailedDuringUnCompress(t *testing.T) {
 	fileUncompress = func(log log.T, src, dest string) error {
 		return fmt.Errorf("Failed with uncompress")
 	}
+	mockContext := context.NewMockDefault()
 
-	_, err := manager.downloadUpdater(logger, &util, plugin.AgentName, manifest, &out, context)
+	_, err := manager.downloadUpdater(mockContext, &util, plugin.AgentName, manifest, &out, info)
 
 	assert.Error(t, err, "Failed with uncompress")
 }
 
 func TestValidateUpdate(t *testing.T) {
 	plugin := createStubPluginInput()
-	context := createStubInstanceContext()
-	manifest := createStubManifest(plugin, context, true, true)
+	info := createStubInstanceInfo()
+	manifest := createStubManifest(plugin, info, true, true)
 
 	manager := updateManager{}
 	out := iohandler.DefaultIOHandler{}
 
-	result, err := manager.validateUpdate(logger, plugin, context, manifest, &out)
+	result, err := manager.validateUpdate(logger, plugin, info, manifest, &out)
 
 	assert.False(t, result)
 	assert.NoError(t, err)
@@ -189,15 +191,15 @@ func TestValidateUpdate(t *testing.T) {
 
 func TestValidateUpdate_GetLatestTargetVersionWhenTargetVersionIsEmpty(t *testing.T) {
 	plugin := createStubPluginInput()
-	context := createStubInstanceContext()
-	manifest := createStubManifest(plugin, context, true, true)
+	info := createStubInstanceInfo()
+	manifest := createStubManifest(plugin, info, true, true)
 
 	manager := updateManager{}
 	// Setup, update target version to empty string
 	plugin.TargetVersion = ""
 	out := iohandler.DefaultIOHandler{}
 
-	result, err := manager.validateUpdate(logger, plugin, context, manifest, &out)
+	result, err := manager.validateUpdate(logger, plugin, info, manifest, &out)
 
 	assert.False(t, result)
 	assert.NoError(t, err)
@@ -206,13 +208,13 @@ func TestValidateUpdate_GetLatestTargetVersionWhenTargetVersionIsEmpty(t *testin
 func TestValidateUpdate_TargetVersionSameAsCurrentVersion(t *testing.T) {
 	plugin := createStubPluginInput()
 	plugin.TargetVersion = version.Version
-	context := createStubInstanceContext()
-	manifest := createStubManifest(plugin, context, true, true)
+	info := createStubInstanceInfo()
+	manifest := createStubManifest(plugin, info, true, true)
 
 	manager := updateManager{}
 	out := iohandler.DefaultIOHandler{}
 
-	noNeedToUpdate, err := manager.validateUpdate(logger, plugin, context, manifest, &out)
+	noNeedToUpdate, err := manager.validateUpdate(logger, plugin, info, manifest, &out)
 
 	assert.True(t, noNeedToUpdate)
 	assert.NoError(t, err)
@@ -223,13 +225,13 @@ func TestValidateUpdate_DowngradeVersion(t *testing.T) {
 	plugin := createStubPluginInput()
 	plugin.AllowDowngrade = "false"
 	plugin.TargetVersion = "0.0.0.1"
-	context := createStubInstanceContext()
-	manifest := createStubManifest(plugin, context, true, true)
+	info := createStubInstanceInfo()
+	manifest := createStubManifest(plugin, info, true, true)
 
 	manager := updateManager{}
 	out := iohandler.DefaultIOHandler{}
 
-	noNeedToUpdate, err := manager.validateUpdate(logger, plugin, context, manifest, &out)
+	noNeedToUpdate, err := manager.validateUpdate(logger, plugin, info, manifest, &out)
 
 	assert.True(t, noNeedToUpdate)
 	assert.Error(t, err)
@@ -239,13 +241,13 @@ func TestValidateUpdate_DowngradeVersion(t *testing.T) {
 func TestValidateUpdate_TargetVersionNotSupport(t *testing.T) {
 	plugin := createStubPluginInput()
 	plugin.TargetVersion = "1.1.1.999"
-	context := createStubInstanceContext()
-	manifest := createStubManifest(plugin, context, true, false)
+	info := createStubInstanceInfo()
+	manifest := createStubManifest(plugin, info, true, false)
 
 	manager := updateManager{}
 	out := iohandler.DefaultIOHandler{}
 
-	result, err := manager.validateUpdate(logger, plugin, context, manifest, &out)
+	result, err := manager.validateUpdate(logger, plugin, info, manifest, &out)
 
 	assert.True(t, result)
 	assert.Error(t, err)
@@ -254,12 +256,12 @@ func TestValidateUpdate_TargetVersionNotSupport(t *testing.T) {
 
 func TestValidateUpdate_UnsupportedCurrentVersion(t *testing.T) {
 	plugin := createStubPluginInput()
-	context := createStubInstanceContext()
-	manifest := createStubManifest(plugin, context, false, true)
+	info := createStubInstanceInfo()
+	manifest := createStubManifest(plugin, info, false, true)
 
 	manager := updateManager{}
 	out := iohandler.DefaultIOHandler{}
-	result, err := manager.validateUpdate(logger, plugin, context, manifest, &out)
+	result, err := manager.validateUpdate(logger, plugin, info, manifest, &out)
 
 	if version.Version != updateutil.PipelineTestVersion {
 		assert.True(t, result)
@@ -270,7 +272,9 @@ func TestValidateUpdate_UnsupportedCurrentVersion(t *testing.T) {
 
 func TestUpdateAgent_InvalidPluginRaw(t *testing.T) {
 	config := contracts.Configuration{}
-	plugin := &Plugin{}
+	plugin := &Plugin{
+		Context: context.NewMockDefault(),
+	}
 
 	mockCancelFlag := new(task.MockCancelFlag)
 
@@ -287,7 +291,9 @@ func TestUpdateAgent_InvalidPluginRaw(t *testing.T) {
 
 func TestUpdateAgent_UpdaterRetry(t *testing.T) {
 	config := contracts.Configuration{}
-	plugin := &Plugin{}
+	plugin := &Plugin{
+		Context: context.NewMockDefault(),
+	}
 	mockCancelFlag := new(task.MockCancelFlag)
 	manager := &fakeUpdateManager{}
 	util := &fakeUtility{pid: -1, execCommandError: fmt.Errorf("test")}
@@ -303,10 +309,12 @@ func TestUpdateAgent_UpdaterRetry(t *testing.T) {
 func TestUpdateAgent(t *testing.T) {
 	pluginInput := createStubPluginInput()
 	pluginInput.TargetVersion = ""
-	context := createStubInstanceContext()
-	manifest := createStubManifest(pluginInput, context, true, true)
+	info := createStubInstanceInfo()
+	manifest := createStubManifest(pluginInput, info, true, true)
 	config := contracts.Configuration{}
-	plugin := &Plugin{}
+	plugin := &Plugin{
+		Context: context.NewMockDefault(),
+	}
 
 	testCases := []fakeUpdateManager{
 		{
@@ -338,7 +346,7 @@ func TestUpdateAgent(t *testing.T) {
 func TestUpdateAgentUpdaterFailedToStart(t *testing.T) {
 	pluginInput := createStubPluginInput()
 	pluginInput.TargetVersion = ""
-	context := createStubInstanceContext()
+	context := createStubInstanceInfo()
 	manifest := createStubManifest(pluginInput, context, true, true)
 	config := contracts.Configuration{}
 	plugin := &Plugin{}
@@ -370,10 +378,12 @@ func TestUpdateAgentUpdaterFailedToStart(t *testing.T) {
 func TestUpdateAgent_NegativeTestCases(t *testing.T) {
 	pluginInput := createStubPluginInput()
 	pluginInput.TargetVersion = ""
-	context := createStubInstanceContext()
-	manifest := createStubManifest(pluginInput, context, true, true)
+	info := createStubInstanceInfo()
+	manifest := createStubManifest(pluginInput, info, true, true)
 	config := contracts.Configuration{}
-	plugin := &Plugin{}
+	plugin := &Plugin{
+		Context: context.NewMockDefault(),
+	}
 
 	testCases := []fakeUpdateManager{
 		{
@@ -426,12 +436,13 @@ func TestExecute(t *testing.T) {
 	p := make([]interface{}, 1)
 	p[0] = pluginInput
 	config.Properties = p
-	plugin := &Plugin{}
+	plugin := &Plugin{
+		Context: context.NewMockDefault(),
+	}
 
 	pluginInput.TargetVersion = ""
 	mockCancelFlag := new(task.MockCancelFlag)
 	mockLockfile := lockfile.MockLockfile{}
-	mockContext := context.NewMockDefault()
 	mockIOHandler := iohandler.DefaultIOHandler{}
 	methodCalled := false
 
@@ -467,7 +478,9 @@ func TestExecute(t *testing.T) {
 	updateUtilRef = &fakeUtility{
 		downloadErr: false,
 	}
-	plugin.Execute(mockContext, config, mockCancelFlag, &mockIOHandler)
+
+	plugin.Execute(config, mockCancelFlag, &mockIOHandler)
+
 	if !methodCalled {
 		t.Fail()
 		fmt.Println("Error UpdateAgent method never called")
@@ -481,12 +494,12 @@ func TestExecuteUpdateLocked(t *testing.T) {
 	p := make([]interface{}, 1)
 	p[0] = pluginInput
 	config.Properties = p
-	plugin := &Plugin{}
-
+	plugin := &Plugin{
+		Context: context.NewMockDefault(),
+	}
 	pluginInput.TargetVersion = ""
 	mockCancelFlag := new(task.MockCancelFlag)
 	mockLockfile := lockfile.MockLockfile{}
-	mockContext := context.NewMockDefault()
 	mockIOHandler := iohandler.DefaultIOHandler{}
 
 	getLockObj = func(pth string) (lockfile.Lockfile, error) {
@@ -504,7 +517,7 @@ func TestExecuteUpdateLocked(t *testing.T) {
 	updateUtilRef = &fakeUtility{
 		downloadErr: true,
 	}
-	plugin.Execute(mockContext, config, mockCancelFlag, &mockIOHandler)
+	plugin.Execute(config, mockCancelFlag, &mockIOHandler)
 }
 
 func TestExecutePanicDuringUpdate(t *testing.T) {
@@ -514,12 +527,12 @@ func TestExecutePanicDuringUpdate(t *testing.T) {
 	p := make([]interface{}, 1)
 	p[0] = pluginInput
 	config.Properties = p
-	plugin := &Plugin{}
-
+	plugin := &Plugin{
+		Context: context.NewMockDefault(),
+	}
 	pluginInput.TargetVersion = ""
 	mockCancelFlag := new(task.MockCancelFlag)
 	mockLockfile := lockfile.MockLockfile{}
-	mockContext := context.NewMockDefault()
 	mockIOHandler := iohandler.DefaultIOHandler{}
 	methodCalled := false
 
@@ -556,7 +569,7 @@ func TestExecutePanicDuringUpdate(t *testing.T) {
 	updateUtilRef = &fakeUtility{
 		downloadErr: true,
 	}
-	plugin.Execute(mockContext, config, mockCancelFlag, &mockIOHandler)
+	plugin.Execute(config, mockCancelFlag, &mockIOHandler)
 
 	if !methodCalled {
 		t.Fail()
@@ -571,12 +584,12 @@ func TestExecuteFailureDuringUpdate(t *testing.T) {
 	p := make([]interface{}, 1)
 	p[0] = pluginInput
 	config.Properties = p
-	plugin := &Plugin{}
-
+	plugin := &Plugin{
+		Context: context.NewMockDefault(),
+	}
 	pluginInput.TargetVersion = ""
 	mockCancelFlag := new(task.MockCancelFlag)
 	mockLockfile := lockfile.MockLockfile{}
-	mockContext := context.NewMockDefault()
 	mockIOHandler := iohandler.DefaultIOHandler{}
 	methodCalled := false
 
@@ -612,7 +625,7 @@ func TestExecuteFailureDuringUpdate(t *testing.T) {
 	updateUtilRef = &fakeUtility{
 		downloadErr: false,
 	}
-	plugin.Execute(mockContext, config, mockCancelFlag, &mockIOHandler)
+	plugin.Execute(config, mockCancelFlag, &mockIOHandler)
 
 	if !methodCalled {
 		t.Fail()
@@ -631,7 +644,7 @@ func createStubPluginInput() *UpdatePluginInput {
 }
 
 func createStubManifest(plugin *UpdatePluginInput,
-	context *updateutil.InstanceContext,
+	context *updateutil.InstanceInfo,
 	addCurrentVersion bool,
 	addTargetVersion bool) *Manifest {
 	manifest, _ := ParseManifest(logger, "testdata/sampleManifest.json", context, plugin.AgentName)
@@ -656,14 +669,14 @@ func createStubManifest(plugin *UpdatePluginInput,
 	return manifest
 }
 
-func createStubInstanceContext() *updateutil.InstanceContext {
-	context := updateutil.InstanceContext{}
-	context.Arch = "amd64"
-	context.CompressFormat = "tar.gz"
-	context.InstallerName = updateutil.PlatformLinux
-	context.Platform = updateutil.PlatformLinux
-	context.PlatformVersion = "2015.9"
-	return &context
+func createStubInstanceInfo() *updateutil.InstanceInfo {
+	info := updateutil.InstanceInfo{}
+	info.Arch = "amd64"
+	info.CompressFormat = "tar.gz"
+	info.InstallerName = updateutil.PlatformLinux
+	info.Platform = updateutil.PlatformLinux
+	info.PlatformVersion = "2015.9"
+	return &info
 }
 
 type fakeUtility struct {
@@ -673,11 +686,15 @@ type fakeUtility struct {
 	downloadErr      bool
 }
 
-func (u *fakeUtility) CreateInstanceContext(log log.T) (context *updateutil.InstanceContext, err error) {
-	return createStubInstanceContext(), nil
+func (u *fakeUtility) CreateInstanceInfo(log log.T) (context *updateutil.InstanceInfo, err error) {
+	return createStubInstanceInfo(), nil
 }
 
-func (u *fakeUtility) IsServiceRunning(log log.T, i *updateutil.InstanceContext) (result bool, err error) {
+func (u *fakeUtility) CleanupCommand(log log.T, pid int) error {
+	return nil
+}
+
+func (u *fakeUtility) IsServiceRunning(log log.T, i *updateutil.InstanceInfo) (result bool, err error) {
 	return true, nil
 }
 
@@ -685,7 +702,7 @@ func (u *fakeUtility) IsWorkerRunning(log log.T) (result bool, err error) {
 	return true, nil
 }
 
-func (u *fakeUtility) WaitForServiceToStart(log log.T, i *updateutil.InstanceContext, targetVersion string) (result bool, err error) {
+func (u *fakeUtility) WaitForServiceToStart(log log.T, i *updateutil.InstanceInfo, targetVersion string) (result bool, err error) {
 	return true, nil
 }
 
@@ -742,7 +759,7 @@ type fakeUpdateManager struct {
 func (u *fakeUpdateManager) generateUpdateCmd(log log.T,
 	manifest *Manifest,
 	pluginInput *UpdatePluginInput,
-	context *updateutil.InstanceContext,
+	context *updateutil.InstanceInfo,
 	updaterVersion string,
 	messageID string,
 	stdout string,
@@ -753,26 +770,26 @@ func (u *fakeUpdateManager) generateUpdateCmd(log log.T,
 	return u.generateUpdateCmdResult, u.generateUpdateCmdError
 }
 
-func (u *fakeUpdateManager) downloadManifest(log log.T,
+func (u *fakeUpdateManager) downloadManifest(context context.T,
 	util updateutil.T,
 	pluginInput *UpdatePluginInput,
-	context *updateutil.InstanceContext,
+	info *updateutil.InstanceInfo,
 	out iohandler.IOHandler) (manifest *Manifest, err error) {
 	return u.downloadManifestResult, u.downloadManifestError
 }
 
-func (u *fakeUpdateManager) downloadUpdater(log log.T,
+func (u *fakeUpdateManager) downloadUpdater(context context.T,
 	util updateutil.T,
 	updaterPackageName string,
 	manifest *Manifest,
 	out iohandler.IOHandler,
-	context *updateutil.InstanceContext) (version string, err error) {
+	info *updateutil.InstanceInfo) (version string, err error) {
 	return u.downloadUpdaterResult, u.downloadUpdaterError
 }
 
 func (u *fakeUpdateManager) validateUpdate(log log.T,
 	pluginInput *UpdatePluginInput,
-	context *updateutil.InstanceContext,
+	context *updateutil.InstanceInfo,
 	manifest *Manifest,
 	out iohandler.IOHandler) (noNeedToUpdate bool, err error) {
 	return u.validateUpdateResult, u.validateUpdateError

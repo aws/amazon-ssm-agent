@@ -21,7 +21,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/docmanager"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	messageContract "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 )
 
@@ -37,9 +36,6 @@ func getPluginAssociationInstances() map[string]AssocList {
 	return pluginAssociationInstances
 }
 
-//TODO in future, platform calls will be stubbed
-var sys system = &systemImp{}
-
 // bookkeepingService represents the dependency for docmanager
 type bookkeepingService interface {
 	DeleteOldOrchestrationDirectories(log log.T, instanceID, orchestrationRootDirName string, retentionDurationHours int, associationRetentionDurationHours int)
@@ -49,24 +45,6 @@ type assocBookkeepingService struct{}
 
 func (assocBookkeepingService) DeleteOldOrchestrationDirectories(log log.T, instanceID, orchestrationRootDirName string, retentionDurationHours int, associationRetentionDurationHours int) {
 	docmanager.DeleteOldOrchestrationDirectories(log, instanceID, orchestrationRootDirName, retentionDurationHours, associationRetentionDurationHours)
-}
-
-// system represents the dependency for platform
-type system interface {
-	InstanceID() (string, error)
-	IsManagedInstance() (bool, error)
-}
-
-type systemImp struct{}
-
-// InstanceID wraps platform InstanceID
-func (systemImp) InstanceID() (string, error) {
-	return platform.InstanceID()
-}
-
-// IsManagedInstance wraps platform IsManagedInstance
-func (systemImp) IsManagedInstance() (bool, error) {
-	return platform.IsManagedInstance()
 }
 
 // parserService represents the dependency for association parser

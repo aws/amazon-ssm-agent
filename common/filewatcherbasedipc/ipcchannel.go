@@ -18,10 +18,10 @@ import (
 	"os"
 	"path"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
+	"github.com/aws/amazon-ssm-agent/common/channel/utils"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 )
 
 const (
@@ -29,10 +29,6 @@ const (
 	ModeWorker     Mode = "worker"
 	ModeSurveyor   Mode = "surveyor"
 	ModeRespondent Mode = "respondent"
-)
-const (
-	defaultChannelBufferSize = 100
-	DefaultFileChannelPath   = "channels"
 )
 
 type Mode string
@@ -52,12 +48,11 @@ type IPCChannel interface {
 }
 
 // IsFileWatcherChannelPresent checks whether the file watcher channel is present or not
-func IsFileWatcherChannelPresent(channelName string) (bool, error) {
-	instanceID, err := platform.InstanceID()
+func IsFileWatcherChannelPresent(identity identity.IAgentIdentity, channelName string) (bool, error) {
+	channelPath, err := utils.GetDefaultChannelPath(identity, channelName)
 	if err != nil {
 		return false, err
 	}
-	channelPath := path.Join(appconfig.DefaultDataStorePath, instanceID, DefaultFileChannelPath, channelName)
 	if _, err = os.Stat(channelPath); os.IsNotExist(err) {
 		return false, nil
 	}
@@ -68,35 +63,34 @@ func IsFileWatcherChannelPresent(channelName string) (bool, error) {
 //if not found, create a new filechannel under the default root dir
 //return the channel and the found flag
 // shouldReadRetry - is this flag is set to true, it will use fileReadWithRetry function to read
-func CreateFileWatcherChannel(log log.T, mode Mode, filename string, shouldReadRetry bool) (IPCChannel, error, bool) {
-	instanceID, err := platform.InstanceID()
+func CreateFileWatcherChannel(log log.T, identity identity.IAgentIdentity, mode Mode, filename string, shouldReadRetry bool) (IPCChannel, error, bool) {
+	rootChannelDir, err := utils.GetDefaultChannelPath(identity, "")
 	if err != nil {
-		log.Errorf("failed to load instance ID: %v", err)
 		return nil, err, false
 	}
-	list, err := fileutil.ReadDir(path.Join(appconfig.DefaultDataStorePath, instanceID, DefaultFileChannelPath))
+	list, err := fileutil.ReadDir(rootChannelDir)
 	if err != nil {
 		log.Infof("failed to read the default channel root directory: %v, creating a new Channel", err)
-		f, err := NewFileWatcherChannel(log, mode, path.Join(appconfig.DefaultDataStorePath, instanceID, DefaultFileChannelPath, filename), shouldReadRetry)
+		f, err := NewFileWatcherChannel(log, mode, path.Join(rootChannelDir, filename), shouldReadRetry)
 		return f, err, false
 	}
 	for _, val := range list {
 		if val.Name() == filename {
 			log.Infof("channel: %v found", filename)
-			f, err := NewFileWatcherChannel(log, mode, path.Join(appconfig.DefaultDataStorePath, instanceID, DefaultFileChannelPath, filename), shouldReadRetry)
+			f, err := NewFileWatcherChannel(log, mode, path.Join(rootChannelDir, filename), shouldReadRetry)
 			return f, err, true
 		}
 	}
 	log.Infof("channel: %v not found, creating a new file channel...", filename)
-	f, err := NewFileWatcherChannel(log, mode, path.Join(appconfig.DefaultDataStorePath, instanceID, DefaultFileChannelPath, filename), shouldReadRetry)
+	f, err := NewFileWatcherChannel(log, mode, path.Join(rootChannelDir, filename), shouldReadRetry)
 	return f, err, false
 }
 
 // RemoveFileWatcherChannel removes the channel folder specific to the command
-func RemoveFileWatcherChannel(channelName string) error {
-	instanceID, err := platform.InstanceID()
+func RemoveFileWatcherChannel(identity identity.IAgentIdentity, channelName string) error {
+	channelPath, err := utils.GetDefaultChannelPath(identity, channelName)
+
 	if err == nil {
-		channelPath := path.Join(appconfig.DefaultDataStorePath, instanceID, DefaultFileChannelPath, channelName)
 		if _, fileStatErr := os.Stat(channelPath); os.IsNotExist(fileStatErr) {
 			return nil
 		}

@@ -148,7 +148,7 @@ func (u *updateManager) finalizeUpdateAndSendReply(log logPkg.T, context *Update
 		return err
 	}
 
-	orchestrationDirectory := getOrchestrationDir(log, update)
+	orchestrationDirectory := getOrchestrationDir(u.Context.Identity(), log, update)
 	filePath, err := fileutil.AppendToFile(orchestrationDirectory, update.StdoutFileName, update.StandardOut)
 	if err != nil {
 		log.Errorf("Error while appending to file %v", filePath)

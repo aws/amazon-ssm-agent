@@ -32,13 +32,13 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
 // Plugin is the type for the Cloudwatch plugin.
 type Plugin struct {
+	Context                            context.T
 	CommandExecuter                    executers.T
 	Process                            os.Process
 	WorkingDir                         string
@@ -69,8 +69,6 @@ type CloudwatchProcessInfo struct {
 // Assign method to global variables to allow unittest to override
 // TODO change these to deps.go later
 var fileExist = fileutil.Exists
-var getInstanceId = platform.InstanceID
-var getRegion = platform.Region
 var exec = executers.ShellCommandExecuter{}
 
 // var createScript = pluginutil.CreateScriptFile
@@ -79,11 +77,12 @@ var exec = executers.ShellCommandExecuter{}
 //todo: honor cancel flag for Stop
 //todo: Start,Stop -> should return plugin.result or error as well -> so that caller can report the results/errors accordingly.
 // NewPlugin returns a new instance of Cloudwatch plugin
-func NewPlugin(pluginConfig iohandler.PluginConfig) (*Plugin, error) {
+func NewPlugin(context context.T, pluginConfig iohandler.PluginConfig) (*Plugin, error) {
 
 	//Note: This is a wrapper on top of cloudwatch.exe - basically this executes the exe in a separate process.
 
 	var plugin Plugin
+	plugin.Context = context
 	plugin.WorkingDir = fileutil.BuildPath(appconfig.DefaultPluginPath, CloudWatchFolderName)
 	plugin.ExeLocation = filepath.Join(plugin.WorkingDir, CloudWatchExeName)
 
@@ -92,7 +91,7 @@ func NewPlugin(pluginConfig iohandler.PluginConfig) (*Plugin, error) {
 	plugin.Name = Name()
 
 	//health check specific stuff will be done here
-	instanceId, _ := platform.InstanceID()
+	instanceId, _ := context.Identity().ShortInstanceID()
 	plugin.DefaultHealthCheckOrchestrationDir = fileutil.BuildPath(appconfig.DefaultDataStorePath,
 		instanceId,
 		appconfig.LongRunningPluginsLocation,
@@ -110,15 +109,14 @@ func Name() string {
 }
 
 // IsRunning returns if the said plugin is running or not
-func (p *Plugin) IsRunning(context context.T) bool {
-	log := context.Log()
+func (p *Plugin) IsRunning() bool {
 	//working directory here doesn't really matter much since we run a powershell script to determine if exe is running
-	return p.IsCloudWatchExeRunning(log, p.DefaultHealthCheckOrchestrationDir, p.DefaultHealthCheckOrchestrationDir, task.NewChanneledCancelFlag())
+	return p.IsCloudWatchExeRunning(p.DefaultHealthCheckOrchestrationDir, p.DefaultHealthCheckOrchestrationDir, task.NewChanneledCancelFlag())
 }
 
 // Start starts the executable file and returns encountered errors
-func (p *Plugin) Start(context context.T, configuration string, orchestrationDir string, cancelFlag task.CancelFlag, out iohandler.IOHandler) (err error) {
-	log := context.Log()
+func (p *Plugin) Start(configuration string, orchestrationDir string, cancelFlag task.CancelFlag, out iohandler.IOHandler) (err error) {
+	log := p.Context.Log()
 	logFormatConfig := logger.PrintCWConfig(configuration, log)
 	log.Infof("CloudWatch Configuration to be applied - %s ", logFormatConfig)
 
@@ -154,9 +152,9 @@ func (p *Plugin) Start(context context.T, configuration string, orchestrationDir
 	}
 
 	//check if cloudwatch.exe is already running or not
-	if p.IsCloudWatchExeRunning(log, p.DefaultHealthCheckOrchestrationDir, p.DefaultHealthCheckOrchestrationDir, cancelFlag) {
+	if p.IsCloudWatchExeRunning(p.DefaultHealthCheckOrchestrationDir, p.DefaultHealthCheckOrchestrationDir, cancelFlag) {
 		log.Debug("Cloudwatch executable is already running. Starting to terminate the process")
-		p.Stop(context, cancelFlag)
+		p.Stop(cancelFlag)
 	}
 
 	/*
@@ -173,12 +171,12 @@ func (p *Plugin) Start(context context.T, configuration string, orchestrationDir
 	commandName := p.ExeLocation
 	var commandArguments []string
 	var instanceId, instanceRegion string
-	if instanceId, err = getInstanceId(); err != nil {
+	if instanceId, err = p.Context.Identity().InstanceID(); err != nil {
 		log.Error("Cannot get the current instance ID")
 		return
 	}
 
-	if instanceRegion, err = getRegion(); err != nil {
+	if instanceRegion, err = p.Context.Identity().Region(); err != nil {
 		log.Error("Cannot get the current instance region information")
 		return
 	}
@@ -210,7 +208,7 @@ func (p *Plugin) Start(context context.T, configuration string, orchestrationDir
 	fileutil.DeleteFile(stdoutFilePath)
 	fileutil.DeleteFile(stderrFilePath)
 
-	process, exitCode, err := p.CommandExecuter.StartExe(log, p.WorkingDir, out.GetStdoutWriter(), out.GetStderrWriter(), cancelFlag, commandName, commandArguments)
+	process, exitCode, err := p.CommandExecuter.StartExe(p.Context, p.WorkingDir, out.GetStdoutWriter(), out.GetStderrWriter(), cancelFlag, commandName, commandArguments)
 	if err != nil || exitCode != 0 {
 		return fmt.Errorf("Errors occurred while starting Cloudwatch exit code %v, error %v", exitCode, err)
 	}
@@ -223,11 +221,11 @@ func (p *Plugin) Start(context context.T, configuration string, orchestrationDir
 }
 
 // Stop returns true if it successfully killed the cloudwatch exe or else it returns false
-func (p *Plugin) Stop(context context.T, cancelFlag task.CancelFlag) (err error) {
-	log := context.Log()
+func (p *Plugin) Stop(cancelFlag task.CancelFlag) (err error) {
+	log := p.Context.Log()
 
 	var cwProcInfo []CloudwatchProcessInfo
-	if cwProcInfo, err = p.GetProcInfoOfCloudWatchExe(log,
+	if cwProcInfo, err = p.GetProcInfoOfCloudWatchExe(
 		p.DefaultHealthCheckOrchestrationDir,
 		p.DefaultHealthCheckOrchestrationDir,
 		task.NewChanneledCancelFlag()); err != nil {
@@ -253,7 +251,7 @@ func (p *Plugin) Stop(context context.T, cancelFlag task.CancelFlag) (err error)
 			log.Infof("Successfully killed the process %v", p.Process.Pid)
 		}
 	}
-	if p.IsRunning(context) || processKillError != nil {
+	if p.IsRunning() || processKillError != nil {
 		log.Errorf("There was an error while killing Cloudwatch: %s", processKillError)
 		return processKillError
 	} else {
@@ -263,11 +261,12 @@ func (p *Plugin) Stop(context context.T, cancelFlag task.CancelFlag) (err error)
 }
 
 // IsCloudWatchExeRunning runs a powershell script to determine if the given process is running
-func (p *Plugin) IsCloudWatchExeRunning(log logger.T, workingDirectory, orchestrationDir string, cancelFlag task.CancelFlag) bool {
+func (p *Plugin) IsCloudWatchExeRunning(workingDirectory, orchestrationDir string, cancelFlag task.CancelFlag) bool {
 	/*
 		Since most functions in "os" package in GoLang isn't implemented for Windows platform, we run a powershell
 		script (using Get-Process) to get process details in Windows.
 	*/
+	log := p.Context.Log()
 	//constructing the powershell command to execute
 	var commandArguments []string
 	var err error
@@ -278,7 +277,7 @@ func (p *Plugin) IsCloudWatchExeRunning(log logger.T, workingDirectory, orchestr
 
 	// execute the command
 	var commandOutput string
-	if commandOutput, err = p.runPowerShell(log, workingDirectory, cancelFlag, commandArguments); err != nil {
+	if commandOutput, err = p.runPowerShell(workingDirectory, cancelFlag, commandArguments); err != nil {
 		//TODO Returning false here because we are unsure if Cloudwatch is running. Trying to kill PID will lead to error. Handle this situation
 		return false
 	}
@@ -298,7 +297,8 @@ func (p *Plugin) IsCloudWatchExeRunning(log logger.T, workingDirectory, orchestr
 }
 
 // GetProcInfoOfCloudWatchExe runs a powershell script to determine the process ID of the Cloudwatch process. It should be called only after confirming that cloudwatch is running
-func (p *Plugin) GetProcInfoOfCloudWatchExe(log logger.T, orchestrationDir, workingDirectory string, cancelFlag task.CancelFlag) (cwProcInfo []CloudwatchProcessInfo, err error) {
+func (p *Plugin) GetProcInfoOfCloudWatchExe(orchestrationDir, workingDirectory string, cancelFlag task.CancelFlag) (cwProcInfo []CloudwatchProcessInfo, err error) {
+	log := p.Context.Log()
 	//constructing the powershell command to execute
 	var commandArguments []string
 	cmdGetPidOfCW := fmt.Sprintf(GetPidOfExe, CloudWatchProcessName)
@@ -307,7 +307,7 @@ func (p *Plugin) GetProcInfoOfCloudWatchExe(log logger.T, orchestrationDir, work
 
 	// execute the command
 	var commandOutput string
-	if commandOutput, err = p.runPowerShell(log, workingDirectory, cancelFlag, commandArguments); err != nil {
+	if commandOutput, err = p.runPowerShell(workingDirectory, cancelFlag, commandArguments); err != nil {
 		return cwProcInfo, err
 	}
 
@@ -327,7 +327,8 @@ func (p *Plugin) GetProcInfoOfCloudWatchExe(log logger.T, orchestrationDir, work
 }
 
 // runPowerShell is a wrapper around Execute command to run powershell script
-func (p *Plugin) runPowerShell(log logger.T, workingDirectory string, cancelFlag task.CancelFlag, commandArguments []string) (commandOutput string, err error) {
+func (p *Plugin) runPowerShell(workingDirectory string, cancelFlag task.CancelFlag, commandArguments []string) (commandOutput string, err error) {
+	log := p.Context.Log()
 	commandName := pluginutil.GetShellCommand()
 	log.Infof("commandName: %s", commandName)
 	log.Infof("arguments passed: %s", commandArguments)
@@ -339,7 +340,7 @@ func (p *Plugin) runPowerShell(log logger.T, workingDirectory string, cancelFlag
 	executionTimeout := pluginutil.ValidateExecutionTimeout(log, 60)
 
 	//execute the command
-	stdout, stderr, exitCode, errs := p.CommandExecuter.Execute(log, workingDirectory, stdoutFilePath,
+	stdout, stderr, exitCode, errs := p.CommandExecuter.Execute(p.Context, workingDirectory, stdoutFilePath,
 		stderrFilePath, cancelFlag, executionTimeout, commandName, commandArguments, make(map[string]string))
 
 	stdOutBuf := new(bytes.Buffer)

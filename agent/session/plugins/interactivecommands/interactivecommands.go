@@ -32,7 +32,8 @@ import (
 
 // InteractiveCommandsPlugin is the type for the plugin.
 type InteractiveCommandsPlugin struct {
-	shell shell.IShellPlugin
+	context context.T
+	shell   shell.IShellPlugin
 }
 
 // Returns parameters required for CLI/console to start session
@@ -46,14 +47,15 @@ func (p *InteractiveCommandsPlugin) RequireHandshake() bool {
 }
 
 // NewPlugin returns a new instance of the Interactive Commands Plugin
-func NewPlugin() (sessionplugin.ISessionPlugin, error) {
-	shellPlugin, err := shell.NewPlugin(appconfig.PluginNameInteractiveCommands)
+func NewPlugin(context context.T) (sessionplugin.ISessionPlugin, error) {
+	shellPlugin, err := shell.NewPlugin(context, appconfig.PluginNameInteractiveCommands)
 	if err != nil {
 		return nil, err
 	}
 
 	var plugin = InteractiveCommandsPlugin{
-		shell: shellPlugin,
+		context: context,
+		shell:   shellPlugin,
 	}
 
 	return &plugin, nil
@@ -67,13 +69,13 @@ func (p *InteractiveCommandsPlugin) name() string {
 // Execute starts pseudo terminal.
 // It reads incoming message from data channel and writes to pty.stdin.
 // It reads message from pty.stdout and writes to data channel
-func (p *InteractiveCommandsPlugin) Execute(context context.T,
+func (p *InteractiveCommandsPlugin) Execute(
 	config agentContracts.Configuration,
 	cancelFlag task.CancelFlag,
 	output iohandler.IOHandler,
 	dataChannel datachannel.IDataChannel) {
 
-	logger := context.Log()
+	logger := p.context.Log()
 	var shellProps mgsContracts.ShellProperties
 	err := jsonutil.Remarshal(config.Properties, &shellProps)
 	logger.Debugf("Plugin properties %v", shellProps)
@@ -100,7 +102,7 @@ func (p *InteractiveCommandsPlugin) Execute(context context.T,
 	// streaming of logs is not supported for interactive commands scenario, set it to false
 	config.CloudWatchStreamingEnabled = false
 
-	p.shell.Execute(context, config, cancelFlag, output, dataChannel, shellProps)
+	p.shell.Execute(config, cancelFlag, output, dataChannel, shellProps)
 }
 
 // InputStreamMessageHandler passes payload byte stream to shell stdin

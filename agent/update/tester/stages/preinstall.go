@@ -15,22 +15,22 @@
 package stages
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	testCommon "github.com/aws/amazon-ssm-agent/agent/update/tester/common"
 
 	"github.com/aws/amazon-ssm-agent/agent/update/tester/stages/testcases"
 )
 
 // GetPreInstallTestObj returns preInstallTester instance with initial values
-func GetPreInstallTestObj(logger log.T) testCommon.ITestStage {
+func GetPreInstallTestObj(context context.T) testCommon.ITestStage {
 	return &preInstallTester{
-		logger: logger,
+		context: context,
 	}
 }
 
 // preInstallTester is responsible for running test cases needed to be run on customer's machine before install
 type preInstallTester struct {
-	logger              log.T
+	context             context.T
 	passedTests         []string
 	currentTest         string
 	registeredTestCases map[string]testCommon.ITestCase
@@ -53,12 +53,13 @@ func (t *preInstallTester) RegisterTestCase(metricName string, testCase testComm
 
 // RunTests runs the test case based on registeredTestCases map.
 func (t *preInstallTester) RunTests() bool {
+	log := t.context.Log()
 	for testCaseName, testCaseObj := range t.registeredTestCases {
 		t.currentTest = testCaseName
-		testCaseObj.Initialize(t.logger)
+		testCaseObj.Initialize(t.context)
 		testCaseOutput := testCaseObj.ExecuteTestCase()
 		if testCaseOutput.Err != nil {
-			t.logger.Errorf("error during pre-install test case execution %v", testCaseOutput.Err)
+			log.Errorf("error during pre-install test case execution %v", testCaseOutput.Err)
 		}
 		testCaseObj.CleanupTestCase()
 		if testCaseOutput.Result == testCommon.TestCaseFail {

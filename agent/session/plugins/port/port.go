@@ -43,6 +43,7 @@ type PortParameters struct {
 
 // Plugin is the type for the port plugin.
 type PortPlugin struct {
+	context     context.T
 	dataChannel datachannel.IDataChannel
 	cancelled   chan struct{}
 	session     IPortSession
@@ -50,24 +51,24 @@ type PortPlugin struct {
 
 // IPortSession interface represents functions that need to be implemented by all port sessions
 type IPortSession interface {
-	InitializeSession(log log.T) (err error)
-	HandleStreamMessage(log log.T, streamDataMessage mgsContracts.AgentMessage) (err error)
-	WritePump(log log.T, channel datachannel.IDataChannel) (errorCode int)
+	InitializeSession() (err error)
+	HandleStreamMessage(streamDataMessage mgsContracts.AgentMessage) (err error)
+	WritePump(channel datachannel.IDataChannel) (errorCode int)
 	IsConnectionAvailable() (isAvailable bool)
 	Stop()
 }
 
 // GetSession initializes session based on the type of the port session
 // mux for port forwarding session and if client supports multiplexing; basic otherwise
-var GetSession = func(portParameters PortParameters, cancelled chan struct{}, clientVersion string, sessionId string) (session IPortSession, err error) {
+var GetSession = func(context context.T, portParameters PortParameters, cancelled chan struct{}, clientVersion string, sessionId string) (session IPortSession, err error) {
 	if portParameters.Type == mgsConfig.LocalPortForwarding &&
 		versionutil.Compare(clientVersion, muxSupportedClientVersion, true) >= 0 {
 
-		if session, err = NewMuxPortSession(cancelled, portParameters.PortNumber, sessionId); err == nil {
+		if session, err = NewMuxPortSession(context, cancelled, portParameters.PortNumber, sessionId); err == nil {
 			return session, nil
 		}
 	} else {
-		if session, err = NewBasicPortSession(cancelled, portParameters.PortNumber, portParameters.Type); err == nil {
+		if session, err = NewBasicPortSession(context, cancelled, portParameters.PortNumber, portParameters.Type); err == nil {
 			return session, nil
 		}
 	}
@@ -85,8 +86,11 @@ func (p *PortPlugin) RequireHandshake() bool {
 }
 
 // NewPortPlugin returns a new instance of the Port Plugin.
-func NewPlugin() (sessionplugin.ISessionPlugin, error) {
-	var plugin = PortPlugin{cancelled: make(chan struct{})}
+func NewPlugin(context context.T) (sessionplugin.ISessionPlugin, error) {
+	var plugin = PortPlugin{
+		context:   context,
+		cancelled: make(chan struct{}),
+	}
 	return &plugin, nil
 }
 
@@ -98,13 +102,13 @@ func (p *PortPlugin) name() string {
 // Execute establishes a connection to a specified port from the parameters
 // It reads incoming messages from the data channel and writes to the port
 // It reads from the port and writes to the data channel
-func (p *PortPlugin) Execute(context context.T,
+func (p *PortPlugin) Execute(
 	config agentContracts.Configuration,
 	cancelFlag task.CancelFlag,
 	output iohandler.IOHandler,
 	dataChannel datachannel.IDataChannel) {
 
-	log := context.Log()
+	log := p.context.Log()
 	p.dataChannel = dataChannel
 	defer func() {
 		if err := recover(); err != nil {
@@ -118,27 +122,27 @@ func (p *PortPlugin) Execute(context context.T,
 	} else if cancelFlag.Canceled() {
 		output.MarkAsCancelled()
 	} else {
-		p.execute(context, config, cancelFlag, output)
+		p.execute(config, cancelFlag, output)
 	}
 }
 
 // Execute establishes a connection to a specified port from the parameters
 // It reads incoming messages from the data channel and writes to the port
 // It reads from the port and writes to the data channel
-func (p *PortPlugin) execute(context context.T,
+func (p *PortPlugin) execute(
 	config agentContracts.Configuration,
 	cancelFlag task.CancelFlag,
 	output iohandler.IOHandler) {
 
-	log := context.Log()
+	log := p.context.Log()
 	var err error
 	sessionPluginResultOutput := mgsContracts.SessionPluginResultOutput{}
 
 	defer func() {
-		p.stop(log)
+		p.stop()
 	}()
 
-	if err = p.initializeParameters(log, config); err != nil {
+	if err = p.initializeParameters(config); err != nil {
 		log.Error(err)
 		output.SetExitCode(appconfig.ErrorExitCode)
 		output.SetStatus(agentContracts.ResultStatusFailed)
@@ -147,7 +151,7 @@ func (p *PortPlugin) execute(context context.T,
 		return
 	}
 
-	if err = p.session.InitializeSession(log); err != nil {
+	if err = p.session.InitializeSession(); err != nil {
 		log.Error(err)
 		output.SetExitCode(appconfig.ErrorExitCode)
 		output.SetStatus(agentContracts.ResultStatusFailed)
@@ -168,7 +172,7 @@ func (p *PortPlugin) execute(context context.T,
 	log.Debugf("Start separate go routine to read from port connection and write to data channel")
 	done := make(chan int, 1)
 	go func() {
-		done <- p.session.WritePump(log, p.dataChannel)
+		done <- p.session.WritePump(p.dataChannel)
 	}()
 	log.Infof("Plugin %s started", p.name())
 
@@ -204,19 +208,19 @@ func (p *PortPlugin) InputStreamMessageHandler(log log.T, streamDataMessage mgsC
 		log.Tracef("TCP connection unavailable. Reject incoming message packet")
 		return mgsContracts.ErrHandlerNotReady
 	}
-	return p.session.HandleStreamMessage(log, streamDataMessage)
+	return p.session.HandleStreamMessage(streamDataMessage)
 }
 
 // Stop closes all opened connections to port
-func (p *PortPlugin) stop(log log.T) {
-	log.Debug("Closing all connections")
+func (p *PortPlugin) stop() {
+	p.context.Log().Debug("Closing all connections")
 	if p.session != nil {
 		p.session.Stop()
 	}
 }
 
 // initializeParameters initializes PortPlugin with input parameters
-func (p *PortPlugin) initializeParameters(log log.T, config agentContracts.Configuration) (err error) {
+func (p *PortPlugin) initializeParameters(config agentContracts.Configuration) (err error) {
 	var portParameters PortParameters
 	if err = jsonutil.Remarshal(config.Properties, &portParameters); err != nil {
 		return errors.New(fmt.Sprintf("Unable to remarshal session properties. %v", err))
@@ -225,7 +229,7 @@ func (p *PortPlugin) initializeParameters(log log.T, config agentContracts.Confi
 	if portParameters.PortNumber == "" {
 		return errors.New(fmt.Sprintf("Port number is empty in session properties. %v", config.Properties))
 	}
-	p.session, err = GetSession(portParameters, p.cancelled, p.dataChannel.GetClientVersion(), config.SessionId)
+	p.session, err = GetSession(p.context, portParameters, p.cancelled, p.dataChannel.GetClientVersion(), config.SessionId)
 
 	return
 }

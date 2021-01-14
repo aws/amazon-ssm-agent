@@ -16,7 +16,6 @@
 package cloudwatchlogsinterface
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/aws-sdk-go/service/cloudwatchlogs"
 )
 
@@ -31,16 +30,16 @@ type CloudWatchLogsClient interface {
 
 // ICloudWatchLogsService interface for CloudWatchLogsService
 type ICloudWatchLogsService interface {
-	CreateNewServiceIfUnHealthy(log log.T)
-	CreateLogGroup(log log.T, logGroup string) (err error)
-	CreateLogStream(log log.T, logGroup, logStream string) (err error)
-	DescribeLogGroups(log log.T, logGroupPrefix, nextToken string) (response *cloudwatchlogs.DescribeLogGroupsOutput, err error)
-	DescribeLogStreams(log log.T, logGroup, logStreamPrefix, nextToken string) (response *cloudwatchlogs.DescribeLogStreamsOutput, err error)
-	IsLogGroupPresent(log log.T, logGroup string) (bool, *cloudwatchlogs.LogGroup)
-	IsLogStreamPresent(log log.T, logGroupName, logStreamName string) bool
-	GetSequenceTokenForStream(log log.T, logGroupName, logStreamName string) (sequenceToken *string)
-	PutLogEvents(log log.T, messages []*cloudwatchlogs.InputLogEvent, logGroup, logStream string, sequenceToken *string) (nextSequenceToken *string, err error)
-	IsLogGroupEncryptedWithKMS(log log.T, logGroup *cloudwatchlogs.LogGroup) (bool, error)
-	StreamData(log log.T, logGroupName string, logStreamName string, absoluteFilePath string, isFileComplete bool, isLogStreamCreated bool, fileCompleteSignal chan bool, cleanupControlCharacters bool, structuredLogs bool) (success bool)
+	CreateNewServiceIfUnHealthy()
+	CreateLogGroup(logGroup string) (err error)
+	CreateLogStream(logGroup, logStream string) (err error)
+	DescribeLogGroups(logGroupPrefix, nextToken string) (response *cloudwatchlogs.DescribeLogGroupsOutput, err error)
+	DescribeLogStreams(logGroup, logStreamPrefix, nextToken string) (response *cloudwatchlogs.DescribeLogStreamsOutput, err error)
+	IsLogGroupPresent(logGroup string) (bool, *cloudwatchlogs.LogGroup)
+	IsLogStreamPresent(logGroupName, logStreamName string) bool
+	GetSequenceTokenForStream(logGroupName, logStreamName string) (sequenceToken *string)
+	PutLogEvents(messages []*cloudwatchlogs.InputLogEvent, logGroup, logStream string, sequenceToken *string) (nextSequenceToken *string, err error)
+	IsLogGroupEncryptedWithKMS(logGroup *cloudwatchlogs.LogGroup) (bool, error)
+	StreamData(logGroupName string, logStreamName string, absoluteFilePath string, isFileComplete bool, isLogStreamCreated bool, fileCompleteSignal chan bool, cleanupControlCharacters bool, structuredLogs bool) (success bool)
 	SetCloudWatchMessage(eventVersion string, awsRegion string, targetId string, runAsUser string, sessionId string, sessionOwner string)
 }

@@ -65,7 +65,7 @@ const (
 // ParseManifest parses the public manifest file to provide agent update information.
 func ParseManifest(log log.T,
 	fileName string,
-	context *updateutil.InstanceContext,
+	context *updateutil.InstanceInfo,
 	packageName string) (parsedManifest *Manifest, err error) {
 	//Load specified file from file system
 	var result = []byte{}
@@ -82,7 +82,7 @@ func ParseManifest(log log.T,
 }
 
 // HasVersion returns if manifest file has particular version for package
-func (m *Manifest) HasVersion(context *updateutil.InstanceContext, packageName string, version string) bool {
+func (m *Manifest) HasVersion(context *updateutil.InstanceInfo, packageName string, version string) bool {
 	for _, p := range m.Packages {
 		if p.Name == packageName {
 			for _, f := range p.Files {
@@ -101,7 +101,7 @@ func (m *Manifest) HasVersion(context *updateutil.InstanceContext, packageName s
 }
 
 // LatestVersion returns latest version for specific package
-func (m *Manifest) LatestVersion(log log.T, context *updateutil.InstanceContext, packageName string) (result string, err error) {
+func (m *Manifest) LatestVersion(log log.T, context *updateutil.InstanceInfo, packageName string) (result string, err error) {
 	var version = minimumVersion
 	var compareResult = 0
 	for _, p := range m.Packages {
@@ -132,7 +132,7 @@ func (m *Manifest) LatestVersion(log log.T, context *updateutil.InstanceContext,
 
 // DownloadURLAndHash returns download source url and hash value
 func (m *Manifest) DownloadURLAndHash(
-	context *updateutil.InstanceContext,
+	context *updateutil.InstanceInfo,
 	packageName string,
 	version string) (result string, hash string, err error) {
 	fileName := context.FileName(packageName)
@@ -163,7 +163,7 @@ func (m *Manifest) DownloadURLAndHash(
 }
 
 // validateManifest makes sure all the fields are provided.
-func validateManifest(log log.T, parsedManifest *Manifest, context *updateutil.InstanceContext, packageName string) error {
+func validateManifest(log log.T, parsedManifest *Manifest, context *updateutil.InstanceInfo, packageName string) error {
 	if len(parsedManifest.URIFormat) == 0 {
 		return fmt.Errorf("folder format cannot be null in the Manifest file")
 	}

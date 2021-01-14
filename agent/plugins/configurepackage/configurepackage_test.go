@@ -20,9 +20,8 @@ package configurepackage
 
 import (
 	"errors"
-	"testing"
-
 	"io/ioutil"
+	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -33,7 +32,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/localpackages"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
-
+	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -886,10 +885,11 @@ func TestExecute(t *testing.T) {
 	serviceMock := serviceSuccessMock()
 
 	plugin := &Plugin{
+		context:                contextMock,
 		localRepository:        repoMock,
 		packageServiceSelector: selectMockService(serviceMock),
 	}
-	plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag(), createMockIOHandler())
+	plugin.execute(buildConfigSimple(pluginInformation), createMockCancelFlag(), createMockIOHandler())
 
 	repoMock.AssertExpectations(t)
 	installerMock.AssertExpectations(t)
@@ -912,10 +912,11 @@ func TestExecuteUpdate_PackageNotInstalled_TreatAsInstall(t *testing.T) {
 	serviceMock := serviceUpdateMock()
 
 	plugin := &Plugin{
+		context:                contextMock,
 		localRepository:        repoMock,
 		packageServiceSelector: selectMockService(serviceMock),
 	}
-	plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag(), createMockIOHandler())
+	plugin.execute(buildConfigSimple(pluginInformation), createMockCancelFlag(), createMockIOHandler())
 
 	repoMock.AssertExpectations(t)
 	installerMock.AssertExpectations(t)
@@ -929,6 +930,7 @@ func TestExecuteArrayInput(t *testing.T) {
 	serviceMock := serviceSuccessMock()
 
 	plugin := &Plugin{
+		context:                contextMock,
 		localRepository:        repoMock,
 		packageServiceSelector: selectMockService(serviceMock),
 	}
@@ -939,7 +941,7 @@ func TestExecuteArrayInput(t *testing.T) {
 	rawPluginInputs = append(rawPluginInputs, pluginInformation)
 	config.Properties = rawPluginInputs
 
-	plugin.execute(contextMock, config, createMockCancelFlag(), createMockIOHandler())
+	plugin.execute(config, createMockCancelFlag(), createMockIOHandler())
 }
 
 func TestConfigurePackage_InvalidAction(t *testing.T) {
@@ -953,10 +955,11 @@ func TestConfigurePackage_InvalidAction(t *testing.T) {
 	serviceMock := serviceSuccessMock()
 
 	plugin := &Plugin{
+		context:                contextMock,
 		localRepository:        repoMock,
 		packageServiceSelector: selectMockService(serviceMock),
 	}
-	plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag(), createMockIOHandler())
+	plugin.execute(buildConfigSimple(pluginInformation), createMockCancelFlag(), createMockIOHandler())
 }
 
 func TestConfigurePackageForUpdate_BirdwatcherService_InvalidInPlaceInstallationType(t *testing.T) {
@@ -966,10 +969,11 @@ func TestConfigurePackageForUpdate_BirdwatcherService_InvalidInPlaceInstallation
 	serviceMock := birdwatcherServiceMock()
 
 	plugin := &Plugin{
+		context:                contextMock,
 		localRepository:        repoMock,
 		packageServiceSelector: selectMockService(serviceMock),
 	}
-	plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag(), createMockIOHandler())
+	plugin.execute(buildConfigSimple(pluginInformation), createMockCancelFlag(), createMockIOHandler())
 
 	installerMock.AssertExpectations(t)
 	repoMock.AssertExpectations(t)
@@ -1290,7 +1294,7 @@ func TestSelectService(t *testing.T) {
 				Repository: "",
 			}
 
-			result, err := selectService(tracer, input, localRepo, &appConfig, testdata.bwfacade, &isDocumentArchive)
+			result, err := selectService(contextMock, tracer, input, localRepo, &appConfig, testdata.bwfacade, &isDocumentArchive)
 
 			if !testdata.errorExpected {
 				assert.Equal(t, testdata.expectedType, result.PackageServiceName())
@@ -1336,13 +1340,14 @@ func TestExecuteConfigurePackagePlugin_BirdwatcherService(t *testing.T) {
 	repoMock.On("LoadTraces", mock.Anything, mock.Anything).Return(nil)
 
 	plugin := &Plugin{
+		context:                contextMock,
 		birdwatcherfacade:      &bwFacade,
 		localRepository:        repoMock,
 		packageServiceSelector: selectService,
 	}
 
 	// open network required
-	plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag(), createMockIOHandler())
+	plugin.execute(buildConfigSimple(pluginInformation), createMockCancelFlag(), createMockIOHandler())
 
 	repoMock.AssertExpectations(t)
 	installerMock.AssertExpectations(t)
@@ -1375,7 +1380,7 @@ func TestExecuteConfigurePackagePlugin_DocumentService(t *testing.T) {
 	getDocument_DocVersion := "2"
 	fakeHash := "djfhsfdse3498234bbar8821344bncdklsr023445fskdsgg"
 
-	ec2infradetect.CollectEc2Infrastructure = func(log log.T) (*ec2infradetect.Ec2Infrastructure, error) {
+	ec2infradetect.CollectEc2Infrastructure = func(identity.IAgentIdentity) (*ec2infradetect.Ec2Infrastructure, error) {
 		return &ec2infradetect.Ec2Infrastructure{
 			InstanceID:       "i-1234",
 			Region:           "us-east-1",
@@ -1504,12 +1509,13 @@ func TestExecuteConfigurePackagePlugin_DocumentService(t *testing.T) {
 			bwFacade.On("PutConfigurePackageResult", mock.Anything).Return(&ssm.PutConfigurePackageResultOutput{}, nil).Once()
 
 			plugin := &Plugin{
+				context:                contextMock,
 				birdwatcherfacade:      &bwFacade,
 				localRepository:        repoMock,
 				packageServiceSelector: selectService,
 			}
 
-			plugin.execute(contextMock, buildConfigSimple(pluginInformation), createMockCancelFlag(), mockIOHandler)
+			plugin.execute(buildConfigSimple(pluginInformation), createMockCancelFlag(), mockIOHandler)
 
 			if !testdata.getDocumentReturnsError {
 				repoMock.AssertExpectations(t)

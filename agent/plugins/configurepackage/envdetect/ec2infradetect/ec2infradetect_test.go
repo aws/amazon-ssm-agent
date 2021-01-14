@@ -3,27 +3,23 @@ package ec2infradetect
 import (
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
+	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 )
 
-var loggerMock = log.NewMockLog()
-
 func TestCollectEc2Infrastructure(t *testing.T) {
-	mockObj := new(platfromProviderMock)
-	mockObj.On("InstanceID", mock.Anything).Return("abc", nil)
-	mockObj.On("InstanceType", mock.Anything).Return("xyz", nil)
-	mockObj.On("AvailabilityZone", mock.Anything).Return("az1", nil)
-	mockObj.On("Region", mock.Anything).Return("reg1", nil)
+	instanceID := "i-abc123"
+	region := "us-west-1"
+	instanceType := "SomeInstanceType"
+	availabilityZone := "SomeAZ"
 
-	platformProviderdep = mockObj
+	identity := identityMocks.NewMockAgentIdentity(instanceID, region, availabilityZone, instanceType, "")
 
-	result, err := CollectEc2Infrastructure(loggerMock)
+	result, err := CollectEc2Infrastructure(identity)
 
-	assert.Equal(t, "abc", result.InstanceID)
-	assert.Equal(t, "xyz", result.InstanceType)
-	assert.Equal(t, "az1", result.AvailabilityZone)
-	assert.Equal(t, "reg1", result.Region)
+	assert.Equal(t, instanceID, result.InstanceID)
+	assert.Equal(t, instanceType, result.InstanceType)
+	assert.Equal(t, availabilityZone, result.AvailabilityZone)
+	assert.Equal(t, region, result.Region)
 	assert.NoError(t, err)
 }

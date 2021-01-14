@@ -17,13 +17,14 @@ package runscript
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/executers"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
 // runShellPlugin is the type for the RunShellScript plugin and embeds Plugin struct.
 type runShellPlugin struct {
+	context context.T
 	Plugin
 }
 
@@ -32,9 +33,11 @@ var shellCommand = "sh"
 var shellArgs = []string{"-c"}
 
 // NewRunShellPlugin returns a new instance of the SHPlugin.
-func NewRunShellPlugin(log log.T) (*runShellPlugin, error) {
+func NewRunShellPlugin(context context.T) (*runShellPlugin, error) {
 	shplugin := runShellPlugin{
-		Plugin{
+		context: context,
+		Plugin: Plugin{
+			Context:         context,
 			Name:            appconfig.PluginNameAwsRunShellScript,
 			ScriptName:      shellScriptName,
 			ShellCommand:    shellCommand,

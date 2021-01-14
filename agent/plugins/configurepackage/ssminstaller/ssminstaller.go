@@ -236,8 +236,6 @@ func (inst *Installer) resolveAction(tracer trace.Tracer, actionName string) (ex
 }
 
 func (inst *Installer) getEnvVars(actionName string, context context.T) (envVars map[string]string, err error) {
-	log := context.Log()
-
 	envVars = make(map[string]string)
 
 	envVars["BWS_ACTION_NAME"] = actionName
@@ -247,7 +245,7 @@ func (inst *Installer) getEnvVars(actionName string, context context.T) (envVars
 	envVars["http_proxy"] = os.Getenv("http_proxy")
 	envVars["no_proxy"] = os.Getenv("no_proxy")
 
-	env, err := inst.envdetectCollector.CollectData(log)
+	env, err := inst.envdetectCollector.CollectData(context)
 	if err != nil {
 		return envVars, fmt.Errorf("failed to collect data: %v", err)
 	}

@@ -42,7 +42,7 @@ func loadPlatformDependentPlugins(context context.T) map[string]Plugin {
 	cwInfo.Configuration = ""
 	cwInfo.State = PluginState{}
 
-	if handler, err := cloudwatch.NewPlugin(iohandler.DefaultOutputConfig()); err == nil {
+	if handler, err := cloudwatch.NewPlugin(context, iohandler.DefaultOutputConfig()); err == nil {
 		cw.Info = cwInfo
 		cw.Handler = handler
 

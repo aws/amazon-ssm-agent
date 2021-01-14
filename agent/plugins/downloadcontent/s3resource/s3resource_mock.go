@@ -15,8 +15,8 @@
 package s3resource
 
 import (
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/stretchr/testify/mock"
 )
@@ -26,12 +26,12 @@ type s3DepMock struct {
 	mock.Mock
 }
 
-func (s3 s3DepMock) ListS3Directory(log log.T, amazonS3URL s3util.AmazonS3URL) (folderNames []string, err error) {
-	args := s3.Called(log, amazonS3URL)
+func (s3 s3DepMock) ListS3Directory(context context.T, amazonS3URL s3util.AmazonS3URL) (folderNames []string, err error) {
+	args := s3.Called(context, amazonS3URL)
 	return args.Get(0).([]string), args.Error(1)
 }
 
-func (s3 s3DepMock) Download(log log.T, input artifact.DownloadInput) (artifact.DownloadOutput, error) {
-	args := s3.Called(log, input)
+func (s3 s3DepMock) Download(context context.T, input artifact.DownloadInput) (artifact.DownloadOutput, error) {
+	args := s3.Called(context, input)
 	return args.Get(0).(artifact.DownloadOutput), args.Error(1)
 }

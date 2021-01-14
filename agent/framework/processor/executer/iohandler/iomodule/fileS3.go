@@ -22,8 +22,8 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher"
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 )
 
@@ -42,8 +42,9 @@ type File struct {
 }
 
 // Read reads from the stream and writes to the output file, s3 and CloudWatchLogs.
-func (file File) Read(log log.T, reader *io.PipeReader) {
+func (file File) Read(context context.T, reader *io.PipeReader) {
 	defer func() { reader.Close() }()
+	log := context.Log()
 
 	log.Debugf("OrchestrationDir %v ", file.OrchestrationDirectory)
 
@@ -63,12 +64,11 @@ func (file File) Read(log log.T, reader *io.PipeReader) {
 
 	defer fileWriter.Close()
 
-	cwl := cloudwatchlogspublisher.NewCloudWatchLogsService(log)
+	cwl := cloudwatchlogspublisher.NewCloudWatchLogsService(context)
 	if file.LogGroupName != "" {
 		log.Debugf("Received CloudWatch Configs: LogGroupName: %s\n, LogStreamName: %s\n", file.LogGroupName, file.LogStreamName)
 		//Start CWL logging on different go routine
 		go cwl.StreamData(
-			log,
 			file.LogGroupName,
 			file.LogStreamName,
 			filePath,
@@ -102,7 +102,7 @@ func (file File) Read(log log.T, reader *io.PipeReader) {
 	// Upload output file to S3
 	if file.OutputS3BucketName != "" && fi.Size() > 0 {
 		s3Key := fileutil.BuildS3Path(file.OutputS3KeyPrefix, file.FileName)
-		if s3, err := s3util.NewAmazonS3Util(log, file.OutputS3BucketName); err == nil {
+		if s3, err := s3util.NewAmazonS3Util(context, file.OutputS3BucketName); err == nil {
 			if err := s3.S3Upload(log, file.OutputS3BucketName, s3Key, filePath); err != nil {
 				log.Errorf("Failed to upload the output to s3: %v", err)
 			}

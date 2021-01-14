@@ -18,6 +18,9 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/common/identity"
+	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 )
@@ -37,6 +40,9 @@ type SessionWorkerTestSuite struct {
 
 // Testing worker invoked by master.
 func (suite *SessionWorkerTestSuite) TestSessionWorkerInitialize() {
+	newAgentIdentity = func(log.T, *appconfig.SsmagentConfig, identity.IAgentIdentitySelector) (identity.IAgentIdentity, error) {
+		return identityMocks.NewDefaultMockAgentIdentity(), nil
+	}
 	ctxLight, channelName, err := initialize([]string{testProgramPath, testChannelName})
 	assert.NoError(suite.T(), err)
 	assert.Equal(suite.T(), testChannelName, channelName)

@@ -95,7 +95,7 @@ func (suite *SessionTestSuite) TestModuleExecute() {
 		return suite.mockControlChannel, nil
 	}
 
-	suite.session.ModuleExecute(suite.mockContext)
+	suite.session.ModuleExecute()
 
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginResult := contracts.PluginResult{
@@ -328,7 +328,10 @@ func (suite *SessionTestSuite) TestBuildAgentTaskCompleteWhenPluginIdIsEmptyAndS
 }
 
 func (suite *SessionTestSuite) TestGetMgsEndpoint() {
-	mgsConfig.GetMgsEndpointFromRip = func(region string) string {
+	// create mock context and log
+	contextMock := context.NewMockDefault()
+
+	mgsConfig.GetMgsEndpointFromRip = func(context context.T, region string) string {
 		if region == "us-east-1" {
 			return "ssmmessages.us-east-1.amazonaws.com"
 		} else if region == "cn-north-1" {
@@ -338,12 +341,12 @@ func (suite *SessionTestSuite) TestGetMgsEndpoint() {
 		}
 	}
 
-	host, err := getMgsEndpoint("us-east-1")
+	host, err := getMgsEndpoint(contextMock, "us-east-1")
 
 	assert.Nil(suite.T(), err)
 	assert.Equal(suite.T(), "https://ssmmessages.us-east-1.amazonaws.com", host)
 
-	bjsHost, err := getMgsEndpoint("cn-north-1")
+	bjsHost, err := getMgsEndpoint(contextMock, "cn-north-1")
 	assert.Nil(suite.T(), err)
 	assert.Equal(suite.T(), "https://ssmmessages.cn-north-1.amazonaws.com.cn", bjsHost)
 }

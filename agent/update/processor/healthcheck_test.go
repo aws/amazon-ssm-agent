@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
@@ -86,23 +87,23 @@ func TestHealthCheckWithUpdateFailed(t *testing.T) {
 }
 
 func TestUpdateHealthCheck(t *testing.T) {
-	context := createUpdateContext(Installed)
+	updateContext := createUpdateContext(Installed)
 	service := &svcManager{}
 
 	mockObj := ssm.NewMockDefault()
 	mockObj.On(
 		"UpdateInstanceInformation",
 		logger,
-		context.Current.SourceVersion,
-		fmt.Sprintf("%v-%v", updateInProgress, context.Current.TargetVersion)).Return(&ssmService.UpdateInstanceInformationOutput{}, nil)
+		updateContext.Current.SourceVersion,
+		fmt.Sprintf("%v-%v", updateInProgress, updateContext.Current.TargetVersion)).Return(&ssmService.UpdateInstanceInformationOutput{}, nil)
 
 	// setup
-	newSsmSvc = func(log log.T) ssm.Service {
+	newSsmSvc = func(context context.T) ssm.Service {
 		return mockObj
 	}
 
 	// action
-	err := service.UpdateHealthCheck(logger, context.Current, "")
+	err := service.UpdateHealthCheck(logger, updateContext.Current, "")
 
 	// assert
 	mockObj.AssertExpectations(t)
@@ -113,24 +114,24 @@ func TestUpdateHealthCheckFailCreatingService(t *testing.T) {
 	// setup
 	// fail to create a new ssm service
 	ssmSvc = nil
-	context := createUpdateContext(Installed)
+	updateContext := createUpdateContext(Installed)
 	service := &svcManager{}
 	// action
-	err := service.UpdateHealthCheck(logger, context.Current, "")
+	err := service.UpdateHealthCheck(logger, updateContext.Current, "")
 
 	// assert
 	assert.Error(t, err)
 }
 
 func createUpdateContext(state UpdateState) *UpdateContext {
-	context := &UpdateContext{}
-	context.Current = &UpdateDetail{}
-	context.Current.Result = contracts.ResultStatusSuccess
-	context.Current.SourceVersion = "5.0.0.0"
-	context.Current.TargetVersion = "6.0.0.0"
-	context.Current.State = state
-	context.Current.UpdateRoot = "testdata"
-	context.Current.MessageID = "message id"
+	updateContext := &UpdateContext{}
+	updateContext.Current = &UpdateDetail{}
+	updateContext.Current.Result = contracts.ResultStatusSuccess
+	updateContext.Current.SourceVersion = "5.0.0.0"
+	updateContext.Current.TargetVersion = "6.0.0.0"
+	updateContext.Current.State = state
+	updateContext.Current.UpdateRoot = "testdata"
+	updateContext.Current.MessageID = "message id"
 
-	return context
+	return updateContext
 }

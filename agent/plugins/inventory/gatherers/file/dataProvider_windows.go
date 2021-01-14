@@ -20,14 +20,13 @@ import (
 	"encoding/json"
 	"fmt"
 	"os/exec"
+	"path/filepath"
 	"strings"
 
-	"path/filepath"
-
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/twinj/uuid"
@@ -163,9 +162,10 @@ func writeFile(path string, commands string) (err error) {
 }
 
 // Powershell has limit on number of parameters. So execute command using script.
-func createScript(commands string, log log.T) (path string, err error) {
+func createScript(context context.T, commands string) (path string, err error) {
+	log := context.Log()
 	var machineID string
-	machineID, err = platform.InstanceID()
+	machineID, err = context.Identity().InstanceID()
 
 	if err != nil {
 		log.Errorf("Error getting machineID")
@@ -208,14 +208,15 @@ func getMetaDataForFiles(log log.T, paths []string) (fileInfo []model.FileData, 
 }
 
 // Tries to create a powershell script and executes it
-func createAndRunScript(log log.T, paths []string) (fileInfo []model.FileData, err error) {
+func createAndRunScript(context context.T, paths []string) (fileInfo []model.FileData, err error) {
 	var cmd, path string
+	log := context.Log()
 	cmd, err = getPowershellCmd(log, paths)
 	if err != nil {
 		log.Errorf(err.Error())
 		return
 	}
-	path, err = createScript(cmd, log)
+	path, err = createScript(context, cmd)
 	if err != nil {
 		log.Errorf(err.Error())
 		return
@@ -231,11 +232,12 @@ func createAndRunScript(log log.T, paths []string) (fileInfo []model.FileData, e
 
 // Its is more efficient to run using script. So try to run command using script.
 // If there is an error we should try fallback method.
-func getMetaData(log log.T, paths []string) (fileInfo []model.FileData, err error) {
+func getMetaData(context context.T, paths []string) (fileInfo []model.FileData, err error) {
+	log := context.Log()
 	var batchPaths []string
 
 	var scriptErr error
-	fileInfo, scriptErr = createAndRunScript(log, paths)
+	fileInfo, scriptErr = createAndRunScript(context, paths)
 
 	// If err running the script, try fallback option
 	if scriptErr != nil {

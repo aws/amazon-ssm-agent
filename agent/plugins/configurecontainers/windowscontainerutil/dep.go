@@ -14,6 +14,7 @@
 package windowscontainerutil
 
 import (
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
@@ -36,7 +37,7 @@ type dependencies interface {
 		stdOut string,
 		stdErr string,
 		usePlatformSpecificCommand bool) (output string, err error)
-	ArtifactDownload(log log.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error)
+	ArtifactDownload(context context.T, input artifact.DownloadInput) (output artifact.DownloadOutput, err error)
 	LocalRegistryKeySetDWordValue(path string, name string, value uint32) error
 	LocalRegistryKeyGetStringValue(path string, name string) (val string, valtype uint32, err error)
 	FileutilUncompress(log log.T, src, dest string) error

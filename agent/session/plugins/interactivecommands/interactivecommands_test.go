@@ -60,6 +60,10 @@ func (suite *InteractiveCommandsTestSuite) SetupTest() {
 			Commands:      "date",
 			RunAsElevated: true,
 		},
+		MacOS: mgsContracts.ShellConfig{
+			Commands:      "ls",
+			RunAsElevated: true,
+		},
 	}
 
 	suite.mockContext = mockContext
@@ -67,7 +71,9 @@ func (suite *InteractiveCommandsTestSuite) SetupTest() {
 	suite.mockCancelFlag = mockCancelFlag
 	suite.mockDataChannel = mockDataChannel
 	suite.mockIohandler = mockIohandler
-	suite.plugin = &InteractiveCommandsPlugin{}
+	suite.plugin = &InteractiveCommandsPlugin{
+		context: suite.mockContext,
+	}
 	suite.shellProps = shellProps
 }
 
@@ -91,9 +97,9 @@ func (suite *InteractiveCommandsTestSuite) TestGetPluginParameters() {
 func (suite *InteractiveCommandsTestSuite) TestExecuteWhenCancelFlagIsShutDown() {
 	suite.mockCancelFlag.On("ShutDown").Return(true)
 	suite.mockIohandler.On("MarkAsShutdown").Return(nil)
-	suite.plugin.shell, _ = shell.NewPlugin(suite.plugin.name())
+	suite.plugin.shell, _ = shell.NewPlugin(suite.mockContext, suite.plugin.name())
 
-	suite.plugin.Execute(suite.mockContext,
+	suite.plugin.Execute(
 		contracts.Configuration{Properties: suite.shellProps},
 		suite.mockCancelFlag,
 		suite.mockIohandler,
@@ -108,9 +114,9 @@ func (suite *InteractiveCommandsTestSuite) TestExecuteWhenCancelFlagIsCancelled(
 	suite.mockCancelFlag.On("Canceled").Return(true)
 	suite.mockCancelFlag.On("ShutDown").Return(false)
 	suite.mockIohandler.On("MarkAsCancelled").Return(nil)
-	suite.plugin.shell, _ = shell.NewPlugin(suite.plugin.name())
+	suite.plugin.shell, _ = shell.NewPlugin(suite.mockContext, suite.plugin.name())
 
-	suite.plugin.Execute(suite.mockContext,
+	suite.plugin.Execute(
 		contracts.Configuration{Properties: suite.shellProps},
 		suite.mockCancelFlag,
 		suite.mockIohandler,
@@ -122,12 +128,12 @@ func (suite *InteractiveCommandsTestSuite) TestExecuteWhenCancelFlagIsCancelled(
 
 // Testing Execute happy case when the exit code is 0.
 func (suite *InteractiveCommandsTestSuite) TestExecute() {
-	newIOHandler := iohandler.NewDefaultIOHandler(suite.mockLog, contracts.IOConfiguration{})
+	newIOHandler := iohandler.NewDefaultIOHandler(suite.mockContext, contracts.IOConfiguration{})
 	mockShellPlugin := new(shell.IShellPluginMock)
-	mockShellPlugin.On("Execute", suite.mockContext, mock.Anything, suite.mockCancelFlag, newIOHandler, suite.mockDataChannel, suite.shellProps).Return()
+	mockShellPlugin.On("Execute", mock.Anything, suite.mockCancelFlag, newIOHandler, suite.mockDataChannel, suite.shellProps).Return()
 	suite.plugin.shell = mockShellPlugin
 
-	suite.plugin.Execute(suite.mockContext,
+	suite.plugin.Execute(
 		contracts.Configuration{Properties: suite.shellProps},
 		suite.mockCancelFlag,
 		newIOHandler,
@@ -146,7 +152,7 @@ func (suite *InteractiveCommandsTestSuite) TestExecuteWithoutCommands() {
 	sessionPluginResultOutput.Output = fmt.Sprintf("Commands cannot be empty for session type %s", suite.plugin.name())
 	suite.mockIohandler.On("SetOutput", sessionPluginResultOutput).Return()
 
-	suite.plugin.Execute(suite.mockContext,
+	suite.plugin.Execute(
 		contracts.Configuration{},
 		suite.mockCancelFlag,
 		suite.mockIohandler,

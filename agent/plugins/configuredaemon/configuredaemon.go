@@ -33,27 +33,29 @@ import (
 
 // Plugin is the type for the lrpm invoker plugin.
 type Plugin struct {
-	lrpm manager.T
+	context context.T
+	lrpm    manager.T
 }
 
 // NewPlugin returns lrpminvoker
-func NewPlugin() (*Plugin, error) {
-	var plugin Plugin
-	var err error
+func NewPlugin(context context.T) (*Plugin, error) {
 	//getting the reference of LRPM - long running plugin manager - which manages all long running plugins
-	plugin.lrpm, err = manager.GetInstance()
-	return &plugin, err
+	lrpm, err := manager.GetInstance()
+	return &Plugin{
+		context: context,
+		lrpm:    lrpm,
+	}, err
 }
 
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
-	log := context.Log()
+func (p *Plugin) Execute(config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
+	log := p.context.Log()
 	log.Infof("%v started with configuration %v", Name(), config)
 	if cancelFlag.ShutDown() {
 		output.MarkAsShutdown()
 	} else if cancelFlag.Canceled() {
 		output.MarkAsCancelled()
 	} else {
-		runConfigureDaemon(p, context, config.Properties, config.OrchestrationDirectory, config.DefaultWorkingDirectory, cancelFlag, output)
+		runConfigureDaemon(p, p.context, config.Properties, config.OrchestrationDirectory, config.DefaultWorkingDirectory, cancelFlag, output)
 	}
 	return
 }

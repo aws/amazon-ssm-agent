@@ -19,8 +19,8 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/ssm/util"
+	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/request"
@@ -42,6 +42,7 @@ type sdkService struct {
 func NewAnonymousService(logger logger.T, region string) AnonymousService {
 
 	log.SetFlags(0)
+
 	awsConfig := util.AwsConfig(logger).WithLogLevel(aws.LogOff)
 
 	awsConfig.Region = &region
@@ -53,16 +54,8 @@ func NewAnonymousService(logger logger.T, region string) AnonymousService {
 		if appConfig.Ssm.Endpoint != "" {
 			awsConfig.Endpoint = &appConfig.Ssm.Endpoint
 		} else {
-			// If we either were passed a blank region, try to figure it out based on platform services
-			if region == "" {
-				region, err = platform.Region()
-				if err != nil {
-					log.Printf("encountered error while determining region - %s", err)
-				}
-			}
-
 			// Get the default ssm endpoint for this region
-			defaultEndpoint := platform.GetDefaultEndPoint(region, "ssm")
+			defaultEndpoint := endpoint.GetDefaultEndpoint(logger, "ssm", region, "")
 			awsConfig.Endpoint = &defaultEndpoint
 
 		}

@@ -23,7 +23,7 @@ import (
 
 func NewHealthCheck(context context.T) (healthModule *health.HealthCheck, ssmsdkMock *ssmsdkmock.SSMAPI) {
 	sdkMock := new(ssmsdkmock.SSMAPI)
-	svc := ssmService.NewSSMService(sdkMock)
+	svc := ssmService.NewSSMService(context, sdkMock)
 	// Create a new Healthcheck module
 	healthModule = health.NewHealthCheck(context, svc)
 	return healthModule, sdkMock

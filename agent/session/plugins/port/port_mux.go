@@ -28,8 +28,8 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	agentContext "github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/session/datachannel"
@@ -53,6 +53,7 @@ type MuxServer struct {
 // MuxPortSession is the type for the multiplexer port session.
 // supports making multiple connections to the destination server.
 type MuxPortSession struct {
+	context          agentContext.T
 	portSession      IPortSession
 	cancelled        chan struct{}
 	serverPortNumber string
@@ -73,8 +74,12 @@ func (s *MuxServer) close() {
 }
 
 // NewMuxPortSession returns a new instance of the MuxPortSession.
-func NewMuxPortSession(cancelled chan struct{}, portNumber string, sessionId string) (IPortSession, error) {
-	var plugin = MuxPortSession{cancelled: cancelled, serverPortNumber: portNumber, sessionId: sessionId}
+func NewMuxPortSession(context agentContext.T, cancelled chan struct{}, portNumber string, sessionId string) (IPortSession, error) {
+	var plugin = MuxPortSession{
+		context:          context,
+		cancelled:        cancelled,
+		serverPortNumber: portNumber,
+		sessionId:        sessionId}
 	return &plugin, nil
 }
 
@@ -84,7 +89,8 @@ func (p *MuxPortSession) IsConnectionAvailable() bool {
 }
 
 // HandleStreamMessage passes payload byte stream to smux server
-func (p *MuxPortSession) HandleStreamMessage(log log.T, streamDataMessage mgsContracts.AgentMessage) error {
+func (p *MuxPortSession) HandleStreamMessage(streamDataMessage mgsContracts.AgentMessage) error {
+	log := p.context.Log()
 	switch mgsContracts.PayloadType(streamDataMessage.PayloadType) {
 	case mgsContracts.Output:
 		log.Tracef("Output message received: %d", streamDataMessage.SequenceNumber)
@@ -118,7 +124,8 @@ func (p *MuxPortSession) Stop() {
 }
 
 // WritePump handles communication between <smux server, datachannel> and <smux server, destination server>
-func (p *MuxPortSession) WritePump(log log.T, dataChannel datachannel.IDataChannel) (errorCode int) {
+func (p *MuxPortSession) WritePump(dataChannel datachannel.IDataChannel) (errorCode int) {
+	log := p.context.Log()
 	defer func() {
 		if err := recover(); err != nil {
 			log.Errorf("WritePump thread crashed with message: %v", err)
@@ -129,12 +136,12 @@ func (p *MuxPortSession) WritePump(log log.T, dataChannel datachannel.IDataChann
 
 	// go routine to read packets from smux server and send on datachannel
 	g.Go(func() error {
-		return p.transferDataToMgs(log, ctx, dataChannel)
+		return p.transferDataToMgs(ctx, dataChannel)
 	})
 
 	// go routine for smux server to accept streams (client connections) and dials connections to destination server
 	g.Go(func() error {
-		return p.handleServerConnections(log, ctx, dataChannel)
+		return p.handleServerConnections(ctx, dataChannel)
 	})
 
 	if err := g.Wait(); err != nil {
@@ -145,19 +152,19 @@ func (p *MuxPortSession) WritePump(log log.T, dataChannel datachannel.IDataChann
 }
 
 // InitializeSession initializes MuxPortSession
-func (p *MuxPortSession) InitializeSession(log log.T) (err error) {
+func (p *MuxPortSession) InitializeSession() (err error) {
 	fileutil.MakeDirs(appconfig.SessionFilesPath)
 	p.socketFile = getUnixSocketPath(p.sessionId, appconfig.SessionFilesPath, "mux.sock")
 
-	if err = p.initialize(log); err != nil {
+	if err = p.initialize(); err != nil {
 		p.cleanUp()
 	}
 	return
 }
 
 // initialize starts smux server and corresponding connections
-func (p *MuxPortSession) initialize(log log.T) (err error) {
-
+func (p *MuxPortSession) initialize() (err error) {
+	log := p.context.Log()
 	var listener net.Listener
 	// start a local listener
 	if listener, err = utility.NewListener(log, p.socketFile); err != nil {
@@ -203,7 +210,8 @@ func (p *MuxPortSession) cleanUp() {
 }
 
 // transferDataToMgs reads data from smux server and sends on data channel.
-func (p *MuxPortSession) transferDataToMgs(log log.T, ctx context.Context, dataChannel datachannel.IDataChannel) error {
+func (p *MuxPortSession) transferDataToMgs(ctx context.Context, dataChannel datachannel.IDataChannel) error {
+	log := p.context.Log()
 	for {
 		packet := make([]byte, mgsConfig.StreamDataPayloadSize)
 		select {
@@ -226,7 +234,8 @@ func (p *MuxPortSession) transferDataToMgs(log log.T, ctx context.Context, dataC
 }
 
 // handleServerConnections sets up smux stream and handles communication between smux stream and destination server.
-func (p *MuxPortSession) handleServerConnections(log log.T, ctx context.Context, dataChannel datachannel.IDataChannel) error {
+func (p *MuxPortSession) handleServerConnections(ctx context.Context, dataChannel datachannel.IDataChannel) error {
+	log := p.context.Log()
 	// net.Dial assumes local system when host in addr is empty
 	localAddr := fmt.Sprintf(":%s", p.serverPortNumber)
 	for {

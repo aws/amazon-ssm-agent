@@ -57,6 +57,8 @@ const (
 // Plugin is the type for the configureDaemon plugin.
 type Plugin struct {
 	iohandler.PluginConfig
+	// Context is the agent context for config, identity and logger
+	Context context.T
 	// ExeLocation is the directory for a particular daemon package
 	ExeLocation string
 	// Name is name of the daemon
@@ -101,7 +103,7 @@ func BlockWhileDaemonRunning(context context.T, pid int) error {
 
 // IsRunning returns if the said plugin is running or not, to the long running plugin manager.
 // We always return false here since the lifecycle of the underlying daemon is anyways being controlled here
-func (p *Plugin) IsRunning(context context.T) bool {
+func (p *Plugin) IsRunning() bool {
 	return false
 }
 
@@ -133,8 +135,8 @@ func IsDaemonRunning(p *Plugin) bool {
 }
 
 // Starts a given executable or a specified powershell script and enables daemon functionality
-func StartDaemonHelper(p *Plugin, context context.T, configuration string) (err error) {
-	log := context.Log()
+func StartDaemonHelper(p *Plugin, configuration string) (err error) {
+	log := p.Context.Log()
 	if IsDaemonRunningExecutor(p) {
 		log.Infof("Daemon already running: %v", configuration)
 		return
@@ -174,8 +176,8 @@ func StartDaemonHelper(p *Plugin, context context.T, configuration string) (err 
 }
 
 // Starts a given executable or a specified powershell script and enables daemon functionality
-func StartDaemon(p *Plugin, context context.T, configuration string) (err error) {
-	log := context.Log()
+func StartDaemon(p *Plugin, configuration string) (err error) {
+	log := p.Context.Log()
 	RetryCount := 0
 	// Bail out if an explicit Stop daemon is requested by the user
 	if p.stopRequested() {
@@ -189,9 +191,9 @@ func StartDaemon(p *Plugin, context context.T, configuration string) (err error)
 
 	for {
 		start := time.Now()
-		log := context.Log()
+		log := p.Context.Log()
 		if p.Process != nil {
-			err = BlockWhileDaemonRunningExecutor(context, p.Process.Pid)
+			err = BlockWhileDaemonRunningExecutor(p.Context, p.Process.Pid)
 			p.SetDaemonStateStopped()
 			if err != nil {
 				log.Infof("Encountered error: process may not have exited cleanly. Pid %v : %s", p.Process.Pid, err.Error())
@@ -204,7 +206,7 @@ func StartDaemon(p *Plugin, context context.T, configuration string) (err error)
 			return
 		}
 		// Invoke the helper function to start daermo
-		err = StartDaemonHelperExecutor(p, context, configuration)
+		err = StartDaemonHelperExecutor(p, configuration)
 		if err == nil {
 			log.Infof("Started Daemon...")
 		}
@@ -229,8 +231,8 @@ func StartDaemon(p *Plugin, context context.T, configuration string) (err error)
 	}
 }
 
-func (p *Plugin) Start(context context.T, configuration string, orchestrationDir string, cancelFlag task.CancelFlag, out iohandler.IOHandler) error {
-	log := context.Log()
+func (p *Plugin) Start(configuration string, orchestrationDir string, cancelFlag task.CancelFlag, out iohandler.IOHandler) error {
+	log := p.Context.Log()
 	log.Infof(" Package location - %s", p.ExeLocation)
 	log.Infof(" Command/Script/Executable to be run - %s", configuration)
 
@@ -241,15 +243,15 @@ func (p *Plugin) Start(context context.T, configuration string, orchestrationDir
 		// Set the User Requested state to ENABLED
 		p.RequestedDaemonState = RequestedEnabled
 		p.ProcessStateLock.Unlock()
-		go StartDaemon(p, context, configuration)
+		go StartDaemon(p, configuration)
 	} else {
 		p.ProcessStateLock.Unlock()
 	}
 	return nil
 }
 
-func StopDaemon(p *Plugin, context context.T) {
-	log := context.Log()
+func StopDaemon(p *Plugin) {
+	log := p.Context.Log()
 	p.ProcessStateLock.Lock()
 	defer p.ProcessStateLock.Unlock()
 	if p.Process != nil {
@@ -273,9 +275,9 @@ func StopDaemon(p *Plugin, context context.T) {
 	}
 }
 
-func (p *Plugin) Stop(context context.T, cancelFlag task.CancelFlag) error {
-	log := context.Log()
+func (p *Plugin) Stop(cancelFlag task.CancelFlag) error {
+	log := p.Context.Log()
 	log.Infof("Stopping Daemon")
-	StopDaemonExecutor(p, context)
+	StopDaemonExecutor(p)
 	return nil
 }

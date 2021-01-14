@@ -21,6 +21,7 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
@@ -53,47 +54,47 @@ func TestGetLatestVersion_None(t *testing.T) {
 }
 
 func TestEndpointEuCentral1(t *testing.T) {
-	service := New("", "eu-central-1")
+	service := New(context.NewMockDefault(), "", "eu-central-1")
 	assert.Equal(t, fmt.Sprintf("https://s3.eu-central-1.amazonaws.com/amazon-ssm-packages-eu-central-1/BirdwatcherPackages/{PackageName}/%v/%v", appconfig.PackagePlatform, runtime.GOARCH), service.packageURL)
 }
 
 func TestEndpointEuCentral1Beta(t *testing.T) {
-	service := New("beta", "eu-central-1")
+	service := New(context.NewMockDefault(), "beta", "eu-central-1")
 	assert.Equal(t, fmt.Sprintf("https://s3.amazonaws.com/amazon-ssm-packages-beta/BirdwatcherPackages/{PackageName}/%v/%v", appconfig.PackagePlatform, runtime.GOARCH), service.packageURL)
 }
 
 func TestEndpointEuCentral1Gamma(t *testing.T) {
-	service := New("gamma", "eu-central-1")
+	service := New(context.NewMockDefault(), "gamma", "eu-central-1")
 	assert.Equal(t, fmt.Sprintf("https://s3.amazonaws.com/amazon-ssm-packages-us-east-1-gamma/BirdwatcherPackages/{PackageName}/%v/%v", appconfig.PackagePlatform, runtime.GOARCH), service.packageURL)
 }
 
 func TestEndpointCnNorth1(t *testing.T) {
-	service := New("", "cn-north-1")
+	service := New(context.NewMockDefault(), "", "cn-north-1")
 	assert.Equal(t, fmt.Sprintf("https://s3.cn-north-1.amazonaws.com.cn/amazon-ssm-packages-cn-north-1/BirdwatcherPackages/{PackageName}/%v/%v", appconfig.PackagePlatform, runtime.GOARCH), service.packageURL)
 }
 
 func TestEndpointCnNorth1Beta(t *testing.T) {
-	service := New("beta", "cn-north-1")
+	service := New(context.NewMockDefault(), "beta", "cn-north-1")
 	assert.Equal(t, fmt.Sprintf("https://s3.amazonaws.com/amazon-ssm-packages-beta/BirdwatcherPackages/{PackageName}/%v/%v", appconfig.PackagePlatform, runtime.GOARCH), service.packageURL)
 }
 
 func TestEndpointCnNorth1Gamma(t *testing.T) {
-	service := New("gamma", "cn-north-1")
+	service := New(context.NewMockDefault(), "gamma", "cn-north-1")
 	assert.Equal(t, fmt.Sprintf("https://s3.amazonaws.com/amazon-ssm-packages-us-east-1-gamma/BirdwatcherPackages/{PackageName}/%v/%v", appconfig.PackagePlatform, runtime.GOARCH), service.packageURL)
 }
 
 func TestEndpointUsEast1(t *testing.T) {
-	service := New("", "us-east-1")
+	service := New(context.NewMockDefault(), "", "us-east-1")
 	assert.Equal(t, fmt.Sprintf("https://s3.us-east-1.amazonaws.com/amazon-ssm-packages-us-east-1/BirdwatcherPackages/{PackageName}/%v/%v", appconfig.PackagePlatform, runtime.GOARCH), service.packageURL)
 }
 
 func TestEndpointUsEast1Beta(t *testing.T) {
-	service := New("beta", "us-east-1")
+	service := New(context.NewMockDefault(), "beta", "us-east-1")
 	assert.Equal(t, fmt.Sprintf("https://s3.amazonaws.com/amazon-ssm-packages-beta/BirdwatcherPackages/{PackageName}/%v/%v", appconfig.PackagePlatform, runtime.GOARCH), service.packageURL)
 }
 
 func TestEndpointUsEast1Gamma(t *testing.T) {
-	service := New("gamma", "us-east-1")
+	service := New(context.NewMockDefault(), "gamma", "us-east-1")
 	assert.Equal(t, fmt.Sprintf("https://s3.amazonaws.com/amazon-ssm-packages-us-east-1-gamma/BirdwatcherPackages/{PackageName}/%v/%v", appconfig.PackagePlatform, runtime.GOARCH), service.packageURL)
 }
 
@@ -213,7 +214,7 @@ func TestUseSSMS3Service_True(t *testing.T) {
 
 	networkdep = mockObj
 
-	assert.True(t, UseSSMS3Service(tracer, "", "eu-central-1"))
+	assert.True(t, UseSSMS3Service(context.NewMockDefault(), tracer, "", "eu-central-1"))
 }
 
 func TestUseSSMS3Service_False(t *testing.T) {
@@ -225,5 +226,5 @@ func TestUseSSMS3Service_False(t *testing.T) {
 
 	networkdep = mockObj
 
-	assert.False(t, UseSSMS3Service(tracer, "beta", "eu-central-1"))
+	assert.False(t, UseSSMS3Service(context.NewMockDefault(), tracer, "beta", "eu-central-1"))
 }

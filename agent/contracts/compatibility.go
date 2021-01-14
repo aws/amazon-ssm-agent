@@ -20,7 +20,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 )
 
 //TODO deprecate this functionality once we update the windows update document
@@ -65,7 +64,7 @@ func RemoveDependencyOnInstanceMetadata(context context.T, docState *DocumentSta
 				return nil
 			}
 
-			region, err := platform.Region()
+			region, err := context.Identity().Region()
 			if err != nil {
 				log.Errorf("Error retrieving agent region. error: %v", err)
 				return err

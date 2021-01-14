@@ -21,6 +21,7 @@ import (
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/framework/docparser/parameters"
@@ -47,7 +48,8 @@ type DocumentParserInfo struct {
 
 // InitializeDocState is a method to obtain the state of the document.
 // This method calls into ParseDocument to obtain the InstancePluginInformation
-func InitializeDocState(log log.T,
+func InitializeDocState(
+	context context.T,
 	documentType contracts.DocumentType,
 	docContent IDocumentContent,
 	docInfo contracts.DocumentInfo,
@@ -59,7 +61,7 @@ func InitializeDocState(log log.T,
 	docState.DocumentInformation = docInfo
 	docState.IOConfig = docContent.GetIOConfiguration(parserInfo)
 
-	pluginInfo, err := docContent.ParseDocument(log, docInfo, parserInfo, params)
+	pluginInfo, err := docContent.ParseDocument(context, docInfo, parserInfo, params)
 	if err != nil {
 		return
 	}
@@ -70,7 +72,7 @@ func InitializeDocState(log log.T,
 type IDocumentContent interface {
 	GetSchemaVersion() string
 	GetIOConfiguration(parserInfo DocumentParserInfo) contracts.IOConfiguration
-	ParseDocument(log log.T, docInfo contracts.DocumentInfo, parserInfo DocumentParserInfo, params map[string]interface{}) (pluginsInfo []contracts.PluginState, err error)
+	ParseDocument(context context.T, docInfo contracts.DocumentInfo, parserInfo DocumentParserInfo, params map[string]interface{}) (pluginsInfo []contracts.PluginState, err error)
 }
 
 // TODO: move DocumentContent/SessionDocumentContent from contracts to docparser.
@@ -93,7 +95,7 @@ func (docContent *DocContent) GetIOConfiguration(parserInfo DocumentParserInfo) 
 }
 
 // ParseDocument is a method used to parse documents that are not received by any service (MDS or State manager)
-func (docContent *DocContent) ParseDocument(log log.T,
+func (docContent *DocContent) ParseDocument(context context.T,
 	docInfo contracts.DocumentInfo,
 	parserInfo DocumentParserInfo,
 	params map[string]interface{}) (pluginsInfo []contracts.PluginState, err error) {
@@ -101,11 +103,11 @@ func (docContent *DocContent) ParseDocument(log log.T,
 	if err = validateSchema(docContent.SchemaVersion); err != nil {
 		return
 	}
-	if err = getValidatedParameters(log, params, docContent); err != nil {
+	if err = getValidatedParameters(context, params, docContent); err != nil {
 		return
 	}
 
-	return parseDocumentContent(*docContent, parserInfo, log, params)
+	return parseDocumentContent(*docContent, parserInfo, context.Log(), params)
 }
 
 // GetSchemaVersion is a method used to get document schema version
@@ -123,15 +125,16 @@ func (sessionDocContent *SessionDocContent) GetIOConfiguration(parserInfo Docume
 }
 
 // ParseDocument is a method used to parse documents that are not received by any service (MDS or State manager)
-func (sessionDocContent *SessionDocContent) ParseDocument(log log.T,
+func (sessionDocContent *SessionDocContent) ParseDocument(context context.T,
 	docInfo contracts.DocumentInfo,
 	parserInfo DocumentParserInfo,
 	params map[string]interface{}) (pluginsInfo []contracts.PluginState, err error) {
+	log := context.Log()
 
 	if err = validateSessionDocumentSchema(sessionDocContent.SchemaVersion); err != nil {
 		return
 	}
-	if err = validateAndReplaceSessionDocumentParameters(log, params, sessionDocContent); err != nil {
+	if err = validateAndReplaceSessionDocumentParameters(context, params, sessionDocContent); err != nil {
 		return
 	}
 
@@ -142,8 +145,8 @@ func (sessionDocContent *SessionDocContent) ParseDocument(log log.T,
 }
 
 // validateAndReplaceSessionDocumentParameters validates the parameters and modifies the document content by replacing all parameters with their actual values.
-func validateAndReplaceSessionDocumentParameters(log log.T, params map[string]interface{}, docContent *SessionDocContent) error {
-
+func validateAndReplaceSessionDocumentParameters(context context.T, params map[string]interface{}, docContent *SessionDocContent) error {
+	log := context.Log()
 	//ValidateParameterNames
 	validParameters := parameters.ValidParameters(log, params)
 
@@ -156,19 +159,20 @@ func validateAndReplaceSessionDocumentParameters(log log.T, params map[string]in
 
 	log.Info("Validating SSM parameters")
 	// Validates SSM parameters
-	if err := parameterstore.ValidateSSMParameters(log, docContent.Parameters, validParameters); err != nil {
+	if err := parameterstore.ValidateSSMParameters(context, docContent.Parameters, validParameters); err != nil {
 		return err
 	}
 
-	err := replaceValidatedSessionParameters(docContent, validParameters, log)
+	err := replaceValidatedSessionParameters(context, docContent, validParameters)
 	return err
 }
 
 // replaceValidatedSessionParameters replaces parameters with their values.
 func replaceValidatedSessionParameters(
+	context context.T,
 	docContent *SessionDocContent,
-	params map[string]interface{},
-	logger log.T) error {
+	params map[string]interface{}) error {
+	logger := context.Log()
 	var err error
 
 	if docContent.Properties != nil {
@@ -177,7 +181,7 @@ func replaceValidatedSessionParameters(
 		docContent.Properties = parameters.ReplaceParameters(docContent.Properties, params, logger)
 
 		// Resolve SSM parameters
-		if docContent.Properties, err = parameterstore.Resolve(logger, docContent.Properties); err != nil {
+		if docContent.Properties, err = parameterstore.Resolve(context, docContent.Properties); err != nil {
 			return err
 		}
 	}
@@ -191,7 +195,7 @@ func replaceValidatedSessionParameters(
 	resolvedRawData := parameters.ReplaceParameters(rawData, params, logger)
 
 	// Resolve SSM Parameters
-	if resolvedRawData, err = parameterstore.Resolve(logger, resolvedRawData); err != nil {
+	if resolvedRawData, err = parameterstore.Resolve(context, resolvedRawData); err != nil {
 		return err
 	}
 
@@ -449,7 +453,8 @@ func validateSchema(documentSchemaVersion string) error {
 }
 
 // getValidatedParameters validates the parameters and modifies the document content by replacing all ssm parameters with their actual values.
-func getValidatedParameters(log log.T, params map[string]interface{}, docContent *DocContent) error {
+func getValidatedParameters(context context.T, params map[string]interface{}, docContent *DocContent) error {
+	log := context.Log()
 
 	//ValidateParameterNames
 	validParameters := parameters.ValidParameters(log, params)
@@ -463,19 +468,20 @@ func getValidatedParameters(log log.T, params map[string]interface{}, docContent
 
 	log.Info("Validating SSM parameters")
 	// Validates SSM parameters
-	if err := parameterstore.ValidateSSMParameters(log, docContent.Parameters, validParameters); err != nil {
+	if err := parameterstore.ValidateSSMParameters(context, docContent.Parameters, validParameters); err != nil {
 		return err
 	}
 
-	err := replaceValidatedPluginParameters(docContent, validParameters, log)
+	err := replaceValidatedPluginParameters(context, docContent, validParameters)
 	return err
 }
 
 // replaceValidatedPluginParameters replaces parameters with their values, within the plugin Properties.
 func replaceValidatedPluginParameters(
+	context context.T,
 	docContent *DocContent,
-	params map[string]interface{},
-	logger log.T) error {
+	params map[string]interface{}) error {
+	logger := context.Log()
 	var err error
 
 	//TODO: Refactor this to not not reparse the docContent
@@ -490,12 +496,12 @@ func replaceValidatedPluginParameters(
 
 			logger.Debug("Resolving SSM parameters")
 			// Resolves SSM parameters
-			if updatedRuntimeConfig[pluginName].Settings, err = parameterstore.Resolve(logger, updatedRuntimeConfig[pluginName].Settings); err != nil {
+			if updatedRuntimeConfig[pluginName].Settings, err = parameterstore.Resolve(context, updatedRuntimeConfig[pluginName].Settings); err != nil {
 				return err
 			}
 
 			// Resolves SSM parameters
-			if updatedRuntimeConfig[pluginName].Properties, err = parameterstore.Resolve(logger, updatedRuntimeConfig[pluginName].Properties); err != nil {
+			if updatedRuntimeConfig[pluginName].Properties, err = parameterstore.Resolve(context, updatedRuntimeConfig[pluginName].Properties); err != nil {
 				return err
 			}
 		}
@@ -513,12 +519,12 @@ func replaceValidatedPluginParameters(
 
 			logger.Debug("Resolving SSM parameters")
 			// Resolves SSM parameters
-			if updatedMainSteps[index].Settings, err = parameterstore.Resolve(logger, updatedMainSteps[index].Settings); err != nil {
+			if updatedMainSteps[index].Settings, err = parameterstore.Resolve(context, updatedMainSteps[index].Settings); err != nil {
 				return err
 			}
 
 			// Resolves SSM parameters
-			if updatedMainSteps[index].Inputs, err = parameterstore.Resolve(logger, updatedMainSteps[index].Inputs); err != nil {
+			if updatedMainSteps[index].Inputs, err = parameterstore.Resolve(context, updatedMainSteps[index].Inputs); err != nil {
 				return err
 			}
 		}

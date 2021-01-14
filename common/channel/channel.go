@@ -18,6 +18,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/common/channel/utils"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/amazon-ssm-agent/common/message"
 )
 
@@ -35,20 +36,19 @@ type IChannel interface {
 
 // GetChannelCreator returns function reference for channel creation based
 // on whether named pipe be created or not
-func GetChannelCreator(log log.T) (channelCreateFn func(log.T) IChannel) {
-	if canUseNamedPipe(log) {
+func GetChannelCreator(log log.T, appConfig appconfig.SsmagentConfig, identity identity.IAgentIdentity) (channelCreateFn func(log.T, identity.IAgentIdentity) IChannel) {
+	if canUseNamedPipe(log, appConfig, identity) {
 		return NewNamedPipeChannel
 	}
 	return NewFileChannel
 }
 
 // canUseNamedPipe checks whether named pipe can be used for IPC or not
-func canUseNamedPipe(log log.T) (useNamedPipe bool) {
-	config, err := appconfig.Config(false)
-	if err == nil && config.Agent.ForceFileIPC {
+func canUseNamedPipe(log log.T, appConfig appconfig.SsmagentConfig, identity identity.IAgentIdentity) (useNamedPipe bool) {
+	if appConfig.Agent.ForceFileIPC {
 		return
 	}
-	namedPipeChannel := NewNamedPipeChannel(log)
+	namedPipeChannel := NewNamedPipeChannel(log, identity)
 	defer func() {
 		if msg := recover(); msg != nil {
 			log.Error("named pipe check panicked")
@@ -61,7 +61,7 @@ func canUseNamedPipe(log log.T) (useNamedPipe bool) {
 		}
 	}()
 	namedPipeChannel.Initialize(utils.Surveyor)
-	if err := namedPipeChannel.Listen(utils.TestAddress); err == nil && !utils.IsDefaultChannelPresent() {
+	if err := namedPipeChannel.Listen(utils.TestAddress); err == nil && !utils.IsDefaultChannelPresent(identity) {
 		useNamedPipe = true
 	}
 	return

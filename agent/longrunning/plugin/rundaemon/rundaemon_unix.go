@@ -25,6 +25,8 @@ import (
 // Plugin is the type for the configureDaemon plugin.
 type Plugin struct {
 	iohandler.PluginConfig
+	// Context is the agent context for config, identity and logger
+	Context context.T
 	// ExeLocation is the location directory for a particular daemon
 	ExeLocation string
 	// Name is the name of the daemon
@@ -34,22 +36,22 @@ type Plugin struct {
 }
 
 // IsRunning checks if the daemon is alive
-func (p *Plugin) IsRunning(context context.T) bool {
-	log := context.Log()
+func (p *Plugin) IsRunning() bool {
+	log := p.Context.Log()
 	log.Infof("IsRunning check for daemon %v", p.Name)
 	return false // TODO:DAEMON check to see if process is alive (false for now to force regular restarts and see the logs
 }
 
 // Start starts the daemon
-func (p *Plugin) Start(context context.T, configuration string, orchestrationDir string, cancelFlag task.CancelFlag, out iohandler.IOHandler) error {
-	log := context.Log()
+func (p *Plugin) Start(configuration string, orchestrationDir string, cancelFlag task.CancelFlag, out iohandler.IOHandler) error {
+	log := p.Context.Log()
 	log.Infof("Starting %v Command: %v Config: %v", p.Name, p.CommandLine, configuration)
 	return nil
 }
 
 // Stop stops the daemon
-func (p *Plugin) Stop(context context.T, cancelFlag task.CancelFlag) error {
-	log := context.Log()
+func (p *Plugin) Stop(cancelFlag task.CancelFlag) error {
+	log := p.Context.Log()
 	log.Infof("Stopping %v", p.Name)
 	return nil
 }

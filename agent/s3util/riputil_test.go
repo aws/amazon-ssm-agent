@@ -16,6 +16,7 @@ package s3util
 import (
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -41,7 +42,7 @@ var (
 
 func TestGetFallbackS3Endpoint(t *testing.T) {
 	for _, test := range getFallbackS3EndpointTests {
-		output := getFallbackS3Endpoint(test.region)
+		output := getFallbackS3Endpoint(context.NewMockDefault(), test.region)
 		assert.Equal(t, test.output, output, "The two urls should be the same")
 	}
 }

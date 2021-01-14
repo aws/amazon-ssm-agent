@@ -41,7 +41,7 @@ const (
 
 // TODO: rename to RCPlugin, this represents RCPlugin interface.
 type T interface {
-	Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler)
+	Execute(config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler)
 }
 
 type PluginFactory interface {
@@ -302,7 +302,7 @@ var runPlugin = func(
 	res.StartDateTime = time.Now()
 	defer func() { res.EndDateTime = time.Now() }()
 
-	output := iohandler.NewDefaultIOHandler(log, ioConfig)
+	output := iohandler.NewDefaultIOHandler(context, ioConfig)
 	//check if properties is a list. If true, then unroll
 	switch config.Properties.(type) {
 	case []interface{}:
@@ -313,16 +313,16 @@ var runPlugin = func(
 		}
 		for _, prop := range properties {
 			config.Properties = prop
-			propOutput := iohandler.NewDefaultIOHandler(log, ioConfig)
+			propOutput := iohandler.NewDefaultIOHandler(context, ioConfig)
 			stepName, err = getStepName(pluginName, config)
 			if err != nil {
 				errorString := fmt.Errorf("Invalid format in plugin properties %v;\nerror %v", config.Properties, err)
 				output.MarkAsFailed(errorString)
 			} else {
-				executePlugin(context, plugin, pluginName, stepName, config, cancelFlag, propOutput)
+				executePlugin(plugin, pluginName, stepName, config, cancelFlag, propOutput)
 			}
 
-			output.Merge(log, propOutput)
+			output.Merge(propOutput)
 		}
 
 	default:
@@ -331,7 +331,7 @@ var runPlugin = func(
 			errorString := fmt.Errorf("Invalid format in plugin properties %v;\nerror %v", config.Properties, err)
 			output.MarkAsFailed(errorString)
 		} else {
-			executePlugin(context, plugin, pluginName, stepName, config, cancelFlag, output)
+			executePlugin(plugin, pluginName, stepName, config, cancelFlag, output)
 		}
 	}
 
@@ -353,19 +353,18 @@ var runPlugin = func(
 }
 
 // executePlugin executes the plugin that's passed in and initializes the necessary writers
-func executePlugin(context context.T,
+func executePlugin(
 	plugin T,
 	pluginName string,
 	stepName string,
 	config contracts.Configuration,
 	cancelFlag task.CancelFlag,
 	output iohandler.IOHandler) {
-	log := context.Log()
 
 	// Create the output object and execute the plugin
-	defer output.Close(log)
-	output.Init(log, pluginName, stepName)
-	plugin.Execute(context, config, cancelFlag, output)
+	defer output.Close()
+	output.Init(pluginName, stepName)
+	plugin.Execute(config, cancelFlag, output)
 }
 
 // GetPropertyName returns the ID field of property in a v1.2 SSM Document

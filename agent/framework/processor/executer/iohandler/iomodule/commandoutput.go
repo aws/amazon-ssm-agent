@@ -16,14 +16,12 @@ package iomodule
 import (
 	"bufio"
 	"io"
-
+	"os"
 	"path/filepath"
 
-	"os"
-
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
 // CommandOutput handles writing output to a string.
@@ -33,7 +31,8 @@ type CommandOutput struct {
 	OrchestrationDirectory string
 }
 
-func (c CommandOutput) Read(log log.T, reader *io.PipeReader) {
+func (c CommandOutput) Read(context context.T, reader *io.PipeReader) {
+	log := context.Log()
 	defer func() { reader.Close() }()
 
 	if err := fileutil.MakeDirs(c.OrchestrationDirectory); err != nil {

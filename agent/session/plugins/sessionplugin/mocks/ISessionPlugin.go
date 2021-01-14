@@ -15,7 +15,6 @@
 package mocks
 
 import (
-	context "github.com/aws/amazon-ssm-agent/agent/context"
 	contracts "github.com/aws/amazon-ssm-agent/agent/contracts"
 	iohandler "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	log "github.com/aws/amazon-ssm-agent/agent/log"
@@ -31,8 +30,8 @@ type ISessionPlugin struct {
 }
 
 // Execute provides a mock function with given fields: _a0, config, cancelFlag, output, dataChannel
-func (_m *ISessionPlugin) Execute(_a0 context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler, dataChannel datachannel.IDataChannel) {
-	_m.Called(_a0, config, cancelFlag, output, dataChannel)
+func (_m *ISessionPlugin) Execute(config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler, dataChannel datachannel.IDataChannel) {
+	_m.Called(config, cancelFlag, output, dataChannel)
 }
 
 // InputStreamMessageHandler provides a mock function with given fields: _a0, streamDataMessage

@@ -17,7 +17,6 @@ package remoteresource
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager"
-	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
 const (
@@ -31,6 +30,6 @@ type DownloadResult struct {
 
 // RemoteResource is an interface for accessing remote resources. Every type of remote resource is expected to implement RemoteResource interface
 type RemoteResource interface {
-	DownloadRemoteResource(log log.T, filesys filemanager.FileSystem, destinationDir string) (err error, result *DownloadResult)
+	DownloadRemoteResource(filesys filemanager.FileSystem, destinationDir string) (err error, result *DownloadResult)
 	ValidateLocationInfo() (bool, error)
 }

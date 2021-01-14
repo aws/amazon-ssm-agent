@@ -16,11 +16,11 @@ package testutils
 
 import (
 	"crypto/sha256"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"net/http"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	mdsService "github.com/aws/amazon-ssm-agent/agent/runcommand/mds"
 	"github.com/aws/amazon-ssm-agent/agent/times"
@@ -39,15 +39,15 @@ func NewMdsSdkMock() *mdssdkmock.SSMMDSAPI {
 	return sdkMock
 }
 
-func NewMdsService(msgSvc ssmmdsiface.SSMMDSAPI, sendMdsSdkRequest mdsService.SendSdkRequest) mdsService.Service {
+func NewMdsService(context context.T, msgSvc ssmmdsiface.SSMMDSAPI, sendMdsSdkRequest mdsService.SendSdkRequest) mdsService.Service {
 	cancelMdsSDKRequest := func(trans *http.Transport, req *request.Request) {
 		return
 	}
-	return mdsService.NewMdsSdkService(msgSvc, &http.Transport{}, sendMdsSdkRequest, cancelMdsSDKRequest)
+	return mdsService.NewMdsSdkService(context, msgSvc, &http.Transport{}, sendMdsSdkRequest, cancelMdsSDKRequest)
 }
 
 func GenerateEmptyMessage() (*ssmmds.GetMessagesOutput, error) {
-	instanceID, _ := platform.InstanceID()
+	instanceID := "i-123123123"
 	uuid.SwitchFormat(uuid.CleanHyphen)
 	var testMessageId = uuid.NewV4().String()
 	msgs := make([]*ssmmds.Message, 0)
@@ -62,7 +62,7 @@ func GenerateEmptyMessage() (*ssmmds.GetMessagesOutput, error) {
 
 func GenerateMessages(messageContent string) (*ssmmds.GetMessagesOutput, error) {
 	uuid.SwitchFormat(uuid.CleanHyphen)
-	instanceID, _ := platform.InstanceID()
+	instanceID := "i-123123123"
 	// mock GetMessagesOutput to return one message
 	var testMessageId = uuid.NewV4().String()
 	msgs := make([]*ssmmds.Message, 1)

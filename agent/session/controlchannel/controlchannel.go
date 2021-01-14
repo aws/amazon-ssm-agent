@@ -19,7 +19,6 @@ import (
 	"fmt"
 	"math/rand"
 	"path/filepath"
-	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -66,9 +65,6 @@ func (controlChannel *ControlChannel) Initialize(context context.T,
 	instanceId string) {
 
 	log := context.Log()
-	if context.AppConfig().Agent.ContainerMode {
-		instanceId, _ = platform.TargetID()
-	}
 	controlChannel.Service = mgsService
 	controlChannel.ChannelId = instanceId
 	controlChannel.channelType = mgsConfig.RoleSubscribe
@@ -96,7 +92,8 @@ func (controlChannel *ControlChannel) SetWebSocket(context context.T,
 	}
 
 	config := context.AppConfig()
-	orchestrationRootDir := filepath.Join(appconfig.DefaultDataStorePath, instanceId, appconfig.DefaultSessionRootDirName, config.Agent.OrchestrationRootDir)
+	shortInstanceId, _ := context.Identity().ShortInstanceID()
+	orchestrationRootDir := filepath.Join(appconfig.DefaultDataStorePath, shortInstanceId, appconfig.DefaultSessionRootDirName, config.Agent.OrchestrationRootDir)
 
 	onMessageHandler := func(input []byte) {
 		controlChannelIncomingMessageHandler(context, processor, input, orchestrationRootDir, instanceId)
@@ -325,18 +322,4 @@ func getControlChannelToken(log log.T,
 
 	log.Debug("Successfully get controlchannel token")
 	return *createControlChannelOutput.TokenValue, nil
-}
-
-func getOrchestrationFolder(log log.T, config appconfig.SsmagentConfig, instanceId string) string {
-	log.Info("Trying to get orchestration folder directory for session manager")
-	var orchestrationRootDir string
-	if config.Agent.ContainerMode {
-		log.Info("Parsing targetID from platform instanceID")
-		infoArray := strings.Split(instanceId, "_")
-		containerId := infoArray[len(infoArray)-1]
-		orchestrationRootDir = filepath.Join(appconfig.DefaultDataStorePath, containerId, appconfig.DefaultSessionRootDirName, config.Agent.OrchestrationRootDir)
-	} else {
-		orchestrationRootDir = filepath.Join(appconfig.DefaultDataStorePath, instanceId, appconfig.DefaultSessionRootDirName, config.Agent.OrchestrationRootDir)
-	}
-	return orchestrationRootDir
 }

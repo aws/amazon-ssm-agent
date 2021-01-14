@@ -19,6 +19,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
+const MaxRetriesIdentitySelector = 3
+
 type defaultAgentIdentitySelector struct {
 	log                        log.T
 	mutex                      sync.Mutex

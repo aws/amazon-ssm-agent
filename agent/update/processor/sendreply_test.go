@@ -20,9 +20,9 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	messageService "github.com/aws/amazon-ssm-agent/agent/runcommand/mds"
-	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/service/ssmmds"
 	"github.com/stretchr/testify/assert"
 )
@@ -70,12 +70,12 @@ func (s *stubSdkService) SendReplyWithInput(log log.T, sendReply *ssmmds.SendRep
 	return nil
 }
 
-func stubNewMsgSvc(log log.T, region string, endpoint string, creds *credentials.Credentials, connectionTimeout time.Duration) messageService.Service {
+func stubNewMsgSvc(context context.T, connectionTimeout time.Duration) messageService.Service {
 	return &stubSdkService{}
 }
 
 func TestSendReply(t *testing.T) {
-	context := createUpdateContext(Installed)
+	updateContext := createUpdateContext(Installed)
 	service := svcManager{}
 	// setup
 	getAppConfig = func(bool) (appconfig.SsmagentConfig, error) {
@@ -86,14 +86,14 @@ func TestSendReply(t *testing.T) {
 	newMsgSvc = stubNewMsgSvc
 
 	// action
-	err := service.SendReply(logger, context.Current)
+	err := service.SendReply(logger, updateContext.Current)
 
 	// assert
 	assert.NoError(t, err)
 }
 
 func TestSendReplyDeleteMessage(t *testing.T) {
-	context := createUpdateContext(Installed)
+	updateContext := createUpdateContext(Installed)
 	service := svcManager{}
 	// setup
 	getAppConfig = func(bool) (appconfig.SsmagentConfig, error) {
@@ -103,7 +103,7 @@ func TestSendReplyDeleteMessage(t *testing.T) {
 	newMsgSvc = stubNewMsgSvc
 
 	// action
-	err := service.DeleteMessage(logger, context.Current)
+	err := service.DeleteMessage(logger, updateContext.Current)
 
 	// assert
 	assert.NoError(t, err)

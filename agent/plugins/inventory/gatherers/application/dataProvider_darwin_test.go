@@ -231,7 +231,7 @@ func TestConvertToApplicationData(t *testing.T) {
 	assert.Nil(t, err, "Check conversion logic - since sample data in unit test is tied to implementation")
 	assertEqual(t, sampleDataParsed, data)
 
-	data, err := convertToApplicationData(unexpectedSampleData)
+	data, err = convertToApplicationData(unexpectedSampleData)
 	assertEqual(t, unexpectedSampleDataParsed, data)
 }
 
@@ -285,7 +285,7 @@ func TestConvertToApplicationDataFromInstalledPkg(t *testing.T) {
 	assert.Nil(t, err, "Check conversion logic - since sample data in unit test is tied to implementation")
 	assertEqual(t, sampleDataPackagesParsed, data)
 
-	data, err := convertToApplicationDataFromInstalledPkg(unexpectedSampleData)
+	data, err = convertToApplicationDataFromInstalledPkg(unexpectedSampleData)
 	assertEqual(t, unexpectedSampleDataParsed, data)
 }
 
@@ -316,7 +316,6 @@ func TestGetInstalledPackages(t *testing.T) {
 }
 
 func TestGetFieldValue(t *testing.T) {
-	mockContext := context.NewMockDefault()
 	name := getFieldValue(applicationSampleData, "_name", "string")
 	assert.Equal(t, "Calendar", name)
 	version := getFieldValue(applicationSampleData, "version", "string")

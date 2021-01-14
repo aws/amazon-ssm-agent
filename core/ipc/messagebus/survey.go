@@ -48,10 +48,11 @@ type MessageBus struct {
 // NewMessageBus creates a new instance of message bus
 func NewMessageBus(context context.ICoreAgentContext) *MessageBus {
 	log := context.Log()
+	identity := context.Identity()
 	channels := make(map[message.TopicType]channel.IChannel)
-	channelCreator := channel.GetChannelCreator(log)
-	channels[message.GetWorkerHealthRequest] = channelCreator(log)
-	channels[message.TerminateWorkerRequest] = channelCreator(log)
+	channelCreator := channel.GetChannelCreator(log, *context.AppConfig(), identity)
+	channels[message.GetWorkerHealthRequest] = channelCreator(log, identity)
+	channels[message.TerminateWorkerRequest] = channelCreator(log, identity)
 
 	return &MessageBus{
 		context:        context.With("[MessageBus]"),

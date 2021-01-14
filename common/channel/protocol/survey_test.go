@@ -23,16 +23,18 @@ import (
 	"github.com/aws/amazon-ssm-agent/common/channel/utils"
 	"github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc"
 	channelmock "github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc/mocks"
-
+	"github.com/aws/amazon-ssm-agent/common/identity"
+	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/aws/amazon-ssm-agent/common/message"
 	"github.com/stretchr/testify/assert"
-
 	"github.com/stretchr/testify/suite"
 )
 
 // ISurveySuite tests surveyor
 type ISurveySuite struct {
 	suite.Suite
+	log log.T
+	identity identity.IAgentIdentity
 	surveyInstance *survey
 }
 
@@ -43,7 +45,9 @@ func TestSurveySuite(t *testing.T) {
 
 // SetupTest initializes Setup
 func (suite *ISurveySuite) SetupTest() {
-	suite.surveyInstance = GetSurveyInstance(log.NewMockLog())
+	suite.log = log.NewMockLog()
+	suite.identity = identityMocks.NewDefaultMockAgentIdentity()
+	suite.surveyInstance = GetSurveyInstance(suite.log, suite.identity)
 }
 
 // TestBasicTest tests basic functionality

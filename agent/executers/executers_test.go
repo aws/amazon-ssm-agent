@@ -15,12 +15,13 @@
 package executers
 
 import (
-	"errors"
 	"fmt"
 	"os/exec"
 	"strings"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/context"
+	mockIdentity "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -67,30 +68,25 @@ func getTestCommand(t *testing.T) *exec.Cmd {
 }
 
 func TestEnvironmentVariables_All(t *testing.T) {
-	instanceTemp := instance
-	instance = &instanceInfoStub{instanceID: testInstanceID, regionName: testRegionName}
-	defer func() { instance = instanceTemp }()
-
+	context := context.NewMockDefault()
 	command := getTestCommand(t)
 	env := make(map[string]string)
 	env["envKey"] = "envVal"
-	prepareEnvironment(command, env)
+	prepareEnvironment(context, command, env)
 
-	assert.Equal(t, getEnvVariableValue(command.Env, envVarInstanceID), testInstanceID)
-	assert.Equal(t, getEnvVariableValue(command.Env, envVarRegionName), testRegionName)
+	assert.Equal(t, getEnvVariableValue(command.Env, envVarInstanceID), mockIdentity.MockInstanceID)
+	assert.Equal(t, getEnvVariableValue(command.Env, envVarRegionName), mockIdentity.MockRegion)
 	assert.Equal(t, getEnvVariableValue(command.Env, "envKey"), "envVal")
 }
 
 func TestEnvironmentVariables_None(t *testing.T) {
-	instanceTemp := instance
-	instance = &instanceInfoStub{"", errors.New(testError), "", errors.New(testError)}
-	defer func() { instance = instanceTemp }()
+	context := context.NewMockDefault()
 
 	command := getTestCommand(t)
-	prepareEnvironment(command, make(map[string]string))
+	prepareEnvironment(context, command, make(map[string]string))
 
-	assert.Empty(t, getEnvVariableValue(command.Env, envVarInstanceID))
-	assert.Empty(t, getEnvVariableValue(command.Env, envVarRegionName))
+	assert.Empty(t, getEnvVariableValue(command.Env, mockIdentity.MockInstanceID))
+	assert.Empty(t, getEnvVariableValue(command.Env, mockIdentity.MockRegion))
 }
 
 func TestQuoteShString(t *testing.T) {

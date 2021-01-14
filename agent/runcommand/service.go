@@ -27,7 +27,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	mdsService "github.com/aws/amazon-ssm-agent/agent/runcommand/mds"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
@@ -116,7 +115,7 @@ func NewOfflineService(context context.T) (*RunCommandService, error) {
 // NewMdsProcessor initializes a new mds processor with the given parameters.
 func NewMDSService(context context.T) *RunCommandService {
 	messageContext := context.With("[" + mdsName + "]")
-	mdsService := newMdsService(messageContext.Log(), context.AppConfig())
+	mdsService := newMdsService(messageContext)
 	config := context.AppConfig()
 
 	return NewService(messageContext, mdsName, mdsService, config.Mds.CommandWorkersLimit, CancelWorkersLimit, true, []contracts.DocumentType{contracts.SendCommand, contracts.CancelCommand})
@@ -126,8 +125,9 @@ func NewMDSService(context context.T) *RunCommandService {
 func NewService(ctx context.T, serviceName string, service mdsService.Service, commandWorkerLimit int, cancelWorkerLimit int, pollAssoc bool, supportedDocs []contracts.DocumentType) *RunCommandService {
 	log := ctx.Log()
 	config := ctx.AppConfig()
+	identity := ctx.Identity()
 
-	instanceID, err := platform.InstanceID()
+	instanceID, err := identity.InstanceID()
 	if instanceID == "" {
 		log.Errorf("no instanceID provided, %v", err)
 		return nil
@@ -146,8 +146,10 @@ func NewService(ctx context.T, serviceName string, service mdsService.Service, c
 		InstanceID: instanceID,
 	}
 
+	shortInstanceId, _ := identity.ShortInstanceID()
+
 	// create new message processor
-	orchestrationRootDir := filepath.Join(appconfig.DefaultDataStorePath, instanceID, appconfig.DefaultDocumentRootDirName, config.Agent.OrchestrationRootDir)
+	orchestrationRootDir := filepath.Join(appconfig.DefaultDataStorePath, shortInstanceId, appconfig.DefaultDocumentRootDirName, config.Agent.OrchestrationRootDir)
 
 	// create a stop policy where we will stop after 10 consecutive errors and if time period expires.
 	stopPolicy := newStopPolicy(serviceName)
@@ -217,14 +219,11 @@ var newOfflineService = func(log log.T) (mdsService.Service, error) {
 	return mdsService.NewOfflineService(log, string(SendCommandTopicPrefixOffline))
 }
 
-var newMdsService = func(log log.T, config appconfig.SsmagentConfig) mdsService.Service {
-	connectionTimeout := time.Duration(config.Mds.StopTimeoutMillis) * time.Millisecond
+var newMdsService = func(context context.T) mdsService.Service {
+	connectionTimeout := time.Duration(context.AppConfig().Mds.StopTimeoutMillis) * time.Millisecond
 
 	return mdsService.NewService(
-		log,
-		config.Agent.Region,
-		config.Mds.Endpoint,
-		nil,
+		context,
 		connectionTimeout,
 	)
 }

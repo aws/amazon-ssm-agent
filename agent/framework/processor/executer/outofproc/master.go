@@ -1,9 +1,8 @@
 package outofproc
 
 import (
-	"time"
-
 	"fmt"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -15,6 +14,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/common/filewatcherbasedipc"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/amazon-ssm-agent/core/executor"
 )
 
@@ -36,8 +36,8 @@ type OutOfProcExecuter struct {
 	executor   executor.IExecutor
 }
 
-var channelCreator = func(log log.T, mode filewatcherbasedipc.Mode, documentID string) (filewatcherbasedipc.IPCChannel, error, bool) {
-	return filewatcherbasedipc.CreateFileWatcherChannel(log, mode, documentID, false)
+var channelCreator = func(log log.T, identity identity.IAgentIdentity, mode filewatcherbasedipc.Mode, documentID string) (filewatcherbasedipc.IPCChannel, error, bool) {
+	return filewatcherbasedipc.CreateFileWatcherChannel(log, identity, mode, documentID, false)
 }
 
 var processFinder = func(log log.T, procinfo contracts.OSProcInfo, executor executor.IExecutor) bool {
@@ -167,11 +167,11 @@ func (e *OutOfProcExecuter) initialize(stopTimer chan bool) (ipc filewatcherbase
 	// this fix is added to delete channels which were not deleted in previous execution
 	if e.docState.DocumentInformation.DocumentStatus == contracts.ResultStatusSuccessAndReboot {
 		log.Info("deleting channel for reboot document")
-		if channelErr := filewatcherbasedipc.RemoveFileWatcherChannel(documentID); channelErr != nil {
+		if channelErr := filewatcherbasedipc.RemoveFileWatcherChannel(e.ctx.Identity(), documentID); channelErr != nil {
 			log.Warnf("failed to remove channel directory: %v", channelErr)
 		}
 	}
-	ipc, err, found = channelCreator(log, filewatcherbasedipc.ModeMaster, documentID)
+	ipc, err, found = channelCreator(log, e.ctx.Identity(), filewatcherbasedipc.ModeMaster, documentID)
 
 	if err != nil {
 		log.Errorf("failed to create ipc channel: %v", err)

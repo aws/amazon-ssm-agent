@@ -18,7 +18,6 @@ package lrpminvoker
 import (
 	"fmt"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
@@ -29,6 +28,7 @@ import (
 
 // Plugin is the type for the lrpm invoker plugin.
 type Plugin struct {
+	context context.T
 	lrpName string
 }
 
@@ -46,22 +46,16 @@ type InvokerInput struct {
 //todo: add interfaces & dependencies to simplify testing for all calls from lrpminvoker calls to lrpm
 
 // NewPlugin returns an instance of lrpminvoker for a given long running plugin name
-func NewPlugin(lrpName string) (*Plugin, error) {
-	var plugin Plugin
-	var err error
+func NewPlugin(context context.T, lrpName string) (*Plugin, error) {
 	//name of the long running plugin that this instance of lrpminvoker interacts with - this is the name the lrpminvoker plugin instance is registered under
-	plugin.lrpName = lrpName
-
-	return &plugin, err
+	return &Plugin{
+		context: context,
+		lrpName: lrpName,
+	}, nil
 }
 
-// Name returns the plugin name
-func Name() string {
-	return appconfig.PluginNameLongRunningPluginInvoker
-}
-
-func (p *Plugin) Execute(context context.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
-	log := context.Log()
+func (p *Plugin) Execute(config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) {
+	log := p.context.Log()
 	log.Infof("long running plugin invoker has been invoked")
 
 	var err error
@@ -79,7 +73,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	if err = jsonutil.Remarshal(config.Settings, &setting); err != nil {
 		log.Errorf(fmt.Sprintf("Invalid format in plugin configuration - %v;\nError %v", config.Settings, err))
 
-		p.CreateResult(log, fmt.Sprintf("Unable to parse Settings for %s", p.lrpName), contracts.ResultStatusFailed, output)
+		p.CreateResult(fmt.Sprintf("Unable to parse Settings for %s", p.lrpName), contracts.ResultStatusFailed, output)
 		return
 	}
 
@@ -88,7 +82,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 	} else if cancelFlag.Canceled() {
 		output.MarkAsCancelled()
 	} else {
-		property := p.prepareForStart(log, config, cancelFlag, output)
+		property := p.prepareForStart(config, cancelFlag, output)
 		output.SetOutput(property)
 		output.AppendInfo(setting.StartType)
 	}
@@ -97,7 +91,7 @@ func (p *Plugin) Execute(context context.T, config contracts.Configuration, canc
 }
 
 // CreateResult returns a PluginResult for given message and status
-func (p *Plugin) CreateResult(log logger.T, msg string, status contracts.ResultStatus, out iohandler.IOHandler) {
+func (p *Plugin) CreateResult(msg string, status contracts.ResultStatus, out iohandler.IOHandler) {
 
 	if status == contracts.ResultStatusFailed {
 		out.AppendError(msg)
@@ -111,7 +105,8 @@ func (p *Plugin) CreateResult(log logger.T, msg string, status contracts.ResultS
 }
 
 // prepareForStart remalshal the Property and stop the plug if it was running before.
-func (p *Plugin) prepareForStart(log logger.T, config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) (property string) {
+func (p *Plugin) prepareForStart(config contracts.Configuration, cancelFlag task.CancelFlag, output iohandler.IOHandler) (property string) {
+	log := p.context.Log()
 	// track if the preparation process succeed.
 	var err error
 	prop := config.Properties
@@ -130,7 +125,7 @@ func (p *Plugin) prepareForStart(log logger.T, config contracts.Configuration, c
 		var inputs InvokerInput
 		if err = jsonutil.Remarshal(config.Properties, &inputs); err != nil {
 			log.Errorf(fmt.Sprintf("Invalid format in plugin configuration - %v;\nError %v", config.Properties, err))
-			p.CreateResult(log, fmt.Sprintf("Invalid format in plugin configuration - expecting property as string - %s", config.Properties),
+			p.CreateResult(fmt.Sprintf("Invalid format in plugin configuration - expecting property as string - %s", config.Properties),
 				contracts.ResultStatusFailed, output)
 			return
 		}
@@ -150,10 +145,10 @@ func (p *Plugin) prepareForStart(log logger.T, config contracts.Configuration, c
 	// config.Properties
 	if err = jsonutil.Remarshal(prop, &property); err != nil {
 		log.Errorf(fmt.Sprintf("Invalid format in plugin configuration - %v;\nError %v", config.Properties, err))
-		p.CreateResult(log, fmt.Sprintf("Invalid format in plugin configuration - expecting property as string - %s", config.Properties),
+		p.CreateResult(fmt.Sprintf("Invalid format in plugin configuration - expecting property as string - %s", config.Properties),
 			contracts.ResultStatusFailed, output)
 		return
 	}
-	p.CreateResult(log, "success", contracts.ResultStatusSuccess, output)
+	p.CreateResult("success", contracts.ResultStatusSuccess, output)
 	return
 }

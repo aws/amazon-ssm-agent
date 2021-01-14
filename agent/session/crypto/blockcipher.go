@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
@@ -45,16 +46,16 @@ type BlockCipher struct {
 }
 
 // NewBlockCipher creates a new block cipher
-func NewBlockCipher(log log.T, kmsKeyId string) (blockCipher *BlockCipher, err error) {
+func NewBlockCipher(context context.T, kmsKeyId string) (blockCipher *BlockCipher, err error) {
 	var kmsService *KMSService
-	if kmsService, err = NewKMSService(log); err != nil {
+	if kmsService, err = NewKMSService(context); err != nil {
 		return nil, fmt.Errorf("Unable to get new KMSService, %v", err)
 	}
-	return NewBlockCipherKMS(log, kmsKeyId, kmsService)
+	return NewBlockCipherKMS(kmsKeyId, kmsService)
 }
 
 // NewBlockCipherKMS creates a new block cipher with a provided IKMService instance
-func NewBlockCipherKMS(log log.T, kmsKeyId string, kmsService IKMSService) (blockCipher *BlockCipher, err error) {
+func NewBlockCipherKMS(kmsKeyId string, kmsService IKMSService) (blockCipher *BlockCipher, err error) {
 	// NewBlockCipher creates a new instance of BlockCipher
 	blockCipher = &BlockCipher{
 		kmsKeyId:   kmsKeyId,
