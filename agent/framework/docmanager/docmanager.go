@@ -22,6 +22,7 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
@@ -37,30 +38,37 @@ type validString func(string) bool
 type modifyString func(string) string
 
 type DocumentMgr interface {
-	MoveDocumentState(log log.T, fileName, instanceID, srcLocationFolder, dstLocationFolder string)
-	PersistDocumentState(log log.T, fileName, instanceID, locationFolder string, state contracts.DocumentState)
-	GetDocumentState(log log.T, fileName, instanceID, locationFolder string) contracts.DocumentState
-	RemoveDocumentState(log log.T, fileName, instanceID, locationFolder string)
+	MoveDocumentState(fileName, srcLocationFolder, dstLocationFolder string)
+	PersistDocumentState(fileName, locationFolder string, state contracts.DocumentState)
+	GetDocumentState(fileName, locationFolder string) contracts.DocumentState
+	RemoveDocumentState(fileName, locationFolder string)
 }
 
 //TODO use class lock instead of global lock?
 //TODO decouple the DocState model to better fit the service-processor-executer architecture
 //DocumentFileMgr encapsulate the file access and perform bookkeeping operations at the specified file location
 type DocumentFileMgr struct {
+	context       context.T
 	dataStorePath string
 	rootDirName   string
 	stateLocation string
 }
 
-func NewDocumentFileMgr(dataStorePath, rootDirName, stateLocation string) *DocumentFileMgr {
+func NewDocumentFileMgr(context context.T, dataStorePath, rootDirName, stateLocation string) *DocumentFileMgr {
 	return &DocumentFileMgr{
+		context:       context,
 		dataStorePath: dataStorePath,
 		rootDirName:   rootDirName,
 		stateLocation: stateLocation,
 	}
 }
 
-func (d *DocumentFileMgr) MoveDocumentState(log log.T, fileName, instanceID, srcLocationFolder, dstLocationFolder string) {
+func (d *DocumentFileMgr) MoveDocumentState(fileName, srcLocationFolder, dstLocationFolder string) {
+	log := d.context.Log()
+	instanceID, err := d.context.Identity().ShortInstanceID()
+	if err != nil {
+		log.Errorf("Failed to get short instanceID for MoveDocumentState: %v", err)
+	}
 
 	absoluteSource := path.Join(d.dataStorePath,
 		instanceID,
@@ -82,7 +90,12 @@ func (d *DocumentFileMgr) MoveDocumentState(log log.T, fileName, instanceID, src
 
 }
 
-func (d *DocumentFileMgr) PersistDocumentState(log log.T, fileName, instanceID, locationFolder string, state contracts.DocumentState) {
+func (d *DocumentFileMgr) PersistDocumentState(fileName, locationFolder string, state contracts.DocumentState) {
+	log := d.context.Log()
+	instanceID, err := d.context.Identity().ShortInstanceID()
+	if err != nil {
+		log.Errorf("Failed to get short instanceID for PersistDocumentState: %v", err)
+	}
 
 	absoluteFileName := path.Join(path.Join(d.dataStorePath,
 		instanceID,
@@ -106,7 +119,13 @@ func (d *DocumentFileMgr) PersistDocumentState(log log.T, fileName, instanceID, 
 	}
 }
 
-func (d *DocumentFileMgr) GetDocumentState(log log.T, fileName, instanceID, locationFolder string) contracts.DocumentState {
+func (d *DocumentFileMgr) GetDocumentState(fileName, locationFolder string) contracts.DocumentState {
+	log := d.context.Log()
+	instanceID, err := d.context.Identity().ShortInstanceID()
+	if err != nil {
+		log.Errorf("Failed to get short instanceID for GetDocumentState: %v", err)
+	}
+
 	filepath := path.Join(d.dataStorePath,
 		instanceID,
 		d.rootDirName,
@@ -144,7 +163,7 @@ func (d *DocumentFileMgr) GetDocumentState(log log.T, fileName, instanceID, loca
 				log.Infof("Document contents: %v", documentContents)
 			}
 
-			d.MoveDocumentState(log, fileName, instanceID, locationFolder, appconfig.DefaultLocationOfCorrupt)
+			d.MoveDocumentState(fileName, locationFolder, appconfig.DefaultLocationOfCorrupt)
 		}
 
 	}
@@ -153,11 +172,16 @@ func (d *DocumentFileMgr) GetDocumentState(log log.T, fileName, instanceID, loca
 }
 
 // RemoveData deletes the fileName from locationFolder under defaultLogDir/instanceID
-func (d *DocumentFileMgr) RemoveDocumentState(log log.T, commandID, instanceID, locationFolder string) {
+func (d *DocumentFileMgr) RemoveDocumentState(commandID, locationFolder string) {
+	log := d.context.Log()
+	instanceID, err := d.context.Identity().ShortInstanceID()
+	if err != nil {
+		log.Errorf("Failed to get short instanceID for GetDocumentState: %v", err)
+	}
 
 	absoluteFileName := docStateFileName(commandID, instanceID, locationFolder)
 
-	err := fileutil.DeleteFile(absoluteFileName)
+	err = fileutil.DeleteFile(absoluteFileName)
 	if err != nil {
 		log.Errorf("encountered error %v while deleting file %v", err, absoluteFileName)
 	} else {

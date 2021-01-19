@@ -17,7 +17,6 @@ package rundocument
 
 import (
 	"encoding/json"
-
 	"path/filepath"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -92,14 +91,9 @@ func (exec ExecDocumentImpl) ExecuteDocument(config contracts.Configuration, con
 		},
 		InstancePluginsInformation: pluginInput,
 	}
-	//specify the sub-document's bookkeeping location
-	instanceID, err := context.Identity().InstanceID()
-	if err != nil {
-		log.Error("failed to load instance id")
-		return resultChannels, err
-	}
-	docStore := executer.NewDocumentFileStore(context, documentID, instanceID, appconfig.DefaultLocationOfCurrent,
-		&docState, docmanager.NewDocumentFileMgr(appconfig.DefaultDataStorePath, appconfig.DefaultDocumentRootDirName, appconfig.DefaultLocationOfState))
+
+	docStore := executer.NewDocumentFileStore(documentID, appconfig.DefaultLocationOfCurrent,
+		&docState, docmanager.NewDocumentFileMgr(context, appconfig.DefaultDataStorePath, appconfig.DefaultDocumentRootDirName, appconfig.DefaultLocationOfState))
 	cancelFlag := task.NewChanneledCancelFlag()
 	resultChannels = exec.DocExecutor.Run(cancelFlag, &docStore)
 
