@@ -29,7 +29,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/coremanager"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	logger "github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/amazon-ssm-agent/internal/tests/testdata"
@@ -100,7 +99,7 @@ func (suite *CrashWorkerTestSuite) TearDownSuite() {
 	// Close the log only after the all tests are done.
 	suite.log.Close()
 
-	instanceId, _ := platform.InstanceID()
+	instanceId, _ := suite.context.Identity().InstanceID()
 	//Empty the current folder
 	currentDirectory := filepath.Join(appconfig.DefaultDataStorePath,
 		instanceId,
@@ -220,7 +219,7 @@ func (suite *CrashWorkerTestSuite) TestDocumentWorkerCrash() {
 		appconfig.DefaultLocationOfPending,
 		appconfig.DefaultLocationOfCompleted,
 		appconfig.DefaultLocationOfCorrupt}
-	instanceId, _ := platform.InstanceID()
+	instanceId, _ := suite.context.Identity().InstanceID()
 	for _, folder := range folders {
 		directoryName := filepath.Join(appconfig.DefaultDataStorePath,
 			instanceId,
