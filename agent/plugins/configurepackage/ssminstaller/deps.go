@@ -18,13 +18,12 @@ import (
 	"encoding/json"
 	"io/ioutil"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/framework/docparser"
-
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/framework/docmanager"
+	"github.com/aws/amazon-ssm-agent/agent/framework/docparser"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/basicexecuter"
 	"github.com/aws/amazon-ssm-agent/agent/task"
@@ -73,12 +72,7 @@ func (m *execDepImp) ExecuteDocument(context context.T, pluginInput []contracts.
 		InstancePluginsInformation: pluginInput,
 	}
 	//specify the subdocument's bookkeeping location
-	instanceID, err := context.Identity().InstanceID()
-	if err != nil {
-		log.Error("failed to load instance id")
-		return
-	}
-	docStore := executer.NewDocumentFileStore(context, documentID, instanceID, appconfig.DefaultLocationOfCurrent, &docState, docmanager.NewDocumentFileMgr(appconfig.DefaultDataStorePath, appconfig.DefaultDocumentRootDirName, appconfig.DefaultLocationOfState))
+	docStore := executer.NewDocumentFileStore(documentID, appconfig.DefaultLocationOfCurrent, &docState, docmanager.NewDocumentFileMgr(context, appconfig.DefaultDataStorePath, appconfig.DefaultDocumentRootDirName, appconfig.DefaultLocationOfState))
 	cancelFlag := task.NewChanneledCancelFlag()
 	resChan := exe.Run(cancelFlag, &docStore)
 
