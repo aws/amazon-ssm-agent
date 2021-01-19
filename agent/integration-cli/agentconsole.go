@@ -27,7 +27,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/aws-sdk-go/aws"
@@ -60,11 +59,6 @@ func main() {
 	var timeout int64 = 10000
 	timeoutPtr := &timeout
 	var err error
-	err = platform.SetRegion(*regionPtr)
-	if err != nil {
-		log.Error("please specify the region to use.")
-		return
-	}
 
 	if *commandPtr == "" && *scriptFilePtr == "" {
 		fmt.Println("No commands specified (use either -c or -f).")
