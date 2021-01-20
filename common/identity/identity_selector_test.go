@@ -31,7 +31,7 @@ func TestNewAgentIdentity_ContainerMode_MissingIdentityFunc(t *testing.T) {
 	selector := &iAgentIdentitySelectorMock{}
 	identityGenerators := make(map[string]createIdentityFunc)
 
-	ident, err := newAgentIdentityInner(log.NewMockLog(), &config, selector, []string{"SomeRandomIdentity"}, identityGenerators)
+	ident, err := newAgentIdentityInner(log.NewMockLog(), &config, selector, appconfig.DefaultIdentityConsumptionOrder, identityGenerators)
 	assert.Nil(t, ident)
 	assert.NotNil(t, err)
 }
@@ -48,9 +48,30 @@ func TestNewAgentIdentity_ContainerMode_NoIdentitySelected(t *testing.T) {
 		return []IAgentIdentityInner{}
 	}
 
-	ident, err := newAgentIdentityInner(log.NewMockLog(), &config, selector, []string{"ECS"}, identityGenerators)
+	ident, err := newAgentIdentityInner(log.NewMockLog(), &config, selector, appconfig.DefaultIdentityConsumptionOrder, identityGenerators)
 	assert.Nil(t, ident)
 	assert.NotNil(t, err)
+}
+
+func TestNewAgentIdentity_ContainerMode_BackwardsCompatibilityOverride(t *testing.T) {
+	var config appconfig.SsmagentConfig
+	config.Agent.ContainerMode = true
+
+	selector := &iAgentIdentitySelectorMock{}
+
+	agentIdentity := &identityMocks.IAgentIdentityInner{}
+	selector.On("selectAgentIdentity", mock.Anything, mock.Anything).Return(agentIdentity)
+	identityGenerators := make(map[string]createIdentityFunc)
+	onPremCalled := false
+	identityGenerators["OnPrem"] = func(log.T, *appconfig.SsmagentConfig) []IAgentIdentityInner {
+		onPremCalled = true
+		return []IAgentIdentityInner{}
+	}
+
+	ident, err := newAgentIdentityInner(log.NewMockLog(), &config, selector, []string{"OnPrem"}, identityGenerators)
+	assert.NotNil(t, agentIdentity, ident)
+	assert.Nil(t, err)
+	assert.True(t, onPremCalled)
 }
 
 func TestNewAgentIdentity_ContainerMode_IdentitySelected(t *testing.T) {
@@ -243,4 +264,18 @@ func TestInstanceIDRegionAgentIdentitySelector_CorrectRegion(t *testing.T) {
 	agentIdentity.On("Region").Return("SomeRegion", nil)
 
 	assert.NotNil(t, selector.selectAgentIdentity([]IAgentIdentityInner{agentIdentity}, "SomeIdentityKey"))
+}
+
+func TestIsDefaultIdentityConsumptionOrder(t *testing.T) {
+	testOrder := []string{"SomeIdentity", "AnotherIdentity"}
+	defaultOrder := []string{"SomeIdentity"}
+	assert.False(t, isDefaultIdentityConsumptionOrder(testOrder, defaultOrder))
+
+	testOrder = []string{"SomeIdentity", "AnotherIdentity"}
+	defaultOrder = []string{"AnotherIdentity", "SomeIdentity"}
+	assert.False(t, isDefaultIdentityConsumptionOrder(testOrder, defaultOrder))
+
+	testOrder = []string{"SomeIdentity", "AnotherIdentity"}
+	defaultOrder = []string{"SomeIdentity", "AnotherIdentity"}
+	assert.True(t, isDefaultIdentityConsumptionOrder(testOrder, defaultOrder))
 }

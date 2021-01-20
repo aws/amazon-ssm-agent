@@ -249,3 +249,10 @@ var ByteControlSignalsWindows = map[byte]os.Signal{
 	'\003': syscall.SIGKILL,
 	'\x1c': syscall.SIGKILL,
 }
+
+// DefaultIdentityConsumptionOrder defines the default order identities will be consumed
+var DefaultIdentityConsumptionOrder = []string{
+	"OnPrem", "EC2", "CustomIdentity",
+}
+
+var DefaultCustomIdentityCredentialsProvider = "DEFAULT"

@@ -112,6 +112,7 @@ type SsmagentConfig struct {
 	S3          S3Cfg
 	Birdwatcher BirdwatcherCfg
 	Kms         KmsConfig
+	Identity    IdentityCfg
 }
 
 // AppConstants represents some run time constant variable for various module.
@@ -119,4 +120,20 @@ type SsmagentConfig struct {
 type AppConstants struct {
 	MinHealthFrequencyMinutes int
 	MaxHealthFrequencyMinutes int
+}
+
+// CustomIdentity defines a single custom identity that the agent can assume
+type CustomIdentity struct {
+	InstanceID          string
+	Region              string
+	AvailabilityZone    string
+	InstanceType        string
+	ServiceDomain       string
+	CredentialsProvider string
+}
+
+// IdentityCfg stores identity consumption order and custom identities
+type IdentityCfg struct {
+	ConsumptionOrder []string
+	CustomIdentities []*CustomIdentity
 }

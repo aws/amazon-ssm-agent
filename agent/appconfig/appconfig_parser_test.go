@@ -122,3 +122,42 @@ func TestGetNumeric64Value(t *testing.T) {
 		assert.Equal(t, test.Output, output)
 	}
 }
+
+func TestIdentityConsumptionOrder_InvalidConsumptionOrderValue(t *testing.T) {
+	agentConfig := DefaultConfig()
+	agentConfig.Identity.ConsumptionOrder = []string{"EC2", "InvalidValue"}
+	parser(&agentConfig)
+
+	assert.Contains(t, agentConfig.Identity.ConsumptionOrder, "EC2")
+	assert.NotContains(t, agentConfig.Identity.ConsumptionOrder, "InvalidValue")
+	assert.Equal(t, 1, len(agentConfig.Identity.ConsumptionOrder))
+}
+
+func TestIdentityConsumptionOrder_TwoInvalidConsumptionOrderValue(t *testing.T) {
+	agentConfig := DefaultConfig()
+	agentConfig.Identity.ConsumptionOrder = []string{"AnotherInvalidValue", "InvalidValue"}
+	parser(&agentConfig)
+
+	assert.NotContains(t, agentConfig.Identity.ConsumptionOrder, "AnotherInvalidValue")
+	assert.NotContains(t, agentConfig.Identity.ConsumptionOrder, "InvalidValue")
+
+	// Expect ConsumptionOrder to change to default consumption order
+	for _, identityType := range DefaultIdentityConsumptionOrder {
+		assert.Contains(t, agentConfig.Identity.ConsumptionOrder, identityType)
+	}
+	assert.Equal(t, len(DefaultIdentityConsumptionOrder), len(agentConfig.Identity.ConsumptionOrder))
+}
+
+func TestIdentityCredentialsValue_InvalidCredentialsProviderToDefault(t *testing.T) {
+	agentConfig := DefaultConfig()
+
+	agentConfig.Identity.CustomIdentities = append(agentConfig.Identity.CustomIdentities, &CustomIdentity{
+		CredentialsProvider: "InvalidProvider",
+	})
+	parser(&agentConfig)
+	assert.Equal(t, agentConfig.Identity.CustomIdentities[0].CredentialsProvider, DefaultCustomIdentityCredentialsProvider)
+
+	agentConfig.Identity.CustomIdentities[0].CredentialsProvider = DefaultCustomIdentityCredentialsProvider
+	parser(&agentConfig)
+	assert.Equal(t, agentConfig.Identity.CustomIdentities[0].CredentialsProvider, DefaultCustomIdentityCredentialsProvider)
+}
