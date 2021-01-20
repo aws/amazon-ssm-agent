@@ -21,7 +21,8 @@ import (
 )
 
 const (
-	MaxInstanceIDLen = 40
+	// 64 is the max length of docker container ids
+	MaxInstanceIDLen = 64
 )
 
 func (c *agentIdentityCacher) InstanceID() (string, error) {

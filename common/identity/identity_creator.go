@@ -15,6 +15,7 @@ package identity
 import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/customidentity"
 	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ec2"
 	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ecs"
 	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/onprem"
@@ -29,6 +30,7 @@ func init() {
 	allIdentityGenerators[ec2.IdentityType] = newEC2Identity
 	allIdentityGenerators[ecs.IdentityType] = newECSIdentity
 	allIdentityGenerators[onprem.IdentityType] = newOnPremIdentity
+	allIdentityGenerators[customidentity.IdentityType] = newCustomIdentity
 }
 
 func newEC2Identity(log log.T, _ *appconfig.SsmagentConfig) []IAgentIdentityInner {
@@ -53,4 +55,20 @@ func newOnPremIdentity(log log.T, config *appconfig.SsmagentConfig) []IAgentIden
 		Log:    log,
 		Config: config,
 	}}
+}
+
+func newCustomIdentity(log log.T, config *appconfig.SsmagentConfig) []IAgentIdentityInner {
+	var customIdentities []IAgentIdentityInner
+
+	for _, customIdentityEntry := range config.Identity.CustomIdentities {
+		log.Debugf("Creating custom identity object for instance id '%s' in region '%s'",
+			customIdentityEntry.InstanceID,
+			customIdentityEntry.Region)
+		customIdentities = append(customIdentities, &customidentity.Identity{
+			CustomIdentity: *customIdentityEntry,
+			Log:            log,
+		})
+	}
+
+	return customIdentities
 }

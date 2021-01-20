@@ -131,6 +131,10 @@ func DefaultConfig() SsmagentConfig {
 		Lang:    "en-US",
 		Version: "1",
 	}
+	var identity = IdentityCfg{
+		ConsumptionOrder: DefaultIdentityConsumptionOrder,
+		CustomIdentities: []*CustomIdentity{},
+	}
 	var birdwatcher BirdwatcherCfg
 	var kms KmsConfig
 
@@ -144,6 +148,7 @@ func DefaultConfig() SsmagentConfig {
 		S3:          s3,
 		Birdwatcher: birdwatcher,
 		Kms:         kms,
+		Identity:    identity,
 	}
 
 	return ssmagentCfg

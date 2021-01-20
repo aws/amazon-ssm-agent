@@ -79,7 +79,7 @@ func (bs *Bootstrap) Init() (context.ICoreAgentContext, error) {
 	if err != nil {
 		return nil, logger.Errorf("error fetching the instanceID, %v", err)
 	}
-	logger.Debug("Using instanceID:", instanceId)
+	logger.Debugf("Using instanceID: '%s'", instanceId)
 
 	err = bs.createIPCFolder()
 	if err != nil {
