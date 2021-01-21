@@ -1,5 +1,21 @@
 Latest
 ===============
+- Add feature to retain hostname during domain join
+- Add delay to pty start failure for session-worker
+- Add nil pointer check on shell command for session-worker
+- Add shlex to vendor which is used to parse session interactive command input for session-worker
+- Change log level for IPC not readable message
+- Change v2 agent to use v3 agent executor
+- Fix network connectivity issues on RHEL8
+- Fix race condition where first message is dropped when session plugin's message handler is not ready
+- Fix file channel protocol test cases
+- Fix blocking http call when certificates are not available
+- Move aws cli installation out of /tmp for domain join plugin
+- Update boolean attributes in Session Document to accept both string and bool values
+- Upgrade vendor dependencies and build to use go1.15.7
+
+3.0.603.0
+===============
 - Added instruction to README.md for getting the latest version of SSM Agent in a specific region
 - Fix for PowerShell stream data being executed in reverse order
 - Fix to create update lock folder before creating update locks
