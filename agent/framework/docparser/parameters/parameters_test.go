@@ -24,11 +24,6 @@ import (
 
 var logger = log.NewMockLog()
 
-func ExampleReplaceParameter() {
-	fmt.Println(ReplaceParameter("A {{ p1 }} is a {{ p1 }}.", "p1", "name"))
-	// Output: A name is a name.
-}
-
 type IsSingleParameterStringTest struct {
 	Input     string
 	ParamName string
@@ -75,6 +70,26 @@ type ReplaceParamTestCase struct {
 	Input  interface{}
 	Params map[string]interface{}
 	Output interface{}
+}
+
+func TestReplaceParameter_SingleOccurrence(t *testing.T) {
+	assert.Equal(t, "A name",
+		ReplaceParameter("A {{ p1 }}", "p1", "name"))
+}
+
+func TestReplaceParameter_MultipleOccurrences(t *testing.T) {
+	assert.Equal(t, "A name is a name",
+		ReplaceParameter("A {{p1 }} is a {{ p1}}", "p1", "name"))
+}
+
+func TestReplaceParameter_EscapesDollarSignsToAvoidBackreferences(t *testing.T) {
+	assert.Equal(t, "Write-Host 'C:\\$Recycle.Bin'",
+		ReplaceParameter("Write-Host '{{Path}}'", "Path", "C:\\$Recycle.Bin"))
+}
+
+func TestReplaceParameter_LeavesEscapedDollarSigns(t *testing.T) {
+	assert.Equal(t, "Write-Host 'C:\\$Recycle.Bin'",
+		ReplaceParameter("Write-Host '{{ Path }}'", "Path", "C:\\$$Recycle.Bin"))
 }
 
 func TestReplaceParameters(t *testing.T) {

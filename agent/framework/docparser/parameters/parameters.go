@@ -20,6 +20,7 @@ import (
 	"reflect"
 	"regexp"
 	"strconv"
+	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
@@ -115,10 +116,18 @@ func isSingleParameterString(input string, paramName string) bool {
 }
 
 // ReplaceParameter replaces all occurrences of "{{ paramName }}" in the input by paramValue.
+// This method should be called only on parameter names that have been validated first.
 func ReplaceParameter(input string, paramName string, paramValue string) string {
-	// this method should be called only on parameter names that have been validated first
+	// The agent used to have a bug where '$' characters in paramValue would be
+	// interpreted as regexp back references by regexp.ReplaceAllString().  That bug
+	// has been fixed.  Now the problem is that some users may already be working around
+	// the bug by using '$$' in place of '$'.  The following line is meant to protect those
+	// users (if any).
+	escapedParamValue := strings.ReplaceAll(paramValue, "$$", "$")
+
 	r := regexp.MustCompile(fmt.Sprintf(`{{\s*%v\s*}}`, paramName))
-	return r.ReplaceAllString(input, paramValue)
+	tokens := r.Split(input, -1)
+	return strings.Join(tokens, escapedParamValue)
 }
 
 // ValidParameters checks if parameter names are valid. Returns valid parameters only.
