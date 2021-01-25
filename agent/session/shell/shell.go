@@ -295,6 +295,9 @@ func (p *ShellPlugin) execute(
 			output.SetExitCode(appconfig.ErrorExitCode)
 			output.SetStatus(agentContracts.ResultStatusFailed)
 		} else {
+			// Call datachannel PrepareToCloseChannel so all messages in the buffer are sent
+			p.dataChannel.PrepareToCloseChannel(log)
+
 			// Send session status as Terminating to service on receiving success exit code from pty
 			if err = p.dataChannel.SendAgentSessionStateMessage(log, mgsContracts.Terminating); err != nil {
 				log.Errorf("Unable to send AgentSessionState message with session status %s. %v", mgsContracts.Terminating, err)
@@ -370,17 +373,20 @@ func (p *ShellPlugin) writePump(log log.T, ipcFile *os.File) (errorCode int) {
 
 	var unprocessedBuf bytes.Buffer
 	for {
-		stdoutBytesLen, err := reader.Read(stdoutBytes)
-		if err != nil {
-			log.Debugf("Failed to read from pty master: %s", err)
-			return appconfig.SuccessExitCode
+		if p.dataChannel.IsActive() {
+			stdoutBytesLen, err := reader.Read(stdoutBytes)
+			if err != nil {
+				log.Debugf("Failed to read from pty master: %s", err)
+				return appconfig.SuccessExitCode
+			}
+
+			// unprocessedBuf contains incomplete utf8 encoded unicode bytes returned after processing of stdoutBytes
+			if unprocessedBuf, err = p.processStdoutData(log, stdoutBytes, stdoutBytesLen, unprocessedBuf, ipcFile); err != nil {
+				log.Errorf("Error processing stdout data, %v", err)
+				return appconfig.ErrorExitCode
+			}
 		}
 
-		// unprocessedBuf contains incomplete utf8 encoded unicode bytes returned after processing of stdoutBytes
-		if unprocessedBuf, err = p.processStdoutData(log, stdoutBytes, stdoutBytesLen, unprocessedBuf, ipcFile); err != nil {
-			log.Errorf("Error processing stdout data, %v", err)
-			return appconfig.ErrorExitCode
-		}
 		// Wait for stdout to process more data
 		time.Sleep(time.Millisecond)
 	}

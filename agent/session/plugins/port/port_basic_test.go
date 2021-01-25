@@ -181,6 +181,7 @@ func (suite *BasicPortTestSuite) TestHandleTCPReadErrorWhenReconnectionToPortFai
 
 // Testing writepump
 func (suite *BasicPortTestSuite) TestWritePump() {
+	suite.mockDataChannel.On("IsActive").Return(true)
 	suite.mockDataChannel.On("SendStreamDataMessage", suite.mockContext.Log(), mgsContracts.Output, payload).Return(nil)
 
 	out, in := net.Pipe()
@@ -196,6 +197,29 @@ func (suite *BasicPortTestSuite) TestWritePump() {
 
 	// Assert if SendStreamDataMessage function was called with same data from stdout
 	suite.mockDataChannel.AssertExpectations(suite.T())
+}
+
+func (suite *BasicPortTestSuite) TestWritePumpWhenDatachannelIsNotActive() {
+	suite.mockDataChannel.On("IsActive").Return(false)
+
+	out, in := net.Pipe()
+	defer out.Close()
+
+	go func() {
+		in.Write(payload)
+		in.Close()
+	}()
+
+	suite.session.conn = out
+	go func() {
+		suite.session.WritePump(suite.mockDataChannel)
+	}()
+
+	time.Sleep(10 * time.Millisecond)
+
+	// Assert if SendStreamDataMessage function was not called
+	suite.mockDataChannel.AssertExpectations(suite.T())
+	suite.mockDataChannel.AssertNotCalled(suite.T(), "SendStreamDataMessage", suite.mockContext.Log(), mgsContracts.Output, payload)
 }
 
 // Execute the test suite

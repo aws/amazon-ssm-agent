@@ -169,6 +169,23 @@ func TestClose(t *testing.T) {
 	mockWsChannel.AssertExpectations(t)
 }
 
+// test PrepareToCloseChannel
+func TestPrepareToCloseChannel(t *testing.T) {
+	dataChannel := getDataChannel()
+	defer dataChannel.Close(mockLog)
+
+	mockWsChannel.On("SendMessage", mock.Anything, mock.Anything, mock.Anything).Return(nil)
+
+	dataChannel.AddDataToOutgoingMessageBuffer(streamingMessages[1])
+	dataChannel.AddDataToOutgoingMessageBuffer(streamingMessages[2])
+	assert.Equal(t, 2, dataChannel.OutgoingMessageBuffer.Messages.Len())
+
+	dataChannel.ResendStreamDataMessageScheduler(mockLog)
+	dataChannel.PrepareToCloseChannel(mockLog)
+
+	mockWsChannel.AssertExpectations(t)
+}
+
 func TestSendStreamDataMessage(t *testing.T) {
 	dataChannel := getDataChannel()
 

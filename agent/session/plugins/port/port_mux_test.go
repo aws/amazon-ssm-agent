@@ -101,6 +101,8 @@ func (suite *MuxPortTestSuite) TestHandleStreamMessageWhenTerminateSessionFlagIs
 
 // Test WritePump
 func (suite *MuxPortTestSuite) TestWritePumpFailsToRead() {
+	suite.mockDataChannel.On("IsActive").Return(true)
+
 	out, in := net.Pipe()
 	session, _ := smux.Server(in, nil)
 	defer session.Close()
@@ -114,7 +116,34 @@ func (suite *MuxPortTestSuite) TestWritePumpFailsToRead() {
 	assert.Equal(suite.T(), appconfig.ErrorExitCode, errCode)
 }
 
+func (suite *MuxPortTestSuite) TestWritePumpWhenDatachannelIsNotActive() {
+	suite.mockDataChannel.On("IsActive").Return(false)
+
+	out, in := net.Pipe()
+	session, _ := smux.Server(in, nil)
+	defer session.Close()
+	defer out.Close()
+
+	go func() {
+		in.Write(payload)
+		in.Close()
+	}()
+
+	suite.session.mgsConn = &MgsConn{nil, out}
+	suite.session.muxServer = &MuxServer{in, session}
+	go func() {
+		suite.session.WritePump(suite.mockDataChannel)
+	}()
+
+	time.Sleep(10 * time.Millisecond)
+
+	// Assert if SendStreamDataMessage function was not called
+	suite.mockDataChannel.AssertExpectations(suite.T())
+	suite.mockDataChannel.AssertNotCalled(suite.T(), "SendStreamDataMessage", suite.mockContext.Log(), mgsContracts.Output, payload)
+}
+
 func (suite *MuxPortTestSuite) TestWritePump() {
+	suite.mockDataChannel.On("IsActive").Return(true)
 	suite.mockDataChannel.On("SendStreamDataMessage", suite.mockContext.Log(), mgsContracts.Output, payload).Return(nil)
 
 	out, in := net.Pipe()

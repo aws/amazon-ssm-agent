@@ -126,19 +126,21 @@ func (p *BasicPortSession) WritePump(dataChannel datachannel.IDataChannel) (erro
 	packet := make([]byte, mgsConfig.StreamDataPayloadSize)
 
 	for {
-		numBytes, err := p.conn.Read(packet)
-		if err != nil {
-			var exitCode int
-			if exitCode = p.handleTCPReadError(err); exitCode == mgsConfig.ResumeReadExitCode {
-				log.Debugf("Reconnection to port %v is successful, resume reading from port.", p.serverPortNumber)
-				continue
+		if dataChannel.IsActive() {
+			numBytes, err := p.conn.Read(packet)
+			if err != nil {
+				var exitCode int
+				if exitCode = p.handleTCPReadError(err); exitCode == mgsConfig.ResumeReadExitCode {
+					log.Debugf("Reconnection to port %v is successful, resume reading from port.", p.serverPortNumber)
+					continue
+				}
+				return exitCode
 			}
-			return exitCode
-		}
 
-		if err = dataChannel.SendStreamDataMessage(log, mgsContracts.Output, packet[:numBytes]); err != nil {
-			log.Errorf("Unable to send stream data message: %v", err)
-			return appconfig.ErrorExitCode
+			if err = dataChannel.SendStreamDataMessage(log, mgsContracts.Output, packet[:numBytes]); err != nil {
+				log.Errorf("Unable to send stream data message: %v", err)
+				return appconfig.ErrorExitCode
+			}
 		}
 		// Wait for TCP to process more data
 		time.Sleep(time.Millisecond)

@@ -247,3 +247,22 @@ func (_m *IDataChannel) GetRegion() string {
 
 	return r0
 }
+
+// IsActive provides a mock function
+func (_m *IDataChannel) IsActive() bool {
+	ret := _m.Called()
+
+	var r0 bool
+	if rf, ok := ret.Get(0).(func() bool); ok {
+		r0 = rf()
+	} else {
+		r0 = ret.Get(0).(bool)
+	}
+
+	return r0
+}
+
+// PrepareToCloseChannel provides a mock function with given fields: _a0
+func (_m *IDataChannel) PrepareToCloseChannel(_a0 log.T) {
+	_m.Called(_a0)
+}

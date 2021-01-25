@@ -150,6 +150,7 @@ func (suite *ShellTestSuite) TestExecute() {
 	suite.mockIohandler.On("SetExitCode", 0).Return(nil)
 	suite.mockIohandler.On("SetStatus", contracts.ResultStatusSuccess).Return()
 	suite.mockIohandler.On("SetOutput", mock.Anything).Return()
+	suite.mockDataChannel.On("PrepareToCloseChannel", mock.Anything).Return(nil).Times(1)
 	suite.mockDataChannel.On("SendAgentSessionStateMessage", mock.Anything, mgsContracts.Terminating).
 		Return(nil).Times(1)
 	suite.mockCmd.On("Wait").Return(nil)
@@ -195,6 +196,7 @@ func (suite *ShellTestSuite) TestExecuteWithCWLoggingEnabled() {
 	suite.mockIohandler.On("SetExitCode", 0).Return(nil)
 	suite.mockIohandler.On("SetStatus", contracts.ResultStatusSuccess).Return()
 	suite.mockIohandler.On("SetOutput", mock.Anything).Return()
+	suite.mockDataChannel.On("PrepareToCloseChannel", mock.Anything).Return(nil).Times(1)
 	suite.mockDataChannel.On("SendAgentSessionStateMessage", mock.Anything, mgsContracts.Terminating).
 		Return(nil).Times(1)
 
@@ -240,6 +242,7 @@ func (suite *ShellTestSuite) TestExecuteWithCWLogStreamingEnabled() {
 	suite.mockIohandler.On("SetExitCode", 0).Return(nil)
 	suite.mockIohandler.On("SetStatus", contracts.ResultStatusSuccess).Return()
 	suite.mockIohandler.On("SetOutput", mock.Anything).Return()
+	suite.mockDataChannel.On("PrepareToCloseChannel", mock.Anything).Return(nil).Times(1)
 	suite.mockDataChannel.On("SendAgentSessionStateMessage", mock.Anything, mgsContracts.Terminating).
 		Return(nil).Times(1)
 
@@ -294,6 +297,7 @@ func (suite *ShellTestSuite) TestExecuteWithCWLoggingDisabledButStreamingEnabled
 	suite.mockIohandler.On("SetExitCode", 0).Return(nil)
 	suite.mockIohandler.On("SetStatus", contracts.ResultStatusSuccess).Return()
 	suite.mockIohandler.On("SetOutput", mock.Anything).Return()
+	suite.mockDataChannel.On("PrepareToCloseChannel", mock.Anything).Return(nil).Times(1)
 	suite.mockDataChannel.On("SendAgentSessionStateMessage", mock.Anything, mgsContracts.Terminating).
 		Return(nil).Times(1)
 
@@ -335,6 +339,7 @@ func (suite *ShellTestSuite) TestExecuteWithCancelFlag() {
 	suite.mockIohandler.On("SetExitCode", 0).Return(nil)
 	suite.mockIohandler.On("SetStatus", contracts.ResultStatusSuccess).Return()
 	suite.mockIohandler.On("SetOutput", mock.Anything).Return()
+	suite.mockDataChannel.On("PrepareToCloseChannel", mock.Anything).Return(nil).Times(0)
 	suite.mockDataChannel.On("SendAgentSessionStateMessage", mock.Anything, mgsContracts.Terminating).
 		Return(nil).Times(0)
 	suite.mockCmd.On("Wait").Return(nil)
@@ -377,6 +382,7 @@ func (suite *ShellTestSuite) TestWritePump() {
 	stdin.Write(payload)
 
 	//suite.mockDataChannel := &dataChannelMock.IDataChannel{}
+	suite.mockDataChannel.On("IsActive").Return(true)
 	suite.mockDataChannel.On("SendStreamDataMessage", mock.Anything, mock.Anything, payload).Return(nil)
 
 	suite.plugin.stdout = stdout
@@ -408,6 +414,7 @@ func (suite *ShellTestSuite) TestWritePumpForInvalidUtf8Character() {
 	stdin.Write(invalidUtf8Payload)
 
 	//suite.mockDataChannel := &dataChannelMock.IDataChannel{}
+	suite.mockDataChannel.On("IsActive").Return(true)
 	suite.mockDataChannel.On("SendStreamDataMessage", mock.Anything, mock.Anything, invalidUtf8Payload).Return(nil)
 
 	suite.plugin.stdout = stdout
@@ -428,6 +435,31 @@ func (suite *ShellTestSuite) TestWritePumpForInvalidUtf8Character() {
 
 	// Assert if SendStreamDataMessage function was called with same data from stdout
 	suite.mockDataChannel.AssertExpectations(suite.T())
+}
+
+func (suite *ShellTestSuite) TestWritePumpWhenDatachannelIsPaused() {
+	stdout, stdin, _ := os.Pipe()
+	stdin.Write(payload)
+
+	//suite.mockDataChannel := &dataChannelMock.IDataChannel{}
+	suite.mockDataChannel.On("IsActive").Return(false)
+
+	suite.plugin.stdout = stdout
+	suite.plugin.logger = logger{ipcFilePath: "test.log"}
+
+	// Create ipc file
+	ipcFile, _ := os.Create(suite.plugin.logger.ipcFilePath)
+	defer ipcFile.Close()
+
+	go func() {
+		suite.plugin.writePump(suite.mockLog, ipcFile)
+	}()
+
+	time.Sleep(1500 * time.Millisecond)
+
+	// Assert if SendStreamDataMessage function was not called
+	suite.mockDataChannel.AssertExpectations(suite.T())
+	suite.mockDataChannel.AssertNotCalled(suite.T(), "SendStreamDataMessage", suite.mockLog, mgsContracts.Output, payload)
 }
 
 // TestProcessStdoutData tests stdout bytes containing utf8 encoded characters
