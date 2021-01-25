@@ -69,7 +69,11 @@ func (p *SessionPlugin) Execute(
 		log.Error(errorString)
 		return
 	}
-	defer dataChannel.Close(log)
+
+	defer func() {
+		dataChannel.PrepareToCloseChannel(log)
+		dataChannel.Close(log)
+	}()
 
 	if err = dataChannel.SendAgentSessionStateMessage(p.context.Log(), mgsContracts.Connected); err != nil {
 		log.Errorf("Unable to send AgentSessionState message with session status %s. %s", mgsContracts.Connected, err)

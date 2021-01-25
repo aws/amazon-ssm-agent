@@ -213,20 +213,22 @@ func (p *MuxPortSession) cleanUp() {
 func (p *MuxPortSession) transferDataToMgs(ctx context.Context, dataChannel datachannel.IDataChannel) error {
 	log := p.context.Log()
 	for {
-		packet := make([]byte, mgsConfig.StreamDataPayloadSize)
-		select {
-		case <-ctx.Done():
-			return ctx.Err()
-		default:
-			numBytes, err := p.mgsConn.conn.Read(packet)
-			if err != nil {
-				log.Errorf("Unable to read from connection: %v", err)
-				return err
-			}
+		if dataChannel.IsActive() {
+			packet := make([]byte, mgsConfig.StreamDataPayloadSize)
+			select {
+			case <-ctx.Done():
+				return ctx.Err()
+			default:
+				numBytes, err := p.mgsConn.conn.Read(packet)
+				if err != nil {
+					log.Errorf("Unable to read from connection: %v", err)
+					return err
+				}
 
-			if err = dataChannel.SendStreamDataMessage(log, mgsContracts.Output, packet[:numBytes]); err != nil {
-				log.Errorf("Unable to send stream data message: %v", err)
-				return err
+				if err = dataChannel.SendStreamDataMessage(log, mgsContracts.Output, packet[:numBytes]); err != nil {
+					log.Errorf("Unable to send stream data message: %v", err)
+					return err
+				}
 			}
 		}
 		time.Sleep(time.Millisecond)

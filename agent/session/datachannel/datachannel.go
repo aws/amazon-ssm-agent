@@ -71,6 +71,8 @@ type IDataChannel interface {
 	GetClientVersion() string
 	GetInstanceId() string
 	GetRegion() string
+	IsActive() bool
+	PrepareToCloseChannel(log log.T)
 }
 
 // DataChannel used for session communication between the message gateway service and the agent.
@@ -369,6 +371,24 @@ func (dataChannel *DataChannel) Reconnect(log log.T) error {
 func (dataChannel *DataChannel) Close(log log.T) error {
 	log.Infof("Closing datachannel with channel Id %s", dataChannel.ChannelId)
 	return dataChannel.wsChannel.Close(log)
+}
+
+// PrepareToCloseChannel waits for all messages to be sent to MGS
+func (dataChannel *DataChannel) PrepareToCloseChannel(log log.T) {
+	done := make(chan bool)
+	go func() {
+		for dataChannel.OutgoingMessageBuffer.Messages.Len() > 0 {
+			time.Sleep(10 * time.Millisecond)
+		}
+		done <- true
+	}()
+
+	select {
+	case <-done:
+		log.Tracef("Datachannel buffer is empty, datachannel can now be closed")
+	case <-time.After(2 * time.Second):
+		log.Debugf("Timeout waiting for datachannel buffer to empty.")
+	}
 }
 
 // SendStreamDataMessage sends a data message in a form of AgentMessage for streaming.
@@ -1074,6 +1094,12 @@ func (dataChannel *DataChannel) GetInstanceId() string {
 // GetRegion returns aws region of the target
 func (dataChannel *DataChannel) GetRegion() string {
 	return dataChannel.Service.GetRegion()
+}
+
+// IsActive returns a boolean value indicating the datachannel is actively listening
+// and communicating with service
+func (dataChannel *DataChannel) IsActive() bool {
+	return !dataChannel.Pause
 }
 
 // getDataChannelToken calls CreateDataChannel to get the token for this session.
