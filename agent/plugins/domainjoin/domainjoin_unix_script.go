@@ -623,6 +623,15 @@ for i in "$@"; do
     shift
 done
 
+# Deal with scenario where this script is run again after the domain is already joined.
+# We want to avoid rerunning as the set_hostname function can change the hostname of a server that is already
+# domain joined and cause a mismatch. 
+realm list | grep -q "domain-name: ${DIRECTORY_NAME}\$"
+if [ $? -eq 0 ]; then
+    echo "########## SKIPPING Domain Join: ${DIRECTORY_NAME} already joined  ##########"
+    exit 0
+fi
+
 REALM=$(echo "$DIRECTORY_NAME" | tr [a-z] [A-Z])
 
 COMPUTER_NAME=$(hostname --short)
