@@ -131,7 +131,7 @@ func (suite *CrashWorkerTestSuite) TestDocumentWorkerCrash() {
 	//send MDS message that's expected to crash document worker
 	var idOfCrashMessage string
 	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
-		messageOutput, _ := testutils.GenerateMessages(testdata.CrashWorkerMDSMessage)
+		messageOutput, _ := testutils.GenerateMessages(suite.context, testdata.CrashWorkerMDSMessage)
 		idOfCrashMessage = *messageOutput.Messages[0].MessageId
 		return messageOutput
 	}, nil).Once()
@@ -139,13 +139,13 @@ func (suite *CrashWorkerTestSuite) TestDocumentWorkerCrash() {
 	//send MDS message that's expected to succeed
 	var idOfGoodMessage string
 	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
-		messageOutput, _ := testutils.GenerateMessages(testdata.EchoMDSMessage)
+		messageOutput, _ := testutils.GenerateMessages(suite.context, testdata.EchoMDSMessage)
 		idOfGoodMessage = *messageOutput.Messages[0].MessageId
 		return messageOutput
 	}, nil).Once()
 
 	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
-		emptyMessage, _ := testutils.GenerateEmptyMessage()
+		emptyMessage, _ := testutils.GenerateEmptyMessage(suite.context)
 		return emptyMessage
 	}, nil)
 

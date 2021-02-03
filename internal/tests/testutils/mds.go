@@ -46,8 +46,8 @@ func NewMdsService(context context.T, msgSvc ssmmdsiface.SSMMDSAPI, sendMdsSdkRe
 	return mdsService.NewMdsSdkService(context, msgSvc, &http.Transport{}, sendMdsSdkRequest, cancelMdsSDKRequest)
 }
 
-func GenerateEmptyMessage() (*ssmmds.GetMessagesOutput, error) {
-	instanceID := "i-123123123"
+func GenerateEmptyMessage(context context.T) (*ssmmds.GetMessagesOutput, error) {
+	instanceID, _ := context.Identity().InstanceID()
 	uuid.SwitchFormat(uuid.CleanHyphen)
 	var testMessageId = uuid.NewV4().String()
 	msgs := make([]*ssmmds.Message, 0)
@@ -60,9 +60,9 @@ func GenerateEmptyMessage() (*ssmmds.GetMessagesOutput, error) {
 	return &messagesOutput, nil
 }
 
-func GenerateMessages(messageContent string) (*ssmmds.GetMessagesOutput, error) {
+func GenerateMessages(context context.T, messageContent string) (*ssmmds.GetMessagesOutput, error) {
 	uuid.SwitchFormat(uuid.CleanHyphen)
-	instanceID := "i-123123123"
+	instanceID, _ := context.Identity().InstanceID()
 	// mock GetMessagesOutput to return one message
 	var testMessageId = uuid.NewV4().String()
 	msgs := make([]*ssmmds.Message, 1)
