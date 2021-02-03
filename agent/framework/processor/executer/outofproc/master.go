@@ -2,6 +2,7 @@ package outofproc
 
 import (
 	"fmt"
+	"runtime/debug"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -102,6 +103,7 @@ func (e *OutOfProcExecuter) Run(
 			defer func() {
 				if msg := recover(); msg != nil {
 					log.Errorf("Executer go-routine panic: %v", msg)
+					log.Errorf("Stacktrace:\n%s", debug.Stack())
 				}
 				//save the overall result and signal called that Executer is done
 				store.Save(*e.docState)

@@ -170,7 +170,7 @@ func (s *Session) ModuleExecute() (err error) {
 	defer func() {
 		if msg := recover(); msg != nil {
 			log.Errorf("MessageGatewayService ModuleExecute run panic: %v", msg)
-			log.Errorf("%s: %s", msg, debug.Stack())
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
 		}
 	}()
 
@@ -207,7 +207,7 @@ func (s *Session) ModuleRequestStop(stopType contracts.StopType) (err error) {
 	defer func() {
 		if msg := recover(); msg != nil {
 			log.Errorf("MessageGatewayService ModuleRequestStop run panic: %v", msg)
-			log.Errorf("%s: %s", msg, debug.Stack())
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
 		}
 	}()
 

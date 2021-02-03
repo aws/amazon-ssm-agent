@@ -149,7 +149,7 @@ func RegisteredWorkerPlugins(context context.T) runpluginutil.PluginRegistry {
 	defer func() {
 		if msg := recover(); msg != nil {
 			context.Log().Errorf("Agent failed while getting registered worker plugins %v!", msg)
-			context.Log().Errorf("%s: %s", msg, debug.Stack())
+			context.Log().Errorf("Stacktrace:\n%s", debug.Stack())
 		}
 	}()
 

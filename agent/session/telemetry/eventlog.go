@@ -20,6 +20,7 @@ import (
 	"hash/fnv"
 	"math/rand"
 	"regexp"
+	"runtime/debug"
 	"strconv"
 	"strings"
 	"sync"
@@ -178,6 +179,7 @@ func (a *AuditLogTelemetry) sendAgentHealthMessage() {
 	defer func() {
 		if err := recover(); err != nil {
 			log.Errorf("Agent Telemetry panicked with: %v", err)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
 		}
 	}()
 	mu.Lock()

@@ -171,7 +171,7 @@ func (webSocketChannel *WebSocketChannel) Open(log log.T) error {
 		defer func() {
 			if msg := recover(); msg != nil {
 				log.Errorf("WebsocketChannel listener run panic: %v", msg)
-				log.Errorf("%s: %s", msg, debug.Stack())
+				log.Errorf("Stacktrace:\n%s", debug.Stack())
 			}
 		}()
 

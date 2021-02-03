@@ -21,6 +21,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"runtime/debug"
 	"strconv"
 	"strings"
 	"time"
@@ -183,6 +184,12 @@ func discoverPort(log log.T, windowsInfo model.WindowsInfo) (port string, err er
 
 // ExecuteTasks opens serial port, write agent verion, AWS driver info and bugchecks in console log.
 func (p *Processor) ExecuteTasks() (err error) {
+	defer func() {
+		if msg := recover(); msg != nil {
+			p.context.Log().Errorf("Failed to run through windows startup with err: %v", msg)
+			p.context.Log().Errorf("Stacktrace:\n%s", debug.Stack())
+		}
+	}()
 	var sp *serialport.SerialPort
 
 	var driverInfo []model.DriverInfo

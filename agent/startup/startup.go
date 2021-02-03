@@ -16,6 +16,7 @@ package startup
 
 import (
 	"fmt"
+	"runtime/debug"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -50,6 +51,7 @@ func (p *Processor) ModuleExecute() (err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			err = fmt.Errorf("Internal error occurred by startup processor: %v", r)
+			p.context.Log().Errorf("Stacktrace:\n%s", debug.Stack())
 		}
 	}()
 
