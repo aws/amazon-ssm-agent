@@ -127,12 +127,12 @@ func (suite *SendFailedReplyTestSuite) TestSaveFailedReply() {
 
 	// Mock MDs service so it returns only one messages, it'll return empty messages after that.
 	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
-		messageOutput, _ := testutils.GenerateMessages(testdata.EchoMDSMessage)
+		messageOutput, _ := testutils.GenerateMessages(suite.context, testdata.EchoMDSMessage)
 		return messageOutput
 	}, nil).Times(1)
 
 	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
-		emptyMessage, _ := testutils.GenerateEmptyMessage()
+		emptyMessage, _ := testutils.GenerateEmptyMessage(suite.context)
 		return emptyMessage
 	}, nil)
 
@@ -204,7 +204,7 @@ func (suite *SendFailedReplyTestSuite) TestSendFailedReply() {
 
 	// Mock MDs service to return empty messages.
 	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
-		emptyMessage, _ := testutils.GenerateEmptyMessage()
+		emptyMessage, _ := testutils.GenerateEmptyMessage(suite.context)
 		return emptyMessage
 	}, nil)
 
@@ -246,7 +246,7 @@ func (suite *SendFailedReplyTestSuite) TestDeleteOldFailedReply() {
 
 	// Mock MDs service to return empty messages.
 	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
-		emptyMessage, _ := testutils.GenerateEmptyMessage()
+		emptyMessage, _ := testutils.GenerateEmptyMessage(suite.context)
 		return emptyMessage
 	}, nil)
 

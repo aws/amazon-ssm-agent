@@ -121,12 +121,12 @@ func verifyRunCommandOutput(suite *RunCommandOutputTestSuite,
 	expectedResultStatus contracts.ResultStatus,
 	wrongResultStatus contracts.ResultStatus) {
 	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
-		messageOutput, _ := testutils.GenerateMessages(docContent)
+		messageOutput, _ := testutils.GenerateMessages(suite.context, docContent)
 		return messageOutput
 	}, nil).Once()
 
 	suite.mdsSdkMock.On("GetMessagesRequest", mock.AnythingOfType("*ssmmds.GetMessagesInput")).Return(&request.Request{}, func(input *ssmmds.GetMessagesInput) *ssmmds.GetMessagesOutput {
-		emptyMessage, _ := testutils.GenerateEmptyMessage()
+		emptyMessage, _ := testutils.GenerateEmptyMessage(suite.context)
 		return emptyMessage
 	}, nil)
 
