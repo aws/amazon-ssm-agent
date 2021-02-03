@@ -15,14 +15,14 @@
 package basicexecuter
 
 import (
-	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-
+	"runtime/debug"
 	"sync"
 
+	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
 	"github.com/aws/amazon-ssm-agent/agent/framework/runpluginutil"
+	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
@@ -48,6 +48,7 @@ func run(context context.T,
 	defer func() {
 		if msg := recover(); msg != nil {
 			context.Log().Errorf("Executer run panic: %v", msg)
+			context.Log().Errorf("Stacktrace:\n%s", debug.Stack())
 		}
 	}()
 	docState := docStore.Load()
@@ -66,6 +67,7 @@ func run(context context.T,
 		defer func() {
 			if msg := recover(); msg != nil {
 				context.Log().Errorf("Executer listener panic: %v", msg)
+				context.Log().Errorf("Stacktrace:\n%s", debug.Stack())
 			}
 			wg.Done()
 		}()

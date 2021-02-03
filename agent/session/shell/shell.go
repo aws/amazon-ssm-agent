@@ -22,6 +22,7 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
+	"runtime/debug"
 	"syscall"
 	"time"
 	"unicode/utf8"
@@ -143,6 +144,7 @@ func (p *ShellPlugin) Execute(
 		}
 		if err := recover(); err != nil {
 			log.Errorf("Error occurred while executing plugin %s: \n%v", p.name, err)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
 			log.Flush()
 			os.Exit(1)
 		}
@@ -359,6 +361,7 @@ func (p *ShellPlugin) writePump(log log.T, ipcFile *os.File) (errorCode int) {
 	defer func() {
 		if err := recover(); err != nil {
 			fmt.Println("WritePump thread crashed with message: \n", err)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
 		}
 	}()
 

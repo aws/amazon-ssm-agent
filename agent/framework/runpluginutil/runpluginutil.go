@@ -16,6 +16,7 @@ package runpluginutil
 
 import (
 	"fmt"
+	"runtime/debug"
 	"strconv"
 	"strings"
 	"time"
@@ -285,6 +286,7 @@ var runPlugin = func(
 			res.Code = 1
 			res.Error = fmt.Errorf("Plugin crashed with message %v!", err).Error()
 			log.Error(res.Error)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
 		}
 	}()
 

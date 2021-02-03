@@ -18,6 +18,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"runtime/debug"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -273,6 +274,7 @@ func recoverUpdaterFromPanic(context *processor.UpdateContext) {
 	// recover in case the updater panics
 	if err := recover(); err != nil {
 		agentContext.Log().Errorf("recovered from panic for updater %v!", err)
+		agentContext.Log().Errorf("Stacktrace:\n%s", debug.Stack())
 		updater.Failed(context, agentContext.Log(), updateutil.ErrorUnexpectedThroughPanic, fmt.Sprintf("%v", err), false)
 	}
 }

@@ -2,6 +2,7 @@ package messaging
 
 import (
 	"errors"
+	"runtime/debug"
 
 	"sync"
 
@@ -163,6 +164,7 @@ func (p *WorkerBackend) pluginListener(statusChan chan contracts.PluginResult) {
 		//if this routine panics, return failed results
 		if msg := recover(); msg != nil {
 			log.Errorf("plugin listener panic: %v", msg)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
 			finalStatus = contracts.ResultStatusFailed
 		}
 

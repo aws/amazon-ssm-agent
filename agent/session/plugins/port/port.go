@@ -18,6 +18,7 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"runtime/debug"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -113,6 +114,7 @@ func (p *PortPlugin) Execute(
 	defer func() {
 		if err := recover(); err != nil {
 			log.Errorf("Error occurred while executing plugin %s: \n%v", p.name(), err)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
 			os.Exit(1)
 		}
 	}()

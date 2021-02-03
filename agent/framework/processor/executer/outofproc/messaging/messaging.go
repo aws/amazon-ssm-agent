@@ -2,6 +2,7 @@ package messaging
 
 import (
 	"errors"
+	"runtime/debug"
 
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -80,6 +81,7 @@ func Messaging(log log.T, ipc filewatcherbasedipc.IPCChannel, backend MessagingB
 	defer func() {
 		if msg := recover(); msg != nil {
 			log.Errorf("messaging worker panic: %v", msg)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
 		}
 	}()
 	log.Info("inter process communication started")
