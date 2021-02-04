@@ -9,7 +9,7 @@ The Amazon EC2 Simple Systems Manager (SSM) Agent is software developed for the 
 
 The SSM Agent runs on EC2 instances and enables you to quickly and easily execute remote commands or scripts against one or more instances. The agent uses SSM [documents](http://docs.aws.amazon.com/ssm/latest/APIReference/aws-ssm-document.html). When you execute a command, the agent on the instance processes the document and configures the instance as specified.
 Currently, the agent and Run Command enable you to quickly run Shell scripts on an instance using the AWS-RunShellScript SSM document. 
-SSM Agent also enables the Session Manager capability that lets you manage your Amazon EC2 instance through an interactive one-click browser-based shell or through the AWS CLI. When the agent starts, it will create a user called "ssm-user" with sudo or administrator privilege. Session Manager sessions will be launched in context of this user.
+SSM Agent also enables the Session Manager capability that lets you manage your Amazon EC2 instance through an interactive one-click browser-based shell or through the AWS CLI. The first time a Session Manager session is started on an instance, the agent will create a user called "ssm-user" with sudo or administrator privilege. Session Manager sessions will be launched in context of this user.
 
 ### Verify Requirements
 
