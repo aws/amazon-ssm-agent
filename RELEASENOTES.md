@@ -1,5 +1,15 @@
 Latest
 ===============
+- Fix bug in document parameter expansion
+- Fix datachannel to wait for empty message buffer before closing
+- Fix for hung Session Manager sessions
+- Fix for folder permission issue in domain join
+- Refactor identity handling
+- Update session plugin to pause reading when datachannel not actively sending data
+- Update ssm-user creation details in README.md
+
+3.0.655.0
+===============
 - Add feature to retain hostname during domain join
 - Add delay to pty start failure for session-worker
 - Add nil pointer check on shell command for session-worker
