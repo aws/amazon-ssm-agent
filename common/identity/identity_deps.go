@@ -50,7 +50,6 @@ type agentIdentityCacher struct {
 	region           string
 	availabilityZone string
 	instanceType     string
-	serviceDomain    string
 	creds            *credentials.Credentials
 	identityType     string
 	mutex            sync.Mutex

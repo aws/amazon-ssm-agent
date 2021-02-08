@@ -132,16 +132,11 @@ func (c* agentIdentityCacher) GetDefaultEndpoint(service string) string {
 	var region, serviceDomain string
 	var err error
 
-	if c.serviceDomain != "" {
-		return c.serviceDomain
-	}
-
 	if region, err = c.regionInner(); err != nil {
 		c.log.Warnf("failed to get region with err: %v", err)
 	}
 
 	serviceDomain, _ = c.client.ServiceDomain()
 
-	c.serviceDomain = endpoint.GetDefaultEndpoint(c.log, service, region, serviceDomain)
-	return c.serviceDomain
+	return endpoint.GetDefaultEndpoint(c.log, service, region, serviceDomain)
 }
