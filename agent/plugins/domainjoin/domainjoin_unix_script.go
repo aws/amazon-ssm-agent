@@ -158,8 +158,8 @@ check_awscli_install_dir() {
        echo "***Failed: AWS CLI install dir user is not root"
        exit 1
    fi
-   AWS_CLI_INSTALL_DIR_PERMISSIONS=$(echo $AWS_CLI_INSTALL_DIR_LS_LD | awk '{print $1}')
-   if echo $AWS_CLI_INSTALL_DIR_PERMISSIONS | grep "drwx------"; then
+   AWS_CLI_INSTALL_DIR_PERMISSIONS=$(echo $AWS_CLI_INSTALL_DIR_LS_LD | awk '{print $1}' | cut -c 5-)
+   if echo "$AWS_CLI_INSTALL_DIR_PERMISSIONS" | grep -e "------" ; then
        echo "Permissions check successful for AWS CLI install directory"
    else
        echo "***Failed: Wrong permissions for $AWS_CLI_INSTALL_DIR_PERMISSIONS"
