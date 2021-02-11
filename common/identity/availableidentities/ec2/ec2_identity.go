@@ -14,9 +14,12 @@
 package ec2
 
 import (
-	"github.com/aws/amazon-ssm-agent/common/identity/creds"
+	"time"
+
 	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/aws/credentials/ec2rolecreds"
 	"github.com/aws/aws-sdk-go/aws/ec2metadata"
+	"github.com/aws/aws-sdk-go/aws/session"
 )
 
 // InstanceID returns the managed instance id
@@ -52,9 +55,17 @@ func (i *Identity) ServiceDomain() (string, error) {
 	return i.Client.GetMetadata(ec2ServiceDomainResource)
 }
 
-// Credentials returns the managed instance credentials
+// Credentials returns the managed instance credentials.
+// Since credentials expire in about 6 hours, setting the ExpiryWindow to 5 hours
+// will trigger a refresh 5 hours before they actually expire. So the TTL of credentials
+// is reduced to about 1 hour to match EC2 assume role frequency.
 func (i *Identity) Credentials() *credentials.Credentials {
-	return creds.GetRemoteCreds()
+	provider := &ec2rolecreds.EC2RoleProvider{
+		Client:       ec2metadata.New(session.New()),
+		ExpiryWindow: time.Hour * 5,
+	}
+
+	return credentials.NewCredentials(provider)
 }
 
 // IsIdentityEnvironment returns if instance is a ec2 instance
