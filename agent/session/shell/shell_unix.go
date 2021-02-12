@@ -50,6 +50,7 @@ const (
 	catCmd                = "cat"
 	scriptFlag            = "-c"
 	homeEnvVariable       = "HOME=/home/"
+	rootHomeEnvVariable   = "HOME=/root"
 	groupsIdentifier      = "groups="
 )
 
@@ -139,6 +140,10 @@ func StartPty(
 		// Setting home environment variable for RunAs user
 		runAsUserHomeEnvVariable := homeEnvVariable + sessionUser
 		cmd.Env = append(cmd.Env, runAsUserHomeEnvVariable)
+	}
+
+	if shellProps.Linux.RunAsElevated {
+		cmd.Env = append(cmd.Env, rootHomeEnvVariable)
 	}
 
 	ptyFile, err = pty.Start(cmd)
