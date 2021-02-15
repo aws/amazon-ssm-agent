@@ -85,13 +85,6 @@ set_hostname() {
 }
 
 ##################################################
-## Get Region from Instance Metadata #############
-##################################################
-get_region() {
-    REGION=$(curl http://169.254.169.254/latest/dynamic/instance-identity/document 2>/dev/null | grep region | awk -F: '{ print $2 }' | tr -d '\", ')
-}
-
-##################################################
 ## Download AWS CLI zip file #####################
 ##################################################
 download_awscli_zipfile() {
@@ -623,6 +616,10 @@ for i in "$@"; do
     shift
 done
 
+if [ -z $REGION ]; then
+    echo "***Failed: No Region found" && exit 1
+fi
+
 # Deal with scenario where this script is run again after the domain is already joined.
 # We want to avoid rerunning as the set_hostname function can change the hostname of a server that is already
 # domain joined and cause a mismatch. 
@@ -639,9 +636,6 @@ if [ -z $KEEP_HOSTNAME ]; then
    set_hostname
 fi
 configure_hosts_file
-if [ -z $REGION ]; then
-    get_region
-fi
 
 MAX_RETRIES=8
 for i in $(seq 1 $MAX_RETRIES)

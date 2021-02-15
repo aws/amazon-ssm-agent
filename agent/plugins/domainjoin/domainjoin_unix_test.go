@@ -27,6 +27,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
+	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -160,8 +161,9 @@ func testRunCommands(t *testing.T, testCase TestCase, rawInput bool) {
 	}
 }
 
-// TestMakeArguments tests the makeArguments methods, which build up the command for domainJoin.exe
+// TestMakeArguments tests the makeArguments methods, which build up the command for aws_domainjoin.sh
 func TestMakeArguments(t *testing.T) {
+	contextMock := &context.Mock{}
 	context := context.NewMockDefault()
 	domainJoinInput := generateDomainJoinPluginInput(testDirectoryId, testDirectoryName, []string{"172.31.4.141", "172.31.21.240"})
 	commandRes, _ := makeArguments(context, "./aws_domainjoin.sh", domainJoinInput)
@@ -191,5 +193,15 @@ func TestMakeArguments(t *testing.T) {
 	domainJoinInput = generateDomainJoinPluginInputOptionalParamKeepHostName(testDirectoryId, testDirectoryName, []string{"172.31.4.141", "172.31.21.240"}, testKeepHostName)
 	commandRes, _ = makeArguments(context, "./aws_domainjoin.sh", domainJoinInput)
 	expected = "./aws_domainjoin.sh --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --dns-addresses 172.31.4.141,172.31.21.240 --keep-hostname  "
+	assert.Equal(t, expected, commandRes)
+
+	// If region is not set, the domain join plugin must fail
+	domainJoinInput = generateDomainJoinPluginInput(testDirectoryId, testDirectoryName, []string{"172.31.4.141", "172.31.21.240"})
+	identityMock := &identityMocks.IAgentIdentity{}
+	identityMock.On("Region").Return("", nil) // Remove region setting
+	contextMock.On("Identity").Return(identityMock)
+	contextMock.On("Log").Return(log.NewMockLog())
+	commandRes, _ = makeArguments(contextMock, "./aws_domainjoin.sh", domainJoinInput)
+	expected = ""
 	assert.Equal(t, expected, commandRes)
 }
