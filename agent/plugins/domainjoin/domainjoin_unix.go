@@ -265,16 +265,17 @@ func makeArguments(context context.T, scriptPath string, pluginInput DomainJoinP
 	buffer.WriteString(DirectoryNameArg)
 	buffer.WriteString(pluginInput.DirectoryName)
 
-	buffer.WriteString(InstanceRegionArg)
 	region, err := context.Identity().Region()
-	if err != nil {
+	if err != nil || region == "" {
 		return "", fmt.Errorf("cannot get the instance region information")
+	} else {
+		buffer.WriteString(InstanceRegionArg)
+		buffer.WriteString(region)
 	}
 
 	if isShellInjection(region) {
 		return "", fmt.Errorf("Shell command injection string " + region)
 	}
-	buffer.WriteString(region)
 
 	// check if user provides the directory OU parameter
 	if len(pluginInput.DirectoryOU) != 0 {
