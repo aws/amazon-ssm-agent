@@ -413,6 +413,8 @@ func TestIsServiceRunning(t *testing.T) {
 		{InstanceInfo{"us-east-1", PlatformRedHat, "6.5", "linux", "amd64", "tar.gz"}, true},
 		// test system with systemD
 		{InstanceInfo{"us-east-1", PlatformRedHat, "7.1", "linux", "amd64", "tar.gz"}, true},
+		// test system for mac os
+		{InstanceInfo{"us-east-1", PlatformDarwin, "-", "darwin", "amd64", "tar.gz"}, true},
 	}
 
 	// Stub exec.Command
@@ -433,6 +435,8 @@ func TestIsServiceRunningWithErrorMessageFromCommandExec(t *testing.T) {
 		{InstanceInfo{"us-east-1", PlatformRedHat, "6.5", "linux", "amd64", "tar.gz"}},
 		// test system with systemD
 		{InstanceInfo{"us-east-1", PlatformRedHat, "7.1", "linux", "amd64", "tar.gz"}},
+		// test system for mac os
+		{InstanceInfo{"us-east-1", PlatformDarwin, "-", "darwin", "amd64", "tar.gz"}},
 	}
 
 	// Stub exec.Command
