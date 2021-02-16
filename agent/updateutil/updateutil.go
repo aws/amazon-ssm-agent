@@ -677,6 +677,15 @@ func (util *Utility) IsServiceRunning(log log.T, i *InstanceInfo) (result bool, 
 	commandOutput := []byte{}
 	expectedOutput := ""
 	isSystemD := false
+	isDarwin := false
+
+	// For mac OS check the running processes
+	isDarwin = i.IsPlatformDarwin()
+	var allProcesses []executor.OsProcess
+	if util.ProcessExecutor == nil {
+		util.ProcessExecutor = executor.NewProcessExecutor(log)
+	}
+
 	// isSystemD will always be false for Windows
 	if isSystemD, err = i.IsPlatformUsingSystemD(log); err != nil {
 		return false, err
@@ -688,6 +697,16 @@ func (util *Utility) IsServiceRunning(log log.T, i *InstanceInfo) (result bool, 
 			//test snap service enabled
 			if commandOutput, err = execCommand("systemctl", "status", "snap.amazon-ssm-agent.amazon-ssm-agent.service").Output(); err != nil {
 				return false, err
+			}
+		}
+	} else if isDarwin {
+		expectedOutput = "/opt/aws/ssm/bin/amazon-ssm-agent"
+		if allProcesses, err = util.ProcessExecutor.Processes(); err != nil {
+			return false, err
+		}
+		for _, process := range allProcesses {
+			if process.Executable == expectedOutput {
+				return true, nil
 			}
 		}
 	} else {
@@ -850,6 +869,11 @@ func (i *InstanceInfo) IsPlatformUsingSystemD(log log.T) (result bool, err error
 	}
 
 	return false, nil
+}
+
+//IsPlatformDarwin returns true for Mac OS
+func (i *InstanceInfo) IsPlatformDarwin() (result bool) {
+	return 0 == strings.Compare(i.Platform, PlatformMacOsX)
 }
 
 func getMinimumVersionForSystemD() (systemDMap *map[string]string) {
