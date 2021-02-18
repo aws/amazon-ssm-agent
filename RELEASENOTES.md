@@ -1,5 +1,10 @@
 Latest
 ===============
+- Fix fallback logic for MGS endpoint generation
+- Fix regional endpoint generation
+
+3.0.732.0
+===============
 - Fix bug in document parameter expansion
 - Fix datachannel to wait for empty message buffer before closing
 - Fix for hung Session Manager sessions
