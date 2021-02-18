@@ -19,6 +19,8 @@ package rip
 import (
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/log"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/stretchr/testify/assert"
@@ -57,6 +59,7 @@ func TestGetMgsEndpointForKnownAwsRegion(t *testing.T) {
 func TestGetMgsEndpointForKnownAwsCnRegion(t *testing.T) {
 	contextMock := &context.Mock{}
 	contextMock.On("AppConfig").Return(appconfig.SsmagentConfig{})
+	contextMock.On("Log").Return(log.NewMockLog())
 	endpoint := GetMgsEndpoint(contextMock, "cn-northwest-1")
 
 	expected := MgsServiceName + ".cn-northwest-1.amazonaws.com.cn"
