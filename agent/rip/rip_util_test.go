@@ -19,22 +19,47 @@ package rip
 import (
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
-
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestGetMgsEndpointForUnknownRegion(t *testing.T) {
-	endpoint := endpoint.GetDefaultEndpoint(log.NewMockLog(), MgsServiceName, "unknown-region", "")
-	expected := ""
+	region := "unknown-region"
+	expected := MgsServiceName + "." + region + ".amazonaws.com"
+
+	contextMock := context.NewMockDefault()
+	endpoint := GetDefaultServiceEndpoint(contextMock, region, MgsServiceName)
 
 	assert.Equal(t, expected, endpoint)
 }
 
 func TestGetMgsEndpointForCnRegion(t *testing.T) {
-	endpoint := endpoint.GetDefaultEndpoint(log.NewMockLog(), MgsServiceName, "cn-north-1", "")
-	expected := MgsServiceName + ".cn-north-1.amazonaws.com.cn"
+	region := "cn-north-1"
+	expected := MgsServiceName + "." + region + ".amazonaws.com.cn"
+
+	contextMock := context.NewMockDefault()
+	endpoint := GetDefaultServiceEndpoint(contextMock, region, MgsServiceName)
+
+	assert.Equal(t, expected, endpoint)
+}
+
+func TestGetMgsEndpointForKnownAwsRegion(t *testing.T) {
+	contextMock := &context.Mock{}
+	contextMock.On("AppConfig").Return(appconfig.SsmagentConfig{})
+	endpoint := GetMgsEndpoint(contextMock, "us-east-1")
+
+	expected := MgsServiceName + ".us-east-1.amazonaws.com"
+
+	assert.Equal(t, expected, endpoint)
+}
+
+func TestGetMgsEndpointForKnownAwsCnRegion(t *testing.T) {
+	contextMock := &context.Mock{}
+	contextMock.On("AppConfig").Return(appconfig.SsmagentConfig{})
+	endpoint := GetMgsEndpoint(contextMock, "cn-northwest-1")
+
+	expected := MgsServiceName + ".cn-northwest-1.amazonaws.com.cn"
 
 	assert.Equal(t, expected, endpoint)
 }

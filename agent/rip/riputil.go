@@ -20,6 +20,7 @@ import (
 	"net/url"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
 )
 
 const (
@@ -72,7 +73,17 @@ func GetMgsEndpoint(context context.T, region string) (mgsEndpoint string) {
 		return mgsEndpoint
 	}
 
-	mgsEndpoint = context.Identity().GetDefaultEndpoint(MgsServiceName)
+	mgsEndpoint = GetDefaultServiceEndpoint(context, region, MgsServiceName)
 
 	return mgsEndpoint
+}
+
+// GetDefaultServiceEndpoint returns the default endpoint for a service, it should not be empty.
+func GetDefaultServiceEndpoint(context context.T, region, service string) (defaultEndpoint string) {
+	defaultEndpoint = endpoint.GetDefaultEndpoint(context.Log(), service, region, "")
+	if defaultEndpoint != "" {
+		return
+	}
+
+	return service + "." + region + ".amazonaws.com"
 }
