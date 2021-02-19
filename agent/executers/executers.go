@@ -30,13 +30,16 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 )
 
 const (
 	// envVar* constants are names of environment variables set for processes executed by ssm agent and should start with AWS_SSM_
-	envVarInstanceID = "AWS_SSM_INSTANCE_ID"
-	envVarRegionName = "AWS_SSM_REGION_NAME"
+	envVarInstanceID      = "AWS_SSM_INSTANCE_ID"
+	envVarRegionName      = "AWS_SSM_REGION_NAME"
+	envVarPlatformName    = "AWS_SSM_PLATFORM_NAME"
+	envVarPlatformVersion = "AWS_SSM_PLATFORM_VERSION"
 )
 
 // T is the interface type for ShellCommandExecuter.
@@ -453,7 +456,9 @@ func killProcessOnCancel(log log.T, command *exec.Cmd, cancelStdout chan bool, c
 
 // prepareEnvironment adds ssm agent standard environment variables or environment variables defined by customer/other plugins to the command
 func prepareEnvironment(context context.T, command *exec.Cmd, envVars map[string]string) {
+	log := context.Log()
 	env := os.Environ()
+
 	for key, val := range envVars {
 		env = append(env, fmtEnvVariable(key, val))
 	}
@@ -462,6 +467,16 @@ func prepareEnvironment(context context.T, command *exec.Cmd, envVars map[string
 	}
 	if region, err := context.Identity().Region(); err == nil {
 		env = append(env, fmtEnvVariable(envVarRegionName, region))
+	}
+	if platformName, err := platform.PlatformName(log); err == nil {
+		env = append(env, fmtEnvVariable(envVarPlatformName, platformName))
+	} else {
+		log.Warnf("There was an error retrieving the platformName while setting the environment variables: %v", err)
+	}
+	if platformVersion, err := platform.PlatformVersion(log); err == nil {
+		env = append(env, fmtEnvVariable(envVarPlatformVersion, platformVersion))
+	} else {
+		log.Warnf("There was an error retrieving the platformVersion while setting the environment variables: %v", err)
 	}
 	command.Env = env
 
