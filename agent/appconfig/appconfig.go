@@ -92,7 +92,8 @@ func getAppConfigPath() (path string, err error) {
 func DefaultConfig() SsmagentConfig {
 
 	var credsProfile = CredentialProfile{
-		ShareCreds: true,
+		ShareCreds:        true,
+		KeyAutoRotateDays: defaultProfileKeyAutoRotateDays,
 	}
 	var s3 S3Cfg
 	var mds = MdsCfg{

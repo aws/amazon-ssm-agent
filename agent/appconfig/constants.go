@@ -114,6 +114,10 @@ const (
 	defaultLongRunningWorkerMonitorIntervalSecondsMin = 30
 	defaultLongRunningWorkerMonitorIntervalSecondsMax = 1800
 
+	defaultProfileKeyAutoRotateDays    = 0
+	defaultProfileKeyAutoRotateDaysMin = 0
+	defaultProfileKeyAutoRotateDaysMax = 365
+
 	// Permissions defaults
 	//NOTE: Limit READ, WRITE and EXECUTE access to administrators/root.
 	ReadWriteAccess        = 0600

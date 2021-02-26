@@ -16,9 +16,6 @@ package onprem
 import (
 	"fmt"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/onprem/rsaauth"
-	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 )
 
@@ -48,24 +45,16 @@ func (i *Identity) Credentials() *credentials.Credentials {
 	shareLock.Lock()
 	defer shareLock.Unlock()
 
-	agentConfig, _ := appconfig.Config(true)
-	shareCreds = agentConfig.Profile.ShareCreds
-	shareProfile = agentConfig.Profile.ShareProfile
-
+	shareCreds = i.Config.Profile.ShareCreds
+	shareProfile = i.Config.Profile.ShareProfile
 	if i.credentialsSingleton == nil {
-		instanceID := managedInstance.InstanceID(i.Log)
-		region := managedInstance.Region(i.Log)
-		privateKey := managedInstance.PrivateKey(i.Log)
-
-		// Service domain not available for onprem without querying ec2 metadata
-		defaultEndpoint := endpoint.GetDefaultEndpoint(i.Log, "ssm", region, "")
-
 		p := &managedInstancesRoleProvider{
-			Log:          i.Log,
-			Client:       rsaauth.NewRsaService(i.Log, i.Config, instanceID, region, defaultEndpoint, privateKey),
+			log:          i.Log.WithContext("[OnPremCreds]"),
+			config:       i.Config,
 			ExpiryWindow: EarlyExpiryTimeWindow,
-			SsmConfig:    i.Config,
 		}
+
+		p.InitializeClient(managedInstance.PrivateKey(i.Log))
 
 		i.credentialsSingleton = credentials.NewCredentials(p)
 	}

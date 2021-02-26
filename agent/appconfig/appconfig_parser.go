@@ -23,6 +23,13 @@ import (
 func parser(config *SsmagentConfig) {
 	log.Printf("processing appconfig overrides")
 
+	// Agent creds profile
+	config.Profile.KeyAutoRotateDays = getNumericValue(
+		config.Profile.KeyAutoRotateDays,
+		defaultProfileKeyAutoRotateDaysMin,
+		defaultProfileKeyAutoRotateDaysMax,
+		defaultProfileKeyAutoRotateDays)
+
 	// Agent config
 	config.Agent.Name = getStringValue(config.Agent.Name, DefaultAgentName)
 	config.Agent.OrchestrationRootDir = getStringValue(config.Agent.OrchestrationRootDir, defaultOrchestrationRootDirName)

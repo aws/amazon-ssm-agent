@@ -71,8 +71,7 @@ func start(log logger.T, instanceIDPtr *string, regionPtr *string, shouldCheckHi
 		return nil, err
 	}
 
-	context := context.Default(log, config, agentIdentity)
-	context = context.With("[ssm-agent-worker]")
+	context := context.Default(log, config, agentIdentity, "[ssm-agent-worker]")
 
 	//Reset password for default RunAs user if already exists
 	sessionUtil := &utility.SessionUtil{}
@@ -166,6 +165,7 @@ func blockUntilSignaled(log logger.T) {
 
 // Run as a single process. Used by Unix systems and when running agent from console.
 func run(log logger.T, shouldCheckHibernation bool) {
+	log = log.WithContext("[ssm-agent-worker]")
 	defer func() {
 		// recover in case the agent panics
 		// this should handle some kind of seg fault errors.

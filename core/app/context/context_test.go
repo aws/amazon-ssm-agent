@@ -38,7 +38,7 @@ func TestCreateContext(t *testing.T) {
 }
 
 func TestWithContext(t *testing.T) {
-	logger := log.NewMockLog()
+	logger := &log.Mock{}
 	instanceId := "i-1234567890"
 	ssmAppconfig := &appconfig.SsmagentConfig{}
 
@@ -51,9 +51,9 @@ func TestWithContext(t *testing.T) {
 	assert.Equal(t, context.AppConfig(), ssmAppconfig)
 	assert.Equal(t, context.Identity(), agentIdentity)
 
-	loggerNew := log.NewMockLog()
+	loggerNew := &log.Mock{}
 	logger.On("WithContext", []string{"test context"}).Return(loggerNew)
 
-	context = context.With("test context")
-	assert.Equal(t, context.Log(), loggerNew)
+	newContext := context.With("test context")
+	assert.Equal(t, newContext.Log(), loggerNew)
 }

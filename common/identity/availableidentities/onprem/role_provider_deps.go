@@ -18,19 +18,25 @@ package onprem
 import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
+	"github.com/cenkalti/backoff"
 )
 
 // dependency for managed instance registration
 var managedInstance instanceRegistration = instanceInfo{}
 
+var backoffRetry = backoff.Retry
+
 type instanceRegistration interface {
 	InstanceID(log.T) string
 	Region(log.T) string
 	PrivateKey(log.T) string
+	PrivateKeyType(log log.T) string
 	Fingerprint(log.T) (string, error)
 	GenerateKeyPair() (string, string, string, error)
 	UpdatePrivateKey(log.T, string, string) error
 	HasManagedInstancesCredentials(log.T) bool
+	GeneratePublicKey(string) (string, error)
+	ShouldRotatePrivateKey(log.T, int, bool) (bool, error)
 }
 
 type instanceInfo struct{}
@@ -43,6 +49,9 @@ func (instanceInfo) Region(log log.T) string { return registration.Region(log) }
 
 // PrivateKey returns the managed instance PrivateKey
 func (instanceInfo) PrivateKey(log log.T) string { return registration.PrivateKey(log) }
+
+// PrivateKey returns the managed instance PrivateKey
+func (instanceInfo) PrivateKeyType(log log.T) string { return registration.PrivateKeyType(log) }
 
 // Fingerprint returns the managed instance fingerprint
 func (instanceInfo) Fingerprint(log log.T) (string, error) { return registration.Fingerprint(log) }
@@ -60,4 +69,14 @@ func (instanceInfo) UpdatePrivateKey(log log.T, privateKey, privateKeyType strin
 // HasManagedInstanceCredentials returns if the instance has registration
 func (instanceInfo) HasManagedInstancesCredentials(log log.T) bool {
 	return registration.HasManagedInstancesCredentials(log)
+}
+
+// ShouldRotatePrivateKey returns true of the age of the private key is greater or equal than argument.
+func (instanceInfo) ShouldRotatePrivateKey(log log.T, privateKeyMaxDaysAge int, serviceSaysRotate bool) (bool, error) {
+	return registration.ShouldRotatePrivateKey(log, privateKeyMaxDaysAge, serviceSaysRotate)
+}
+
+// GeneratePublicKey generate the public key of a provided private key
+func (instanceInfo) GeneratePublicKey(privateKey string) (string, error) {
+	return registration.GeneratePublicKey(privateKey)
 }
