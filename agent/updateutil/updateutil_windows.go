@@ -17,7 +17,6 @@
 package updateutil
 
 import (
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -25,6 +24,8 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
+	"golang.org/x/sys/windows/svc"
+	"golang.org/x/sys/windows/svc/mgr"
 )
 
 const (
@@ -92,35 +93,29 @@ var getPlatformSku = platform.PlatformSku
 func prepareProcess(command *exec.Cmd) {
 }
 
-func agentStatusOutput(log log.T) (output []byte, err error) {
-	pathValues := strings.Split(os.Getenv("Path"), ";")
-	scm := "sc"
+func isAgentServiceRunning(log log.T) (bool, error) {
 	serviceName := "AmazonSSMAgent"
-	commandOption := "query"
-	output, err = execCommand(scm, commandOption, serviceName).Output()
-	if err != nil {
-		for _, path := range pathValues {
-			files, fileErr := ioutil.ReadDir(path)
-			if fileErr != nil {
-				continue
-			}
-			for _, file := range files {
-				if strings.ToLower(file.Name()) == (scm + ".exe") {
-					output, err = execCommand(filepath.Join(path, scm), commandOption, serviceName).Output()
-					if err != nil {
-						log.Errorf("error executing sc.exe in path %v with err %s", path, err)
-						continue
-					}
-					return
-				}
-			}
-		}
-	}
-	return
-}
+	expectedState := svc.Running
 
-func agentExpectedStatus() string {
-	return "RUNNING"
+	manager, err := mgr.Connect()
+	if err != nil {
+		log.Warnf("Cannot connect to service manager: %v", err)
+		return false, err
+	}
+	defer manager.Disconnect()
+
+	service, err := manager.OpenService(serviceName)
+	if err != nil {
+		log.Warnf("Cannot open agent service: %v", err)
+		return false, err
+	}
+	serviceStatus, err := service.Query()
+	if err != nil {
+		log.Warnf("Cannot query agent service: %v", err)
+		return false, err
+	}
+
+	return serviceStatus.State == expectedState, err
 }
 
 func setPlatformSpecificCommand(parts []string) []string {

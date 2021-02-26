@@ -704,6 +704,8 @@ func (util *Utility) IsServiceRunning(log log.T, i *InstanceInfo) (result bool, 
 				return false, err
 			}
 		}
+		agentStatus := strings.TrimSpace(string(commandOutput))
+		return strings.Contains(agentStatus, expectedOutput), nil
 	} else if isDarwin {
 		expectedOutput = "/opt/aws/ssm/bin/amazon-ssm-agent"
 		if allProcesses, err = util.ProcessExecutor.Processes(); err != nil {
@@ -714,19 +716,10 @@ func (util *Utility) IsServiceRunning(log log.T, i *InstanceInfo) (result bool, 
 				return true, nil
 			}
 		}
-	} else {
-		expectedOutput = agentExpectedStatus()
-		if commandOutput, err = agentStatusOutput(log); err != nil {
-			return false, err
-		}
+		return false, nil
 	}
 
-	agentStatus := strings.TrimSpace(string(commandOutput))
-	if strings.Contains(agentStatus, expectedOutput) {
-		return true, nil
-	}
-
-	return false, nil
+	return isAgentServiceRunning(log)
 }
 
 // IsWorkerRunning returns true if ssm-agent-worker running

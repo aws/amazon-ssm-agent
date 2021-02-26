@@ -18,6 +18,7 @@ package updateutil
 
 import (
 	"os/exec"
+	"strings"
 	"syscall"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -87,12 +88,14 @@ func prepareProcess(command *exec.Cmd) {
 	command.SysProcAttr = &syscall.SysProcAttr{Setpgid: true}
 }
 
-func agentStatusOutput(log log.T) ([]byte, error) {
-	return execCommand("status", "amazon-ssm-agent").Output()
-}
+func isAgentServiceRunning(log log.T) (bool, error) {
+	serviceStatus, err := execCommand("status", "amazon-ssm-agent").Output()
+	if err != nil {
+		return false, err
+	}
 
-func agentExpectedStatus() string {
-	return "amazon-ssm-agent start/running"
+	agentStatus := strings.TrimSpace(string(serviceStatus))
+	return strings.Contains(agentStatus, "amazon-ssm-agent start/running"), nil
 }
 
 func setPlatformSpecificCommand(parts []string) []string {
