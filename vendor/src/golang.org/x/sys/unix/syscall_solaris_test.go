@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+//go:build solaris
 // +build solaris
 
 package unix_test
@@ -31,4 +32,12 @@ func TestStatvfs(t *testing.T) {
 			t.Logf("mount: %s", mount)
 		}
 	}
+}
+
+func TestSysconf(t *testing.T) {
+	n, err := unix.Sysconf(3 /* SC_CLK_TCK */)
+	if err != nil {
+		t.Fatalf("Sysconf: %v", err)
+	}
+	t.Logf("Sysconf(SC_CLK_TCK) = %d", n)
 }

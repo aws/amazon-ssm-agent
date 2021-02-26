@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+//go:build ignore
 // +build ignore
 
 /*
@@ -86,15 +87,13 @@ func parseParam(p string) Param {
 }
 
 func main() {
-	// Get the OS and architecture (using GOARCH_TARGET if it exists)
-	goos := os.Getenv("GOOS")
+	goos := os.Getenv("GOOS_TARGET")
+	if goos == "" {
+		goos = os.Getenv("GOOS")
+	}
 	if goos == "" {
 		fmt.Fprintln(os.Stderr, "GOOS not defined in environment")
 		os.Exit(1)
-	}
-	goarch := os.Getenv("GOARCH_TARGET")
-	if goarch == "" {
-		goarch = os.Getenv("GOARCH")
 	}
 
 	// Check that we are using the Docker-based build system if we should
@@ -121,7 +120,7 @@ func main() {
 	}
 
 	libc := false
-	if goos == "darwin" && (strings.Contains(buildTags(), ",go1.12") || strings.Contains(buildTags(), ",go1.13")) {
+	if goos == "darwin" {
 		libc = true
 	}
 	trampolines := map[string]bool{}
@@ -136,27 +135,20 @@ func main() {
 		s := bufio.NewScanner(file)
 		for s.Scan() {
 			t := s.Text()
-			t = strings.TrimSpace(t)
-			t = regexp.MustCompile(`\s+`).ReplaceAllString(t, ` `)
-			nonblock := regexp.MustCompile(`^\/\/sysnb `).FindStringSubmatch(t)
-			if regexp.MustCompile(`^\/\/sys `).FindStringSubmatch(t) == nil && nonblock == nil {
+			nonblock := regexp.MustCompile(`^\/\/sysnb\t`).FindStringSubmatch(t)
+			if regexp.MustCompile(`^\/\/sys\t`).FindStringSubmatch(t) == nil && nonblock == nil {
 				continue
 			}
 
 			// Line must be of the form
 			//	func Open(path string, mode int, perm int) (fd int, errno error)
 			// Split into name, in params, out params.
-			f := regexp.MustCompile(`^\/\/sys(nb)? (\w+)\(([^()]*)\)\s*(?:\(([^()]+)\))?\s*(?:=\s*((?i)SYS_[A-Z0-9_]+))?$`).FindStringSubmatch(t)
+			f := regexp.MustCompile(`^\/\/sys(nb)?\t(\w+)\(([^()]*)\)\s*(?:\(([^()]+)\))?\s*(?:=\s*((?i)SYS_[A-Z0-9_]+))?$`).FindStringSubmatch(t)
 			if f == nil {
 				fmt.Fprintf(os.Stderr, "%s:%s\nmalformed //sys declaration\n", path, t)
 				os.Exit(1)
 			}
 			funct, inps, outps, sysname := f[2], f[3], f[4], f[5]
-
-			// ClockGettime doesn't have a syscall number on Darwin, only generate libc wrappers.
-			if goos == "darwin" && !libc && funct == "ClockGettime" {
-				continue
-			}
 
 			// Split argument lists on comma.
 			in := parseParamList(inps)
@@ -370,7 +362,6 @@ func main() {
 				text += fmt.Sprintf("func libc_%s_trampoline()\n", libcFn)
 				// Assembly trampoline calls the libc_* function, which this magic
 				// redirects to use the function from libSystem.
-				text += fmt.Sprintf("//go:linkname libc_%s libc_%s\n", libcFn, libcFn)
 				text += fmt.Sprintf("//go:cgo_import_dynamic libc_%s %s \"/usr/lib/libSystem.B.dylib\"\n", libcFn, libcFn)
 				text += "\n"
 			}

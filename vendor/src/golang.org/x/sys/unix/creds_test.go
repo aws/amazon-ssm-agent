@@ -2,13 +2,13 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+//go:build linux
 // +build linux
 
 package unix_test
 
 import (
 	"bytes"
-	"go/build"
 	"net"
 	"os"
 	"testing"
@@ -35,11 +35,6 @@ func TestSCMCredentials(t *testing.T) {
 	}
 
 	for _, tt := range socketTypeTests {
-		if tt.socketType == unix.SOCK_DGRAM && !atLeast1p10() {
-			t.Log("skipping DGRAM test on pre-1.10")
-			continue
-		}
-
 		fds, err := unix.Socketpair(unix.AF_LOCAL, tt.socketType, 0)
 		if err != nil {
 			t.Fatalf("Socketpair: %v", err)
@@ -121,14 +116,4 @@ func TestSCMCredentials(t *testing.T) {
 			t.Fatalf("ParseUnixCredentials = %+v, want %+v", newUcred, ucred)
 		}
 	}
-}
-
-// atLeast1p10 reports whether we are running on Go 1.10 or later.
-func atLeast1p10() bool {
-	for _, ver := range build.Default.ReleaseTags {
-		if ver == "go1.10" {
-			return true
-		}
-	}
-	return false
 }

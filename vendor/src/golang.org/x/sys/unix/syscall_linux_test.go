@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+//go:build linux
 // +build linux
 
 package unix_test
@@ -13,6 +14,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
+	"path/filepath"
 	"runtime"
 	"runtime/debug"
 	"strconv"
@@ -71,6 +73,22 @@ func TestIoctlGetRTCTime(t *testing.T) {
 	}
 
 	t.Logf("RTC time: %04d-%02d-%02d %02d:%02d:%02d", v.Year+1900, v.Mon+1, v.Mday, v.Hour, v.Min, v.Sec)
+}
+
+func TestIoctlGetRTCWkAlrm(t *testing.T) {
+	f, err := os.Open("/dev/rtc0")
+	if err != nil {
+		t.Skipf("skipping test, %v", err)
+	}
+	defer f.Close()
+
+	v, err := unix.IoctlGetRTCWkAlrm(int(f.Fd()))
+	if err != nil {
+		t.Fatalf("failed to perform ioctl: %v", err)
+	}
+
+	t.Logf("RTC wake alarm enabled '%d'; time: %04d-%02d-%02d %02d:%02d:%02d",
+		v.Enabled, v.Time.Year+1900, v.Time.Mon+1, v.Time.Mday, v.Time.Hour, v.Time.Min, v.Time.Sec)
 }
 
 func TestPpoll(t *testing.T) {
@@ -217,9 +235,12 @@ func TestPselect(t *testing.T) {
 	}
 
 	dur := 2500 * time.Microsecond
-	ts := unix.NsecToTimespec(int64(dur))
 	var took time.Duration
 	for {
+		// On some platforms (e.g. Linux), the passed-in timespec is
+		// updated by pselect(2). Make sure to reset to the full
+		// duration in case of an EINTR.
+		ts := unix.NsecToTimespec(int64(dur))
 		start := time.Now()
 		n, err := unix.Pselect(0, nil, nil, nil, &ts, nil)
 		took = time.Since(start)
@@ -235,8 +256,10 @@ func TestPselect(t *testing.T) {
 		break
 	}
 
-	if took < dur {
-		t.Errorf("Pselect: timeout should have been at least %v, got %v", dur, took)
+	// On some builder the actual timeout might also be slightly less than the requested.
+	// Add an acceptable margin to avoid flaky tests.
+	if took < dur*2/3 {
+		t.Errorf("Pselect: got %v timeout, expected at least %v", took, dur)
 	}
 }
 
@@ -712,5 +735,153 @@ func TestTimerfd(t *testing.T) {
 		}
 
 		count += *(*uint64)(unsafe.Pointer(&buffer))
+	}
+}
+
+func TestOpenat2(t *testing.T) {
+	how := &unix.OpenHow{
+		Flags: unix.O_RDONLY,
+	}
+	fd, err := unix.Openat2(unix.AT_FDCWD, ".", how)
+	if err != nil {
+		if err == unix.ENOSYS || err == unix.EPERM {
+			t.Skipf("openat2: %v (old kernel? need Linux >= 5.6)", err)
+		}
+		t.Fatalf("openat2: %v", err)
+	}
+	if err := unix.Close(fd); err != nil {
+		t.Fatalf("close: %v", err)
+	}
+
+	// prepare
+	tempDir, err := ioutil.TempDir("", t.Name())
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer os.RemoveAll(tempDir)
+
+	subdir := filepath.Join(tempDir, "dir")
+	if err := os.Mkdir(subdir, 0755); err != nil {
+		t.Fatal(err)
+	}
+	symlink := filepath.Join(subdir, "symlink")
+	if err := os.Symlink("../", symlink); err != nil {
+		t.Fatal(err)
+	}
+
+	dirfd, err := unix.Open(subdir, unix.O_RDONLY, 0)
+	if err != nil {
+		t.Fatalf("open(%q): %v", subdir, err)
+	}
+	defer unix.Close(dirfd)
+
+	// openat2 with no extra flags -- should succeed
+	fd, err = unix.Openat2(dirfd, "symlink", how)
+	if err != nil {
+		t.Errorf("Openat2 should succeed, got %v", err)
+	}
+	if err := unix.Close(fd); err != nil {
+		t.Fatalf("close: %v", err)
+	}
+
+	// open with RESOLVE_BENEATH, should result in EXDEV
+	how.Resolve = unix.RESOLVE_BENEATH
+	fd, err = unix.Openat2(dirfd, "symlink", how)
+	if err == nil {
+		if err := unix.Close(fd); err != nil {
+			t.Fatalf("close: %v", err)
+		}
+	}
+	if err != unix.EXDEV {
+		t.Errorf("Openat2 should fail with EXDEV, got %v", err)
+	}
+}
+
+func TestIoctlFileDedupeRange(t *testing.T) {
+	f1, err := ioutil.TempFile("", t.Name())
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer f1.Close()
+	defer os.Remove(f1.Name())
+
+	// Test deduplication with two blocks of zeros
+	data := make([]byte, 4096)
+
+	for i := 0; i < 2; i += 1 {
+		_, err = f1.Write(data)
+		if err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	f2, err := ioutil.TempFile("", t.Name())
+	if err != nil {
+		t.Fatal(err)
+	}
+	defer f2.Close()
+	defer os.Remove(f2.Name())
+
+	for i := 0; i < 2; i += 1 {
+		// Make the 2nd block different
+		if i == 1 {
+			data[1] = 1
+		}
+
+		_, err = f2.Write(data)
+		if err != nil {
+			t.Fatal(err)
+		}
+	}
+
+	dedupe := unix.FileDedupeRange{
+		Src_offset: uint64(0),
+		Src_length: uint64(4096),
+		Info: []unix.FileDedupeRangeInfo{
+			unix.FileDedupeRangeInfo{
+				Dest_fd:     int64(f2.Fd()),
+				Dest_offset: uint64(0),
+			},
+			unix.FileDedupeRangeInfo{
+				Dest_fd:     int64(f2.Fd()),
+				Dest_offset: uint64(4096),
+			},
+		}}
+
+	err = unix.IoctlFileDedupeRange(int(f1.Fd()), &dedupe)
+	if err == unix.EOPNOTSUPP || err == unix.EINVAL || err == unix.ENOTTY {
+		t.Skip("deduplication not supported on this filesystem")
+	} else if err != nil {
+		t.Fatal(err)
+	}
+
+	// The first Info should be equal
+	if dedupe.Info[0].Status < 0 {
+		errno := unix.Errno(-dedupe.Info[0].Status)
+		if errno == unix.EINVAL {
+			t.Skip("deduplication not supported on this filesystem")
+		}
+		t.Errorf("Unexpected error in FileDedupeRange: %s", unix.ErrnoName(errno))
+	} else if dedupe.Info[0].Status == unix.FILE_DEDUPE_RANGE_DIFFERS {
+		t.Errorf("Unexpected different bytes in FileDedupeRange")
+	}
+	if dedupe.Info[0].Bytes_deduped != 4096 {
+		t.Errorf("Unexpected amount of bytes deduped %v != %v",
+			dedupe.Info[0].Bytes_deduped, 4096)
+	}
+
+	// The second Info should be different
+	if dedupe.Info[1].Status < 0 {
+		errno := unix.Errno(-dedupe.Info[1].Status)
+		if errno == unix.EINVAL {
+			t.Skip("deduplication not supported on this filesystem")
+		}
+		t.Errorf("Unexpected error in FileDedupeRange: %s", unix.ErrnoName(errno))
+	} else if dedupe.Info[1].Status == unix.FILE_DEDUPE_RANGE_SAME {
+		t.Errorf("Unexpected equal bytes in FileDedupeRange")
+	}
+	if dedupe.Info[1].Bytes_deduped != 0 {
+		t.Errorf("Unexpected amount of bytes deduped %v != %v",
+			dedupe.Info[1].Bytes_deduped, 0)
 	}
 }
