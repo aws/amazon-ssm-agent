@@ -66,11 +66,18 @@ func mark(s string) string {
 	return startMarker + s + endMarker
 }
 
-// decoupling exec.Command for easy testability
+// decoupling for easy testability
 var cmdExecutor = executeCommand
+var checkCommandExists = commandExists
 
 func executeCommand(command string, args ...string) ([]byte, error) {
 	return exec.Command(command, args...).CombinedOutput()
+}
+
+// returns true if the command is available on the instance
+func commandExists(cmd string) bool {
+	_, err := exec.LookPath(cmd)
+	return err == nil
 }
 
 func platformInfoProvider(log log.T) (name string, err error) {
@@ -81,18 +88,26 @@ func platformInfoProvider(log log.T) (name string, err error) {
 func collectPlatformDependentApplicationData(context context.T) (appData []model.ApplicationData) {
 
 	var err error
+	var cmd string
+	var args []string
+
 	log := context.Log()
 
-	args := []string{dpkgArgsToGetAllApplications, dpkgQueryFormat}
-	cmd := dpkgCmd
-	// try dpkg first, if any error occurs, use rpm
-	if appData, err = getApplicationData(context, cmd, args); err != nil {
-		log.Info("Getting applications information using dpkg failed, trying rpm now")
+	if checkCommandExists(dpkgCmd) {
+		cmd = dpkgCmd
+		args = []string{dpkgArgsToGetAllApplications, dpkgQueryFormat}
+	} else if checkCommandExists(rpmCmd) {
 		cmd = rpmCmd
 		args = []string{rpmCmdArgToGetAllApplications, rpmQueryFormat, rpmQueryFormatArgs}
-		if appData, err = getApplicationData(context, cmd, args); err != nil {
-			log.Errorf("Unable to detect package manager - hence no inventory data for %v", GathererName)
-		}
+	} else {
+		log.Errorf("Unable to detect package manager - hence no inventory data for %v", GathererName)
+		return
+	}
+
+	log.Infof("Using '%s' to gather application information", cmd)
+	if appData, err = getApplicationData(context, cmd, args); err != nil {
+		log.Errorf("Failed to gather inventory data for %v: %v", GathererName, err)
+		return
 	}
 
 	// Due to ubuntu 18 use snap, so add getApplicationData here

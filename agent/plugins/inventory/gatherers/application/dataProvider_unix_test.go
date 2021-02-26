@@ -143,15 +143,6 @@ func MockTestExecutorWithoutError(command string, args ...string) ([]byte, error
 
 var i = 0
 
-// cmdExecutor returns error first (dpkg) and returns some valid result (rpm)
-func MockTestExecutorWithAndWithoutError(command string, args ...string) ([]byte, error) {
-	if i == 0 {
-		i++
-		return MockTestExecutorWithError(command, args...)
-	}
-	return MockTestExecutorWithoutError(command, args...)
-}
-
 func TestConvertToApplicationData(t *testing.T) {
 	data, err := convertToApplicationData(sampleData)
 
@@ -200,19 +191,39 @@ func TestParseSnapOutput(t *testing.T) {
 
 func TestCollectApplicationData(t *testing.T) {
 	mockContext := context.NewMockDefault()
+	oldCheckCmd := checkCommandExists
+	defer func() { checkCommandExists = oldCheckCmd }()
 
-	// both dpkg and rpm return result without error
+	// test with finding dpkg
+	checkCommandExists = func(string) bool { return true }
 	cmdExecutor = MockTestExecutorWithoutError
 	data := collectPlatformDependentApplicationData(mockContext)
 	assertEqual(t, sampleDataParsed, data)
 
-	// both dpkg and rpm return errors
+	// neither dpkg nor rpm are found
+	checkCommandExists = func(string) bool { return false }
+	data = collectPlatformDependentApplicationData(mockContext)
+	assert.Equal(t, 0, len(data), "when no package managers are found- application dataset must be empty")
+
+	// test with finding rpm
+	returnList := []bool{false, true}
+	checkCommandExists = func(string) bool {
+		retVal := returnList[0]
+		returnList = returnList[1:]
+		return retVal
+	}
+	cmdExecutor = MockTestExecutorWithoutError
+	data = collectPlatformDependentApplicationData(mockContext)
+	assertEqual(t, sampleDataParsed, data)
+
+	// test with finding rpm but executor executor error
+	returnList = []bool{false, true}
+	checkCommandExists = func(string) bool {
+		retVal := returnList[0]
+		returnList = returnList[1:]
+		return retVal
+	}
 	cmdExecutor = MockTestExecutorWithError
 	data = collectPlatformDependentApplicationData(mockContext)
 	assert.Equal(t, 0, len(data), "When command execution fails - application dataset must be empty")
-
-	// dpkg returns error and rpm return some result
-	cmdExecutor = MockTestExecutorWithAndWithoutError
-	data = collectPlatformDependentApplicationData(mockContext)
-	assertEqual(t, sampleDataParsed, data)
 }
