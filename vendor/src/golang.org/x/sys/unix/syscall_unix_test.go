@@ -2,6 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
+//go:build aix || darwin || dragonfly || freebsd || linux || netbsd || openbsd || solaris
 // +build aix darwin dragonfly freebsd linux netbsd openbsd solaris
 
 package unix_test
@@ -122,7 +123,7 @@ func TestSignalNum(t *testing.T) {
 
 func TestFcntlInt(t *testing.T) {
 	t.Parallel()
-	file, err := ioutil.TempFile("", "TestFnctlInt")
+	file, err := ioutil.TempFile("", "TestFcntlInt")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -165,7 +166,7 @@ func TestFcntlFlock(t *testing.T) {
 // "-test.run=^TestPassFD$" and an environment variable used to signal
 // that the test should become the child process instead.
 func TestPassFD(t *testing.T) {
-	if runtime.GOOS == "darwin" && (runtime.GOARCH == "arm" || runtime.GOARCH == "arm64") {
+	if (runtime.GOOS == "darwin" || runtime.GOOS == "ios") && (runtime.GOARCH == "arm" || runtime.GOARCH == "arm64") {
 		t.Skip("cannot exec subprocess on iOS, skipping test")
 	}
 
@@ -377,11 +378,11 @@ func TestRlimit(t *testing.T) {
 	}
 	set := rlimit
 	set.Cur = set.Max - 1
-	if runtime.GOOS == "darwin" && set.Cur > 10240 {
-		// The max file limit is 10240, even though
-		// the max returned by Getrlimit is 1<<63-1.
-		// This is OPEN_MAX in sys/syslimits.h.
-		set.Cur = 10240
+	if (runtime.GOOS == "darwin" || runtime.GOOS == "ios") && set.Cur > 4096 {
+		// rlim_min for RLIMIT_NOFILE should be equal to
+		// or lower than kern.maxfilesperproc, which on
+		// some machines are 4096. See #40564.
+		set.Cur = 4096
 	}
 	err = unix.Setrlimit(unix.RLIMIT_NOFILE, &set)
 	if err != nil {
@@ -394,12 +395,15 @@ func TestRlimit(t *testing.T) {
 	}
 	set = rlimit
 	set.Cur = set.Max - 1
+	if (runtime.GOOS == "darwin" || runtime.GOOS == "ios") && set.Cur > 4096 {
+		set.Cur = 4096
+	}
 	if set != get {
 		// Seems like Darwin requires some privilege to
 		// increase the soft limit of rlimit sandbox, though
 		// Setrlimit never reports an error.
 		switch runtime.GOOS {
-		case "darwin":
+		case "darwin", "ios":
 		default:
 			t.Fatalf("Rlimit: change failed: wanted %#v got %#v", set, get)
 		}
@@ -407,6 +411,12 @@ func TestRlimit(t *testing.T) {
 	err = unix.Setrlimit(unix.RLIMIT_NOFILE, &rlimit)
 	if err != nil {
 		t.Fatalf("Setrlimit: restore failed: %#v %v", rlimit, err)
+	}
+
+	// make sure RLIM_INFINITY can be assigned to Rlimit members
+	_ = unix.Rlimit{
+		Cur: unix.RLIM_INFINITY,
+		Max: unix.RLIM_INFINITY,
 	}
 }
 
@@ -480,7 +490,7 @@ func TestDup(t *testing.T) {
 
 func TestPoll(t *testing.T) {
 	if runtime.GOOS == "android" ||
-		(runtime.GOOS == "darwin" && (runtime.GOARCH == "arm" || runtime.GOARCH == "arm64")) {
+		((runtime.GOOS == "darwin" || runtime.GOOS == "ios") && (runtime.GOARCH == "arm" || runtime.GOARCH == "arm64")) {
 		t.Skip("mkfifo syscall is not available on android and iOS, skipping test")
 	}
 
@@ -528,9 +538,12 @@ func TestSelect(t *testing.T) {
 	}
 
 	dur := 250 * time.Millisecond
-	tv := unix.NsecToTimeval(int64(dur))
 	var took time.Duration
 	for {
+		// On some platforms (e.g. Linux), the passed-in timeval is
+		// updated by select(2). Make sure to reset to the full duration
+		// in case of an EINTR.
+		tv := unix.NsecToTimeval(int64(dur))
 		start := time.Now()
 		n, err := unix.Select(0, nil, nil, nil, &tv)
 		took = time.Since(start)
@@ -594,7 +607,7 @@ func TestGetwd(t *testing.T) {
 	switch runtime.GOOS {
 	case "android":
 		dirs = []string{"/", "/system/bin"}
-	case "darwin":
+	case "darwin", "ios":
 		switch runtime.GOARCH {
 		case "arm", "arm64":
 			d1, err := ioutil.TempDir("", "d1")
@@ -644,6 +657,27 @@ func TestGetwd(t *testing.T) {
 	}
 }
 
+func compareStat_t(t *testing.T, otherStat string, st1, st2 *unix.Stat_t) {
+	if st2.Dev != st1.Dev {
+		t.Errorf("%s/Fstatat: got dev %v, expected %v", otherStat, st2.Dev, st1.Dev)
+	}
+	if st2.Ino != st1.Ino {
+		t.Errorf("%s/Fstatat: got ino %v, expected %v", otherStat, st2.Ino, st1.Ino)
+	}
+	if st2.Mode != st1.Mode {
+		t.Errorf("%s/Fstatat: got mode %v, expected %v", otherStat, st2.Mode, st1.Mode)
+	}
+	if st2.Uid != st1.Uid {
+		t.Errorf("%s/Fstatat: got uid %v, expected %v", otherStat, st2.Uid, st1.Uid)
+	}
+	if st2.Gid != st1.Gid {
+		t.Errorf("%s/Fstatat: got gid %v, expected %v", otherStat, st2.Gid, st1.Gid)
+	}
+	if st2.Size != st1.Size {
+		t.Errorf("%s/Fstatat: got size %v, expected %v", otherStat, st2.Size, st1.Size)
+	}
+}
+
 func TestFstatat(t *testing.T) {
 	defer chtmpdir(t)()
 
@@ -661,9 +695,7 @@ func TestFstatat(t *testing.T) {
 		t.Fatalf("Fstatat: %v", err)
 	}
 
-	if st1 != st2 {
-		t.Errorf("Fstatat: returned stat does not match Stat")
-	}
+	compareStat_t(t, "Stat", &st1, &st2)
 
 	err = os.Symlink("file1", "symlink1")
 	if err != nil {
@@ -680,24 +712,7 @@ func TestFstatat(t *testing.T) {
 		t.Fatalf("Fstatat: %v", err)
 	}
 
-	if st2.Dev != st1.Dev {
-		t.Errorf("Fstatat: got dev %v, expected %v", st2.Dev, st1.Dev)
-	}
-	if st2.Ino != st1.Ino {
-		t.Errorf("Fstatat: got ino %v, expected %v", st2.Ino, st1.Ino)
-	}
-	if st2.Mode != st1.Mode {
-		t.Errorf("Fstatat: got mode %v, expected %v", st2.Mode, st1.Mode)
-	}
-	if st2.Uid != st1.Uid {
-		t.Errorf("Fstatat: got uid %v, expected %v", st2.Uid, st1.Uid)
-	}
-	if st2.Gid != st1.Gid {
-		t.Errorf("Fstatat: got gid %v, expected %v", st2.Gid, st1.Gid)
-	}
-	if st2.Size != st1.Size {
-		t.Errorf("Fstatat: got size %v, expected %v", st2.Size, st1.Size)
-	}
+	compareStat_t(t, "Lstat", &st1, &st2)
 }
 
 func TestFchmodat(t *testing.T) {
@@ -765,6 +780,48 @@ func TestMkdev(t *testing.T) {
 	}
 	if unix.Minor(dev) != minor {
 		t.Errorf("Minor(%#x) == %d, want %d", dev, unix.Minor(dev), minor)
+	}
+}
+
+func TestPipe(t *testing.T) {
+	const s = "hello"
+	var pipes [2]int
+	err := unix.Pipe(pipes[:])
+	if err != nil {
+		t.Fatalf("pipe: %v", err)
+	}
+	r := pipes[0]
+	w := pipes[1]
+	go func() {
+		n, err := unix.Write(w, []byte(s))
+		if err != nil {
+			t.Errorf("bad write: %v", err)
+			return
+		}
+		if n != len(s) {
+			t.Errorf("bad write count: %d", n)
+			return
+		}
+		err = unix.Close(w)
+		if err != nil {
+			t.Errorf("bad close: %v", err)
+			return
+		}
+	}()
+	var buf [10 + len(s)]byte
+	n, err := unix.Read(r, buf[:])
+	if err != nil {
+		t.Fatalf("bad read: %v", err)
+	}
+	if n != len(s) {
+		t.Fatalf("bad read count: %d", n)
+	}
+	if string(buf[:n]) != s {
+		t.Fatalf("bad contents: %s", string(buf[:n]))
+	}
+	err = unix.Close(r)
+	if err != nil {
+		t.Fatalf("bad close: %v", err)
 	}
 }
 
