@@ -1,7 +1,8 @@
 {
     "Profile":{
         "ShareCreds" : true,
-        "ShareProfile" : ""
+        "ShareProfile" : "",
+        "ForceUpdateCreds" : false
     },
     "Mds": {
         "CommandWorkersLimit" : 5,

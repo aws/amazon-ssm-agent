@@ -153,6 +153,8 @@ To set up your own custom configuration for the agent:
     * ShareCreds (boolean)
         * Default: true
     * ShareProfile (string)
+    * ForceUpdateCreds (boolean) - overwrite shared credentials file if existing one cannot be parsed
+        * Default: false
 * Mds - represents configuration for Message delivery service (MDS) where agent listens for incoming messages
     * CommandWorkersLimit (int)
         * Default: 5

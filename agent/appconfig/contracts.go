@@ -16,8 +16,9 @@ package appconfig
 
 // CredentialProfile represents configurations for aws credential profile
 type CredentialProfile struct {
-	ShareCreds   bool
-	ShareProfile string
+	ShareCreds       bool
+	ShareProfile     string
+	ForceUpdateCreds bool
 }
 
 // MdsCfg represents configuration for Message delivery service (MDS)
