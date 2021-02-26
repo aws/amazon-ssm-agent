@@ -2,7 +2,8 @@
     "Profile":{
         "ShareCreds" : true,
         "ShareProfile" : "",
-        "ForceUpdateCreds" : false
+        "ForceUpdateCreds" : false,
+        "KeyAutoRotateDays": 0
     },
     "Mds": {
         "CommandWorkersLimit" : 5,

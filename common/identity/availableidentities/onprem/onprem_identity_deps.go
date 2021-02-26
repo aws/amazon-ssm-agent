@@ -48,9 +48,6 @@ var (
 type managedInstancesRoleProvider struct {
 	credentials.Expiry
 
-	// Client is the required SSM managed instance service client to use when connecting to SSM Auth service.
-	Client rsaauth.RsaSignedService
-
 	// ExpiryWindow will allow the credentials to trigger refreshing prior to
 	// the credentials actually expiring. This is beneficial so race conditions
 	// with expiring credentials do not cause request to fail unexpectedly
@@ -62,8 +59,10 @@ type managedInstancesRoleProvider struct {
 	// If ExpiryWindow is 0 or less it will be ignored.
 	ExpiryWindow time.Duration
 
-	Log log.T
-	SsmConfig *appconfig.SsmagentConfig
+	// client is the required SSM managed instance service client to use when connecting to SSM Auth service.
+	client rsaauth.RsaSignedService
+	config *appconfig.SsmagentConfig
+	log log.T
 }
 
 // Identity is the struct defining the IAgentIdentityInner for OnPrem

@@ -18,6 +18,7 @@ import (
 	"log"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/backoffconfig"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/ssm/util"
 	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
@@ -26,6 +27,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/aws/session"
 	"github.com/aws/aws-sdk-go/service/ssm"
+	"github.com/cenkalti/backoff"
 )
 
 // AnonymousService is an interface to the Anonymous methods of the SSM service.
@@ -73,6 +75,10 @@ func NewAnonymousService(logger logger.T, region string) AnonymousService {
 
 // RegisterManagedInstance calls the RegisterManagedInstance SSM API.
 func (svc *sdkService) RegisterManagedInstance(activationCode, activationID, publicKey, publicKeyType, fingerprint string) (string, error) {
+	exponentialBackoff, err := backoffconfig.GetDefaultExponentialBackoff()
+	if err != nil {
+		return "", err
+	}
 
 	params := ssm.RegisterManagedInstanceInput{
 		ActivationCode: aws.String(activationCode),
@@ -82,7 +88,14 @@ func (svc *sdkService) RegisterManagedInstance(activationCode, activationID, pub
 		Fingerprint:    aws.String(fingerprint),
 	}
 
-	result, err := svc.sdk.RegisterManagedInstance(&params)
+	var result *ssm.RegisterManagedInstanceOutput
+	var innerErr error
+
+	err = backoff.Retry(func() error {
+		result, innerErr = svc.sdk.RegisterManagedInstance(&params)
+		return innerErr
+	}, exponentialBackoff)
+
 	if err != nil {
 		return "", err
 	}

@@ -34,15 +34,13 @@ type T interface {
 }
 
 // Default returns an empty context that use the default logger and appconfig.
-func Default(logger log.T, ssmAppconfig appconfig.SsmagentConfig, agentIdentity identity.IAgentIdentity) T {
+func Default(logger log.T, ssmAppconfig appconfig.SsmagentConfig, agentIdentity identity.IAgentIdentity, contextList ...string) T {
 	// Loading the maximum & minimum frequency minutes for healthcheck
 	appconst := appconfig.AppConstants{
 		MinHealthFrequencyMinutes: appconfig.DefaultSsmHealthFrequencyMinutesMin,
 		MaxHealthFrequencyMinutes: appconfig.DefaultSsmHealthFrequencyMinutesMax,
 	}
-
-	ctx := &defaultContext{log: logger, appconfig: ssmAppconfig, appconst: appconst, identity: agentIdentity}
-	return ctx
+	return &defaultContext{context: contextList, log: logger.WithContext(contextList...), appconfig: ssmAppconfig, appconst: appconst, identity: agentIdentity}
 }
 
 type defaultContext struct {

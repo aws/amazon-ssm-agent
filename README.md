@@ -155,6 +155,8 @@ To set up your own custom configuration for the agent:
     * ShareProfile (string)
     * ForceUpdateCreds (boolean) - overwrite shared credentials file if existing one cannot be parsed
         * Default: false
+    * KeyAutoRotateDays (int) - defines the maximum age in days for on-prem private key, default value might change to 30 in the close future
+        * Default: 0 (never rotate)
 * Mds - represents configuration for Message delivery service (MDS) where agent listens for incoming messages
     * CommandWorkersLimit (int)
         * Default: 5
