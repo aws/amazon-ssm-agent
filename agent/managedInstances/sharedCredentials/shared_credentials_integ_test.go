@@ -21,6 +21,8 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/log"
+
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/go-ini/ini"
 	"github.com/stretchr/testify/assert"
@@ -56,7 +58,7 @@ func TestSharedCredentialsStore(t *testing.T) {
 	// Test
 	os.Setenv("AWS_SHARED_CREDENTIALS_FILE", credFilePath)
 
-	err1 := Store(accessKey, accessSecretKey, token, profile)
+	err1 := Store(log.NewMockLog(), accessKey, accessSecretKey, token, profile, false)
 	assert.Nil(t, err1, "Expect no error saving profile")
 
 	config, err2 := ini.Load(credFilePath)
@@ -78,7 +80,7 @@ func TestSharedCredentialsStoreDefaultProfile(t *testing.T) {
 	// Test
 	os.Setenv("AWS_SHARED_CREDENTIALS_FILE", credFilePath)
 
-	err1 := Store(accessKey, accessSecretKey, token, "")
+	err1 := Store(log.NewMockLog(), accessKey, accessSecretKey, token, "", false)
 	assert.Nil(t, err1, "Expect no error saving profile")
 
 	config, err2 := ini.Load(credFilePath)
@@ -86,6 +88,43 @@ func TestSharedCredentialsStoreDefaultProfile(t *testing.T) {
 
 	iniProfile := config.Section(defaultProfile)
 
+	assert.Equal(t, accessKey, iniProfile.Key(awsAccessKeyID).Value(), "Expect access key ID to match")
+	assert.Equal(t, accessSecretKey, iniProfile.Key(awsSecretAccessKey).Value(), "Expect secret access key to match")
+	assert.Equal(t, token, iniProfile.Key(awsSessionToken).Value(), "Expect session token to match")
+}
+
+func TestSharedCredentialsStore_ParseError_NoForceUpdate_LeavesFileUnchanged(t *testing.T) {
+	// Test setup.  Shared credentials file is corrupt.
+	os.Clearenv()
+	credFilePath := exampleCredFilePath()
+	os.Setenv("AWS_SHARED_CREDENTIALS_FILE", credFilePath)
+	fileutil.WriteAllText(credFilePath, "junk")
+
+	// Test
+	err := Store(log.NewMockLog(), accessKey, accessSecretKey, token, profile, false)
+	assert.NotNil(t, err, "Expect error when saving profile")
+
+	// Verify that the file is unchanged
+	contents, err := fileutil.ReadAllText(credFilePath)
+	assert.Equal(t, "junk", contents)
+}
+
+func TestSharedCredentialsStore_ParseError_ForceUpdate_OverwritesFile(t *testing.T) {
+	// Test setup.  Shared credentials file is corrupt.
+	os.Clearenv()
+	credFilePath := exampleCredFilePath()
+	os.Setenv("AWS_SHARED_CREDENTIALS_FILE", credFilePath)
+	fileutil.WriteAllText(credFilePath, "junk")
+
+	// Test
+	err := Store(log.NewMockLog(), accessKey, accessSecretKey, token, profile, true)
+	assert.Nil(t, err, "Expect no error when saving profile")
+
+	// Verify that the shared credentials file has been replaced with a new one
+	config, err := ini.Load(credFilePath)
+	assert.Nil(t, err, "Expect no error loading file")
+
+	iniProfile := config.Section(profile)
 	assert.Equal(t, accessKey, iniProfile.Key(awsAccessKeyID).Value(), "Expect access key ID to match")
 	assert.Equal(t, accessSecretKey, iniProfile.Key(awsSecretAccessKey).Value(), "Expect secret access key to match")
 	assert.Equal(t, token, iniProfile.Key(awsSessionToken).Value(), "Expect session token to match")

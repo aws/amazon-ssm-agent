@@ -15,6 +15,7 @@ package onprem
 
 import (
 	"fmt"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/onprem/rsaauth"
 	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
@@ -63,6 +64,7 @@ func (i *Identity) Credentials() *credentials.Credentials {
 			Log:          i.Log,
 			Client:       rsaauth.NewRsaService(i.Log, i.Config, instanceID, region, defaultEndpoint, privateKey),
 			ExpiryWindow: EarlyExpiryTimeWindow,
+			SsmConfig:    i.Config,
 		}
 
 		i.credentialsSingleton = credentials.NewCredentials(p)

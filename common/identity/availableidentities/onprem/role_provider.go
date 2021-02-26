@@ -15,9 +15,10 @@ package onprem
 
 import (
 	"fmt"
+	"time"
+
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/sharedCredentials"
 	"github.com/aws/aws-sdk-go/aws/credentials"
-	"time"
 )
 
 // Retrieve retrieves credentials from the SSM Auth service.
@@ -70,7 +71,8 @@ func (m *managedInstancesRoleProvider) Retrieve() (credentials.Value, error) {
 	shareLock.RLock()
 	defer shareLock.RUnlock()
 	if shareCreds {
-		err = sharedCredentials.Store(*roleCreds.AccessKeyId, *roleCreds.SecretAccessKey, *roleCreds.SessionToken, shareProfile)
+		err = sharedCredentials.Store(m.Log, *roleCreds.AccessKeyId, *roleCreds.SecretAccessKey,
+			*roleCreds.SessionToken, shareProfile, m.SsmConfig.Profile.ForceUpdateCreds)
 		if err != nil {
 			m.Log.Error(ProviderName, "Error occurred sharing credentials. ", err) // error does not stop execution
 		}

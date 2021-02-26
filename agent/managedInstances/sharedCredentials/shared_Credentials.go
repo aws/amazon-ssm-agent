@@ -19,6 +19,8 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/aws/amazon-ssm-agent/agent/log"
+
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/go-ini/ini"
@@ -63,7 +65,7 @@ func createFile(filePath string) error {
 // Store function updates the shared credentials with the specified values:
 // * If the shared credentials file does not exist, it will be created. Any parent directories will also be created.
 // * If the section to update does not exist, it will be created.
-func Store(accessKeyID, secretAccessKey, sessionToken, profile string) error {
+func Store(log log.T, accessKeyID, secretAccessKey, sessionToken, profile string, force bool) error {
 	if profile == "" {
 		profile = defaultProfile
 	}
@@ -83,7 +85,12 @@ func Store(accessKeyID, secretAccessKey, sessionToken, profile string) error {
 
 	config, err := ini.Load(credPath)
 	if err != nil {
-		return awserr.New("SharedCredentialsStore", "failed to load shared credentials file", err)
+		if force {
+			log.Warn("Failed to load shared credentials file. Force update is enabled, creating a new empty config.", err)
+			config = ini.Empty()
+		} else {
+			return awserr.New("SharedCredentialsStore", "failed to load shared credentials file", err)
+		}
 	}
 
 	iniProfile := config.Section(profile)
