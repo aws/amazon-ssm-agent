@@ -20,9 +20,15 @@ import (
 	"io"
 	"strings"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/cli/cliutil"
+	logger "github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/twinj/uuid"
 )
+
+// Assign to variable to be able to mock function
+var newAgentIdentity = identity.NewAgentIdentity
 
 // TODO:MF: make errors more like ssm-cli: error: <arg type>: <error>?
 // RunCommand parses and executes a single command line, please refer the aws cli exit code
@@ -46,7 +52,16 @@ func RunCommand(args []string, out io.Writer) (exitCode int) {
 		if cliutil.IsHelp(subcommands, parameters) {
 			fmt.Fprint(out, cmd.Help())
 		} else {
-			cmdErr, result := cmd.Execute(subcommands, parameters)
+			log := logger.NewSilentMockLog()
+			config := appconfig.DefaultConfig()
+			selector := identity.NewDefaultAgentIdentitySelector(log)
+			agentIdentity, err := newAgentIdentity(log, &config, selector)
+			if err != nil {
+				fmt.Fprintf(out, "Failed to load agent identity: %v", err)
+				return cliutil.CLI_NO_IDENTITY_EXITCODE
+			}
+
+			cmdErr, result := cmd.Execute(agentIdentity, subcommands, parameters)
 			if cmdErr != nil {
 				displayUsage(out)
 				fmt.Fprintln(out, cmdErr.Error())

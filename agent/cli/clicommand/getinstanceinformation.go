@@ -21,10 +21,8 @@ import (
 	"strings"
 	"text/template"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/cli/cliutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
-	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/aws/amazon-ssm-agent/common/identity"
 )
@@ -72,20 +70,11 @@ type GetInstanceInformationCommand struct {
 }
 
 // Execute validates and executes the get-instance-information cli command
-func (c *GetInstanceInformationCommand) Execute(subcommands []string, parameters map[string][]string) (error, string) {
+func (c *GetInstanceInformationCommand) Execute(agentIdentity identity.IAgentIdentity, subcommands []string, parameters map[string][]string) (error, string) {
 	validation := c.validateGetInstanceInformationCommandInput(subcommands, parameters)
 	// return validation errors if any were found
 	if len(validation) > 0 {
 		return errors.New(strings.Join(validation, "\n")), ""
-	}
-
-	// TODO: Move this higher in the ssm-cli
-	log := logger.NewMockLog()
-	config, _ := appconfig.Config(true)
-	selector := identity.NewDefaultAgentIdentitySelector(log)
-	agentIdentity, err := identity.NewAgentIdentity(log, &config, selector)
-	if err != nil {
-		return err, ""
 	}
 
 	information := make(map[string]string)

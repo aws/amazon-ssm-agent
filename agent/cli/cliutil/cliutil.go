@@ -19,12 +19,15 @@ import (
 	"fmt"
 	"net/url"
 	"strings"
+
+	"github.com/aws/amazon-ssm-agent/common/identity"
 )
 
 const (
 	HelpFlag                  = "help"
 	SsmCliName                = "ssm-cli"
 	CLI_PARSE_FAIL_EXITCODE   = 2
+	CLI_NO_IDENTITY_EXITCODE  = 3
 	CLI_COMMAND_FAIL_EXITCODE = 255
 	CLI_SUCCESS_EXITCODE      = 0
 )
@@ -38,7 +41,7 @@ var CliCommands map[string]CliCommand
 
 // CliCommand defines the interface for all commands the cli can execute
 type CliCommand interface {
-	Execute(subcommands []string, parameters map[string][]string) (error, string)
+	Execute(agentIdentity identity.IAgentIdentity, subcommands []string, parameters map[string][]string) (error, string)
 	Help() string
 	Name() string
 }
