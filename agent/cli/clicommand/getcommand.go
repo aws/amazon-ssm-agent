@@ -25,6 +25,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/cli/cliutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 )
 
 const (
@@ -79,14 +80,19 @@ type GetOfflineCommand struct {
 }
 
 // Execute validates and executes the get-offline-command-invocation cli command
-func (c *GetOfflineCommand) Execute(subcommands []string, parameters map[string][]string) (error, string) {
+func (c *GetOfflineCommand) Execute(agentIdentity identity.IAgentIdentity, subcommands []string, parameters map[string][]string) (error, string) {
 	validation, commandID, showDetails := c.validateGetCommandInput(subcommands, parameters)
 	// return validation errors if any were found
 	if len(validation) > 0 {
 		return errors.New(strings.Join(validation, "\n")), ""
 	}
 
-	return c.getCommandStatus(commandID, showDetails)
+	instanceID, err := agentIdentity.InstanceID()
+	if err != nil {
+		return err, ""
+	}
+
+	return c.getCommandStatus(instanceID, commandID, showDetails)
 }
 
 // Help prints help for the get-offline-command-invocation cli command
@@ -145,19 +151,19 @@ func (GetOfflineCommand) validateGetCommandInput(subcommands []string, parameter
 }
 
 // getCommandStatus looks for the command in the local orchestration folders and returns status and optionally details
-func (c *GetOfflineCommand) getCommandStatus(commandID string, showDetails bool) (error, string) {
+func (c *GetOfflineCommand) getCommandStatus(instanceID, commandID string, showDetails bool) (error, string) {
 	// Look for file with commandID as name in each orchestration folder
 	// If found, return status (or lots of details if showDetails is set)
 	if c.isCommandCompleted(commandID) {
 		return nil, "Complete"
 	}
-	if c.isCommandInState(appconfig.DefaultLocationOfPending, commandID) {
+	if c.isCommandInState(instanceID, appconfig.DefaultLocationOfPending, commandID) {
 		return nil, "Pending"
 	}
-	if c.isCommandInState(appconfig.DefaultLocationOfCurrent, commandID) {
+	if c.isCommandInState(instanceID, appconfig.DefaultLocationOfCurrent, commandID) {
 		return nil, "In Progress"
 	}
-	if c.isCommandInState(appconfig.DefaultLocationOfCorrupt, commandID) {
+	if c.isCommandInState(instanceID, appconfig.DefaultLocationOfCorrupt, commandID) {
 		return nil, "Corrupt"
 	}
 
@@ -169,21 +175,11 @@ func (c *GetOfflineCommand) isCommandCompleted(commandID string) bool {
 	return fileutil.Exists(path.Join(appconfig.LocalCommandRootCompleted, commandID))
 }
 
-func (GetOfflineCommand) isCommandInState(stateFolder string, commandID string) bool {
-	// TODO:MF: Find a way to get the current instanceID instead of trying all possible folders
-	dirs, _ := fileutil.GetDirectoryNames(appconfig.DefaultDataStorePath)
-
-	for _, dir := range dirs {
-		potentialFolder := path.Join(appconfig.DefaultDataStorePath,
-			dir,
-			appconfig.DefaultDocumentRootDirName,
-			appconfig.DefaultLocationOfState,
-			stateFolder,
-			commandID)
-		if fileutil.Exists(potentialFolder) {
-			return true
-		}
-	}
-
-	return false
+func (GetOfflineCommand) isCommandInState(instanceID, stateFolder, commandID string) bool {
+	return fileutil.Exists(path.Join(appconfig.DefaultDataStorePath,
+		instanceID,
+		appconfig.DefaultDocumentRootDirName,
+		appconfig.DefaultLocationOfState,
+		stateFolder,
+		commandID))
 }

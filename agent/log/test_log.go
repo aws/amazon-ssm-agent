@@ -24,6 +24,7 @@ import (
 type Mock struct {
 	mock.Mock
 	context string
+	silent  bool
 }
 
 // NewMockLogger returns an instance of Mock with default expectations set.
@@ -43,6 +44,13 @@ func NewMockLog() *Mock {
 	log.On("Tracef", mock.Anything, mock.Anything).Return()
 	log.On("Infof", mock.Anything, mock.Anything).Return()
 	log.On("Closed").Return(false)
+	return log
+}
+
+// NewSilentMockLogger returns an instance of Mock with default expectations set.
+func NewSilentMockLog() *Mock {
+	log := NewMockLog()
+	log.silent = true
 	return log
 }
 
@@ -67,121 +75,150 @@ func NewMockLogWithContext(ctx string) *Mock {
 }
 
 func (_m *Mock) WithContext(context ...string) (contextLogger T) {
-	fmt.Print(_m.context)
-	fmt.Printf("WithContext: %v", context)
+	if !_m.silent {
+		fmt.Print(_m.context)
+		fmt.Printf("WithContext: %v", context)
+	}
 	ret := _m.Called(context)
 	return ret.Get(0).(T)
 }
 
 func (_m *Mock) WriteEvent(eventType string, agentVersion string, content string) {
-	fmt.Print(_m.context)
-	fmt.Print("Write Event: ")
-	fmt.Println(content)
+	if !_m.silent {
+		fmt.Print(_m.context)
+		fmt.Print("Write Event: ")
+		fmt.Println(content)
+	}
 	_m.Called(eventType, agentVersion, content)
 }
 
 // Tracef mocks the Tracef function.
 func (_m *Mock) Tracef(format string, params ...interface{}) {
-	fmt.Print(_m.context)
-	fmt.Printf("Tracef: "+format+"\n", params...)
+	if !_m.silent {
+		fmt.Print(_m.context)
+		fmt.Printf("Tracef: "+format+"\n", params...)
+	}
 	_m.Called(format, params)
 }
 
 // Debugf mocks the Debugf function.
 func (_m *Mock) Debugf(format string, params ...interface{}) {
-	fmt.Print(_m.context)
-	fmt.Printf("Debugf: "+format, params...)
-	fmt.Println()
+	if !_m.silent {
+		fmt.Print(_m.context)
+		fmt.Printf("Debugf: "+format, params...)
+		fmt.Println()
+	}
 	_m.Called(format, params)
 }
 
 // Infof mocks the Infof function.
 func (_m *Mock) Infof(format string, params ...interface{}) {
-	fmt.Print(_m.context)
-	fmt.Printf("Infof: "+format, params...)
-	fmt.Println()
+	if !_m.silent {
+		fmt.Print(_m.context)
+		fmt.Printf("Infof: "+format, params...)
+		fmt.Println()
+	}
 	_m.Called(format, params)
 }
 
 // Warnf mocks the Warnf function.
 func (_m *Mock) Warnf(format string, params ...interface{}) error {
-	fmt.Print(_m.context)
 	msg := fmt.Sprintf("Warnf: "+format, params...)
-	fmt.Printf(msg)
-	fmt.Println()
+	if !_m.silent {
+		fmt.Print(_m.context)
+		fmt.Printf(msg)
+		fmt.Println()
+	}
 	_m.Called(format, params)
 	return errors.New(msg)
 }
 
 // Errorf mocks the Errorf function.
 func (_m *Mock) Errorf(format string, params ...interface{}) error {
-	fmt.Print(_m.context)
 	msg := fmt.Sprintf("Errorf: "+format, params...)
-	fmt.Printf(msg)
-	fmt.Println()
+	if !_m.silent {
+		fmt.Print(_m.context)
+		fmt.Printf(msg)
+		fmt.Println()
+	}
 	_m.Called(format, params)
 	return errors.New(msg)
 }
 
 // Criticalf mocks the Criticalf function.
 func (_m *Mock) Criticalf(format string, params ...interface{}) error {
-	fmt.Print(_m.context)
 	msg := fmt.Sprintf("Criticalf: "+format, params...)
-	fmt.Printf(msg)
-	fmt.Println()
+	if !_m.silent {
+		fmt.Print(_m.context)
+		fmt.Printf(msg)
+		fmt.Println()
+	}
 	_m.Called(format, params)
 	return errors.New(msg)
 }
 
 // Trace mocks the Trace function.
 func (_m *Mock) Trace(v ...interface{}) {
-	fmt.Print(_m.context)
-	fmt.Print("Trace: ")
-	fmt.Println(v...)
+	if !_m.silent {
+		fmt.Print(_m.context)
+		fmt.Print("Trace: ")
+		fmt.Println(v...)
+	}
 	_m.Called(v)
 }
 
 // Debug mocks the Debug function.
 func (_m *Mock) Debug(v ...interface{}) {
-	fmt.Print(_m.context)
-	fmt.Print("Debug: ")
-	fmt.Println(v...)
+	if !_m.silent {
+		fmt.Print(_m.context)
+		fmt.Print("Debug: ")
+		fmt.Println(v...)
+	}
 	_m.Called(v)
 }
 
 // Info mocks the Info function.
 func (_m *Mock) Info(v ...interface{}) {
-	fmt.Print(_m.context)
-	fmt.Print("Info: ")
-	fmt.Println(v...)
+	if !_m.silent {
+		fmt.Print(_m.context)
+		fmt.Print("Info: ")
+		fmt.Println(v...)
+	}
 	_m.Called(v)
 }
 
 // Warn mocks the Warn function.
 func (_m *Mock) Warn(v ...interface{}) error {
-	fmt.Print(_m.context)
 	msg := "Warn: " + fmt.Sprint(v...)
-	fmt.Print(msg)
-	fmt.Println()
+
+	if !_m.silent {
+		fmt.Print(_m.context)
+		fmt.Print(msg)
+		fmt.Println()
+	}
 	_m.Called(v)
 	return errors.New(msg)
 }
 
 // Error mocks the Error function.
 func (_m *Mock) Error(v ...interface{}) error {
-	fmt.Print(_m.context)
 	msg := fmt.Sprint("Error: ") + fmt.Sprint(v...)
-	fmt.Printf(msg)
-	fmt.Println()
+	if !_m.silent {
+		fmt.Print(_m.context)
+		fmt.Printf(msg)
+		fmt.Println()
+	}
 	_m.Called(v)
 	return errors.New(msg)
 }
 
 // Critical mocks the Critical function.
 func (_m *Mock) Critical(v ...interface{}) error {
-	fmt.Print(_m.context)
-	fmt.Print("Critical: ")
-	fmt.Println(v...)
+	if !_m.silent {
+		fmt.Print(_m.context)
+		fmt.Print("Critical: ")
+		fmt.Println(v...)
+	}
 	ret := _m.Called(v)
 	return ret.Error(0)
 }

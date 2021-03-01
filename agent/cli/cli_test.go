@@ -18,9 +18,13 @@ import (
 	"bytes"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/cli/clicommand"
 	"github.com/aws/amazon-ssm-agent/agent/cli/cliutil"
 	CliCommandMock "github.com/aws/amazon-ssm-agent/agent/cli/cliutil/mocks"
+	logger "github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/common/identity"
+	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -49,6 +53,12 @@ func TestCliHelp(t *testing.T) {
 }
 
 func TestCliCmdExecError(t *testing.T) {
+	oldFunc := newAgentIdentity
+	newAgentIdentity = func(logger.T, *appconfig.SsmagentConfig, identity.IAgentIdentitySelector) (identity.IAgentIdentity, error) {
+		return identityMocks.NewDefaultMockAgentIdentity(), nil
+	}
+	defer func() { newAgentIdentity = oldFunc }()
+
 	var buffer bytes.Buffer
 	cliutil.Register(&clicommand.GetOfflineCommand{})
 	args := []string{"ssm-cli", "get-offline-command-invocation", "--command-id", "d24d687d", "--details", "true"}
@@ -57,10 +67,16 @@ func TestCliCmdExecError(t *testing.T) {
 }
 
 func TestCliCmdExecSuccess(t *testing.T) {
+	oldFunc := newAgentIdentity
+	newAgentIdentity = func(logger.T, *appconfig.SsmagentConfig, identity.IAgentIdentitySelector) (identity.IAgentIdentity, error) {
+		return identityMocks.NewDefaultMockAgentIdentity(), nil
+	}
+	defer func() { newAgentIdentity = oldFunc }()
+
 	var buffer bytes.Buffer
 	cliCmdMock := &CliCommandMock.CliCommand{}
 	cliCmdMock.On("Name").Return("cli-command-mock").Once()
-	cliCmdMock.On("Execute", mock.AnythingOfType("[]string"), mock.AnythingOfType("map[string][]string")).Return(nil, "success").Once()
+	cliCmdMock.On("Execute", mock.Anything, mock.AnythingOfType("[]string"), mock.AnythingOfType("map[string][]string")).Return(nil, "success").Once()
 	cliutil.Register(cliCmdMock)
 
 	args := []string{"ssm-cli", "cli-command-mock", "--content", "fakefile.json"}
