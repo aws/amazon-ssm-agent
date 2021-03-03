@@ -19,6 +19,7 @@ import (
 	"fmt"
 	"math/rand"
 	"path/filepath"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -123,6 +124,11 @@ func (controlChannel *ControlChannel) SetWebSocket(context context.T,
 			MaxDelayInMilli:     mgsConfig.ControlChannelRetryMaxIntervalMillis,
 			MaxAttempts:         mgsConfig.ControlChannelNumMaxRetries,
 		}
+
+		// add a jitter to the first control-channel call
+		maxDelayMillis := int64(float64(mgsConfig.ControlChannelRetryInitialDelayMillis) * mgsConfig.RetryJitterRatio)
+		delayWithJitter(maxDelayMillis)
+
 		retryer.Init()
 		if _, err := retryer.Call(); err != nil {
 			// should never happen
@@ -348,4 +354,13 @@ func getControlChannelToken(log log.T,
 
 	log.Debug("Successfully get controlchannel token")
 	return *createControlChannelOutput.TokenValue, nil
+}
+
+// delayWithJitter adds a delay before next operation
+func delayWithJitter(maxDelayMillis int64) {
+	if maxDelayMillis <= 0 {
+		return
+	}
+	jitter := rand.Int63n(maxDelayMillis)
+	time.Sleep(time.Duration(jitter) * time.Millisecond)
 }
