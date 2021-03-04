@@ -76,7 +76,9 @@ func stubNewMsgSvc(context context.T, connectionTimeout time.Duration) messageSe
 
 func TestSendReply(t *testing.T) {
 	updateContext := createUpdateContext(Installed)
-	service := svcManager{}
+	service := svcManager{
+		context: context.NewMockDefault(),
+	}
 	// setup
 	getAppConfig = func(bool) (appconfig.SsmagentConfig, error) {
 		config := appconfig.SsmagentConfig{}
@@ -94,7 +96,9 @@ func TestSendReply(t *testing.T) {
 
 func TestSendReplyDeleteMessage(t *testing.T) {
 	updateContext := createUpdateContext(Installed)
-	service := svcManager{}
+	service := svcManager{
+		context: context.NewMockDefault(),
+	}
 	// setup
 	getAppConfig = func(bool) (appconfig.SsmagentConfig, error) {
 		config := appconfig.SsmagentConfig{}

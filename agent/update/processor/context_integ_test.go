@@ -24,7 +24,11 @@ import (
 	"testing"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	contextmocks "github.com/aws/amazon-ssm-agent/agent/context"
+	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -138,6 +142,64 @@ func TestLoadUpdateContext(t *testing.T) {
 
 	assert.NoError(t, err)
 	assert.True(t, len(context.Histories) > 0)
+}
+
+func TestGetV12DocOrchDir(t *testing.T) {
+	context := contextmocks.NewMockDefault()
+	shortInstanceId, _ := context.Identity().ShortInstanceID()
+
+	updateDetail := &UpdateDetail{}
+	dir := getV12DocOrchDir(context.Identity(), context.Log(), updateDetail)
+
+	expected := fileutil.BuildPath(
+		appconfig.DefaultDataStorePath,
+		shortInstanceId,
+		appconfig.DefaultDocumentRootDirName,
+		"orchestration",
+		updateutil.DefaultOutputFolder)
+	assert.Equal(t, expected, dir)
+
+	updateDetail.MessageID = "messageid"
+	dir = getV12DocOrchDir(context.Identity(), context.Log(), updateDetail)
+	expected = fileutil.BuildPath(
+		appconfig.DefaultDataStorePath,
+		shortInstanceId,
+		appconfig.DefaultDocumentRootDirName,
+		"orchestration",
+		"messageid",
+		updateutil.DefaultOutputFolder)
+
+	assert.Equal(t, expected, dir)
+}
+
+func TestGetV22DocOrchDir(t *testing.T) {
+	context := contextmocks.NewMockDefault()
+	shortInstanceId, _ := context.Identity().ShortInstanceID()
+
+	updateDetail := &UpdateDetail{}
+	dir := getV22DocOrchDir(context.Identity(), context.Log(), updateDetail)
+
+	expected := fileutil.BuildPath(
+		appconfig.DefaultDataStorePath,
+		shortInstanceId,
+		appconfig.DefaultDocumentRootDirName,
+		"orchestration",
+		updateutil.DefaultOutputFolder,
+		updateutil.DefaultOutputFolder)
+	assert.Equal(t, expected, dir)
+
+	updateDetail.MessageID = "messageid"
+	dir = getV22DocOrchDir(context.Identity(), context.Log(), updateDetail)
+	expected = fileutil.BuildPath(
+		appconfig.DefaultDataStorePath,
+		shortInstanceId,
+		appconfig.DefaultDocumentRootDirName,
+		"orchestration",
+		"messageid",
+		updateutil.DefaultOutputFolder,
+		updateutil.DefaultOutputFolder)
+
+	assert.Equal(t, expected, dir)
 }
 
 //Load specified file from file system
