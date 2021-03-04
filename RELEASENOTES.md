@@ -1,5 +1,20 @@
 Latest
 ===============
+- Added $HOME env variable for root user when runAsElevated is true in session
+- Added CREAD flag in serial port control flags on linux
+- Added PlatformName and PlatformVersion as env variables for aws:runShellScript
+- Added support for macOS updater
+- Added v2.2 document support in updater
+- Added defer recover statements
+- Fixed inventory error log when dpkg is not available
+- Fixed ssm-cli logging to stdout
+- Removed consideration of unimportant error codes in service side
+- Updated ec2 credential caching time to ~1 hour
+- Updated service query logic for Windows
+- Updated golang sys package dependency
+
+3.0.755.0
+===============
 - Fix fallback logic for MGS endpoint generation
 - Fix regional endpoint generation
 
