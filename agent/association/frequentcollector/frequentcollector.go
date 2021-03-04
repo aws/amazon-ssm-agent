@@ -17,6 +17,7 @@ package frequentcollector
 import (
 	"encoding/json"
 	"math"
+	"runtime/debug"
 	"strconv"
 	"strings"
 	"sync"
@@ -113,6 +114,12 @@ func (collector *FrequentCollector) StartFrequentCollector(context context.T, do
 	ticker := collector.resetTicker(time.Duration(intervalInSeconds) * time.Second)
 
 	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				log.Errorf("Frequent collector panic: %v", r)
+				log.Errorf("Stacktrace:\n%s", debug.Stack())
+			}
+		}()
 		for t := range ticker.C {
 			log.Infof("Frequent collector, tick at %s, ticker address : %p", t.Format(time.UnixDate), collector.tickerForFrequentCollector)
 			collector.collect(context, docState)

@@ -15,6 +15,7 @@
 package signal
 
 import (
+	"runtime/debug"
 	"sync"
 	"time"
 
@@ -50,6 +51,12 @@ func InitializeAssociationSignalService(log log.T, task func(log log.T)) {
 	defer lock.Unlock()
 
 	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				log.Errorf("Association signal service panic: %v", r)
+				log.Errorf("Stacktrace:\n%s", debug.Stack())
+			}
+		}()
 		for {
 			_, more := <-instance.executeSignal
 			if more {

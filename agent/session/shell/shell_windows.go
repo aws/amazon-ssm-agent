@@ -27,6 +27,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"runtime"
+	"runtime/debug"
 	"strconv"
 	"strings"
 	"sync"
@@ -120,6 +121,12 @@ func StartPty(
 		var wg sync.WaitGroup
 		wg.Add(1)
 		go func() {
+			defer func() {
+				if r := recover(); r != nil {
+					log.Errorf("Start pty as user panic: \n%v", r)
+					log.Errorf("Stacktrace:\n%s", debug.Stack())
+				}
+			}()
 			defer wg.Done()
 			plugin.logger.transcriptDirPath, err = plugin.startPtyAsUser(log, config, appconfig.DefaultRunAsUserName, newPassword, finalCmd)
 		}()

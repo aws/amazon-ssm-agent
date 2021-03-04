@@ -216,6 +216,12 @@ func (webSocketChannel *WebSocketChannel) Open(log log.T) error {
 func (webSocketChannel *WebSocketChannel) StartPings(log log.T, pingInterval time.Duration) {
 
 	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				log.Errorf("Websocket channel start pings panic: %v", r)
+				log.Errorf("Stacktrace:\n%s", debug.Stack())
+			}
+		}()
 		for {
 			if webSocketChannel.IsOpen == false {
 				return

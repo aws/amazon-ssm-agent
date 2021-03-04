@@ -244,6 +244,12 @@ func (s *Session) ModuleRequestStop(stopType contracts.StopType) (err error) {
 // listenReply listens document result of session execution.
 func (s *Session) listenReply(resultChan chan contracts.DocumentResult, instanceId string) {
 	log := s.context.Log()
+	defer func() {
+		if r := recover(); r != nil {
+			log.Errorf("Listen reply panic: \n%v", r)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
+		}
+	}()
 	log.Info("listening reply.")
 
 	//processor guarantees to close this channel upon stop
@@ -283,6 +289,12 @@ func (s *Session) listenReply(resultChan chan contracts.DocumentResult, instance
 // sendAgentTaskCompleteWithRetry sends AgentTaskComplete, waits for acknowledgement from MGS
 // and retries 3 times at 1 second intervals if the message is not acknowledged
 func (s *Session) sendAgentTaskCompleteWithRetry(agentTaskComplete mgsContracts.AgentTaskCompletePayload) {
+	defer func() {
+		if r := recover(); r != nil {
+			s.context.Log().Errorf("Send agent task complete panic: \n%v", r)
+			s.context.Log().Errorf("Stacktrace:\n%s", debug.Stack())
+		}
+	}()
 	messageUUID := GenerateUUID()
 	maxAttempts := 4
 	s.taskMessageChan.Store(messageUUID.String(), make(chan bool))
@@ -350,6 +362,12 @@ func (s *Session) buildAgentMessageAndSend(agentTaskComplete mgsContracts.AgentT
 // listenTaskAcknowledge listens to task acknowledgements from MGS.
 func (s *Session) listenTaskAcknowledge() {
 	log := s.context.Log()
+	defer func() {
+		if r := recover(); r != nil {
+			log.Errorf("Listen task acknowledge panic: \n%v", r)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
+		}
+	}()
 	log.Info("listening task acknowledge.")
 
 	// session module guarantees to close this channel upon stop

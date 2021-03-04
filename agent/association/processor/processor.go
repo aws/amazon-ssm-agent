@@ -18,6 +18,7 @@ import (
 	"bytes"
 	"fmt"
 	"path"
+	"runtime/debug"
 	"strings"
 	"sync"
 	"time"
@@ -527,6 +528,12 @@ func (r *Processor) associationExecutionReport(
 
 func (r *Processor) listenToResponses() {
 	log := r.context.Log()
+	defer func() {
+		if r := recover(); r != nil {
+			log.Errorf("Association processor listen panic: %v", r)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
+		}
+	}()
 	for res := range r.resChan {
 		if res.LastPlugin != "" {
 			log.Infof("update association status upon plugin $v completion", res.LastPlugin)

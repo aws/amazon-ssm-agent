@@ -16,6 +16,7 @@ package coremanager
 
 import (
 	"path/filepath"
+	"runtime/debug"
 	"sync"
 	"time"
 
@@ -215,6 +216,12 @@ func (c *CoreManager) executeCoreModules() {
 	l := len(c.coreModules)
 	for i := 0; i < l; i++ {
 		go func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					c.context.Log().Errorf("Execute core modules panic: %v", r)
+					c.context.Log().Errorf("Stacktrace:\n%s", debug.Stack())
+				}
+			}()
 			module := c.coreModules[i]
 			var err error
 			if err = module.ModuleExecute(); err != nil {
@@ -236,6 +243,12 @@ func (c *CoreManager) stopCoreModules(stopType contracts.StopType) {
 	l := len(c.coreModules)
 	for i := 0; i < l; i++ {
 		go func(wgc *sync.WaitGroup, i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					log.Errorf("Core module stop request panic: %v", r)
+					log.Errorf("Stacktrace:\n%s", debug.Stack())
+				}
+			}()
 			if stopType == contracts.StopTypeSoftStop {
 				wgc.Add(1)
 				defer wgc.Done()
@@ -263,6 +276,13 @@ func (c *CoreManager) stopCoreModules(stopType contracts.StopType) {
 // watchForReboot watches for reboot events and request core modules to stop when necessary
 func (c *CoreManager) watchForReboot() {
 	log := c.context.Log()
+
+	defer func() {
+		if r := recover(); r != nil {
+			log.Errorf("Watch for reboot panic: %v", r)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
+		}
+	}()
 
 	ch := c.rebooter.GetChannel()
 	// blocking receive

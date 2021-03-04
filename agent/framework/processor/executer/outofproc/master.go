@@ -123,7 +123,7 @@ func (e *OutOfProcExecuter) Run(
 func (e *OutOfProcExecuter) messaging(log log.T, ipc filewatcherbasedipc.IPCChannel, resChan chan contracts.DocumentResult, cancelFlag task.CancelFlag, stopTimer chan bool) {
 
 	//handoff reply functionalities to data backend.
-	backend := messaging.NewExecuterBackend(resChan, e.docState, cancelFlag)
+	backend := messaging.NewExecuterBackend(log, resChan, e.docState, cancelFlag)
 	//handoff the data backend to messaging worker
 	if err := messaging.Messaging(log, ipc, backend, stopTimer); err != nil {
 		//the messaging worker encountered error, either ipc run into error or data backend throws error
@@ -234,6 +234,12 @@ func (e *OutOfProcExecuter) WaitForProcess(stopTimer chan bool, process proc.OSP
 	//		process.Kill()
 	//	}
 	//}()
+	defer func() {
+		if r := recover(); r != nil {
+			log.Errorf("Wait for process panic: %v", r)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
+		}
+	}()
 	if err := process.Wait(); err != nil {
 		log.Errorf("process: %v exited unsuccessfully, error message: %v", process.Pid(), err)
 	} else {

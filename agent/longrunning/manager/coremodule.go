@@ -20,6 +20,7 @@ import (
 	"errors"
 	"fmt"
 	"path/filepath"
+	"runtime/debug"
 	"sync"
 	"time"
 
@@ -274,6 +275,12 @@ func (m *Manager) ModuleRequestStop(stopType contracts.StopType) (err error) {
 	// shutdown the send command pool in a separate go routine
 	wg.Add(1)
 	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				m.context.Log().Errorf("Shutdown start plugin panic: %v", r)
+				m.context.Log().Errorf("Stacktrace:\n%s", debug.Stack())
+			}
+		}()
 		defer wg.Done()
 		m.startPlugin.ShutdownAndWait(waitTimeout)
 	}()
@@ -281,6 +288,12 @@ func (m *Manager) ModuleRequestStop(stopType contracts.StopType) (err error) {
 	// shutdown the cancel command pool in a separate go routine
 	wg.Add(1)
 	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				m.context.Log().Errorf("Shutdown stop plugin panic: %v", r)
+				m.context.Log().Errorf("Stacktrace:\n%s", debug.Stack())
+			}
+		}()
 		defer wg.Done()
 		m.stopPlugin.ShutdownAndWait(waitTimeout)
 	}()
@@ -303,6 +316,12 @@ func (m *Manager) stopLongRunningPlugins(stopType contracts.StopType) {
 	i := 0
 	for pluginName := range m.runningPlugins {
 		go func(wgc *sync.WaitGroup, i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					log.Errorf("Stop long running plugins panic: %v", r)
+					log.Errorf("Stacktrace:\n%s", debug.Stack())
+				}
+			}()
 			if stopType == contracts.StopTypeSoftStop {
 				wgc.Add(1)
 				defer wgc.Done()

@@ -105,6 +105,13 @@ func RunPlugins(
 	logStreamPrefix := ioConfig.CloudWatchConfig.LogStreamPrefix
 	log := context.Log()
 
+	defer func() {
+		if r := recover(); r != nil {
+			log.Errorf("Run plugins panic: \n%v", r)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
+		}
+	}()
+
 	for pluginIndex, pluginState := range plugins {
 		pluginID := pluginState.Id     // the identifier of the plugin
 		pluginName := pluginState.Name // the name of the plugin

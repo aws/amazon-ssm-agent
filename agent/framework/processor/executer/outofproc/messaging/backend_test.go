@@ -3,10 +3,11 @@ package messaging
 import (
 	"testing"
 
+	"time"
+
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-
-	"time"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/stretchr/testify/assert"
@@ -121,7 +122,8 @@ func TestExecuterBackendStart_Shutdown(t *testing.T) {
 		closed <- true
 	}()
 	cancel.Set(task.ShutDown)
-	backend.start(testCase.docState)
+	logMock := log.NewMockLog()
+	backend.start(logMock, testCase.docState)
 	//make sure input is closed
 	<-inputChan
 	//make sure assertion are made

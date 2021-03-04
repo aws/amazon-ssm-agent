@@ -112,6 +112,12 @@ func start(log logger.T, instanceIDPtr *string, regionPtr *string, shouldCheckHi
 		//Starting hibernate mode
 		context.Log().Info("Entering SSM Agent hibernate - ", hibernationErr)
 		go func() {
+			defer func() {
+				if r := recover(); r != nil {
+					context.Log().Errorf("Hibernate panic: %v", r)
+					context.Log().Errorf("Stacktrace:\n%s", debug.Stack())
+				}
+			}()
 			hibernateState.ExecuteHibernation()
 			err = startAgent(ssmAgent, context)
 		}()

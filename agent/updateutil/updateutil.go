@@ -25,6 +25,7 @@ import (
 	"os/exec"
 	"path/filepath"
 	"runtime"
+	"runtime/debug"
 	"strconv"
 	"strings"
 	"sync"
@@ -985,6 +986,12 @@ func UnInstallerFilePath(updateRoot string, packageName string, version string) 
 }
 
 func killProcessOnTimeout(log log.T, command *exec.Cmd, timer *time.Timer) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Errorf("Kill process on timeout panic: \n%v", r)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
+		}
+	}()
 	<-timer.C
 	log.Debug("Process exceeded timeout. Attempting to kill process!")
 

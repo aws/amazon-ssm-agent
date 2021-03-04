@@ -22,6 +22,7 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"runtime/debug"
 	"strings"
 	"syscall"
 	"time"
@@ -436,6 +437,12 @@ func StartCommand(context context.T,
 // process of the command. This will unblock the command.Wait() call.
 // If the task completed successfully this method returns with no action.
 func killProcessOnCancel(log log.T, command *exec.Cmd, cancelStdout chan bool, cancelStderr chan bool, cancelFlag task.CancelFlag, signal *timeoutSignal) {
+	defer func() {
+		if r := recover(); r != nil {
+			log.Errorf("Kill process on cancel panic: %v", r)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
+		}
+	}()
 	cancelFlag.Wait()
 	if cancelFlag.Canceled() {
 		log.Debug("Process cancelled. Attempting to stop process.")
