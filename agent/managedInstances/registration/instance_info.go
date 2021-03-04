@@ -19,7 +19,7 @@ import (
 	"fmt"
 	"sync"
 
-	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/auth"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/fingerprint"
 )
@@ -39,64 +39,43 @@ var (
 )
 
 const (
-	RegVaultKey            = "RegistrationKey"
-	OnPremisesInstanceType = "on-premises"
+	RegVaultKey = "RegistrationKey"
 )
 
 // InstanceID of the managed instance.
-func InstanceID() string {
-	instance := getInstanceInfo()
+func InstanceID(log log.T) string {
+	instance := getInstanceInfo(log)
 	return instance.InstanceID
 }
 
 // Region of the managed instance.
-func Region() string {
-	instance := getInstanceInfo()
+func Region(log log.T) string {
+	instance := getInstanceInfo(log)
 	return instance.Region
 }
 
-// InstanceType of the managed instance.
-func InstanceType() string {
-	instance := getInstanceInfo()
-	if instance.InstanceID != "" {
-		return OnPremisesInstanceType
-	}
-
-	return ""
-}
-
-// AvailabilityZone of the managed instance.
-func AvailabilityZone() string {
-	instance := getInstanceInfo()
-	if instance.InstanceID != "" {
-		return "on-premises"
-	}
-
-	return ""
-}
-
 // PrivateKey of the managed instance.
-func PrivateKey() string {
-	instance := getInstanceInfo()
+func PrivateKey(log log.T) string {
+	instance := getInstanceInfo(log)
 	return instance.PrivateKey
 }
 
 // Fingerprint of the managed instance.
-func Fingerprint() (string, error) {
-	return fingerprint.InstanceFingerprint()
+func Fingerprint(log log.T) (string, error) {
+	return fingerprint.InstanceFingerprint(log)
 }
 
 // HasManagedInstancesCredentials returns true when the valid registration information is present
-func HasManagedInstancesCredentials() bool {
-	info := getInstanceInfo()
+func HasManagedInstancesCredentials(log log.T) bool {
+	info := getInstanceInfo(log)
 
 	// check if we need to activate instance
 	return info.PrivateKey != "" && info.Region != "" && info.InstanceID != ""
 }
 
 // UpdatePrivateKey saves the private key into the registration persistence store
-func UpdatePrivateKey(privateKey, privateKeyType string) (err error) {
-	info := getInstanceInfo()
+func UpdatePrivateKey(log log.T, privateKey, privateKeyType string) (err error) {
+	info := getInstanceInfo(log)
 	info.PrivateKey = privateKey
 	info.PrivateKeyType = privateKeyType
 	return updateServerInfo(info)
@@ -175,11 +154,10 @@ func loadServerInfo() (loadErr error) {
 	return nil
 }
 
-func getInstanceInfo() instanceInfo {
+func getInstanceInfo(log log.T) instanceInfo {
 	if loadedServerInfo.InstanceID == "" {
 		if err := loadServerInfo(); err != nil {
-			logger := ssmlog.SSMLogger(false)
-			logger.Warnf("error while loading server info", err)
+			log.Warnf("error while loading server info", err)
 		}
 	}
 	lock.RLock()

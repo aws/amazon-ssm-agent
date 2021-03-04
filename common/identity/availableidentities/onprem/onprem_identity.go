@@ -22,10 +22,10 @@ import (
 )
 
 // InstanceID returns the managed instance ID
-func (*Identity) InstanceID() (string, error) { return managedInstance.InstanceID(), nil }
+func (i *Identity) InstanceID() (string, error) { return managedInstance.InstanceID(i.Log), nil }
 
 // Region returns the region of the managed instance
-func (*Identity) Region() (string, error) { return managedInstance.Region(), nil }
+func (i *Identity) Region() (string, error) { return managedInstance.Region(i.Log), nil }
 
 // AvailabilityZone returns the managed instance availabilityZone
 func (*Identity) AvailabilityZone() (string, error) {
@@ -52,9 +52,9 @@ func (i *Identity) Credentials() *credentials.Credentials {
 	shareProfile = agentConfig.Profile.ShareProfile
 
 	if i.credentialsSingleton == nil {
-		instanceID := managedInstance.InstanceID()
-		region := managedInstance.Region()
-		privateKey := managedInstance.PrivateKey()
+		instanceID := managedInstance.InstanceID(i.Log)
+		region := managedInstance.Region(i.Log)
+		privateKey := managedInstance.PrivateKey(i.Log)
 
 		// Service domain not available for onprem without querying ec2 metadata
 		defaultEndpoint := endpoint.GetDefaultEndpoint(i.Log, "ssm", region, "")
@@ -71,8 +71,8 @@ func (i *Identity) Credentials() *credentials.Credentials {
 }
 
 // IsIdentityEnvironment returns if instance has managed instance registration
-func (*Identity) IsIdentityEnvironment() bool {
-	return managedInstance.HasManagedInstancesCredentials()
+func (i *Identity) IsIdentityEnvironment() bool {
+	return managedInstance.HasManagedInstancesCredentials(i.Log)
 }
 
 // IdentityType returns the identity type of the managed instance

@@ -30,7 +30,6 @@ import (
 	"unicode/utf8"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	"github.com/twinj/uuid"
 )
 
@@ -52,7 +51,7 @@ var (
 	logLock     sync.RWMutex
 )
 
-func InstanceFingerprint() (string, error) {
+func InstanceFingerprint(log log.T) (string, error) {
 	if isLoaded() {
 		return fingerprint, nil
 	}
@@ -61,7 +60,7 @@ func InstanceFingerprint() (string, error) {
 	defer lock.Unlock()
 
 	var err error
-	fingerprint, err = generateFingerprint()
+	fingerprint, err = generateFingerprint(log)
 	if err != nil {
 		return "", err
 	}
@@ -70,13 +69,13 @@ func InstanceFingerprint() (string, error) {
 	return fingerprint, nil
 }
 
-func SetSimilarityThreshold(value int) (err error) {
+func SetSimilarityThreshold(log log.T, value int) (err error) {
 	if value < 1 || 100 < value { // zero not allowed
 		return fmt.Errorf("Invalid Similarity Threshold value of %v. Value must be between 1 and 100.", value)
 	}
 
 	savedHwInfo := hwInfo{}
-	if savedHwInfo, err = fetch(); err == nil {
+	if savedHwInfo, err = fetch(log); err == nil {
 		savedHwInfo.SimilarityThreshold = value
 		err = save(savedHwInfo)
 	}
@@ -88,13 +87,11 @@ func SetSimilarityThreshold(value int) (err error) {
 }
 
 // generateFingerprint generates new fingerprint and saves it in the vault
-func generateFingerprint() (string, error) {
+func generateFingerprint(log log.T) (string, error) {
 	var hardwareHash map[string]string
 	var savedHwInfo hwInfo
 	var err error
 	var hwHashErr error
-
-	logger := getLogger()
 
 	uuid.SwitchFormat(uuid.CleanHyphen)
 	result := ""
@@ -112,7 +109,7 @@ func generateFingerprint() (string, error) {
 		}
 
 		// try get previously saved fingerprint data from vault
-		savedHwInfo, err = fetch()
+		savedHwInfo, err = fetch(log)
 		if err != nil {
 			continue
 		}
@@ -123,40 +120,40 @@ func generateFingerprint() (string, error) {
 
 		// first time generation, breakout retry
 		if !hasFingerprint(savedHwInfo) {
-			logger.Debugf("No initial fingerprint detected, skipping retry...")
+			log.Debugf("No initial fingerprint detected, skipping retry...")
 			break
 		}
 
 		// stop retry if the hardware hashes are the same
-		if isSimilarHardwareHash(logger, savedHwInfo.HardwareHash, hardwareHash, threshold) {
-			logger.Debugf("Calculated hardware hash is same as saved one, skipping retry...")
+		if isSimilarHardwareHash(log, savedHwInfo.HardwareHash, hardwareHash, threshold) {
+			log.Debugf("Calculated hardware hash is same as saved one, skipping retry...")
 			break
 		}
 
-		logger.Debugf("Calculated hardware hash is different with saved one, retry to ensure the difference is not cause by the dependency has not been ready")
+		log.Debugf("Calculated hardware hash is different with saved one, retry to ensure the difference is not cause by the dependency has not been ready")
 		// sleep 5 seconds until the next retry
 		time.Sleep(5 * time.Second)
 	}
 
 	if hwHashErr != nil {
-		logger.Errorf("Error while fetching hardware hashes from instance: %s", hwHashErr)
+		log.Errorf("Error while fetching hardware hashes from instance: %s", hwHashErr)
 		return result, hwHashErr
 	} else if !isValidHardwareHash(hardwareHash) {
 		return result, fmt.Errorf("Hardware hash generated contains invalid characters. %s", hardwareHash)
 	}
 
 	if err != nil {
-		logger.Warnf("Error while fetching fingerprint data from vault: %s", err)
+		log.Warnf("Error while fetching fingerprint data from vault: %s", err)
 	}
 
 	// check if this is the first time we are generating the fingerprint
 	// or if there is no match
 	if !hasFingerprint(savedHwInfo) {
 		// generate new fingerprint
-		logger.Info("No initial fingerprint detected, generating fingerprint file...")
+		log.Info("No initial fingerprint detected, generating fingerprint file...")
 		result = uuid.NewV4().String()
-	} else if !isSimilarHardwareHash(logger, savedHwInfo.HardwareHash, hardwareHash, threshold) {
-		logger.Info("Calculated hardware difference, regenerating fingerprint...")
+	} else if !isSimilarHardwareHash(log, savedHwInfo.HardwareHash, hardwareHash, threshold) {
+		log.Info("Calculated hardware difference, regenerating fingerprint...")
 		result = uuid.NewV4().String()
 	} else {
 		result = savedHwInfo.Fingerprint
@@ -172,19 +169,18 @@ func generateFingerprint() (string, error) {
 
 	// save content in vault
 	if err = save(updatedHwInfo); err != nil {
-		logger.Errorf("Error while saving fingerprint data from vault: %s", err)
+		log.Errorf("Error while saving fingerprint data from vault: %s", err)
 	}
 	return result, err
 }
 
-func fetch() (hwInfo, error) {
-	logger = getLogger()
+func fetch(log log.T) (hwInfo, error) {
 	savedHwInfo := hwInfo{}
 
 	// try get previously saved fingerprint data from vault
 	d, err := vault.Retrieve(vaultKey)
 	if err != nil {
-		_ = logger.Warnf("Could not read InstanceFingerprint file: %v", err)
+		_ = log.Warnf("Could not read InstanceFingerprint file: %v", err)
 		return hwInfo{}, nil
 	} else if d == nil {
 		return hwInfo{}, nil
@@ -238,7 +234,7 @@ func hasFingerprint(info hwInfo) bool {
 // currentHwHash is a map of machine property names to their current values
 // threshold is the percentage of machine properties (other than SID and IP Address) that have to match for the instance
 // to be considered the same
-func isSimilarHardwareHash(logger log.T, savedHwHash map[string]string, currentHwHash map[string]string, threshold int) bool {
+func isSimilarHardwareHash(log log.T, savedHwHash map[string]string, currentHwHash map[string]string, threshold int) bool {
 
 	var totalCount, successCount int
 	isSimilar := true
@@ -246,7 +242,7 @@ func isSimilarHardwareHash(logger log.T, savedHwHash map[string]string, currentH
 	// check input
 	if len(savedHwHash) == 0 || len(currentHwHash) == 0 {
 
-		_ = logger.Errorf(
+		_ = log.Errorf(
 			"Cannot connect to AWS Systems Manager.  " +
 				"The saved machine configuration could not be loaded or the current machine configuration could not be determined.")
 
@@ -257,7 +253,7 @@ func isSimilarHardwareHash(logger log.T, savedHwHash map[string]string, currentH
 	// this usually happens during provisioning
 	if currentHwHash[hardwareID] != savedHwHash[hardwareID] {
 
-		_ = logger.Errorf(
+		_ = log.Errorf(
 			"Cannot connect to AWS Systems Manager.  The hardware ID (%v) has changed from the registered value (%v).",
 			currentHwHash[hardwareID],
 			savedHwHash[hardwareID])
@@ -273,27 +269,27 @@ func isSimilarHardwareHash(logger log.T, savedHwHash map[string]string, currentH
 		// check whether ipaddress is the same - if the machine key and the IP address have not changed, it's the same instance.
 		if currentHwHash[ipAddressID] == savedHwHash[ipAddressID] {
 
-			logger.Debugf(matchedValueFormat, "IP Address")
+			log.Debugf(matchedValueFormat, "IP Address")
 
 		} else {
 
 			message := fmt.Sprintf(unmatchedValueFormat, "IP Address", currentHwHash[ipAddressID], savedHwHash[ipAddressID])
 			mismatchedKeyMessages = append(mismatchedKeyMessages, message)
-			logger.Debug(message)
+			log.Debug(message)
 
 			// identify number of successful matches
 			for key, currValue := range currentHwHash {
 
 				if prevValue, ok := savedHwHash[key]; ok && currValue == prevValue {
 
-					logger.Debugf(matchedValueFormat, key)
+					log.Debugf(matchedValueFormat, key)
 					successCount++
 
 				} else {
 
 					message := fmt.Sprintf(unmatchedValueFormat, key, currValue, prevValue)
 					mismatchedKeyMessages = append(mismatchedKeyMessages, message)
-					logger.Debug(message)
+					log.Debug(message)
 				}
 			}
 
@@ -301,10 +297,10 @@ func isSimilarHardwareHash(logger log.T, savedHwHash map[string]string, currentH
 			totalCount = len(currentHwHash)
 			if float32(successCount)/float32(totalCount)*100 < float32(threshold) {
 
-				_ = logger.Error("Cannot connect to AWS Systems Manager.  Machine configuration has changed more than the allowed threshold.")
+				_ = log.Error("Cannot connect to AWS Systems Manager.  Machine configuration has changed more than the allowed threshold.")
 				for _, message := range mismatchedKeyMessages {
 
-					_ = logger.Warn(message)
+					_ = log.Warn(message)
 				}
 
 				isSimilar = false
@@ -368,29 +364,4 @@ func isValidHardwareHash(hardwareHash map[string]string) bool {
 	}
 
 	return true
-}
-
-// getLogger returns the logger for the component.
-// If the logger instance has not been created, a default SSMLogger is created.
-func getLogger() log.T {
-	if logger == nil {
-
-		logLock.RLock()
-		defer logLock.RUnlock()
-
-		// in a race, another thread may have already set the logger instance before this thread acquired the lock
-		if logger == nil {
-			logger = ssmlog.SSMLogger(true)
-		}
-	}
-
-	return logger
-}
-
-// setLogger sets the logger for the component to a non-default logger.
-// This method is used by tests to inject a fake or mock logger that doesn't write to the file system.
-func setLogger(newLogger log.T) {
-	logLock.Lock()
-	defer logLock.Unlock()
-	logger = newLogger
 }
