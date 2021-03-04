@@ -198,25 +198,47 @@ func getCommandID(messageID string) (string, error) {
 	return processMessageID(messageID), nil
 }
 
-// getOrchestrationDir returns the orchestration directory
-func getOrchestrationDir(identity identity.IAgentIdentity, log log.T, update *UpdateDetail) string {
-	var err error
-	var shortInstanceId string
-	if shortInstanceId, err = identity.ShortInstanceID(); err != nil {
-		log.Errorf("Cannot get instance id.")
+// getV12DocOrchDir returns the orchestration path for v1.2 document plugins
+func getV12DocOrchDir(identity identity.IAgentIdentity, log log.T, update *UpdateDetail) string {
+	shortInstanceId, err := identity.ShortInstanceID()
+
+	if err != nil {
+		log.Errorf("Cannot get instance id: %v", err)
 	}
-	orchestrationDir := fileutil.BuildPath(
-		appconfig.DefaultDataStorePath,
-		shortInstanceId,
-		appconfig.DefaultDocumentRootDirName,
-		"orchestration")
+
 	var commandID string
 	if update.HasMessageID() {
 		commandID, _ = getCommandID(update.MessageID)
 	}
 
-	orchestrationDirectory := fileutil.BuildPath(orchestrationDir, commandID, updateutil.DefaultOutputFolder)
-	return orchestrationDirectory
+	return fileutil.BuildPath(
+		appconfig.DefaultDataStorePath,
+		shortInstanceId,
+		appconfig.DefaultDocumentRootDirName,
+		"orchestration",
+		commandID,
+		updateutil.DefaultOutputFolder)
+}
+
+// getV22DocOrchDir returns the orchestration path for v2.2 document plugins
+func getV22DocOrchDir(identity identity.IAgentIdentity, log log.T, update *UpdateDetail) string {
+	return fileutil.BuildPath(getV12DocOrchDir(identity, log, update), updateutil.DefaultOutputFolder)
+}
+
+// isV22DocUpdate returns true if the v2.2 document plugin folder exists
+func isV22DocUpdate(identity identity.IAgentIdentity, log log.T, update *UpdateDetail) bool {
+	return fileutil.Exists(getV22DocOrchDir(identity, log, update))
+}
+
+// getOrchestrationDir returns the orchestration directory
+func getOrchestrationDir(identity identity.IAgentIdentity, log log.T, update *UpdateDetail) string {
+	if isV22DocUpdate(identity, log, update) {
+		log.Debugf("Assuming v2.2 document is being executed")
+		return getV22DocOrchDir(identity, log, update)
+	}
+
+	log.Debugf("Assuming v1.2 document is being executed")
+	return getV12DocOrchDir(identity, log, update)
 }
 
 func (context *UpdateContext) cleanUpdate() {

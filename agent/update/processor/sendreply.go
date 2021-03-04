@@ -29,6 +29,7 @@ import (
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	messageService "github.com/aws/amazon-ssm-agent/agent/runcommand/mds"
 	"github.com/aws/amazon-ssm-agent/agent/times"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 )
 
 var msgSvc messageService.Service
@@ -51,18 +52,13 @@ type svcManager struct {
 // SendReply sends message back to the service
 func (s *svcManager) SendReply(log log.T, update *UpdateDetail) (err error) {
 	var svc messageService.Service
-	var config appconfig.SsmagentConfig
 	payloadB := []byte{}
 
-	if config, err = getAppConfig(false); err != nil {
-		return fmt.Errorf("could not load config file %v", err.Error())
-	}
-
-	value := prepareReplyPayload(config, update)
+	value := prepareReplyPayload(s.context, update)
 	if payloadB, err = json.Marshal(value); err != nil {
 		return fmt.Errorf("could not marshal reply payload %v", err.Error())
 	}
-	if svc, err = getMsgSvc(s.context, config); err != nil {
+	if svc, err = getMsgSvc(s.context); err != nil {
 		return fmt.Errorf("could not load message service %v", err.Error())
 	}
 
@@ -73,12 +69,8 @@ func (s *svcManager) SendReply(log log.T, update *UpdateDetail) (err error) {
 // DeleteMessage calls the DeleteMessage MDS API.
 func (s *svcManager) DeleteMessage(log log.T, update *UpdateDetail) (err error) {
 	var svc messageService.Service
-	var config appconfig.SsmagentConfig
 
-	if config, err = getAppConfig(false); err != nil {
-		return fmt.Errorf("could not load config file %v", err.Error())
-	}
-	if svc, err = getMsgSvc(s.context, config); err != nil {
+	if svc, err = getMsgSvc(s.context); err != nil {
 		return fmt.Errorf("could not load message service %v", err)
 	}
 
@@ -86,9 +78,9 @@ func (s *svcManager) DeleteMessage(log log.T, update *UpdateDetail) (err error) 
 }
 
 // getMsgSvc gets cached message service
-func getMsgSvc(context context.T, config appconfig.SsmagentConfig) (svc messageService.Service, err error) {
+func getMsgSvc(context context.T) (svc messageService.Service, err error) {
 	msgSvcOnce.Do(func() {
-		connectionTimeout := time.Duration(config.Mds.StopTimeoutMillis) * time.Millisecond
+		connectionTimeout := time.Duration(context.AppConfig().Mds.StopTimeoutMillis) * time.Millisecond
 		msgSvc = newMsgSvc(
 			context,
 			connectionTimeout)
@@ -101,10 +93,18 @@ func getMsgSvc(context context.T, config appconfig.SsmagentConfig) (svc messageS
 }
 
 // prepareReplyPayload setups the reply payload
-func prepareReplyPayload(config appconfig.SsmagentConfig, update *UpdateDetail) (payload *messageContracts.SendReplyPayload) {
+func prepareReplyPayload(context context.T, update *UpdateDetail) (payload *messageContracts.SendReplyPayload) {
+	config := context.AppConfig()
 	runtimeStatuses := make(map[string]*contracts.PluginRuntimeStatus)
 	rs := prepareRuntimeStatus(update)
-	runtimeStatuses[appconfig.PluginNameAwsAgentUpdate] = &rs
+
+	if isV22DocUpdate(context.Identity(), context.Log(), update) {
+		rs.Name = appconfig.PluginNameAwsAgentUpdate
+		runtimeStatuses[updateutil.DefaultOutputFolder] = &rs
+	} else {
+		runtimeStatuses[appconfig.PluginNameAwsAgentUpdate] = &rs
+	}
+
 	agentInfo := contracts.AgentInfo{
 		Lang:      config.Os.Lang,
 		Name:      config.Agent.Name,
