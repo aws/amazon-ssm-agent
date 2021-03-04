@@ -178,14 +178,13 @@ func deepCopy(original map[string]string) (copied map[string]string) {
 
 func TestGenerateFingerprint_FailGenerateHwHash(t *testing.T) {
 	// Arrange
-	setLogger(log.NewMockLog())
 	failedGenerateHwHashError := "Failed to generate hardware hash"
 	currentHwHash = func() (map[string]string, error) {
 		return make(map[string]string), fmt.Errorf(failedGenerateHwHashError)
 	}
 
 	// Act
-	fingerprint, err := generateFingerprint()
+	fingerprint, err := generateFingerprint(log.NewMockLog())
 
 	// Assert
 	assert.Error(t, err, "expected no error from the call")
@@ -195,7 +194,6 @@ func TestGenerateFingerprint_FailGenerateHwHash(t *testing.T) {
 
 func TestGenerateFingerprint_GenerateNewWhenNoneSaved(t *testing.T) {
 	// Arrange
-	setLogger(log.NewMockLog())
 	currentHwHash = func() (map[string]string, error) {
 		hwHash := make(map[string]string)
 		hwHash[hardwareID] = "original"
@@ -209,7 +207,7 @@ func TestGenerateFingerprint_GenerateNewWhenNoneSaved(t *testing.T) {
 	}
 
 	// Act
-	actual, err := generateFingerprint()
+	actual, err := generateFingerprint(log.NewMockLog())
 
 	// Assert
 	assert.NoError(t, err, "expected no error from the call")
@@ -219,7 +217,6 @@ func TestGenerateFingerprint_GenerateNewWhenNoneSaved(t *testing.T) {
 
 func TestGenerateFingerprint_ReturnSavedWhenMatched(t *testing.T) {
 	// Arrange
-	setLogger(log.NewMockLog())
 	currentHwHash = func() (map[string]string, error) {
 		hwHash := make(map[string]string)
 		hwHash[hardwareID] = "original"
@@ -243,7 +240,7 @@ func TestGenerateFingerprint_ReturnSavedWhenMatched(t *testing.T) {
 	}
 
 	// Act
-	actual, err := generateFingerprint()
+	actual, err := generateFingerprint(log.NewMockLog())
 
 	// Assert
 	assert.NoError(t, err, "expected no error from the call")
@@ -253,7 +250,6 @@ func TestGenerateFingerprint_ReturnSavedWhenMatched(t *testing.T) {
 
 func TestGenerateFingerprint_ReturnUpdated_WhenHardwareHashesDontMatch(t *testing.T) {
 	// Arrange
-	setLogger(log.NewMockLog())
 	currentHwHash = func() (map[string]string, error) {
 		hwHash := make(map[string]string)
 		hwHash[hardwareID] = "changed"
@@ -276,7 +272,7 @@ func TestGenerateFingerprint_ReturnUpdated_WhenHardwareHashesDontMatch(t *testin
 	}
 
 	// Act
-	actual, err := generateFingerprint()
+	actual, err := generateFingerprint(log.NewMockLog())
 
 	// Assert
 	assert.NoError(t, err, "expected no error from the call")
@@ -285,7 +281,6 @@ func TestGenerateFingerprint_ReturnUpdated_WhenHardwareHashesDontMatch(t *testin
 
 func TestGenerateFingerprint_ReturnsError_WhenInvalidCharactersInHardwareHash(t *testing.T) {
 	// Arrange
-	setLogger(log.NewMockLog())
 	currentHwHash = func() (map[string]string, error) {
 		hwHash := make(map[string]string)
 		hwHash[hardwareID] = invalidUTF8String
@@ -296,7 +291,7 @@ func TestGenerateFingerprint_ReturnsError_WhenInvalidCharactersInHardwareHash(t 
 	vault = vaultMock
 
 	//Act
-	fingerprint, err := generateFingerprint()
+	fingerprint, err := generateFingerprint(log.NewMockLog())
 
 	//Assert
 	assert.Error(t, err)
@@ -305,7 +300,6 @@ func TestGenerateFingerprint_ReturnsError_WhenInvalidCharactersInHardwareHash(t 
 
 func TestGenerateFingerprint_DoesNotSave_WhenHardwareHashesMatch(t *testing.T) {
 	// Arrange
-	setLogger(log.NewMockLog())
 	savedHwHash := getHwHash("original")
 	currentHwHash = func() (map[string]string, error) {
 		return savedHwHash, nil
@@ -323,12 +317,11 @@ func TestGenerateFingerprint_DoesNotSave_WhenHardwareHashesMatch(t *testing.T) {
 	vault = vaultMock
 
 	// Act
-	generateFingerprint()
+	generateFingerprint(log.NewMockLog())
 }
 
 func TestSave_SavesNewFingerprint(t *testing.T) {
 	// Arrange
-	setLogger(log.NewMockLog())
 	sampleHwHash := getHwHash("backup")
 	sampleHwInfo := hwInfo{
 		HardwareHash:        sampleHwHash,
@@ -349,7 +342,6 @@ func TestSave_SavesNewFingerprint(t *testing.T) {
 
 func TestIsValidHardwareHash_ReturnsHashIsValid(t *testing.T) {
 	// Arrange
-	setLogger(log.NewMockLog())
 	sampleHash := make(map[string]string)
 	sampleHash[hardwareID] = "sample"
 
@@ -362,7 +354,6 @@ func TestIsValidHardwareHash_ReturnsHashIsValid(t *testing.T) {
 
 func TestIsValidHardwareHash_ReturnsHashIsInvalid(t *testing.T) {
 	// Arrange
-	setLogger(log.NewMockLog())
 	sampleHash := make(map[string]string)
 	sampleHash[hardwareID] = invalidUTF8String
 

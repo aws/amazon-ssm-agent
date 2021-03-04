@@ -24,7 +24,7 @@ import (
 // Error will be returned if the request fails, or unable to extract
 // the desired credentials.
 func (m *managedInstancesRoleProvider) Retrieve() (credentials.Value, error) {
-	fingerprint, err := managedInstance.Fingerprint()
+	fingerprint, err := managedInstance.Fingerprint(m.Log)
 	if err != nil {
 		return emptyCredential, fmt.Errorf("error reading machine fingerprint: %v", err)
 	}
@@ -51,7 +51,7 @@ func (m *managedInstancesRoleProvider) Retrieve() (credentials.Value, error) {
 		}
 
 		// persist the new key
-		err = managedInstance.UpdatePrivateKey(privateKey, keyType)
+		err = managedInstance.UpdatePrivateKey(m.Log, privateKey, keyType)
 		if err != nil {
 			return emptyCredential, fmt.Errorf("error persisting private key: %v", err)
 		}

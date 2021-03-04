@@ -16,6 +16,8 @@ package registration
 
 import (
 	"fmt"
+
+	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
 const (
@@ -36,7 +38,7 @@ func ExampleRegion() {
 	file = fileStub{}
 	vault = vaultStub{rKey: sampleRegistrationKey, data: sampleJson, exists: true}
 	loadServerInfo() // load info with mocked vault
-	region := Region()
+	region := Region(log.NewMockLog())
 	fmt.Println(region)
 	// Output:
 	// us-west-1
@@ -46,7 +48,7 @@ func ExampleInstanceID() {
 	file = fileStub{}
 	vault = vaultStub{rKey: sampleRegistrationKey, data: sampleJson, exists: true}
 	loadServerInfo() // load info with mocked vault
-	instanceID := InstanceID()
+	instanceID := InstanceID(log.NewMockLog())
 	fmt.Println(instanceID)
 	// Output:
 	// mi-e6c6f145e6c6f145
@@ -56,7 +58,7 @@ func ExamplePrivateKey() {
 	file = fileStub{}
 	vault = vaultStub{rKey: sampleRegistrationKey, data: sampleJson, exists: true}
 	loadServerInfo() // load info with mocked vault
-	privateKey := PrivateKey()
+	privateKey := PrivateKey(log.NewMockLog())
 	fmt.Println(privateKey)
 	// Output:
 	// KEYe6c6f145e6c6f145

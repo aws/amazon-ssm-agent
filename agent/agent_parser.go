@@ -99,7 +99,7 @@ func processRegistration(log logger.T) (exitCode int) {
 	}
 
 	// check if previously registered
-	if !force && registration.InstanceID() != "" {
+	if !force && registration.InstanceID(log) != "" {
 		confirmation, err := askForConfirmation()
 		if err != nil {
 			log.Errorf("Registration failed due to %v", err)
@@ -124,7 +124,7 @@ func processRegistration(log logger.T) (exitCode int) {
 
 // processFingerprint handles flags related to the fingerprint category
 func processFingerprint(log logger.T) (exitCode int) {
-	if err := fingerprint.SetSimilarityThreshold(similarityThreshold); err != nil {
+	if err := fingerprint.SetSimilarityThreshold(log, similarityThreshold); err != nil {
 		log.Errorf("Error setting the SimilarityThreshold. %v", err)
 		return 1
 	}
@@ -148,7 +148,7 @@ func registerManagedInstance(log logger.T) (managedInstanceID string, err error)
 	}
 
 	// generate fingerprint
-	fingerprint, err := registration.Fingerprint()
+	fingerprint, err := registration.Fingerprint(log)
 	if err != nil {
 		return managedInstanceID, fmt.Errorf("error generating instance fingerprint. %v", err)
 	}

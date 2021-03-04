@@ -21,6 +21,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -181,17 +182,17 @@ func TestParseCurlOutput(t *testing.T) {
 	}
 }
 
-func mockOnPremInstanceType() string {
-	return "on-premises"
+func mockIsOnPremInstanceType(identity.IAgentIdentity) bool {
+	return true
 }
 
-func mockInstanceType() string {
-	return ""
+func mockIsNotOnPremInstanceType(identity.IAgentIdentity) bool {
+	return false
 }
 
 func TestCollectBillingInfoData(t *testing.T) {
 	mockContext := context.NewMockDefault()
-	instType = mockInstanceType
+	isOnPremInstance = mockIsNotOnPremInstanceType
 	for i, sampleData := range sampleDataUnix {
 		cmdExecutor = createMockExecutor(sampleData)
 		parsedItems := CollectBillingInfoData(mockContext)
@@ -211,7 +212,7 @@ func TestCollectBillingInfoData(t *testing.T) {
 
 func TestCollectBillingInfoDataWithOnPremInstance(t *testing.T) {
 	mockContext := context.NewMockDefault()
-	instType = mockOnPremInstanceType
+	isOnPremInstance = mockIsOnPremInstanceType
 	parsedItems := CollectBillingInfoData(mockContext)
 	assert.Equal(t, len(parsedItems), 0)
 }

@@ -21,6 +21,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/assert"
 )
@@ -133,26 +134,24 @@ type registrationStub struct {
 	err              error
 }
 
-func (r registrationStub) InstanceID() string { return r.instanceID }
+func (r registrationStub) InstanceID(log log.T) string { return r.instanceID }
 
-func (r registrationStub) Region() string { return r.region }
+func (r registrationStub) Region(log log.T) string { return r.region }
 
-func (r registrationStub) InstanceType() string { return r.instanceType }
+func (r registrationStub) InstanceType(log log.T) string { return r.instanceType }
 
-func (r registrationStub) AvailabilityZone() string { return r.availabilityZone }
+func (r registrationStub) Fingerprint(log log.T) (string, error) { return r.fingerprint, r.err }
 
-func (r registrationStub) Fingerprint() (string, error) { return r.fingerprint, r.err }
-
-func (r registrationStub) PrivateKey() string { return r.privateKey }
+func (r registrationStub) PrivateKey(log log.T) string { return r.privateKey }
 
 func (r registrationStub) GenerateKeyPair() (publicKey, privateKey, keyType string, err error) {
 	return r.publicKey, r.privateKey, r.keyType, r.err
 }
 
-func (r registrationStub) UpdatePrivateKey(privateKey, privateKeyType string) (err error) {
+func (r registrationStub) UpdatePrivateKey(log log.T, privateKey, privateKeyType string) (err error) {
 	return r.err
 }
 
-func (r registrationStub) HasManagedInstancesCredentials() (bool) {
+func (r registrationStub) HasManagedInstancesCredentials(log log.T) bool {
 	return r.hasCreds
 }

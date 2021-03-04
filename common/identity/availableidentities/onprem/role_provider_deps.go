@@ -16,35 +16,36 @@
 package onprem
 
 import (
-"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
+	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
 )
 
 // dependency for managed instance registration
 var managedInstance instanceRegistration = instanceInfo{}
 
 type instanceRegistration interface {
-	InstanceID() string
-	Region() string
-	PrivateKey() string
-	Fingerprint() (string, error)
+	InstanceID(log.T) string
+	Region(log.T) string
+	PrivateKey(log.T) string
+	Fingerprint(log.T) (string, error)
 	GenerateKeyPair() (string, string, string, error)
-	UpdatePrivateKey(string, string) error
-	HasManagedInstancesCredentials() bool
+	UpdatePrivateKey(log.T, string, string) error
+	HasManagedInstancesCredentials(log.T) bool
 }
 
 type instanceInfo struct{}
 
 // ServerID returns the managed instance ID
-func (instanceInfo) InstanceID() string { return registration.InstanceID() }
+func (instanceInfo) InstanceID(log log.T) string { return registration.InstanceID(log) }
 
 // Region returns the managed instance region
-func (instanceInfo) Region() string { return registration.Region() }
+func (instanceInfo) Region(log log.T) string { return registration.Region(log) }
 
 // PrivateKey returns the managed instance PrivateKey
-func (instanceInfo) PrivateKey() string { return registration.PrivateKey() }
+func (instanceInfo) PrivateKey(log log.T) string { return registration.PrivateKey(log) }
 
 // Fingerprint returns the managed instance fingerprint
-func (instanceInfo) Fingerprint() (string, error) { return registration.Fingerprint() }
+func (instanceInfo) Fingerprint(log log.T) (string, error) { return registration.Fingerprint(log) }
 
 // GenerateKeyPair generate a new keypair
 func (instanceInfo) GenerateKeyPair() (publicKey, privateKey, keyType string, err error) {
@@ -52,11 +53,11 @@ func (instanceInfo) GenerateKeyPair() (publicKey, privateKey, keyType string, er
 }
 
 // UpdatePrivateKey saves the private key into the registration persistence store
-func (instanceInfo) UpdatePrivateKey(privateKey, privateKeyType string) (err error) {
-	return registration.UpdatePrivateKey(privateKey, privateKeyType)
+func (instanceInfo) UpdatePrivateKey(log log.T, privateKey, privateKeyType string) (err error) {
+	return registration.UpdatePrivateKey(log, privateKey, privateKeyType)
 }
 
 // HasManagedInstanceCredentials returns if the instance has registration
-func (instanceInfo) HasManagedInstancesCredentials() bool {
-	return registration.HasManagedInstancesCredentials()
+func (instanceInfo) HasManagedInstancesCredentials(log log.T) bool {
+	return registration.HasManagedInstancesCredentials(log)
 }
