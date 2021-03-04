@@ -15,6 +15,7 @@
 package cloudwatchlogspublisher
 
 import (
+	"runtime/debug"
 	"strings"
 	"time"
 
@@ -99,6 +100,13 @@ func (cloudwatchPublisher *CloudWatchPublisher) Init() {
 
 // CloudWatchLogsEventsListener listens to cloudwatchlogs events channel
 func (cloudwatchPublisher *CloudWatchPublisher) CloudWatchLogsEventsListener() {
+	log := cloudwatchPublisher.context.Log()
+	defer func() {
+		if r := recover(); r != nil {
+			log.Errorf("Cloudwatch listener panic: %v", r)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
+		}
+	}()
 	for event := range cloudwatchlogsqueue.CloudWatchLogsEventsChannel {
 
 		switch event {
@@ -199,6 +207,12 @@ func (cloudwatchPublisher *CloudWatchPublisher) startPolling(sequenceToken, sequ
 	pollingShouldBackoff := false
 
 	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				log.Errorf("Cloudwatch publisher poll panic: %v", r)
+				log.Errorf("Stacktrace:\n%s", debug.Stack())
+			}
+		}()
 		for {
 			pollingShouldBackoff = false
 			select {

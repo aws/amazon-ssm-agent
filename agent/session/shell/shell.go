@@ -476,6 +476,12 @@ func (p *ShellPlugin) startStreamingLogs(
 
 	// starts streaming
 	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				log.Errorf("CloudWatch stream data panic: %v", r)
+				log.Errorf("Stacktrace:\n%s", debug.Stack())
+			}
+		}()
 		p.logger.cloudWatchStreamingFinished <- p.logger.cwl.StreamData(
 			config.CloudWatchLogGroup,
 			config.SessionId,

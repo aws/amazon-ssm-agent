@@ -16,6 +16,7 @@ package health
 
 import (
 	"math/rand"
+	"runtime/debug"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -89,6 +90,13 @@ func (h *HealthCheck) scheduleUpdateHealth() {
 // updates SSM with the instance health information
 func (h *HealthCheck) updateHealth() {
 	log := h.context.Log()
+	defer func() {
+		if r := recover(); r != nil {
+			log.Errorf("Update health panic: \n%v", r)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
+		}
+	}()
+
 	log.Infof("%s reporting agent health.", name)
 
 	var err error

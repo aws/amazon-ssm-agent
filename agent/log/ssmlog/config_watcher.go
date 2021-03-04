@@ -16,6 +16,7 @@ package ssmlog
 
 import (
 	"path/filepath"
+	"runtime/debug"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/fsnotify/fsnotify"
@@ -76,7 +77,12 @@ func (fileWatcher *FileWatcher) Start() {
 
 // fileEventHandler implements handling of the events triggered by the OS
 func (fileWatcher *FileWatcher) fileEventHandler() {
-
+	defer func() {
+		if r := recover(); r != nil {
+			fileWatcher.log.Errorf("File event handler panic: \n%v", r)
+			fileWatcher.log.Errorf("Stacktrace:\n%s", debug.Stack())
+		}
+	}()
 	// Waiting on signals from OS
 	for event := range fileWatcher.watcher.Events {
 		// Event signalled by OS on file

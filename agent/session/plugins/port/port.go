@@ -163,6 +163,12 @@ func (p *PortPlugin) execute(
 	}
 
 	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				log.Errorf("Session cancel flag panic: \n%v", r)
+				log.Errorf("Stacktrace:\n%s", debug.Stack())
+			}
+		}()
 		cancelState := cancelFlag.Wait()
 		if cancelFlag.Canceled() {
 			p.cancelled <- struct{}{}
@@ -174,6 +180,12 @@ func (p *PortPlugin) execute(
 	log.Debugf("Start separate go routine to read from port connection and write to data channel")
 	done := make(chan int, 1)
 	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				log.Errorf("Session write pump panic: \n%v", r)
+				log.Errorf("Stacktrace:\n%s", debug.Stack())
+			}
+		}()
 		done <- p.session.WritePump(p.dataChannel)
 	}()
 	log.Infof("Plugin %s started", p.name())

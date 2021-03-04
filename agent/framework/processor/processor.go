@@ -198,6 +198,12 @@ func (p *EngineProcessor) Stop(stopType contracts.StopType) {
 	// shutdown the send command pool in a separate go routine
 	wg.Add(1)
 	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				p.context.Log().Errorf("Shutdown send command pool panic: %v", r)
+				p.context.Log().Errorf("Stacktrace:\n%s", debug.Stack())
+			}
+		}()
 		defer wg.Done()
 		p.sendCommandPool.ShutdownAndWait(waitTimeout)
 	}()
@@ -205,6 +211,12 @@ func (p *EngineProcessor) Stop(stopType contracts.StopType) {
 	// shutdown the cancel command pool in a separate go routine
 	wg.Add(1)
 	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				p.context.Log().Errorf("Shutdown cancel command pool panic: %v", r)
+				p.context.Log().Errorf("Stacktrace:\n%s", debug.Stack())
+			}
+		}()
 		defer wg.Done()
 		p.cancelCommandPool.ShutdownAndWait(waitTimeout)
 	}()

@@ -5,6 +5,7 @@ package main
 import (
 	"log"
 	"os"
+	"runtime/debug"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -166,6 +167,14 @@ func waitForSysPrep(log logger.T) (bool, uint32) {
 // Execute agent as Windows service.  Implement golang.org/x/sys/windows/svc#Handler.
 func (a *amazonSSMAgentService) Execute(args []string, r <-chan svc.ChangeRequest, s chan<- svc.Status) (bool, uint32) {
 	log := a.log
+	defer func() {
+		// recover in case the agent panics
+		// this should handle some kind of seg fault errors.
+		if msg := recover(); msg != nil {
+			log.Errorf("core Agent service crashed with message %v!", msg)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
+		}
+	}()
 
 	isSysPrepEC, erro := waitForSysPrep(log)
 	if !(isSysPrepEC && erro == appconfig.SuccessExitCode) { //returnCode true with success exit code means we can continue to start the agent

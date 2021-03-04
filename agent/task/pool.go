@@ -15,6 +15,7 @@ package task
 
 import (
 	"fmt"
+	"runtime/debug"
 	"sync"
 	"time"
 
@@ -147,6 +148,12 @@ func (p *pool) start(jobProcessor func(JobToken)) {
 	for i := 0; i < p.nWorkers; i++ {
 		workerName := fmt.Sprintf("worker-%d", i)
 		go func() {
+			defer func() {
+				if r := recover(); r != nil {
+					p.log.Errorf("Pool start panic: %v", r)
+					p.log.Errorf("Stacktrace:\n%s", debug.Stack())
+				}
+			}()
 			defer p.workerDone()
 			worker(workerName, p.jobQueue, jobProcessor)
 		}()

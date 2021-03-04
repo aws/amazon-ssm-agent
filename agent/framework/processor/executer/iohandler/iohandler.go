@@ -18,6 +18,7 @@ import (
 	"bytes"
 	"fmt"
 	"io"
+	"runtime/debug"
 
 	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -209,6 +210,12 @@ func (out *DefaultIOHandler) RegisterOutputSource(multiWriter multiwriter.Docume
 		// Run the reader for each module
 		log.Debug("Starting a new stream reader go routing")
 		go func(module iomodule.IOModule, r *io.PipeReader) {
+			defer func() {
+				if r := recover(); r != nil {
+					log.Errorf("Stream reader panic: %v", r)
+					log.Errorf("Stacktrace:\n%s", debug.Stack())
+				}
+			}()
 			defer wg.Done()
 			module.Read(out.context, r)
 		}(module, r)

@@ -23,6 +23,7 @@ import (
 	"fmt"
 	"math"
 	"math/rand"
+	"runtime/debug"
 	"sync"
 	"time"
 
@@ -452,6 +453,12 @@ func (dataChannel *DataChannel) SendStreamDataMessage(log log.T, payloadType mgs
 // and resends first message if time elapsed since lastSentTime of the message is more than acknowledge wait time
 func (dataChannel *DataChannel) ResendStreamDataMessageScheduler(log log.T) error {
 	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				log.Errorf("Resend stream data message scheduler panic: %v", r)
+				log.Errorf("Stacktrace:\n%s", debug.Stack())
+			}
+		}()
 		for {
 			time.Sleep(mgsConfig.ResendSleepInterval)
 			if dataChannel.Pause {

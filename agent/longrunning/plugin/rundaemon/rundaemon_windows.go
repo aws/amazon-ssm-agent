@@ -20,6 +20,7 @@ package rundaemon
 import (
 	"os"
 	"os/exec"
+	"runtime/debug"
 	"strconv"
 	"strings"
 	"sync"
@@ -178,6 +179,12 @@ func StartDaemonHelper(p *Plugin, configuration string) (err error) {
 // Starts a given executable or a specified powershell script and enables daemon functionality
 func StartDaemon(p *Plugin, configuration string) (err error) {
 	log := p.Context.Log()
+	defer func() {
+		if r := recover(); r != nil {
+			log.Errorf("Start daemon panic: \n%v", r)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
+		}
+	}()
 	RetryCount := 0
 	// Bail out if an explicit Stop daemon is requested by the user
 	if p.stopRequested() {

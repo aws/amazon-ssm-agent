@@ -6,6 +6,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"runtime/debug"
 	"strings"
 	"time"
 
@@ -373,6 +374,13 @@ func getFileSize(filepath string) (fileSize int64, err error) {
 // make sure this go routine not leaking
 func (ch *fileWatcherChannel) watch() {
 	log := ch.logger
+	defer func() {
+		if r := recover(); r != nil {
+			log.Errorf("File watch panic: %v", r)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
+		}
+	}()
+
 	log.Debugf("%v listener started on path: %v", ch.mode, ch.path)
 	//drain all the current messages in the dir
 	ch.consumeAll()

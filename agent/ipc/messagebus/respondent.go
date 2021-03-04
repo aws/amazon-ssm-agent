@@ -18,6 +18,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"runtime/debug"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -60,6 +61,12 @@ func NewMessageBus(context context.T) *MessageBus {
 // and process the relies on the HealthPing to determine if worker is still running
 func (bus *MessageBus) ProcessHealthRequest() {
 	log := bus.context.Log()
+	defer func() {
+		if r := recover(); r != nil {
+			log.Errorf("Process health request panic: %v", r)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
+		}
+	}()
 	var err error
 	var msg []byte
 
@@ -124,6 +131,12 @@ func (bus *MessageBus) ProcessHealthRequest() {
 // CoreAgent sends termination message when itself is stopping, Worker use it to decide if itself should be terminated
 func (bus *MessageBus) ProcessTerminationRequest() {
 	log := bus.context.Log()
+	defer func() {
+		if r := recover(); r != nil {
+			log.Errorf("Process termination request panic: %v", r)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
+		}
+	}()
 	var err error
 	var msg []byte
 	defer func() {

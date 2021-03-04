@@ -21,6 +21,7 @@ import (
 	"errors"
 	"io"
 	"os"
+	"runtime/debug"
 	"strings"
 	"time"
 
@@ -499,6 +500,12 @@ func (service *CloudWatchLogsService) StreamData(
 	structuredLogs bool) (success bool) {
 	log := service.context.Log()
 	log.Infof("Uploading logs at %s to CloudWatch", absoluteFilePath)
+	defer func() {
+		if r := recover(); r != nil {
+			log.Errorf("CloudWatch service stream data panic: %v", r)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
+		}
+	}()
 
 	service.IsFileComplete = isFileComplete
 	go func() {

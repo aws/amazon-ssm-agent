@@ -212,6 +212,11 @@ func (p *MuxPortSession) cleanUp() {
 // transferDataToMgs reads data from smux server and sends on data channel.
 func (p *MuxPortSession) transferDataToMgs(ctx context.Context, dataChannel datachannel.IDataChannel) error {
 	log := p.context.Log()
+	defer func() {
+		if r := recover(); r != nil {
+			log.Errorf("Transfer data to mgs crashed with message: %v", r)
+		}
+	}()
 	for {
 		if dataChannel.IsActive() {
 			packet := make([]byte, mgsConfig.StreamDataPayloadSize)
@@ -238,6 +243,11 @@ func (p *MuxPortSession) transferDataToMgs(ctx context.Context, dataChannel data
 // handleServerConnections sets up smux stream and handles communication between smux stream and destination server.
 func (p *MuxPortSession) handleServerConnections(ctx context.Context, dataChannel datachannel.IDataChannel) error {
 	log := p.context.Log()
+	defer func() {
+		if r := recover(); r != nil {
+			log.Errorf("Handle server connections crashed with message: %v", r)
+		}
+	}()
 	// net.Dial assumes local system when host in addr is empty
 	localAddr := fmt.Sprintf(":%s", p.serverPortNumber)
 	for {
@@ -256,6 +266,11 @@ func (p *MuxPortSession) handleServerConnections(ctx context.Context, dataChanne
 			if conn, err := net.Dial("tcp", localAddr); err == nil {
 				log.Tracef("Established connection to port %s", p.serverPortNumber)
 				go func() {
+					defer func() {
+						if r := recover(); r != nil {
+							log.Errorf("Handle data transfer crashed with message: %v", r)
+						}
+					}()
 					handleDataTransfer(stream, conn)
 				}()
 			} else {

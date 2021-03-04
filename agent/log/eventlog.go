@@ -137,6 +137,11 @@ func (e *EventLog) rotateEventLog() {
 //eventWriter triggers the go routine once and then waits for data from buffer channel
 func (e *EventLog) eventWriter() {
 	go func() {
+		defer func() {
+			if r := recover(); r != nil {
+				fmt.Println("Event writer panic: ", r)
+			}
+		}()
 		for event := range e.eventChannel {
 			header := SchemaVersionHeader + e.schemaVersion + "\n"
 			if createdFlag := e.writeFile(event, header); createdFlag {
