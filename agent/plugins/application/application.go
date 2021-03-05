@@ -159,6 +159,12 @@ func (p *Plugin) runCommands(pluginID string, pluginInput ApplicationPluginInput
 	output.SetExitCode(exitCode)
 	setMsiExecStatus(log, pluginInput, cancelFlag, output)
 
+	// Only delete the file if source is not a local path
+	if exists, err := fileutil.LocalFileExist(pluginInput.Source); err == nil && !exists {
+		// delete downloaded file, if it exists
+		pluginutil.CleanupFile(log, downloadOutput.LocalFilePath)
+	}
+
 	if err != nil {
 		output.MarkAsFailed(fmt.Errorf("failed to run commands: %v", err))
 		return

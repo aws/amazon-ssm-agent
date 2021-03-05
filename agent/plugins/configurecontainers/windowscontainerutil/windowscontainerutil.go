@@ -21,12 +21,14 @@ import (
 	"strings"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 )
 
 const (
@@ -178,14 +180,22 @@ func RunInstallCommands(context context.T, orchestrationDirectory string, out io
 
 	//Download docker
 	var downloadOutput artifact.DownloadOutput
-	downloadOutput, err = dep.ArtifactDownload(context, artifact.DownloadInput{SourceURL: DOCKER_DOWNLOAD_URL, DestinationDirectory: os.TempDir()})
+	downloadOutput, err = dep.ArtifactDownload(context, artifact.DownloadInput{SourceURL: DOCKER_DOWNLOAD_URL, DestinationDirectory: appconfig.PluginsDownloadRoot})
+	if err != nil {
+		log.Errorf("failed to download file from %v: %v", DOCKER_DOWNLOAD_URL, err)
+		return
+	}
+	log.Debugf("Zip file downloaded to %v", downloadOutput.LocalFilePath)
+
 	_, installedErr := os.Stat(DOCKER_INSTALLED_DIRECTORY)
 	if downloadOutput.IsUpdated || installedErr != nil {
 		out.AppendInfo("Unzipping Docker to program files directory.")
 		//uncompress docker zip
 		fileutil.Uncompress(log, downloadOutput.LocalFilePath, DOCKER_UNCOMPRESS_DIRECTORY)
 	}
-	log.Debugf("Zip file downloaded to %v", downloadOutput.LocalFilePath)
+
+	// delete downloaded file, if it exists
+	pluginutil.CleanupFile(log, downloadOutput.LocalFilePath)
 
 	//Set this process's path environment variable to include Docker
 	if !strings.Contains(strings.ToLower(os.Getenv("path")), strings.ToLower(DOCKER_INSTALLED_DIRECTORY)) {

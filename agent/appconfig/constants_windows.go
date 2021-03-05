@@ -116,6 +116,9 @@ var ManifestCacheDirectory string
 // DownloadRoot specifies the directory under which files will be downloaded
 var DownloadRoot string
 
+// PluginsDownloadRoot specifies the directory under which files will be downloaded by plugins
+var PluginsDownloadRoot string
+
 // UpdaterArtifactsRoot represents the directory for storing update related information
 var UpdaterArtifactsRoot string
 
@@ -189,15 +192,14 @@ func init() {
 	LocalCommandRootSubmitted = filepath.Join(LocalCommandRoot, "Submitted")
 	LocalCommandRootCompleted = filepath.Join(LocalCommandRoot, "Completed")
 	LocalCommandRootInvalid = filepath.Join(LocalCommandRoot, "Invalid")
+	PluginsDownloadRoot = filepath.Join(SSMDataPath, "Download")
 	DownloadRoot = filepath.Join(temp, SSMFolder, "Download")
 	UpdaterArtifactsRoot = filepath.Join(temp, SSMFolder, "Update")
 	UpdaterPidLockfile = filepath.Join(temp, SSMFolder, "update.lock")
-	EC2UpdateArtifactsRoot = filepath.Join(EnvWinDir, EC2ConfigServiceFolder, "Update")
-	EC2UpdaterDownloadRoot = filepath.Join(temp, EC2ConfigAppDataFolder, "Download")
 
 	DefaultCustomInventoryFolder = filepath.Join(SSMDataPath, "Inventory", "Custom")
-	EC2UpdateArtifactsRoot = filepath.Join(EnvWinDir, EC2ConfigServiceFolder, "Update")
-	EC2UpdaterDownloadRoot = filepath.Join(temp, EC2ConfigAppDataFolder, "Download")
+	EC2UpdateArtifactsRoot = filepath.Join(programData, EC2ConfigAppDataFolder, "Updater")
+	EC2UpdaterDownloadRoot = filepath.Join(programData, EC2ConfigAppDataFolder, "Downloads")
 	EC2ConfigDataStorePath = filepath.Join(programData, EC2ConfigAppDataFolder, "InstanceData")
 	UpdateContextFilePath = filepath.Join(programData, EC2ConfigAppDataFolder, "Update\\UpdateContext.json")
 	EC2ConfigSettingPath = filepath.Join(EnvProgramFiles, EC2ConfigServiceFolder, "Settings")

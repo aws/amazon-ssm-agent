@@ -21,6 +21,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher"
@@ -250,7 +251,8 @@ func downloadFile(ds *PackageService, tracer trace.Tracer, file *archive.File, p
 		return "", err
 	}
 	downloadInput := artifact.DownloadInput{
-		SourceURL: sourceUrl,
+		SourceURL:            sourceUrl,
+		DestinationDirectory: appconfig.PluginsDownloadRoot,
 		// TODO don't hardcode sha256 - use multiple checksums
 		SourceChecksums: file.Info.Checksums,
 	}

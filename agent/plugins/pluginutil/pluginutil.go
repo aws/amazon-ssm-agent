@@ -18,6 +18,7 @@ import (
 	"errors"
 	"io"
 	"io/ioutil"
+	"os"
 	"strconv"
 	"strings"
 
@@ -93,7 +94,8 @@ func CreateScriptFile(log log.T, scriptPath string, runCommand []string, byteOrd
 func DownloadFileFromSource(context context.T, source string, sourceHash string, sourceHashType string) (artifact.DownloadOutput, error) {
 	// download source and verify its integrity
 	downloadInput := artifact.DownloadInput{
-		SourceURL: source,
+		SourceURL:            source,
+		DestinationDirectory: appconfig.PluginsDownloadRoot,
 		SourceChecksums: map[string]string{
 			sourceHashType: sourceHash,
 		},
@@ -257,4 +259,17 @@ func CleanupJSONField(field string) string {
 	res = strings.Replace(res, `"`, `\"`, -1)
 	res = strings.Replace(res, "\t", `\t`, -1)
 	return res
+}
+
+// Deletes file if it exists
+func CleanupFile(log log.T, file string) {
+	if _, err := os.Stat(file); err == nil || os.IsExist(err) {
+		if err = os.RemoveAll(file); err != nil {
+			log.Debugf("failed to delete file %v, %v", file, err.Error())
+		} else {
+			log.Debugf("deleted file %v", file)
+		}
+	} else {
+		log.Debugf("failed to get file info: %v", file)
+	}
 }

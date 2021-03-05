@@ -18,6 +18,7 @@ import (
 	"errors"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/birdwatcher"
@@ -1033,8 +1034,9 @@ func TestDownloadFile(t *testing.T) {
 				assert.Equal(t, "agent.zip", result)
 				// verify download input
 				input := artifact.DownloadInput{
-					SourceURL:       testdata.file.Info.DownloadLocation,
-					SourceChecksums: map[string]string{"sha256": "asdf"},
+					SourceURL:            testdata.file.Info.DownloadLocation,
+					DestinationDirectory: appconfig.PluginsDownloadRoot,
+					SourceChecksums:      map[string]string{"sha256": "asdf"},
 				}
 				assert.Equal(t, input, testdata.network.downloadInput)
 			}
