@@ -135,12 +135,22 @@ func (p *Plugin) runCommands(pluginID string, pluginInput PSModulePluginInput, o
 		downloadOutput, err := pluginutil.DownloadFileFromSource(p.context, pluginInput.Source, pluginInput.SourceHash, pluginInput.SourceHashType)
 		if err != nil || downloadOutput.IsHashMatched == false || downloadOutput.LocalFilePath == "" {
 			output.MarkAsFailed(fmt.Errorf("failed to download file reliably %v", pluginInput.Source))
+			// Only delete the file if source is not a local path
+			if exists, err := fileutil.LocalFileExist(pluginInput.Source); err == nil && !exists {
+				// delete downloaded file, if it exists
+				pluginutil.CleanupFile(log, downloadOutput.LocalFilePath)
+			}
 			return
 		} else {
 			// Uncompress the zip file received
 			if err = fileutil.Uncompress(log, downloadOutput.LocalFilePath, PowerShellModulesDirectory); err != nil {
 				output.MarkAsFailed(fmt.Errorf("Failed to uncompress %v to %v: %v", downloadOutput.LocalFilePath, PowerShellModulesDirectory, err.Error()))
 				return
+			}
+			// Only delete the file if source is not a local path
+			if exists, err := fileutil.LocalFileExist(pluginInput.Source); err == nil && !exists {
+				// delete downloaded file, if it exists
+				pluginutil.CleanupFile(log, downloadOutput.LocalFilePath)
 			}
 		}
 	}

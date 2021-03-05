@@ -34,6 +34,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
@@ -445,6 +446,8 @@ func (m *updateManager) downloadUpdater(
 		if downloadErr != nil {
 			errMessage = fmt.Sprintf("%v, %v", errMessage, downloadErr.Error())
 		}
+		// delete downloaded file, if it exists
+		pluginutil.CleanupFile(log, downloadOutput.LocalFilePath)
 		return version, errors.New(errMessage)
 	}
 
@@ -453,10 +456,14 @@ func (m *updateManager) downloadUpdater(
 		log,
 		downloadOutput.LocalFilePath,
 		updateutil.UpdateArtifactFolder(appconfig.EC2UpdateArtifactsRoot, updaterPackageName, version)); uncompressErr != nil {
+		// delete downloaded file, if it exists
+		pluginutil.CleanupFile(log, downloadOutput.LocalFilePath)
 		return version, fmt.Errorf("failed to uncompress updater package, %v, %v",
 			downloadOutput.LocalFilePath,
 			uncompressErr.Error())
 	}
+	// delete downloaded file, if it exists
+	pluginutil.CleanupFile(log, downloadOutput.LocalFilePath)
 
 	return version, nil
 }
