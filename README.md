@@ -174,6 +174,10 @@ To set up your own custom configuration for the agent:
         * Default: 336
     * SessionLogsRetentionDurationHours (int)
         * Default: 336
+    * PluginLocalOutputCleanup (string) - Configure when after execution it is safe to delete local plugin output logs in orchestration folder
+        * Default: "" - Don't delete logs immediately after execution. Fall back to AssociationLogsRetentionDurationHours, RunCommandLogsRetentionDurationHours, and SessionLogsRetentionDurationHours 
+        * OptionalValue: "after-execution" - Delete plugin output file locally after plugin execution
+        * OptionalValue: "after-upload" - Delete plugin output locally after successful s3 or cloudWatch upload
 * Mgs - represents configuration for Message Gateway service
     * Region (string)
     * Endpoint (string)

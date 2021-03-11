@@ -27,6 +27,6 @@ type MockIOModule struct {
 }
 
 // Read is a mocked method that acknowledges that the function has been called.
-func (m *MockIOModule) Read(context context.T, reader *io.PipeReader) {
-	m.Called(context, reader)
+func (m *MockIOModule) Read(context context.T, reader *io.PipeReader, exitCode int) {
+	m.Called(context, reader, exitCode)
 }

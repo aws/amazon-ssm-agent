@@ -112,6 +112,7 @@ func DefaultConfig() SsmagentConfig {
 		AssociationLogsRetentionDurationHours: DefaultAssociationLogsRetentionDurationHours,
 		RunCommandLogsRetentionDurationHours:  DefaultRunCommandLogsRetentionDurationHours,
 		SessionLogsRetentionDurationHours:     DefaultSessionLogsRetentionDurationHours,
+		PluginLocalOutputCleanup:              DefaultPluginOutputRetention,
 	}
 	var agent = AgentInfo{
 		Name:                                    "amazon-ssm-agent",

@@ -37,11 +37,16 @@ type SsmCfg struct {
 	AssociationRetryLimit       int
 	// TODO: test hook, can be removed before release
 	// this is to skip ssl verification for the beta self signed certs
-	InsecureSkipVerify                    bool
-	CustomInventoryDefaultLocation        string
+	InsecureSkipVerify             bool
+	CustomInventoryDefaultLocation string
+	// Hours to retain association logs in the orchestration folder
 	AssociationLogsRetentionDurationHours int
-	RunCommandLogsRetentionDurationHours  int
-	SessionLogsRetentionDurationHours     int
+	// Hours to retain run command logs in the orchestration folder
+	RunCommandLogsRetentionDurationHours int
+	// Hours to retain session logs in the orchestration folder
+	SessionLogsRetentionDurationHours int
+	// Configure when after execution it is safe to delete local plugin output files in orchestration folder
+	PluginLocalOutputCleanup string
 }
 
 // AgentInfo represents metadata for amazon-ssm-agent

@@ -53,7 +53,6 @@ func (m *Manager) ensurePluginsAreRunning() {
 						appconfig.DefaultDocumentRootDirName,
 						m.context.AppConfig().Agent.OrchestrationRootDir)
 					orchestrationDir := fileutil.BuildPath(orchestrationRootDir)
-
 					ioConfig := contracts.IOConfiguration{
 						OrchestrationDirectory: orchestrationDir,
 						OutputS3BucketName:     "",

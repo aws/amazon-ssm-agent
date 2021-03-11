@@ -6,11 +6,10 @@ import (
 	"sync"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/stretchr/testify/assert"
 )
-
-// Test randomly breaks for some reason - prints out duplicate info
 
 // TestCommandOuput tests the CommandOutput module
 func TestCommandOuput(t *testing.T) {
@@ -54,7 +53,7 @@ func testFileCommandOutput(context context.T, pipeTestCase string, i int) string
 
 	go func() {
 		defer wg.Done()
-		stdoutConsole.Read(context, r)
+		stdoutConsole.Read(context, r, appconfig.SuccessExitCode)
 	}()
 
 	w.Write([]byte(pipeTestCase))

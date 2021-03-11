@@ -50,6 +50,23 @@ func NewMockDefault() *Mock {
 	return ctx
 }
 
+func NewMockDefaultWithConfig(config appconfig.SsmagentConfig) *Mock {
+	ctx := new(Mock)
+	log := log.NewMockLog()
+	agentIdentity := identityMocks.NewDefaultMockAgentIdentity()
+	appconst := appconfig.AppConstants{
+		MinHealthFrequencyMinutes: appconfig.DefaultSsmHealthFrequencyMinutesMin,
+		MaxHealthFrequencyMinutes: appconfig.DefaultSsmHealthFrequencyMinutesMax,
+	}
+	ctx.On("Log").Return(log)
+	ctx.On("AppConfig").Return(config)
+	ctx.On("With", mock.AnythingOfType("string")).Return(ctx)
+	ctx.On("CurrentContext").Return([]string{})
+	ctx.On("Identity").Return(agentIdentity)
+	ctx.On("AppConstants").Return(&appconst)
+	return ctx
+}
+
 // NewMockDefaultWithContext returns an instance of Mock with specified context.
 func NewMockDefaultWithContext(context []string) *Mock {
 	ctx := new(Mock)

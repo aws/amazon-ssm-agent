@@ -88,6 +88,7 @@ func enablePlugin(context context.T, orchestrationDirectory string, pluginID str
 	if err := lrpm.StopPlugin(lrpName, cancelFlag); err != nil {
 		log.Errorf("Unable to stop the plugin - %s: %s", lrpName, err.Error())
 	}
+
 	ioConfig := contracts.IOConfiguration{
 		OrchestrationDirectory: orchestrationDirectory,
 		OutputS3BucketName:     res.OutputS3BucketName,
