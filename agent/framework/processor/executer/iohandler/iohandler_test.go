@@ -83,9 +83,9 @@ func TestRegisterOutputSource(t *testing.T) {
 
 	// Create multiple test IOModules
 	testModule1 := new(iomodulemock.MockIOModule)
-	testModule1.On("Read", mockContext, mock.Anything).Return()
+	testModule1.On("Read", mockContext, mock.Anything, mock.AnythingOfType("int")).Return()
 	testModule2 := new(iomodulemock.MockIOModule)
-	testModule2.On("Read", mockContext, mock.Anything).Return()
+	testModule2.On("Read", mockContext, mock.Anything, mock.AnythingOfType("int")).Return()
 
 	output := NewDefaultIOHandler(mockContext, contracts.IOConfiguration{})
 

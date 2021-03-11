@@ -20,11 +20,9 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/agentlogstocloudwatch/cloudwatchlogspublisher"
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/s3util"
 )
 
 const (
@@ -41,10 +39,32 @@ type File struct {
 	LogStreamName          string
 }
 
-// Read reads from the stream and writes to the output file, s3 and CloudWatchLogs.
-func (file File) Read(context context.T, reader *io.PipeReader) {
-	defer func() { reader.Close() }()
+// CleanUp cleans up local files according to PluginLocalOutputCleanup app config
+func (file File) cleanUp(context context.T, uploadComplete bool, exitCode int) {
+	pluginLocalOutputCleanup := context.AppConfig().Ssm.PluginLocalOutputCleanup
 	log := context.Log()
+
+	if pluginLocalOutputCleanup == appconfig.DefaultPluginOutputRetention {
+		return
+	}
+
+	// File is incomplete in the case of a reboot
+	if exitCode != appconfig.RebootExitCode && (pluginLocalOutputCleanup == appconfig.PluginLocalOutputCleanupAfterExecution ||
+		(pluginLocalOutputCleanup == appconfig.PluginLocalOutputCleanupAfterUpload && uploadComplete)) {
+		filePath := filepath.Join(file.OrchestrationDirectory, file.FileName)
+		log.Debugf("Deleting file at %s", filePath)
+		if err := fileutil.DeleteFile(filePath); err != nil {
+			log.Errorf("failed to delete orchestration file. Err: %s Filepath: %s", err, filePath)
+		}
+	}
+}
+
+// Read reads from the stream and writes to the output file, s3 and CloudWatchLogs.
+func (file File) Read(context context.T, reader *io.PipeReader, exitCode int) {
+	uploadComplete := false
+	log := context.Log()
+	defer func() { reader.Close() }()
+	defer func() { file.cleanUp(context, uploadComplete, exitCode) }()
 
 	log.Debugf("OrchestrationDir %v ", file.OrchestrationDirectory)
 
@@ -64,7 +84,7 @@ func (file File) Read(context context.T, reader *io.PipeReader) {
 
 	defer fileWriter.Close()
 
-	cwl := cloudwatchlogspublisher.NewCloudWatchLogsService(context)
+	cwl := cloudWatchServiceRetriever.NewCloudWatchLogsService(context)
 	if file.LogGroupName != "" {
 		log.Debugf("Received CloudWatch Configs: LogGroupName: %s\n, LogStreamName: %s\n", file.LogGroupName, file.LogStreamName)
 		//Start CWL logging on different go routine
@@ -102,9 +122,11 @@ func (file File) Read(context context.T, reader *io.PipeReader) {
 	// Upload output file to S3
 	if file.OutputS3BucketName != "" && fi.Size() > 0 {
 		s3Key := fileutil.BuildS3Path(file.OutputS3KeyPrefix, file.FileName)
-		if s3, err := s3util.NewAmazonS3Util(context, file.OutputS3BucketName); err == nil {
+		if s3, err := s3ServiceRetriever.NewAmazonS3Util(context, file.OutputS3BucketName); err == nil {
 			if err := s3.S3Upload(log, file.OutputS3BucketName, s3Key, filePath); err != nil {
 				log.Errorf("Failed to upload the output to s3: %v", err)
+			} else {
+				uploadComplete = true
 			}
 		}
 	}
@@ -112,11 +134,13 @@ func (file File) Read(context context.T, reader *io.PipeReader) {
 	//Block main thread until CloudWatchLogs uploading is complete or until maxCloudWatchUploadRetry is reached
 	//TODO Add unit test to test maxRetry logic
 	if file.LogGroupName != "" {
-		cwl.IsFileComplete = true
+		cwl.SetIsFileComplete(true)
 		retry := 0
-		for !cwl.IsUploadComplete && retry < maxCloudWatchUploadRetry {
+		for !cwl.GetIsUploadComplete() && retry < maxCloudWatchUploadRetry {
 			retry++
-			time.Sleep(cloudwatchlogspublisher.UploadFrequency)
+			time.Sleep(cloudWatchUploadFrequency)
 		}
+
+		uploadComplete = uploadComplete || cwl.GetIsUploadComplete()
 	}
 }

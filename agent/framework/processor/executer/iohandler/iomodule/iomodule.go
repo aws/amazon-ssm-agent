@@ -22,5 +22,5 @@ import (
 
 // IOModule is an interface for output modules
 type IOModule interface {
-	Read(context.T, *io.PipeReader)
+	Read(context.T, *io.PipeReader, int)
 }

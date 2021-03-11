@@ -55,6 +55,15 @@ const (
 	DefaultLocationOfState       = "state"
 	DefaultLocationOfAssociation = "association"
 
+	// PluginLocalOutputCleanup
+	// Delete plugin output file locally after plugin execution
+	PluginLocalOutputCleanupAfterExecution = "after-execution"
+	// Delete plugin output locally after successful s3 or cloudWatch upload
+	PluginLocalOutputCleanupAfterUpload = "after-upload"
+	// Don't delete logs immediately after execution. Fall back to AssociationLogsRetentionDurationHours,
+	// RunCommandLogsRetentionDurationHours, and SessionLogsRetentionDurationHours
+	DefaultPluginOutputRetention = "default"
+
 	//aws-ssm-agent state and orchestration logs duration for Run Command and Association
 	DefaultAssociationLogsRetentionDurationHours           = 24  // 1 day default retention
 	DefaultRunCommandLogsRetentionDurationHours            = 336 // 14 days default retention

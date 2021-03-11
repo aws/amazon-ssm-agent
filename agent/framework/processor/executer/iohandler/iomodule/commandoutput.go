@@ -31,9 +31,19 @@ type CommandOutput struct {
 	OrchestrationDirectory string
 }
 
-func (c CommandOutput) Read(context context.T, reader *io.PipeReader) {
+// CleanUp cleans up local files according to PluginLocalOutputCleanup app config
+func (c CommandOutput) cleanUp(context context.T, exitCode int) {
+	pluginLocalOutputCleanup := context.AppConfig().Ssm.PluginLocalOutputCleanup
+	if pluginLocalOutputCleanup != appconfig.DefaultPluginOutputRetention && exitCode != appconfig.RebootExitCode {
+		filePath := filepath.Join(c.OrchestrationDirectory, c.FileName)
+		fileutil.DeleteFile(filePath)
+	}
+}
+
+func (c CommandOutput) Read(context context.T, reader *io.PipeReader, exitCode int) {
 	log := context.Log()
 	defer func() { reader.Close() }()
+	defer c.cleanUp(context, exitCode)
 
 	if err := fileutil.MakeDirs(c.OrchestrationDirectory); err != nil {
 		log.Errorf("failed to create orchestrationDir directory at %v: %v", c.OrchestrationDirectory, err)

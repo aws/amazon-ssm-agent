@@ -55,8 +55,8 @@ type CloudWatchLogsService struct {
 	context              context.T
 	cloudWatchLogsClient cloudwatchlogsinterface.CloudWatchLogsClient
 	stopPolicy           *sdkutil.StopPolicy
-	IsFileComplete       bool
-	IsUploadComplete     bool
+	isFileComplete       bool
+	isUploadComplete     bool
 	CloudWatchMessage    CloudWatchMessage
 }
 
@@ -129,8 +129,8 @@ func NewCloudWatchLogsService(context context.T) *CloudWatchLogsService {
 		context:              context,
 		cloudWatchLogsClient: createCloudWatchClient(context),
 		stopPolicy:           createCloudWatchStopPolicy(),
-		IsFileComplete:       false,
-		IsUploadComplete:     false,
+		isFileComplete:       false,
+		isUploadComplete:     false,
 		CloudWatchMessage:    CloudWatchMessage{},
 	}
 	return &cloudWatchLogsService
@@ -142,8 +142,8 @@ func NewCloudWatchLogsServiceWithCredentials(context context.T, id, secret strin
 		context:              context,
 		cloudWatchLogsClient: createCloudWatchClientWithCredentials(context, id, secret),
 		stopPolicy:           createCloudWatchStopPolicy(),
-		IsFileComplete:       false,
-		IsUploadComplete:     false,
+		isFileComplete:       false,
+		isUploadComplete:     false,
 	}
 	return &cloudWatchLogsService
 }
@@ -507,10 +507,10 @@ func (service *CloudWatchLogsService) StreamData(
 		}
 	}()
 
-	service.IsFileComplete = isFileComplete
+	service.isFileComplete = isFileComplete
 	go func() {
-		service.IsFileComplete = <-fileCompleteSignal
-		log.Debugf("Received file complete signal %v", service.IsFileComplete)
+		service.isFileComplete = <-fileCompleteSignal
+		log.Debugf("Received file complete signal %v", service.isFileComplete)
 	}()
 
 	// Keeps track of the last known line number that was successfully uploaded to CloudWatch.
@@ -538,7 +538,7 @@ func (service *CloudWatchLogsService) StreamData(
 		if eof {
 			ticker.Stop()
 			log.Info("Finished uploading events to CloudWatch")
-			service.IsUploadComplete = true
+			service.isUploadComplete = true
 			success = true
 			break
 		}
@@ -631,7 +631,7 @@ func (service *CloudWatchLogsService) getNextMessage(
 		line, err = reader.ReadSlice(NewLineCharacter)
 		if err != nil && err != bufio.ErrBufferFull {
 			// Breaking out of loop since nothing to upload
-			if err != io.EOF || len(line) == 0 || !service.IsFileComplete {
+			if err != io.EOF || len(line) == 0 || !service.isFileComplete {
 				break
 			}
 		}
@@ -674,7 +674,7 @@ func (service *CloudWatchLogsService) getNextMessage(
 	}
 
 	// This determines the end of session.
-	if len(message) == 0 && (err == nil || err == io.EOF) && service.IsFileComplete {
+	if len(message) == 0 && (err == nil || err == io.EOF) && service.isFileComplete {
 		eof = true
 	}
 
@@ -724,7 +724,7 @@ func (service *CloudWatchLogsService) buildEventInfo(message []byte, structuredL
 		formattedMessage = string(formattedMessageBytes)
 	} else {
 		formattedMessage = strings.ReplaceAll(string(message), "\r\n", "\n")
-		if service.IsFileComplete && message[len(message)-1] == byte(NewLineCharacter) {
+		if service.isFileComplete && message[len(message)-1] == byte(NewLineCharacter) {
 			formattedMessage = formattedMessage[:len(formattedMessage)-1]
 		}
 	}
@@ -734,4 +734,12 @@ func (service *CloudWatchLogsService) buildEventInfo(message []byte, structuredL
 		Timestamp: aws.Int64(time.Now().UnixNano() / int64(time.Millisecond)),
 	}
 	return event
+}
+
+func (service *CloudWatchLogsService) SetIsFileComplete(val bool) {
+	service.isFileComplete = val
+}
+
+func (service *CloudWatchLogsService) GetIsUploadComplete() bool {
+	return service.isUploadComplete
 }

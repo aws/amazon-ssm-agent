@@ -61,7 +61,6 @@ func (m *execDepImp) ExecuteDocument(context context.T, pluginInput []contracts.
 	log := context.Log()
 	log.Debugf("Running subcommand")
 	exe := basicexecuter.NewBasicExecuter(context)
-
 	docState := contracts.DocumentState{
 		DocumentInformation: contracts.DocumentInfo{
 			DocumentID: documentID,

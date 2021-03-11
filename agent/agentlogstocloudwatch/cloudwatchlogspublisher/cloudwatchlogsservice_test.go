@@ -195,7 +195,7 @@ func TestCloudWatchLogsService_getNextMessage(t *testing.T) {
 		context:              contextMock,
 		cloudWatchLogsClient: cwLogsClientMock,
 		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
-		IsFileComplete:       true,
+		isFileComplete:       true,
 	}
 
 	fileName := "cwl_util_test_file"
@@ -272,7 +272,7 @@ func TestCloudWatchLogsService_getNextMessage_largeline(t *testing.T) {
 		context:              contextMock,
 		cloudWatchLogsClient: cwLogsClientMock,
 		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
-		IsFileComplete:       true,
+		isFileComplete:       true,
 	}
 
 	fileName := "cwl_util_test_file"
@@ -310,7 +310,7 @@ func TestCloudWatchLogsService_getNextMessage_ending_with_newlinecharacter(t *te
 		context:              contextMock,
 		cloudWatchLogsClient: cwLogsClientMock,
 		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
-		IsFileComplete:       true,
+		isFileComplete:       true,
 	}
 
 	fileName := "cwl_util_test_file"
@@ -342,7 +342,7 @@ func TestCloudWatchLogsService_getNextMessage_structuredLogs(t *testing.T) {
 		context:              contextMock,
 		cloudWatchLogsClient: cwLogsClientMock,
 		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
-		IsFileComplete:       true,
+		isFileComplete:       true,
 	}
 
 	fileName := "cwl_util_test_file"
@@ -399,7 +399,7 @@ func TestCloudWatchLogsService_getNextMessage_cleanupControlCharacters(t *testin
 		context:              contextMock,
 		cloudWatchLogsClient: cwLogsClientMock,
 		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
-		IsFileComplete:       true,
+		isFileComplete:       true,
 	}
 
 	fileName := "cwl_util_test_file"
@@ -596,7 +596,7 @@ func TestCloudWatchLogsService_StreamData_StreamingEnabled(t *testing.T) {
 	go func() {
 		time.Sleep(1800 * time.Millisecond)
 		file.Write([]byte("Test Line 2"))
-		service.IsFileComplete = true
+		service.isFileComplete = true
 	}()
 
 	// isFileComplete set to false is to enable streaming of logs

@@ -217,7 +217,7 @@ func (out *DefaultIOHandler) RegisterOutputSource(multiWriter multiwriter.Docume
 				}
 			}()
 			defer wg.Done()
-			module.Read(out.context, r)
+			module.Read(out.context, r, out.ExitCode)
 		}(module, r)
 	}
 
