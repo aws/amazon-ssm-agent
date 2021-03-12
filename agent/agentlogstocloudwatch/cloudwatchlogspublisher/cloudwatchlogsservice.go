@@ -564,7 +564,8 @@ func (service *CloudWatchLogsService) StreamData(
 				log.Errorf("Error Creating Log Stream for CloudWatchLogs output: %v", err)
 				currentLineNumber = lastKnownLineUploadedToCWL
 				log.Debug("Failed to upload message to CloudWatch")
-				continue
+				ticker.Stop()
+				break
 			} else {
 				IsLogStreamCreated = true
 			}
