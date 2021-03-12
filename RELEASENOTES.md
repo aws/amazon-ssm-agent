@@ -1,5 +1,11 @@
 Latest
 ===============
+- Added jitter to first control channel call
+- Added dedicated folder for plugins
+- Added option to overwrite corrupt shared credentials
+
+3.0.854.0
+===============
 - Added $HOME env variable for root user when runAsElevated is true in session
 - Added CREAD flag in serial port control flags on linux
 - Added PlatformName and PlatformVersion as env variables for aws:runShellScript
