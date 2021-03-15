@@ -27,6 +27,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/service/cloudwatchlogs"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -674,6 +675,85 @@ func TestCloudWatchLogsService_StreamData_MissingStreamPermissions(t *testing.T)
 
 	cwLogsClientMock.On("CreateLogStream", mock.Anything).Return(&cloudwatchlogs.CreateLogStreamOutput{}, errors.New("error"))
 	cwLogsClientMock.On("DescribeLogGroups", mock.Anything).Return(logGroupOutput, nil)
+
+	go func() {
+		time.Sleep(1800 * time.Millisecond)
+		file.Write([]byte("Test Line 2"))
+		service.isFileComplete = true
+	}()
+
+	// isFileComplete set to false is to enable streaming of logs
+	success := service.StreamData(
+		logGroupName,
+		logStreamName,
+		fileName,
+		false,
+		false,
+		fileCompleteSignal,
+		true,
+		true)
+
+	assert.False(t, success)
+	cwLogsClientMock.AssertExpectations(t)
+}
+
+func TestCloudWatchLogsService_StreamData_InvalidLogStream(t *testing.T) {
+	cwLogsClientMock = cloudwatchlogspublisher_mock.NewClientMockDefault(logMock)
+	service := CloudWatchLogsService{
+		context:              contextMock,
+		cloudWatchLogsClient: cwLogsClientMock,
+		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
+	}
+
+	fileName := "cwl_util_test_file"
+	file, err := os.Create(fileName)
+	assert.Nil(t, err, "Failed to create test file")
+	file.Write([]byte("Test Line 1\n"))
+
+	// Deleting file
+	defer func() {
+		file.Close()
+		err = os.Remove(fileName)
+		assert.Nil(t, err)
+	}()
+	fileCompleteSignal := make(chan bool)
+	service.SetCloudWatchMessage(
+		eventVersion,
+		awsRegion,
+		targetId,
+		runAsUser,
+		sessionId,
+		sessionOwner,
+	)
+	cloudWatchMessage := service.CloudWatchMessage
+	cloudWatchMessage.SessionData = aws.StringSlice([]string{"Test Line 1"})
+	formattedMessageBytes, _ := json.Marshal(service.CloudWatchMessage)
+	formattedMessage := string(formattedMessageBytes)
+
+	var events []*cloudwatchlogs.InputLogEvent
+	event := &cloudwatchlogs.InputLogEvent{
+		Message:   aws.String(formattedMessage),
+		Timestamp: aws.Int64(time.Now().UnixNano() / int64(time.Millisecond)),
+	}
+	events = append(events, event)
+
+	var logGroups []*cloudwatchlogs.LogGroup
+	logGroup := &cloudwatchlogs.LogGroup{LogGroupName: &logGroupName}
+	logGroups = append(logGroups, logGroup)
+	logGroupOutput := &cloudwatchlogs.DescribeLogGroupsOutput{
+		LogGroups: logGroups,
+	}
+
+	cwLogsClientMock.On("CreateLogStream", mock.Anything).Return(&cloudwatchlogs.CreateLogStreamOutput{}, nil)
+	cwLogsClientMock.On("DescribeLogGroups", mock.Anything).Return(logGroupOutput, nil)
+	cwLogsClientMock.On("DescribeLogStreams", mock.Anything).Return(&cloudwatchlogs.DescribeLogStreamsOutput{}, nil)
+	// Returns a ResourceNotFoundException error when PutLogEvents is called
+	cwLogsClientMock.On("PutLogEvents", mock.Anything).Return(
+		&cloudwatchlogs.PutLogEventsOutput{},
+		awserr.New("ResourceNotFoundException",
+			"Mocked ResourceNotFound Response from AWS API",
+			nil),
+	)
 
 	go func() {
 		time.Sleep(1800 * time.Millisecond)

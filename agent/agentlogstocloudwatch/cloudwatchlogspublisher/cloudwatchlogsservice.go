@@ -552,14 +552,13 @@ func (service *CloudWatchLogsService) StreamData(
 		log.Tracef("Uploading message line %d to CloudWatch", currentLineNumber)
 
 		if !IsLogStreamCreated {
-
-			// Terminate process if the log group is not present.
+			// Terminate process if the log group is not present
 			if logGroupPresent, _ := service.IsLogGroupPresent(logGroupName); !logGroupPresent {
-				log.Errorf("CloudWatch log group resource not created: %s", logGroupName)
+				log.Errorf("CloudWatch log group \"%s\" does not exist. Log streaming cannot be continued.", logGroupName)
 				ticker.Stop()
 				break
 			}
-
+			// Terminate process if the log stream cannot be created
 			if err := service.CreateLogStream(logGroupName, logStreamName); err != nil {
 				log.Errorf("Error Creating Log Stream for CloudWatchLogs output: %v", err)
 				currentLineNumber = lastKnownLineUploadedToCWL
@@ -582,7 +581,17 @@ func (service *CloudWatchLogsService) StreamData(
 			lastKnownLineUploadedToCWL = currentLineNumber
 			log.Trace("Successfully uploaded message line %d to CloudWatch", currentLineNumber)
 		} else {
-			// Reset the current line to last known line since the upload failed and retry again in the next iteration.
+			if errCode := sdkutil.GetAwsErrorCode(err); errCode == resourceNotFoundException {
+				// Log group or log stream not found due to resource change outside of client. Stop log streaming for session
+				log.Errorf(
+					"Log group \"%s\" or log stream \"%s\" not found. Log stream stopped. Error:%v",
+					logGroupName,
+					logStreamName,
+					err)
+				ticker.Stop()
+				break
+			}
+			// Upload failed for unknown reason. Reset the current line to last known line and retry upload again in the next iteration
 			currentLineNumber = lastKnownLineUploadedToCWL
 			log.Debugf("Failed to upload message to CloudWatch, err: %v", err)
 		}
