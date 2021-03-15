@@ -28,6 +28,7 @@ const (
 	dataAlreadyAcceptedException   = "DataAlreadyAcceptedException"
 	invalidSequenceTokenException  = "InvalidSequenceTokenException"
 	resourceAlreadyExistsException = "ResourceAlreadyExistsException"
+	resourceNotFoundException      = "ResourceNotFoundException"
 	defaultPollingInterval         = time.Second
 	defaultPollingWaitTime         = 200 * time.Millisecond
 	pollingBackoffMultiplier       = 2
