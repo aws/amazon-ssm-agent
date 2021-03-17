@@ -25,15 +25,14 @@ import (
 )
 
 // inProgress sets update to inProgressing with given new UpdateState
-func (u *updateManager) inProgress(context *UpdateContext, log logPkg.T, state UpdateState) (err error) {
-	update := context.Current
+func (u *updateManager) inProgress(updateDetail *UpdateDetail, log logPkg.T, state UpdateState) (err error) {
 	defer func() {
 		if err != nil {
 			failedUpdateDetail := &UpdateDetail{
 				State:         Completed,
 				Result:        contracts.ResultStatusFailed,
-				TargetVersion: update.TargetVersion,
-				SourceVersion: update.SourceVersion,
+				TargetVersion: updateDetail.TargetVersion,
+				SourceVersion: updateDetail.SourceVersion,
 			}
 			errorCode := u.subStatus + string(state)
 			log.WriteEvent(
@@ -45,152 +44,133 @@ func (u *updateManager) inProgress(context *UpdateContext, log logPkg.T, state U
 			}
 		}
 	}()
-	update.State = state
-	update.Result = contracts.ResultStatusInProgress
+	updateDetail.State = state
+	updateDetail.Result = contracts.ResultStatusInProgress
 
-	// resolve context location base on the UpdateRoot
-	contextLocation := updateutil.UpdateContextFilePath(update.UpdateRoot)
-	if err = u.ctxMgr.saveUpdateContext(log, context, contextLocation); err != nil {
-		return err
-	}
-
-	if update.HasMessageID() && context.Current.SelfUpdate == false {
-		err = u.svc.SendReply(log, update)
+	if updateDetail.HasMessageID() && updateDetail.SelfUpdate == false {
+		err = u.svc.SendReply(log, updateDetail)
 		if err != nil {
 			log.Errorf(err.Error())
 		}
 	}
 
-	if err = u.svc.UpdateHealthCheck(log, update, ""); err != nil {
+	if err = u.svc.UpdateHealthCheck(log, updateDetail, ""); err != nil {
 		log.Errorf(err.Error())
 	}
 	return nil
 }
 
-func (u *updateManager) reportTestFailure(context *UpdateContext, log logPkg.T, testOutput string) {
-	updateDetail := &UpdateDetail{
+func (u *updateManager) reportTestFailure(updateDetail *UpdateDetail, log logPkg.T, testOutput string) {
+	updateStatus := &UpdateDetail{
 		State:         TestExecution,
 		Result:        contracts.ResultStatusTestFailure,
-		TargetVersion: context.Current.TargetVersion,
-		SourceVersion: context.Current.SourceVersion,
+		TargetVersion: updateDetail.TargetVersion,
+		SourceVersion: updateDetail.SourceVersion,
 	}
-	if err := u.svc.UpdateHealthCheck(log, updateDetail, testOutput); err != nil {
+	if err := u.svc.UpdateHealthCheck(log, updateStatus, testOutput); err != nil {
 		log.Errorf("error while sending test failure metric: %v", err.Error())
 	}
 }
 
 // succeeded sets update to completed
-func (u *updateManager) succeeded(context *UpdateContext, log logPkg.T) (err error) {
-	update := context.Current
-	update.State = Completed
-	update.Result = contracts.ResultStatusSuccess
-	update.AppendInfo(
+func (u *updateManager) succeeded(updateDetail *UpdateDetail, log logPkg.T) (err error) {
+	updateDetail.State = Completed
+	updateDetail.Result = contracts.ResultStatusSuccess
+	updateDetail.AppendInfo(
 		log,
 		"%v updated successfully to %v",
-		update.PackageName,
-		update.TargetVersion)
+		updateDetail.PackageName,
+		updateDetail.TargetVersion)
 
 	log.WriteEvent(
 		logPkg.AgentUpdateResultMessage,
-		update.SourceVersion,
-		PrepareHealthStatus(update, "", update.TargetVersion))
-	return u.finalizeUpdateAndSendReply(log, context, "")
+		updateDetail.SourceVersion,
+		PrepareHealthStatus(updateDetail, "", updateDetail.TargetVersion))
+	return u.finalize(u, updateDetail, "")
 }
 
 // failed sets update to failed with error messages
-func (u *updateManager) failed(context *UpdateContext, log logPkg.T, code updateutil.ErrorCode, errMessage string, noRollbackMessage bool) (err error) {
-	update := context.Current
-	update.State = Completed
-	update.Result = contracts.ResultStatusFailed
-	update.AppendInfo(log, errMessage)
-	update.AppendInfo(
+func (u *updateManager) failed(updateDetail *UpdateDetail, log logPkg.T, code updateutil.ErrorCode, errMessage string, noRollbackMessage bool) (err error) {
+	updateDetail.State = Completed
+	updateDetail.Result = contracts.ResultStatusFailed
+	updateDetail.AppendInfo(log, errMessage)
+	updateDetail.AppendInfo(
 		log,
 		"Failed to update %v to %v",
-		update.PackageName,
-		update.TargetVersion)
+		updateDetail.PackageName,
+		updateDetail.TargetVersion)
 
 	// Specify no rollback needed
 	if noRollbackMessage {
-		update.AppendInfo(log, "No rollback needed")
+		updateDetail.AppendInfo(log, "No rollback needed")
 	}
 	errorCode := u.subStatus + string(code)
 	log.WriteEvent(
 		logPkg.AgentUpdateResultMessage,
-		update.SourceVersion,
-		PrepareHealthStatus(update, errorCode, update.TargetVersion))
-	return u.finalizeUpdateAndSendReply(log, context, errorCode)
+		updateDetail.SourceVersion,
+		PrepareHealthStatus(updateDetail, errorCode, updateDetail.TargetVersion))
+	return u.finalize(u, updateDetail, errorCode)
 }
 
-func (u *updateManager) inactive(context *UpdateContext, log logPkg.T, errorWarnCode string) (err error) {
-	update := context.Current
-	update.State = Completed
-	update.Result = contracts.ResultStatusSuccess
-	update.AppendInfo(
+func (u *updateManager) inactive(updateDetail *UpdateDetail, log logPkg.T, errorWarnCode string) (err error) {
+	updateDetail.State = Completed
+	updateDetail.Result = contracts.ResultStatusSuccess
+	updateDetail.AppendInfo(
 		log,
 		"%v version %v is deprecated/inactive, update skipped",
-		update.PackageName,
-		update.TargetVersion)
+		updateDetail.PackageName,
+		updateDetail.TargetVersion)
 	errorWarnCode = u.subStatus + errorWarnCode
 	log.WriteEvent(
 		logPkg.AgentUpdateResultMessage,
-		update.SourceVersion,
-		PrepareHealthStatus(update, errorWarnCode, update.TargetVersion))
-	return u.finalizeUpdateAndSendReply(log, context, errorWarnCode)
+		updateDetail.SourceVersion,
+		PrepareHealthStatus(updateDetail, errorWarnCode, updateDetail.TargetVersion))
+	return u.finalize(u, updateDetail, errorWarnCode)
 }
 
 // finalizeUpdateAndSendReply completes the update and sends reply to message service, also uploads to S3 (if any)
-func (u *updateManager) finalizeUpdateAndSendReply(log logPkg.T, context *UpdateContext, errorCode string) (err error) {
-	update := context.Current
-	update.EndDateTime = time.Now().UTC()
-	// resolve context location base on the UpdateRoot
-	contextLocation := updateutil.UpdateContextFilePath(update.UpdateRoot)
-	if err = u.ctxMgr.saveUpdateContext(log, context, contextLocation); err != nil {
-		return err
-	}
+func finalizeUpdateAndSendReply(u *updateManager, updateDetail *UpdateDetail, errorCode string) (err error) {
+	log := u.Context.Log()
+	updateDetail.EndDateTime = time.Now().UTC()
 
-	orchestrationDirectory := getOrchestrationDir(u.Context.Identity(), log, update)
-	filePath, err := fileutil.AppendToFile(orchestrationDirectory, update.StdoutFileName, update.StandardOut)
+	orchestrationDirectory := getOrchestrationDir(u.Context.Identity(), log, updateDetail)
+	filePath, err := fileutil.AppendToFile(orchestrationDirectory, updateDetail.StdoutFileName, updateDetail.StandardOut)
 	if err != nil {
 		log.Errorf("Error while appending to file %v", filePath)
 	}
-	if update.StandardOut, err = fileutil.ReadAllText(filePath); err != nil {
+	if updateDetail.StandardOut, err = fileutil.ReadAllText(filePath); err != nil {
 		log.Errorf("Error reading contents from %v", filePath)
 	}
 
-	if filePath, err = fileutil.AppendToFile(orchestrationDirectory, update.StderrFileName, update.StandardError); err != nil {
+	if filePath, err = fileutil.AppendToFile(orchestrationDirectory, updateDetail.StderrFileName, updateDetail.StandardError); err != nil {
 		log.Errorf("Error while appending to file %v", filePath)
 	}
-	if update.StandardError, err = fileutil.ReadAllText(filePath); err != nil {
+	if updateDetail.StandardError, err = fileutil.ReadAllText(filePath); err != nil {
 		log.Errorf("Error reading contents from %v", filePath)
 	}
 	// send reply except for self update, don't send any response back to service side for self update
-	if update.HasMessageID() && update.SelfUpdate == false {
-		if err = u.svc.SendReply(log, update); err != nil {
+	if updateDetail.HasMessageID() && updateDetail.SelfUpdate == false {
+		if err = u.svc.SendReply(log, updateDetail); err != nil {
 			log.Errorf(err.Error())
 		}
 
-		if err = u.svc.DeleteMessage(log, update); err != nil {
+		if err = u.svc.DeleteMessage(log, updateDetail); err != nil {
 			log.Errorf(err.Error())
 		}
 	}
 
 	// update health information
-	if err = u.svc.UpdateHealthCheck(log, update, errorCode); err != nil {
+	if err = u.svc.UpdateHealthCheck(log, updateDetail, errorCode); err != nil {
 		log.Errorf(err.Error())
 	}
 
 	// upload output to s3 bucket
-	log.Debugf("output s3 bucket name is %v", update.OutputS3BucketName)
-	if update.OutputS3BucketName != "" {
-		u.ctxMgr.uploadOutput(log, context, orchestrationDirectory)
+	log.Debugf("output s3 bucket name is %v", updateDetail.OutputS3BucketName)
+	if updateDetail.OutputS3BucketName != "" {
+		u.ctxMgr.uploadOutput(log, updateDetail, orchestrationDirectory)
 	}
 
-	if err = u.clean(u, log, context); err != nil {
-		return err
-	}
-
-	context.cleanUpdate()
-	if err = u.ctxMgr.saveUpdateContext(log, context, contextLocation); err != nil {
+	if err = u.clean(u, log, updateDetail); err != nil {
 		return err
 	}
 

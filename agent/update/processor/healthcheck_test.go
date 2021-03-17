@@ -47,14 +47,14 @@ func TestHealthCheck(t *testing.T) {
 		{RolledBack, rollBackCompleted},
 	}
 
-	context := createUpdateContext(Installed)
+	updateDetail := createUpdateDetail(Installed)
 
 	// run tests
 	for _, tst := range testCases {
-		context.Current.State = tst.Input
+		updateDetail.State = tst.Input
 
 		// call method
-		result := PrepareHealthStatus(context.Current, "", "")
+		result := PrepareHealthStatus(updateDetail, "", "")
 
 		// check results
 		assert.Equal(t, result, tst.Output)
@@ -74,21 +74,21 @@ func TestUpdateHealthStatusWithNonAlarmingErrorCodes(t *testing.T) {
 		updateutil.ErrorEnvironmentIssue:          fmt.Sprintf("%v_%v-%v", updateFailed, updateutil.ErrorEnvironmentIssue, dummyTargetVersion),
 	}
 
-	context := createUpdateContext(Installed)
+	updateDetail := createUpdateDetail(Installed)
 
 	// run tests
 	for errorCode, output := range testCases {
-		context.Current.Result = contracts.ResultStatusFailed
-		context.Current.State = Completed
-		result := PrepareHealthStatus(context.Current, string(errorCode), "")
+		updateDetail.Result = contracts.ResultStatusFailed
+		updateDetail.State = Completed
+		result := PrepareHealthStatus(updateDetail, string(errorCode), "")
 		assert.Equal(t, output, result)
 	}
 
 	// run tests
 	for errorCode, output := range testCasesWithTargetVersion {
-		context.Current.Result = contracts.ResultStatusFailed
-		context.Current.State = Completed
-		result := PrepareHealthStatus(context.Current, string(errorCode), dummyTargetVersion)
+		updateDetail.Result = contracts.ResultStatusFailed
+		updateDetail.State = Completed
+		result := PrepareHealthStatus(updateDetail, string(errorCode), dummyTargetVersion)
 		assert.Equal(t, output, result)
 	}
 }
@@ -105,14 +105,14 @@ func TestHealthCheckWithUpdateFailed(t *testing.T) {
 		{RolledBack, fmt.Sprintf("%v_%v", updateFailed, RolledBack)},
 	}
 
-	context := createUpdateContext(Installed)
+	updateDetail := createUpdateDetail(Installed)
 
 	for _, tst := range testCases {
-		context.Current.Result = contracts.ResultStatusFailed
-		context.Current.State = Completed
+		updateDetail.Result = contracts.ResultStatusFailed
+		updateDetail.State = Completed
 
 		// call method
-		result := PrepareHealthStatus(context.Current, string(tst.Input), "")
+		result := PrepareHealthStatus(updateDetail, string(tst.Input), "")
 
 		// check results
 		assert.Equal(t, result, tst.Output)
@@ -120,15 +120,15 @@ func TestHealthCheckWithUpdateFailed(t *testing.T) {
 }
 
 func TestUpdateHealthCheck(t *testing.T) {
-	updateContext := createUpdateContext(Installed)
+	updateDetail := createUpdateDetail(Installed)
 	service := &svcManager{}
 
 	mockObj := ssm.NewMockDefault()
 	mockObj.On(
 		"UpdateInstanceInformation",
 		logger,
-		updateContext.Current.SourceVersion,
-		fmt.Sprintf("%v-%v", updateInProgress, updateContext.Current.TargetVersion)).Return(&ssmService.UpdateInstanceInformationOutput{}, nil)
+		updateDetail.SourceVersion,
+		fmt.Sprintf("%v-%v", updateInProgress, updateDetail.TargetVersion)).Return(&ssmService.UpdateInstanceInformationOutput{}, nil)
 
 	// setup
 	newSsmSvc = func(context context.T) ssm.Service {
@@ -136,7 +136,7 @@ func TestUpdateHealthCheck(t *testing.T) {
 	}
 
 	// action
-	err := service.UpdateHealthCheck(logger, updateContext.Current, "")
+	err := service.UpdateHealthCheck(logger, updateDetail, "")
 
 	// assert
 	mockObj.AssertExpectations(t)
@@ -147,24 +147,23 @@ func TestUpdateHealthCheckFailCreatingService(t *testing.T) {
 	// setup
 	// fail to create a new ssm service
 	ssmSvc = nil
-	updateContext := createUpdateContext(Installed)
+	updateDetail := createUpdateDetail(Installed)
 	service := &svcManager{}
 	// action
-	err := service.UpdateHealthCheck(logger, updateContext.Current, "")
+	err := service.UpdateHealthCheck(logger, updateDetail, "")
 
 	// assert
 	assert.Error(t, err)
 }
 
-func createUpdateContext(state UpdateState) *UpdateContext {
-	updateContext := &UpdateContext{}
-	updateContext.Current = &UpdateDetail{}
-	updateContext.Current.Result = contracts.ResultStatusSuccess
-	updateContext.Current.SourceVersion = "5.0.0.0"
-	updateContext.Current.TargetVersion = "6.0.0.0"
-	updateContext.Current.State = state
-	updateContext.Current.UpdateRoot = "testdata"
-	updateContext.Current.MessageID = "message id"
+func createUpdateDetail(state UpdateState) *UpdateDetail {
+	updateDetail := &UpdateDetail{}
+	updateDetail.Result = contracts.ResultStatusSuccess
+	updateDetail.SourceVersion = "5.0.0.0"
+	updateDetail.TargetVersion = "6.0.0.0"
+	updateDetail.State = state
+	updateDetail.UpdateRoot = "testdata"
+	updateDetail.MessageID = "message id"
 
-	return updateContext
+	return updateDetail
 }

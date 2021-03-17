@@ -64,6 +64,7 @@ func NewUpdater(context context.T) *Updater {
 			download:  downloadAndUnzipArtifact,
 			clean:     cleanUninstalledVersions,
 			runTests:  testerPkg.StartTests,
+			finalize:  finalizeUpdateAndSendReply,
 		},
 	}
 
@@ -71,58 +72,48 @@ func NewUpdater(context context.T) *Updater {
 }
 
 // StartOrResumeUpdate starts/resume update.
-func (u *Updater) StartOrResumeUpdate(log log.T, updateContext *UpdateContext) (err error) {
+func (u *Updater) StartOrResumeUpdate(log log.T, updateDetail *UpdateDetail) (err error) {
 	switch {
-	case updateContext.Current.State == Initialized:
-		return u.mgr.prepare(u.mgr, log, updateContext)
-	case updateContext.Current.State == Staged:
-		return u.mgr.update(u.mgr, log, updateContext)
-	case updateContext.Current.State == Installed:
-		return u.mgr.verify(u.mgr, log, updateContext, false)
-	case updateContext.Current.State == Rollback:
-		return u.mgr.rollback(u.mgr, log, updateContext)
-	case updateContext.Current.State == RolledBack:
-		return u.mgr.verify(u.mgr, log, updateContext, true)
+	case updateDetail.State == Initialized:
+		return u.mgr.prepare(u.mgr, log, updateDetail)
+	case updateDetail.State == Staged:
+		return u.mgr.update(u.mgr, log, updateDetail)
+	case updateDetail.State == Installed:
+		return u.mgr.verify(u.mgr, log, updateDetail, false)
+	case updateDetail.State == Rollback:
+		return u.mgr.rollback(u.mgr, log, updateDetail)
+	case updateDetail.State == RolledBack:
+		return u.mgr.verify(u.mgr, log, updateDetail, true)
 	}
 
 	return nil
 }
 
-// InitializeUpdate initializes update, creates update context
-func (u *Updater) InitializeUpdate(log log.T, detail *UpdateDetail) (context *UpdateContext, err error) {
+// InitializeUpdate initializes update, populates update detail
+func (u *Updater) InitializeUpdate(log log.T, updateDetail *UpdateDetail) (err error) {
 	var pluginResult *updateutil.UpdatePluginResult
 
 	// load plugin update result
-	pluginResult, err = updateutil.LoadUpdatePluginResult(log, detail.UpdateRoot)
+	pluginResult, err = updateutil.LoadUpdatePluginResult(log, updateDetail.UpdateRoot)
 	if err != nil {
-		return nil, fmt.Errorf("update failed, no rollback needed %v", err.Error())
+		return fmt.Errorf("update failed, no rollback needed %v", err.Error())
 	}
-	detail.StandardOut = pluginResult.StandOut
+	updateDetail.StandardOut = pluginResult.StandOut
 	// if failed to read time from updateplugin file
 	if !pluginResult.StartDateTime.Equal(time.Time{}) {
-		detail.StartDateTime = pluginResult.StartDateTime
+		updateDetail.StartDateTime = pluginResult.StartDateTime
 	}
 
-	// Load UpdateContext from local storage, set current update with the new UpdateDetail
-	if context, err = LoadUpdateContext(log, updateutil.UpdateContextFilePath(detail.UpdateRoot)); err != nil {
-		return context, fmt.Errorf("update failed, no rollback needed %v", err.Error())
-	}
-
-	if context.IsUpdateInProgress(log) {
-		return context, fmt.Errorf("another update is in progress, please retry later")
-	}
-
-	context.Current = detail
-	if err = u.mgr.inProgress(context, log, Initialized); err != nil {
+	if err = u.mgr.inProgress(updateDetail, log, Initialized); err != nil {
 		return
 	}
 
-	return context, nil
+	return nil
 }
 
 // Failed sets update to failed with error messages
-func (u *Updater) Failed(context *UpdateContext, log log.T, code updateutil.ErrorCode, errMessage string, noRollbackMessage bool) (err error) {
-	return u.mgr.failed(context, log, code, errMessage, noRollbackMessage)
+func (u *Updater) Failed(updateDetail *UpdateDetail, log log.T, code updateutil.ErrorCode, errMessage string, noRollbackMessage bool) (err error) {
+	return u.mgr.failed(updateDetail, log, code, errMessage, noRollbackMessage)
 }
 
 // validateUpdateVersion validates target version number base on the current platform
@@ -170,8 +161,8 @@ func getMinimumVSupportedVersions() (versions *map[string]string) {
 }
 
 // prepareInstallationPackages downloads artifacts from public s3 storage
-func prepareInstallationPackages(mgr *updateManager, log log.T, updateContext *UpdateContext) (err error) {
-	log.Infof("Initiating download %v", updateContext.Current.PackageName)
+func prepareInstallationPackages(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
+	log.Infof("Initiating download %v", updateDetail.PackageName)
 	var instanceContext *updateutil.InstanceInfo
 
 	var manifestDownloadOutput *artifact.DownloadOutput
@@ -180,245 +171,245 @@ func prepareInstallationPackages(mgr *updateManager, log log.T, updateContext *U
 	updateDownload := ""
 
 	if instanceContext, err = mgr.util.CreateInstanceInfo(log); err != nil {
-		return mgr.failed(updateContext, log, updateutil.ErrorEnvironmentIssue, err.Error(), false)
+		return mgr.failed(updateDetail, log, updateutil.ErrorEnvironmentIssue, err.Error(), false)
 	}
-	if err = validateUpdateVersion(log, updateContext.Current, instanceContext); err != nil {
-		return mgr.failed(updateContext, log, updateutil.ErrorUnsupportedVersion, err.Error(), true)
+	if err = validateUpdateVersion(log, updateDetail, instanceContext); err != nil {
+		return mgr.failed(updateDetail, log, updateutil.ErrorUnsupportedVersion, err.Error(), true)
 	}
 
 	if updateDownload, err = mgr.util.CreateUpdateDownloadFolder(); err != nil {
 		message := updateutil.BuildMessage(
 			err,
 			"failed to create download folder %v %v",
-			updateContext.Current.PackageName,
-			updateContext.Current.TargetVersion)
-		return mgr.failed(updateContext, log, updateutil.ErrorCreateUpdateFolder, message, true)
+			updateDetail.PackageName,
+			updateDetail.TargetVersion)
+		return mgr.failed(updateDetail, log, updateutil.ErrorCreateUpdateFolder, message, true)
 	}
 
-	if updateContext.Current.ManifestPath == "" {
-		if manifestDownloadOutput, updateContext.Current.ManifestUrl, err =
-			mgr.util.DownloadManifestFile(log, updateDownloadFolder, updateContext.Current.ManifestUrl, instanceContext.Region); err != nil {
+	if updateDetail.ManifestPath == "" {
+		if manifestDownloadOutput, updateDetail.ManifestUrl, err =
+			mgr.util.DownloadManifestFile(log, updateDownloadFolder, updateDetail.ManifestUrl, instanceContext.Region); err != nil {
 
 			message := updateutil.BuildMessage(err, "failed to download manifest file")
-			return mgr.failed(updateContext, log, updateutil.ErrorInvalidManifest, message, true)
+			return mgr.failed(updateDetail, log, updateutil.ErrorInvalidManifest, message, true)
 		}
-		updateContext.Current.ManifestPath = manifestDownloadOutput.LocalFilePath
+		updateDetail.ManifestPath = manifestDownloadOutput.LocalFilePath
 	}
 
-	if err = validateInactiveVersion(mgr.Context, updateContext.Current); err != nil {
-		return mgr.inactive(updateContext, log, updateutil.WarnInactiveVersion)
+	if err = validateInactiveVersion(mgr.Context, updateDetail); err != nil {
+		return mgr.inactive(updateDetail, log, updateutil.WarnInactiveVersion)
 	}
 
 	// Download source
 	downloadInput := artifact.DownloadInput{
-		SourceURL: updateContext.Current.SourceLocation,
+		SourceURL: updateDetail.SourceLocation,
 		SourceChecksums: map[string]string{
-			updateutil.HashType: updateContext.Current.SourceHash,
+			updateutil.HashType: updateDetail.SourceHash,
 		},
 		DestinationDirectory: updateDownload,
 	}
-	if err = mgr.download(mgr, log, downloadInput, updateContext, updateContext.Current.SourceVersion); err != nil {
-		return mgr.failed(updateContext, log, updateutil.ErrorSourcePkgDownload, err.Error(), true)
+	if err = mgr.download(mgr, log, downloadInput, updateDetail, updateDetail.SourceVersion); err != nil {
+		return mgr.failed(updateDetail, log, updateutil.ErrorSourcePkgDownload, err.Error(), true)
 	}
 	// Download target
 	downloadInput = artifact.DownloadInput{
-		SourceURL: updateContext.Current.TargetLocation,
+		SourceURL: updateDetail.TargetLocation,
 		SourceChecksums: map[string]string{
-			updateutil.HashType: updateContext.Current.TargetHash,
+			updateutil.HashType: updateDetail.TargetHash,
 		},
 		DestinationDirectory: updateDownload,
 	}
-	if err = mgr.download(mgr, log, downloadInput, updateContext, updateContext.Current.TargetVersion); err != nil {
-		return mgr.failed(updateContext, log, updateutil.ErrorTargetPkgDownload, err.Error(), true)
+	if err = mgr.download(mgr, log, downloadInput, updateDetail, updateDetail.TargetVersion); err != nil {
+		return mgr.failed(updateDetail, log, updateutil.ErrorTargetPkgDownload, err.Error(), true)
 	}
 	// Update stdout
-	updateContext.Current.AppendInfo(
+	updateDetail.AppendInfo(
 		log,
 		"Initiating %v update to %v",
-		updateContext.Current.PackageName,
-		updateContext.Current.TargetVersion)
+		updateDetail.PackageName,
+		updateDetail.TargetVersion)
 
 	// Update state to Staged
-	if err = mgr.inProgress(updateContext, log, Staged); err != nil {
+	if err = mgr.inProgress(updateDetail, log, Staged); err != nil {
 		return err
 	}
 
 	// Process update
-	return mgr.update(mgr, log, updateContext)
+	return mgr.update(mgr, log, updateDetail)
 }
 
 // proceedUpdate starts update process
-func proceedUpdate(mgr *updateManager, log log.T, context *UpdateContext) (err error) {
+func proceedUpdate(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
 	log.Infof(
 		"Attemping to upgrade from %v to %v",
-		context.Current.SourceVersion,
-		context.Current.TargetVersion)
+		updateDetail.SourceVersion,
+		updateDetail.TargetVersion)
 
 	// Uninstall only when the target version is lower than the source version
-	if context.Current.RequiresUninstall {
-		if exitCode, err := mgr.uninstall(mgr, log, context.Current.SourceVersion, context); err != nil {
+	if updateDetail.RequiresUninstall {
+		if exitCode, err := mgr.uninstall(mgr, log, updateDetail.SourceVersion, updateDetail); err != nil {
 			message := updateutil.BuildMessage(
 				err,
 				"failed to uninstall %v %v",
-				context.Current.PackageName,
-				context.Current.SourceVersion)
+				updateDetail.PackageName,
+				updateDetail.SourceVersion)
 			mgr.subStatus = updateutil.Downgrade
 			if exitCode == updateutil.ExitCodeUnsupportedPlatform {
-				return mgr.failed(context, log, updateutil.ErrorUnsupportedServiceManager, message, true)
+				return mgr.failed(updateDetail, log, updateutil.ErrorUnsupportedServiceManager, message, true)
 			}
-			return mgr.failed(context, log, updateutil.ErrorUninstallFailed, message, true)
+			return mgr.failed(updateDetail, log, updateutil.ErrorUninstallFailed, message, true)
 		}
 	}
 	preInstallTestTimeoutSeconds := 7
 	if testResult := mgr.runTests(mgr.Context, testerCommon.PreInstallTest, preInstallTestTimeoutSeconds); testResult != "" {
-		mgr.reportTestFailure(context, log, testResult)
+		mgr.reportTestFailure(updateDetail, log, testResult)
 	}
-	if exitCode, err := mgr.install(mgr, log, context.Current.TargetVersion, context); err != nil {
+	if exitCode, err := mgr.install(mgr, log, updateDetail.TargetVersion, updateDetail); err != nil {
 		// Install target failed with err
 		// log the error and initiating rollback to the source version
 		message := updateutil.BuildMessage(err,
 			"failed to install %v %v",
-			context.Current.PackageName,
-			context.Current.TargetVersion)
-		context.Current.AppendError(log, message)
+			updateDetail.PackageName,
+			updateDetail.TargetVersion)
+		updateDetail.AppendError(log, message)
 
 		if exitCode == updateutil.ExitCodeUnsupportedPlatform {
-			return mgr.failed(context, log, updateutil.ErrorUnsupportedServiceManager, message, true)
+			return mgr.failed(updateDetail, log, updateutil.ErrorUnsupportedServiceManager, message, true)
 		}
 
-		context.Current.AppendInfo(
+		updateDetail.AppendInfo(
 			log,
 			"Initiating rollback %v to %v",
-			context.Current.PackageName,
-			context.Current.SourceVersion)
+			updateDetail.PackageName,
+			updateDetail.SourceVersion)
 		mgr.subStatus = updateutil.InstallRollback
 		// Update state to Rollback to indicate updater has initiated the rollback process
-		if err = mgr.inProgress(context, log, Rollback); err != nil {
+		if err = mgr.inProgress(updateDetail, log, Rollback); err != nil {
 			return err
 		}
 		// Rollback
-		return mgr.rollback(mgr, log, context)
+		return mgr.rollback(mgr, log, updateDetail)
 	}
 
 	// Update state to installed to indicate there is no error occur during installation
 	// Updater has installed the new version and started the verify process
-	if err = mgr.inProgress(context, log, Installed); err != nil {
+	if err = mgr.inProgress(updateDetail, log, Installed); err != nil {
 		return err
 	}
 
 	// verify target version
-	return mgr.verify(mgr, log, context, false)
+	return mgr.verify(mgr, log, updateDetail, false)
 }
 
 // verifyInstallation checks installation result, verifies if agent is running
-func verifyInstallation(mgr *updateManager, log log.T, context *UpdateContext, isRollback bool) (err error) {
+func verifyInstallation(mgr *updateManager, log log.T, updateDetail *UpdateDetail, isRollback bool) (err error) {
 	// Check if agent is running
 	var isRunning = false
 	var instanceContext *updateutil.InstanceInfo
 
 	if instanceContext, err = mgr.util.CreateInstanceInfo(log); err != nil {
-		return mgr.failed(context, log, updateutil.ErrorCreateInstanceContext, err.Error(), false)
+		return mgr.failed(updateDetail, log, updateutil.ErrorCreateInstanceContext, err.Error(), false)
 	}
-	version := context.Current.TargetVersion
+	version := updateDetail.TargetVersion
 	if isRollback {
-		version = context.Current.SourceVersion
+		version = updateDetail.SourceVersion
 	}
 	log.Infof("Initiating update health check")
 	if isRunning, err = mgr.util.WaitForServiceToStart(log, instanceContext, version); err != nil || !isRunning {
 		if !isRollback {
 			message := updateutil.BuildMessage(err,
 				"failed to update %v to %v, %v",
-				context.Current.PackageName,
-				context.Current.TargetVersion,
+				updateDetail.PackageName,
+				updateDetail.TargetVersion,
 				"failed to start the agent")
 
-			context.Current.AppendError(log, message)
-			context.Current.AppendInfo(
+			updateDetail.AppendError(log, message)
+			updateDetail.AppendInfo(
 				log,
 				"Initiating rollback %v to %v",
-				context.Current.PackageName,
-				context.Current.SourceVersion)
+				updateDetail.PackageName,
+				updateDetail.SourceVersion)
 			mgr.subStatus = updateutil.VerificationRollback
 			// Update state to rollback
-			if err = mgr.inProgress(context, log, Rollback); err != nil {
+			if err = mgr.inProgress(updateDetail, log, Rollback); err != nil {
 				return err
 			}
-			return mgr.rollback(mgr, log, context)
+			return mgr.rollback(mgr, log, updateDetail)
 		}
 
 		message := updateutil.BuildMessage(err,
 			"failed to rollback %v to %v, %v",
-			context.Current.PackageName,
-			context.Current.SourceVersion,
+			updateDetail.PackageName,
+			updateDetail.SourceVersion,
 			"failed to start the agent")
 		// Rolled back, but service cannot start, Update failed.
-		return mgr.failed(context, log, updateutil.ErrorCannotStartService, message, false)
+		return mgr.failed(updateDetail, log, updateutil.ErrorCannotStartService, message, false)
 	}
 
-	log.Infof("%v is running", context.Current.PackageName)
+	log.Infof("%v is running", updateDetail.PackageName)
 	if !isRollback {
-		return mgr.succeeded(context, log)
+		return mgr.succeeded(updateDetail, log)
 	}
 
-	message := fmt.Sprintf("rolledback %v to %v", context.Current.PackageName, context.Current.SourceVersion)
+	message := fmt.Sprintf("rolledback %v to %v", updateDetail.PackageName, updateDetail.SourceVersion)
 	log.Infof("message is %v", message)
-	return mgr.failed(context, log, updateutil.ErrorUpdateFailRollbackSuccess, message, false)
+	return mgr.failed(updateDetail, log, updateutil.ErrorUpdateFailRollbackSuccess, message, false)
 }
 
 // rollbackInstallation rollback installation to the source version
-func rollbackInstallation(mgr *updateManager, log log.T, context *UpdateContext) (err error) {
-	if exitCode, err := mgr.uninstall(mgr, log, context.Current.TargetVersion, context); err != nil {
+func rollbackInstallation(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
+	if exitCode, err := mgr.uninstall(mgr, log, updateDetail.TargetVersion, updateDetail); err != nil {
 		// Fail the rollback process as a result of target version cannot be uninstalled
 		message := updateutil.BuildMessage(
 			err,
 			"failed to uninstall %v %v",
-			context.Current.PackageName,
-			context.Current.TargetVersion)
+			updateDetail.PackageName,
+			updateDetail.TargetVersion)
 
 		// this case is not possible at all as we would have caught it in the earlier uninstall/install
 		// if this happens, something else is wrong so it is better to have this code for differentiation
 		if exitCode == updateutil.ExitCodeUnsupportedPlatform {
-			return mgr.failed(context, log, updateutil.ErrorUnsupportedServiceManager, message, true)
+			return mgr.failed(updateDetail, log, updateutil.ErrorUnsupportedServiceManager, message, true)
 		}
-		return mgr.failed(context, log, updateutil.ErrorUninstallFailed, message, false)
+		return mgr.failed(updateDetail, log, updateutil.ErrorUninstallFailed, message, false)
 	}
 
-	if exitCode, err := mgr.install(mgr, log, context.Current.SourceVersion, context); err != nil {
+	if exitCode, err := mgr.install(mgr, log, updateDetail.SourceVersion, updateDetail); err != nil {
 		// Fail the rollback process as a result of source version cannot be reinstalled
 		message := updateutil.BuildMessage(
 			err,
 			"failed to install %v %v",
-			context.Current.PackageName,
-			context.Current.SourceVersion)
+			updateDetail.PackageName,
+			updateDetail.SourceVersion)
 
 		// this case is not possible at all as we would have caught it in the earlier uninstall/install
 		// if this happens, something else is wrong and it is better to have this code for differentiation
 		if exitCode == updateutil.ExitCodeUnsupportedPlatform {
-			return mgr.failed(context, log, updateutil.ErrorUnsupportedServiceManager, message, true)
+			return mgr.failed(updateDetail, log, updateutil.ErrorUnsupportedServiceManager, message, true)
 		}
-		return mgr.failed(context, log, updateutil.ErrorInstallFailed, message, false)
+		return mgr.failed(updateDetail, log, updateutil.ErrorInstallFailed, message, false)
 	}
 
-	if err = mgr.inProgress(context, log, RolledBack); err != nil {
+	if err = mgr.inProgress(updateDetail, log, RolledBack); err != nil {
 		return err
 	}
-	return mgr.verify(mgr, log, context, true)
+	return mgr.verify(mgr, log, updateDetail, true)
 }
 
 // uninstall executes the uninstall script for the specific version of agent
-func uninstallAgent(mgr *updateManager, log log.T, version string, context *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error) {
-	log.Infof("Initiating %v %v uninstallation", context.Current.PackageName, version)
+func uninstallAgent(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	log.Infof("Initiating %v %v uninstallation", updateDetail.PackageName, version)
 
 	// find the path for the uninstall script
 	uninstallPath := updateutil.UnInstallerFilePath(
-		context.Current.UpdateRoot,
-		context.Current.PackageName,
+		updateDetail.UpdateRoot,
+		updateDetail.PackageName,
 		version)
 
 	// calculate work directory
 	workDir := updateutil.UpdateArtifactFolder(
-		context.Current.UpdateRoot,
-		context.Current.PackageName,
+		updateDetail.UpdateRoot,
+		updateDetail.PackageName,
 		version)
 
 	uninstallRetryCount := 3
@@ -430,9 +421,9 @@ func uninstallAgent(mgr *updateManager, log log.T, version string, context *Upda
 			log,
 			uninstallPath,
 			workDir,
-			context.Current.UpdateRoot,
-			context.Current.StdoutFileName,
-			context.Current.StderrFileName,
+			updateDetail.UpdateRoot,
+			updateDetail.StdoutFileName,
+			updateDetail.StderrFileName,
 			false)
 		if err == nil {
 			break
@@ -444,28 +435,28 @@ func uninstallAgent(mgr *updateManager, log log.T, version string, context *Upda
 	if err != nil {
 		return exitCode, err
 	}
-	log.Infof("%v %v uninstalled successfully", context.Current.PackageName, version)
+	log.Infof("%v %v uninstalled successfully", updateDetail.PackageName, version)
 	return exitCode, nil
 }
 
 // install executes the install script for the specific version of agent
-func installAgent(mgr *updateManager, log log.T, version string, context *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error) {
-	log.Infof("Initiating %v %v installation", context.Current.PackageName, version)
+func installAgent(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	log.Infof("Initiating %v %v installation", updateDetail.PackageName, version)
 
 	// find the path for the install script
 	installerPath := updateutil.InstallerFilePath(
-		context.Current.UpdateRoot,
-		context.Current.PackageName,
+		updateDetail.UpdateRoot,
+		updateDetail.PackageName,
 		version)
 	// calculate work directory
 	workDir := updateutil.UpdateArtifactFolder(
-		context.Current.UpdateRoot,
-		context.Current.PackageName,
+		updateDetail.UpdateRoot,
+		updateDetail.PackageName,
 		version)
 
 	// Install version - TODO - move the retry logic to ExeCommand while cleaning that function
 	installRetryCount := 3
-	if context.Current.State == Staged {
+	if updateDetail.State == Staged {
 		installRetryCount = 4 // this value is taken because previous updater version had total 4 retries (2 target install + 2 rollback install)
 	}
 	for retryCounter := 1; retryCounter <= installRetryCount; retryCounter++ {
@@ -473,9 +464,9 @@ func installAgent(mgr *updateManager, log log.T, version string, context *Update
 			log,
 			installerPath,
 			workDir,
-			context.Current.UpdateRoot,
-			context.Current.StdoutFileName,
-			context.Current.StderrFileName,
+			updateDetail.UpdateRoot,
+			updateDetail.StdoutFileName,
+			updateDetail.StderrFileName,
 			false)
 		if err == nil {
 			break
@@ -494,7 +485,7 @@ func installAgent(mgr *updateManager, log log.T, version string, context *Update
 	if err != nil {
 		return exitCode, err
 	}
-	log.Infof("%v %v installed successfully", context.Current.PackageName, version)
+	log.Infof("%v %v installed successfully", updateDetail.PackageName, version)
 	return exitCode, nil
 }
 
@@ -513,15 +504,15 @@ func getNextBackOff(retryCounter int) (backOff time.Duration) {
 }
 
 // cleanUninstalledVersions deletes leftover files from previously installed versions in update folder
-func cleanUninstalledVersions(mgr *updateManager, log log.T, context *UpdateContext) (err error) {
+func cleanUninstalledVersions(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
 	log.Infof("Initiating cleanup of other versions.")
 	var installedVersion string
 
-	switch context.Current.Result {
+	switch updateDetail.Result {
 	case contracts.ResultStatusSuccess:
-		installedVersion = context.Current.TargetVersion
+		installedVersion = updateDetail.TargetVersion
 	case contracts.ResultStatusFailed:
-		installedVersion = context.Current.SourceVersion
+		installedVersion = updateDetail.SourceVersion
 	}
 
 	path := appconfig.UpdaterArtifactsRoot + updateutil.UpdateAmazonSSMAgentDir
@@ -558,7 +549,7 @@ func downloadAndUnzipArtifact(
 	mgr *updateManager,
 	log log.T,
 	downloadInput artifact.DownloadInput,
-	updateContext *UpdateContext,
+	updateDetail *UpdateDetail,
 	version string) (err error) {
 
 	log.Infof("Preparing source for version %v", version)
@@ -574,13 +565,13 @@ func downloadAndUnzipArtifact(
 	}
 
 	// downloaded successfully, append message
-	updateContext.Current.AppendInfo(log, "Successfully downloaded %v", downloadInput.SourceURL)
+	updateDetail.AppendInfo(log, "Successfully downloaded %v", downloadInput.SourceURL)
 
 	// uncompress installation package
 	if err = uncompress(
 		log,
 		downloadOutput.LocalFilePath,
-		updateutil.UpdateArtifactFolder(updateContext.Current.UpdateRoot, updateContext.Current.PackageName, version)); err != nil {
+		updateutil.UpdateArtifactFolder(updateDetail.UpdateRoot, updateDetail.PackageName, version)); err != nil {
 		return fmt.Errorf("failed to uncompress installation package, %v", err.Error())
 	}
 

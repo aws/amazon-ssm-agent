@@ -202,7 +202,7 @@ func main() {
 	}
 
 	// Create new UpdateDetail
-	detail := &processor.UpdateDetail{
+	updateDetail := &processor.UpdateDetail{
 		State:              processor.NotStarted,
 		Result:             contracts.ResultStatusInProgress,
 		SourceVersion:      *sourceVersion,
@@ -224,29 +224,29 @@ func main() {
 		SelfUpdate:         *selfUpdate,
 	}
 
-	if err = resolveUpdateDetail(detail); err != nil {
+	if err = resolveUpdateDetail(updateDetail); err != nil {
 		log.Errorf(err.Error())
 		return
 	}
 
-	log.Infof("Update root is: %v", detail.UpdateRoot)
+	log.Infof("Update root is: %v", updateDetail.UpdateRoot)
 
-	// Load UpdateContext from local storage, set current update with the new UpdateDetail
-	updateContext, err := updater.InitializeUpdate(log, detail)
+	// Initialize update detail with plugin info
+	err = updater.InitializeUpdate(log, updateDetail)
 	if err != nil {
 		log.Errorf(err.Error())
 		return
 	}
 
 	// Recover updater if panic occurs and fail the updater
-	defer recoverUpdaterFromPanic(updateContext)
+	defer recoverUpdaterFromPanic(updateDetail)
 
 	// Start or resume update
-	if err = updater.StartOrResumeUpdate(log, updateContext); err != nil { // We do not send any error above this to ICS/MGS except panic message
+	if err = updater.StartOrResumeUpdate(log, updateDetail); err != nil { // We do not send any error above this to ICS/MGS except panic message
 		// Rolled back, but service cannot start, Update failed.
-		updater.Failed(updateContext, log, updateutil.ErrorUnexpected, err.Error(), false)
+		updater.Failed(updateDetail, log, updateutil.ErrorUnexpected, err.Error(), false)
 	} else {
-		log.Infof(updateContext.Current.StandardOut)
+		log.Infof(updateDetail.StandardOut)
 	}
 
 }
@@ -270,11 +270,11 @@ func resolveUpdateDetail(detail *processor.UpdateDetail) error {
 }
 
 // recoverUpdaterFromPanic recovers updater if panic occurs and fails the updater
-func recoverUpdaterFromPanic(context *processor.UpdateContext) {
+func recoverUpdaterFromPanic(updateDetail *processor.UpdateDetail) {
 	// recover in case the updater panics
 	if err := recover(); err != nil {
 		agentContext.Log().Errorf("recovered from panic for updater %v!", err)
 		agentContext.Log().Errorf("Stacktrace:\n%s", debug.Stack())
-		updater.Failed(context, agentContext.Log(), updateutil.ErrorUnexpectedThroughPanic, fmt.Sprintf("%v", err), false)
+		updater.Failed(updateDetail, agentContext.Log(), updateutil.ErrorUnexpectedThroughPanic, fmt.Sprintf("%v", err), false)
 	}
 }
