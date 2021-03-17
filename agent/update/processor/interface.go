@@ -26,24 +26,25 @@ import (
 // T represents the interface for agent update
 type T interface {
 	// StartOrResumeUpdate starts/resumes update.
-	StartOrResumeUpdate(log log.T, updateContext *UpdateContext) (err error)
+	StartOrResumeUpdate(log log.T, updateDetail *UpdateDetail) (err error)
 
-	// InitializeUpdate initializes update, creates update context
-	InitializeUpdate(log log.T, detail *UpdateDetail) (context *UpdateContext, err error)
+	// InitializeUpdate initializes update
+	InitializeUpdate(log log.T, detail *UpdateDetail) (err error)
 
 	// Failed sets update to failed with error messages
-	Failed(context *UpdateContext, log log.T, code updateutil.ErrorCode, errMessage string, noRollbackMessage bool) (err error)
+	Failed(updateDetail *UpdateDetail, log log.T, code updateutil.ErrorCode, errMessage string, noRollbackMessage bool) (err error)
 }
 
-type prepare func(mgr *updateManager, log log.T, updateContext *UpdateContext) (err error)
-type update func(mgr *updateManager, log log.T, updateContext *UpdateContext) (err error)
-type verify func(mgr *updateManager, log log.T, updateContext *UpdateContext, isRollback bool) (err error)
-type rollback func(mgr *updateManager, log log.T, updateContext *UpdateContext) (err error)
-type uninstall func(mgr *updateManager, log log.T, version string, updateContext *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error)
-type install func(mgr *updateManager, log log.T, version string, updateContext *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error)
-type download func(mgr *updateManager, log log.T, downloadInput artifact.DownloadInput, updateContext *UpdateContext, version string) (err error)
-type clean func(mgr *updateManager, log log.T, updateContext *UpdateContext) (err error)
+type prepare func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error)
+type update func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error)
+type verify func(mgr *updateManager, log log.T, updateDetail *UpdateDetail, isRollback bool) (err error)
+type rollback func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error)
+type uninstall func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error)
+type install func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error)
+type download func(mgr *updateManager, log log.T, downloadInput artifact.DownloadInput, updateDetail *UpdateDetail, version string) (err error)
+type clean func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error)
 type runTests func(context context.T, stage testCommon.TestStage, timeOutSeconds int) (testOutput string)
+type finalize func(mgr *updateManager, updateDetail *UpdateDetail, errorCode string) (err error)
 
 type updateManager struct {
 	Context   context.T
@@ -59,7 +60,8 @@ type updateManager struct {
 	download  download
 	clean     clean
 	runTests  runTests
-	subStatus string // Values currently being used - downgrade, InstallRollback, VerificationRollback. It is good to place it here as UpdateContext is being saved on the filesystem
+	finalize  finalize
+	subStatus string // Values currently being used - downgrade, InstallRollback, VerificationRollback.
 }
 
 // Updater contains logic for performing agent update

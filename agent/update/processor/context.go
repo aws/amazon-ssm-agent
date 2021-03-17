@@ -16,10 +16,7 @@
 package processor
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
-	"os"
 	"path"
 	"regexp"
 	"strings"
@@ -71,8 +68,7 @@ const (
 
 // ContextMgr reprents context management logics
 type ContextMgr interface {
-	uploadOutput(log log.T, context *UpdateContext, orchestrationDir string) error
-	saveUpdateContext(log log.T, context *UpdateContext, contextLocation string) error
+	uploadOutput(log log.T, updateDetail *UpdateDetail, orchestrationDir string) error
 }
 
 type contextManager struct {
@@ -106,39 +102,12 @@ type UpdateDetail struct {
 	SelfUpdate         bool                   `json:"SelfUpdate"`
 }
 
-// UpdateContext holds the book keeping details for Update context
-// It contains current update detail and all the update histories
-type UpdateContext struct {
-	Current   *UpdateDetail   `json:"Current"`
-	Histories []*UpdateDetail `json:"Histories"`
-}
-
 // HasMessageID represents if update is triggered by run command
 func (update *UpdateDetail) HasMessageID() bool {
 	return len(update.MessageID) > 0
 }
 
-// IsUpdateInProgress represents if the another update is running
-func (context *UpdateContext) IsUpdateInProgress(log log.T) bool {
-	//System will check the start time of the last update
-	//If current system time minus start time is bigger than the MaxAllowedUpdateTime, which means update has been interrupted.
-	//Allow system to resume update
-	if context.Current == nil {
-		return false
-	} else if string(context.Current.State) == "" {
-		return false
-	} else {
-		duration := time.Since(context.Current.StartDateTime)
-		log.Infof("Attemping to retry update after %v seconds", duration.Seconds())
-		if duration.Seconds() > maxAllowedUpdateDuration {
-			return false
-		}
-	}
-
-	return true
-}
-
-// AppendInfo appends messages to UpdateContext StandardOut
+// AppendInfo appends messages to UpdateDetail StandardOut
 func (update *UpdateDetail) AppendInfo(log log.T, format string, params ...interface{}) {
 	message := fmt.Sprintf(format, params...)
 	log.Infof(message)
@@ -149,7 +118,7 @@ func (update *UpdateDetail) AppendInfo(log log.T, format string, params ...inter
 	}
 }
 
-// AppendError appends messages to UpdateContext StandardError and StandardOut
+// AppendError appends messages to UpdateDetail StandardError and StandardOut
 func (update *UpdateDetail) AppendError(log log.T, format string, params ...interface{}) {
 	message := fmt.Sprintf(format, params...)
 	log.Errorf(message)
@@ -163,21 +132,6 @@ func (update *UpdateDetail) AppendError(log log.T, format string, params ...inte
 	} else {
 		update.StandardError = message
 	}
-}
-
-// LoadUpdateContext loads update context info from local storage, set current update with new update detail
-func LoadUpdateContext(log log.T, source string) (context *UpdateContext, err error) {
-	log.Debugf("file %v", source)
-	if _, err := os.Stat(source); os.IsNotExist(err) {
-		log.Debugf("UpdateContext file doesn't exist, creating new one")
-		context = &UpdateContext{}
-	} else {
-		log.Debugf("UpdateContext file exists")
-		if context, err = parseContext(log, source); err != nil {
-			return context, err
-		}
-	}
-	return context, nil
 }
 
 // processMessageID splits the messageID and returns the commandID part of it.
@@ -241,63 +195,27 @@ func getOrchestrationDir(identity identity.IAgentIdentity, log log.T, update *Up
 	return getV12DocOrchDir(identity, log, update)
 }
 
-func (context *UpdateContext) cleanUpdate() {
-	context.Histories = append(context.Histories, context.Current)
-	context.Current = &UpdateDetail{}
-}
-
-// saveUpdateContext save update context to local storage
-func (c *contextManager) saveUpdateContext(log log.T, context *UpdateContext, contextLocation string) (err error) {
-	var jsonData = []byte{}
-	if jsonData, err = json.Marshal(context); err != nil {
-		return err
-	}
-
-	if err = ioutil.WriteFile(
-		contextLocation,
-		jsonData,
-		appconfig.ReadWriteAccess); err != nil {
-		return err
-	}
-	return nil
-}
-
-// parseContext loads and parses update context from local storage
-func parseContext(log log.T, fileName string) (context *UpdateContext, err error) {
-	// Load specified file from file system
-	result, err := ioutil.ReadFile(fileName)
-	if err != nil {
-		return
-	}
-	// parse context file
-	if err = json.Unmarshal([]byte(result), &context); err != nil {
-		return
-	}
-
-	return context, err
-}
-
 // uploadOutput uploads the stdout and stderr file to S3
-func (c *contextManager) uploadOutput(log log.T, context *UpdateContext, orchestrationDirectory string) (err error) {
+func (c *contextManager) uploadOutput(log log.T, updateDetail *UpdateDetail, orchestrationDirectory string) (err error) {
 
 	// upload outputs (if any) to s3
 	uploadOutputsToS3 := func() {
 		// delete temp outputDir once we're done
 		defer func() {
-			if err := fileutil.DeleteDirectory(updateutil.UpdateOutputDirectory(context.Current.UpdateRoot)); err != nil {
+			if err := fileutil.DeleteDirectory(updateutil.UpdateOutputDirectory(updateDetail.UpdateRoot)); err != nil {
 				log.Error("error deleting directory", err)
 			}
 		}()
 
 		// get stdout file path
-		stdoutPath := updateutil.UpdateStdOutPath(orchestrationDirectory, context.Current.StdoutFileName)
-		s3Key := path.Join(context.Current.OutputS3KeyPrefix, context.Current.StdoutFileName)
-		log.Debugf("Uploading %v to s3://%v/%v", stdoutPath, context.Current.OutputS3BucketName, s3Key)
-		if s3, err := s3util.NewAmazonS3Util(c.context, context.Current.OutputS3BucketName); err == nil {
-			if err := s3.S3Upload(log, context.Current.OutputS3BucketName, s3Key, stdoutPath); err != nil {
+		stdoutPath := updateutil.UpdateStdOutPath(orchestrationDirectory, updateDetail.StdoutFileName)
+		s3Key := path.Join(updateDetail.OutputS3KeyPrefix, updateDetail.StdoutFileName)
+		log.Debugf("Uploading %v to s3://%v/%v", stdoutPath, updateDetail.OutputS3BucketName, s3Key)
+		if s3, err := s3util.NewAmazonS3Util(c.context, updateDetail.OutputS3BucketName); err == nil {
+			if err := s3.S3Upload(log, updateDetail.OutputS3BucketName, s3Key, stdoutPath); err != nil {
 				log.Errorf("failed uploading %v to s3://%v/%v \n err:%v",
 					stdoutPath,
-					context.Current.OutputS3BucketName,
+					updateDetail.OutputS3BucketName,
 					s3Key,
 					err)
 			}
@@ -306,12 +224,12 @@ func (c *contextManager) uploadOutput(log log.T, context *UpdateContext, orchest
 		}
 
 		// get stderr file path
-		stderrPath := updateutil.UpdateStdErrPath(orchestrationDirectory, context.Current.StderrFileName)
-		s3Key = path.Join(context.Current.OutputS3KeyPrefix, context.Current.StderrFileName)
-		log.Debugf("Uploading %v to s3://%v/%v", stderrPath, context.Current.OutputS3BucketName, s3Key)
-		if s3, err := s3util.NewAmazonS3Util(c.context, context.Current.OutputS3BucketName); err == nil {
-			if err := s3.S3Upload(log, context.Current.OutputS3BucketName, s3Key, stderrPath); err != nil {
-				log.Errorf("failed uploading %v to s3://%v/%v \n err:%v", stderrPath, context.Current.StderrFileName, s3Key, err)
+		stderrPath := updateutil.UpdateStdErrPath(orchestrationDirectory, updateDetail.StderrFileName)
+		s3Key = path.Join(updateDetail.OutputS3KeyPrefix, updateDetail.StderrFileName)
+		log.Debugf("Uploading %v to s3://%v/%v", stderrPath, updateDetail.OutputS3BucketName, s3Key)
+		if s3, err := s3util.NewAmazonS3Util(c.context, updateDetail.OutputS3BucketName); err == nil {
+			if err := s3.S3Upload(log, updateDetail.OutputS3BucketName, s3Key, stderrPath); err != nil {
+				log.Errorf("failed uploading %v to s3://%v/%v \n err:%v", stderrPath, updateDetail.StderrFileName, s3Key, err)
 			}
 		} else {
 			log.Errorf("s3 client initialization failed, not uploading %v to s3. err: %v", stderrPath, err)

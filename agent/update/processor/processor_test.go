@@ -51,15 +51,7 @@ type contextMgrStub struct {
 	tempStdOut string
 }
 
-func (c *contextMgrStub) saveUpdateContext(log log.T, context *UpdateContext, contextLocation string) (err error) {
-	if context.Current.StandardOut == "" {
-		return nil
-	}
-	c.tempStdOut = context.Current.StandardOut
-	return nil
-}
-
-func (c *contextMgrStub) uploadOutput(log log.T, context *UpdateContext, orchestrationDir string) error {
+func (c *contextMgrStub) uploadOutput(log log.T, updateDetail *UpdateDetail, orchestrationDir string) error {
 	return nil
 }
 
@@ -67,14 +59,14 @@ func TestStartOrResumeUpdateFromInstalledState(t *testing.T) {
 	// setup
 	updater := createDefaultUpdaterStub()
 	isMethodExecuted := false
-	updateContext := createUpdateContext(Installed)
+	updateDetail := createUpdateDetail(Installed)
 	// mock the verify method
-	updater.mgr.verify = func(mgr *updateManager, log log.T, context *UpdateContext, isRollback bool) error {
+	updater.mgr.verify = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail, isRollback bool) error {
 		isMethodExecuted = true
 		return nil
 	}
 	// action
-	updater.StartOrResumeUpdate(logger, updateContext)
+	updater.StartOrResumeUpdate(logger, updateDetail)
 	// assert
 	assert.True(t, isMethodExecuted)
 }
@@ -83,14 +75,14 @@ func TestStartOrResumeUpdateFromInitializedState(t *testing.T) {
 	// setup
 	updater := createDefaultUpdaterStub()
 	isMethodExecuted := false
-	updateContext := createUpdateContext(Initialized)
+	updateDetail := createUpdateDetail(Initialized)
 	// mock the verify method
-	updater.mgr.prepare = func(mgr *updateManager, log log.T, context *UpdateContext) error {
+	updater.mgr.prepare = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) error {
 		isMethodExecuted = true
 		return nil
 	}
 	// action
-	updater.StartOrResumeUpdate(logger, updateContext)
+	updater.StartOrResumeUpdate(logger, updateDetail)
 	// assert
 	assert.True(t, isMethodExecuted)
 }
@@ -99,14 +91,14 @@ func TestStartOrResumeUpdateFromStagedState(t *testing.T) {
 	// setup
 	updater := createDefaultUpdaterStub()
 	isMethodExecuted := false
-	updateContext := createUpdateContext(Staged)
+	updateDetail := createUpdateDetail(Staged)
 	// mock the verify method
-	updater.mgr.update = func(mgr *updateManager, log log.T, context *UpdateContext) error {
+	updater.mgr.update = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) error {
 		isMethodExecuted = true
 		return nil
 	}
 	// action
-	updater.StartOrResumeUpdate(logger, updateContext)
+	updater.StartOrResumeUpdate(logger, updateDetail)
 	// assert
 	assert.True(t, isMethodExecuted)
 }
@@ -114,29 +106,29 @@ func TestStartOrResumeUpdateFromStagedState(t *testing.T) {
 func TestInitializeUpdate(t *testing.T) {
 	// setup
 	updater := createDefaultUpdaterStub()
-	updateContext := createUpdateContext("")
+	updateDetail := createUpdateDetail("")
 
 	// action
-	updateContext, err := updater.InitializeUpdate(logger, updateContext.Current)
+	err := updater.InitializeUpdate(logger, updateDetail)
 
 	// assert
-	assert.NotEmpty(t, updateContext.Current.StandardOut)
-	assert.NotEmpty(t, updateContext.Current.StartDateTime)
+	assert.NotEmpty(t, updateDetail.StandardOut)
+	assert.NotEmpty(t, updateDetail.StartDateTime)
 	assert.NoError(t, err)
 }
 
 func TestPrepareInstallationPackages(t *testing.T) {
 	// setup
 	updater := createDefaultUpdaterStub()
-	updateContext := createUpdateContext(Initialized)
+	updateDetail := createUpdateDetail(Initialized)
 	isUpdateCalled := false
 
 	// stub download for updater
-	updater.mgr.download = func(mgr *updateManager, log log.T, downloadInput artifact.DownloadInput, context *UpdateContext, version string) (err error) {
+	updater.mgr.download = func(mgr *updateManager, log log.T, downloadInput artifact.DownloadInput, updateDetail *UpdateDetail, version string) (err error) {
 		return nil
 	}
 	// stop at the end of prepareInstallationPackages, do not perform update
-	updater.mgr.update = func(mgr *updateManager, log log.T, context *UpdateContext) (err error) {
+	updater.mgr.update = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
 		isUpdateCalled = true
 		return nil
 	}
@@ -145,13 +137,12 @@ func TestPrepareInstallationPackages(t *testing.T) {
 		return true
 	}
 	// action
-	err := prepareInstallationPackages(updater.mgr, logger, updateContext)
+	err := prepareInstallationPackages(updater.mgr, logger, updateDetail)
 
 	// assert
 	assert.NoError(t, err)
-	assert.Equal(t, updateContext.Current.State, Staged)
-	assert.NotEmpty(t, updateContext.Current.StandardOut)
-	assert.Empty(t, updateContext.Histories)
+	assert.Equal(t, updateDetail.State, Staged)
+	assert.NotEmpty(t, updateDetail.StandardOut)
 	assert.True(t, isUpdateCalled)
 }
 
@@ -159,29 +150,27 @@ func TestPreparePackagesFailCreateInstanceContext(t *testing.T) {
 	// setup
 	control := &stubControl{failCreateInstanceContext: true}
 	updater := createUpdaterStubs(control)
-	updateContext := createUpdateContext(Initialized)
+	updateDetail := createUpdateDetail(Initialized)
 	versioncheck = func(context context.T, manifestFilePath string, version string) bool {
 		// Don't check the version status in this test
 		return true
 	}
 
 	// action
-	err := prepareInstallationPackages(updater.mgr, logger, updateContext)
+	err := prepareInstallationPackages(updater.mgr, logger, updateDetail)
 
 	// assert
 	assert.NoError(t, err)
-	assert.Equal(t, string(updateContext.Current.State), "")
-	assert.Equal(t, updateContext.Histories[0].State, Completed)
-	assert.Equal(t, updateContext.Histories[0].Result, contracts.ResultStatusFailed)
+	assert.Equal(t, Completed, updateDetail.State)
 }
 
 func TestPreparePackagesFailCreateUpdateDownloadFolder(t *testing.T) {
 	// setup
 	updater := createDefaultUpdaterStub()
-	updateContext := createUpdateContext(Initialized)
+	updateDetail := createUpdateDetail(Initialized)
 
 	// stub download for updater
-	updater.mgr.download = func(mgr *updateManager, log log.T, downloadInput artifact.DownloadInput, context *UpdateContext, version string) (err error) {
+	updater.mgr.download = func(mgr *updateManager, log log.T, downloadInput artifact.DownloadInput, updateDetail *UpdateDetail, version string) (err error) {
 		return fmt.Errorf("no access")
 	}
 	versioncheck = func(context context.T, manifestFilePath string, version string) bool {
@@ -190,49 +179,45 @@ func TestPreparePackagesFailCreateUpdateDownloadFolder(t *testing.T) {
 	}
 
 	// action
-	err := prepareInstallationPackages(updater.mgr, logger, updateContext)
+	err := prepareInstallationPackages(updater.mgr, logger, updateDetail)
 
 	// assert
 	assert.NoError(t, err)
-	assert.Equal(t, string(updateContext.Current.State), "")
-	assert.Equal(t, updateContext.Histories[0].State, Completed)
-	assert.Equal(t, updateContext.Histories[0].Result, contracts.ResultStatusFailed)
+	assert.Equal(t, Completed, updateDetail.State)
 }
 
 func TestPreparePackagesFailDownload(t *testing.T) {
 	// setup
 	control := &stubControl{failCreateUpdateDownloadFolder: true}
 	updater := createUpdaterStubs(control)
-	updateContext := createUpdateContext(Initialized)
+	updateDetail := createUpdateDetail(Initialized)
 	versioncheck = func(context context.T, manifestFilePath string, version string) bool {
 		// Don't check the version status in this test
 		return true
 	}
 
 	// action
-	err := prepareInstallationPackages(updater.mgr, logger, updateContext)
+	err := prepareInstallationPackages(updater.mgr, logger, updateDetail)
 
 	// assert
 	assert.NoError(t, err)
-	assert.Equal(t, string(updateContext.Current.State), "")
-	assert.Equal(t, updateContext.Histories[0].State, Completed)
-	assert.Equal(t, updateContext.Histories[0].Result, contracts.ResultStatusFailed)
+	assert.Equal(t, Completed, updateDetail.State)
 }
 
 func TestPreparePackageFailInvalidVersion(t *testing.T) {
 	updater := createDefaultUpdaterStub()
-	updateContext := createUpdateContext(Initialized)
-	updateContext.Current.ManifestPath = "fake-manifest-path"
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.ManifestPath = "fake-manifest-path"
 	isUpdateCalled := false
 	isDownloadCalled := false
 
 	// stub download for updater
-	updater.mgr.download = func(mgr *updateManager, log log.T, downloadInput artifact.DownloadInput, updateContext *UpdateContext, version string) (err error) {
+	updater.mgr.download = func(mgr *updateManager, log log.T, downloadInput artifact.DownloadInput, updateDetail *UpdateDetail, version string) (err error) {
 		isDownloadCalled = true
 		return nil
 	}
 	// stop at the end of prepareInstallationPackages, do not perform update
-	updater.mgr.update = func(mgr *updateManager, log log.T, updateContext *UpdateContext) (err error) {
+	updater.mgr.update = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
 		isUpdateCalled = true
 		return nil
 	}
@@ -242,33 +227,31 @@ func TestPreparePackageFailInvalidVersion(t *testing.T) {
 		return false
 	}
 	// action
-	err := prepareInstallationPackages(updater.mgr, logger, updateContext)
+	err := prepareInstallationPackages(updater.mgr, logger, updateDetail)
 
 	// assert
 	assert.Nil(t, err)
-	assert.Equal(t, string(updateContext.Current.State), "")
-	assert.Equal(t, updateContext.Histories[0].State, Completed)
-	assert.Equal(t, updateContext.Histories[0].Result, contracts.ResultStatusSuccess)
+	assert.Equal(t, Completed, updateDetail.State)
 
-	assert.Empty(t, updateContext.Current.StandardOut)
+	assert.Empty(t, updateDetail.StandardOut)
 	assert.Equal(t, isDownloadCalled, false)
 	assert.Equal(t, isUpdateCalled, false)
 }
 
 func TestPreparePackageFailInvalidVersion_WithNoManifestPath(t *testing.T) {
 	updater := createDefaultUpdaterStub()
-	updateContext := createUpdateContext(Initialized)
-	updateContext.Current.ManifestPath = ""
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.ManifestPath = ""
 	isUpdateCalled := false
 	isDownloadCalled := false
 
 	// stub download for updater
-	updater.mgr.download = func(mgr *updateManager, log log.T, downloadInput artifact.DownloadInput, updateContext *UpdateContext, version string) (err error) {
+	updater.mgr.download = func(mgr *updateManager, log log.T, downloadInput artifact.DownloadInput, updateDetail *UpdateDetail, version string) (err error) {
 		isDownloadCalled = true
 		return nil
 	}
 	// stop at the end of prepareInstallationPackages, do not perform update
-	updater.mgr.update = func(mgr *updateManager, log log.T, updateContext *UpdateContext) (err error) {
+	updater.mgr.update = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
 		isUpdateCalled = true
 		return nil
 	}
@@ -279,21 +262,19 @@ func TestPreparePackageFailInvalidVersion_WithNoManifestPath(t *testing.T) {
 		return false
 	}
 	// action
-	err := prepareInstallationPackages(updater.mgr, logger, updateContext)
+	err := prepareInstallationPackages(updater.mgr, logger, updateDetail)
 
 	// assert
 	assert.Nil(t, err)
-	assert.Equal(t, string(updateContext.Current.State), "")
-	assert.Equal(t, updateContext.Histories[0].State, Completed)
-	assert.Equal(t, updateContext.Histories[0].Result, contracts.ResultStatusSuccess)
+	assert.Equal(t, Completed, updateDetail.State)
 
-	assert.Empty(t, updateContext.Current.StandardOut)
+	assert.Empty(t, updateDetail.StandardOut)
 	assert.Equal(t, isDownloadCalled, false)
 	assert.Equal(t, isUpdateCalled, false)
 }
 
 func TestValidateUpdateVersion(t *testing.T) {
-	updateContext := createUpdateContext(Initialized)
+	updateDetail := createUpdateDetail(Initialized)
 	instanceContext := &updateutil.InstanceInfo{
 		Region:          "us-east-1",
 		Platform:        updateutil.PlatformRedHat,
@@ -303,14 +284,14 @@ func TestValidateUpdateVersion(t *testing.T) {
 		CompressFormat:  "tar.gz",
 	}
 
-	err := validateUpdateVersion(logger, updateContext.Current, instanceContext)
+	err := validateUpdateVersion(logger, updateDetail, instanceContext)
 
 	assert.NoError(t, err)
 }
 
 func TestValidateUpdateVersionFailCentOs(t *testing.T) {
-	updateContext := createUpdateContext(Initialized)
-	updateContext.Current.TargetVersion = "1.0.0.0"
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.TargetVersion = "1.0.0.0"
 	instanceContext := &updateutil.InstanceInfo{
 		Region:          "us-east-1",
 		Platform:        updateutil.PlatformCentOS,
@@ -320,7 +301,7 @@ func TestValidateUpdateVersionFailCentOs(t *testing.T) {
 		CompressFormat:  "tar.gz",
 	}
 
-	err := validateUpdateVersion(logger, updateContext.Current, instanceContext)
+	err := validateUpdateVersion(logger, updateDetail, instanceContext)
 
 	assert.Error(t, err)
 }
@@ -328,307 +309,303 @@ func TestValidateUpdateVersionFailCentOs(t *testing.T) {
 func TestProceedUpdate(t *testing.T) {
 	// setup
 	updater := createDefaultUpdaterStub()
-	updateContext := createUpdateContext(Staged)
+	updateDetail := createUpdateDetail(Staged)
 	isVerifyCalled := false
 
 	// stub install for updater
-	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateContext *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
 		return exitCode, nil
 	}
 
-	updater.mgr.verify = func(mgr *updateManager, log log.T, updateContext *UpdateContext, isRollback bool) (err error) {
+	updater.mgr.verify = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail, isRollback bool) (err error) {
 		isVerifyCalled = true
 		return nil
 	}
 
 	// action
-	err := proceedUpdate(updater.mgr, logger, updateContext)
+	err := proceedUpdate(updater.mgr, logger, updateDetail)
 
 	// assert
 	assert.NoError(t, err)
-	assert.Equal(t, updateContext.Current.State, Installed)
+	assert.Equal(t, updateDetail.State, Installed)
 	assert.True(t, isVerifyCalled)
-	assert.Empty(t, updateContext.Histories)
 }
 
 func TestProceedUpdateWithDowngrade(t *testing.T) {
 	// setup
 	updater := createDefaultUpdaterStub()
-	updateContext := createUpdateContext(Staged)
-	updateContext.Current.RequiresUninstall = true
+	updateDetail := createUpdateDetail(Staged)
+	updateDetail.RequiresUninstall = true
 	isVerifyCalled := false
 	isUninstallCalled := false
 
 	// stub install for updater
-	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateContext *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
 		return exitCode, nil
 	}
-	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateContext *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
 		isUninstallCalled = true
 		return exitCode, nil
 	}
-	updater.mgr.verify = func(mgr *updateManager, log log.T, updateContext *UpdateContext, isRollback bool) (err error) {
+	updater.mgr.verify = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail, isRollback bool) (err error) {
 		isVerifyCalled = true
 		return nil
 	}
 
 	// action
-	err := proceedUpdate(updater.mgr, logger, updateContext)
+	err := proceedUpdate(updater.mgr, logger, updateDetail)
 
 	// assert
 	assert.NoError(t, err)
 	assert.True(t, isVerifyCalled)
 	assert.True(t, isUninstallCalled)
-	assert.Equal(t, updateContext.Current.State, Installed)
-	assert.Empty(t, updateContext.Histories)
+	assert.Equal(t, updateDetail.State, Installed)
 }
 
 func TestProceedUpdateWithUnsupportedServiceMgrForUpdateInstall(t *testing.T) {
 	// setup
 	updater := createDefaultUpdaterStub()
-	updateContext := createUpdateContext(Staged)
+	updateDetail := createUpdateDetail(Staged)
 	isInstallCalled := false
 	invalidPlatform := "Invalid Platform"
 	// stub install for updater
-	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateContext *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
 		isInstallCalled = true
 		return updateutil.ExitCodeUnsupportedPlatform, fmt.Errorf(invalidPlatform)
 	}
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, errorCode string) (err error) {
+		return nil
+	}
 
 	// action
-	err := proceedUpdate(updater.mgr, logger, updateContext)
+	err := proceedUpdate(updater.mgr, logger, updateDetail)
 
 	// assert
 	assert.NoError(t, err)
 	assert.True(t, isInstallCalled)
-	assert.Equal(t, updateContext.Histories[0].State, Completed)
-	assert.Equal(t, updateContext.Histories[0].Result, contracts.ResultStatusFailed)
-	assert.True(t, strings.Contains(updater.mgr.ctxMgr.(*contextMgrStub).tempStdOut, invalidPlatform))
+	assert.Equal(t, updateDetail.State, Completed)
+	assert.Equal(t, updateDetail.Result, contracts.ResultStatusFailed)
+	assert.True(t, strings.Contains(updateDetail.StandardOut, invalidPlatform))
 }
 
 func TestProceedUpdateWithUnsupportedServiceMgrForUpdateUninstall(t *testing.T) {
 	// setup
 	updater := createDefaultUpdaterStub()
-	updateContext := createUpdateContext(Staged)
-	updateContext.Current.RequiresUninstall = true
+	updateDetail := createUpdateDetail(Staged)
+	updateDetail.RequiresUninstall = true
 	isUnInstallCalled := false
 	invalidPlatform := "Invalid Platform"
 
 	// stub install for updater
-	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateContext *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
 		isUnInstallCalled = true
 		return updateutil.ExitCodeUnsupportedPlatform, fmt.Errorf(invalidPlatform)
 	}
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, errorCode string) (err error) {
+		return nil
+	}
 
 	// action
-	err := proceedUpdate(updater.mgr, logger, updateContext)
+	err := proceedUpdate(updater.mgr, logger, updateDetail)
 
 	// assert
 	assert.NoError(t, err)
 	assert.True(t, isUnInstallCalled)
-	assert.Equal(t, updateContext.Histories[0].State, Completed)
-	assert.Equal(t, updateContext.Histories[0].Result, contracts.ResultStatusFailed)
-	assert.True(t, strings.Contains(updater.mgr.ctxMgr.(*contextMgrStub).tempStdOut, invalidPlatform))
+	assert.True(t, strings.Contains(updateDetail.StandardOut, invalidPlatform))
 }
 
 func TestProceedUpdateWithUnsupportedServiceMgrForRollbackUninstall(t *testing.T) {
 	// setup
 	control := &stubControl{serviceIsRunning: false}
 	updater := createUpdaterStubs(control)
-	updateContext := createUpdateContext(Rollback)
+	updateDetail := createUpdateDetail(Rollback)
 
 	isVerifyCalled, isInstallCalled, isUninstallCalled := false, false, false
 	invalidPlatform := "Invalid Platform"
 
 	// stub install for updater
-	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateContext *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
 		isInstallCalled = true
 		return exitCode, nil
 	}
-	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateContext *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
 		isUninstallCalled = true
 		return updateutil.ExitCodeUnsupportedPlatform, fmt.Errorf(invalidPlatform)
 	}
-	updater.mgr.verify = func(mgr *updateManager, log log.T, updateContext *UpdateContext, isRollback bool) (err error) {
+	updater.mgr.verify = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail, isRollback bool) (err error) {
 		isVerifyCalled = true
 		return nil
 	}
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, errorCode string) (err error) {
+		return nil
+	}
+
 	// action
-	err := rollbackInstallation(updater.mgr, logger, updateContext)
+	err := rollbackInstallation(updater.mgr, logger, updateDetail)
 
 	// assert
 	assert.NoError(t, err)
 	assert.True(t, isUninstallCalled)
 	assert.False(t, isVerifyCalled, isInstallCalled)
-	assert.Equal(t, updateContext.Histories[0].State, Completed)
-	assert.Equal(t, updateContext.Histories[0].Result, contracts.ResultStatusFailed)
-	assert.True(t, strings.Contains(updater.mgr.ctxMgr.(*contextMgrStub).tempStdOut, invalidPlatform))
+	assert.True(t, strings.Contains(updateDetail.StandardOut, invalidPlatform))
 }
 
 func TestProceedUpdateWithUnsupportedServiceMgrForRollbackInstall(t *testing.T) {
 	// setup
 	control := &stubControl{serviceIsRunning: false}
 	updater := createUpdaterStubs(control)
-	updateContext := createUpdateContext(Rollback)
+	updateDetail := createUpdateDetail(Rollback)
 	invalidPlatform := "Invalid Platform"
 
 	isVerifyCalled, isInstallCalled, isUninstallCalled := false, false, false
 
 	// stub install for updater
-	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateContext *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
 		isInstallCalled = true
 		return updateutil.ExitCodeUnsupportedPlatform, fmt.Errorf(invalidPlatform)
 	}
-	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateContext *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
 		isUninstallCalled = true
 		return exitCode, nil
 	}
-	updater.mgr.verify = func(mgr *updateManager, log log.T, updateContext *UpdateContext, isRollback bool) (err error) {
+	updater.mgr.verify = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail, isRollback bool) (err error) {
 		isVerifyCalled = true
 		return nil
 	}
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, errorCode string) (err error) {
+		return nil
+	}
 	// action
-	err := rollbackInstallation(updater.mgr, logger, updateContext)
+	err := rollbackInstallation(updater.mgr, logger, updateDetail)
 
 	// assert
 	assert.NoError(t, err)
 	assert.True(t, isUninstallCalled, isInstallCalled)
 	assert.False(t, isVerifyCalled)
-	assert.Equal(t, updateContext.Histories[0].State, Completed)
-	assert.Equal(t, updateContext.Histories[0].Result, contracts.ResultStatusFailed)
-	assert.True(t, strings.Contains(updater.mgr.ctxMgr.(*contextMgrStub).tempStdOut, invalidPlatform))
+	assert.True(t, strings.Contains(updateDetail.StandardOut, invalidPlatform))
 }
 
 func TestProceedUpdateWithDowngradeFailUninstall(t *testing.T) {
 	// setup
 	updater := createDefaultUpdaterStub()
-	updateContext := createUpdateContext(Staged)
-	updateContext.Current.RequiresUninstall = true
+	updateDetail := createUpdateDetail(Staged)
+	updateDetail.RequiresUninstall = true
 	isVerifyCalled := false
 	isUninstallCalled := false
 
 	// stub install for updater
-	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateContext *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
 		return exitCode, nil
 	}
-	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateContext *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
 		isUninstallCalled = true
 		return exitCode, fmt.Errorf("cannot uninstall")
 	}
-	updater.mgr.verify = func(mgr *updateManager, log log.T, updateContext *UpdateContext, isRollback bool) (err error) {
+	updater.mgr.verify = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail, isRollback bool) (err error) {
 		isVerifyCalled = true
 		return nil
 	}
 
 	// action
-	err := proceedUpdate(updater.mgr, logger, updateContext)
+	err := proceedUpdate(updater.mgr, logger, updateDetail)
 
 	// assert
 	assert.NoError(t, err)
 	assert.False(t, isVerifyCalled)
 	assert.True(t, isUninstallCalled)
-	assert.Equal(t, string(updateContext.Current.State), "")
-	assert.Equal(t, updateContext.Histories[0].State, Completed)
-	assert.Equal(t, updateContext.Histories[0].Result, contracts.ResultStatusFailed)
+	assert.Equal(t, Completed, updateDetail.State)
 }
 
 func TestProceedUpdateFailInstall(t *testing.T) {
 	// setup
 	updater := createDefaultUpdaterStub()
-	updateContext := createUpdateContext(Staged)
+	updateDetail := createUpdateDetail(Staged)
 	isRollbackCalled := false
 
 	// stub install for updater
-	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateContext *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
 		return exitCode, fmt.Errorf("install failed")
 	}
 
-	updater.mgr.rollback = func(mgr *updateManager, log log.T, updateContext *UpdateContext) (err error) {
+	updater.mgr.rollback = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
 		isRollbackCalled = true
 		return nil
 	}
 
 	// action
-	err := proceedUpdate(updater.mgr, logger, updateContext)
+	err := proceedUpdate(updater.mgr, logger, updateDetail)
 
 	// assert
 	assert.NoError(t, err)
 	assert.True(t, isRollbackCalled)
-	assert.Equal(t, updateContext.Current.State, Rollback)
-	assert.Empty(t, updateContext.Histories)
+	assert.Equal(t, updateDetail.State, Rollback)
 }
 
 func TestVerifyInstallation(t *testing.T) {
 	// setup
 	control := &stubControl{serviceIsRunning: true}
 	updater := createUpdaterStubs(control)
-	updateContext := createUpdateContext(Installed)
+	updateDetail := createUpdateDetail(Installed)
 
 	// action
-	err := verifyInstallation(updater.mgr, logger, updateContext, false)
+	err := verifyInstallation(updater.mgr, logger, updateDetail, false)
 
 	// assert
 	assert.NoError(t, err)
-	assert.Equal(t, string(updateContext.Current.State), "")
-	assert.Equal(t, updateContext.Histories[0].State, Completed)
-	assert.Equal(t, updateContext.Histories[0].Result, contracts.ResultStatusSuccess)
+	assert.Equal(t, Completed, updateDetail.State)
 }
 
 func TestVerifyInstallationFailedGetInstanceInfo(t *testing.T) {
 	// setup
 	control := &stubControl{failCreateInstanceContext: true}
 	updater := createUpdaterStubs(control)
-	updateContext := createUpdateContext(Installed)
+	updateDetail := createUpdateDetail(Installed)
 
 	// action
-	err := verifyInstallation(updater.mgr, logger, updateContext, false)
+	err := verifyInstallation(updater.mgr, logger, updateDetail, false)
 
 	// assert
 	assert.NoError(t, err)
-	assert.Equal(t, string(updateContext.Current.State), "")
-	assert.Equal(t, updateContext.Histories[0].State, Completed)
-	assert.Equal(t, updateContext.Histories[0].Result, contracts.ResultStatusFailed)
+	assert.Equal(t, Completed, updateDetail.State)
 }
 
 func TestVerifyInstallationCannotStartAgent(t *testing.T) {
 	// setup
 	control := &stubControl{serviceIsRunning: false}
 	updater := createUpdaterStubs(control)
-	updateContext := createUpdateContext(Installed)
-	expectedVersion := updateContext.Current.TargetVersion
+	updateDetail := createUpdateDetail(Installed)
+	expectedVersion := updateDetail.TargetVersion
 	isRollbackCalled := false
 
-	updater.mgr.rollback = func(mgr *updateManager, log log.T, updateContext *UpdateContext) (err error) {
+	updater.mgr.rollback = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
 		isRollbackCalled = true
 		return nil
 	}
 
 	// action
-	err := verifyInstallation(updater.mgr, logger, updateContext, false)
+	err := verifyInstallation(updater.mgr, logger, updateDetail, false)
 
 	// assert
 	assert.NoError(t, err)
 	assert.True(t, isRollbackCalled)
 	assert.Equal(t, expectedVersion, control.getWaitForServiceVersion())
-	assert.Equal(t, updateContext.Current.State, Rollback)
+	assert.Equal(t, updateDetail.State, Rollback)
 }
 
 func TestVerifyRollback(t *testing.T) {
 	// setup
 	control := &stubControl{serviceIsRunning: true}
 	updater := createUpdaterStubs(control)
-	updateContext := createUpdateContext(RolledBack)
-	expectedVersion := updateContext.Current.SourceVersion
+	updateDetail := createUpdateDetail(RolledBack)
+	expectedVersion := updateDetail.SourceVersion
 
 	// action
-	err := verifyInstallation(updater.mgr, logger, updateContext, true)
+	err := verifyInstallation(updater.mgr, logger, updateDetail, true)
 
 	// assert
 	assert.NoError(t, err)
-	assert.Equal(t, string(updateContext.Current.State), "")
+	assert.Equal(t, Completed, updateDetail.State)
 	assert.Equal(t, expectedVersion, control.getWaitForServiceVersion())
-	assert.Equal(t, updateContext.Histories[0].State, Completed)
-	assert.Equal(t, updateContext.Histories[0].Result, contracts.ResultStatusFailed)
 }
 
 func TestVerifyRollbackCannotStartAgent(t *testing.T) {
@@ -637,120 +614,114 @@ func TestVerifyRollbackCannotStartAgent(t *testing.T) {
 	updater := createUpdaterStubs(control)
 
 	// open network required
-	updateContext := createUpdateContext(RolledBack)
+	updateDetail := createUpdateDetail(RolledBack)
 
 	// action
-	err := verifyInstallation(updater.mgr, logger, updateContext, true)
+	err := verifyInstallation(updater.mgr, logger, updateDetail, true)
 
 	// assert
 	assert.NoError(t, err)
-	assert.Equal(t, string(updateContext.Current.State), "")
-	assert.Equal(t, updateContext.Histories[0].State, Completed)
-	assert.Equal(t, updateContext.Histories[0].Result, contracts.ResultStatusFailed)
+	assert.Equal(t, Completed, updateDetail.State)
 }
 
 func TestRollbackInstallation(t *testing.T) {
 	// setup
 	control := &stubControl{serviceIsRunning: false}
 	updater := createUpdaterStubs(control)
-	updateContext := createUpdateContext(Rollback)
+	updateDetail := createUpdateDetail(Rollback)
 
 	isVerifyCalled, isInstallCalled, isUninstallCalled := false, false, false
 
 	// stub install for updater
-	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateContext *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
 		isInstallCalled = true
 		return exitCode, nil
 	}
-	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateContext *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
 		isUninstallCalled = true
 		return exitCode, nil
 	}
-	updater.mgr.verify = func(mgr *updateManager, log log.T, updateContext *UpdateContext, isRollback bool) (err error) {
+	updater.mgr.verify = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail, isRollback bool) (err error) {
 		isVerifyCalled = true
 		return nil
 	}
 	// action
-	err := rollbackInstallation(updater.mgr, logger, updateContext)
+	err := rollbackInstallation(updater.mgr, logger, updateDetail)
 
 	// assert
 	assert.NoError(t, err)
 	assert.True(t, isVerifyCalled, isInstallCalled, isUninstallCalled)
-	assert.Equal(t, updateContext.Current.State, RolledBack)
+	assert.Equal(t, updateDetail.State, RolledBack)
 }
 
 func TestRollbackInstallationFailUninstall(t *testing.T) {
 	// setup
 	control := &stubControl{serviceIsRunning: false}
 	updater := createUpdaterStubs(control)
-	updateContext := createUpdateContext(Rollback)
+	updateDetail := createUpdateDetail(Rollback)
 
 	isVerifyCalled, isInstallCalled, isUninstallCalled := false, false, false
 
 	// stub install for updater
-	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateContext *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
 		isInstallCalled = true
 		return exitCode, nil
 	}
-	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateContext *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
 		isUninstallCalled = true
 		return exitCode, fmt.Errorf("cannot uninstall")
 	}
-	updater.mgr.verify = func(mgr *updateManager, log log.T, updateContext *UpdateContext, isRollback bool) (err error) {
+	updater.mgr.verify = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail, isRollback bool) (err error) {
 		isVerifyCalled = true
 		return nil
 	}
 	// action
-	err := rollbackInstallation(updater.mgr, logger, updateContext)
+	err := rollbackInstallation(updater.mgr, logger, updateDetail)
 
 	// assert
 	assert.NoError(t, err)
 	assert.True(t, isUninstallCalled)
 	assert.False(t, isInstallCalled, isVerifyCalled)
-	assert.Equal(t, updateContext.Histories[0].State, Completed)
-	assert.Equal(t, updateContext.Histories[0].Result, contracts.ResultStatusFailed)
 }
 
 func TestRollbackInstallationFailInstall(t *testing.T) {
 	// setup
 	control := &stubControl{serviceIsRunning: false}
 	updater := createUpdaterStubs(control)
-	updateContext := createUpdateContext(Rollback)
+	updateDetail := createUpdateDetail(Rollback)
 
 	isVerifyCalled, isInstallCalled, isUninstallCalled := false, false, false
 
 	// stub install for updater
-	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateContext *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
 		isInstallCalled = true
 		return exitCode, fmt.Errorf("cannot uninstall")
 	}
-	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateContext *UpdateContext) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
 		isUninstallCalled = true
 		return exitCode, nil
 	}
-	updater.mgr.verify = func(mgr *updateManager, log log.T, updateContext *UpdateContext, isRollback bool) (err error) {
+	updater.mgr.verify = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail, isRollback bool) (err error) {
 		isVerifyCalled = true
 		return nil
 	}
 	// action
-	err := rollbackInstallation(updater.mgr, logger, updateContext)
+	err := rollbackInstallation(updater.mgr, logger, updateDetail)
 
 	// assert
 	assert.NoError(t, err)
 	assert.True(t, isUninstallCalled, isInstallCalled)
 	assert.False(t, isVerifyCalled)
-	assert.Equal(t, updateContext.Histories[0].State, Completed)
-	assert.Equal(t, updateContext.Histories[0].Result, contracts.ResultStatusFailed)
 }
 
 func TestUninstallAgent(t *testing.T) {
 	// setup
 	control := &stubControl{failExeCommand: false}
 	updater := createUpdaterStubs(control)
-	updateContext := createUpdateContext(Initialized)
+	updateDetail := createUpdateDetail(Initialized)
 
 	// action
-	exitCode, err := uninstallAgent(updater.mgr, logger, updateContext.Current.TargetVersion, updateContext)
+	exitCode, err := uninstallAgent(updater.mgr, logger, updateDetail.TargetVersion, updateDetail)
 
 	// assert
 	assert.NoError(t, err)
@@ -761,10 +732,10 @@ func TestUninstallAgentFailExeCommand(t *testing.T) {
 	// setup
 	control := &stubControl{failExeCommand: true}
 	updater := createUpdaterStubs(control)
-	updateContext := createUpdateContext(Initialized)
+	updateDetail := createUpdateDetail(Initialized)
 
 	// action
-	exitCode, err := uninstallAgent(updater.mgr, logger, updateContext.Current.TargetVersion, updateContext)
+	exitCode, err := uninstallAgent(updater.mgr, logger, updateDetail.TargetVersion, updateDetail)
 
 	// assert
 	assert.Error(t, err)
@@ -775,10 +746,10 @@ func TestInstallAgent(t *testing.T) {
 	// setup
 	control := &stubControl{failExeCommand: false}
 	updater := createUpdaterStubs(control)
-	updateContext := createUpdateContext(Initialized)
+	updateDetail := createUpdateDetail(Initialized)
 
 	// action
-	exitCode, err := installAgent(updater.mgr, logger, updateContext.Current.TargetVersion, updateContext)
+	exitCode, err := installAgent(updater.mgr, logger, updateDetail.TargetVersion, updateDetail)
 
 	// assert
 	assert.NoError(t, err)
@@ -789,10 +760,10 @@ func TestInstallAgentFailExeCommand(t *testing.T) {
 	// setup
 	control := &stubControl{failExeCommand: true}
 	updater := createUpdaterStubs(control)
-	updateContext := createUpdateContext(Initialized)
+	updateDetail := createUpdateDetail(Initialized)
 
 	// action
-	exitCode, err := installAgent(updater.mgr, logger, updateContext.Current.TargetVersion, updateContext)
+	exitCode, err := installAgent(updater.mgr, logger, updateDetail.TargetVersion, updateDetail)
 
 	// assert
 	assert.Error(t, err)
@@ -803,7 +774,7 @@ func TestDownloadAndUnzipArtifact(t *testing.T) {
 	// setup
 	control := &stubControl{failExeCommand: true}
 	updater := createUpdaterStubs(control)
-	updateContext := createUpdateContext(Initialized)
+	updateDetail := createUpdateDetail(Initialized)
 	downloadOutput := artifact.DownloadOutput{
 		IsHashMatched: true,
 		LocalFilePath: "filepath",
@@ -817,7 +788,7 @@ func TestDownloadAndUnzipArtifact(t *testing.T) {
 	}
 
 	// action
-	err := downloadAndUnzipArtifact(updater.mgr, logger, artifact.DownloadInput{}, updateContext, updateContext.Current.TargetVersion)
+	err := downloadAndUnzipArtifact(updater.mgr, logger, artifact.DownloadInput{}, updateDetail, updateDetail.TargetVersion)
 
 	// assert
 	assert.NoError(t, err)
@@ -827,7 +798,7 @@ func TestDownloadWithError(t *testing.T) {
 	// setup
 	control := &stubControl{failExeCommand: true}
 	updater := createUpdaterStubs(control)
-	updateContext := createUpdateContext(Initialized)
+	updateDetail := createUpdateDetail(Initialized)
 	downloadOutput := artifact.DownloadOutput{
 		IsHashMatched: false,
 		LocalFilePath: "",
@@ -838,7 +809,7 @@ func TestDownloadWithError(t *testing.T) {
 	}
 
 	// action
-	err := downloadAndUnzipArtifact(updater.mgr, logger, artifact.DownloadInput{}, updateContext, updateContext.Current.TargetVersion)
+	err := downloadAndUnzipArtifact(updater.mgr, logger, artifact.DownloadInput{}, updateDetail, updateDetail.TargetVersion)
 
 	// assert
 	assert.Error(t, err)
