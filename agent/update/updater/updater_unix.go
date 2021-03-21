@@ -19,7 +19,7 @@ package main
 import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/update/processor"
-	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/aws/amazon-ssm-agent/agent/versionutil"
 )
 
 const (
@@ -29,7 +29,7 @@ const (
 
 // updateRoot returns the platform specific path to update artifacts
 func updateRoot(detail *processor.UpdateDetail) error {
-	compareResult, err := updateutil.VersionCompare(detail.SourceVersion, firstAgentWithNewUpdaterPath)
+	compareResult, err := versionutil.VersionCompare(detail.SourceVersion, firstAgentWithNewUpdaterPath)
 	if err != nil {
 		return err
 	}

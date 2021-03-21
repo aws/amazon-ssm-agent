@@ -21,6 +21,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	testCommon "github.com/aws/amazon-ssm-agent/agent/update/tester/common"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 )
 
 // T represents the interface for agent update
@@ -32,15 +33,15 @@ type T interface {
 	InitializeUpdate(log log.T, detail *UpdateDetail) (err error)
 
 	// Failed sets update to failed with error messages
-	Failed(updateDetail *UpdateDetail, log log.T, code updateutil.ErrorCode, errMessage string, noRollbackMessage bool) (err error)
+	Failed(updateDetail *UpdateDetail, log log.T, code updateconstants.ErrorCode, errMessage string, noRollbackMessage bool) (err error)
 }
 
 type prepare func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error)
 type update func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error)
 type verify func(mgr *updateManager, log log.T, updateDetail *UpdateDetail, isRollback bool) (err error)
 type rollback func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error)
-type uninstall func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error)
-type install func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error)
+type uninstall func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error)
+type install func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error)
 type download func(mgr *updateManager, log log.T, downloadInput artifact.DownloadInput, updateDetail *UpdateDetail, version string) (err error)
 type clean func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error)
 type runTests func(context context.T, stage testCommon.TestStage, timeOutSeconds int) (testOutput string)

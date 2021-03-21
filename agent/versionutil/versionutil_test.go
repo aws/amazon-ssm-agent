@@ -1,9 +1,8 @@
 package versionutil
 
 import (
-	"testing"
-
 	"sort"
+	"testing"
 
 	"github.com/stretchr/testify/assert"
 )
@@ -68,4 +67,52 @@ func TestSort(t *testing.T) {
 	expected := []string{"2.0.1+asdf.qwerty", "3.7", "3.8", "4.0", "4.0", "4.0.1"}
 	sort.Sort(ByVersion(actual))
 	assert.Equal(t, actual, expected)
+}
+
+// TestVersionStringCompare tests version string comparison
+func TestVersionStringCompare(t *testing.T) {
+	testCases := []struct {
+		a      string
+		b      string
+		result int
+	}{
+		{"0", "1.0.152.0", -1},
+		{"0.0.1.0", "1.0.152.0", -1},
+		{"1.05.00.0156", "1.0.221.9289", 1},
+		{"2.05.1", "1.3234.221.9289", 1},
+		{"1", "1.0.1", -1},
+		{"1.0.1", "1.0.2", -1},
+		{"1.0.2", "1.0.3", -1},
+		{"1.0.3", "1.1", -1},
+		{"1.1", "1.1.1", -1},
+		{"1.1.0", "1.0.152.0", 1},
+		{"1.1.45", "1.0.152.0", 1},
+		{"1.1.1", "1.1.2", -1},
+		{"1.1.2", "1.2", -1},
+		{"1.1.2", "1.1.2", 0},
+		{"2.1.2", "2.1.2", 0},
+		{"7.1", "7", 1},
+	}
+
+	for _, test := range testCases {
+		compareResult, err := VersionCompare(test.a, test.b)
+		assert.NoError(t, err)
+		assert.Equal(t, compareResult, test.result)
+	}
+}
+
+// TestVersionStringCompare tests version string comparison
+func TestVersionStringCompareWithError(t *testing.T) {
+	testCases := []struct {
+		a string
+		b string
+	}{
+		{"Invalid version", "1.0.152.0"},
+		{"0.0.1.0", "Invalid version"},
+	}
+
+	for _, test := range testCases {
+		_, err := VersionCompare(test.a, test.b)
+		assert.Error(t, err)
+	}
 }

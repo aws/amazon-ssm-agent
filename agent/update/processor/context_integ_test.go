@@ -23,7 +23,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	contextmocks "github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -39,7 +39,7 @@ func TestGetV12DocOrchDir(t *testing.T) {
 		shortInstanceId,
 		appconfig.DefaultDocumentRootDirName,
 		"orchestration",
-		updateutil.DefaultOutputFolder)
+		updateconstants.DefaultOutputFolder)
 	assert.Equal(t, expected, dir)
 
 	updateDetail.MessageID = "messageid"
@@ -50,7 +50,7 @@ func TestGetV12DocOrchDir(t *testing.T) {
 		appconfig.DefaultDocumentRootDirName,
 		"orchestration",
 		"messageid",
-		updateutil.DefaultOutputFolder)
+		updateconstants.DefaultOutputFolder)
 
 	assert.Equal(t, expected, dir)
 }
@@ -67,8 +67,8 @@ func TestGetV22DocOrchDir(t *testing.T) {
 		shortInstanceId,
 		appconfig.DefaultDocumentRootDirName,
 		"orchestration",
-		updateutil.DefaultOutputFolder,
-		updateutil.DefaultOutputFolder)
+		updateconstants.DefaultOutputFolder,
+		updateconstants.DefaultOutputFolder)
 	assert.Equal(t, expected, dir)
 
 	updateDetail.MessageID = "messageid"
@@ -79,8 +79,8 @@ func TestGetV22DocOrchDir(t *testing.T) {
 		appconfig.DefaultDocumentRootDirName,
 		"orchestration",
 		"messageid",
-		updateutil.DefaultOutputFolder,
-		updateutil.DefaultOutputFolder)
+		updateconstants.DefaultOutputFolder,
+		updateconstants.DefaultOutputFolder)
 
 	assert.Equal(t, expected, dir)
 }

@@ -22,7 +22,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/update/processor"
-	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/stretchr/testify/assert"
@@ -57,7 +57,7 @@ func (u *stubUpdater) CleanupUpdate(log logger.T, updateDetail *processor.Update
 func (u *stubUpdater) Failed(
 	updateDetail *processor.UpdateDetail,
 	log logger.T,
-	code updateutil.ErrorCode,
+	code updateconstants.ErrorCode,
 	errMessage string,
 	noRollbackMessage bool) (err error) {
 	return nil

@@ -19,6 +19,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -31,11 +32,11 @@ func successMock() *DepMock {
 	var context *updateutil.InstanceInfo
 	context = &updateutil.InstanceInfo{
 		Region:          "us-east-1",
-		Platform:        updateutil.PlatformLinux,
+		Platform:        updateconstants.PlatformLinux,
 		PlatformVersion: "",
-		InstallerName:   updateutil.PlatformLinux,
+		InstallerName:   updateconstants.PlatformLinux,
 		Arch:            runtime.GOARCH,
-		CompressFormat:  updateutil.CompressFormat,
+		CompressFormat:  updateconstants.CompressFormat,
 	}
 
 	depmock.On("GetInstanceInfo", mock.Anything).Return(context, nil)
@@ -50,11 +51,11 @@ func unsupportedPlatformMock() *DepMock {
 	var context *updateutil.InstanceInfo
 	context = &updateutil.InstanceInfo{
 		Region:          "us-east-1",
-		Platform:        updateutil.PlatformUbuntu,
+		Platform:        updateconstants.PlatformUbuntu,
 		PlatformVersion: "",
-		InstallerName:   updateutil.PlatformUbuntu,
+		InstallerName:   updateconstants.PlatformUbuntu,
 		Arch:            runtime.GOARCH,
-		CompressFormat:  updateutil.CompressFormat,
+		CompressFormat:  updateconstants.CompressFormat,
 	}
 
 	depmock.On("GetInstanceInfo", mock.Anything).Return(context, nil)

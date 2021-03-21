@@ -28,6 +28,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -277,7 +278,7 @@ func TestValidateUpdateVersion(t *testing.T) {
 	updateDetail := createUpdateDetail(Initialized)
 	instanceContext := &updateutil.InstanceInfo{
 		Region:          "us-east-1",
-		Platform:        updateutil.PlatformRedHat,
+		Platform:        updateconstants.PlatformRedHat,
 		PlatformVersion: "6.5",
 		InstallerName:   "linux",
 		Arch:            "amd64",
@@ -294,7 +295,7 @@ func TestValidateUpdateVersionFailCentOs(t *testing.T) {
 	updateDetail.TargetVersion = "1.0.0.0"
 	instanceContext := &updateutil.InstanceInfo{
 		Region:          "us-east-1",
-		Platform:        updateutil.PlatformCentOS,
+		Platform:        updateconstants.PlatformCentOS,
 		PlatformVersion: "6.5",
 		InstallerName:   "linux",
 		Arch:            "amd64",
@@ -313,7 +314,7 @@ func TestProceedUpdate(t *testing.T) {
 	isVerifyCalled := false
 
 	// stub install for updater
-	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error) {
 		return exitCode, nil
 	}
 
@@ -340,10 +341,10 @@ func TestProceedUpdateWithDowngrade(t *testing.T) {
 	isUninstallCalled := false
 
 	// stub install for updater
-	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error) {
 		return exitCode, nil
 	}
-	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error) {
 		isUninstallCalled = true
 		return exitCode, nil
 	}
@@ -369,9 +370,9 @@ func TestProceedUpdateWithUnsupportedServiceMgrForUpdateInstall(t *testing.T) {
 	isInstallCalled := false
 	invalidPlatform := "Invalid Platform"
 	// stub install for updater
-	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error) {
 		isInstallCalled = true
-		return updateutil.ExitCodeUnsupportedPlatform, fmt.Errorf(invalidPlatform)
+		return updateconstants.ExitCodeUnsupportedPlatform, fmt.Errorf(invalidPlatform)
 	}
 	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, errorCode string) (err error) {
 		return nil
@@ -397,9 +398,9 @@ func TestProceedUpdateWithUnsupportedServiceMgrForUpdateUninstall(t *testing.T) 
 	invalidPlatform := "Invalid Platform"
 
 	// stub install for updater
-	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error) {
 		isUnInstallCalled = true
-		return updateutil.ExitCodeUnsupportedPlatform, fmt.Errorf(invalidPlatform)
+		return updateconstants.ExitCodeUnsupportedPlatform, fmt.Errorf(invalidPlatform)
 	}
 	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, errorCode string) (err error) {
 		return nil
@@ -424,13 +425,13 @@ func TestProceedUpdateWithUnsupportedServiceMgrForRollbackUninstall(t *testing.T
 	invalidPlatform := "Invalid Platform"
 
 	// stub install for updater
-	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error) {
 		isInstallCalled = true
 		return exitCode, nil
 	}
-	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error) {
 		isUninstallCalled = true
-		return updateutil.ExitCodeUnsupportedPlatform, fmt.Errorf(invalidPlatform)
+		return updateconstants.ExitCodeUnsupportedPlatform, fmt.Errorf(invalidPlatform)
 	}
 	updater.mgr.verify = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail, isRollback bool) (err error) {
 		isVerifyCalled = true
@@ -460,11 +461,11 @@ func TestProceedUpdateWithUnsupportedServiceMgrForRollbackInstall(t *testing.T) 
 	isVerifyCalled, isInstallCalled, isUninstallCalled := false, false, false
 
 	// stub install for updater
-	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error) {
 		isInstallCalled = true
-		return updateutil.ExitCodeUnsupportedPlatform, fmt.Errorf(invalidPlatform)
+		return updateconstants.ExitCodeUnsupportedPlatform, fmt.Errorf(invalidPlatform)
 	}
-	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error) {
 		isUninstallCalled = true
 		return exitCode, nil
 	}
@@ -494,10 +495,10 @@ func TestProceedUpdateWithDowngradeFailUninstall(t *testing.T) {
 	isUninstallCalled := false
 
 	// stub install for updater
-	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error) {
 		return exitCode, nil
 	}
-	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error) {
 		isUninstallCalled = true
 		return exitCode, fmt.Errorf("cannot uninstall")
 	}
@@ -523,7 +524,7 @@ func TestProceedUpdateFailInstall(t *testing.T) {
 	isRollbackCalled := false
 
 	// stub install for updater
-	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error) {
 		return exitCode, fmt.Errorf("install failed")
 	}
 
@@ -633,11 +634,11 @@ func TestRollbackInstallation(t *testing.T) {
 	isVerifyCalled, isInstallCalled, isUninstallCalled := false, false, false
 
 	// stub install for updater
-	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error) {
 		isInstallCalled = true
 		return exitCode, nil
 	}
-	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error) {
 		isUninstallCalled = true
 		return exitCode, nil
 	}
@@ -663,11 +664,11 @@ func TestRollbackInstallationFailUninstall(t *testing.T) {
 	isVerifyCalled, isInstallCalled, isUninstallCalled := false, false, false
 
 	// stub install for updater
-	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error) {
 		isInstallCalled = true
 		return exitCode, nil
 	}
-	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error) {
 		isUninstallCalled = true
 		return exitCode, fmt.Errorf("cannot uninstall")
 	}
@@ -693,11 +694,11 @@ func TestRollbackInstallationFailInstall(t *testing.T) {
 	isVerifyCalled, isInstallCalled, isUninstallCalled := false, false, false
 
 	// stub install for updater
-	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.install = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error) {
 		isInstallCalled = true
 		return exitCode, fmt.Errorf("cannot uninstall")
 	}
-	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateutil.UpdateScriptExitCode, err error) {
+	updater.mgr.uninstall = func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error) {
 		isUninstallCalled = true
 		return exitCode, nil
 	}
@@ -856,7 +857,7 @@ func (u *utilityStub) CreateInstanceContext(log log.T) (info *updateutil.Instanc
 	}
 	return &updateutil.InstanceInfo{
 		Region:          "us-east-1",
-		Platform:        updateutil.PlatformRedHat,
+		Platform:        updateconstants.PlatformRedHat,
 		PlatformVersion: "6.5",
 		InstallerName:   "linux",
 		Arch:            "amd64",
@@ -871,7 +872,7 @@ func (u *utilityStub) CreateUpdateDownloadFolder() (folder string, err error) {
 	return "rootfolder", nil
 }
 
-func (u *utilityStub) ExeCommand(log log.T, cmd string, workingDir string, updaterRoot string, stdOut string, stdErr string, isAsync bool) (pid int, exitCode updateutil.UpdateScriptExitCode, err error) {
+func (u *utilityStub) ExeCommand(log log.T, cmd string, workingDir string, updaterRoot string, stdOut string, stdErr string, isAsync bool) (pid int, exitCode updateconstants.UpdateScriptExitCode, err error) {
 	if u.controller.failExeCommand {
 		return -1, exitCode, fmt.Errorf("cannot run script")
 	}

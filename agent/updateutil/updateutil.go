@@ -38,282 +38,10 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
+	"github.com/aws/amazon-ssm-agent/agent/versionutil"
 	"github.com/aws/amazon-ssm-agent/core/executor"
 	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/model"
-)
-
-const (
-	// UpdaterPackageNamePrefix represents the name of Updater Package
-	UpdaterPackageNamePrefix = "-updater"
-
-	// HashType represents the default hash type
-	HashType = "sha256"
-
-	// Updater represents Updater name
-	Updater = "updater"
-
-	// Directory containing older versions of agent during update
-	UpdateAmazonSSMAgentDir = "amazon-ssm-agent/"
-
-	// UpdateContextFileName represents Update context json file
-	UpdateContextFileName = "updatecontext.json"
-
-	// UpdatePluginResultFileName represents Update plugin result file name
-	UpdatePluginResultFileName = "updatepluginresult.json"
-
-	// DefaultOutputFolder represents default location for storing output files
-	DefaultOutputFolder = "awsupdateSsmAgent"
-
-	// DefaultStandOut represents the default file name for update stand output
-	DefaultStandOut = "stdout"
-
-	// DefaultStandErr represents the default file name for update stand error
-	DefaultStandErr = "stderr"
-
-	// RegionHolder represents Place holder for Region
-	RegionHolder = "{Region}"
-
-	// PackageNameHolder represents Place holder for package name
-	PackageNameHolder = "{PackageName}"
-
-	// PackageVersionHolder represents Place holder for package version
-	PackageVersionHolder = "{PackageVersion}"
-
-	// FileNameHolder represents Place holder for file name
-	FileNameHolder = "{FileName}"
-
-	// PlatformHolder represents Place holder for platform
-	PlatformHolder = "{Platform}"
-
-	// ArchHolder represents Place holder for Arch
-	ArchHolder = "{Arch}"
-
-	// CompressedHolder represents Place holder for compress format
-	CompressedHolder = "{Compressed}"
-
-	// PlatformLinux represents linux
-	PlatformLinux = "linux"
-
-	// PlatformAmazonLinux represents amazon linux
-	PlatformAmazonLinux = "amazon"
-
-	// PlatformRedHat represents RedHat
-	PlatformRedHat = "red hat"
-
-	// PlatformOracleLinux represents oracle linux
-	PlatformOracleLinux = "oracle"
-
-	// PlatformUbuntu represents Ubuntu
-	PlatformUbuntu = "ubuntu"
-
-	// PlatformUbuntuSnap represents Ubuntu
-	PlatformUbuntuSnap = "snap"
-
-	//PlatformDarwin represents darwin
-	PlatformDarwin = "darwin"
-
-	// PlatformCentOS represents CentOS
-	PlatformCentOS = "centos"
-
-	// PlatformSuse represents SLES(SUSe)
-	PlatformSuseOS = "sles"
-
-	// PlatformRaspbian represents Raspbian
-	PlatformRaspbian = "raspbian"
-
-	// PlatformDebian represents Debian
-	PlatformDebian = "debian"
-
-	// PlatformWindows represents windows
-	PlatformWindows = "windows"
-
-	//PlatformWindowsNano represents windows nano
-	PlatformWindowsNano = "windows-nano"
-
-	//PlatformMacOsX represents mac os
-	PlatformMacOsX = "mac os x"
-
-	// DefaultUpdateExecutionTimeoutInSeconds represents default timeout time for execution update related scripts in seconds
-	DefaultUpdateExecutionTimeoutInSeconds = 150
-
-	// PipelineTestVersion represents fake version for pipeline tests
-	PipelineTestVersion = "255.0.0.0"
-
-	SSMAgentWorkerMinVersion = "3.0.0.0"
-
-	// version status of SSM agent
-	Active     = "Active"
-	Inactive   = "Inactive"
-	Deprecated = "Deprecated"
-
-	minimumVersion = "0"
-
-	// Lock file expiry minutes
-	UpdateLockFileMinutes = int64(60)
-
-	snapServiceFile = "/etc/systemd/system/snap.amazon-ssm-agent.amazon-ssm-agent.service"
-
-	ManifestPath = "/amazon-ssm-{Region}/ssm-agent-manifest.json"
-
-	// CommonManifestURL is the Manifest URL for regular regions
-	CommonManifestURL = "https://s3.{Region}.amazonaws.com" + ManifestPath
-)
-
-// error status codes returned from the update scripts
-type UpdateScriptExitCode int
-
-const (
-	// exit code represents exit code when there is no service manager
-	ExitCodeUnsupportedPlatform UpdateScriptExitCode = 124
-
-	// exit code represents exit code from agent update install script
-	ExitCodeUpdateUsingPkgMgr UpdateScriptExitCode = 125
-)
-
-// SUb status values
-const (
-	// installRollback represents rollback code flow occurring during installation
-	InstallRollback = "InstallRollback_"
-
-	// verificationRollback represents rollback code flow occurring during verification
-	VerificationRollback = "VerificationRollback_"
-
-	// downgrade represents that the respective error code was logged during agent downgrade
-	Downgrade = "downgrade_"
-)
-
-//ErrorCode is types of Error Codes
-type ErrorCode string
-
-const (
-	// ErrorInvalidSourceVersion represents Source version is not supported
-	ErrorInvalidSourceVersion ErrorCode = "ErrorInvalidSourceVersion"
-
-	// ErrorInvalidTargetVersion represents Target version is not supported
-	ErrorInvalidTargetVersion ErrorCode = "ErrorInvalidTargetVersion"
-
-	// ErrorSourcePkgDownload represents source version not able to download
-	ErrorSourcePkgDownload ErrorCode = "ErrorSourcePkgDownload"
-
-	// ErrorCreateInstanceContext represents the error code while loading the initial context
-	ErrorCreateInstanceContext ErrorCode = "ErrorCreateInstanceContext"
-
-	// ErrorTargetPkgDownload represents target version not able to download
-	ErrorTargetPkgDownload ErrorCode = "ErrorTargetPkgDownload"
-
-	// ErrorUnexpected represents Unexpected Error from panic
-	ErrorUnexpectedThroughPanic ErrorCode = "ErrorUnexpectedThroughPanic"
-
-	// ErrorManifestURLParse represents manifest url parse error
-	ErrorManifestURLParse ErrorCode = "ErrorManifestURLParse"
-
-	// ErrorDownloadManifest represents download manifest error
-	ErrorDownloadManifest ErrorCode = "ErrorDownloadManifest"
-
-	// ErrorCreateUpdateFolder represents error when creating the download directory
-	ErrorCreateUpdateFolder ErrorCode = "ErrorCreateUpdateFolder"
-
-	// ErrorDownloadUpdater represents error when download and unzip the updater
-	ErrorDownloadUpdater ErrorCode = "ErrorDownloadUpdater"
-
-	// ErrorExecuteUpdater represents error when execute the updater
-	ErrorExecuteUpdater ErrorCode = "ErrorExecuteUpdater"
-
-	// ErrorUnsupportedVersion represents version less than minimum supported version by OS
-	ErrorUnsupportedVersion ErrorCode = "ErrorUnsupportedVersion"
-
-	// ErrorUpdateFailRollbackSuccess represents rollback succeeded but update process failed
-	ErrorUpdateFailRollbackSuccess ErrorCode = "ErrorUpdateFailRollbackSuccess"
-
-	// ErrorAttemptToDowngrade represents An update is attempting to downgrade Ec2Config to a lower version
-	ErrorAttemptToDowngrade ErrorCode = "ErrorAttempToDowngrade"
-
-	// ErrorInitializationFailed represents An update is failed to initialize
-	ErrorInitializationFailed ErrorCode = "ErrorInitializationFailed"
-
-	// ErrorInvalidPackage represents Installation package file is invalid
-	ErrorInvalidPackage ErrorCode = "ErrorInvalidPackage"
-
-	// ErrorPackageNotAccessible represents Installation package file is not accessible
-	ErrorPackageNotAccessible ErrorCode = "ErrorPackageNotAccessible"
-
-	// ErrorInvalidCertificate represents Installation package file doesn't contain valid certificate
-	ErrorInvalidCertificate ErrorCode = "ErrorInvalidCertificate"
-
-	// ErrorVersionNotFoundInManifest represents version is not found in the manifest
-	ErrorVersionNotFoundInManifest ErrorCode = "ErrorVersionNotFoundInManifest"
-
-	// ErrorInvalidManifest represents Invalid manifest file
-	ErrorInvalidManifest ErrorCode = "ErrorInvalidManifest"
-
-	// ErrorInvalidManifestLocation represents Invalid manifest file location
-	ErrorInvalidManifestLocation ErrorCode = "ErrorInvalidManifestLocation"
-
-	// ErrorUninstallFailed represents Uninstall failed
-	ErrorUninstallFailed ErrorCode = "ErrorUninstallFailed"
-
-	// ErrorUnsupportedServiceManager represents unsupported service manager
-	ErrorUnsupportedServiceManager ErrorCode = "ErrorUnsupportedServiceManager"
-
-	// ErrorInstallFailed represents Install failed
-	ErrorInstallFailed ErrorCode = "ErrorInstallFailed"
-
-	// ErrorCannotStartService represents Cannot start Ec2Config service
-	ErrorCannotStartService ErrorCode = "ErrorCannotStartService"
-
-	// ErrorCannotStopService represents Cannot stop Ec2Config service
-	ErrorCannotStopService ErrorCode = "ErrorCannotStopService"
-
-	// ErrorTimeout represents Installation time-out
-	ErrorTimeout ErrorCode = "ErrorTimeout"
-
-	// ErrorVersionCompare represents version compare error
-	ErrorVersionCompare ErrorCode = "ErrorVersionCompare"
-
-	// ErrorUnexpected represents Unexpected Error
-	ErrorUnexpected ErrorCode = "ErrorUnexpected"
-
-	// ErrorUpdaterLockBusy represents message when updater lock is acquired by someone else
-	ErrorUpdaterLockBusy ErrorCode = "ErrorUpdaterLockBusy"
-
-	// ErrorEnvironmentIssue represents Unexpected Error
-	ErrorEnvironmentIssue ErrorCode = "ErrorEnvironmentIssue"
-
-	// ErrorLoadingAgentVersion represents failed for loading agent version
-	ErrorLoadingAgentVersion ErrorCode = "ErrorLoadingAgentVersion"
-
-	SelfUpdatePrefix = "SelfUpdate_"
-
-	// we have same below fields in processor package without underscore
-	UpdateFailed    = "UpdateFailed_"
-	UpdateSucceeded = "UpdateSucceeded_"
-)
-
-// NonAlarmingErrors contains error codes which are not important.
-var NonAlarmingErrors = map[ErrorCode]struct{}{
-	ErrorUnsupportedServiceManager: {},
-}
-
-type SelfUpdateState string
-
-const (
-	Stage SelfUpdateState = "Stage"
-)
-
-const (
-	// WarnInactiveVersion represents the warning message when inactive version is used for update
-	WarnInactiveVersion string = "InactiveAgentVersion"
-
-	// WarnUpdaterLockFail represents warning message that the lock could not be acquired because of system issues
-	WarnUpdaterLockFail string = "WarnUpdaterLockFail"
-)
-
-// MinimumDiskSpaceForUpdate represents 100 Mb in bytes
-const MinimumDiskSpaceForUpdate int64 = 104857600
-
-const (
-	verifyAttemptCount              = 36
-	verifyRetryIntervalMilliseconds = 5000
 )
 
 // InstanceInfo holds information for the instance
@@ -356,7 +84,7 @@ type PackageVersion struct {
 type T interface {
 	CreateInstanceInfo(log log.T) (context *InstanceInfo, err error)
 	CreateUpdateDownloadFolder() (folder string, err error)
-	ExeCommand(log log.T, cmd string, workingDir string, updaterRoot string, stdOut string, stdErr string, isAsync bool) (pid int, exitCode UpdateScriptExitCode, err error)
+	ExeCommand(log log.T, cmd string, workingDir string, updaterRoot string, stdOut string, stdErr string, isAsync bool) (pid int, exitCode updateconstants.UpdateScriptExitCode, err error)
 	IsServiceRunning(log log.T, i *InstanceInfo) (result bool, err error)
 	IsWorkerRunning(log log.T) (result bool, err error)
 	WaitForServiceToStart(log log.T, i *InstanceInfo, targetVersion string) (result bool, err error)
@@ -389,23 +117,6 @@ var Installer string
 // UnInstaller represents Uninstall shell script for linux
 var UnInstaller string
 
-const (
-	// installer script for debian
-	DebInstaller = "install.sh"
-	// uninstaller script for debian
-	DebUnInstaller = "uninstall.sh"
-
-	// installer script for snap
-	SnapInstaller = "snap-install.sh"
-	// uninstaller script for snap
-	SnapUnInstaller = "snap-uninstall.sh"
-)
-
-var possiblyUsingSystemD = map[string]bool{
-	PlatformRaspbian: true,
-	PlatformLinux:    true,
-}
-
 // CreateInstanceContext create instance related information such as region, platform and arch
 func (util *Utility) CreateInstanceInfo(log log.T) (context *InstanceInfo, err error) {
 	var region string
@@ -420,68 +131,68 @@ func (util *Utility) CreateInstanceInfo(log log.T) (context *InstanceInfo, err e
 	}
 	// TODO: Change this structure to a switch and inject the platform name from another method.
 	platformName = strings.ToLower(platformName)
-	if strings.Contains(platformName, PlatformAmazonLinux) {
-		platformName = PlatformLinux
-		installerName = PlatformLinux
-		Installer = InstallScript
-		UnInstaller = UninstallScript
-	} else if strings.Contains(platformName, PlatformRedHat) {
-		platformName = PlatformRedHat
-		installerName = PlatformLinux
-		Installer = InstallScript
-		UnInstaller = UninstallScript
-	} else if strings.Contains(platformName, PlatformOracleLinux) {
-		platformName = PlatformOracleLinux
-		installerName = PlatformLinux
-		Installer = InstallScript
-		UnInstaller = UninstallScript
-	} else if strings.Contains(platformName, PlatformUbuntu) {
-		platformName = PlatformUbuntu
+	if strings.Contains(platformName, updateconstants.PlatformAmazonLinux) {
+		platformName = updateconstants.PlatformLinux
+		installerName = updateconstants.PlatformLinux
+		Installer = updateconstants.InstallScript
+		UnInstaller = updateconstants.UninstallScript
+	} else if strings.Contains(platformName, updateconstants.PlatformRedHat) {
+		platformName = updateconstants.PlatformRedHat
+		installerName = updateconstants.PlatformLinux
+		Installer = updateconstants.InstallScript
+		UnInstaller = updateconstants.UninstallScript
+	} else if strings.Contains(platformName, updateconstants.PlatformOracleLinux) {
+		platformName = updateconstants.PlatformOracleLinux
+		installerName = updateconstants.PlatformLinux
+		Installer = updateconstants.InstallScript
+		UnInstaller = updateconstants.UninstallScript
+	} else if strings.Contains(platformName, updateconstants.PlatformUbuntu) {
+		platformName = updateconstants.PlatformUbuntu
 		if isSnap, err := isAgentInstalledUsingSnap(log); err == nil && isSnap {
-			installerName = PlatformUbuntuSnap
-			Installer = SnapInstaller
-			UnInstaller = SnapUnInstaller
+			installerName = updateconstants.PlatformUbuntuSnap
+			Installer = updateconstants.SnapInstaller
+			UnInstaller = updateconstants.SnapUnInstaller
 		} else {
-			installerName = PlatformUbuntu
-			Installer = DebInstaller
-			UnInstaller = DebUnInstaller
+			installerName = updateconstants.PlatformUbuntu
+			Installer = updateconstants.DebInstaller
+			UnInstaller = updateconstants.DebUnInstaller
 		}
-	} else if strings.Contains(platformName, PlatformCentOS) {
-		platformName = PlatformCentOS
-		installerName = PlatformLinux
-		Installer = InstallScript
-		UnInstaller = UninstallScript
-	} else if strings.Contains(platformName, PlatformSuseOS) {
-		platformName = PlatformSuseOS
-		installerName = PlatformLinux
-		Installer = InstallScript
-		UnInstaller = UninstallScript
-	} else if strings.Contains(platformName, PlatformRaspbian) {
-		platformName = PlatformRaspbian
-		installerName = PlatformUbuntu
-		Installer = InstallScript
-		UnInstaller = UninstallScript
-	} else if strings.Contains(platformName, PlatformDebian) {
-		platformName = PlatformDebian
-		installerName = PlatformUbuntu
-		Installer = InstallScript
-		UnInstaller = UninstallScript
-	} else if strings.Contains(platformName, PlatformMacOsX) {
-		platformName = PlatformMacOsX
-		installerName = PlatformDarwin
-		Installer = InstallScript
-		UnInstaller = UninstallScript
+	} else if strings.Contains(platformName, updateconstants.PlatformCentOS) {
+		platformName = updateconstants.PlatformCentOS
+		installerName = updateconstants.PlatformLinux
+		Installer = updateconstants.InstallScript
+		UnInstaller = updateconstants.UninstallScript
+	} else if strings.Contains(platformName, updateconstants.PlatformSuseOS) {
+		platformName = updateconstants.PlatformSuseOS
+		installerName = updateconstants.PlatformLinux
+		Installer = updateconstants.InstallScript
+		UnInstaller = updateconstants.UninstallScript
+	} else if strings.Contains(platformName, updateconstants.PlatformRaspbian) {
+		platformName = updateconstants.PlatformRaspbian
+		installerName = updateconstants.PlatformUbuntu
+		Installer = updateconstants.InstallScript
+		UnInstaller = updateconstants.UninstallScript
+	} else if strings.Contains(platformName, updateconstants.PlatformDebian) {
+		platformName = updateconstants.PlatformDebian
+		installerName = updateconstants.PlatformUbuntu
+		Installer = updateconstants.InstallScript
+		UnInstaller = updateconstants.UninstallScript
+	} else if strings.Contains(platformName, updateconstants.PlatformMacOsX) {
+		platformName = updateconstants.PlatformMacOsX
+		installerName = updateconstants.PlatformDarwin
+		Installer = updateconstants.InstallScript
+		UnInstaller = updateconstants.UninstallScript
 	} else if isNano, _ := platform.IsPlatformNanoServer(log); isNano {
 		//TODO move this logic to instance context
-		platformName = PlatformWindowsNano
-		installerName = PlatformWindowsNano
-		Installer = InstallScript
-		UnInstaller = UninstallScript
+		platformName = updateconstants.PlatformWindowsNano
+		installerName = updateconstants.PlatformWindowsNano
+		Installer = updateconstants.InstallScript
+		UnInstaller = updateconstants.UninstallScript
 	} else {
-		platformName = PlatformWindows
-		installerName = PlatformWindows
-		Installer = InstallScript
-		UnInstaller = UninstallScript
+		platformName = updateconstants.PlatformWindows
+		installerName = updateconstants.PlatformWindows
+		Installer = updateconstants.InstallScript
+		UnInstaller = updateconstants.UninstallScript
 	}
 
 	if platformVersion, err = getPlatformVersion(log); err != nil {
@@ -493,7 +204,7 @@ func (util *Utility) CreateInstanceInfo(log log.T) (context *InstanceInfo, err e
 		PlatformVersion: platformVersion,
 		InstallerName:   installerName,
 		Arch:            runtime.GOARCH,
-		CompressFormat:  CompressFormat,
+		CompressFormat:  updateconstants.CompressFormat,
 	}
 
 	return context, nil
@@ -529,11 +240,11 @@ func (util *Utility) ExeCommand(
 	outputRoot string,
 	stdOut string,
 	stdErr string,
-	isAsync bool) (int, UpdateScriptExitCode, error) { // pid, exitCode, error
+	isAsync bool) (int, updateconstants.UpdateScriptExitCode, error) { // pid, exitCode, error
 
 	parts := strings.Fields(cmd)
 	pid := -1
-	var updateExitCode UpdateScriptExitCode = -1
+	var updateExitCode updateconstants.UpdateScriptExitCode = -1
 
 	if isAsync {
 		command := execCommand(parts[0], parts[1:]...)
@@ -566,7 +277,7 @@ func (util *Utility) ExeCommand(
 
 		pid = GetCommandPid(command)
 
-		var timeout = DefaultUpdateExecutionTimeoutInSeconds
+		var timeout = updateconstants.DefaultUpdateExecutionTimeoutInSeconds
 		if util.CustomUpdateExecutionTimeoutInSeconds != 0 {
 			timeout = util.CustomUpdateExecutionTimeoutInSeconds
 		}
@@ -585,7 +296,7 @@ func (util *Utility) ExeCommand(
 						exitCode = appconfig.CommandStoppedPreemptivelyExitCode
 						log.Infof("The execution of command was timedout.")
 					}
-					updateExitCode = UpdateScriptExitCode(exitCode)
+					updateExitCode = updateconstants.UpdateScriptExitCode(exitCode)
 					err = fmt.Errorf("The execution of command returned Exit Status: %d \n %v", exitCode, err.Error())
 				}
 			}
@@ -740,9 +451,9 @@ func (util *Utility) IsWorkerRunning(log log.T) (result bool, err error) {
 	}
 
 	// For snap, find the work directory
-	if _, err := os.Stat(snapServiceFile); err == nil {
+	if _, err := os.Stat(updateconstants.SnapServiceFile); err == nil {
 		log.Infof("snap is installed")
-		file, err := os.Open(snapServiceFile)
+		file, err := os.Open(updateconstants.SnapServiceFile)
 		if err != nil {
 			return false, fmt.Errorf("failed to open amazon-ssm-agent.service file %s", err)
 		}
@@ -775,6 +486,10 @@ func (util *Utility) IsWorkerRunning(log log.T) (result bool, err error) {
 
 // WaitForServiceToStart wait for service to start and returns is service started
 func (util *Utility) WaitForServiceToStart(log log.T, i *InstanceInfo, targetVersion string) (result bool, svcRunningErr error) {
+	const (
+		verifyAttemptCount              = 36
+		verifyRetryIntervalMilliseconds = 5000
+	)
 	isRunning := false
 	isWorkerRunning := true
 	var workRunningErr error
@@ -791,7 +506,7 @@ func (util *Utility) WaitForServiceToStart(log log.T, i *InstanceInfo, targetVer
 			log.Infof("health check: amazon-ssm-agent is not running")
 		}
 
-		compareResult, err := VersionCompare(targetVersion, SSMAgentWorkerMinVersion)
+		compareResult, err := versionutil.VersionCompare(targetVersion, updateconstants.SSMAgentWorkerMinVersion)
 		if err == nil && compareResult >= 0 {
 			isWorkerRunning, workRunningErr = util.IsWorkerRunning(log)
 			if isWorkerRunning {
@@ -835,7 +550,7 @@ func (util *Utility) IsDiskSpaceSufficientForUpdate(log log.T) (bool, error) {
 	}
 
 	// Return false if available disk space is less than 100 Mb
-	if diskSpaceInfo.AvailBytes < MinimumDiskSpaceForUpdate {
+	if diskSpaceInfo.AvailBytes < updateconstants.MinimumDiskSpaceForUpdate {
 		log.Infof("Insufficient available disk space - %d Mb", diskSpaceInfo.AvailBytes/int64(1024*1024))
 		return false, nil
 	}
@@ -852,13 +567,13 @@ func (i *InstanceInfo) IsPlatformUsingSystemD(log log.T) (result bool, err error
 	// check if current platform has systemd
 	if val, ok := (*systemDVersions)[i.Platform]; ok {
 		// compare current agent version with minimum supported version
-		if compareResult, err = VersionCompare(i.PlatformVersion, val); err != nil {
+		if compareResult, err = versionutil.VersionCompare(i.PlatformVersion, val); err != nil {
 			return false, err
 		}
 		if compareResult >= 0 {
 			return true, nil
 		}
-	} else if _, ok := possiblyUsingSystemD[i.Platform]; ok {
+	} else if _, ok := updateconstants.PossiblyUsingSystemD[i.Platform]; ok {
 		// attempt to execute 'systemctl --version' to verify systemd
 		if _, commandErr := execCommand("systemctl", "--version").Output(); commandErr != nil {
 			return false, nil
@@ -872,18 +587,18 @@ func (i *InstanceInfo) IsPlatformUsingSystemD(log log.T) (result bool, err error
 
 //IsPlatformDarwin returns true for Mac OS
 func (i *InstanceInfo) IsPlatformDarwin() (result bool) {
-	return 0 == strings.Compare(i.Platform, PlatformMacOsX)
+	return 0 == strings.Compare(i.Platform, updateconstants.PlatformMacOsX)
 }
 
 func getMinimumVersionForSystemD() (systemDMap *map[string]string) {
 	once.Do(func() {
 		isUsingSystemD = make(map[string]string)
-		isUsingSystemD[PlatformCentOS] = "7"
-		isUsingSystemD[PlatformRedHat] = "7"
-		isUsingSystemD[PlatformOracleLinux] = "7"
-		isUsingSystemD[PlatformUbuntu] = "15"
-		isUsingSystemD[PlatformSuseOS] = "12"
-		isUsingSystemD[PlatformDebian] = "8"
+		isUsingSystemD[updateconstants.PlatformCentOS] = "7"
+		isUsingSystemD[updateconstants.PlatformRedHat] = "7"
+		isUsingSystemD[updateconstants.PlatformOracleLinux] = "7"
+		isUsingSystemD[updateconstants.PlatformUbuntu] = "15"
+		isUsingSystemD[updateconstants.PlatformSuseOS] = "12"
+		isUsingSystemD[updateconstants.PlatformDebian] = "8"
 	})
 	return &isUsingSystemD
 }
@@ -891,10 +606,10 @@ func getMinimumVersionForSystemD() (systemDMap *map[string]string) {
 // FileName generates downloadable file name base on agreed convension
 func (i *InstanceInfo) FileName(packageName string) string {
 	fileName := "{PackageName}-{Platform}-{Arch}.{Compressed}"
-	fileName = strings.Replace(fileName, PackageNameHolder, packageName, -1)
-	fileName = strings.Replace(fileName, PlatformHolder, i.InstallerName, -1)
-	fileName = strings.Replace(fileName, ArchHolder, i.Arch, -1)
-	fileName = strings.Replace(fileName, CompressedHolder, i.CompressFormat, -1)
+	fileName = strings.Replace(fileName, updateconstants.PackageNameHolder, packageName, -1)
+	fileName = strings.Replace(fileName, updateconstants.PlatformHolder, i.InstallerName, -1)
+	fileName = strings.Replace(fileName, updateconstants.ArchHolder, i.Arch, -1)
+	fileName = strings.Replace(fileName, updateconstants.CompressedHolder, i.CompressFormat, -1)
 
 	return fileName
 }
@@ -941,18 +656,18 @@ func UpdateArtifactFolder(updateRoot string, packageName string, version string)
 
 // UpdateContextFilePath returns Context file path
 func UpdateContextFilePath(updateRoot string) (filePath string) {
-	return filepath.Join(updateRoot, UpdateContextFileName)
+	return filepath.Join(updateRoot, updateconstants.UpdateContextFileName)
 }
 
 // UpdateOutputDirectory returns output directory
 func UpdateOutputDirectory(updateRoot string) string {
-	return filepath.Join(updateRoot, DefaultOutputFolder)
+	return filepath.Join(updateRoot, updateconstants.DefaultOutputFolder)
 }
 
 // UpdateStdOutPath returns stand output file path
 func UpdateStdOutPath(updateRoot string, fileName string) string {
 	if fileName == "" {
-		fileName = DefaultStandOut
+		fileName = updateconstants.DefaultStandOut
 	}
 	return filepath.Join(updateRoot, fileName)
 }
@@ -960,19 +675,19 @@ func UpdateStdOutPath(updateRoot string, fileName string) string {
 // UpdateStdErrPath returns stand error file path
 func UpdateStdErrPath(updateRoot string, fileName string) string {
 	if fileName == "" {
-		fileName = DefaultStandErr
+		fileName = updateconstants.DefaultStandErr
 	}
 	return filepath.Join(updateRoot, fileName)
 }
 
 // UpdatePluginResultFilePath returns update plugin result file path
 func UpdatePluginResultFilePath(updateRoot string) (filePath string) {
-	return filepath.Join(updateRoot, UpdatePluginResultFileName)
+	return filepath.Join(updateRoot, updateconstants.UpdatePluginResultFileName)
 }
 
 // UpdaterFilePath returns updater file path
 func UpdaterFilePath(updateRoot string, updaterPackageName string, version string) (filePath string) {
-	return filepath.Join(UpdateArtifactFolder(updateRoot, updaterPackageName, version), Updater)
+	return filepath.Join(UpdateArtifactFolder(updateRoot, updaterPackageName, version), updateconstants.Updater)
 }
 
 // InstallerFilePath returns Installer file path
@@ -1128,20 +843,20 @@ func PrepareResourceForSelfUpdate(
 	}
 
 	if err = util.SaveUpdatePluginResult(logger, appconfig.UpdaterArtifactsRoot, SelfUpdateResult); err != nil {
-		logger.WriteEvent(log.AgentUpdateResultMessage, version, GenerateSelUpdateErrorEvent(ErrorInitializationFailed))
+		logger.WriteEvent(log.AgentUpdateResultMessage, version, GenerateSelUpdateErrorEvent(updateconstants.ErrorInitializationFailed))
 		return "", "", "", "", "", "", "",
 			logger.Errorf("Failed to update plugin result for selfupdate %v", err)
 	}
 
 	if info, err = util.CreateInstanceInfo(logger); err != nil {
-		logger.WriteEvent(log.AgentUpdateResultMessage, version, GenerateSelUpdateErrorEvent(ErrorCreateInstanceContext))
+		logger.WriteEvent(log.AgentUpdateResultMessage, version, GenerateSelUpdateErrorEvent(updateconstants.ErrorCreateInstanceContext))
 		return "", "", "", "", "", "", "",
 			logger.Errorf("Failed to validate version, %v", err)
 	}
 
 	logger.Infof("manifest url is %v : ", manifestURL)
 	if manifestDownloadOutput, manifestFinalURL, err = util.DownloadManifestFile(logger, updateDownloadFolder, manifestURL, info.Region); err != nil {
-		logger.WriteEvent(log.AgentUpdateResultMessage, version, GenerateSelUpdateErrorEvent(ErrorDownloadManifest))
+		logger.WriteEvent(log.AgentUpdateResultMessage, version, GenerateSelUpdateErrorEvent(updateconstants.ErrorDownloadManifest))
 		return "", "", "", "", "", "", "",
 			logger.Errorf("Failed to generate manifest file local path, %v", err)
 	}
@@ -1149,14 +864,14 @@ func PrepareResourceForSelfUpdate(
 	logger.Infof("manifest file path is %v: ", manifestFilePath)
 
 	if parsedManifest, err = ParseManifest(logger, manifestFilePath, info, appconfig.DefaultAgentName); err != nil {
-		logger.WriteEvent(log.AgentUpdateResultMessage, version, GenerateSelUpdateErrorEvent(ErrorManifestURLParse))
+		logger.WriteEvent(log.AgentUpdateResultMessage, version, GenerateSelUpdateErrorEvent(updateconstants.ErrorManifestURLParse))
 		return "", "", "", "", "", "", "",
 			logger.Errorf("Failed to parse Manifest for preparing resource for selfupdate, %v", err)
 	}
 
 	// get the latest active version and it's location
 	if isDeprecated, err = isVersionDeprecated(logger, parsedManifest, appconfig.DefaultAgentName, version, info); err != nil {
-		logger.WriteEvent(log.AgentUpdateResultMessage, version, GenerateSelUpdateErrorEvent(ErrorVersionNotFoundInManifest))
+		logger.WriteEvent(log.AgentUpdateResultMessage, version, GenerateSelUpdateErrorEvent(updateconstants.ErrorVersionNotFoundInManifest))
 		return "", "", "", "", "", "", "",
 			logger.Errorf("Failed to find version in manifest for selfupdate, %v", err)
 	}
@@ -1165,7 +880,7 @@ func PrepareResourceForSelfUpdate(
 		// get the latest active version and it's location
 		logger.Infof("Agent version %v is deprecated", version)
 		if targetVersion, err = latestActiveVersion(logger, parsedManifest, info); err != nil {
-			logger.WriteEvent(log.AgentUpdateResultMessage, version, GenerateSelUpdateErrorEvent(ErrorVersionCompare))
+			logger.WriteEvent(log.AgentUpdateResultMessage, version, GenerateSelUpdateErrorEvent(updateconstants.ErrorVersionCompare))
 			return "", "", "", "", "", "", "",
 				logger.Errorf("Failed to generate the target information, fail to get latest active version from manifest file, %v", err)
 		}
@@ -1177,7 +892,7 @@ func PrepareResourceForSelfUpdate(
 	logger.Infof("target version is %v", version)
 	if targetLocation, targetHash, err = downloadURLandHash(logger,
 		parsedManifest, info, targetVersion, appconfig.DefaultAgentName); err != nil {
-		logger.WriteEvent(log.AgentUpdateResultMessage, version, GenerateSelUpdateErrorEvent(ErrorTargetPkgDownload))
+		logger.WriteEvent(log.AgentUpdateResultMessage, version, GenerateSelUpdateErrorEvent(updateconstants.ErrorTargetPkgDownload))
 		return "", "", "", "", "", "", "",
 			logger.Errorf("Failed to get the sourceHash from manifest file, %v", err)
 	}
@@ -1186,7 +901,7 @@ func PrepareResourceForSelfUpdate(
 	logger.Infof("source version is %v", version)
 	if sourceLocation, sourceHash, err = downloadURLandHash(logger,
 		parsedManifest, info, version, appconfig.DefaultAgentName); err != nil {
-		logger.WriteEvent(log.AgentUpdateResultMessage, version, GenerateSelUpdateErrorEvent(ErrorSourcePkgDownload))
+		logger.WriteEvent(log.AgentUpdateResultMessage, version, GenerateSelUpdateErrorEvent(updateconstants.ErrorSourcePkgDownload))
 		return "", "", "", "", "", "", "",
 			logger.Errorf("Failed to get the sourceHash from manifest file for version %v", version)
 	}
@@ -1195,13 +910,13 @@ func PrepareResourceForSelfUpdate(
 }
 
 // GenerateSelUpdateErrorEvent constructs error codes for self update
-func GenerateSelUpdateErrorEvent(errorCode ErrorCode) string {
-	return UpdateFailed + SelfUpdatePrefix + string(errorCode)
+func GenerateSelUpdateErrorEvent(errorCode updateconstants.ErrorCode) string {
+	return updateconstants.UpdateFailed + updateconstants.SelfUpdatePrefix + string(errorCode)
 }
 
 // GenerateSelUpdateSuccessEvent constructs success codes for self update
 func GenerateSelUpdateSuccessEvent(code string) string {
-	return UpdateSucceeded + SelfUpdatePrefix + code
+	return updateconstants.UpdateSucceeded + updateconstants.SelfUpdatePrefix + code
 }
 
 func ValidateVersion(context context.T, manifestFilePath string, version string) bool {
@@ -1256,13 +971,13 @@ func (util *Utility) DownloadManifestFile(log log.T, updateDownloadFolder string
 	// best efforts for the old agents
 	// download the manifest file from well-known location
 	if manifestUrl == "" {
-		manifestUrl = CommonManifestURL
+		manifestUrl = updateconstants.CommonManifestURL
 		if dynamicS3Endpoint := util.Context.Identity().GetDefaultEndpoint("s3"); dynamicS3Endpoint != "" {
-			manifestUrl = "https://" + dynamicS3Endpoint + ManifestPath
+			manifestUrl = "https://" + dynamicS3Endpoint + updateconstants.ManifestPath
 		}
 	}
 
-	manifestUrl = strings.Replace(manifestUrl, RegionHolder, region, -1)
+	manifestUrl = strings.Replace(manifestUrl, updateconstants.RegionHolder, region, -1)
 	log.Infof("manifest download url is %s", manifestUrl)
 
 	downloadInput := artifact.DownloadInput{
@@ -1304,10 +1019,10 @@ func downloadURLandHash(log log.T,
 					for _, v := range f.AvailableVersions {
 						if v.Version == version {
 							log.Infof("Version %v checksum is %v", version, v.Checksum)
-							downloadURL = strings.Replace(downloadURL, RegionHolder, context.Region, -1)
-							downloadURL = strings.Replace(downloadURL, PackageNameHolder, packageName, -1)
-							downloadURL = strings.Replace(downloadURL, PackageVersionHolder, version, -1)
-							downloadURL = strings.Replace(downloadURL, FileNameHolder, context.FileName(packageName), -1)
+							downloadURL = strings.Replace(downloadURL, updateconstants.RegionHolder, context.Region, -1)
+							downloadURL = strings.Replace(downloadURL, updateconstants.PackageNameHolder, packageName, -1)
+							downloadURL = strings.Replace(downloadURL, updateconstants.PackageVersionHolder, version, -1)
+							downloadURL = strings.Replace(downloadURL, updateconstants.FileNameHolder, context.FileName(packageName), -1)
 
 							log.Infof("Download resource location is %v", downloadURL)
 							return downloadURL, v.Checksum, nil
@@ -1324,7 +1039,7 @@ func downloadURLandHash(log log.T,
 
 func latestActiveVersion(log log.T,
 	m *Manifest, context *InstanceInfo) (targetVersion string, err error) {
-	targetVersion = minimumVersion
+	targetVersion = updateconstants.MinimumVersion
 	var compareResult = 0
 	var packageName = "amazon-ssm-agent"
 
@@ -1336,7 +1051,7 @@ func latestActiveVersion(log log.T,
 						if !isVersionActive(v.Status) {
 							continue
 						}
-						if compareResult, err = VersionCompare(v.Version, targetVersion); err != nil {
+						if compareResult, err = versionutil.VersionCompare(v.Version, targetVersion); err != nil {
 							return "", err
 						}
 						if compareResult > 0 {
@@ -1348,7 +1063,7 @@ func latestActiveVersion(log log.T,
 		}
 	}
 
-	if targetVersion == minimumVersion {
+	if targetVersion == updateconstants.MinimumVersion {
 		log.Debugf("Filename: %v", context.FileName(packageName))
 		log.Debugf("Package Name: %v", packageName)
 		log.Debugf("Manifest: %v", m)
@@ -1408,7 +1123,7 @@ func validateVersion(log log.T,
 				if f.Name == fileName {
 					for _, v := range f.AvailableVersions {
 						if v.Version == version {
-							status := Active
+							status := updateconstants.ActiveVersionStatus
 							if v.Status != "" {
 								status = v.Status
 							}
@@ -1441,13 +1156,13 @@ func isVersionDeprecated(log log.T,
 				if f.Name == fileName {
 					for _, v := range f.AvailableVersions {
 						if v.Version == version {
-							status := Active
+							status := updateconstants.ActiveVersionStatus
 							if v.Status != "" {
 								status = v.Status
 							}
 
 							log.Infof("Version %v status is %v", version, status)
-							return v.Status == Deprecated, nil
+							return v.Status == updateconstants.DeprecatedVersionStatus, nil
 						}
 					}
 					break
@@ -1462,11 +1177,11 @@ func isVersionDeprecated(log log.T,
 func isVersionActive(agentVersionStatus string) bool {
 
 	switch agentVersionStatus {
-	case Active:
+	case updateconstants.ActiveVersionStatus:
 		return true
-	case Inactive:
+	case updateconstants.InactiveVersionStatus:
 		return false
-	case Deprecated:
+	case updateconstants.DeprecatedVersionStatus:
 		return false
 	case "":
 		return true

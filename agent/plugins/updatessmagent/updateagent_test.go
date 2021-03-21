@@ -26,6 +26,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/aws/amazon-ssm-agent/core/executor"
 	executormocks "github.com/aws/amazon-ssm-agent/core/executor/mocks"
@@ -263,7 +264,7 @@ func TestValidateUpdate_UnsupportedCurrentVersion(t *testing.T) {
 	out := iohandler.DefaultIOHandler{}
 	result, err := manager.validateUpdate(logger, plugin, info, manifest, &out)
 
-	if version.Version != updateutil.PipelineTestVersion {
+	if version.Version != updateconstants.PipelineTestVersion {
 		assert.True(t, result)
 		assert.Error(t, err)
 		assert.Contains(t, err.Error(), "is unsupported on current platform")
@@ -673,8 +674,8 @@ func createStubInstanceInfo() *updateutil.InstanceInfo {
 	info := updateutil.InstanceInfo{}
 	info.Arch = "amd64"
 	info.CompressFormat = "tar.gz"
-	info.InstallerName = updateutil.PlatformLinux
-	info.Platform = updateutil.PlatformLinux
+	info.InstallerName = updateconstants.PlatformLinux
+	info.Platform = updateconstants.PlatformLinux
 	info.PlatformVersion = "2015.9"
 	return &info
 }
@@ -720,7 +721,7 @@ func (u *fakeUtility) ExeCommand(
 	workingDir string,
 	stdOut string,
 	stdErr string,
-	isAsync bool) (pid int, exitCode updateutil.UpdateScriptExitCode, err error) {
+	isAsync bool) (pid int, exitCode updateconstants.UpdateScriptExitCode, err error) {
 	u.retryCounter++
 	return u.pid, exitCode, u.execCommandError
 }
