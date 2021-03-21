@@ -22,6 +22,8 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
+	"github.com/aws/amazon-ssm-agent/agent/versionutil"
 )
 
 // Manifest represents the json structure of online manifest file.
@@ -88,7 +90,7 @@ func (m *Manifest) HasVersion(context *updateutil.InstanceInfo, packageName stri
 			for _, f := range p.Files {
 				if f.Name == context.FileName(packageName) {
 					for _, v := range f.AvailableVersions {
-						if v.Version == version || version == updateutil.PipelineTestVersion {
+						if v.Version == version || version == updateconstants.PipelineTestVersion {
 							return true
 						}
 					}
@@ -109,7 +111,7 @@ func (m *Manifest) LatestVersion(log log.T, context *updateutil.InstanceInfo, pa
 			for _, f := range p.Files {
 				if f.Name == context.FileName(packageName) {
 					for _, v := range f.AvailableVersions {
-						if compareResult, err = updateutil.VersionCompare(v.Version, version); err != nil {
+						if compareResult, err = versionutil.VersionCompare(v.Version, version); err != nil {
 							return version, err
 						}
 						if compareResult > 0 {
@@ -142,13 +144,13 @@ func (m *Manifest) DownloadURLAndHash(
 			for _, f := range p.Files {
 				if f.Name == fileName {
 					for _, v := range f.AvailableVersions {
-						if version == v.Version || version == updateutil.PipelineTestVersion {
+						if version == v.Version || version == updateconstants.PipelineTestVersion {
 							result = m.URIFormat
-							result = strings.Replace(result, updateutil.RegionHolder, context.Region, -1)
-							result = strings.Replace(result, updateutil.PackageNameHolder, packageName, -1)
-							result = strings.Replace(result, updateutil.PackageVersionHolder, version, -1)
-							result = strings.Replace(result, updateutil.FileNameHolder, f.Name, -1)
-							if version == updateutil.PipelineTestVersion {
+							result = strings.Replace(result, updateconstants.RegionHolder, context.Region, -1)
+							result = strings.Replace(result, updateconstants.PackageNameHolder, packageName, -1)
+							result = strings.Replace(result, updateconstants.PackageVersionHolder, version, -1)
+							result = strings.Replace(result, updateconstants.FileNameHolder, f.Name, -1)
+							if version == updateconstants.PipelineTestVersion {
 								return result, "", nil
 							}
 							return result, v.Checksum, nil

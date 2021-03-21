@@ -29,7 +29,7 @@ import (
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	messageService "github.com/aws/amazon-ssm-agent/agent/runcommand/mds"
 	"github.com/aws/amazon-ssm-agent/agent/times"
-	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 )
 
 var msgSvc messageService.Service
@@ -100,7 +100,7 @@ func prepareReplyPayload(context context.T, update *UpdateDetail) (payload *mess
 
 	if isV22DocUpdate(context.Identity(), context.Log(), update) {
 		rs.Name = appconfig.PluginNameAwsAgentUpdate
-		runtimeStatuses[updateutil.DefaultOutputFolder] = &rs
+		runtimeStatuses[updateconstants.DefaultOutputFolder] = &rs
 	} else {
 		runtimeStatuses[appconfig.PluginNameAwsAgentUpdate] = &rs
 	}

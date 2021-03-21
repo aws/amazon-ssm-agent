@@ -24,7 +24,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/health"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/ssm"
-	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 )
 
 const (
@@ -120,7 +120,7 @@ func PrepareHealthStatus(update *UpdateDetail, errorCode string, additionalStatu
 		result = fmt.Sprintf("%v-%v", result, additionalStatus)
 	}
 
-	if _, ok := updateutil.NonAlarmingErrors[updateutil.ErrorCode(errorCode)]; ok {
+	if _, ok := updateconstants.NonAlarmingErrors[updateconstants.ErrorCode(errorCode)]; ok {
 		result = fmt.Sprintf("%v-%v", result, noAlarm)
 	}
 

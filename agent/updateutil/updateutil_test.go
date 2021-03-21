@@ -28,6 +28,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/aws/amazon-ssm-agent/core/executor"
 	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/model"
@@ -60,64 +61,16 @@ type testInstanceContext struct {
 	expectingError        bool
 }
 
-// TestVersionStringCompare tests version string comparison
-func TestVersionStringCompare(t *testing.T) {
-	testCases := []struct {
-		a      string
-		b      string
-		result int
-	}{
-		{"0", "1.0.152.0", -1},
-		{"0.0.1.0", "1.0.152.0", -1},
-		{"1.05.00.0156", "1.0.221.9289", 1},
-		{"2.05.1", "1.3234.221.9289", 1},
-		{"1", "1.0.1", -1},
-		{"1.0.1", "1.0.2", -1},
-		{"1.0.2", "1.0.3", -1},
-		{"1.0.3", "1.1", -1},
-		{"1.1", "1.1.1", -1},
-		{"1.1.0", "1.0.152.0", 1},
-		{"1.1.45", "1.0.152.0", 1},
-		{"1.1.1", "1.1.2", -1},
-		{"1.1.2", "1.2", -1},
-		{"1.1.2", "1.1.2", 0},
-		{"2.1.2", "2.1.2", 0},
-		{"7.1", "7", 1},
-	}
-
-	for _, test := range testCases {
-		compareResult, err := VersionCompare(test.a, test.b)
-		assert.NoError(t, err)
-		assert.Equal(t, compareResult, test.result)
-	}
-}
-
-// TestVersionStringCompare tests version string comparison
-func TestVersionStringCompareWithError(t *testing.T) {
-	testCases := []struct {
-		a string
-		b string
-	}{
-		{"Invalid version", "1.0.152.0"},
-		{"0.0.1.0", "Invalid version"},
-	}
-
-	for _, test := range testCases {
-		_, err := VersionCompare(test.a, test.b)
-		assert.Error(t, err)
-	}
-}
-
 func TestCreateInstanceContext(t *testing.T) {
 	testCases := []testInstanceContext{
-		{"us-east-1", PlatformAmazonLinux, nil, "2015.9", nil, PlatformLinux, PlatformLinux, false},
-		{"us-east-1", PlatformCentOS, nil, "7.1", nil, PlatformCentOS, PlatformLinux, false},
-		{"us-east-1", PlatformSuseOS, nil, "12", nil, PlatformSuseOS, PlatformLinux, false},
-		{"us-east-1", PlatformRedHat, nil, "6.8", nil, PlatformRedHat, PlatformLinux, false},
-		{"us-east-1", PlatformOracleLinux, nil, "7.7", nil, PlatformOracleLinux, PlatformLinux, false},
-		{"us-east-1", PlatformUbuntu, nil, "12", nil, PlatformUbuntu, PlatformUbuntu, false},
-		{"us-east-1", PlatformWindows, nil, "5", nil, PlatformWindows, PlatformWindows, false},
-		{"us-east-1", PlatformMacOsX, nil, "10.14.2", nil, PlatformMacOsX, PlatformDarwin, false},
+		{"us-east-1", updateconstants.PlatformAmazonLinux, nil, "2015.9", nil, updateconstants.PlatformLinux, updateconstants.PlatformLinux, false},
+		{"us-east-1", updateconstants.PlatformCentOS, nil, "7.1", nil, updateconstants.PlatformCentOS, updateconstants.PlatformLinux, false},
+		{"us-east-1", updateconstants.PlatformSuseOS, nil, "12", nil, updateconstants.PlatformSuseOS, updateconstants.PlatformLinux, false},
+		{"us-east-1", updateconstants.PlatformRedHat, nil, "6.8", nil, updateconstants.PlatformRedHat, updateconstants.PlatformLinux, false},
+		{"us-east-1", updateconstants.PlatformOracleLinux, nil, "7.7", nil, updateconstants.PlatformOracleLinux, updateconstants.PlatformLinux, false},
+		{"us-east-1", updateconstants.PlatformUbuntu, nil, "12", nil, updateconstants.PlatformUbuntu, updateconstants.PlatformUbuntu, false},
+		{"us-east-1", updateconstants.PlatformWindows, nil, "5", nil, updateconstants.PlatformWindows, updateconstants.PlatformWindows, false},
+		{"us-east-1", updateconstants.PlatformMacOsX, nil, "10.14.2", nil, updateconstants.PlatformMacOsX, updateconstants.PlatformDarwin, false},
 		{"us-east-1", "", fmt.Errorf("error"), "", nil, "", "", true},
 		{"us-east-1", "", nil, "", fmt.Errorf("error"), "", "", true},
 		{"", "", nil, "", nil, "", "", true},
@@ -256,12 +209,12 @@ func TestUpdateArtifactFolder(t *testing.T) {
 
 func TestUpdateContextFilePath(t *testing.T) {
 	result := UpdateContextFilePath(appconfig.UpdaterArtifactsRoot)
-	assert.Contains(t, result, UpdateContextFileName)
+	assert.Contains(t, result, updateconstants.UpdateContextFileName)
 }
 
 func TestUpdateOutputDirectory(t *testing.T) {
 	result := UpdateOutputDirectory(appconfig.UpdaterArtifactsRoot)
-	assert.Equal(t, strings.Contains(result, DefaultOutputFolder), true)
+	assert.Equal(t, strings.Contains(result, updateconstants.DefaultOutputFolder), true)
 }
 
 func TestUpdateStandOutPath(t *testing.T) {
@@ -270,7 +223,7 @@ func TestUpdateStandOutPath(t *testing.T) {
 		expectedFileName string
 	}{
 		{"std.out", "std.out"},
-		{"", DefaultStandOut},
+		{"", updateconstants.DefaultStandOut},
 	}
 
 	for _, test := range testCases {
@@ -285,7 +238,7 @@ func TestUpdateStandErrPath(t *testing.T) {
 		expectedFileName string
 	}{
 		{"std.err", "std.err"},
-		{"", DefaultStandErr},
+		{"", updateconstants.DefaultStandErr},
 	}
 
 	for _, test := range testCases {
@@ -296,7 +249,7 @@ func TestUpdateStandErrPath(t *testing.T) {
 
 func TestUpdatePluginResultFilePath(t *testing.T) {
 	result := UpdatePluginResultFilePath(appconfig.UpdaterArtifactsRoot)
-	assert.Contains(t, result, UpdatePluginResultFileName)
+	assert.Contains(t, result, updateconstants.UpdatePluginResultFileName)
 }
 
 func TestUpdaterFilePath(t *testing.T) {
@@ -312,7 +265,7 @@ func TestUpdaterFilePath(t *testing.T) {
 		result := UpdaterFilePath(appconfig.UpdaterArtifactsRoot, test.pkgname, test.version)
 		assert.Contains(t, result, test.pkgname)
 		assert.Contains(t, result, test.version)
-		assert.Contains(t, result, Updater)
+		assert.Contains(t, result, updateconstants.Updater)
 	}
 }
 
@@ -355,13 +308,13 @@ func TestIsPlatformUsingSystemD(t *testing.T) {
 		context InstanceInfo
 		result  bool
 	}{
-		{InstanceInfo{"us-east-1", PlatformRedHat, "6.5", "linux", "amd64", "tar.gz"}, false},
-		{InstanceInfo{"us-east-1", PlatformRedHat, "7.0", "linux", "amd64", "tar.gz"}, true},
-		{InstanceInfo{"us-east-1", PlatformOracleLinux, "7.7", "linux", "amd64", "tar.gz"}, true},
-		{InstanceInfo{"us-east-1", PlatformOracleLinux, "6.10", "linux", "amd64", "tar.gz"}, false},
-		{InstanceInfo{"us-west-1", PlatformCentOS, "6.1", "linux", "amd64", "tar.gz"}, false},
-		{InstanceInfo{"us-east-1", PlatformSuseOS, "12", "linux", "amd64", "tar.gz"}, true},
-		{InstanceInfo{"us-west-1", PlatformCentOS, "7", "linux", "amd64", "tar.gz"}, true},
+		{InstanceInfo{"us-east-1", updateconstants.PlatformRedHat, "6.5", "linux", "amd64", "tar.gz"}, false},
+		{InstanceInfo{"us-east-1", updateconstants.PlatformRedHat, "7.0", "linux", "amd64", "tar.gz"}, true},
+		{InstanceInfo{"us-east-1", updateconstants.PlatformOracleLinux, "7.7", "linux", "amd64", "tar.gz"}, true},
+		{InstanceInfo{"us-east-1", updateconstants.PlatformOracleLinux, "6.10", "linux", "amd64", "tar.gz"}, false},
+		{InstanceInfo{"us-west-1", updateconstants.PlatformCentOS, "6.1", "linux", "amd64", "tar.gz"}, false},
+		{InstanceInfo{"us-east-1", updateconstants.PlatformSuseOS, "12", "linux", "amd64", "tar.gz"}, true},
+		{InstanceInfo{"us-west-1", updateconstants.PlatformCentOS, "7", "linux", "amd64", "tar.gz"}, true},
 	}
 
 	for _, test := range testCases {
@@ -376,7 +329,7 @@ func TestIsPlatformUsingSystemDWithInvalidVersionNumber(t *testing.T) {
 		context InstanceInfo
 		result  bool
 	}{
-		{InstanceInfo{"us-east-1", PlatformRedHat, "wrong version", "linux", "amd64", "tar.gz"}, false},
+		{InstanceInfo{"us-east-1", updateconstants.PlatformRedHat, "wrong version", "linux", "amd64", "tar.gz"}, false},
 	}
 
 	for _, test := range testCases {
@@ -390,7 +343,7 @@ func TestIsPlatformUsingSystemDWithPossiblyUsingSystemD(t *testing.T) {
 		context InstanceInfo
 		result  bool
 	}{
-		{InstanceInfo{"us-east-1", PlatformRaspbian, "8", "linux", "amd64", "tar.gz"}, true},
+		{InstanceInfo{"us-east-1", updateconstants.PlatformRaspbian, "8", "linux", "amd64", "tar.gz"}, true},
 	}
 
 	// Stub exec.Command
@@ -410,11 +363,11 @@ func TestIsServiceRunning(t *testing.T) {
 		result  bool
 	}{
 		// test system with upstart
-		{InstanceInfo{"us-east-1", PlatformRedHat, "6.5", "linux", "amd64", "tar.gz"}, true},
+		{InstanceInfo{"us-east-1", updateconstants.PlatformRedHat, "6.5", "linux", "amd64", "tar.gz"}, true},
 		// test system with systemD
-		{InstanceInfo{"us-east-1", PlatformRedHat, "7.1", "linux", "amd64", "tar.gz"}, true},
+		{InstanceInfo{"us-east-1", updateconstants.PlatformRedHat, "7.1", "linux", "amd64", "tar.gz"}, true},
 		// test system for mac os
-		{InstanceInfo{"us-east-1", PlatformDarwin, "-", "darwin", "amd64", "tar.gz"}, true},
+		{InstanceInfo{"us-east-1", updateconstants.PlatformDarwin, "-", "darwin", "amd64", "tar.gz"}, true},
 	}
 
 	// Stub exec.Command
@@ -432,11 +385,11 @@ func TestIsServiceRunningWithErrorMessageFromCommandExec(t *testing.T) {
 		context InstanceInfo
 	}{
 		// test system with upstart
-		{InstanceInfo{"us-east-1", PlatformRedHat, "6.5", "linux", "amd64", "tar.gz"}},
+		{InstanceInfo{"us-east-1", updateconstants.PlatformRedHat, "6.5", "linux", "amd64", "tar.gz"}},
 		// test system with systemD
-		{InstanceInfo{"us-east-1", PlatformRedHat, "7.1", "linux", "amd64", "tar.gz"}},
+		{InstanceInfo{"us-east-1", updateconstants.PlatformRedHat, "7.1", "linux", "amd64", "tar.gz"}},
 		// test system for mac os
-		{InstanceInfo{"us-east-1", PlatformDarwin, "-", "darwin", "amd64", "tar.gz"}},
+		{InstanceInfo{"us-east-1", updateconstants.PlatformDarwin, "-", "darwin", "amd64", "tar.gz"}},
 	}
 
 	// Stub exec.Command
@@ -580,7 +533,7 @@ func TestExecCommandHelperProcess(*testing.T) {
 func TestIsDiskSpaceSufficientForUpdateWithSufficientSpace(t *testing.T) {
 	getDiskSpaceInfo = func() (fileutil.DiskSpaceInfo, error) {
 		return fileutil.DiskSpaceInfo{
-			AvailBytes: MinimumDiskSpaceForUpdate,
+			AvailBytes: updateconstants.MinimumDiskSpaceForUpdate,
 			FreeBytes:  0,
 			TotalBytes: 0,
 		}, nil
@@ -596,7 +549,7 @@ func TestIsDiskSpaceSufficientForUpdateWithSufficientSpace(t *testing.T) {
 func TestIsDiskSpaceSufficientForUpdateWithInsufficientSpace(t *testing.T) {
 	getDiskSpaceInfo = func() (fileutil.DiskSpaceInfo, error) {
 		return fileutil.DiskSpaceInfo{
-			AvailBytes: MinimumDiskSpaceForUpdate - 1,
+			AvailBytes: updateconstants.MinimumDiskSpaceForUpdate - 1,
 			FreeBytes:  0,
 			TotalBytes: 0,
 		}, nil

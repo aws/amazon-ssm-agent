@@ -80,7 +80,7 @@ quick-test-common: copy-src pre-build pre-release --quick-test-common
 quick-e2e: copy-src pre-build pre-release --quick-e2e --quick-e2e-core --quick-e2e-common
 
 .PHONY: test-all
-test-all: copy-src pre-build pre-release --quick-integtest --quick-integtest-core --quick-integtest-common --quick-test --quick-test-core --quick-test-common --quick-e2e --quick-e2e-core --quick-e2e-common
+test-all: copy-src pre-build pre-release checkstyle --quick-integtest --quick-integtest-core --quick-integtest-common --quick-test --quick-test-core --quick-test-common --quick-e2e --quick-e2e-core --quick-e2e-common
 
 .PHONY: pre-release
 pre-release:

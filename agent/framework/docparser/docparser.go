@@ -28,7 +28,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/docparser/parameterstore"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/aws/amazon-ssm-agent/agent/versionutil"
 )
 
 const (
@@ -539,7 +539,7 @@ func isPreconditionEnabled(schemaVersion string) (response bool) {
 	response = false
 
 	// set precondition flag based on schema version
-	versionCompare, err := updateutil.VersionCompare(schemaVersion, preconditionSchemaVersion)
+	versionCompare, err := versionutil.VersionCompare(schemaVersion, preconditionSchemaVersion)
 	if err == nil && versionCompare >= 0 {
 		response = true
 	}

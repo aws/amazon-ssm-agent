@@ -31,6 +31,7 @@ import (
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/aws/amazon-ssm-agent/core/app/context"
 	"github.com/aws/amazon-ssm-agent/core/app/selfupdate/fileutil"
@@ -179,16 +180,16 @@ func (u *SelfUpdate) updateFromS3() (err error) {
 	var instanceId, region string
 
 	lockFileHandle, _ := lockfile.New(lockFileName)
-	err = lockFileHandle.TryLockExpire(updateutil.UpdateLockFileMinutes) // 60 minutes
+	err = lockFileHandle.TryLockExpire(updateconstants.UpdateLockFileMinutes) // 60 minutes
 
 	if err != nil {
 		if err == lockfile.ErrBusy {
 			log.Errorf("Failed to lock update lockfile, another update is in progress: %s", err)
-			log.WriteEvent(logger.AgentUpdateResultMessage, "", u.generateEventCode(updateutil.ErrorUpdaterLockBusy))
+			log.WriteEvent(logger.AgentUpdateResultMessage, "", u.generateEventCode(updateconstants.ErrorUpdaterLockBusy))
 			return
 		} else {
 			log.Warnf("Proceeding update process with new lock. Failed to lock update lockfile: %s", err)
-			log.WriteEvent(logger.AgentUpdateResultMessage, "", u.generateWarnEventCode(updateutil.WarnUpdaterLockFail))
+			log.WriteEvent(logger.AgentUpdateResultMessage, "", u.generateWarnEventCode(updateconstants.WarnUpdaterLockFail))
 		}
 	}
 
@@ -205,31 +206,31 @@ func (u *SelfUpdate) updateFromS3() (err error) {
 
 	if region, err = u.context.Identity().Region(); err != nil {
 		log.Errorf("Self update failed to get region from platform package, %s", err)
-		log.WriteEvent(logger.AgentUpdateResultMessage, "", u.generateEventCode(updateutil.ErrorInitializationFailed))
+		log.WriteEvent(logger.AgentUpdateResultMessage, "", u.generateEventCode(updateconstants.ErrorInitializationFailed))
 		return
 	}
 
 	if instanceId, err = u.context.Identity().InstanceID(); err != nil {
 		log.Errorf("Self update failed to get the instance id, %v", err)
-		log.WriteEvent(logger.AgentUpdateResultMessage, "", u.generateEventCode(updateutil.ErrorInitializationFailed))
+		log.WriteEvent(logger.AgentUpdateResultMessage, "", u.generateEventCode(updateconstants.ErrorInitializationFailed))
 		return
 	}
 
 	if err = updateInitialize(instanceId); err != nil {
 		log.Errorf("Self Update failed to init, %v", err)
-		log.WriteEvent(logger.AgentUpdateResultMessage, "", u.generateEventCode(updateutil.ErrorCreateUpdateFolder))
+		log.WriteEvent(logger.AgentUpdateResultMessage, "", u.generateEventCode(updateconstants.ErrorCreateUpdateFolder))
 		return
 	}
 
 	if err = updateDownloadResource(region); err != nil {
 		log.Errorf("Self Update failed to download resource, %v", err)
-		log.WriteEvent(logger.AgentUpdateResultMessage, "", u.generateEventCode(updateutil.ErrorDownloadUpdater))
+		log.WriteEvent(logger.AgentUpdateResultMessage, "", u.generateEventCode(updateconstants.ErrorDownloadUpdater))
 		return
 	}
 
 	if pid, err = updateExecuteSelfUpdate(log, region); err != nil {
 		log.Errorf("Self update failed to execute the self update, %v", err)
-		log.WriteEvent(logger.AgentUpdateResultMessage, "", u.generateEventCode(updateutil.ErrorExecuteUpdater))
+		log.WriteEvent(logger.AgentUpdateResultMessage, "", u.generateEventCode(updateconstants.ErrorExecuteUpdater))
 		return
 	}
 
@@ -264,12 +265,12 @@ func (u *SelfUpdate) init(instanceId string) (err error) {
 	return nil
 }
 
-func (u *SelfUpdate) generateEventCode(errorCode updateutil.ErrorCode) string {
-	return updateutil.UpdateFailed + updateutil.SelfUpdatePrefix + string(errorCode)
+func (u *SelfUpdate) generateEventCode(errorCode updateconstants.ErrorCode) string {
+	return updateconstants.UpdateFailed + updateconstants.SelfUpdatePrefix + string(errorCode)
 }
 
 func (u *SelfUpdate) generateWarnEventCode(errorCode string) string {
-	return updateutil.UpdateSucceeded + updateutil.SelfUpdatePrefix + errorCode
+	return updateconstants.UpdateSucceeded + updateconstants.SelfUpdatePrefix + errorCode
 }
 
 func (u *SelfUpdate) downloadResource(region string) (err error) {

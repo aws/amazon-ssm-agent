@@ -21,7 +21,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	logPkg "github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 )
 
 // inProgress sets update to inProgressing with given new UpdateState
@@ -90,7 +90,7 @@ func (u *updateManager) succeeded(updateDetail *UpdateDetail, log logPkg.T) (err
 }
 
 // failed sets update to failed with error messages
-func (u *updateManager) failed(updateDetail *UpdateDetail, log logPkg.T, code updateutil.ErrorCode, errMessage string, noRollbackMessage bool) (err error) {
+func (u *updateManager) failed(updateDetail *UpdateDetail, log logPkg.T, code updateconstants.ErrorCode, errMessage string, noRollbackMessage bool) (err error) {
 	updateDetail.State = Completed
 	updateDetail.Result = contracts.ResultStatusFailed
 	updateDetail.AppendInfo(log, errMessage)

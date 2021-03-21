@@ -20,6 +20,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 )
 
 func RunInstallCommands(context context.T, orchestrationDirectory string, out iohandler.IOHandler) {
@@ -32,14 +33,14 @@ func RunInstallCommands(context context.T, orchestrationDirectory string, out io
 		out.MarkAsFailed(fmt.Errorf("Error determining Linux variant: %v", err))
 		return
 	}
-	if info.Platform == updateutil.PlatformUbuntu {
+	if info.Platform == updateconstants.PlatformUbuntu {
 		log.Error("Ubuntu platform is not currently supported", err)
 		out.MarkAsFailed(fmt.Errorf("Ubuntu platform is not currently supported: %v", err))
 		return
-	} else if info.Platform == updateutil.PlatformLinux {
+	} else if info.Platform == updateconstants.PlatformLinux {
 		runAmazonLinuxPlatformInstallCommands(log, orchestrationDirectory, out)
 		return
-	} else if info.Platform == updateutil.PlatformRedHat {
+	} else if info.Platform == updateconstants.PlatformRedHat {
 		runRedhatLinuxPlatformInstallCommands(log, orchestrationDirectory, out)
 		return
 	} else {
@@ -169,14 +170,14 @@ func RunUninstallCommands(context context.T, orchestrationDirectory string, out 
 		out.MarkAsFailed(fmt.Errorf("Error determining Linux variant: %v", err))
 		return
 	}
-	if info.Platform == updateutil.PlatformUbuntu {
+	if info.Platform == updateconstants.PlatformUbuntu {
 		log.Error("Ubuntu platform is not currently supported", err)
 		out.MarkAsFailed(fmt.Errorf("Ubuntu platform is not currently supported: %v", err))
 		return
-	} else if info.Platform == updateutil.PlatformLinux {
+	} else if info.Platform == updateconstants.PlatformLinux {
 		runAmazonLinuxPlatformUninstallCommands(log, orchestrationDirectory, out)
 		return
-	} else if info.Platform == updateutil.PlatformRedHat {
+	} else if info.Platform == updateconstants.PlatformRedHat {
 		runRedhatLinuxPlatformUninstallCommands(log, orchestrationDirectory, out)
 		return
 	} else {

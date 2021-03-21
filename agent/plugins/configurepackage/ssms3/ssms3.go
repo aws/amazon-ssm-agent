@@ -29,7 +29,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/packageservice"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/configurepackage/trace"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
-	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 )
 
 const (
@@ -187,8 +187,8 @@ func downloadPackageFromS3(context context.T, tracer trace.Tracer, packageS3Sour
 func getS3Location(packageName string, version string, url string) string {
 	s3Location := url + PackageNameSuffix
 
-	s3Location = strings.Replace(s3Location, updateutil.PackageNameHolder, packageName, -1)
-	s3Location = strings.Replace(s3Location, updateutil.PackageVersionHolder, version, -1)
+	s3Location = strings.Replace(s3Location, updateconstants.PackageNameHolder, packageName, -1)
+	s3Location = strings.Replace(s3Location, updateconstants.PackageVersionHolder, version, -1)
 	return s3Location
 }
 
@@ -196,7 +196,7 @@ func getS3Location(packageName string, version string, url string) string {
 func getS3Url(packageURL string, packageName string) *url.URL {
 	// s3 uri format based on agreed convention
 	s3Location := packageURL
-	s3Location = strings.Replace(s3Location, updateutil.PackageNameHolder, packageName, -1)
+	s3Location = strings.Replace(s3Location, updateconstants.PackageNameHolder, packageName, -1)
 
 	s3Url, _ := url.Parse(s3Location)
 	return s3Url

@@ -33,6 +33,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/amazon-ssm-agent/core/executor"
@@ -143,9 +144,9 @@ func runUpdateAgent(
 		pluginInput.Source = p.ManifestLocation
 	}
 	//Calculate manifest location base on current instance's region
-	pluginInput.Source = strings.Replace(pluginInput.Source, updateutil.RegionHolder, instanceInfo.Region, -1)
+	pluginInput.Source = strings.Replace(pluginInput.Source, updateconstants.RegionHolder, instanceInfo.Region, -1)
 	//Calculate updater package name base on agent name
-	pluginInput.UpdaterName = pluginInput.AgentName + updateutil.UpdaterPackageNamePrefix
+	pluginInput.UpdaterName = pluginInput.AgentName + updateconstants.UpdaterPackageNamePrefix
 	//Generate update output
 	targetVersion := pluginInput.TargetVersion
 	if len(targetVersion) == 0 {
@@ -293,32 +294,32 @@ func (m *updateManager) generateUpdateCmd(log log.T,
 		context, pluginInput.AgentName, version.Version); err != nil {
 		return
 	}
-	cmd = updateutil.BuildUpdateCommand(cmd, updateutil.SourceVersionCmd, version.Version)
-	cmd = updateutil.BuildUpdateCommand(cmd, updateutil.SourceLocationCmd, source)
-	cmd = updateutil.BuildUpdateCommand(cmd, updateutil.SourceHashCmd, hash)
+	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.SourceVersionCmd, version.Version)
+	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.SourceLocationCmd, source)
+	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.SourceHashCmd, hash)
 
 	//Get download url and hash value from for the target version of ssm agent
 	if source, hash, err = manifest.DownloadURLAndHash(
 		context, pluginInput.AgentName, pluginInput.TargetVersion); err != nil {
 		return
 	}
-	cmd = updateutil.BuildUpdateCommand(cmd, updateutil.TargetVersionCmd, pluginInput.TargetVersion)
-	cmd = updateutil.BuildUpdateCommand(cmd, updateutil.TargetLocationCmd, source)
-	cmd = updateutil.BuildUpdateCommand(cmd, updateutil.TargetHashCmd, hash)
+	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.TargetVersionCmd, pluginInput.TargetVersion)
+	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.TargetLocationCmd, source)
+	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.TargetHashCmd, hash)
 
-	cmd = updateutil.BuildUpdateCommand(cmd, updateutil.PackageNameCmd, pluginInput.AgentName)
-	cmd = updateutil.BuildUpdateCommand(cmd, updateutil.MessageIDCmd, messageID)
+	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.PackageNameCmd, pluginInput.AgentName)
+	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.MessageIDCmd, messageID)
 
-	cmd = updateutil.BuildUpdateCommand(cmd, updateutil.StdoutFileName, stdout)
-	cmd = updateutil.BuildUpdateCommand(cmd, updateutil.StderrFileName, stderr)
+	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.StdoutFileName, stdout)
+	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.StderrFileName, stderr)
 
-	cmd = updateutil.BuildUpdateCommand(cmd, updateutil.OutputKeyPrefixCmd, keyPrefix)
-	cmd = updateutil.BuildUpdateCommand(cmd, updateutil.OutputBucketNameCmd, bucketName)
+	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.OutputKeyPrefixCmd, keyPrefix)
+	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.OutputBucketNameCmd, bucketName)
 
 	versionSplit := strings.Split(updaterVersion, ".")
 	majorVersion, _ := strconv.Atoi(versionSplit[0])
 	if majorVersion > 2 {
-		cmd = updateutil.BuildUpdateCommand(cmd, updateutil.ManifestFileUrlCmd, pluginInput.Source)
+		cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.ManifestFileUrlCmd, pluginInput.Source)
 	}
 	return
 }
@@ -375,7 +376,7 @@ func (m *updateManager) downloadUpdater(context context.T,
 	downloadInput := artifact.DownloadInput{
 		SourceURL: source,
 		SourceChecksums: map[string]string{
-			updateutil.HashType: hash,
+			updateconstants.HashType: hash,
 		},
 		DestinationDirectory: updateDownloadFolder,
 	}
@@ -482,7 +483,7 @@ func (p *Plugin) Execute(config contracts.Configuration, cancelFlag task.CancelF
 
 		// First check if lock is locked by anyone
 		lock, _ := getLockObj(appconfig.UpdaterPidLockfile)
-		err := lock.TryLockExpireWithRetry(updateutil.UpdateLockFileMinutes)
+		err := lock.TryLockExpireWithRetry(updateconstants.UpdateLockFileMinutes)
 
 		if err != nil {
 			if err == lockfile.ErrBusy {

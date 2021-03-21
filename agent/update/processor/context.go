@@ -29,6 +29,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/common/identity"
 )
 
@@ -171,12 +172,12 @@ func getV12DocOrchDir(identity identity.IAgentIdentity, log log.T, update *Updat
 		appconfig.DefaultDocumentRootDirName,
 		"orchestration",
 		commandID,
-		updateutil.DefaultOutputFolder)
+		updateconstants.DefaultOutputFolder)
 }
 
 // getV22DocOrchDir returns the orchestration path for v2.2 document plugins
 func getV22DocOrchDir(identity identity.IAgentIdentity, log log.T, update *UpdateDetail) string {
-	return fileutil.BuildPath(getV12DocOrchDir(identity, log, update), updateutil.DefaultOutputFolder)
+	return fileutil.BuildPath(getV12DocOrchDir(identity, log, update), updateconstants.DefaultOutputFolder)
 }
 
 // isV22DocUpdate returns true if the v2.2 document plugin folder exists

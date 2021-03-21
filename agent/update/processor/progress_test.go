@@ -21,7 +21,7 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
-	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -59,7 +59,7 @@ func TestUpdateFailed(t *testing.T) {
 	updater := createDefaultUpdaterStub()
 	detail := generateTestCase().Detail
 	detail.OutputS3BucketName = "test"
-	err := updater.mgr.failed(detail, logger, updateutil.ErrorInstallFailed, "Cannot Install", true)
+	err := updater.mgr.failed(detail, logger, updateconstants.ErrorInstallFailed, "Cannot Install", true)
 
 	assert.Equal(t, Completed, detail.State)
 	assert.Equal(t, contracts.ResultStatusFailed, detail.Result)

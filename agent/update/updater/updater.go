@@ -28,6 +28,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	"github.com/aws/amazon-ssm-agent/agent/update/processor"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
+	"github.com/aws/amazon-ssm-agent/agent/versionutil"
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/nightlyone/lockfile"
 )
@@ -72,25 +74,25 @@ func init() {
 	log = ssmlog.GetUpdaterLogger(logger.DefaultLogDir, defaultLogFileName)
 
 	// Load update detail from command line
-	update = flag.Bool(updateutil.UpdateCmd, false, "current Agent Version")
-	sourceVersion = flag.String(updateutil.SourceVersionCmd, "", "current Agent Version")
-	sourceLocation = flag.String(updateutil.SourceLocationCmd, "", "current Agent installer source")
-	sourceHash = flag.String(updateutil.SourceHashCmd, "", "current Agent installer hash")
-	targetVersion = flag.String(updateutil.TargetVersionCmd, "", "target Agent Version")
-	targetLocation = flag.String(updateutil.TargetLocationCmd, "", "target Agent installer source")
-	targetHash = flag.String(updateutil.TargetHashCmd, "", "target Agent installer hash")
-	packageName = flag.String(updateutil.PackageNameCmd, "", "target Agent Version")
-	messageID = flag.String(updateutil.MessageIDCmd, "", "target Agent Version")
-	stdout = flag.String(updateutil.StdoutFileName, "", "standard output file path")
-	stderr = flag.String(updateutil.StderrFileName, "", "standard error file path")
-	outputKeyPrefix = flag.String(updateutil.OutputKeyPrefixCmd, "", "output key prefix")
-	outputBucket = flag.String(updateutil.OutputBucketNameCmd, "", "output bucket name")
+	update = flag.Bool(updateconstants.UpdateCmd, false, "current Agent Version")
+	sourceVersion = flag.String(updateconstants.SourceVersionCmd, "", "current Agent Version")
+	sourceLocation = flag.String(updateconstants.SourceLocationCmd, "", "current Agent installer source")
+	sourceHash = flag.String(updateconstants.SourceHashCmd, "", "current Agent installer hash")
+	targetVersion = flag.String(updateconstants.TargetVersionCmd, "", "target Agent Version")
+	targetLocation = flag.String(updateconstants.TargetLocationCmd, "", "target Agent installer source")
+	targetHash = flag.String(updateconstants.TargetHashCmd, "", "target Agent installer hash")
+	packageName = flag.String(updateconstants.PackageNameCmd, "", "target Agent Version")
+	messageID = flag.String(updateconstants.MessageIDCmd, "", "target Agent Version")
+	stdout = flag.String(updateconstants.StdoutFileName, "", "standard output file path")
+	stderr = flag.String(updateconstants.StderrFileName, "", "standard error file path")
+	outputKeyPrefix = flag.String(updateconstants.OutputKeyPrefixCmd, "", "output key prefix")
+	outputBucket = flag.String(updateconstants.OutputBucketNameCmd, "", "output bucket name")
 
-	manifestURL = flag.String(updateutil.ManifestFileUrlCmd, "", "Manifest file url")
+	manifestURL = flag.String(updateconstants.ManifestFileUrlCmd, "", "Manifest file url")
 	manifestLocation := ""
 	manifestPath = &manifestLocation
 
-	selfUpdate = flag.Bool(updateutil.SelfUpdateCmd, false, "SelfUpdate command")
+	selfUpdate = flag.Bool(updateconstants.SelfUpdateCmd, false, "SelfUpdate command")
 
 }
 
@@ -122,7 +124,7 @@ func main() {
 	// If there is no lockfile, the updater will own it
 	// If the updater is unable to lock the file, we retry and then fail
 	lock, _ := lockfile.New(appconfig.UpdaterPidLockfile)
-	err = lock.TryLockExpireWithRetry(updateutil.UpdateLockFileMinutes)
+	err = lock.TryLockExpireWithRetry(updateconstants.UpdateLockFileMinutes)
 
 	if err != nil {
 		if err == lockfile.ErrBusy {
@@ -156,7 +158,7 @@ func main() {
 
 		log.WriteEvent(logger.AgentUpdateResultMessage,
 			*sourceVersion,
-			updateutil.GenerateSelUpdateSuccessEvent(string(updateutil.Stage))) // UpdateSucceeded_SelfUpdate_Stage
+			updateutil.GenerateSelUpdateSuccessEvent(string(updateconstants.Stage))) // UpdateSucceeded_SelfUpdate_Stage
 
 		if *targetVersion == *sourceVersion {
 			log.Infof("Current version %v is not deprecated, skipping self update", *sourceVersion)
@@ -244,7 +246,7 @@ func main() {
 	// Start or resume update
 	if err = updater.StartOrResumeUpdate(log, updateDetail); err != nil { // We do not send any error above this to ICS/MGS except panic message
 		// Rolled back, but service cannot start, Update failed.
-		updater.Failed(updateDetail, log, updateutil.ErrorUnexpected, err.Error(), false)
+		updater.Failed(updateDetail, log, updateconstants.ErrorUnexpected, err.Error(), false)
 	} else {
 		log.Infof(updateDetail.StandardOut)
 	}
@@ -253,7 +255,7 @@ func main() {
 
 // resolveUpdateDetail decides which UpdaterRoot to use and if uninstall is required for the agent
 func resolveUpdateDetail(detail *processor.UpdateDetail) error {
-	compareResult, err := updateutil.VersionCompare(detail.SourceVersion, detail.TargetVersion)
+	compareResult, err := versionutil.VersionCompare(detail.SourceVersion, detail.TargetVersion)
 	if err != nil {
 		return err
 	}
@@ -275,6 +277,6 @@ func recoverUpdaterFromPanic(updateDetail *processor.UpdateDetail) {
 	if err := recover(); err != nil {
 		agentContext.Log().Errorf("recovered from panic for updater %v!", err)
 		agentContext.Log().Errorf("Stacktrace:\n%s", debug.Stack())
-		updater.Failed(updateDetail, agentContext.Log(), updateutil.ErrorUnexpectedThroughPanic, fmt.Sprintf("%v", err), false)
+		updater.Failed(updateDetail, agentContext.Log(), updateconstants.ErrorUnexpectedThroughPanic, fmt.Sprintf("%v", err), false)
 	}
 }
