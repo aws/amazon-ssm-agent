@@ -33,12 +33,6 @@ func NewMockDefault() *Mock {
 	return new(Mock)
 }
 
-// CreateInstanceContext mocks the CreateInstanceContext function.
-func (m *Mock) CreateInstanceContext(log log.T) (context *InstanceInfo, err error) {
-	args := m.Called(log)
-	return args.Get(0).(*InstanceInfo), args.Error(1)
-}
-
 // CreateUpdateDownloadFolder mocks the CreateUpdateDownloadFolder function.
 func (m *Mock) CreateUpdateDownloadFolder() (folder string, err error) {
 	args := m.Called()

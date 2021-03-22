@@ -22,6 +22,7 @@ import (
 	testCommon "github.com/aws/amazon-ssm-agent/agent/update/tester/common"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
 )
 
 // T represents the interface for agent update
@@ -49,6 +50,7 @@ type finalize func(mgr *updateManager, updateDetail *UpdateDetail, errorCode str
 
 type updateManager struct {
 	Context   context.T
+	Info      updateinfo.T
 	util      updateutil.T
 	svc       Service
 	ctxMgr    ContextMgr

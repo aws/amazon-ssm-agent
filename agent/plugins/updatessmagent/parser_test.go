@@ -20,8 +20,10 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
+	updateinfomocks "github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo/mocks"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 //Valid manifest files
@@ -116,12 +118,11 @@ func loadManifestFromFile(t *testing.T, fileName string) (manifest *Manifest) {
 	return manifest
 }
 
-func mockInstanceContext() *updateutil.InstanceInfo {
-	return &updateutil.InstanceInfo{
-		Region:         "us-east-1",
-		Platform:       "linux",
-		InstallerName:  "linux",
-		Arch:           "amd64",
-		CompressFormat: "tar.gz",
-	}
+func mockInstanceContext() updateinfo.T {
+	info := &updateinfomocks.T{}
+
+	info.On("GetPlatform").Return("linux")
+	info.On("GenerateCompressedFileName", mock.Anything).Return("amazon-ssm-agent-linux-amd64.tar.gz")
+
+	return info
 }

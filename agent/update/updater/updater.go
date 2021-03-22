@@ -29,6 +29,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/update/processor"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
 	"github.com/aws/amazon-ssm-agent/agent/versionutil"
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/nightlyone/lockfile"
@@ -118,7 +119,13 @@ func main() {
 	// Sleep 3 seconds to allow agent to finishing up it's work
 	time.Sleep(defaultWaitTimeForAgentToFinish * time.Second)
 
-	updater = processor.NewUpdater(agentContext)
+	// Create update info
+	updateInfo, err := updateinfo.New(agentContext)
+	if err != nil {
+		log.Errorf("Failed to initialize update info object: %v", err)
+	}
+
+	updater = processor.NewUpdater(agentContext, updateInfo)
 
 	// If the updater already owns the lockfile, no harm done
 	// If there is no lockfile, the updater will own it
@@ -151,7 +158,7 @@ func main() {
 		log.Infof("Starting getting self update required information")
 
 		if *sourceLocation, *sourceHash, *targetVersion, *targetLocation, *targetHash, *manifestURL, *manifestPath, err =
-			updateutil.PrepareResourceForSelfUpdate(agentContext, *manifestURL, *sourceVersion); err != nil {
+			updateutil.PrepareResourceForSelfUpdate(agentContext, updateInfo, *manifestURL, *sourceVersion); err != nil {
 			log.Errorf(err.Error())
 			return
 		}

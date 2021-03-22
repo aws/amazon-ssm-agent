@@ -21,8 +21,8 @@ import (
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
 	"github.com/aws/amazon-ssm-agent/agent/versionutil"
 )
 
@@ -67,7 +67,7 @@ const (
 // ParseManifest parses the public manifest file to provide agent update information.
 func ParseManifest(log log.T,
 	fileName string,
-	context *updateutil.InstanceInfo,
+	info updateinfo.T,
 	packageName string) (parsedManifest *Manifest, err error) {
 	//Load specified file from file system
 	var result = []byte{}
@@ -79,16 +79,16 @@ func ParseManifest(log log.T,
 		return
 	}
 
-	err = validateManifest(log, parsedManifest, context, packageName)
+	err = validateManifest(log, parsedManifest, info, packageName)
 	return
 }
 
 // HasVersion returns if manifest file has particular version for package
-func (m *Manifest) HasVersion(context *updateutil.InstanceInfo, packageName string, version string) bool {
+func (m *Manifest) HasVersion(info updateinfo.T, packageName string, version string) bool {
 	for _, p := range m.Packages {
 		if p.Name == packageName {
 			for _, f := range p.Files {
-				if f.Name == context.FileName(packageName) {
+				if f.Name == info.GenerateCompressedFileName(packageName) {
 					for _, v := range f.AvailableVersions {
 						if v.Version == version || version == updateconstants.PipelineTestVersion {
 							return true
@@ -103,13 +103,13 @@ func (m *Manifest) HasVersion(context *updateutil.InstanceInfo, packageName stri
 }
 
 // LatestVersion returns latest version for specific package
-func (m *Manifest) LatestVersion(log log.T, context *updateutil.InstanceInfo, packageName string) (result string, err error) {
+func (m *Manifest) LatestVersion(log log.T, info updateinfo.T, packageName string) (result string, err error) {
 	var version = minimumVersion
 	var compareResult = 0
 	for _, p := range m.Packages {
 		if p.Name == packageName {
 			for _, f := range p.Files {
-				if f.Name == context.FileName(packageName) {
+				if f.Name == info.GenerateCompressedFileName(packageName) {
 					for _, v := range f.AvailableVersions {
 						if compareResult, err = versionutil.VersionCompare(v.Version, version); err != nil {
 							return version, err
@@ -123,7 +123,7 @@ func (m *Manifest) LatestVersion(log log.T, context *updateutil.InstanceInfo, pa
 		}
 	}
 	if version == minimumVersion {
-		log.Debugf("Filename: %v", context.FileName(packageName))
+		log.Debugf("Filename: %v", info.GenerateCompressedFileName(packageName))
 		log.Debugf("Package Name: %v", packageName)
 		log.Debugf("Manifest: %v", m)
 		return version, fmt.Errorf("cannot find the latest version for package %v", packageName)
@@ -134,10 +134,11 @@ func (m *Manifest) LatestVersion(log log.T, context *updateutil.InstanceInfo, pa
 
 // DownloadURLAndHash returns download source url and hash value
 func (m *Manifest) DownloadURLAndHash(
-	context *updateutil.InstanceInfo,
+	info updateinfo.T,
 	packageName string,
+	region string,
 	version string) (result string, hash string, err error) {
-	fileName := context.FileName(packageName)
+	fileName := info.GenerateCompressedFileName(packageName)
 
 	for _, p := range m.Packages {
 		if p.Name == packageName {
@@ -146,7 +147,7 @@ func (m *Manifest) DownloadURLAndHash(
 					for _, v := range f.AvailableVersions {
 						if version == v.Version || version == updateconstants.PipelineTestVersion {
 							result = m.URIFormat
-							result = strings.Replace(result, updateconstants.RegionHolder, context.Region, -1)
+							result = strings.Replace(result, updateconstants.RegionHolder, region, -1)
 							result = strings.Replace(result, updateconstants.PackageNameHolder, packageName, -1)
 							result = strings.Replace(result, updateconstants.PackageVersionHolder, version, -1)
 							result = strings.Replace(result, updateconstants.FileNameHolder, f.Name, -1)
@@ -165,11 +166,11 @@ func (m *Manifest) DownloadURLAndHash(
 }
 
 // validateManifest makes sure all the fields are provided.
-func validateManifest(log log.T, parsedManifest *Manifest, context *updateutil.InstanceInfo, packageName string) error {
+func validateManifest(log log.T, parsedManifest *Manifest, info updateinfo.T, packageName string) error {
 	if len(parsedManifest.URIFormat) == 0 {
 		return fmt.Errorf("folder format cannot be null in the Manifest file")
 	}
-	fileName := context.FileName(packageName)
+	fileName := info.GenerateCompressedFileName(packageName)
 	foundPackage := false
 	foundFile := false
 	for _, p := range parsedManifest.Packages {

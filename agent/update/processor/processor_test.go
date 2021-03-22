@@ -29,6 +29,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
+	updateinfomocks "github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo/mocks"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -133,7 +135,7 @@ func TestPrepareInstallationPackages(t *testing.T) {
 		isUpdateCalled = true
 		return nil
 	}
-	versioncheck = func(context context.T, manifestFilePath string, version string) bool {
+	versioncheck = func(context context.T, info updateinfo.T, manifestFilePath string, version string) bool {
 		// Don't check the version status in this test
 		return true
 	}
@@ -152,7 +154,7 @@ func TestPreparePackagesFailCreateInstanceContext(t *testing.T) {
 	control := &stubControl{failCreateInstanceContext: true}
 	updater := createUpdaterStubs(control)
 	updateDetail := createUpdateDetail(Initialized)
-	versioncheck = func(context context.T, manifestFilePath string, version string) bool {
+	versioncheck = func(context context.T, info updateinfo.T, manifestFilePath string, version string) bool {
 		// Don't check the version status in this test
 		return true
 	}
@@ -174,7 +176,7 @@ func TestPreparePackagesFailCreateUpdateDownloadFolder(t *testing.T) {
 	updater.mgr.download = func(mgr *updateManager, log log.T, downloadInput artifact.DownloadInput, updateDetail *UpdateDetail, version string) (err error) {
 		return fmt.Errorf("no access")
 	}
-	versioncheck = func(context context.T, manifestFilePath string, version string) bool {
+	versioncheck = func(context context.T, info updateinfo.T, manifestFilePath string, version string) bool {
 		// Don't check the version status in this test
 		return true
 	}
@@ -192,7 +194,7 @@ func TestPreparePackagesFailDownload(t *testing.T) {
 	control := &stubControl{failCreateUpdateDownloadFolder: true}
 	updater := createUpdaterStubs(control)
 	updateDetail := createUpdateDetail(Initialized)
-	versioncheck = func(context context.T, manifestFilePath string, version string) bool {
+	versioncheck = func(context context.T, info updateinfo.T, manifestFilePath string, version string) bool {
 		// Don't check the version status in this test
 		return true
 	}
@@ -223,7 +225,7 @@ func TestPreparePackageFailInvalidVersion(t *testing.T) {
 		return nil
 	}
 
-	versioncheck = func(context context.T, manifestFilePath string, version string) bool {
+	versioncheck = func(context context.T, info updateinfo.T, manifestFilePath string, version string) bool {
 		// test for invalid version
 		return false
 	}
@@ -257,7 +259,7 @@ func TestPreparePackageFailInvalidVersion_WithNoManifestPath(t *testing.T) {
 		return nil
 	}
 
-	versioncheck = func(context context.T, manifestFilePath string, version string) bool {
+	versioncheck = func(context context.T, info updateinfo.T, manifestFilePath string, version string) bool {
 		// test for invalid version
 
 		return false
@@ -276,16 +278,11 @@ func TestPreparePackageFailInvalidVersion_WithNoManifestPath(t *testing.T) {
 
 func TestValidateUpdateVersion(t *testing.T) {
 	updateDetail := createUpdateDetail(Initialized)
-	instanceContext := &updateutil.InstanceInfo{
-		Region:          "us-east-1",
-		Platform:        updateconstants.PlatformRedHat,
-		PlatformVersion: "6.5",
-		InstallerName:   "linux",
-		Arch:            "amd64",
-		CompressFormat:  "tar.gz",
-	}
 
-	err := validateUpdateVersion(logger, updateDetail, instanceContext)
+	info := &updateinfomocks.T{}
+	info.On("GetPlatform").Return(updateconstants.PlatformRedHat)
+
+	err := validateUpdateVersion(logger, updateDetail, info)
 
 	assert.NoError(t, err)
 }
@@ -293,16 +290,10 @@ func TestValidateUpdateVersion(t *testing.T) {
 func TestValidateUpdateVersionFailCentOs(t *testing.T) {
 	updateDetail := createUpdateDetail(Initialized)
 	updateDetail.TargetVersion = "1.0.0.0"
-	instanceContext := &updateutil.InstanceInfo{
-		Region:          "us-east-1",
-		Platform:        updateconstants.PlatformCentOS,
-		PlatformVersion: "6.5",
-		InstallerName:   "linux",
-		Arch:            "amd64",
-		CompressFormat:  "tar.gz",
-	}
+	info := &updateinfomocks.T{}
+	info.On("GetPlatform").Return(updateconstants.PlatformCentOS)
 
-	err := validateUpdateVersion(logger, updateDetail, instanceContext)
+	err := validateUpdateVersion(logger, updateDetail, info)
 
 	assert.Error(t, err)
 }
@@ -823,7 +814,12 @@ func createDefaultUpdaterStub() *Updater {
 
 func createUpdaterStubs(control *stubControl) *Updater {
 	context := context.NewMockDefault()
-	updater := NewUpdater(context)
+	info := &updateinfomocks.T{}
+	info.On("GetPlatform").Return(updateconstants.PlatformRedHat)
+	info.On("GetUnInstaller").Return(updateconstants.UninstallScript)
+	info.On("GetInstaller").Return(updateconstants.InstallScript)
+
+	updater := NewUpdater(context, info)
 	updater.mgr.svc = &serviceStub{}
 	util := &utilityStub{controller: control}
 	util.Context = context
@@ -851,20 +847,6 @@ type utilityStub struct {
 	controller *stubControl
 }
 
-func (u *utilityStub) CreateInstanceContext(log log.T) (info *updateutil.InstanceInfo, err error) {
-	if u.controller.failCreateInstanceContext {
-		return nil, fmt.Errorf("failed to load context")
-	}
-	return &updateutil.InstanceInfo{
-		Region:          "us-east-1",
-		Platform:        updateconstants.PlatformRedHat,
-		PlatformVersion: "6.5",
-		InstallerName:   "linux",
-		Arch:            "amd64",
-		CompressFormat:  "tar.gz",
-	}, nil
-}
-
 func (u *utilityStub) CreateUpdateDownloadFolder() (folder string, err error) {
 	if u.controller.failCreateUpdateDownloadFolder {
 		return "", fmt.Errorf("failed to create update download folder")
@@ -883,14 +865,14 @@ func (u *utilityStub) SaveUpdatePluginResult(log log.T, updaterRoot string, upda
 	return nil
 }
 
-func (u *utilityStub) IsServiceRunning(log log.T, i *updateutil.InstanceInfo) (result bool, err error) {
+func (u *utilityStub) IsServiceRunning(log log.T, i updateinfo.T) (result bool, err error) {
 	if u.controller.serviceIsRunning {
 		return true, nil
 	}
 	return false, nil
 }
 
-func (u *utilityStub) WaitForServiceToStart(log log.T, i *updateutil.InstanceInfo, targetVersion string) (result bool, err error) {
+func (u *utilityStub) WaitForServiceToStart(log log.T, i updateinfo.T, targetVersion string) (result bool, err error) {
 	u.controller.waitForServiceVersion = targetVersion
 	if u.controller.serviceIsRunning {
 		return true, nil

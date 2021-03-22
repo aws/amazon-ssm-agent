@@ -129,6 +129,9 @@ const (
 
 	// CommonManifestURL is the Manifest URL for regular regions
 	CommonManifestURL = "https://s3.{Region}.amazonaws.com" + ManifestPath
+
+	// DarwinBinaryPath is the default path of the amazon-ssm-agent binary on darwin
+	DarwinBinaryPath = "/opt/aws/ssm/bin/amazon-ssm-agent"
 )
 
 // error status codes returned from the update scripts

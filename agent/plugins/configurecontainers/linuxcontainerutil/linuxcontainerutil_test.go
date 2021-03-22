@@ -13,13 +13,12 @@
 package linuxcontainerutil
 
 import (
-	"runtime"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
-	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
+	updateinfomocks "github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -29,17 +28,10 @@ func successMock() *DepMock {
 	depmock.On("UpdateUtilExeCommandOutput", mock.Anything, mock.Anything, mock.Anything, mock.Anything,
 		mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return("True", nil)
 
-	var context *updateutil.InstanceInfo
-	context = &updateutil.InstanceInfo{
-		Region:          "us-east-1",
-		Platform:        updateconstants.PlatformLinux,
-		PlatformVersion: "",
-		InstallerName:   updateconstants.PlatformLinux,
-		Arch:            runtime.GOARCH,
-		CompressFormat:  updateconstants.CompressFormat,
-	}
+	info := &updateinfomocks.T{}
+	info.On("GetPlatform").Return(updateconstants.PlatformLinux)
 
-	depmock.On("GetInstanceInfo", mock.Anything).Return(context, nil)
+	depmock.On("GetInstanceInfo", mock.Anything).Return(info, nil)
 	return &depmock
 }
 
@@ -48,17 +40,10 @@ func unsupportedPlatformMock() *DepMock {
 	depmock.On("UpdateUtilExeCommandOutput", mock.Anything, mock.Anything, mock.Anything, mock.Anything,
 		mock.Anything, mock.Anything, mock.Anything, mock.Anything, mock.Anything).Return("True", nil)
 
-	var context *updateutil.InstanceInfo
-	context = &updateutil.InstanceInfo{
-		Region:          "us-east-1",
-		Platform:        updateconstants.PlatformUbuntu,
-		PlatformVersion: "",
-		InstallerName:   updateconstants.PlatformUbuntu,
-		Arch:            runtime.GOARCH,
-		CompressFormat:  updateconstants.CompressFormat,
-	}
+	info := &updateinfomocks.T{}
+	info.On("GetPlatform").Return(updateconstants.PlatformUbuntu)
 
-	depmock.On("GetInstanceInfo", mock.Anything).Return(context, nil)
+	depmock.On("GetInstanceInfo", mock.Anything).Return(info, nil)
 	return &depmock
 }
 

@@ -34,6 +34,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/task"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/amazon-ssm-agent/core/executor"
@@ -68,30 +69,32 @@ type pluginHelper interface {
 	generateUpdateCmd(log log.T,
 		manifest *Manifest,
 		pluginInput *UpdatePluginInput,
-		context *updateutil.InstanceInfo,
+		info updateinfo.T,
 		updaterVersion string,
 		messageID string,
 		stdout string,
 		stderr string,
 		keyPrefix string,
-		bucketName string) (cmd string, err error)
+		bucketName string,
+		region string) (cmd string, err error)
 
 	downloadManifest(context context.T,
 		util updateutil.T,
 		pluginInput *UpdatePluginInput,
-		info *updateutil.InstanceInfo,
+		info updateinfo.T,
 		out iohandler.IOHandler) (manifest *Manifest, err error)
 
 	downloadUpdater(context context.T,
 		util updateutil.T,
 		updaterPackageName string,
+		region string,
 		manifest *Manifest,
 		out iohandler.IOHandler,
-		info *updateutil.InstanceInfo) (version string, err error)
+		info updateinfo.T) (version string, err error)
 
 	validateUpdate(log log.T,
 		pluginInput *UpdatePluginInput,
-		context *updateutil.InstanceInfo,
+		info updateinfo.T,
 		manifest *Manifest,
 		out iohandler.IOHandler) (noNeedToUpdate bool, err error)
 }
@@ -118,6 +121,7 @@ func runUpdateAgent(
 	log log.T,
 	manager pluginHelper,
 	util updateutil.T,
+	info updateinfo.T,
 	rawPluginInput interface{},
 	cancelFlag task.CancelFlag,
 	output iohandler.IOHandler,
@@ -125,7 +129,6 @@ func runUpdateAgent(
 	exec executor.IExecutor) (pid int) {
 	var pluginInput UpdatePluginInput
 	var err error
-	var instanceInfo *updateutil.InstanceInfo
 
 	pluginConfig := iohandler.DefaultOutputConfig()
 
@@ -134,8 +137,9 @@ func runUpdateAgent(
 		return
 	}
 
-	if instanceInfo, err = util.CreateInstanceInfo(log); err != nil {
-		output.MarkAsFailed(err)
+	region, err := p.Context.Identity().Region()
+	if err != nil {
+		output.MarkAsFailed(fmt.Errorf("failed to get region: %v", err))
 		return
 	}
 
@@ -144,7 +148,7 @@ func runUpdateAgent(
 		pluginInput.Source = p.ManifestLocation
 	}
 	//Calculate manifest location base on current instance's region
-	pluginInput.Source = strings.Replace(pluginInput.Source, updateconstants.RegionHolder, instanceInfo.Region, -1)
+	pluginInput.Source = strings.Replace(pluginInput.Source, updateconstants.RegionHolder, region, -1)
 	//Calculate updater package name base on agent name
 	pluginInput.UpdaterName = pluginInput.AgentName + updateconstants.UpdaterPackageNamePrefix
 	//Generate update output
@@ -165,7 +169,7 @@ func runUpdateAgent(
 	updateRetryDelayBase := 1000 // 1000 millisecond
 	updateRetryDelay := 500      // 500 millisecond
 
-	manifest, downloadErr = manager.downloadManifest(p.Context, util, &pluginInput, instanceInfo, output)
+	manifest, downloadErr = manager.downloadManifest(p.Context, util, &pluginInput, info, output)
 	if downloadErr != nil {
 		output.MarkAsFailed(downloadErr)
 		return
@@ -173,7 +177,7 @@ func runUpdateAgent(
 
 	//Validate update details
 	noNeedToUpdate := false
-	if noNeedToUpdate, err = manager.validateUpdate(log, &pluginInput, instanceInfo, manifest, output); noNeedToUpdate {
+	if noNeedToUpdate, err = manager.validateUpdate(log, &pluginInput, info, manifest, output); noNeedToUpdate {
 		if err != nil {
 			output.MarkAsFailed(err)
 		}
@@ -183,7 +187,7 @@ func runUpdateAgent(
 	//Download updater and retrieve the version number
 	updaterVersion := ""
 	if updaterVersion, err = manager.downloadUpdater(
-		p.Context, util, pluginInput.UpdaterName, manifest, output, instanceInfo); err != nil {
+		p.Context, util, pluginInput.UpdaterName, region, manifest, output, info); err != nil {
 		output.MarkAsFailed(err)
 		return
 	}
@@ -193,13 +197,14 @@ func runUpdateAgent(
 	if cmd, err = manager.generateUpdateCmd(log,
 		manifest,
 		&pluginInput,
-		instanceInfo,
+		info,
 		updaterVersion,
 		config.MessageId,
 		pluginConfig.StdoutFileName,
 		pluginConfig.StderrFileName,
 		fileutil.BuildS3Path(output.GetIOConfig().OutputS3KeyPrefix, config.PluginID),
-		output.GetIOConfig().OutputS3BucketName); err != nil {
+		output.GetIOConfig().OutputS3BucketName,
+		region); err != nil {
 		output.MarkAsFailed(err)
 		return
 	}
@@ -277,13 +282,14 @@ func runUpdateAgent(
 func (m *updateManager) generateUpdateCmd(log log.T,
 	manifest *Manifest,
 	pluginInput *UpdatePluginInput,
-	context *updateutil.InstanceInfo,
+	info updateinfo.T,
 	updaterVersion string,
 	messageID string,
 	stdout string,
 	stderr string,
 	keyPrefix string,
-	bucketName string) (cmd string, err error) {
+	bucketName string,
+	region string) (cmd string, err error) {
 	updaterPath := updateutil.UpdaterFilePath(appconfig.UpdaterArtifactsRoot, pluginInput.UpdaterName, updaterVersion)
 	cmd = updaterPath + " -update"
 	source := ""
@@ -291,7 +297,7 @@ func (m *updateManager) generateUpdateCmd(log log.T,
 
 	//Get download url and hash value from for the current version of ssm agent
 	if source, hash, err = manifest.DownloadURLAndHash(
-		context, pluginInput.AgentName, version.Version); err != nil {
+		info, pluginInput.AgentName, region, version.Version); err != nil {
 		return
 	}
 	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.SourceVersionCmd, version.Version)
@@ -300,7 +306,7 @@ func (m *updateManager) generateUpdateCmd(log log.T,
 
 	//Get download url and hash value from for the target version of ssm agent
 	if source, hash, err = manifest.DownloadURLAndHash(
-		context, pluginInput.AgentName, pluginInput.TargetVersion); err != nil {
+		info, pluginInput.AgentName, region, pluginInput.TargetVersion); err != nil {
 		return
 	}
 	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.TargetVersionCmd, pluginInput.TargetVersion)
@@ -328,7 +334,7 @@ func (m *updateManager) generateUpdateCmd(log log.T,
 func (m *updateManager) downloadManifest(context context.T,
 	util updateutil.T,
 	pluginInput *UpdatePluginInput,
-	info *updateutil.InstanceInfo,
+	info updateinfo.T,
 	out iohandler.IOHandler) (manifest *Manifest, err error) {
 	//Download source
 	var updateDownload = ""
@@ -356,16 +362,17 @@ func (m *updateManager) downloadManifest(context context.T,
 func (m *updateManager) downloadUpdater(context context.T,
 	util updateutil.T,
 	updaterPackageName string,
+	region string,
 	manifest *Manifest,
 	out iohandler.IOHandler,
-	info *updateutil.InstanceInfo) (version string, err error) {
+	info updateinfo.T) (version string, err error) {
 	var hash = ""
 	var source = ""
 
 	if version, err = manifest.LatestVersion(context.Log(), info, updaterPackageName); err != nil {
 		return
 	}
-	if source, hash, err = manifest.DownloadURLAndHash(info, updaterPackageName, version); err != nil {
+	if source, hash, err = manifest.DownloadURLAndHash(info, updaterPackageName, region, version); err != nil {
 		return
 	}
 	var updateDownloadFolder = ""
@@ -407,13 +414,13 @@ func (m *updateManager) downloadUpdater(context context.T,
 //validateUpdate validates manifest against update request
 func (m *updateManager) validateUpdate(log log.T,
 	pluginInput *UpdatePluginInput,
-	context *updateutil.InstanceInfo,
+	info updateinfo.T,
 	manifest *Manifest,
 	out iohandler.IOHandler) (noNeedToUpdate bool, err error) {
 	currentVersion := version.Version
 	var allowDowngrade = false
 	if len(pluginInput.TargetVersion) == 0 {
-		if pluginInput.TargetVersion, err = manifest.LatestVersion(log, context, pluginInput.AgentName); err != nil {
+		if pluginInput.TargetVersion, err = manifest.LatestVersion(log, info, pluginInput.AgentName); err != nil {
 			return true, err
 		}
 	}
@@ -442,14 +449,14 @@ func (m *updateManager) validateUpdate(log log.T,
 				pluginInput.AgentName)
 
 	}
-	if !manifest.HasVersion(context, pluginInput.AgentName, pluginInput.TargetVersion) {
+	if !manifest.HasVersion(info, pluginInput.AgentName, pluginInput.TargetVersion) {
 		return true,
 			fmt.Errorf(
 				"%v version %v is unsupported\n",
 				pluginInput.AgentName,
 				pluginInput.TargetVersion)
 	}
-	if !manifest.HasVersion(context, pluginInput.AgentName, currentVersion) {
+	if !manifest.HasVersion(info, pluginInput.AgentName, currentVersion) {
 		return true,
 			fmt.Errorf(
 				"%v current version %v is unsupported on current platform\n",
@@ -471,6 +478,14 @@ func (p *Plugin) Execute(config contracts.Configuration, cancelFlag task.CancelF
 	manager := new(updateManager)
 	executor := executor.NewProcessExecutor(log)
 
+	updateInfo, err := updateinfo.New(p.Context)
+
+	if err != nil {
+		log.Warnf("Failed to create update info object: %s", err)
+		output.MarkAsFailed(fmt.Errorf("Failed to create update info object: %s", err))
+		return
+	}
+
 	if cancelFlag.ShutDown() {
 		output.MarkAsShutdown()
 	} else if cancelFlag.Canceled() {
@@ -483,7 +498,7 @@ func (p *Plugin) Execute(config contracts.Configuration, cancelFlag task.CancelF
 
 		// First check if lock is locked by anyone
 		lock, _ := getLockObj(appconfig.UpdaterPidLockfile)
-		err := lock.TryLockExpireWithRetry(updateconstants.UpdateLockFileMinutes)
+		err = lock.TryLockExpireWithRetry(updateconstants.UpdateLockFileMinutes)
 
 		if err != nil {
 			if err == lockfile.ErrBusy {
@@ -512,6 +527,7 @@ func (p *Plugin) Execute(config contracts.Configuration, cancelFlag task.CancelF
 			log,
 			manager,
 			updateUtilRef,
+			updateInfo,
 			config.Properties,
 			cancelFlag,
 			output,

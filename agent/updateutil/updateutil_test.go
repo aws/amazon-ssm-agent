@@ -25,14 +25,16 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
-	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
+	updateinfomocks "github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo/mocks"
 	"github.com/aws/amazon-ssm-agent/core/executor"
+	executormocks "github.com/aws/amazon-ssm-agent/core/executor/mocks"
 	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/model"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 var logger = log.NewMockLog()
@@ -48,94 +50,6 @@ type testCase struct {
 }
 
 type testProcess struct {
-}
-
-type testInstanceContext struct {
-	region                string
-	platformName          string
-	platformNameErr       error
-	platformVersion       string
-	platformVersionErr    error
-	expectedPlatformName  string
-	expectedInstallerName string
-	expectingError        bool
-}
-
-func TestCreateInstanceContext(t *testing.T) {
-	testCases := []testInstanceContext{
-		{"us-east-1", updateconstants.PlatformAmazonLinux, nil, "2015.9", nil, updateconstants.PlatformLinux, updateconstants.PlatformLinux, false},
-		{"us-east-1", updateconstants.PlatformCentOS, nil, "7.1", nil, updateconstants.PlatformCentOS, updateconstants.PlatformLinux, false},
-		{"us-east-1", updateconstants.PlatformSuseOS, nil, "12", nil, updateconstants.PlatformSuseOS, updateconstants.PlatformLinux, false},
-		{"us-east-1", updateconstants.PlatformRedHat, nil, "6.8", nil, updateconstants.PlatformRedHat, updateconstants.PlatformLinux, false},
-		{"us-east-1", updateconstants.PlatformOracleLinux, nil, "7.7", nil, updateconstants.PlatformOracleLinux, updateconstants.PlatformLinux, false},
-		{"us-east-1", updateconstants.PlatformUbuntu, nil, "12", nil, updateconstants.PlatformUbuntu, updateconstants.PlatformUbuntu, false},
-		{"us-east-1", updateconstants.PlatformWindows, nil, "5", nil, updateconstants.PlatformWindows, updateconstants.PlatformWindows, false},
-		{"us-east-1", updateconstants.PlatformMacOsX, nil, "10.14.2", nil, updateconstants.PlatformMacOsX, updateconstants.PlatformDarwin, false},
-		{"us-east-1", "", fmt.Errorf("error"), "", nil, "", "", true},
-		{"us-east-1", "", nil, "", fmt.Errorf("error"), "", "", true},
-		{"", "", nil, "", nil, "", "", true},
-	}
-
-	getPlatformName = PlatformNameStub
-	getPlatformVersion = PlatformVersionStub
-
-	util := Utility{}
-
-	for _, test := range testCases {
-		// Setup stubs
-		testInstanceInfo = test
-
-		identityMock := identityMocks.IAgentIdentity{}
-		if test.region != "" {
-			identityMock.On("Region").Return(test.region, nil)
-		} else {
-			identityMock.On("Region").Return(test.region, fmt.Errorf("RegionIsEmpty"))
-
-		}
-
-		contextMock := &context.Mock{}
-		contextMock.On("Identity").Return(&identityMock)
-		contextMock.On("Log").Return(log.NewMockLog())
-
-		util.Context = contextMock
-
-		info, err := util.CreateInstanceInfo(logger)
-
-		if test.expectingError {
-			assert.Error(t, err)
-		} else {
-			assert.NoError(t, err)
-			assert.Equal(t, info.Platform, test.expectedPlatformName)
-			assert.Equal(t, info.Region, test.region)
-			assert.Equal(t, info.InstallerName, test.expectedInstallerName)
-		}
-	}
-}
-
-var testInstanceInfo testInstanceContext
-
-func PlatformVersionStub(log log.T) (version string, err error) {
-	return testInstanceInfo.platformVersion, testInstanceInfo.platformVersionErr
-}
-func PlatformNameStub(log log.T) (name string, err error) {
-	return testInstanceInfo.platformName, testInstanceInfo.platformNameErr
-}
-
-func TestFileNameConstruction(t *testing.T) {
-	testCases := []struct {
-		context InstanceInfo
-		result  string
-	}{
-		{InstanceInfo{"us-east-1", "linux", "2015.9", "linux", "amd64", "tar.gz"}, "amazon-ssm-agent-linux-amd64.tar.gz"},
-		{InstanceInfo{"us-east-1", "linux", "2015.9", "linux", "386", "tar.gz"}, "amazon-ssm-agent-linux-386.tar.gz"},
-		{InstanceInfo{"us-west-1", "ubuntu", "12", "ubuntu", "386", "tar.gz"}, "amazon-ssm-agent-ubuntu-386.tar.gz"},
-		{InstanceInfo{"us-west-1", "max os x", "10.14.2", "darwin", "amd64", "tar.gz"}, "amazon-ssm-agent-darwin-amd64.tar.gz"},
-	}
-
-	for _, test := range testCases {
-		fileNameResult := test.context.FileName("amazon-ssm-agent")
-		assert.Equal(t, fileNameResult, test.result)
-	}
 }
 
 func TestBuildMessage(t *testing.T) {
@@ -270,6 +184,7 @@ func TestUpdaterFilePath(t *testing.T) {
 }
 
 func TestInstallerFilePath(t *testing.T) {
+	randomInstaller := "someinstaller.sh"
 	testCases := []struct {
 		pkgname string
 		version string
@@ -279,14 +194,15 @@ func TestInstallerFilePath(t *testing.T) {
 	}
 
 	for _, test := range testCases {
-		result := InstallerFilePath(appconfig.UpdaterArtifactsRoot, test.pkgname, test.version)
+		result := InstallerFilePath(appconfig.UpdaterArtifactsRoot, test.pkgname, test.version, randomInstaller)
 		assert.Contains(t, result, test.pkgname)
 		assert.Contains(t, result, test.version)
-		assert.Contains(t, result, Installer)
+		assert.Contains(t, result, randomInstaller)
 	}
 }
 
 func TestUnInstallerFilePath(t *testing.T) {
+	randomUnInstaller := "someuninstaller.sh"
 	testCases := []struct {
 		pkgname string
 		version string
@@ -296,107 +212,95 @@ func TestUnInstallerFilePath(t *testing.T) {
 	}
 
 	for _, test := range testCases {
-		result := UnInstallerFilePath(appconfig.UpdaterArtifactsRoot, test.pkgname, test.version)
+		result := UnInstallerFilePath(appconfig.UpdaterArtifactsRoot, test.pkgname, test.version, randomUnInstaller)
 		assert.Contains(t, result, test.pkgname)
 		assert.Contains(t, result, test.version)
-		assert.Contains(t, result, UnInstaller)
-	}
-}
-
-func TestIsPlatformUsingSystemD(t *testing.T) {
-	testCases := []struct {
-		context InstanceInfo
-		result  bool
-	}{
-		{InstanceInfo{"us-east-1", updateconstants.PlatformRedHat, "6.5", "linux", "amd64", "tar.gz"}, false},
-		{InstanceInfo{"us-east-1", updateconstants.PlatformRedHat, "7.0", "linux", "amd64", "tar.gz"}, true},
-		{InstanceInfo{"us-east-1", updateconstants.PlatformOracleLinux, "7.7", "linux", "amd64", "tar.gz"}, true},
-		{InstanceInfo{"us-east-1", updateconstants.PlatformOracleLinux, "6.10", "linux", "amd64", "tar.gz"}, false},
-		{InstanceInfo{"us-west-1", updateconstants.PlatformCentOS, "6.1", "linux", "amd64", "tar.gz"}, false},
-		{InstanceInfo{"us-east-1", updateconstants.PlatformSuseOS, "12", "linux", "amd64", "tar.gz"}, true},
-		{InstanceInfo{"us-west-1", updateconstants.PlatformCentOS, "7", "linux", "amd64", "tar.gz"}, true},
-	}
-
-	for _, test := range testCases {
-		result, err := test.context.IsPlatformUsingSystemD(logger)
-		assert.NoError(t, err)
-		assert.Equal(t, result, test.result)
-	}
-}
-
-func TestIsPlatformUsingSystemDWithInvalidVersionNumber(t *testing.T) {
-	testCases := []struct {
-		context InstanceInfo
-		result  bool
-	}{
-		{InstanceInfo{"us-east-1", updateconstants.PlatformRedHat, "wrong version", "linux", "amd64", "tar.gz"}, false},
-	}
-
-	for _, test := range testCases {
-		_, err := test.context.IsPlatformUsingSystemD(logger)
-		assert.Error(t, err)
-	}
-}
-
-func TestIsPlatformUsingSystemDWithPossiblyUsingSystemD(t *testing.T) {
-	testCases := []struct {
-		context InstanceInfo
-		result  bool
-	}{
-		{InstanceInfo{"us-east-1", updateconstants.PlatformRaspbian, "8", "linux", "amd64", "tar.gz"}, true},
-	}
-
-	// Stub exec.Command
-	execCommand = fakeExecCommand
-
-	for _, test := range testCases {
-		result, err := test.context.IsPlatformUsingSystemD(logger)
-		assert.NoError(t, err)
-		assert.Equal(t, result, test.result)
+		assert.Contains(t, result, randomUnInstaller)
 	}
 }
 
 func TestIsServiceRunning(t *testing.T) {
-	util := Utility{}
+	infoRedHat65 := &updateinfomocks.T{}
+	infoRedHat65.On("GetPlatform").Return(updateconstants.PlatformRedHat)
+	infoRedHat65.On("IsPlatformUsingSystemD").Return(false, nil)
+	infoRedHat65.On("IsPlatformDarwin").Return(false)
+
+	infoRedHat71 := &updateinfomocks.T{}
+	infoRedHat71.On("GetPlatform").Return(updateconstants.PlatformRedHat)
+	infoRedHat71.On("IsPlatformUsingSystemD").Return(true, nil)
+	infoRedHat71.On("IsPlatformDarwin").Return(false)
+
+	infoDarwin := &updateinfomocks.T{}
+	infoDarwin.On("GetPlatform").Return(updateconstants.PlatformDarwin)
+	infoDarwin.On("IsPlatformUsingSystemD").Return(false, nil)
+	infoDarwin.On("IsPlatformDarwin").Return(true)
+
+	mock := &executormocks.IExecutor{}
+	mock.On("Processes").Return([]executor.OsProcess{{Executable: updateconstants.DarwinBinaryPath}}, nil)
+
+	util := Utility{
+		ProcessExecutor: mock,
+	}
 	testCases := []struct {
-		context InstanceInfo
-		result  bool
+		info   updateinfo.T
+		result bool
 	}{
 		// test system with upstart
-		{InstanceInfo{"us-east-1", updateconstants.PlatformRedHat, "6.5", "linux", "amd64", "tar.gz"}, true},
+		{infoRedHat65, true},
 		// test system with systemD
-		{InstanceInfo{"us-east-1", updateconstants.PlatformRedHat, "7.1", "linux", "amd64", "tar.gz"}, true},
+		{infoRedHat71, true},
 		// test system for mac os
-		{InstanceInfo{"us-east-1", updateconstants.PlatformDarwin, "-", "darwin", "amd64", "tar.gz"}, true},
+		{infoDarwin, true},
 	}
 
 	// Stub exec.Command
 	execCommand = fakeExecCommand
 
 	for _, test := range testCases {
-		result, _ := util.IsServiceRunning(logger, &test.context)
+		fmt.Printf("Testing %s\n", test.info.GetPlatform())
+		result, _ := util.IsServiceRunning(logger, test.info)
 		assert.Equal(t, result, test.result)
 	}
 }
 
 func TestIsServiceRunningWithErrorMessageFromCommandExec(t *testing.T) {
-	util := Utility{}
+	infoRedHat65 := &updateinfomocks.T{}
+	infoRedHat65.On("GetPlatform").Return(updateconstants.PlatformRedHat)
+	infoRedHat65.On("IsPlatformUsingSystemD").Return(false, nil)
+	infoRedHat65.On("IsPlatformDarwin").Return(false)
+
+	infoRedHat71 := &updateinfomocks.T{}
+	infoRedHat71.On("GetPlatform").Return(updateconstants.PlatformRedHat)
+	infoRedHat71.On("IsPlatformUsingSystemD").Return(true, nil)
+	infoRedHat71.On("IsPlatformDarwin").Return(false)
+
+	infoDarwin := &updateinfomocks.T{}
+	infoDarwin.On("GetPlatform").Return(updateconstants.PlatformDarwin)
+	infoDarwin.On("IsPlatformUsingSystemD").Return(false, nil)
+	infoDarwin.On("IsPlatformDarwin").Return(true)
+
+	mock := &executormocks.IExecutor{}
+	mock.On("Processes").Return(nil, fmt.Errorf("SomeError"))
+	util := Utility{
+		ProcessExecutor: mock,
+	}
 	testCases := []struct {
-		context InstanceInfo
+		info updateinfo.T
 	}{
 		// test system with upstart
-		{InstanceInfo{"us-east-1", updateconstants.PlatformRedHat, "6.5", "linux", "amd64", "tar.gz"}},
+		{infoRedHat65},
 		// test system with systemD
-		{InstanceInfo{"us-east-1", updateconstants.PlatformRedHat, "7.1", "linux", "amd64", "tar.gz"}},
+		{infoRedHat71},
 		// test system for mac os
-		{InstanceInfo{"us-east-1", updateconstants.PlatformDarwin, "-", "darwin", "amd64", "tar.gz"}},
+		{infoDarwin},
 	}
 
 	// Stub exec.Command
 	execCommand = fakeExecCommandWithError
 
 	for _, test := range testCases {
-		_, err := util.IsServiceRunning(logger, &test.context)
+		fmt.Printf("Testing %s\n", test.info.GetPlatform())
+		_, err := util.IsServiceRunning(logger, test.info)
 		assert.Error(t, err)
 	}
 }
@@ -662,11 +566,12 @@ func TestParseManifestWithStatus(t *testing.T) {
 	}
 	agentName := "amazon-ssm-agent"
 	log := log.NewMockLog()
-	context := mockInstanceContext()
+	info := &updateinfomocks.T{}
+	info.On("GenerateCompressedFileName", mock.Anything).Return("amazon-ssm-agent-linux-amd64.tar.gz")
 	// run tests
 	for _, tst := range testCases {
 		// call method
-		parsedMsg, err := ParseManifest(log, tst.Input, context, agentName)
+		parsedMsg, err := ParseManifest(log, tst.Input, info, agentName)
 
 		// check results
 		assert.Nil(t, err)
@@ -698,16 +603,6 @@ func loadManifestFromFile(t *testing.T, fileName string) (manifest *Manifest) {
 	}
 
 	return manifest
-}
-
-func mockInstanceContext() *InstanceInfo {
-	return &InstanceInfo{
-		Region:         "us-east-1",
-		Platform:       "linux",
-		InstallerName:  "linux",
-		Arch:           "amd64",
-		CompressFormat: "tar.gz",
-	}
 }
 
 func (p *testProcess) Start(*model.WorkerConfig) (*model.Process, error) { return nil, nil }
