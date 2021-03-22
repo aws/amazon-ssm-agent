@@ -31,6 +31,7 @@ import (
 	testerCommon "github.com/aws/amazon-ssm-agent/agent/update/tester/common"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
 	"github.com/aws/amazon-ssm-agent/agent/versionutil"
 )
 
@@ -44,10 +45,11 @@ var (
 )
 
 // NewUpdater creates an instance of Updater and other services it requires
-func NewUpdater(context context.T) *Updater {
+func NewUpdater(context context.T, info updateinfo.T) *Updater {
 	updater := &Updater{
 		mgr: &updateManager{
 			Context: context,
+			Info:    info,
 			util: &updateutil.Utility{
 				Context: context,
 			},
@@ -98,6 +100,7 @@ func (u *Updater) InitializeUpdate(log log.T, updateDetail *UpdateDetail) (err e
 	// load plugin update result
 	pluginResult, err = updateutil.LoadUpdatePluginResult(log, updateDetail.UpdateRoot)
 	if err != nil {
+		// TODO: Check old path
 		return fmt.Errorf("update failed, no rollback needed %v", err.Error())
 	}
 	updateDetail.StandardOut = pluginResult.StandOut
@@ -120,12 +123,12 @@ func (u *Updater) Failed(updateDetail *UpdateDetail, log log.T, code updateconst
 
 // validateUpdateVersion validates target version number base on the current platform
 // to avoid accidentally downgrade agent to the earlier version that doesn't support current platform
-func validateUpdateVersion(log log.T, detail *UpdateDetail, instanceContext *updateutil.InstanceInfo) (err error) {
+func validateUpdateVersion(log log.T, detail *UpdateDetail, info updateinfo.T) (err error) {
 	compareResult := 0
 	minimumVersions := getMinimumVSupportedVersions()
 
 	// check if current platform has minimum supported version
-	if val, ok := (*minimumVersions)[instanceContext.Platform]; ok {
+	if val, ok := (*minimumVersions)[info.GetPlatform()]; ok {
 		// compare current agent version with minimum supported version
 		if compareResult, err = versionutil.VersionCompare(detail.TargetVersion, val); err != nil {
 			return err
@@ -138,9 +141,9 @@ func validateUpdateVersion(log log.T, detail *UpdateDetail, instanceContext *upd
 	return nil
 }
 
-func validateInactiveVersion(context context.T, detail *UpdateDetail) (err error) {
+func validateInactiveVersion(context context.T, info updateinfo.T, detail *UpdateDetail) (err error) {
 	context.Log().Info("Validating inactive version for amazon ssm agent")
-	if !versioncheck(context, detail.ManifestPath, detail.TargetVersion) {
+	if !versioncheck(context, info, detail.ManifestPath, detail.TargetVersion) {
 		err := fmt.Errorf("agent version %v is inactive", detail.TargetVersion)
 		return err
 	}
@@ -165,17 +168,18 @@ func getMinimumVSupportedVersions() (versions *map[string]string) {
 // prepareInstallationPackages downloads artifacts from public s3 storage
 func prepareInstallationPackages(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
 	log.Infof("Initiating download %v", updateDetail.PackageName)
-	var instanceContext *updateutil.InstanceInfo
+	var region string
 
 	var manifestDownloadOutput *artifact.DownloadOutput
 	updateDownloadFolder := ""
 
 	updateDownload := ""
 
-	if instanceContext, err = mgr.util.CreateInstanceInfo(log); err != nil {
+	if region, err = mgr.Context.Identity().Region(); err != nil {
 		return mgr.failed(updateDetail, log, updateconstants.ErrorEnvironmentIssue, err.Error(), false)
 	}
-	if err = validateUpdateVersion(log, updateDetail, instanceContext); err != nil {
+
+	if err = validateUpdateVersion(log, updateDetail, mgr.Info); err != nil {
 		return mgr.failed(updateDetail, log, updateconstants.ErrorUnsupportedVersion, err.Error(), true)
 	}
 
@@ -190,7 +194,7 @@ func prepareInstallationPackages(mgr *updateManager, log log.T, updateDetail *Up
 
 	if updateDetail.ManifestPath == "" {
 		if manifestDownloadOutput, updateDetail.ManifestUrl, err =
-			mgr.util.DownloadManifestFile(log, updateDownloadFolder, updateDetail.ManifestUrl, instanceContext.Region); err != nil {
+			mgr.util.DownloadManifestFile(log, updateDownloadFolder, updateDetail.ManifestUrl, region); err != nil {
 
 			message := updateutil.BuildMessage(err, "failed to download manifest file")
 			return mgr.failed(updateDetail, log, updateconstants.ErrorInvalidManifest, message, true)
@@ -198,7 +202,7 @@ func prepareInstallationPackages(mgr *updateManager, log log.T, updateDetail *Up
 		updateDetail.ManifestPath = manifestDownloadOutput.LocalFilePath
 	}
 
-	if err = validateInactiveVersion(mgr.Context, updateDetail); err != nil {
+	if err = validateInactiveVersion(mgr.Context, mgr.Info, updateDetail); err != nil {
 		return mgr.inactive(updateDetail, log, updateconstants.WarnInactiveVersion)
 	}
 
@@ -307,17 +311,13 @@ func proceedUpdate(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (e
 func verifyInstallation(mgr *updateManager, log log.T, updateDetail *UpdateDetail, isRollback bool) (err error) {
 	// Check if agent is running
 	var isRunning = false
-	var instanceContext *updateutil.InstanceInfo
 
-	if instanceContext, err = mgr.util.CreateInstanceInfo(log); err != nil {
-		return mgr.failed(updateDetail, log, updateconstants.ErrorCreateInstanceContext, err.Error(), false)
-	}
 	version := updateDetail.TargetVersion
 	if isRollback {
 		version = updateDetail.SourceVersion
 	}
 	log.Infof("Initiating update health check")
-	if isRunning, err = mgr.util.WaitForServiceToStart(log, instanceContext, version); err != nil || !isRunning {
+	if isRunning, err = mgr.util.WaitForServiceToStart(log, mgr.Info, version); err != nil || !isRunning {
 		if !isRollback {
 			message := updateutil.BuildMessage(err,
 				"failed to update %v to %v, %v",
@@ -406,7 +406,8 @@ func uninstallAgent(mgr *updateManager, log log.T, version string, updateDetail 
 	uninstallPath := updateutil.UnInstallerFilePath(
 		updateDetail.UpdateRoot,
 		updateDetail.PackageName,
-		version)
+		version,
+		mgr.Info.GetUnInstaller())
 
 	// calculate work directory
 	workDir := updateutil.UpdateArtifactFolder(
@@ -449,7 +450,8 @@ func installAgent(mgr *updateManager, log log.T, version string, updateDetail *U
 	installerPath := updateutil.InstallerFilePath(
 		updateDetail.UpdateRoot,
 		updateDetail.PackageName,
-		version)
+		version,
+		mgr.Info.GetInstaller())
 	// calculate work directory
 	workDir := updateutil.UpdateArtifactFolder(
 		updateDetail.UpdateRoot,

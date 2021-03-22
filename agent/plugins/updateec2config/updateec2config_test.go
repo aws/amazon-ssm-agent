@@ -21,7 +21,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	updateinfomocks "github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo/mocks"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -42,14 +42,14 @@ func TestGenerateUpdateCmd(t *testing.T) {
 //TestValidateUpdate tests the function validateUpdate
 func TestValidateUpdate(t *testing.T) {
 	plugin := createStubPluginInput()
-	context := createStubInstanceContext()
+	info := &updateinfomocks.T{}
 	manifest := createStubManifest()
 
 	manager := updateManager{}
 	out := iohandler.DefaultIOHandler{}
 	fakeVersion := "1.0.0"
 
-	result, err := manager.validateUpdate(logger, plugin, context, manifest, &out, fakeVersion)
+	result, err := manager.validateUpdate(logger, plugin, info, manifest, &out, fakeVersion)
 
 	assert.False(t, result)
 	assert.NoError(t, err)
@@ -58,7 +58,7 @@ func TestValidateUpdate(t *testing.T) {
 //TestValidateUpdate_GetLatestTargetVersionWhenTargetVersionIsEmpty tests negative case
 func TestValidateUpdate_GetLatestTargetVersionWhenTargetVersionIsEmpty(t *testing.T) {
 	plugin := createStubPluginInput()
-	context := createStubInstanceContext()
+	info := &updateinfomocks.T{}
 	manifest := createStubManifest()
 
 	manager := updateManager{}
@@ -67,7 +67,7 @@ func TestValidateUpdate_GetLatestTargetVersionWhenTargetVersionIsEmpty(t *testin
 	out := iohandler.DefaultIOHandler{}
 	fakeVersion := "1.0.0"
 
-	result, err := manager.validateUpdate(logger, plugin, context, manifest, &out, fakeVersion)
+	result, err := manager.validateUpdate(logger, plugin, info, manifest, &out, fakeVersion)
 
 	assert.False(t, result)
 	assert.NoError(t, err)
@@ -79,13 +79,13 @@ func TestValidateUpdate_DowngradeVersion(t *testing.T) {
 	plugin.AllowDowngrade = "false"
 	plugin.TargetVersion = "1.0.0"
 	fakeVersion := "999.0.0"
-	context := createStubInstanceContext()
+	info := &updateinfomocks.T{}
 	manifest := createStubManifest()
 
 	manager := updateManager{}
 	out := iohandler.DefaultIOHandler{}
 
-	noNeedToUpdate, err := manager.validateUpdate(logger, plugin, context, manifest, &out, fakeVersion)
+	noNeedToUpdate, err := manager.validateUpdate(logger, plugin, info, manifest, &out, fakeVersion)
 
 	assert.True(t, noNeedToUpdate)
 	assert.Error(t, err)
@@ -97,13 +97,13 @@ func TestValidateUpdate_UnsupportedTargetVersion(t *testing.T) {
 	plugin := createStubPluginInput()
 	plugin.TargetVersion = "1.2.3"
 	fakeVersion := "1.0.0"
-	context := createStubInstanceContext()
+	info := &updateinfomocks.T{}
 	manifest := createStubManifest()
 
 	manager := updateManager{}
 	out := iohandler.DefaultIOHandler{}
 
-	result, err := manager.validateUpdate(logger, plugin, context, manifest, &out, fakeVersion)
+	result, err := manager.validateUpdate(logger, plugin, info, manifest, &out, fakeVersion)
 
 	assert.True(t, result)
 	assert.Error(t, err)
@@ -114,13 +114,13 @@ func TestValidateUpdate_UnsupportedTargetVersion(t *testing.T) {
 func TestValidateUpdate_TargetVersionSameAsCurrentVersion(t *testing.T) {
 	plugin := createStubPluginInput()
 	//plugin.TargetVersion = fakeAgentVersion
-	context := createStubInstanceContext()
+	info := &updateinfomocks.T{}
 	manifest := createStubManifest()
 
 	manager := updateManager{}
 	out := iohandler.DefaultIOHandler{}
 
-	noNeedToUpdate, err := manager.validateUpdate(logger, plugin, context, manifest, &out, plugin.TargetVersion)
+	noNeedToUpdate, err := manager.validateUpdate(logger, plugin, info, manifest, &out, plugin.TargetVersion)
 
 	assert.True(t, noNeedToUpdate)
 	assert.NoError(t, err)
@@ -130,12 +130,12 @@ func TestValidateUpdate_TargetVersionSameAsCurrentVersion(t *testing.T) {
 //TestValidateUpdate_UnsupportedCurrentVersion tests negative case
 func TestValidateUpdate_UnsupportedCurrentVersion(t *testing.T) {
 	plugin := createStubPluginInput()
-	context := createStubInstanceContext()
+	info := &updateinfomocks.T{}
 	manifest := createStubManifest()
 
 	manager := updateManager{}
 	out := iohandler.DefaultIOHandler{}
-	result, err := manager.validateUpdate(logger, plugin, context, manifest, &out, "1.2.3.4")
+	result, err := manager.validateUpdate(logger, plugin, info, manifest, &out, "1.2.3.4")
 
 	assert.True(t, result)
 	assert.Error(t, err)
@@ -158,11 +158,4 @@ func createStubManifest() *Manifest {
 	manifest := &Manifest{}
 	manifest, _ = ParseManifest(logger, "testData/testManifest.json")
 	return manifest
-}
-
-//createStubInstanceContext is a helper function to create a stub instance for testing
-func createStubInstanceContext() *updateutil.InstanceInfo {
-	context := updateutil.InstanceInfo{}
-	context.Region = "region"
-	return &context
 }

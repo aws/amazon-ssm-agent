@@ -19,6 +19,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
 )
 
 func init() {
@@ -27,10 +28,8 @@ func init() {
 
 type DepLinux struct{}
 
-func (DepLinux) GetInstanceInfo(context context.T) (instancInfo *updateutil.InstanceInfo, err error) {
-	updateUtil := new(updateutil.Utility)
-	updateUtil.Context = context
-	return updateUtil.CreateInstanceInfo(context.Log())
+func (DepLinux) GetInstanceInfo(context context.T) (instancInfo updateinfo.T, err error) {
+	return updateinfo.New(context)
 }
 
 func (DepLinux) UpdateUtilExeCommandOutput(

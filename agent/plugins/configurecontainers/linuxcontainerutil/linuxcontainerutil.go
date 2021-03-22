@@ -19,13 +19,13 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
 )
 
 func RunInstallCommands(context context.T, orchestrationDirectory string, out iohandler.IOHandler) {
 	var err error
-	var info *updateutil.InstanceInfo
+	var info updateinfo.T
 	log := context.Log()
 	info, err = dep.GetInstanceInfo(context)
 	if err != nil {
@@ -33,14 +33,14 @@ func RunInstallCommands(context context.T, orchestrationDirectory string, out io
 		out.MarkAsFailed(fmt.Errorf("Error determining Linux variant: %v", err))
 		return
 	}
-	if info.Platform == updateconstants.PlatformUbuntu {
+	if info.GetPlatform() == updateconstants.PlatformUbuntu {
 		log.Error("Ubuntu platform is not currently supported", err)
 		out.MarkAsFailed(fmt.Errorf("Ubuntu platform is not currently supported: %v", err))
 		return
-	} else if info.Platform == updateconstants.PlatformLinux {
+	} else if info.GetPlatform() == updateconstants.PlatformLinux {
 		runAmazonLinuxPlatformInstallCommands(log, orchestrationDirectory, out)
 		return
-	} else if info.Platform == updateconstants.PlatformRedHat {
+	} else if info.GetPlatform() == updateconstants.PlatformRedHat {
 		runRedhatLinuxPlatformInstallCommands(log, orchestrationDirectory, out)
 		return
 	} else {
@@ -162,7 +162,7 @@ func runRedhatLinuxPlatformInstallCommands(log log.T, orchestrationDirectory str
 
 func RunUninstallCommands(context context.T, orchestrationDirectory string, out iohandler.IOHandler) {
 	var err error
-	var info *updateutil.InstanceInfo
+	var info updateinfo.T
 	log := context.Log()
 	info, err = dep.GetInstanceInfo(context)
 	if err != nil {
@@ -170,14 +170,14 @@ func RunUninstallCommands(context context.T, orchestrationDirectory string, out 
 		out.MarkAsFailed(fmt.Errorf("Error determining Linux variant: %v", err))
 		return
 	}
-	if info.Platform == updateconstants.PlatformUbuntu {
+	if info.GetPlatform() == updateconstants.PlatformUbuntu {
 		log.Error("Ubuntu platform is not currently supported", err)
 		out.MarkAsFailed(fmt.Errorf("Ubuntu platform is not currently supported: %v", err))
 		return
-	} else if info.Platform == updateconstants.PlatformLinux {
+	} else if info.GetPlatform() == updateconstants.PlatformLinux {
 		runAmazonLinuxPlatformUninstallCommands(log, orchestrationDirectory, out)
 		return
-	} else if info.Platform == updateconstants.PlatformRedHat {
+	} else if info.GetPlatform() == updateconstants.PlatformRedHat {
 		runRedhatLinuxPlatformUninstallCommands(log, orchestrationDirectory, out)
 		return
 	} else {

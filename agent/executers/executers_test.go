@@ -32,21 +32,6 @@ const (
 	testError      = "FooBar"
 )
 
-type instanceInfoStub struct {
-	instanceID      string
-	instanceIDError error
-	regionName      string
-	regionNameError error
-}
-
-func (m *instanceInfoStub) InstanceID() (string, error) {
-	return m.instanceID, m.instanceIDError
-}
-
-func (m *instanceInfoStub) Region() (string, error) {
-	return m.regionName, m.regionNameError
-}
-
 // Return the value of a named environment variable from a list of environment variable
 // where the format of each entry is name=value
 // Return nil if no variable with the given envVarName is found in the collection env

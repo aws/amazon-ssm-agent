@@ -16,7 +16,7 @@ package linuxcontainerutil
 import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
 	"github.com/stretchr/testify/mock"
 )
 
@@ -42,7 +42,7 @@ func (m *DepMock) UpdateUtilExeCommandOutput(
 	return args.String(0), args.Error(1)
 }
 
-func (m *DepMock) GetInstanceInfo(context context.T) (instanceInfo *updateutil.InstanceInfo, err error) {
+func (m *DepMock) GetInstanceInfo(context context.T) (instanceInfo updateinfo.T, err error) {
 	args := m.Called(context)
-	return args.Get(0).(*updateutil.InstanceInfo), args.Error(1)
+	return args.Get(0).(updateinfo.T), args.Error(1)
 }

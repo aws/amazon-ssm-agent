@@ -25,6 +25,9 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
+	"github.com/aws/amazon-ssm-agent/agent/versionutil"
 )
 
 // Manifest represents the json structure of online manifest file.
@@ -65,7 +68,7 @@ func ParseManifest(log log.T,
 }
 
 // HasVersion returns if manifest file has particular version for package
-func (m *Manifest) HasVersion(context *updateutil.InstanceInfo, version string) bool {
+func (m *Manifest) HasVersion(info updateinfo.T, version string) bool {
 	for _, p := range m.Packages {
 		if p.Name == EC2UpdaterPackageName && p.FileName == EC2UpdaterFileName {
 			for _, v := range p.AvailableVersions {
@@ -80,13 +83,13 @@ func (m *Manifest) HasVersion(context *updateutil.InstanceInfo, version string) 
 }
 
 // LatestVersion returns latest version for specific package
-func (m *Manifest) LatestVersion(log log.T, context *updateutil.InstanceInfo) (result string, err error) {
+func (m *Manifest) LatestVersion(log log.T, info updateinfo.T) (result string, err error) {
 	var version = minimumVersion
 	var compareResult = 0
 	for _, p := range m.Packages {
 		if p.Name == EC2UpdaterPackageName && p.FileName == EC2UpdaterFileName {
 			for _, v := range p.AvailableVersions {
-				if compareResult, err = updateutil.VersionCompare(v.Version, version); err != nil {
+				if compareResult, err = versionutil.VersionCompare(v.Version, version); err != nil {
 					return version, err
 				}
 				if compareResult > 0 {
@@ -107,9 +110,8 @@ func (m *Manifest) LatestVersion(log log.T, context *updateutil.InstanceInfo) (r
 
 // DownloadURLAndHash returns download source url and hash value
 func (m *Manifest) DownloadURLAndHash(
-	context *updateutil.InstanceInfo,
 	packageName string,
-	version string, filename string, toformat string, fromformat string) (result string, hash string, err error) {
+	version string, filename string, toformat string, fromformat string, region string) (result string, hash string, err error) {
 
 	for _, p := range m.Packages {
 		if p.Name == packageName && p.FileName == filename {
@@ -117,10 +119,10 @@ func (m *Manifest) DownloadURLAndHash(
 				if version == v.Version || version == PipelineTestVersion {
 					m.URIFormat = strings.Replace(m.URIFormat, fromformat, toformat, 1)
 					result = m.URIFormat
-					result = strings.Replace(result, updateutil.RegionHolder, context.Region, -1)
-					result = strings.Replace(result, updateutil.PackageNameHolder, packageName, -1)
+					result = strings.Replace(result, updateconstants.RegionHolder, region, -1)
+					result = strings.Replace(result, updateconstants.PackageNameHolder, packageName, -1)
 					result = strings.Replace(result, PackageVersionHolder, version, -1)
-					result = strings.Replace(result, updateutil.FileNameHolder, p.FileName, -1)
+					result = strings.Replace(result, updateconstants.FileNameHolder, p.FileName, -1)
 					if version == PipelineTestVersion {
 						return result, "", nil
 					}
