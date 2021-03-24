@@ -113,11 +113,6 @@ const (
 
 	SSMAgentWorkerMinVersion = "3.0.0.0"
 
-	// version status of SSM agent
-	ActiveVersionStatus     = "Active"
-	InactiveVersionStatus   = "Inactive"
-	DeprecatedVersionStatus = "Deprecated"
-
 	MinimumVersion = "0"
 
 	// Lock file expiry minutes
@@ -125,10 +120,17 @@ const (
 
 	SnapServiceFile = "/etc/systemd/system/snap.amazon-ssm-agent.amazon-ssm-agent.service"
 
-	ManifestPath = "/amazon-ssm-{Region}/ssm-agent-manifest.json"
+	// ManifestFile is the manifest file name
+	ManifestFile = "ssm-agent-manifest.json"
+
+	//ManifestPath is path of manifest in the s3 bucket
+	ManifestPath = "/amazon-ssm-{Region}/" + ManifestFile
 
 	// CommonManifestURL is the Manifest URL for regular regions
 	CommonManifestURL = "https://s3.{Region}.amazonaws.com" + ManifestPath
+
+	// ChinaManifestURL is the manifest URL for regions in China
+	ChinaManifestURL = "https://s3.{Region}.amazonaws.com.cn" + ManifestPath
 
 	// DarwinBinaryPath is the default path of the amazon-ssm-agent binary on darwin
 	DarwinBinaryPath = "/opt/aws/ssm/bin/amazon-ssm-agent"

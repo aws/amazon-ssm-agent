@@ -31,7 +31,9 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
 	updateinfomocks "github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo/mocks"
+	updatemanifestmocks "github.com/aws/amazon-ssm-agent/agent/updateutil/updatemanifest/mocks"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 type serviceStub struct {
@@ -124,6 +126,11 @@ func TestPrepareInstallationPackages(t *testing.T) {
 	// setup
 	updater := createDefaultUpdaterStub()
 	updateDetail := createUpdateDetail(Initialized)
+
+	manifest := &updatemanifestmocks.T{}
+	manifest.On("IsVersionActive", mock.Anything, mock.Anything).Return(true, nil)
+	updateDetail.Manifest = manifest
+
 	isUpdateCalled := false
 
 	// stub download for updater
@@ -134,10 +141,6 @@ func TestPrepareInstallationPackages(t *testing.T) {
 	updater.mgr.update = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
 		isUpdateCalled = true
 		return nil
-	}
-	versioncheck = func(context context.T, info updateinfo.T, manifestFilePath string, version string) bool {
-		// Don't check the version status in this test
-		return true
 	}
 	// action
 	err := prepareInstallationPackages(updater.mgr, logger, updateDetail)
@@ -154,10 +157,10 @@ func TestPreparePackagesFailCreateInstanceContext(t *testing.T) {
 	control := &stubControl{failCreateInstanceContext: true}
 	updater := createUpdaterStubs(control)
 	updateDetail := createUpdateDetail(Initialized)
-	versioncheck = func(context context.T, info updateinfo.T, manifestFilePath string, version string) bool {
-		// Don't check the version status in this test
-		return true
-	}
+
+	manifest := &updatemanifestmocks.T{}
+	manifest.On("IsVersionActive", mock.Anything, mock.Anything).Return(true, nil)
+	updateDetail.Manifest = manifest
 
 	// action
 	err := prepareInstallationPackages(updater.mgr, logger, updateDetail)
@@ -172,13 +175,13 @@ func TestPreparePackagesFailCreateUpdateDownloadFolder(t *testing.T) {
 	updater := createDefaultUpdaterStub()
 	updateDetail := createUpdateDetail(Initialized)
 
+	manifest := &updatemanifestmocks.T{}
+	manifest.On("IsVersionActive", mock.Anything, mock.Anything).Return(true, nil)
+	updateDetail.Manifest = manifest
+
 	// stub download for updater
 	updater.mgr.download = func(mgr *updateManager, log log.T, downloadInput artifact.DownloadInput, updateDetail *UpdateDetail, version string) (err error) {
 		return fmt.Errorf("no access")
-	}
-	versioncheck = func(context context.T, info updateinfo.T, manifestFilePath string, version string) bool {
-		// Don't check the version status in this test
-		return true
 	}
 
 	// action
@@ -194,10 +197,10 @@ func TestPreparePackagesFailDownload(t *testing.T) {
 	control := &stubControl{failCreateUpdateDownloadFolder: true}
 	updater := createUpdaterStubs(control)
 	updateDetail := createUpdateDetail(Initialized)
-	versioncheck = func(context context.T, info updateinfo.T, manifestFilePath string, version string) bool {
-		// Don't check the version status in this test
-		return true
-	}
+
+	manifest := &updatemanifestmocks.T{}
+	manifest.On("IsVersionActive", mock.Anything, mock.Anything).Return(true, nil)
+	updateDetail.Manifest = manifest
 
 	// action
 	err := prepareInstallationPackages(updater.mgr, logger, updateDetail)
@@ -210,9 +213,12 @@ func TestPreparePackagesFailDownload(t *testing.T) {
 func TestPreparePackageFailInvalidVersion(t *testing.T) {
 	updater := createDefaultUpdaterStub()
 	updateDetail := createUpdateDetail(Initialized)
-	updateDetail.ManifestPath = "fake-manifest-path"
 	isUpdateCalled := false
 	isDownloadCalled := false
+
+	manifest := &updatemanifestmocks.T{}
+	manifest.On("IsVersionActive", mock.Anything, mock.Anything).Return(false, nil)
+	updateDetail.Manifest = manifest
 
 	// stub download for updater
 	updater.mgr.download = func(mgr *updateManager, log log.T, downloadInput artifact.DownloadInput, updateDetail *UpdateDetail, version string) (err error) {
@@ -225,45 +231,6 @@ func TestPreparePackageFailInvalidVersion(t *testing.T) {
 		return nil
 	}
 
-	versioncheck = func(context context.T, info updateinfo.T, manifestFilePath string, version string) bool {
-		// test for invalid version
-		return false
-	}
-	// action
-	err := prepareInstallationPackages(updater.mgr, logger, updateDetail)
-
-	// assert
-	assert.Nil(t, err)
-	assert.Equal(t, Completed, updateDetail.State)
-
-	assert.Empty(t, updateDetail.StandardOut)
-	assert.Equal(t, isDownloadCalled, false)
-	assert.Equal(t, isUpdateCalled, false)
-}
-
-func TestPreparePackageFailInvalidVersion_WithNoManifestPath(t *testing.T) {
-	updater := createDefaultUpdaterStub()
-	updateDetail := createUpdateDetail(Initialized)
-	updateDetail.ManifestPath = ""
-	isUpdateCalled := false
-	isDownloadCalled := false
-
-	// stub download for updater
-	updater.mgr.download = func(mgr *updateManager, log log.T, downloadInput artifact.DownloadInput, updateDetail *UpdateDetail, version string) (err error) {
-		isDownloadCalled = true
-		return nil
-	}
-	// stop at the end of prepareInstallationPackages, do not perform update
-	updater.mgr.update = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
-		isUpdateCalled = true
-		return nil
-	}
-
-	versioncheck = func(context context.T, info updateinfo.T, manifestFilePath string, version string) bool {
-		// test for invalid version
-
-		return false
-	}
 	// action
 	err := prepareInstallationPackages(updater.mgr, logger, updateDetail)
 
@@ -878,13 +845,4 @@ func (u *utilityStub) WaitForServiceToStart(log log.T, i updateinfo.T, targetVer
 		return true, nil
 	}
 	return false, nil
-}
-
-func (u *utilityStub) DownloadManifestFile(log log.T, updateDownloadFolder string, manifestUrl string, region string) (*artifact.DownloadOutput, string, error) {
-
-	return &artifact.DownloadOutput{
-		LocalFilePath: "testPath",
-		IsUpdated:     true,
-		IsHashMatched: true,
-	}, "manifestUrl", nil
 }

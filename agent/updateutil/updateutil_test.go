@@ -15,9 +15,7 @@
 package updateutil
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"strings"
@@ -34,20 +32,9 @@ import (
 	executormocks "github.com/aws/amazon-ssm-agent/core/executor/mocks"
 	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/model"
 	"github.com/stretchr/testify/assert"
-	"github.com/stretchr/testify/mock"
 )
 
 var logger = log.NewMockLog()
-
-//Valid manifest file with Status field
-var sampleManifestWithStatus = []string{
-	"testdata/sampleManifestWithStatus.json",
-}
-
-type testCase struct {
-	Input  string
-	Output *Manifest
-}
 
 type testProcess struct {
 }
@@ -545,64 +532,41 @@ func TestCompareVersion(t *testing.T) {
 
 }
 
-// Test version status validation
-func TestVersionStatusValidation(t *testing.T) {
-	assert.True(t, isVersionActive("Active"))
-	assert.False(t, isVersionActive("Inactive"))
-	assert.False(t, isVersionActive("Deprecated"))
-	assert.True(t, isVersionActive(""))
-	assert.False(t, isVersionActive("Foo"))
-}
+func TestGetManifestURLFromSourceUrl(t *testing.T) {
+	// Empty URL
+	url, err := GetManifestURLFromSourceUrl("")
+	assert.NotNil(t, err)
+	assert.Equal(t, "", url)
 
-//Test parsing manifest file with version Status field
-func TestParseManifestWithStatus(t *testing.T) {
-	// generate test cases
-	var testCases []testCase
-	for _, manifestFile := range sampleManifestWithStatus {
-		testCases = append(testCases, testCase{
-			Input:  string(manifestFile),
-			Output: loadManifestFromFile(t, manifestFile),
-		})
-	}
-	agentName := "amazon-ssm-agent"
-	log := log.NewMockLog()
-	info := &updateinfomocks.T{}
-	info.On("GenerateCompressedFileName", mock.Anything).Return("amazon-ssm-agent-linux-amd64.tar.gz")
-	// run tests
-	for _, tst := range testCases {
-		// call method
-		parsedMsg, err := ParseManifest(log, tst.Input, info, agentName)
+	// Invalid URL
+	url, err = GetManifestURLFromSourceUrl("InvalidUrl")
+	assert.NotNil(t, err)
+	assert.Equal(t, "", url)
 
-		// check results
-		assert.Nil(t, err)
-		assert.Equal(t, tst.Output, parsedMsg)
-		assert.Equal(t, parsedMsg.Packages[0].Name, agentName)
-		assert.Equal(t, parsedMsg.Packages[0].Files[0].Name, "amazon-ssm-agent-linux-amd64.tar.gz")
-		assert.Equal(
-			t,
-			parsedMsg.Packages[0].Files[0].AvailableVersions[0].Version,
-			"1.1.0.0")
-		assert.Equal(
-			t,
-			parsedMsg.Packages[0].Files[0].AvailableVersions[0].Checksum,
-			"84fc818a7e21068c47412ddd18d3748a04a16b8f8836a259191920f854c4edc7")
-		assert.Equal(t, parsedMsg.Packages[0].Files[0].AvailableVersions[0].Status, "Foo")
-	}
-}
+	// Valid s3 link bucket in URL
+	url, err = GetManifestURLFromSourceUrl("https://bucket.s3.region.amazonaws.com/amazon-ssm-agent/version/amazon-ssm-agent.tar.gz")
+	assert.Nil(t, err)
+	assert.Equal(t, "https://bucket.s3.region.amazonaws.com/ssm-agent-manifest.json", url)
 
-//Parse manifest file
-func loadManifestFromFile(t *testing.T, fileName string) (manifest *Manifest) {
-	var result []byte
-	var err error
-	if result, err = ioutil.ReadFile(fileName); err != nil {
-		t.Fatal(err)
-	}
+	// Valid s3 link bucket in Path
+	url, err = GetManifestURLFromSourceUrl("https://s3.region.amazonaws.com/bucket/amazon-ssm-agent/version/amazon-ssm-agent.tar.gz")
+	assert.Nil(t, err)
+	assert.Equal(t, "https://s3.region.amazonaws.com/bucket/ssm-agent-manifest.json", url)
 
-	if err := json.Unmarshal(result, &manifest); err != nil {
-		t.Fatal(err)
-	}
+	// Valid s3 link bucket in URL - china
+	url, err = GetManifestURLFromSourceUrl("https://bucket.s3.region.amazonaws.com.cn/amazon-ssm-agent/version/amazon-ssm-agent.tar.gz")
+	assert.Nil(t, err)
+	assert.Equal(t, "https://bucket.s3.region.amazonaws.com.cn/ssm-agent-manifest.json", url)
 
-	return manifest
+	// Valid s3 link bucket in Path - china
+	url, err = GetManifestURLFromSourceUrl("https://s3.region.amazonaws.com.cn/bucket/amazon-ssm-agent/version/amazon-ssm-agent.tar.gz")
+	assert.Nil(t, err)
+	assert.Equal(t, "https://s3.region.amazonaws.com.cn/bucket/ssm-agent-manifest.json", url)
+
+	// Valid s3 link but not expected path
+	url, err = GetManifestURLFromSourceUrl("https://s3.region.amazonaws.com/bucket")
+	assert.NotNil(t, err)
+	assert.Equal(t, "", url)
 }
 
 func (p *testProcess) Start(*model.WorkerConfig) (*model.Process, error) { return nil, nil }

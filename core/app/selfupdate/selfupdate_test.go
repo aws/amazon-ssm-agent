@@ -23,6 +23,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	context "github.com/aws/amazon-ssm-agent/core/app/context/mocks"
 	lock "github.com/nightlyone/lockfile"
@@ -164,7 +165,7 @@ func (suite *SelfUpdateTestSuite) TestFileName() {
 		return PlatformRedHat, nil
 	}
 
-	fileName, err := suite.selfUpdater.getUpdaterFileName(suite.logMock, "amd64", CompressFormat)
+	fileName, err := suite.selfUpdater.getUpdaterFileName(suite.logMock, "amd64", updateconstants.CompressFormat)
 	assert.Nil(suite.T(), err)
 	assert.Equal(suite.T(), "amazon-ssm-agent-updater-linux-amd64.tar.gz", fileName)
 }

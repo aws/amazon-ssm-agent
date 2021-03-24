@@ -278,7 +278,7 @@ func (u *SelfUpdate) downloadResource(region string) (err error) {
 	var sourceURL, fileName string
 	var updaterDownloadOutput artifact.DownloadOutput
 
-	if fileName, err = u.getUpdaterFileName(log, runtime.GOARCH, CompressFormat); err != nil {
+	if fileName, err = u.getUpdaterFileName(log, runtime.GOARCH, updateconstants.CompressFormat); err != nil {
 		return fmt.Errorf("selfupdate failed to get updater file name, %v", err)
 	}
 
@@ -340,8 +340,8 @@ func (u *SelfUpdate) generateUpdateCmd(log logger.T, sourceURL string) (cmd stri
 
 	cmd = filepath.Join(appconfig.UpdaterArtifactsRoot, PackageName, PackageVersion, Updater) + " -update" + " -selfupdate"
 
-	cmd = u.buildUpdateCommand(cmd, ManifestFileUrlCmd, sourceURL)
-	cmd = u.buildUpdateCommand(cmd, SourceVersionCmd, version.Version)
+	cmd = u.buildUpdateCommand(cmd, updateconstants.ManifestFileUrlCmd, sourceURL)
+	cmd = u.buildUpdateCommand(cmd, updateconstants.SourceVersionCmd, version.Version)
 
 	return cmd
 }

@@ -64,12 +64,10 @@ const (
 )
 
 const (
-	// CompressFormat represents the compress format for linux platform
-	CompressFormat = "tar.gz"
-)
-const (
 	// installer script for linux
 	InstallScript = "install.sh"
 	// uninstaller script for linux
 	UninstallScript = "uninstall.sh"
+	// CompressFormat represents the compress format for linux platform
+	CompressFormat = "tar.gz"
 )

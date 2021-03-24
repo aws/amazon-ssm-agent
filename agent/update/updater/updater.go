@@ -30,6 +30,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updatemanifest"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updates3util"
 	"github.com/aws/amazon-ssm-agent/agent/versionutil"
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/nightlyone/lockfile"
@@ -65,11 +67,11 @@ var (
 	outputKeyPrefix *string
 	outputBucket    *string
 	manifestURL     *string
-	manifestPath    *string
 	selfUpdate      *bool
 )
 
 var newAgentIdentity = identity.NewAgentIdentity
+var newUpdateS3Util = updates3util.New
 
 func init() {
 	log = ssmlog.GetUpdaterLogger(logger.DefaultLogDir, defaultLogFileName)
@@ -90,8 +92,6 @@ func init() {
 	outputBucket = flag.String(updateconstants.OutputBucketNameCmd, "", "output bucket name")
 
 	manifestURL = flag.String(updateconstants.ManifestFileUrlCmd, "", "Manifest file url")
-	manifestLocation := ""
-	manifestPath = &manifestLocation
 
 	selfUpdate = flag.Bool(updateconstants.SelfUpdateCmd, false, "SelfUpdate command")
 
@@ -146,6 +146,29 @@ func main() {
 
 	flag.Parse()
 
+	// Get manifest url
+	// TODO move to processor in next CRs
+	if len(*manifestURL) == 0 {
+		log.Infof("ManifestURL is not set, attempting to get url from source location")
+		*manifestURL, err = updateutil.GetManifestURLFromSourceUrl(*sourceLocation)
+
+		if err != nil {
+			// TODO: Report failure to runcommmand
+			log.Errorf("Failed to get manifestURL from source location: %v", err)
+			return
+		}
+	}
+
+	// Get manifest
+	updateS3Util := newUpdateS3Util(agentContext)
+	manifest := updatemanifest.New(agentContext, updateInfo)
+	err = updateS3Util.DownloadManifest(manifest, *manifestURL)
+	if err != nil {
+		// TODO: Report failure to runcommmand
+		log.Errorf("Failed to get manifest: %v", err)
+		return
+	}
+
 	// self update command,
 	if *selfUpdate {
 		// manifest path will only be specified in self update use case
@@ -157,8 +180,8 @@ func main() {
 
 		log.Infof("Starting getting self update required information")
 
-		if *sourceLocation, *sourceHash, *targetVersion, *targetLocation, *targetHash, *manifestURL, *manifestPath, err =
-			updateutil.PrepareResourceForSelfUpdate(agentContext, updateInfo, *manifestURL, *sourceVersion); err != nil {
+		if *sourceLocation, *sourceHash, *targetVersion, *targetLocation, *targetHash, err =
+			updateutil.PrepareResourceForSelfUpdate(agentContext, manifest, *sourceVersion); err != nil {
 			log.Errorf(err.Error())
 			return
 		}
@@ -228,8 +251,7 @@ func main() {
 		MessageID:          *messageID,
 		StartDateTime:      time.Now().UTC(),
 		RequiresUninstall:  false,
-		ManifestUrl:        *manifestURL,
-		ManifestPath:       *manifestPath,
+		Manifest:           manifest,
 		SelfUpdate:         *selfUpdate,
 	}
 

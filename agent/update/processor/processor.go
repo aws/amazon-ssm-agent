@@ -41,7 +41,6 @@ var once sync.Once
 var (
 	downloadArtifact = artifact.Download
 	uncompress       = fileutil.Uncompress
-	versioncheck     = updateutil.ValidateVersion
 )
 
 // NewUpdater creates an instance of Updater and other services it requires
@@ -143,9 +142,15 @@ func validateUpdateVersion(log log.T, detail *UpdateDetail, info updateinfo.T) (
 
 func validateInactiveVersion(context context.T, info updateinfo.T, detail *UpdateDetail) (err error) {
 	context.Log().Info("Validating inactive version for amazon ssm agent")
-	if !versioncheck(context, info, detail.ManifestPath, detail.TargetVersion) {
-		err := fmt.Errorf("agent version %v is inactive", detail.TargetVersion)
-		return err
+	var isActive bool
+	isActive, err = detail.Manifest.IsVersionActive(appconfig.DefaultAgentName, detail.TargetVersion)
+
+	if err != nil {
+		return fmt.Errorf("failed to check if version is active: %v", err)
+	}
+
+	if !isActive {
+		return fmt.Errorf("agent version %v is inactive", detail.TargetVersion)
 	}
 
 	if detail.TargetVersion == "2.3.772.0" {
@@ -168,16 +173,8 @@ func getMinimumVSupportedVersions() (versions *map[string]string) {
 // prepareInstallationPackages downloads artifacts from public s3 storage
 func prepareInstallationPackages(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
 	log.Infof("Initiating download %v", updateDetail.PackageName)
-	var region string
-
-	var manifestDownloadOutput *artifact.DownloadOutput
-	updateDownloadFolder := ""
 
 	updateDownload := ""
-
-	if region, err = mgr.Context.Identity().Region(); err != nil {
-		return mgr.failed(updateDetail, log, updateconstants.ErrorEnvironmentIssue, err.Error(), false)
-	}
 
 	if err = validateUpdateVersion(log, updateDetail, mgr.Info); err != nil {
 		return mgr.failed(updateDetail, log, updateconstants.ErrorUnsupportedVersion, err.Error(), true)
@@ -190,16 +187,6 @@ func prepareInstallationPackages(mgr *updateManager, log log.T, updateDetail *Up
 			updateDetail.PackageName,
 			updateDetail.TargetVersion)
 		return mgr.failed(updateDetail, log, updateconstants.ErrorCreateUpdateFolder, message, true)
-	}
-
-	if updateDetail.ManifestPath == "" {
-		if manifestDownloadOutput, updateDetail.ManifestUrl, err =
-			mgr.util.DownloadManifestFile(log, updateDownloadFolder, updateDetail.ManifestUrl, region); err != nil {
-
-			message := updateutil.BuildMessage(err, "failed to download manifest file")
-			return mgr.failed(updateDetail, log, updateconstants.ErrorInvalidManifest, message, true)
-		}
-		updateDetail.ManifestPath = manifestDownloadOutput.LocalFilePath
 	}
 
 	if err = validateInactiveVersion(mgr.Context, mgr.Info, updateDetail); err != nil {
