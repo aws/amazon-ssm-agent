@@ -33,6 +33,7 @@ import (
 	agentContracts "github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	mgsContracts "github.com/aws/amazon-ssm-agent/agent/session/contracts"
+	"github.com/aws/amazon-ssm-agent/agent/session/shell/constants"
 	"github.com/aws/amazon-ssm-agent/agent/session/shell/execcmd"
 	"github.com/aws/amazon-ssm-agent/agent/session/utility"
 	"github.com/creack/pty"
@@ -49,8 +50,6 @@ const (
 	newLineCharacter      = "\n"
 	catCmd                = "cat"
 	scriptFlag            = "-c"
-	homeEnvVariable       = "HOME=/home/"
-	rootHomeEnvVariable   = "HOME=/root"
 	groupsIdentifier      = "groups="
 )
 
@@ -69,14 +68,14 @@ func StartPty(
 
 	appConfig, _ := appconfig.Config(false)
 
-	if strings.TrimSpace(shellProps.Linux.Commands) == "" || isSessionLogger {
+	if strings.TrimSpace(constants.GetShellCommand(shellProps)) == "" || isSessionLogger {
 
 		cmd = exec.Command("sh")
 
 	} else {
 		if appConfig.Agent.ContainerMode {
 
-			commands, err := shlex.Split(shellProps.Linux.Commands)
+			commands, err := shlex.Split(constants.GetShellCommand(shellProps))
 			if err != nil {
 				log.Errorf("Failed to parse commands input: %s\n", err)
 				return fmt.Errorf("Failed to parse commands input: %s\n", err)
@@ -88,7 +87,7 @@ func StartPty(
 			}
 
 		} else {
-			commandArgs := append(utility.ShellPluginCommandArgs, shellProps.Linux.Commands)
+			commandArgs := append(utility.ShellPluginCommandArgs, constants.GetShellCommand(shellProps))
 			cmd = exec.Command("sh", commandArgs...)
 		}
 	}
@@ -105,7 +104,7 @@ func StartPty(
 	}
 
 	var sessionUser string
-	if !shellProps.Linux.RunAsElevated && !isSessionLogger && !appConfig.Agent.ContainerMode {
+	if !constants.GetRunAsElevated(shellProps) && !isSessionLogger && !appConfig.Agent.ContainerMode {
 		// We get here only when its a customer shell that needs to be started in a specific user mode.
 
 		u := &utility.SessionUtil{}
@@ -138,12 +137,12 @@ func StartPty(
 		cmd.SysProcAttr.Credential = &syscall.Credential{Uid: uid, Gid: gid, Groups: groups, NoSetGroups: false}
 
 		// Setting home environment variable for RunAs user
-		runAsUserHomeEnvVariable := homeEnvVariable + sessionUser
+		runAsUserHomeEnvVariable := constants.HomeEnvVariable + sessionUser
 		cmd.Env = append(cmd.Env, runAsUserHomeEnvVariable)
 	}
 
-	if shellProps.Linux.RunAsElevated {
-		cmd.Env = append(cmd.Env, rootHomeEnvVariable)
+	if constants.GetRunAsElevated(shellProps) {
+		cmd.Env = append(cmd.Env, constants.RootHomeEnvVariable)
 	}
 
 	ptyFile, err = pty.Start(cmd)
