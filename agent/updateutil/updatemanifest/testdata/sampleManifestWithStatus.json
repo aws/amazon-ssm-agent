@@ -30,6 +30,46 @@
               "CheckSum": "8482afbdd9c6960e6406838f5306c242c2c6110861b55a212385cf0f13d73505",
               "Version": "2.0.822.0",
               "Status": "Deprecated"
+            },
+            {
+              "CheckSum": "2137c6c149711c3a3ea53aed7d2167bfc9049d9388e36d19f2f400a6fdeac312",
+              "Version": "2.2.96.0",
+              "Status": "Active"
+            }
+          ]
+        },
+        {
+          "Name": "amazon-ssm-agent-linux-arm64.tar.gz",
+          "AvailableVersions": [
+            {
+              "CheckSum": "84fc818a7e21068c47412ddd18d3748a04a16b8f8836a259191920f854c4edc7",
+              "Version": "1.1.0.0",
+              "Status": "Foo"
+            },
+            {
+              "CheckSum": "8dcb1072b7b0669b1de53163eb0eec322ceabd7f08fff395d73240ec633181bf",
+              "Version": "1.2.251.0",
+              "Status": ""
+            },
+            {
+              "CheckSum": "3605bc636b12ec48e6dd7d18cb6b00c386e7edabc2e38306cb28a7a289513f9a",
+              "Version": "2.0.796.0",
+              "Status": "Active"
+            },
+            {
+              "CheckSum": "99305af6436674c3950dd35ea1fab26ee671ac8fb50cf1115b1368da5e3d3764",
+              "Version": "2.0.805.0",
+              "Status": "Inactive"
+            },
+            {
+              "CheckSum": "8482afbdd9c6960e6406838f5306c242c2c6110861b55a212385cf0f13d73505",
+              "Version": "2.0.822.0",
+              "Status": "Deprecated"
+            },
+            {
+              "CheckSum": "2137c6c149711c3a3ea53aed7d2167bfc9049d9388e36d19f2f400a6fdeac312",
+              "Version": "2.2.96.0",
+              "Status": "Deprecated"
             }
           ]
         },
@@ -125,6 +165,11 @@
               "CheckSum": "5bad79e15987cd1d653f90b6a1d1033a1c6a652ff1a10697a75b70f216b13380",
               "Version": "2.2.64.0",
               "Status": "Deprecated"
+            },
+            {
+              "CheckSum": "3127c6c149711c3a3ea53aed7d2167bfc9049d9388e36d19f2f400a6fdeac213",
+              "Version": "2.2.69.0",
+              "Status": "Active"
             }
           ]
         },
@@ -192,5 +237,5 @@
       "Name": "amazon-ssm-agent-updater"
     }
   ],
-  "UriFormat": "https://s3.amazonaws.com/ssm-test-agent-bucket/{PackageName}/{PackageVersion}/{FileName}"
+  "UriFormat": "https://s3.amazonaws.com/some-agent-bucket/{PackageName}/{PackageVersion}/{FileName}"
 }

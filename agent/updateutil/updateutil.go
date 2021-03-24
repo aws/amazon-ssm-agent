@@ -16,59 +16,30 @@ package updateutil
 
 import (
 	"bufio"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
-	"io/ioutil"
+	"net/url"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"runtime/debug"
 	"strconv"
 	"strings"
-	"sync"
 	"syscall"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updatemanifest"
 	"github.com/aws/amazon-ssm-agent/agent/versionutil"
 	"github.com/aws/amazon-ssm-agent/core/executor"
 	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/model"
 )
-
-// Manifest represents the json structure of online manifest file.
-type Manifest struct {
-	SchemaVersion string            `json:"SchemaVersion"`
-	URIFormat     string            `json:"UriFormat"`
-	Packages      []*PackageContent `json:"Packages"`
-}
-
-// PackageContent section in the Manifest json.
-type PackageContent struct {
-	Name  string         `json:"Name"`
-	Files []*FileContent `json:"Files"`
-}
-
-// FileContent holds the file name and available versions
-type FileContent struct {
-	Name              string            `json:"Name"`
-	AvailableVersions []*PackageVersion `json:"AvailableVersions"`
-}
-
-// PackageVersion section in the PackageContent
-type PackageVersion struct {
-	Version  string `json:"Version"`
-	Checksum string `json:"Checksum"`
-	Status   string `json:"Status"`
-}
 
 // T represents the interface for Update utility
 type T interface {
@@ -79,7 +50,6 @@ type T interface {
 	WaitForServiceToStart(log log.T, i updateinfo.T, targetVersion string) (result bool, err error)
 	SaveUpdatePluginResult(log log.T, updaterRoot string, updateResult *UpdatePluginResult) (err error)
 	IsDiskSpaceSufficientForUpdate(log log.T) (bool, error)
-	DownloadManifestFile(log log.T, updateDownloadFolder string, manifestUrl string, region string) (*artifact.DownloadOutput, string, error)
 }
 
 // Utility implements interface T
@@ -90,31 +60,15 @@ type Utility struct {
 }
 
 var getDiskSpaceInfo = fileutil.GetDiskSpaceInfo
-var getPlatformName = platform.PlatformName
-var getPlatformVersion = platform.PlatformVersion
 var mkDirAll = os.MkdirAll
 var openFile = os.OpenFile
 var execCommand = exec.Command
 var cmdStart = (*exec.Cmd).Start
 var cmdOutput = (*exec.Cmd).Output
-var isUsingSystemD map[string]string
-var once sync.Once
 
 // CreateInstanceContext create instance related information such as region, platform and arch
 func (util *Utility) CreateInstanceInfo(log log.T) (context updateinfo.T, err error) {
 	return nil, nil
-}
-
-// isAgentInstalledUsingSnap returns if snap is used to install the snap
-func isAgentInstalledUsingSnap(log log.T) (result bool, err error) {
-
-	if _, commandErr := execCommand("snap", "services", "amazon-ssm-agent").Output(); commandErr != nil {
-		log.Debugf("Error checking 'snap services amazon-ssm-agent' - %v", commandErr)
-		return false, commandErr
-	}
-	log.Debug("Agent is installed using snap")
-	return true, nil
-
 }
 
 // CreateUpdateDownloadFolder creates folder for storing update downloads
@@ -663,17 +617,13 @@ func parseVersion(version string) (uint64, uint64, uint64, uint64, error) {
 
 func PrepareResourceForSelfUpdate(
 	context context.T,
-	updateInfo updateinfo.T,
-	manifestURL string,
-	version string) (sourceLocation, sourceHash, targetVersion, targetLocation, targetHash, manifestFinalURL, manifestFilePath string, err error) {
+	manifest updatemanifest.T,
+	version string) (sourceLocation, sourceHash, targetVersion, targetLocation, targetHash string, err error) {
 
 	util := &Utility{
 		Context: context,
 	}
 	logger := context.Log()
-	var parsedManifest *Manifest
-	var manifestDownloadOutput *artifact.DownloadOutput
-	var updateDownloadFolder string
 	var isDeprecated bool
 
 	SelfUpdateResult := &UpdatePluginResult{
@@ -683,40 +633,23 @@ func PrepareResourceForSelfUpdate(
 
 	if err = util.SaveUpdatePluginResult(logger, appconfig.UpdaterArtifactsRoot, SelfUpdateResult); err != nil {
 		logger.WriteEvent(log.AgentUpdateResultMessage, version, GenerateSelUpdateErrorEvent(updateconstants.ErrorInitializationFailed))
-		return "", "", "", "", "", "", "",
+		return "", "", "", "", "",
 			logger.Errorf("Failed to update plugin result for selfupdate %v", err)
 	}
 
-	region, _ := context.Identity().Region()
-
-	logger.Infof("manifest url is %v : ", manifestURL)
-	if manifestDownloadOutput, manifestFinalURL, err = util.DownloadManifestFile(logger, updateDownloadFolder, manifestURL, region); err != nil {
-		logger.WriteEvent(log.AgentUpdateResultMessage, version, GenerateSelUpdateErrorEvent(updateconstants.ErrorDownloadManifest))
-		return "", "", "", "", "", "", "",
-			logger.Errorf("Failed to generate manifest file local path, %v", err)
-	}
-	manifestFilePath = manifestDownloadOutput.LocalFilePath
-	logger.Infof("manifest file path is %v: ", manifestFilePath)
-
-	if parsedManifest, err = ParseManifest(logger, manifestFilePath, updateInfo, appconfig.DefaultAgentName); err != nil {
-		logger.WriteEvent(log.AgentUpdateResultMessage, version, GenerateSelUpdateErrorEvent(updateconstants.ErrorManifestURLParse))
-		return "", "", "", "", "", "", "",
-			logger.Errorf("Failed to parse Manifest for preparing resource for selfupdate, %v", err)
-	}
-
 	// get the latest active version and it's location
-	if isDeprecated, err = isVersionDeprecated(logger, parsedManifest, appconfig.DefaultAgentName, version, updateInfo); err != nil {
+	if isDeprecated, err = manifest.IsVersionDeprecated(appconfig.DefaultAgentName, version); err != nil {
 		logger.WriteEvent(log.AgentUpdateResultMessage, version, GenerateSelUpdateErrorEvent(updateconstants.ErrorVersionNotFoundInManifest))
-		return "", "", "", "", "", "", "",
+		return "", "", "", "", "",
 			logger.Errorf("Failed to find version in manifest for selfupdate, %v", err)
 	}
 
 	if isDeprecated {
 		// get the latest active version and it's location
 		logger.Infof("Agent version %v is deprecated", version)
-		if targetVersion, err = latestActiveVersion(logger, parsedManifest, updateInfo); err != nil {
+		if targetVersion, err = manifest.GetLatestActiveVersion(appconfig.DefaultAgentName); err != nil {
 			logger.WriteEvent(log.AgentUpdateResultMessage, version, GenerateSelUpdateErrorEvent(updateconstants.ErrorVersionCompare))
-			return "", "", "", "", "", "", "",
+			return "", "", "", "", "",
 				logger.Errorf("Failed to generate the target information, fail to get latest active version from manifest file, %v", err)
 		}
 	} else {
@@ -724,20 +657,18 @@ func PrepareResourceForSelfUpdate(
 	}
 
 	// target version download url location
-	logger.Infof("target version is %v", version)
-	if targetLocation, targetHash, err = downloadURLandHash(logger,
-		parsedManifest, updateInfo, targetVersion, appconfig.DefaultAgentName, region); err != nil {
-		logger.WriteEvent(log.AgentUpdateResultMessage, version, GenerateSelUpdateErrorEvent(updateconstants.ErrorTargetPkgDownload))
-		return "", "", "", "", "", "", "",
+	logger.Infof("target version is %v", targetVersion)
+	if targetLocation, targetHash, err = manifest.GetDownloadURLAndHash(appconfig.DefaultAgentName, targetVersion); err != nil {
+		logger.WriteEvent(log.AgentUpdateResultMessage, targetVersion, GenerateSelUpdateErrorEvent(updateconstants.ErrorTargetPkgDownload))
+		return "", "", "", "", "",
 			logger.Errorf("Failed to get the sourceHash from manifest file, %v", err)
 	}
 
 	// source version download url location
 	logger.Infof("source version is %v", version)
-	if sourceLocation, sourceHash, err = downloadURLandHash(logger,
-		parsedManifest, updateInfo, version, appconfig.DefaultAgentName, region); err != nil {
+	if sourceLocation, sourceHash, err = manifest.GetDownloadURLAndHash(appconfig.DefaultAgentName, version); err != nil {
 		logger.WriteEvent(log.AgentUpdateResultMessage, version, GenerateSelUpdateErrorEvent(updateconstants.ErrorSourcePkgDownload))
-		return "", "", "", "", "", "", "",
+		return "", "", "", "", "",
 			logger.Errorf("Failed to get the sourceHash from manifest file for version %v", version)
 	}
 
@@ -754,266 +685,26 @@ func GenerateSelUpdateSuccessEvent(code string) string {
 	return updateconstants.UpdateSucceeded + updateconstants.SelfUpdatePrefix + code
 }
 
-func ValidateVersion(context context.T, info updateinfo.T, manifestFilePath string, version string) bool {
-	log := context.Log()
-	var parsedManifest *Manifest
-	var isValid bool
-	var err error
+// GetManifestURLFromSourceUrl parses source url passed to the updater and generates the url for manifest
+func GetManifestURLFromSourceUrl(sourceURL string) (string, error) {
+	u, err := url.Parse(sourceURL)
 
-	if parsedManifest, err = ParseManifest(log, manifestFilePath, info, appconfig.DefaultAgentName); err != nil {
-		log.Error("Error during parsed Manifest for validating version")
+	if err != nil {
+		return "", err
 	}
 
-	if isValid, err = validateVersion(log, parsedManifest, appconfig.DefaultAgentName, version, info); err != nil {
-		log.Error("Error during validate version from Manifest")
-		return false
-	}
-	log.Infof("Version %v is %v", version, isValid)
-
-	return isValid
-}
-
-// ParseManifest parses the public manifest file to provide agent update information.
-func ParseManifest(log log.T,
-	fileName string,
-	info updateinfo.T,
-	packageName string) (parsedManifest *Manifest, err error) {
-	//Load specified file from file system
-	var result = []byte{}
-	if result, err = ioutil.ReadFile(fileName); err != nil {
-		return
-	}
-	// parse manifest file
-	if err = json.Unmarshal([]byte(result), &parsedManifest); err != nil {
-		return
+	pathArgs := strings.Split(u.Path, "/")
+	if len(pathArgs) < 4 || len(pathArgs) > 5 {
+		return "", fmt.Errorf("URL does not have expected path structure: %s", sourceURL)
+	} else if len(pathArgs) == 4 {
+		// Case for: https://{bucket}.s3.{region}.amazonaws.com/amazon-ssm-agent/{version}/amazon-ssm-agent.tar.gz
+		u.Path = ""
+	} else {
+		// Case for: https://s3.{region}.amazonaws.com/{bucket}/amazon-ssm-agent/{version}/amazon-ssm-agent.tar.gz
+		u.Path = "/" + pathArgs[1]
 	}
 
-	err = validateManifest(log, parsedManifest, info, packageName)
-	return
-}
+	u.Path += "/" + updateconstants.ManifestFile
 
-func (util *Utility) DownloadManifestFile(log log.T, updateDownloadFolder string, manifestUrl string, region string) (*artifact.DownloadOutput, string, error) {
-	var downloadOutput artifact.DownloadOutput
-	var err error
-
-	// best efforts for the old agents
-	// download the manifest file from well-known location
-	if manifestUrl == "" {
-		manifestUrl = updateconstants.CommonManifestURL
-		if dynamicS3Endpoint := util.Context.Identity().GetDefaultEndpoint("s3"); dynamicS3Endpoint != "" {
-			manifestUrl = "https://" + dynamicS3Endpoint + updateconstants.ManifestPath
-		}
-	}
-
-	manifestUrl = strings.Replace(manifestUrl, updateconstants.RegionHolder, region, -1)
-	log.Infof("manifest download url is %s", manifestUrl)
-
-	downloadInput := artifact.DownloadInput{
-		SourceURL:            manifestUrl,
-		DestinationDirectory: updateDownloadFolder,
-	}
-
-	downloadOutput, err = artifact.Download(util.Context, downloadInput)
-	if err != nil ||
-		downloadOutput.IsHashMatched == false ||
-		downloadOutput.LocalFilePath == "" {
-		if err != nil {
-			return nil, "", fmt.Errorf("failed to download file reliably, %v, %v", downloadInput.SourceURL, err.Error())
-		}
-		return nil, "", fmt.Errorf("failed to download file reliably, %v", downloadInput.SourceURL)
-	}
-
-	log.Infof("Succeed to download the manifest")
-	log.Infof("Local file path : %v", downloadOutput.LocalFilePath)
-	log.Infof("Is updated: %v", downloadOutput.IsUpdated)
-	log.Infof("Is hash matched %v", downloadOutput.IsHashMatched)
-	return &downloadOutput, manifestUrl, nil
-}
-
-func downloadURLandHash(log log.T,
-	m *Manifest,
-	info updateinfo.T,
-	version, packageName, region string) (downloadURL, hash string, err error) {
-
-	fileName := info.GenerateCompressedFileName(packageName)
-	downloadURL = m.URIFormat
-
-	for _, p := range m.Packages {
-		if p.Name == packageName {
-			log.Infof("found package for version hash %v", packageName)
-			for _, f := range p.Files {
-				if f.Name == fileName {
-					log.Infof("found file name for version hash %v", fileName)
-					for _, v := range f.AvailableVersions {
-						if v.Version == version {
-							log.Infof("Version %v checksum is %v", version, v.Checksum)
-							downloadURL = strings.Replace(downloadURL, updateconstants.RegionHolder, region, -1)
-							downloadURL = strings.Replace(downloadURL, updateconstants.PackageNameHolder, packageName, -1)
-							downloadURL = strings.Replace(downloadURL, updateconstants.PackageVersionHolder, version, -1)
-							downloadURL = strings.Replace(downloadURL, updateconstants.FileNameHolder, fileName, -1)
-
-							log.Infof("Download resource location is %v", downloadURL)
-							return downloadURL, v.Checksum, nil
-						}
-					}
-					break
-				}
-			}
-		}
-	}
-
-	return "", "", fmt.Errorf("failed to get the downloadURL and Hash for version %v", version)
-}
-
-func latestActiveVersion(log log.T,
-	m *Manifest, info updateinfo.T) (targetVersion string, err error) {
-	targetVersion = updateconstants.MinimumVersion
-	var compareResult = 0
-	var packageName = "amazon-ssm-agent"
-
-	for _, p := range m.Packages {
-		if p.Name == packageName {
-			for _, f := range p.Files {
-				if f.Name == info.GenerateCompressedFileName(packageName) {
-					for _, v := range f.AvailableVersions {
-						if !isVersionActive(v.Status) {
-							continue
-						}
-						if compareResult, err = versionutil.VersionCompare(v.Version, targetVersion); err != nil {
-							return "", err
-						}
-						if compareResult > 0 {
-							targetVersion = v.Version
-						}
-					}
-				}
-			}
-		}
-	}
-
-	if targetVersion == updateconstants.MinimumVersion {
-		log.Debugf("Filename: %v", info.GenerateCompressedFileName(packageName))
-		log.Debugf("Package Name: %v", packageName)
-		log.Debugf("Manifest: %v", m)
-		return "", fmt.Errorf("cannot find the latest version for package %v", packageName)
-	}
-
-	return targetVersion, nil
-}
-
-// validateManifest makes sure all the fields are provided.
-func validateManifest(log log.T, parsedManifest *Manifest, info updateinfo.T, packageName string) error {
-	if len(parsedManifest.URIFormat) == 0 {
-		return fmt.Errorf("folder format cannot be null in the Manifest file")
-	}
-	fileName := info.GenerateCompressedFileName(packageName)
-	foundPackage := false
-	foundFile := false
-	for _, p := range parsedManifest.Packages {
-		if p.Name == packageName {
-			log.Infof("found package %v", packageName)
-			foundPackage = true
-			for _, f := range p.Files {
-				if f.Name == fileName {
-					foundFile = true
-					if len(f.AvailableVersions) == 0 {
-						return fmt.Errorf("at least one available version is required for the %v", fileName)
-					}
-
-					log.Infof("found file %v", fileName)
-					break
-				}
-			}
-		}
-	}
-
-	if !foundPackage {
-		return fmt.Errorf("cannot find the %v information in the Manifest file", packageName)
-	}
-	if !foundFile {
-		return fmt.Errorf("cannot find the %v information in the Manifest file", fileName)
-	}
-
-	return nil
-}
-
-func validateVersion(log log.T,
-	parsedManifest *Manifest,
-	packageName string,
-	version string,
-	info updateinfo.T) (isValid bool, err error) {
-
-	fileName := info.GenerateCompressedFileName(packageName)
-	for _, p := range parsedManifest.Packages {
-		if p.Name == packageName {
-			log.Infof("found package %v", packageName)
-			for _, f := range p.Files {
-				if f.Name == fileName {
-					for _, v := range f.AvailableVersions {
-						if v.Version == version {
-							status := updateconstants.ActiveVersionStatus
-							if v.Status != "" {
-								status = v.Status
-							}
-
-							log.Infof("Version %v status is %v", version, status)
-							return isVersionActive(v.Status), nil
-						}
-					}
-					break
-				}
-			}
-		}
-	}
-
-	// return true for backward compatibility
-	return true, nil
-}
-
-func isVersionDeprecated(log log.T,
-	parsedManifest *Manifest,
-	packageName string,
-	version string,
-	info updateinfo.T) (isValid bool, err error) {
-
-	fileName := info.GenerateCompressedFileName(packageName)
-	for _, p := range parsedManifest.Packages {
-		if p.Name == packageName {
-			log.Infof("found package %v", packageName)
-			for _, f := range p.Files {
-				if f.Name == fileName {
-					for _, v := range f.AvailableVersions {
-						if v.Version == version {
-							status := updateconstants.ActiveVersionStatus
-							if v.Status != "" {
-								status = v.Status
-							}
-
-							log.Infof("Version %v status is %v", version, status)
-							return v.Status == updateconstants.DeprecatedVersionStatus, nil
-						}
-					}
-					break
-				}
-			}
-		}
-	}
-
-	return isValid, fmt.Errorf("cannot find  %v information for %v in Manifest file", fileName, version)
-}
-
-func isVersionActive(agentVersionStatus string) bool {
-
-	switch agentVersionStatus {
-	case updateconstants.ActiveVersionStatus:
-		return true
-	case updateconstants.InactiveVersionStatus:
-		return false
-	case updateconstants.DeprecatedVersionStatus:
-		return false
-	case "":
-		return true
-	default:
-		return false
-	}
+	return u.String(), nil
 }

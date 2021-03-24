@@ -30,6 +30,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updatemanifest"
 	"github.com/aws/amazon-ssm-agent/common/identity"
 )
 
@@ -78,29 +79,28 @@ type contextManager struct {
 
 // UpdateDetail Book keeping detail for Agent Update
 type UpdateDetail struct {
-	State              UpdateState            `json:"State"`
-	Result             contracts.ResultStatus `json:"Result"`
-	StandardOut        string                 `json:"StandardOut"`
-	StandardError      string                 `json:"StandardError"`
-	OutputS3KeyPrefix  string                 `json:"OutputS3KeyPrefix"`
-	OutputS3BucketName string                 `json:"OutputS3BucketName"`
-	StdoutFileName     string                 `json:"StdoutFileName"`
-	StderrFileName     string                 `json:"StderrFileName"`
-	SourceVersion      string                 `json:"SourceVersion"`
-	SourceLocation     string                 `json:"SourceLocation"`
-	SourceHash         string                 `json:"SourceHash"`
-	TargetVersion      string                 `json:"TargetVersion"`
-	TargetLocation     string                 `json:"TargetLocation"`
-	TargetHash         string                 `json:"TargetHash"`
-	PackageName        string                 `json:"PackageName"`
-	StartDateTime      time.Time              `json:"StartDateTime"`
-	EndDateTime        time.Time              `json:"EndDateTime"`
-	MessageID          string                 `json:"MessageId"`
-	UpdateRoot         string                 `json:"UpdateRoot"`
-	RequiresUninstall  bool                   `json:"RequiresUninstall"`
-	ManifestPath       string                 `json:"ManifestPath"`
-	ManifestUrl        string                 `json:"ManifestUrl"`
-	SelfUpdate         bool                   `json:"SelfUpdate"`
+	State              UpdateState
+	Result             contracts.ResultStatus
+	StandardOut        string
+	StandardError      string
+	OutputS3KeyPrefix  string
+	OutputS3BucketName string
+	StdoutFileName     string
+	StderrFileName     string
+	SourceVersion      string
+	SourceLocation     string
+	SourceHash         string
+	TargetVersion      string
+	TargetLocation     string
+	TargetHash         string
+	PackageName        string
+	StartDateTime      time.Time
+	EndDateTime        time.Time
+	MessageID          string
+	UpdateRoot         string
+	RequiresUninstall  bool
+	Manifest           updatemanifest.T
+	SelfUpdate         bool
 }
 
 // HasMessageID represents if update is triggered by run command

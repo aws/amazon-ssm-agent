@@ -90,7 +90,7 @@ type UpdateAgentFactory struct {
 }
 
 func (f UpdateAgentFactory) Create(context context.T) (runpluginutil.T, error) {
-	return updatessmagent.NewPlugin(context, updatessmagent.GetUpdatePluginConfig(context))
+	return updatessmagent.NewPlugin(context)
 }
 
 type ConfigureContainerFactory struct {
