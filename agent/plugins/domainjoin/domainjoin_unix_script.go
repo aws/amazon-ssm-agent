@@ -179,7 +179,7 @@ install_components() {
         LINUX_DISTRO='CentOS'
         # yum -y update
         ## yum update takes too long
-        yum -y install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation unzip >/dev/null
+        yum -y install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation unzip bind-utils >/dev/null
         if [ $? -ne 0 ]; then echo "install_components(): yum install errors for CentOS" && return 1; fi
     elif grep -e 'Red Hat' /etc/os-release 1>/dev/null 2>/dev/null; then
         LINUX_DISTRO='RHEL'
@@ -198,14 +198,14 @@ install_components() {
         # yum -y update
         ## yum update takes too long
         # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html-single/deploying_different_types_of_servers/index
-        yum -y  install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation python3 vim unzip >/dev/null
+        yum -y  install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation python3 vim unzip bind-utils >/dev/null
         alias python=python3
         if [ $? -ne 0 ]; then echo "install_components(): yum install errors for Red Hat" && return 1; fi
     elif grep -e 'Fedora' /etc/os-release 1>/dev/null 2>/dev/null; then
         LINUX_DISTRO='Fedora'
         ## yum update takes too long, but it is unavoidable here.
         yum -y update
-        yum -y  install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation python3 vim unzip >/dev/null
+        yum -y  install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation python3 vim unzip bind-utils >/dev/null
         alias python=python3
         if [ $? -ne 0 ]; then echo "install_components(): yum install errors for Fedora" && return 1; fi
         systemctl restart dbus
@@ -213,7 +213,7 @@ install_components() {
          LINUX_DISTRO='AMAZON_LINUX'
          # yum -y update
          ## yum update takes too long
-         yum -y  install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation unzip  >/dev/null
+         yum -y  install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation unzip bind-utils >/dev/null
          if [ $? -ne 0 ]; then echo "install_components(): yum install errors for Amazon Linux" && return 1; fi
     elif grep 'Ubuntu' /etc/os-release 1>/dev/null 2>/dev/null; then
          LINUX_DISTRO='UBUNTU'
@@ -228,7 +228,7 @@ install_components() {
          export DEBIAN_FRONTEND=noninteractive
          apt-get -y update
          if [ $? -ne 0 ]; then echo "install_components(): apt-get update errors for Ubuntu" && return 1; fi
-         apt-get -yq install realmd adcli winbind samba libnss-winbind libpam-winbind libpam-krb5 krb5-config krb5-locales krb5-user packagekit  ntp unzip python > /dev/null
+         apt-get -yq install realmd adcli winbind samba libnss-winbind libpam-winbind libpam-krb5 krb5-config krb5-locales krb5-user packagekit  ntp unzip python dnsutils > /dev/null
          if [ $? -ne 0 ]; then echo "install_components(): apt-get install errors for Ubuntu" && return 1; fi
          # Disable Reverse DNS resolution. Ubuntu Instances must be reverse-resolvable in DNS before the realm will work.
          sed -i "s/default_realm.*$/default_realm = $REALM\n\trdns = false/g" /etc/krb5.conf
@@ -248,7 +248,7 @@ install_components() {
          fi
          LINUX_DISTRO='SUSE'
          sudo zypper update -y
-         sudo zypper -n install realmd adcli sssd sssd-tools sssd-ad samba-client krb5-client samba-winbind krb5-client python
+         sudo zypper -n install realmd adcli sssd sssd-tools sssd-ad samba-client krb5-client samba-winbind krb5-client python bind-utils
          if [ $? -ne 0 ]; then
             return 1
          fi
@@ -262,7 +262,7 @@ install_components() {
          fi
          apt-get -y update
          LINUX_DISTRO='DEBIAN'
-         DEBIAN_FRONTEND=noninteractive apt-get -yq install realmd adcli winbind samba libnss-winbind libpam-winbind libpam-krb5 krb5-config krb5-locales krb5-user packagekit  ntp unzip > /dev/null
+         DEBIAN_FRONTEND=noninteractive apt-get -yq install realmd adcli winbind samba libnss-winbind libpam-winbind libpam-krb5 krb5-config krb5-locales krb5-user packagekit  ntp unzip dnsutils > /dev/null
          if [ $? -ne 0 ]; then
             return 1
          fi
@@ -445,14 +445,38 @@ is_dns_ip_reachable() {
 }
 
 ##################################################
+## Resolve domain name to IP address(es)        ##
+## by using nslookup command                    ##
+##################################################
+resolve_name_to_ip() {
+    (
+        nslookup "$1"| tail -n +3 | sed -n 's/Address:\s*//p'
+    ) && return 0 || return 1
+}
+
+##################################################
 ## DNS may already be reachable if DHCP option  ##
 ## sets are used.                               ##
 ##################################################
 is_directory_reachable() {
+    DNS_IPS=$(resolve_name_to_ip $DIRECTORY_NAME)
+    if [ $? -ne 0 ]; then
+        echo "***Failed: Cannot resolve domain name $DIRECTORY_NAME" && return 1
+    fi
+    echo -e "Successfully resolve domain name $DIRECTORY_NAME to IP address(es):\n$DNS_IPS"
+
+    DNS_IP1=$(echo $DNS_IPS | awk '{ print $1 }')
+    DNS_IP2=$(echo $DNS_IPS | awk '{ print $2 }')
+
     MAX_RETRIES=5
     for i in $(seq 1 $MAX_RETRIES)
     do
-        ping -c 1 "$DIRECTORY_NAME" 2>/dev/null
+        is_dns_ip_reachable $DNS_IP1
+        if [ $? -eq 0 ]; then
+            return 0
+        fi
+
+        is_dns_ip_reachable $DNS_IP2
         if [ $? -eq 0 ]; then
             return 0
         fi
