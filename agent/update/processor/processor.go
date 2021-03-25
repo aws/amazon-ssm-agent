@@ -18,6 +18,8 @@ package processor
 import (
 	"fmt"
 	"math/rand"
+	"os"
+	"path/filepath"
 	"sync"
 	"time"
 
@@ -112,7 +114,14 @@ func (u *Updater) InitializeUpdate(log log.T, updateDetail *UpdateDetail) (err e
 
 	// load plugin update result only if not self update
 	if !updateDetail.SelfUpdate {
-		pluginResult, err = updateutil.LoadUpdatePluginResult(log, updateDetail.UpdateRoot)
+		// Check if updatePluginResultFilePath exists
+		pluginResultPath := updateDetail.UpdateRoot
+		_, err = os.Stat(updateutil.UpdatePluginResultFilePath(pluginResultPath))
+		if os.IsNotExist(err) {
+			// for backwards compatibility for when updating from <= 3.0.951.0 to a higher version on windows
+			pluginResultPath = filepath.Join(os.Getenv("TEMP"), "Amazon\\SSM\\Update")
+		}
+		pluginResult, err = updateutil.LoadUpdatePluginResult(log, pluginResultPath)
 		if err != nil {
 			return fmt.Errorf("update failed, no rollback needed %v", err.Error())
 		}
@@ -282,7 +291,7 @@ func determineTarget(mgr *updateManager, logger log.T, updateDetail *UpdateDetai
 
 // validateUpdateParam populates the update detail for self update
 func validateUpdateParam(mgr *updateManager, logger log.T, updateDetail *UpdateDetail) (err error) {
-	updateDetail.AppendInfo(logger, "Updating %v from %v to %v\n",
+	updateDetail.AppendInfo(logger, "Updating %v from %v to %v",
 		updateDetail.PackageName,
 		updateDetail.SourceVersion,
 		updateDetail.TargetVersion)

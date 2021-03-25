@@ -30,6 +30,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updatemanifest"
+	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/nightlyone/lockfile"
 )
@@ -99,6 +100,7 @@ func main() {
 	defer log.Close()
 	defer log.Flush()
 
+	log.Infof("SSM Agent Updater - %s", version.String())
 	// Initialize agent config for agent identity
 	appConfig, err := appconfig.Config(true)
 	if err != nil {
