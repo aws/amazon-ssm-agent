@@ -180,7 +180,7 @@ func RunInstallCommands(context context.T, orchestrationDirectory string, out io
 
 	//Download docker
 	var downloadOutput artifact.DownloadOutput
-	downloadOutput, err = dep.ArtifactDownload(context, artifact.DownloadInput{SourceURL: DOCKER_DOWNLOAD_URL, DestinationDirectory: appconfig.PluginsDownloadRoot})
+	downloadOutput, err = dep.ArtifactDownload(context, artifact.DownloadInput{SourceURL: DOCKER_DOWNLOAD_URL, DestinationDirectory: appconfig.DownloadRoot})
 	if err != nil {
 		log.Errorf("failed to download file from %v: %v", DOCKER_DOWNLOAD_URL, err)
 		return

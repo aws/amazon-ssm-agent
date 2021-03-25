@@ -50,9 +50,6 @@ const (
 	// DownloadRoot specifies the directory under which files will be downloaded
 	DownloadRoot = DefaultProgramFolder + "download/"
 
-	// PluginsDownloadRoot specifies the directory under which files will be downloaded by plugins
-	PluginsDownloadRoot = DefaultProgramFolder + "download/"
-
 	// DefaultDataStorePath represents the directory for storing system data
 	DefaultDataStorePath = DefaultProgramFolder + "data/"
 

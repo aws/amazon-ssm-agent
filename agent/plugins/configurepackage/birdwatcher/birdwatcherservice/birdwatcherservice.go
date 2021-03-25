@@ -252,7 +252,7 @@ func downloadFile(ds *PackageService, tracer trace.Tracer, file *archive.File, p
 	}
 	downloadInput := artifact.DownloadInput{
 		SourceURL:            sourceUrl,
-		DestinationDirectory: appconfig.PluginsDownloadRoot,
+		DestinationDirectory: appconfig.DownloadRoot,
 		// TODO don't hardcode sha256 - use multiple checksums
 		SourceChecksums: file.Info.Checksums,
 	}

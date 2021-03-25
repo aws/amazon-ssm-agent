@@ -95,7 +95,7 @@ func DownloadFileFromSource(context context.T, source string, sourceHash string,
 	// download source and verify its integrity
 	downloadInput := artifact.DownloadInput{
 		SourceURL:            source,
-		DestinationDirectory: appconfig.PluginsDownloadRoot,
+		DestinationDirectory: appconfig.DownloadRoot,
 		SourceChecksums: map[string]string{
 			sourceHashType: sourceHash,
 		},

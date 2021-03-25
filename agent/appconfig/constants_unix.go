@@ -57,9 +57,6 @@ const (
 	// DownloadRoot specifies the directory under which files will be downloaded
 	DownloadRoot = AgentData + "download/"
 
-	// PluginsDownloadRoot specifies the directory under which files will be downloaded by plugins
-	PluginsDownloadRoot = AgentData + "download/"
-
 	// DefaultDataStorePath represents the directory for storing system data
 	DefaultDataStorePath = AgentData
 
