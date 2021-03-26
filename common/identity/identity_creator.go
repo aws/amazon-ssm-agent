@@ -60,7 +60,15 @@ func newOnPremIdentity(log log.T, config *appconfig.SsmagentConfig) []IAgentIden
 func newCustomIdentity(log log.T, config *appconfig.SsmagentConfig) []IAgentIdentityInner {
 	var customIdentities []IAgentIdentityInner
 
-	for _, customIdentityEntry := range config.Identity.CustomIdentities {
+	for index, customIdentityEntry := range config.Identity.CustomIdentities {
+		if customIdentityEntry.InstanceID == "" {
+			log.Warnf("The InstanceID provided as part of CustomIdentity cannot be empty. Skipping custom identity #%d", index)
+			continue
+		}
+		if customIdentityEntry.Region == "" {
+			log.Warnf("The Region provided as part of CustomIdentity cannot be empty. Skipping custom identity #%d", index)
+			continue
+		}
 		log.Debugf("Creating custom identity object for instance id '%s' in region '%s'",
 			customIdentityEntry.InstanceID,
 			customIdentityEntry.Region)
