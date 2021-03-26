@@ -31,33 +31,40 @@ import (
 var logger = log.NewMockLog()
 
 type healthCheckTestCase struct {
-	Input  UpdateState
-	Output string
+	InputState   UpdateState
+	IsSelfUpdate bool
+	InputResult  contracts.ResultStatus
+	Output       string
 }
 
 func TestHealthCheck(t *testing.T) {
 	// generate test cases
 	testCases := []healthCheckTestCase{
-		{NotStarted, active},
-		{Initialized, updateInitialized},
-		{Staged, updateStaged},
-		{Installed, updateInProgress},
-		{Completed, updateSucceeded},
-		{Rollback, rollingBack},
-		{RolledBack, rollBackCompleted},
+		{NotStarted, false, contracts.ResultStatusNotStarted, active},
+		{Initialized, false, contracts.ResultStatusInProgress, updateInitialized},
+		{Staged, false, contracts.ResultStatusInProgress, updateStaged},
+		{Installed, false, contracts.ResultStatusInProgress, updateInProgress},
+		{Completed, false, contracts.ResultStatusSuccess, updateSucceeded},
+		{Completed, true, contracts.ResultStatusSuccess, updateSucceeded + "_SelfUpdate"},
+		{Completed, false, contracts.ResultStatusFailed, updateFailed},
+		{Rollback, false, contracts.ResultStatusNotStarted, rollingBack},
+		{RolledBack, false, contracts.ResultStatusNotStarted, rollBackCompleted},
+		{TestExecution, false, contracts.ResultStatusTestFailure, testFailed},
 	}
 
 	updateDetail := createUpdateDetail(Installed)
 
 	// run tests
 	for _, tst := range testCases {
-		updateDetail.State = tst.Input
+		updateDetail.State = tst.InputState
+		updateDetail.Result = tst.InputResult
+		updateDetail.SelfUpdate = tst.IsSelfUpdate
 
 		// call method
 		result := PrepareHealthStatus(updateDetail, "", "")
 
 		// check results
-		assert.Equal(t, result, tst.Output)
+		assert.Equal(t, result, tst.Output, "Output was %s but expected to be %s", result, tst.Output)
 	}
 }
 
@@ -96,23 +103,25 @@ func TestUpdateHealthStatusWithNonAlarmingErrorCodes(t *testing.T) {
 func TestHealthCheckWithUpdateFailed(t *testing.T) {
 	// generate test cases
 	testCases := []healthCheckTestCase{
-		{NotStarted, fmt.Sprintf("%v_%v", updateFailed, NotStarted)},
-		{Initialized, fmt.Sprintf("%v_%v", updateFailed, Initialized)},
-		{Staged, fmt.Sprintf("%v_%v", updateFailed, Staged)},
-		{Installed, fmt.Sprintf("%v_%v", updateFailed, Installed)},
-		{Completed, fmt.Sprintf("%v_%v", updateFailed, Completed)},
-		{Rollback, fmt.Sprintf("%v_%v", updateFailed, Rollback)},
-		{RolledBack, fmt.Sprintf("%v_%v", updateFailed, RolledBack)},
+		{NotStarted, false, contracts.ResultStatusFailed, fmt.Sprintf("%v_%v", updateFailed, NotStarted)},
+		{Initialized, false, contracts.ResultStatusFailed, fmt.Sprintf("%v_%v", updateFailed, Initialized)},
+		{Staged, false, contracts.ResultStatusFailed, fmt.Sprintf("%v_%v", updateFailed, Staged)},
+		{Installed, false, contracts.ResultStatusFailed, fmt.Sprintf("%v_%v", updateFailed, Installed)},
+		{Completed, false, contracts.ResultStatusFailed, fmt.Sprintf("%v_%v", updateFailed, Completed)},
+		{Rollback, false, contracts.ResultStatusFailed, fmt.Sprintf("%v_%v", updateFailed, Rollback)},
+		{RolledBack, false, contracts.ResultStatusFailed, fmt.Sprintf("%v_%v", updateFailed, RolledBack)},
+		{RolledBack, true, contracts.ResultStatusFailed, fmt.Sprintf("%v_%v_%v", updateFailed, "SelfUpdate", RolledBack)},
 	}
 
 	updateDetail := createUpdateDetail(Installed)
 
 	for _, tst := range testCases {
-		updateDetail.Result = contracts.ResultStatusFailed
+		updateDetail.Result = tst.InputResult
 		updateDetail.State = Completed
+		updateDetail.SelfUpdate = tst.IsSelfUpdate
 
 		// call method
-		result := PrepareHealthStatus(updateDetail, string(tst.Input), "")
+		result := PrepareHealthStatus(updateDetail, string(tst.InputState), "")
 
 		// check results
 		assert.Equal(t, result, tst.Output)
@@ -158,7 +167,7 @@ func TestUpdateHealthCheckFailCreatingService(t *testing.T) {
 
 func createUpdateDetail(state UpdateState) *UpdateDetail {
 	updateDetail := &UpdateDetail{}
-	updateDetail.Result = contracts.ResultStatusSuccess
+	updateDetail.Result = contracts.ResultStatusInProgress
 	updateDetail.SourceVersion = "5.0.0.0"
 	updateDetail.TargetVersion = "6.0.0.0"
 	updateDetail.State = state

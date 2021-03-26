@@ -18,7 +18,6 @@ package main
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/update/processor"
 	"github.com/aws/amazon-ssm-agent/agent/versionutil"
 )
 
@@ -27,17 +26,16 @@ const (
 	firstAgentWithNewUpdaterPath = "1.1.86.0"
 )
 
-// updateRoot returns the platform specific path to update artifacts
-func updateRoot(detail *processor.UpdateDetail) error {
-	compareResult, err := versionutil.VersionCompare(detail.SourceVersion, firstAgentWithNewUpdaterPath)
+// resolveUpdateRoot returns the platform specific path to update artifacts
+func resolveUpdateRoot(sourceVersion string) (string, error) {
+	compareResult, err := versionutil.VersionCompare(sourceVersion, firstAgentWithNewUpdaterPath)
 	if err != nil {
-		return err
+		return "", err
 	}
 	// New versions that with new binary locations
 	if compareResult >= 0 {
-		detail.UpdateRoot = appconfig.UpdaterArtifactsRoot
-	} else {
-		detail.UpdateRoot = legacyUpdaterArtifactsRoot
+		return appconfig.UpdaterArtifactsRoot, nil
 	}
-	return nil
+
+	return legacyUpdaterArtifactsRoot, nil
 }

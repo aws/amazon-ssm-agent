@@ -27,12 +27,9 @@ import (
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	"github.com/aws/amazon-ssm-agent/agent/update/processor"
-	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updatemanifest"
-	"github.com/aws/amazon-ssm-agent/agent/updateutil/updates3util"
-	"github.com/aws/amazon-ssm-agent/agent/versionutil"
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/nightlyone/lockfile"
 )
@@ -40,10 +37,6 @@ import (
 const (
 	defaultLogFileName              = "AmazonSSMAgent-update.txt"
 	defaultWaitTimeForAgentToFinish = 3
-	defaultStdoutFileName           = "stdout"
-	defaultStderrFileName           = "stderr"
-	defaultSSMAgentName             = "amazon-ssm-agent"
-	defaultSelfUpdateMessageID      = "aws.ssm.self-update-agent.i-instanceid"
 )
 
 var (
@@ -53,25 +46,25 @@ var (
 )
 
 var (
-	update          *bool
-	sourceVersion   *string
-	sourceLocation  *string
-	sourceHash      *string
-	targetVersion   *string
-	targetLocation  *string
-	targetHash      *string
-	packageName     *string
-	messageID       *string
-	stdout          *string
-	stderr          *string
-	outputKeyPrefix *string
-	outputBucket    *string
-	manifestURL     *string
-	selfUpdate      *bool
+	update           *bool
+	sourceVersion    *string
+	sourceLocation   *string
+	sourceHash       *string
+	targetVersion    *string
+	targetLocation   *string
+	targetHash       *string
+	packageName      *string
+	messageID        *string
+	stdout           *string
+	stderr           *string
+	outputKeyPrefix  *string
+	outputBucket     *string
+	manifestURL      *string
+	selfUpdate       *bool
+	disableDowngrade *bool
 )
 
 var newAgentIdentity = identity.NewAgentIdentity
-var newUpdateS3Util = updates3util.New
 
 func init() {
 	log = ssmlog.GetUpdaterLogger(logger.DefaultLogDir, defaultLogFileName)
@@ -80,10 +73,9 @@ func init() {
 	update = flag.Bool(updateconstants.UpdateCmd, false, "current Agent Version")
 	sourceVersion = flag.String(updateconstants.SourceVersionCmd, "", "current Agent Version")
 	sourceLocation = flag.String(updateconstants.SourceLocationCmd, "", "current Agent installer source")
-	sourceHash = flag.String(updateconstants.SourceHashCmd, "", "current Agent installer hash")
+
 	targetVersion = flag.String(updateconstants.TargetVersionCmd, "", "target Agent Version")
-	targetLocation = flag.String(updateconstants.TargetLocationCmd, "", "target Agent installer source")
-	targetHash = flag.String(updateconstants.TargetHashCmd, "", "target Agent installer hash")
+
 	packageName = flag.String(updateconstants.PackageNameCmd, "", "target Agent Version")
 	messageID = flag.String(updateconstants.MessageIDCmd, "", "target Agent Version")
 	stdout = flag.String(updateconstants.StdoutFileName, "", "standard output file path")
@@ -95,6 +87,12 @@ func init() {
 
 	selfUpdate = flag.Bool(updateconstants.SelfUpdateCmd, false, "SelfUpdate command")
 
+	disableDowngrade = flag.Bool(updateconstants.DisableDowngradeCmd, false, "defines if updater is allowed to downgrade")
+
+	// Legacy flags no longer used, need to be defined or we get this error: flag provided but not defined
+	flag.String(updateconstants.TargetLocationCmd, "", "target Agent installer source")
+	flag.String(updateconstants.TargetHashCmd, "", "target Agent installer hash")
+	flag.String(updateconstants.SourceHashCmd, "", "current Agent installer hash")
 }
 
 func main() {
@@ -116,14 +114,15 @@ func main() {
 
 	agentContext = context.Default(log, appConfig, agentIdentity)
 
-	// Sleep 3 seconds to allow agent to finishing up it's work
-	time.Sleep(defaultWaitTimeForAgentToFinish * time.Second)
-
 	// Create update info
 	updateInfo, err := updateinfo.New(agentContext)
 	if err != nil {
 		log.Errorf("Failed to initialize update info object: %v", err)
+		os.Exit(1)
 	}
+
+	// Sleep 3 seconds to allow agent to finishing up it's work
+	time.Sleep(defaultWaitTimeForAgentToFinish * time.Second)
 
 	updater = processor.NewUpdater(agentContext, updateInfo)
 
@@ -146,76 +145,6 @@ func main() {
 
 	flag.Parse()
 
-	// Get manifest url
-	// TODO move to processor in next CRs
-	if len(*manifestURL) == 0 {
-		log.Infof("ManifestURL is not set, attempting to get url from source location")
-		*manifestURL, err = updateutil.GetManifestURLFromSourceUrl(*sourceLocation)
-
-		if err != nil {
-			// TODO: Report failure to runcommmand
-			log.Errorf("Failed to get manifestURL from source location: %v", err)
-			return
-		}
-	}
-
-	// Get manifest
-	updateS3Util := newUpdateS3Util(agentContext)
-	manifest := updatemanifest.New(agentContext, updateInfo)
-	err = updateS3Util.DownloadManifest(manifest, *manifestURL)
-	if err != nil {
-		// TODO: Report failure to runcommmand
-		log.Errorf("Failed to get manifest: %v", err)
-		return
-	}
-
-	// self update command,
-	if *selfUpdate {
-		// manifest path will only be specified in self update use case
-		var err error
-		if len(*manifestURL) == 0 {
-			log.Error("Please provide manifest path for self update")
-			flag.Usage()
-		}
-
-		log.Infof("Starting getting self update required information")
-
-		if *sourceLocation, *sourceHash, *targetVersion, *targetLocation, *targetHash, err =
-			updateutil.PrepareResourceForSelfUpdate(agentContext, manifest, *sourceVersion); err != nil {
-			log.Errorf(err.Error())
-			return
-		}
-
-		log.WriteEvent(logger.AgentUpdateResultMessage,
-			*sourceVersion,
-			updateutil.GenerateSelUpdateSuccessEvent(string(updateconstants.Stage))) // UpdateSucceeded_SelfUpdate_Stage
-
-		if *targetVersion == *sourceVersion {
-			log.Infof("Current version %v is not deprecated, skipping self update", *sourceVersion)
-			return
-		}
-
-		*stdout = defaultStdoutFileName
-		*stderr = defaultStderrFileName
-		*packageName = defaultSSMAgentName
-		*messageID = defaultSelfUpdateMessageID
-
-		log.Infof("stdout: %v", *stdout)
-		log.Infof("stderr: %v", *stderr)
-		log.Infof("packageName: %v", *packageName)
-		log.Infof("messageId: %v", *messageID)
-
-		// current version and current resource download url location
-		log.Infof("sourceVersion : %v", *sourceVersion)
-		log.Infof("sourceLocation : %v", *sourceLocation)
-		log.Infof("sourceHash : %v", *sourceHash)
-
-		// latest active version and resource download url location
-		log.Infof("targetVersion : %v", *targetVersion)
-		log.Infof("targetLocation : %v", *targetLocation)
-		log.Infof("targetHash : %v", *targetHash)
-	}
-
 	// Return if update is not present in the command
 	if !*update {
 		log.Error("incorrect usage (use -update).")
@@ -224,12 +153,16 @@ func main() {
 	}
 
 	// Basic Validation
-	if len(*sourceVersion) == 0 || len(*sourceLocation) == 0 {
-		log.Error("no current version or package source.")
+	if len(*manifestURL) == 0 && len(*sourceLocation) == 0 {
+		log.Error("must pass either manifest url or source location")
 		flag.Usage()
 	}
-	if len(*targetVersion) == 0 || len(*targetLocation) == 0 {
-		log.Error("no target version or package source.")
+	if len(*sourceVersion) == 0 {
+		log.Error("no current version")
+		flag.Usage()
+	}
+	if !*selfUpdate && len(*targetVersion) == 0 {
+		log.Error("no target version")
 		flag.Usage()
 	}
 
@@ -239,10 +172,7 @@ func main() {
 		Result:             contracts.ResultStatusInProgress,
 		SourceVersion:      *sourceVersion,
 		SourceLocation:     *sourceLocation,
-		SourceHash:         *sourceHash,
 		TargetVersion:      *targetVersion,
-		TargetLocation:     *targetLocation,
-		TargetHash:         *targetHash,
 		StdoutFileName:     *stdout,
 		StderrFileName:     *stderr,
 		OutputS3KeyPrefix:  *outputKeyPrefix,
@@ -251,12 +181,15 @@ func main() {
 		MessageID:          *messageID,
 		StartDateTime:      time.Now().UTC(),
 		RequiresUninstall:  false,
-		Manifest:           manifest,
+		ManifestURL:        *manifestURL,
+		Manifest:           updatemanifest.New(agentContext, updateInfo),
 		SelfUpdate:         *selfUpdate,
+		AllowDowngrade:     !*disableDowngrade,
 	}
 
-	if err = resolveUpdateDetail(updateDetail); err != nil {
-		log.Errorf(err.Error())
+	updateDetail.UpdateRoot, err = resolveUpdateRoot(updateDetail.SourceVersion)
+	if err != nil {
+		log.Errorf("Failed to resolve update root: %v", err)
 		return
 	}
 
@@ -280,24 +213,6 @@ func main() {
 		log.Infof(updateDetail.StandardOut)
 	}
 
-}
-
-// resolveUpdateDetail decides which UpdaterRoot to use and if uninstall is required for the agent
-func resolveUpdateDetail(detail *processor.UpdateDetail) error {
-	compareResult, err := versionutil.VersionCompare(detail.SourceVersion, detail.TargetVersion)
-	if err != nil {
-		return err
-	}
-	// if performing a downgrade
-	if compareResult > 0 {
-		detail.RequiresUninstall = true
-	}
-
-	if err := updateRoot(detail); err != nil {
-		return err
-	}
-
-	return nil
 }
 
 // recoverUpdaterFromPanic recovers updater if panic occurs and fails the updater

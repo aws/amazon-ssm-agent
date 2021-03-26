@@ -29,8 +29,8 @@ const (
 type T interface {
 	LoadManifest(manifestPath string) error
 	HasVersion(packageName string, version string) bool
-	GetLatestVersion(version string) (string, error)
-	GetLatestActiveVersion(version string) (string, error)
+	GetLatestVersion(packageName string) (string, error)
+	GetLatestActiveVersion(packageName string) (string, error)
 	GetDownloadURLAndHash(packageName string, version string) (string, string, error)
 	IsVersionDeprecated(packageName string, version string) (bool, error)
 	IsVersionActive(packageName string, version string) (bool, error)

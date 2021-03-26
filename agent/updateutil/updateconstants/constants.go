@@ -220,6 +220,9 @@ const (
 	// ErrorVersionNotFoundInManifest represents version is not found in the manifest
 	ErrorVersionNotFoundInManifest ErrorCode = "ErrorVersionNotFoundInManifest"
 
+	// ErrorGetLatestActiveVersionManifest represents failure to get latest active version from manifest
+	ErrorGetLatestActiveVersionManifest ErrorCode = "ErrorGetLatestActiveVersionManifest"
+
 	// ErrorInvalidManifest represents Invalid manifest file
 	ErrorInvalidManifest ErrorCode = "ErrorInvalidManifest"
 
@@ -259,16 +262,26 @@ const (
 	// ErrorLoadingAgentVersion represents failed for loading agent version
 	ErrorLoadingAgentVersion ErrorCode = "ErrorLoadingAgentVersion"
 
-	SelfUpdatePrefix = "SelfUpdate_"
+	SelfUpdatePrefix = "SelfUpdate"
 
 	// we have same below fields in processor package without underscore
 	UpdateFailed    = "UpdateFailed_"
 	UpdateSucceeded = "UpdateSucceeded_"
 )
 
+type TargetVersionResolver int
+
+// target version resolver options
+const (
+	TargetVersionCustomerDefined = iota
+	TargetVersionLatest
+	TargetVersionSelfUpdate
+)
+
 // NonAlarmingErrors contains error codes which are not important.
 var NonAlarmingErrors = map[ErrorCode]struct{}{
 	ErrorUnsupportedServiceManager: {},
+	ErrorAttemptToDowngrade:        {},
 }
 
 type SelfUpdateState string

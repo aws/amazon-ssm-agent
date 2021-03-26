@@ -21,7 +21,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
-	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updatemanifest"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 )
@@ -42,13 +41,6 @@ type T interface {
 		updaterPackageName string,
 		downloadPath string,
 	) (version string, err error)
-
-	ValidateUpdate(
-		manifest updatemanifest.T,
-		out iohandler.IOHandler,
-		agentName string,
-		targetVersion string,
-		allowDowngradeStr string) (noNeedToUpdate bool, err error)
 }
 
 type updateS3UtilImpl struct {
