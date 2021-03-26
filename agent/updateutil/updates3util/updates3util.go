@@ -17,13 +17,11 @@ package updates3util
 import (
 	"errors"
 	"fmt"
-	"strconv"
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
-	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
@@ -98,7 +96,7 @@ func (util *updateS3UtilImpl) DownloadManifest(manifest updatemanifest.T, manife
 
 	logger.Infof("Succeed to download the manifest")
 	logger.Infof("Local file path : %v", downloadOutput.LocalFilePath)
-	
+
 	if err = manifest.LoadManifest(downloadOutput.LocalFilePath); err != nil {
 		logger.Errorf("Failed to parse manifest: %v", err)
 		return err
@@ -161,65 +159,4 @@ func (util *updateS3UtilImpl) DownloadUpdater(
 	logger.Infof("Successfully decompressed the updater")
 
 	return versionStr, nil
-}
-
-//validateUpdate validates manifest against update request
-func (m *updateS3UtilImpl) ValidateUpdate(
-	manifest updatemanifest.T,
-	out iohandler.IOHandler,
-	agentName string,
-	targetVersion string,
-	allowDowngradeStr string,
-) (noNeedToUpdate bool, err error) {
-	var allowDowngrade = false
-
-	// TODO: Resolve empty targetVersion in updater
-	if len(targetVersion) == 0 {
-		if targetVersion, err = manifest.GetLatestVersion(agentName); err != nil {
-			return true, err
-		}
-	}
-
-	if allowDowngrade, err = strconv.ParseBool(allowDowngradeStr); err != nil {
-		return true, err
-	}
-
-	res, err := updateutil.CompareVersion(targetVersion, currentVersion)
-	if err != nil {
-		return true, err
-	}
-
-	if res == 0 {
-		out.AppendInfof("%v %v has already been installed, update skipped\n",
-			agentName,
-			currentVersion)
-		out.MarkAsSucceeded()
-		return true, nil
-	}
-
-	// TODO: Check for allow downgrade in the updater
-	if res == -1 && !allowDowngrade {
-		return true,
-			fmt.Errorf(
-				"updating %v to an older version, please enable allow downgrade to proceed",
-				agentName)
-	}
-
-	if !manifest.HasVersion(agentName, targetVersion) {
-		return true,
-			fmt.Errorf(
-				"%v target version %v is unsupported on current platform",
-				agentName,
-				targetVersion)
-	}
-
-	if !manifest.HasVersion(agentName, currentVersion) {
-		return true,
-			fmt.Errorf(
-				"%v current version %v is unsupported on current platform",
-				agentName,
-				currentVersion)
-	}
-
-	return false, nil
 }

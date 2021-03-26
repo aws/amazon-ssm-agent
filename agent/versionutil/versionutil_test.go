@@ -1,6 +1,7 @@
 package versionutil
 
 import (
+	"fmt"
 	"sort"
 	"testing"
 
@@ -114,5 +115,27 @@ func TestVersionStringCompareWithError(t *testing.T) {
 	for _, test := range testCases {
 		_, err := VersionCompare(test.a, test.b)
 		assert.Error(t, err)
+	}
+}
+
+// TestVersionStringCompare tests version string comparison
+func TestIsValidVersion(t *testing.T) {
+	testCases := []struct {
+		version string
+		success bool
+	}{
+		{"somestring", false},
+		{"1.3.3.7", true},
+		{"1.0", true},
+		{"1", true},
+	}
+
+	for _, test := range testCases {
+		result := IsValidVersion(test.version)
+		if test.success {
+			assert.True(t, result, fmt.Sprintf("Version %s should have been valid", test.version))
+		} else {
+			assert.False(t, result, fmt.Sprintf("Version %s should not have been valid", test.version))
+		}
 	}
 }

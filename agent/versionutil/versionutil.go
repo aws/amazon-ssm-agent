@@ -94,6 +94,11 @@ func normalizeForCompare(version string) string {
 	return version[0:lenSignificant]
 }
 
+func IsValidVersion(version string) bool {
+	_, err := versionOrdinal(strings.TrimSpace(version))
+	return err == nil
+}
+
 // VersionCompare compares two version strings
 func VersionCompare(versionl string, versionr string) (result int, err error) {
 	if versionl, err = versionOrdinal(strings.TrimSpace(versionl)); err != nil {

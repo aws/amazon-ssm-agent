@@ -32,6 +32,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
 	updateinfomocks "github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo/mocks"
 	updatemanifestmocks "github.com/aws/amazon-ssm-agent/agent/updateutil/updatemanifest/mocks"
+	updates3utilmocks "github.com/aws/amazon-ssm-agent/agent/updateutil/updates3util/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )
@@ -82,7 +83,7 @@ func TestStartOrResumeUpdateFromInitializedState(t *testing.T) {
 	isMethodExecuted := false
 	updateDetail := createUpdateDetail(Initialized)
 	// mock the verify method
-	updater.mgr.prepare = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) error {
+	updater.mgr.initManifest = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) error {
 		isMethodExecuted = true
 		return nil
 	}
@@ -122,6 +123,684 @@ func TestInitializeUpdate(t *testing.T) {
 	assert.NoError(t, err)
 }
 
+func TestInitManifest_NoManifestURLNoSource(t *testing.T) {
+	// setup
+	updater := createDefaultUpdaterStub()
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.SourceLocation = ""
+	updateDetail.ManifestURL = ""
+
+	finalizeCalled := false
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, code string) (err error) {
+		finalizeCalled = true
+		return nil
+	}
+
+	// action
+	err := initManifest(updater.mgr, logger, updateDetail)
+
+	// assert
+	assert.NoError(t, err)
+	assert.True(t, finalizeCalled)
+	assert.Equal(t, Completed, updateDetail.State)
+	assert.Equal(t, contracts.ResultStatusFailed, updateDetail.Result)
+
+	assert.Equal(t, "", updateDetail.SourceLocation)
+	assert.Equal(t, "", updateDetail.ManifestURL)
+	assert.Contains(t, updateDetail.StandardOut, "Failed to resolve manifest url:")
+	assert.Equal(t, "", updateDetail.StandardError)
+}
+
+func TestInitManifest_NoManifestURLButSuccess(t *testing.T) {
+	// setup
+	updater := createDefaultUpdaterStub()
+
+	s3Util := &updates3utilmocks.T{}
+	s3Util.On("DownloadManifest", mock.Anything, mock.Anything).Return(nil)
+	updater.mgr.S3util = s3Util
+
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.SourceLocation = "https://bucket.s3.region.amazonaws.com/amazon-ssm-agent/version/amazon-ssm-agent.tar.gz"
+	updateDetail.ManifestURL = ""
+
+	finalizeCalled := false
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, code string) (err error) {
+		finalizeCalled = true
+		return nil
+	}
+
+	called := false
+	updater.mgr.initSelfUpdate = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
+		called = true
+		return nil
+	}
+
+	// action
+	err := initManifest(updater.mgr, logger, updateDetail)
+
+	// assert
+	assert.NoError(t, err)
+	assert.True(t, called)
+	assert.False(t, finalizeCalled)
+
+	assert.Equal(t, Initialized, updateDetail.State)
+	assert.Equal(t, contracts.ResultStatusInProgress, updateDetail.Result)
+
+	assert.Equal(t, "https://bucket.s3.region.amazonaws.com/ssm-agent-manifest.json", updateDetail.ManifestURL)
+	assert.Equal(t, "", updateDetail.StandardOut)
+	assert.Equal(t, "", updateDetail.StandardError)
+}
+
+func TestInitManifest_ErrorDownloadManifest(t *testing.T) {
+	// setup
+	updater := createDefaultUpdaterStub()
+
+	s3Util := &updates3utilmocks.T{}
+	s3Util.On("DownloadManifest", mock.Anything, mock.Anything).Return(fmt.Errorf("SomeDownloadError"))
+	updater.mgr.S3util = s3Util
+
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.ManifestURL = "https://bucket.s3.region.amazonaws.com/ssm-agent-manifest.json"
+
+	finalizeCalled := false
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, code string) (err error) {
+		finalizeCalled = true
+		return nil
+	}
+
+	called := false
+	updater.mgr.initSelfUpdate = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
+		called = true
+		return nil
+	}
+
+	// action
+	err := initManifest(updater.mgr, logger, updateDetail)
+
+	// assert
+	assert.NoError(t, err)
+	assert.False(t, called)
+	assert.True(t, finalizeCalled)
+	assert.Equal(t, Completed, updateDetail.State)
+	assert.Equal(t, contracts.ResultStatusFailed, updateDetail.Result)
+
+	assert.Contains(t, updateDetail.StandardOut, "Failed to download manifest: SomeDownloadError")
+	assert.Equal(t, "", updateDetail.StandardError)
+}
+
+func TestInitSelfUpdate_NoSelfUpdate(t *testing.T) {
+	// setup
+	updater := createDefaultUpdaterStub()
+
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.SelfUpdate = false
+
+	finalizeCalled := false
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, code string) (err error) {
+		finalizeCalled = true
+		return nil
+	}
+
+	called := false
+	updater.mgr.determineTarget = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
+		called = true
+		return nil
+	}
+
+	// action
+	err := initSelfUpdate(updater.mgr, logger, updateDetail)
+
+	// assert
+	assert.NoError(t, err)
+	assert.True(t, called)
+	assert.False(t, finalizeCalled)
+	assert.Equal(t, Initialized, updateDetail.State)
+
+	assert.Equal(t, "", updateDetail.StandardOut)
+	assert.Equal(t, "", updateDetail.StandardError)
+}
+
+func TestInitSelfUpdate_FailedCheckDeprecated(t *testing.T) {
+	// setup
+	updater := createDefaultUpdaterStub()
+
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.SelfUpdate = true
+
+	manifest := &updatemanifestmocks.T{}
+	manifest.On("IsVersionDeprecated", mock.Anything, mock.Anything).Return(false, fmt.Errorf("SomeDeprecationError"))
+	updateDetail.Manifest = manifest
+
+	finalizeCalled := false
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, code string) (err error) {
+		finalizeCalled = true
+		return nil
+	}
+
+	called := false
+	updater.mgr.determineTarget = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
+		called = true
+		return nil
+	}
+
+	// action
+	err := initSelfUpdate(updater.mgr, logger, updateDetail)
+
+	// assert
+	assert.NoError(t, err)
+	assert.False(t, called)
+	assert.True(t, finalizeCalled)
+	assert.Equal(t, Completed, updateDetail.State)
+
+	assert.Contains(t, updateDetail.StandardOut, "Failed to check if version is deprecated: SomeDeprecationError")
+	assert.Equal(t, "", updateDetail.StandardError)
+}
+
+func TestInitSelfUpdate_NotDeprecated(t *testing.T) {
+	// setup
+	updater := createDefaultUpdaterStub()
+
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.SelfUpdate = true
+
+	manifest := &updatemanifestmocks.T{}
+	manifest.On("IsVersionDeprecated", mock.Anything, mock.Anything).Return(false, nil)
+	updateDetail.Manifest = manifest
+
+	finalizeCalled := false
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, code string) (err error) {
+		finalizeCalled = true
+		return nil
+	}
+
+	// action
+	err := initSelfUpdate(updater.mgr, logger, updateDetail)
+
+	// assert
+	assert.NoError(t, err)
+	assert.True(t, finalizeCalled)
+
+	assert.Equal(t, Initialized, updateDetail.State)
+
+	assert.Equal(t, "", updateDetail.StandardOut)
+	assert.Equal(t, "", updateDetail.StandardError)
+}
+
+func TestInitSelfUpdate_IsDeprecated_FailedGetLastestActive(t *testing.T) {
+	// setup
+	updater := createDefaultUpdaterStub()
+
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.SelfUpdate = true
+
+	manifest := &updatemanifestmocks.T{}
+	manifest.On("IsVersionDeprecated", mock.Anything, mock.Anything).Return(true, nil)
+	manifest.On("GetLatestActiveVersion", mock.Anything).Return("", fmt.Errorf("SomeGetLatestError"))
+	updateDetail.Manifest = manifest
+
+	finalizeCalled := false
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, code string) (err error) {
+		finalizeCalled = true
+		return nil
+	}
+
+	// action
+	err := initSelfUpdate(updater.mgr, logger, updateDetail)
+
+	// assert
+	assert.NoError(t, err)
+	assert.True(t, finalizeCalled)
+	assert.Equal(t, Completed, updateDetail.State)
+	assert.Equal(t, contracts.ResultStatusFailed, updateDetail.Result)
+
+	assert.Contains(t, updateDetail.StandardOut, "Failed to get latest active version from manifest: SomeGetLatestError")
+	assert.Equal(t, "", updateDetail.StandardError)
+}
+
+func TestInitSelfUpdate_IsDeprecated_Success(t *testing.T) {
+	// setup
+	updater := createDefaultUpdaterStub()
+
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.SelfUpdate = true
+
+	manifest := &updatemanifestmocks.T{}
+	manifest.On("IsVersionDeprecated", mock.Anything, mock.Anything).Return(true, nil)
+	manifest.On("GetLatestActiveVersion", mock.Anything).Return("5.5.0.0", nil)
+	updateDetail.Manifest = manifest
+
+	finalizeCalled := false
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, code string) (err error) {
+		finalizeCalled = true
+		return nil
+	}
+
+	called := false
+	updater.mgr.determineTarget = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
+		called = true
+		return nil
+	}
+
+	// action
+	err := initSelfUpdate(updater.mgr, logger, updateDetail)
+
+	// assert
+	assert.NoError(t, err)
+	assert.False(t, finalizeCalled)
+	assert.True(t, called)
+	assert.Equal(t, Initialized, updateDetail.State)
+	assert.Equal(t, contracts.ResultStatusInProgress, updateDetail.Result)
+
+	assert.Equal(t, "", updateDetail.StandardOut)
+	assert.Equal(t, "", updateDetail.StandardError)
+	assert.Equal(t, "5.5.0.0", updateDetail.TargetVersion)
+	assert.Equal(t, "5.0.0.0", updateDetail.SourceVersion)
+	assert.True(t, updateconstants.TargetVersionSelfUpdate == updateDetail.TargetResolver)
+}
+
+func TestDetermineTarget_TargetVersionNone_FailedGetLatest(t *testing.T) {
+	// setup
+	updater := createDefaultUpdaterStub()
+
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.TargetVersion = "None"
+
+	manifest := &updatemanifestmocks.T{}
+	manifest.On("GetLatestActiveVersion", mock.Anything).Return("", fmt.Errorf("SomeGetLatestError"))
+	updateDetail.Manifest = manifest
+
+	finalizeCalled := false
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, code string) (err error) {
+		finalizeCalled = true
+		return nil
+	}
+
+	called := false
+	updater.mgr.validateUpdateParam = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
+		called = true
+		return nil
+	}
+
+	// action
+	err := determineTarget(updater.mgr, logger, updateDetail)
+
+	// assert
+	assert.NoError(t, err)
+	assert.False(t, called)
+	assert.True(t, finalizeCalled)
+	assert.Equal(t, Completed, updateDetail.State)
+	assert.Equal(t, contracts.ResultStatusFailed, updateDetail.Result)
+	assert.True(t, updateconstants.TargetVersionLatest == updateDetail.TargetResolver)
+
+	assert.Contains(t, updateDetail.StandardOut, "Failed to get latest active version from manifest: SomeGetLatestError")
+	assert.Equal(t, "", updateDetail.StandardError)
+}
+
+func TestDetermineTarget_TargetVersionLatest_FailedGetLatest(t *testing.T) {
+	// setup
+	updater := createDefaultUpdaterStub()
+
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.TargetVersion = "latest"
+
+	manifest := &updatemanifestmocks.T{}
+	manifest.On("GetLatestActiveVersion", mock.Anything).Return("", fmt.Errorf("SomeGetLatestError"))
+	updateDetail.Manifest = manifest
+
+	finalizeCalled := false
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, code string) (err error) {
+		finalizeCalled = true
+		return nil
+	}
+
+	called := false
+	updater.mgr.validateUpdateParam = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
+		called = true
+		return nil
+	}
+
+	// action
+	err := determineTarget(updater.mgr, logger, updateDetail)
+
+	// assert
+	assert.NoError(t, err)
+	assert.False(t, called)
+	assert.True(t, finalizeCalled)
+	assert.Equal(t, Completed, updateDetail.State)
+	assert.Equal(t, contracts.ResultStatusFailed, updateDetail.Result)
+
+	assert.Contains(t, updateDetail.StandardOut, "Failed to get latest active version from manifest: SomeGetLatestError")
+	assert.Equal(t, "", updateDetail.StandardError)
+}
+
+func TestDetermineTarget_TargetVersionLatest_Success(t *testing.T) {
+	// setup
+	updater := createDefaultUpdaterStub()
+
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.TargetVersion = "latest"
+
+	manifest := &updatemanifestmocks.T{}
+	manifest.On("GetLatestActiveVersion", mock.Anything).Return("5.6.5.0", nil)
+	updateDetail.Manifest = manifest
+
+	finalizeCalled := false
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, code string) (err error) {
+		finalizeCalled = true
+		return nil
+	}
+
+	called := false
+	updater.mgr.validateUpdateParam = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
+		called = true
+		return nil
+	}
+
+	// action
+	err := determineTarget(updater.mgr, logger, updateDetail)
+
+	// assert
+	assert.NoError(t, err)
+	assert.True(t, called)
+	assert.False(t, finalizeCalled)
+	assert.Equal(t, Initialized, updateDetail.State)
+	assert.Equal(t, contracts.ResultStatusInProgress, updateDetail.Result)
+	assert.True(t, updateconstants.TargetVersionLatest == updateDetail.TargetResolver)
+	assert.Equal(t, "5.6.5.0", updateDetail.TargetVersion)
+
+	assert.Equal(t, "", updateDetail.StandardOut)
+	assert.Equal(t, "", updateDetail.StandardError)
+}
+
+func TestDetermineTarget_CustomerDefinedVersion_InvalidTarget(t *testing.T) {
+	// setup
+	updater := createDefaultUpdaterStub()
+
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.TargetVersion = "SomeRandomTargetVersion"
+
+	finalizeCalled := false
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, code string) (err error) {
+		finalizeCalled = true
+		return nil
+	}
+
+	called := false
+	updater.mgr.validateUpdateParam = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
+		called = true
+		return nil
+	}
+
+	// action
+	err := determineTarget(updater.mgr, logger, updateDetail)
+
+	// assert
+	assert.NoError(t, err)
+	assert.False(t, called)
+	assert.True(t, finalizeCalled)
+	assert.Equal(t, Completed, updateDetail.State)
+	assert.Equal(t, contracts.ResultStatusFailed, updateDetail.Result)
+	assert.True(t, updateconstants.TargetVersionCustomerDefined == updateDetail.TargetResolver)
+
+	assert.Contains(t, updateDetail.StandardOut, "Invalid target version: SomeRandomTargetVersion")
+	assert.Equal(t, "", updateDetail.StandardError)
+}
+
+func TestDetermineTarget_CustomerDefinedVersion_Success(t *testing.T) {
+	// setup
+	updater := createDefaultUpdaterStub()
+
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.TargetVersion = "5.6.9.9"
+
+	finalizeCalled := false
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, code string) (err error) {
+		finalizeCalled = true
+		return nil
+	}
+
+	called := false
+	updater.mgr.validateUpdateParam = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
+		called = true
+		return nil
+	}
+
+	// action
+	err := determineTarget(updater.mgr, logger, updateDetail)
+
+	// assert
+	assert.NoError(t, err)
+	assert.True(t, called)
+	assert.False(t, finalizeCalled)
+	assert.Equal(t, Initialized, updateDetail.State)
+	assert.Equal(t, contracts.ResultStatusInProgress, updateDetail.Result)
+	assert.True(t, updateconstants.TargetVersionCustomerDefined == updateDetail.TargetResolver)
+	assert.Equal(t, "5.6.9.9", updateDetail.TargetVersion)
+
+	assert.Equal(t, "", updateDetail.StandardOut)
+	assert.Equal(t, "", updateDetail.StandardError)
+}
+
+func TestValidateUpdateParam_FailedInvalidSourceVersion(t *testing.T) {
+	// setup
+	updater := createDefaultUpdaterStub()
+
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.SourceVersion = "SomeInvalidSource"
+
+	finalizeCalled := false
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, code string) (err error) {
+		finalizeCalled = true
+		return nil
+	}
+
+	called := false
+	updater.mgr.populateUrlHash = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
+		called = true
+		return nil
+	}
+
+	// action
+	err := validateUpdateParam(updater.mgr, logger, updateDetail)
+
+	// assert
+	assert.NoError(t, err)
+	assert.False(t, called)
+	assert.True(t, finalizeCalled)
+	assert.Equal(t, Completed, updateDetail.State)
+	assert.Equal(t, contracts.ResultStatusFailed, updateDetail.Result)
+
+	assert.Contains(t, updateDetail.StandardOut, "Failed to compare versions SomeInvalidSource")
+	assert.Equal(t, "", updateDetail.StandardError)
+}
+
+func TestValidateUpdateParam_VersionAlreadyInstalled(t *testing.T) {
+	// setup
+	updater := createDefaultUpdaterStub()
+
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.TargetVersion = updateDetail.SourceVersion
+
+	finalizeCalled := false
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, code string) (err error) {
+		finalizeCalled = true
+		return nil
+	}
+
+	called := false
+	updater.mgr.populateUrlHash = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
+		called = true
+		return nil
+	}
+
+	// action
+	err := validateUpdateParam(updater.mgr, logger, updateDetail)
+
+	// assert
+	assert.NoError(t, err)
+	assert.False(t, called)
+	assert.True(t, finalizeCalled)
+	assert.Equal(t, Completed, updateDetail.State)
+	assert.Equal(t, contracts.ResultStatusSuccess, updateDetail.Result)
+
+	assert.Contains(t, updateDetail.StandardOut, "has already been installed")
+	assert.Equal(t, "", updateDetail.StandardError)
+}
+
+func TestValidateUpdateParam_FailedAttemptDowngrade_AllowDowngradeFalse(t *testing.T) {
+	// setup
+	updater := createDefaultUpdaterStub()
+
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.AllowDowngrade = false
+	updateDetail.SourceVersion = "3.0.0.0"
+	updateDetail.TargetVersion = "2.0.0.0"
+
+	finalizeCalled := false
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, code string) (err error) {
+		finalizeCalled = true
+		return nil
+	}
+
+	called := false
+	updater.mgr.populateUrlHash = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
+		called = true
+		return nil
+	}
+
+	// action
+	err := validateUpdateParam(updater.mgr, logger, updateDetail)
+
+	// assert
+	assert.NoError(t, err)
+	assert.False(t, called)
+	assert.True(t, finalizeCalled)
+	assert.Equal(t, Completed, updateDetail.State)
+	assert.Equal(t, contracts.ResultStatusFailed, updateDetail.Result)
+	assert.True(t, updateDetail.RequiresUninstall)
+
+	assert.Contains(t, updateDetail.StandardOut, "to an older version, please enable allow downgrade to proceed")
+	assert.Equal(t, "", updateDetail.StandardError)
+}
+
+func TestValidateUpdateParam_AllowDowngrade_SourceVersionNotExist(t *testing.T) {
+	// setup
+	updater := createDefaultUpdaterStub()
+
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.AllowDowngrade = true
+	updateDetail.SourceVersion = "3.0.0.0"
+	updateDetail.TargetVersion = "2.0.0.0"
+
+	manifest := &updatemanifestmocks.T{}
+	manifest.On("HasVersion", mock.Anything, updateDetail.SourceVersion).Return(false)
+	updateDetail.Manifest = manifest
+
+	finalizeCalled := false
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, code string) (err error) {
+		finalizeCalled = true
+		return nil
+	}
+
+	called := false
+	updater.mgr.populateUrlHash = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
+		called = true
+		return nil
+	}
+
+	// action
+	err := validateUpdateParam(updater.mgr, logger, updateDetail)
+
+	// assert
+	assert.NoError(t, err)
+	assert.False(t, called)
+	assert.True(t, finalizeCalled)
+	assert.Equal(t, Completed, updateDetail.State)
+	assert.Equal(t, contracts.ResultStatusFailed, updateDetail.Result)
+	assert.True(t, updateDetail.RequiresUninstall)
+
+	assert.Contains(t, updateDetail.StandardOut, "source version 3.0.0.0 is unsupported on current platform")
+	assert.Equal(t, "", updateDetail.StandardError)
+}
+
+func TestValidateUpdateParam_TargetVersionNotExist(t *testing.T) {
+	// setup
+	updater := createDefaultUpdaterStub()
+
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.AllowDowngrade = false
+
+	manifest := &updatemanifestmocks.T{}
+	manifest.On("HasVersion", mock.Anything, updateDetail.SourceVersion).Return(true)
+	manifest.On("HasVersion", mock.Anything, updateDetail.TargetVersion).Return(false)
+	updateDetail.Manifest = manifest
+
+	finalizeCalled := false
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, code string) (err error) {
+		finalizeCalled = true
+		return nil
+	}
+
+	called := false
+	updater.mgr.populateUrlHash = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
+		called = true
+		return nil
+	}
+
+	// action
+	err := validateUpdateParam(updater.mgr, logger, updateDetail)
+
+	// assert
+	assert.NoError(t, err)
+	assert.False(t, called)
+	assert.True(t, finalizeCalled)
+	assert.Equal(t, Completed, updateDetail.State)
+	assert.Equal(t, contracts.ResultStatusFailed, updateDetail.Result)
+	assert.False(t, updateDetail.RequiresUninstall)
+
+	assert.Contains(t, updateDetail.StandardOut, "target version 6.0.0.0 is unsupported on current platform")
+	assert.Equal(t, "", updateDetail.StandardError)
+}
+
+func TestValidateUpdateParam_Success(t *testing.T) {
+	// setup
+	updater := createDefaultUpdaterStub()
+
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.AllowDowngrade = false
+
+	manifest := &updatemanifestmocks.T{}
+	manifest.On("HasVersion", mock.Anything, updateDetail.SourceVersion).Return(true)
+	manifest.On("HasVersion", mock.Anything, updateDetail.TargetVersion).Return(true)
+	updateDetail.Manifest = manifest
+
+	finalizeCalled := false
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, code string) (err error) {
+		finalizeCalled = true
+		return nil
+	}
+
+	called := false
+	updater.mgr.populateUrlHash = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
+		called = true
+		return nil
+	}
+
+	// action
+	err := validateUpdateParam(updater.mgr, logger, updateDetail)
+
+	// assert
+	assert.NoError(t, err)
+	assert.True(t, called)
+	assert.False(t, finalizeCalled)
+	assert.Equal(t, Initialized, updateDetail.State)
+	assert.Equal(t, contracts.ResultStatusInProgress, updateDetail.Result)
+	assert.False(t, updateDetail.RequiresUninstall)
+
+	assert.Contains(t, updateDetail.StandardOut, "Updating  from 5.0.0.0 to 6.0.0.0")
+	assert.Equal(t, "", updateDetail.StandardError)
+}
+
 func TestPrepareInstallationPackages(t *testing.T) {
 	// setup
 	updater := createDefaultUpdaterStub()
@@ -143,7 +822,7 @@ func TestPrepareInstallationPackages(t *testing.T) {
 		return nil
 	}
 	// action
-	err := prepareInstallationPackages(updater.mgr, logger, updateDetail)
+	err := downloadPackages(updater.mgr, logger, updateDetail)
 
 	// assert
 	assert.NoError(t, err)
@@ -163,7 +842,7 @@ func TestPreparePackagesFailCreateInstanceContext(t *testing.T) {
 	updateDetail.Manifest = manifest
 
 	// action
-	err := prepareInstallationPackages(updater.mgr, logger, updateDetail)
+	err := downloadPackages(updater.mgr, logger, updateDetail)
 
 	// assert
 	assert.NoError(t, err)
@@ -185,7 +864,7 @@ func TestPreparePackagesFailCreateUpdateDownloadFolder(t *testing.T) {
 	}
 
 	// action
-	err := prepareInstallationPackages(updater.mgr, logger, updateDetail)
+	err := downloadPackages(updater.mgr, logger, updateDetail)
 
 	// assert
 	assert.NoError(t, err)
@@ -203,7 +882,7 @@ func TestPreparePackagesFailDownload(t *testing.T) {
 	updateDetail.Manifest = manifest
 
 	// action
-	err := prepareInstallationPackages(updater.mgr, logger, updateDetail)
+	err := downloadPackages(updater.mgr, logger, updateDetail)
 
 	// assert
 	assert.NoError(t, err)
@@ -232,7 +911,7 @@ func TestPreparePackageFailInvalidVersion(t *testing.T) {
 	}
 
 	// action
-	err := prepareInstallationPackages(updater.mgr, logger, updateDetail)
+	err := downloadPackages(updater.mgr, logger, updateDetail)
 
 	// assert
 	assert.Nil(t, err)

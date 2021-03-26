@@ -266,11 +266,11 @@ func (u *SelfUpdate) init(instanceId string) (err error) {
 }
 
 func (u *SelfUpdate) generateEventCode(errorCode updateconstants.ErrorCode) string {
-	return updateconstants.UpdateFailed + updateconstants.SelfUpdatePrefix + string(errorCode)
+	return updateconstants.UpdateFailed + updateconstants.SelfUpdatePrefix + "_" + string(errorCode)
 }
 
 func (u *SelfUpdate) generateWarnEventCode(errorCode string) string {
-	return updateconstants.UpdateSucceeded + updateconstants.SelfUpdatePrefix + errorCode
+	return updateconstants.UpdateSucceeded + updateconstants.SelfUpdatePrefix + "_" + errorCode
 }
 
 func (u *SelfUpdate) downloadResource(region string) (err error) {

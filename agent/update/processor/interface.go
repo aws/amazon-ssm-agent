@@ -23,6 +23,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updates3util"
 )
 
 // T represents the interface for agent update
@@ -37,7 +38,7 @@ type T interface {
 	Failed(updateDetail *UpdateDetail, log log.T, code updateconstants.ErrorCode, errMessage string, noRollbackMessage bool) (err error)
 }
 
-type prepare func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error)
+type initPrep func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error)
 type update func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error)
 type verify func(mgr *updateManager, log log.T, updateDetail *UpdateDetail, isRollback bool) (err error)
 type rollback func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error)
@@ -49,22 +50,28 @@ type runTests func(context context.T, stage testCommon.TestStage, timeOutSeconds
 type finalize func(mgr *updateManager, updateDetail *UpdateDetail, errorCode string) (err error)
 
 type updateManager struct {
-	Context   context.T
-	Info      updateinfo.T
-	util      updateutil.T
-	svc       Service
-	ctxMgr    ContextMgr
-	prepare   prepare
-	update    update
-	verify    verify
-	rollback  rollback
-	uninstall uninstall
-	install   install
-	download  download
-	clean     clean
-	runTests  runTests
-	finalize  finalize
-	subStatus string // Values currently being used - downgrade, InstallRollback, VerificationRollback.
+	Context             context.T
+	Info                updateinfo.T
+	util                updateutil.T
+	S3util              updates3util.T
+	svc                 Service
+	ctxMgr              ContextMgr
+	initManifest        initPrep
+	initSelfUpdate      initPrep
+	determineTarget     initPrep
+	validateUpdateParam initPrep
+	populateUrlHash     initPrep
+	downloadPackages    initPrep
+	update              update
+	verify              verify
+	rollback            rollback
+	uninstall           uninstall
+	install             install
+	download            download
+	clean               clean
+	runTests            runTests
+	finalize            finalize
+	subStatus           string // Values currently being used - downgrade, InstallRollback, VerificationRollback.
 }
 
 // Updater contains logic for performing agent update

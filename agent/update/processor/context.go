@@ -91,6 +91,7 @@ type UpdateDetail struct {
 	SourceLocation     string
 	SourceHash         string
 	TargetVersion      string
+	TargetResolver     updateconstants.TargetVersionResolver
 	TargetLocation     string
 	TargetHash         string
 	PackageName        string
@@ -99,8 +100,10 @@ type UpdateDetail struct {
 	MessageID          string
 	UpdateRoot         string
 	RequiresUninstall  bool
+	ManifestURL        string
 	Manifest           updatemanifest.T
 	SelfUpdate         bool
+	AllowDowngrade     bool
 }
 
 // HasMessageID represents if update is triggered by run command

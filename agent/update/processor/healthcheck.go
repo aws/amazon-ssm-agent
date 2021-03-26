@@ -82,8 +82,8 @@ func getSsmSvc(context context.T) (ssm.Service, error) {
 }
 
 // prepareHealthStatus prepares health status payload
-func PrepareHealthStatus(update *UpdateDetail, errorCode string, additionalStatus string) (result string) {
-	switch update.State {
+func PrepareHealthStatus(updateDetail *UpdateDetail, errorCode string, additionalStatus string) (result string) {
+	switch updateDetail.State {
 	default:
 		result = active
 	case NotStarted:
@@ -95,14 +95,14 @@ func PrepareHealthStatus(update *UpdateDetail, errorCode string, additionalStatu
 	case Installed:
 		result = updateInProgress
 	case Completed:
-		if update.Result == contracts.ResultStatusFailed {
+		if updateDetail.Result == contracts.ResultStatusFailed {
 			result = updateFailed
 		}
-		if update.Result == contracts.ResultStatusSuccess {
+		if updateDetail.Result == contracts.ResultStatusSuccess {
 			result = updateSucceeded
 		}
 	case TestExecution:
-		if update.Result == contracts.ResultStatusTestFailure {
+		if updateDetail.Result == contracts.ResultStatusTestFailure {
 			result = testFailed
 		}
 	case Rollback:
@@ -112,6 +112,10 @@ func PrepareHealthStatus(update *UpdateDetail, errorCode string, additionalStatu
 	}
 
 	// please maintain the if condition order.
+	if updateDetail.SelfUpdate {
+		result = fmt.Sprintf("%v_%v", result, updateconstants.SelfUpdatePrefix)
+	}
+
 	if len(errorCode) > 0 {
 		result = fmt.Sprintf("%v_%v", result, errorCode)
 	}

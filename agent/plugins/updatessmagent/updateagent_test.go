@@ -40,34 +40,10 @@ import (
 
 var mockContext = context.NewMockDefault()
 
-func TestGenerateUpdateCmdWithV2(t *testing.T) {
+func TestGenerateUpdateCmd(t *testing.T) {
 	pluginInput := createStubPluginInput()
 
-	manifest := createStubManifest(pluginInput, true, true)
-	manifest.On("GetDownloadURLAndHash", "amazon-ssm-agent", currentAgentVersion).Return("url", "hash", nil)
-	manifest.On("GetDownloadURLAndHash", "amazon-ssm-agent", pluginInput.TargetVersion).Return("url2", "hash2", nil)
-
-	result, err := generateUpdateCmd(manifest, pluginInput,
-		"2.0.0.0", "messageID", "stdout", "stderr", "prefix", "bucket")
-
-	assert.NoError(t, err)
-	assert.Contains(t, result, "2.0.0.0")
-	assert.Contains(t, result, "messageID")
-	assert.Contains(t, result, "stdout")
-	assert.Contains(t, result, "stderr")
-	assert.Contains(t, result, "prefix")
-	assert.Contains(t, result, "bucket")
-	assert.NotContains(t, result, "manifest")
-}
-
-func TestGenerateUpdateCmdWithV3(t *testing.T) {
-	pluginInput := createStubPluginInput()
-
-	manifest := createStubManifest(pluginInput, true, true)
-	manifest.On("GetDownloadURLAndHash", "amazon-ssm-agent", currentAgentVersion).Return("url", "hash", nil)
-	manifest.On("GetDownloadURLAndHash", "amazon-ssm-agent", pluginInput.TargetVersion).Return("url2", "hash2", nil)
-
-	result, err := generateUpdateCmd(manifest, pluginInput,
+	result, err := generateUpdateCmd(pluginInput,
 		"3.0.0.0", "messageID", "stdout", "stderr", "prefix", "bucket")
 
 	assert.NoError(t, err)
@@ -78,6 +54,35 @@ func TestGenerateUpdateCmdWithV3(t *testing.T) {
 	assert.Contains(t, result, "prefix")
 	assert.Contains(t, result, "bucket")
 	assert.Contains(t, result, "manifest")
+	assert.NotContains(t, result, "-"+updateconstants.DisableDowngradeCmd)
+}
+
+func TestGenerateUpdateCmdNoDowngrade(t *testing.T) {
+	pluginInput := createStubPluginInput()
+	pluginInput.AllowDowngrade = "false"
+
+	result, err := generateUpdateCmd(pluginInput,
+		"3.0.0.0", "messageID", "stdout", "stderr", "prefix", "bucket")
+
+	assert.NoError(t, err)
+	assert.Contains(t, result, "3.0.0.0")
+	assert.Contains(t, result, "messageID")
+	assert.Contains(t, result, "stdout")
+	assert.Contains(t, result, "stderr")
+	assert.Contains(t, result, "prefix")
+	assert.Contains(t, result, "bucket")
+	assert.Contains(t, result, "manifest")
+	assert.Contains(t, result, "-"+updateconstants.DisableDowngradeCmd)
+}
+
+func TestGenerateUpdateCmdInvalidDowngrade(t *testing.T) {
+	pluginInput := createStubPluginInput()
+	pluginInput.AllowDowngrade = "somerandomstring"
+
+	_, err := generateUpdateCmd(pluginInput,
+		"3.0.0.0", "messageID", "stdout", "stderr", "prefix", "bucket")
+
+	assert.Error(t, err)
 }
 
 func TestUpdateAgent_InvalidPluginRaw(t *testing.T) {
@@ -117,51 +122,6 @@ func TestUpdateAgent_FailedDownloadManifest(t *testing.T) {
 	assert.Contains(t, out.GetStderr(), "SomeDownloadManifestError")
 }
 
-func TestUpdateAgent_FailedValidateError(t *testing.T) {
-	pluginInput := createStubPluginInput()
-	config := contracts.Configuration{}
-	util := &fakeUtility{}
-
-	manifest := createStubManifest(pluginInput, true, true)
-	s3Util := &updates3utilmocks.T{}
-
-	out := iohandler.DefaultIOHandler{}
-	execMock := &executormocks.IExecutor{}
-	downloadfolder := "somefolder"
-
-	// Define behavior
-	s3Util.On("DownloadManifest", mock.Anything, pluginInput.Source).Return(nil)
-	s3Util.On("ValidateUpdate", mock.Anything, mock.Anything, pluginInput.AgentName, pluginInput.TargetVersion, pluginInput.AllowDowngrade).Return(true, fmt.Errorf("SomeValidationError"))
-
-	updateAgent(config, mockContext, util, s3Util, manifest, pluginInput, &out, time.Now(), execMock, downloadfolder)
-
-	assert.Equal(t, contracts.ResultStatusFailed, out.Status)
-	assert.Contains(t, out.GetStderr(), "SomeValidationError")
-}
-
-func TestUpdateAgent_FailedValidateNoNeedUpdate(t *testing.T) {
-	pluginInput := createStubPluginInput()
-	config := contracts.Configuration{}
-	util := &fakeUtility{}
-
-	manifest := createStubManifest(pluginInput, true, true)
-	s3Util := &updates3utilmocks.T{}
-
-	out := iohandler.DefaultIOHandler{}
-	execMock := &executormocks.IExecutor{}
-	downloadfolder := "somefolder"
-
-	// Define behavior
-	s3Util.On("DownloadManifest", mock.Anything, pluginInput.Source).Return(nil)
-	s3Util.On("ValidateUpdate", mock.Anything, mock.Anything, pluginInput.AgentName, pluginInput.TargetVersion, pluginInput.AllowDowngrade).Return(true, nil)
-
-	updateAgent(config, mockContext, util, s3Util, manifest, pluginInput, &out, time.Now(), execMock, downloadfolder)
-
-	// Assert result status emptystring because the status is changed inside REAL ValidateUpdate, TODO move validate to updater
-	assert.Equal(t, contracts.ResultStatus(""), out.Status)
-	assert.Equal(t, "", out.GetStderr())
-}
-
 func TestUpdateAgent_FailedDownloadUpdater(t *testing.T) {
 	pluginInput := createStubPluginInput()
 	config := contracts.Configuration{}
@@ -176,8 +136,6 @@ func TestUpdateAgent_FailedDownloadUpdater(t *testing.T) {
 
 	// Define behavior
 	s3Util.On("DownloadManifest", mock.Anything, pluginInput.Source).Return(nil)
-	s3Util.On("ValidateUpdate", mock.Anything, mock.Anything, pluginInput.AgentName, pluginInput.TargetVersion, pluginInput.AllowDowngrade).Return(false, nil)
-
 	s3Util.On("DownloadUpdater", mock.Anything, pluginInput.UpdaterName, downloadfolder).Return("", fmt.Errorf("SomeDownloadError"))
 
 	updateAgent(config, mockContext, util, s3Util, manifest, pluginInput, &out, time.Now(), execMock, downloadfolder)
@@ -188,12 +146,11 @@ func TestUpdateAgent_FailedDownloadUpdater(t *testing.T) {
 
 func TestUpdateAgent_FailedGenerateUpdateCmd(t *testing.T) {
 	pluginInput := createStubPluginInput()
+	pluginInput.AllowDowngrade = "FailParseBool"
 	config := contracts.Configuration{}
 	util := &fakeUtility{}
 
 	manifest := createStubManifest(pluginInput, true, true)
-	manifest.On("GetDownloadURLAndHash", "amazon-ssm-agent", currentAgentVersion).Return("url", "hash", nil)
-	manifest.On("GetDownloadURLAndHash", "amazon-ssm-agent", pluginInput.TargetVersion).Return("", "", fmt.Errorf("SomeUrlHashError"))
 
 	s3Util := &updates3utilmocks.T{}
 
@@ -203,14 +160,12 @@ func TestUpdateAgent_FailedGenerateUpdateCmd(t *testing.T) {
 
 	// Define behavior
 	s3Util.On("DownloadManifest", mock.Anything, pluginInput.Source).Return(nil)
-	s3Util.On("ValidateUpdate", mock.Anything, mock.Anything, pluginInput.AgentName, pluginInput.TargetVersion, pluginInput.AllowDowngrade).Return(false, nil)
-
 	s3Util.On("DownloadUpdater", mock.Anything, pluginInput.UpdaterName, downloadfolder).Return("", nil)
 
 	updateAgent(config, mockContext, util, s3Util, manifest, pluginInput, &out, time.Now(), execMock, downloadfolder)
 
 	assert.Equal(t, contracts.ResultStatusFailed, out.Status)
-	assert.Equal(t, "SomeUrlHashError", out.GetStderr())
+	assert.Contains(t, out.GetStderr(), "FailParseBool")
 }
 
 func TestUpdateAgent_FailedSaveUpdatePlugin(t *testing.T) {
@@ -219,8 +174,6 @@ func TestUpdateAgent_FailedSaveUpdatePlugin(t *testing.T) {
 	util := &fakeUtility{savePluginErr: fmt.Errorf("SomeSaveError")}
 
 	manifest := createStubManifest(pluginInput, true, true)
-	manifest.On("GetDownloadURLAndHash", "amazon-ssm-agent", currentAgentVersion).Return("url", "hash", nil)
-	manifest.On("GetDownloadURLAndHash", "amazon-ssm-agent", pluginInput.TargetVersion).Return("url2", "hash2", nil)
 
 	s3Util := &updates3utilmocks.T{}
 
@@ -230,8 +183,6 @@ func TestUpdateAgent_FailedSaveUpdatePlugin(t *testing.T) {
 
 	// Define behavior
 	s3Util.On("DownloadManifest", mock.Anything, pluginInput.Source).Return(nil)
-	s3Util.On("ValidateUpdate", mock.Anything, mock.Anything, pluginInput.AgentName, pluginInput.TargetVersion, pluginInput.AllowDowngrade).Return(false, nil)
-
 	s3Util.On("DownloadUpdater", mock.Anything, pluginInput.UpdaterName, downloadfolder).Return("", nil)
 
 	updateAgent(config, mockContext, util, s3Util, manifest, pluginInput, &out, time.Now(), execMock, downloadfolder)
@@ -246,8 +197,6 @@ func TestUpdateAgent_FailedNoDiskSpaceFalse(t *testing.T) {
 	util := &fakeUtility{noDiskSpace: true}
 
 	manifest := createStubManifest(pluginInput, true, true)
-	manifest.On("GetDownloadURLAndHash", "amazon-ssm-agent", currentAgentVersion).Return("url", "hash", nil)
-	manifest.On("GetDownloadURLAndHash", "amazon-ssm-agent", pluginInput.TargetVersion).Return("url2", "hash2", nil)
 
 	s3Util := &updates3utilmocks.T{}
 
@@ -257,8 +206,6 @@ func TestUpdateAgent_FailedNoDiskSpaceFalse(t *testing.T) {
 
 	// Define behavior
 	s3Util.On("DownloadManifest", mock.Anything, pluginInput.Source).Return(nil)
-	s3Util.On("ValidateUpdate", mock.Anything, mock.Anything, pluginInput.AgentName, pluginInput.TargetVersion, pluginInput.AllowDowngrade).Return(false, nil)
-
 	s3Util.On("DownloadUpdater", mock.Anything, pluginInput.UpdaterName, downloadfolder).Return("", nil)
 
 	updateAgent(config, mockContext, util, s3Util, manifest, pluginInput, &out, time.Now(), execMock, downloadfolder)
@@ -273,8 +220,6 @@ func TestUpdateAgent_FailedNoDiskSpaceError(t *testing.T) {
 	util := &fakeUtility{isDiskSpaceErr: fmt.Errorf("SomeDiskError")}
 
 	manifest := createStubManifest(pluginInput, true, true)
-	manifest.On("GetDownloadURLAndHash", "amazon-ssm-agent", currentAgentVersion).Return("url", "hash", nil)
-	manifest.On("GetDownloadURLAndHash", "amazon-ssm-agent", pluginInput.TargetVersion).Return("url2", "hash2", nil)
 
 	s3Util := &updates3utilmocks.T{}
 
@@ -284,8 +229,6 @@ func TestUpdateAgent_FailedNoDiskSpaceError(t *testing.T) {
 
 	// Define behavior
 	s3Util.On("DownloadManifest", mock.Anything, pluginInput.Source).Return(nil)
-	s3Util.On("ValidateUpdate", mock.Anything, mock.Anything, pluginInput.AgentName, pluginInput.TargetVersion, pluginInput.AllowDowngrade).Return(false, nil)
-
 	s3Util.On("DownloadUpdater", mock.Anything, pluginInput.UpdaterName, downloadfolder).Return("", nil)
 
 	updateAgent(config, mockContext, util, s3Util, manifest, pluginInput, &out, time.Now(), execMock, downloadfolder)
@@ -301,8 +244,6 @@ func TestUpdateAgent_FailedExecUpdater(t *testing.T) {
 	util := &fakeUtility{pid: pid, execCommandError: fmt.Errorf("SomeCmdError")}
 
 	manifest := createStubManifest(pluginInput, true, true)
-	manifest.On("GetDownloadURLAndHash", "amazon-ssm-agent", currentAgentVersion).Return("url", "hash", nil)
-	manifest.On("GetDownloadURLAndHash", "amazon-ssm-agent", pluginInput.TargetVersion).Return("url2", "hash2", nil)
 
 	s3Util := &updates3utilmocks.T{}
 
@@ -312,8 +253,6 @@ func TestUpdateAgent_FailedExecUpdater(t *testing.T) {
 
 	// Define behavior
 	s3Util.On("DownloadManifest", mock.Anything, pluginInput.Source).Return(nil)
-	s3Util.On("ValidateUpdate", mock.Anything, mock.Anything, pluginInput.AgentName, pluginInput.TargetVersion, pluginInput.AllowDowngrade).Return(false, nil)
-
 	s3Util.On("DownloadUpdater", mock.Anything, pluginInput.UpdaterName, downloadfolder).Return("", nil)
 
 	out_pid := updateAgent(config, mockContext, util, s3Util, manifest, pluginInput, &out, time.Now(), execMock, downloadfolder)
@@ -341,12 +280,7 @@ func TestUpdateAgent_FailedIsPidRunningError(t *testing.T) {
 
 	// Define behavior
 	s3Util.On("DownloadManifest", mock.Anything, pluginInput.Source).Return(nil)
-	s3Util.On("ValidateUpdate", mock.Anything, mock.Anything, pluginInput.AgentName, pluginInput.TargetVersion, pluginInput.AllowDowngrade).Return(false, nil)
-
 	s3Util.On("DownloadUpdater", mock.Anything, pluginInput.UpdaterName, downloadfolder).Return("", nil)
-
-	manifest.On("GetDownloadURLAndHash", "amazon-ssm-agent", currentAgentVersion).Return("url", "hash", nil)
-	manifest.On("GetDownloadURLAndHash", "amazon-ssm-agent", pluginInput.TargetVersion).Return("url2", "hash2", nil)
 
 	execMock.On("IsPidRunning", mock.Anything).Return(false, fmt.Errorf("SomeIsPidRunningError"))
 
@@ -374,12 +308,7 @@ func TestUpdateAgent_FailedIsPidRunningFalse(t *testing.T) {
 
 	// Define behavior
 	s3Util.On("DownloadManifest", mock.Anything, pluginInput.Source).Return(nil)
-	s3Util.On("ValidateUpdate", mock.Anything, mock.Anything, pluginInput.AgentName, pluginInput.TargetVersion, pluginInput.AllowDowngrade).Return(false, nil)
-
 	s3Util.On("DownloadUpdater", mock.Anything, pluginInput.UpdaterName, downloadfolder).Return("", nil)
-
-	manifest.On("GetDownloadURLAndHash", "amazon-ssm-agent", currentAgentVersion).Return("url", "hash", nil)
-	manifest.On("GetDownloadURLAndHash", "amazon-ssm-agent", pluginInput.TargetVersion).Return("url2", "hash2", nil)
 
 	execMock.On("IsPidRunning", pid).Return(false, nil)
 	execMock.On("Kill", pid).Return(nil)
@@ -408,12 +337,7 @@ func TestUpdateAgent(t *testing.T) {
 
 	// Define behavior
 	s3Util.On("DownloadManifest", mock.Anything, pluginInput.Source).Return(nil)
-	s3Util.On("ValidateUpdate", mock.Anything, mock.Anything, pluginInput.AgentName, pluginInput.TargetVersion, pluginInput.AllowDowngrade).Return(false, nil)
-
 	s3Util.On("DownloadUpdater", mock.Anything, pluginInput.UpdaterName, downloadfolder).Return("", nil)
-
-	manifest.On("GetDownloadURLAndHash", "amazon-ssm-agent", currentAgentVersion).Return("url", "hash", nil)
-	manifest.On("GetDownloadURLAndHash", "amazon-ssm-agent", pluginInput.TargetVersion).Return("url2", "hash2", nil)
 
 	execMock.On("IsPidRunning", mock.Anything).Return(true, nil)
 

@@ -3,7 +3,6 @@
 package mocks
 
 import (
-	iohandler "github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	mock "github.com/stretchr/testify/mock"
 
 	updatemanifest "github.com/aws/amazon-ssm-agent/agent/updateutil/updatemanifest"
@@ -42,27 +41,6 @@ func (_m *T) DownloadUpdater(manifest updatemanifest.T, updaterPackageName strin
 	var r1 error
 	if rf, ok := ret.Get(1).(func(updatemanifest.T, string, string) error); ok {
 		r1 = rf(manifest, updaterPackageName, downloadPath)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
-// ValidateUpdate provides a mock function with given fields: manifest, out, agentName, targetVersion, allowDowngradeStr
-func (_m *T) ValidateUpdate(manifest updatemanifest.T, out iohandler.IOHandler, agentName string, targetVersion string, allowDowngradeStr string) (bool, error) {
-	ret := _m.Called(manifest, out, agentName, targetVersion, allowDowngradeStr)
-
-	var r0 bool
-	if rf, ok := ret.Get(0).(func(updatemanifest.T, iohandler.IOHandler, string, string, string) bool); ok {
-		r0 = rf(manifest, out, agentName, targetVersion, allowDowngradeStr)
-	} else {
-		r0 = ret.Get(0).(bool)
-	}
-
-	var r1 error
-	if rf, ok := ret.Get(1).(func(updatemanifest.T, iohandler.IOHandler, string, string, string) error); ok {
-		r1 = rf(manifest, out, agentName, targetVersion, allowDowngradeStr)
 	} else {
 		r1 = ret.Error(1)
 	}

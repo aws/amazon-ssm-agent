@@ -18,11 +18,9 @@ package main
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/agent/update/processor"
 )
 
-// updateRoot returns the platform specific path to update artifacts
-func updateRoot(detail *processor.UpdateDetail) error {
-	detail.UpdateRoot = appconfig.UpdaterArtifactsRoot
-	return nil
+// resolveUpdateRoot returns the platform specific path to update artifacts
+func resolveUpdateRoot(sourceVersion string) (string, error) {
+	return appconfig.UpdaterArtifactsRoot, nil
 }

@@ -35,7 +35,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
-	"github.com/aws/amazon-ssm-agent/agent/updateutil/updatemanifest"
 	"github.com/aws/amazon-ssm-agent/agent/versionutil"
 	"github.com/aws/amazon-ssm-agent/core/executor"
 	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/model"
@@ -613,76 +612,6 @@ func parseVersion(version string) (uint64, uint64, uint64, uint64, error) {
 	}
 
 	return major, minor, build, patch, nil
-}
-
-func PrepareResourceForSelfUpdate(
-	context context.T,
-	manifest updatemanifest.T,
-	version string) (sourceLocation, sourceHash, targetVersion, targetLocation, targetHash string, err error) {
-
-	util := &Utility{
-		Context: context,
-	}
-	logger := context.Log()
-	var isDeprecated bool
-
-	SelfUpdateResult := &UpdatePluginResult{
-		StandOut:      "",
-		StartDateTime: time.Now(),
-	}
-
-	if err = util.SaveUpdatePluginResult(logger, appconfig.UpdaterArtifactsRoot, SelfUpdateResult); err != nil {
-		logger.WriteEvent(log.AgentUpdateResultMessage, version, GenerateSelUpdateErrorEvent(updateconstants.ErrorInitializationFailed))
-		return "", "", "", "", "",
-			logger.Errorf("Failed to update plugin result for selfupdate %v", err)
-	}
-
-	// get the latest active version and it's location
-	if isDeprecated, err = manifest.IsVersionDeprecated(appconfig.DefaultAgentName, version); err != nil {
-		logger.WriteEvent(log.AgentUpdateResultMessage, version, GenerateSelUpdateErrorEvent(updateconstants.ErrorVersionNotFoundInManifest))
-		return "", "", "", "", "",
-			logger.Errorf("Failed to find version in manifest for selfupdate, %v", err)
-	}
-
-	if isDeprecated {
-		// get the latest active version and it's location
-		logger.Infof("Agent version %v is deprecated", version)
-		if targetVersion, err = manifest.GetLatestActiveVersion(appconfig.DefaultAgentName); err != nil {
-			logger.WriteEvent(log.AgentUpdateResultMessage, version, GenerateSelUpdateErrorEvent(updateconstants.ErrorVersionCompare))
-			return "", "", "", "", "",
-				logger.Errorf("Failed to generate the target information, fail to get latest active version from manifest file, %v", err)
-		}
-	} else {
-		targetVersion = version
-	}
-
-	// target version download url location
-	logger.Infof("target version is %v", targetVersion)
-	if targetLocation, targetHash, err = manifest.GetDownloadURLAndHash(appconfig.DefaultAgentName, targetVersion); err != nil {
-		logger.WriteEvent(log.AgentUpdateResultMessage, targetVersion, GenerateSelUpdateErrorEvent(updateconstants.ErrorTargetPkgDownload))
-		return "", "", "", "", "",
-			logger.Errorf("Failed to get the sourceHash from manifest file, %v", err)
-	}
-
-	// source version download url location
-	logger.Infof("source version is %v", version)
-	if sourceLocation, sourceHash, err = manifest.GetDownloadURLAndHash(appconfig.DefaultAgentName, version); err != nil {
-		logger.WriteEvent(log.AgentUpdateResultMessage, version, GenerateSelUpdateErrorEvent(updateconstants.ErrorSourcePkgDownload))
-		return "", "", "", "", "",
-			logger.Errorf("Failed to get the sourceHash from manifest file for version %v", version)
-	}
-
-	return
-}
-
-// GenerateSelUpdateErrorEvent constructs error codes for self update
-func GenerateSelUpdateErrorEvent(errorCode updateconstants.ErrorCode) string {
-	return updateconstants.UpdateFailed + updateconstants.SelfUpdatePrefix + string(errorCode)
-}
-
-// GenerateSelUpdateSuccessEvent constructs success codes for self update
-func GenerateSelUpdateSuccessEvent(code string) string {
-	return updateconstants.UpdateSucceeded + updateconstants.SelfUpdatePrefix + code
 }
 
 // GetManifestURLFromSourceUrl parses source url passed to the updater and generates the url for manifest

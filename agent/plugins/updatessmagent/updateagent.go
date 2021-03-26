@@ -19,7 +19,6 @@ import (
 	"fmt"
 	"math/rand"
 	"strconv"
-	"strings"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -98,15 +97,11 @@ func runUpdateAgent(
 
 	//Calculate updater package name base on agent name
 	pluginInput.UpdaterName = pluginInput.AgentName + updateconstants.UpdaterPackageNamePrefix
-	//Generate update output
-	targetVersion := pluginInput.TargetVersion
-	if len(targetVersion) == 0 {
-		targetVersion = "latest"
+
+	// if TargetVersion is Empty, set to None and it will be resolved in the updater
+	if len(pluginInput.TargetVersion) == 0 {
+		pluginInput.TargetVersion = "None"
 	}
-	output.AppendInfof("Updating %v from %v to %v\n",
-		pluginInput.AgentName,
-		currentAgentVersion,
-		targetVersion)
 
 	//Download manifest file and populate manifest object
 	if downloadErr := s3util.DownloadManifest(manifest, pluginInput.Source); downloadErr != nil {
@@ -114,15 +109,6 @@ func runUpdateAgent(
 		return
 	}
 	output.AppendInfo("Successfully downloaded manifest\n")
-
-	//Validate update details
-	noNeedToUpdate := false
-	if noNeedToUpdate, err = s3util.ValidateUpdate(manifest, output, pluginInput.AgentName, pluginInput.TargetVersion, pluginInput.AllowDowngrade); noNeedToUpdate || err != nil {
-		if err != nil {
-			output.MarkAsFailed(err)
-		}
-		return
-	}
 
 	//Download updater and retrieve the version number
 	updaterVersion := ""
@@ -135,7 +121,6 @@ func runUpdateAgent(
 	//Generate update command base on the update detail
 	cmd := ""
 	if cmd, err = generateUpdateCmd(
-		manifest,
 		&pluginInput,
 		updaterVersion,
 		config.MessageId,
@@ -317,7 +302,6 @@ func Name() string {
 }
 
 func generateUpdateCmd(
-	manifest updatemanifest.T,
 	pluginInput *UpdatePluginInput,
 	updaterVersion string,
 	messageID string,
@@ -327,27 +311,9 @@ func generateUpdateCmd(
 	bucketName string) (cmd string, err error) {
 	updaterPath := updateutil.UpdaterFilePath(appconfig.UpdaterArtifactsRoot, pluginInput.UpdaterName, updaterVersion)
 	cmd = updaterPath + " -update"
-	source := ""
-	hash := ""
 
-	//Get download url and hash value from for the current version of ssm agent
-	if source, hash, err = manifest.GetDownloadURLAndHash(
-		pluginInput.AgentName, currentAgentVersion); err != nil {
-		return
-	}
 	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.SourceVersionCmd, currentAgentVersion)
-	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.SourceLocationCmd, source)
-	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.SourceHashCmd, hash)
-
-	//Get download url and hash value from for the target version of ssm agent
-	if source, hash, err = manifest.GetDownloadURLAndHash(
-		pluginInput.AgentName, pluginInput.TargetVersion); err != nil {
-		return
-	}
-
 	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.TargetVersionCmd, pluginInput.TargetVersion)
-	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.TargetLocationCmd, source)
-	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.TargetHashCmd, hash)
 
 	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.PackageNameCmd, pluginInput.AgentName)
 	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.MessageIDCmd, messageID)
@@ -358,10 +324,17 @@ func generateUpdateCmd(
 	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.OutputKeyPrefixCmd, keyPrefix)
 	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.OutputBucketNameCmd, bucketName)
 
-	versionSplit := strings.Split(updaterVersion, ".")
-	majorVersion, _ := strconv.Atoi(versionSplit[0])
-	if majorVersion > 2 {
-		cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.ManifestFileUrlCmd, pluginInput.Source)
+	cmd = updateutil.BuildUpdateCommand(cmd, updateconstants.ManifestFileUrlCmd, pluginInput.Source)
+
+	allowDowngrade, err := strconv.ParseBool(pluginInput.AllowDowngrade)
+	if err != nil {
+		return "", err
 	}
+
+	// Tell the updater if downgrade is not allowed
+	if !allowDowngrade {
+		cmd += " -" + updateconstants.DisableDowngradeCmd
+	}
+
 	return
 }

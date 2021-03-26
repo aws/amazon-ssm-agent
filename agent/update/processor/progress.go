@@ -47,7 +47,7 @@ func (u *updateManager) inProgress(updateDetail *UpdateDetail, log logPkg.T, sta
 	updateDetail.State = state
 	updateDetail.Result = contracts.ResultStatusInProgress
 
-	if updateDetail.HasMessageID() && updateDetail.SelfUpdate == false {
+	if updateDetail.HasMessageID() && !updateDetail.SelfUpdate {
 		err = u.svc.SendReply(log, updateDetail)
 		if err != nil {
 			log.Errorf(err.Error())
@@ -104,6 +104,7 @@ func (u *updateManager) failed(updateDetail *UpdateDetail, log logPkg.T, code up
 	if noRollbackMessage {
 		updateDetail.AppendInfo(log, "No rollback needed")
 	}
+
 	errorCode := u.subStatus + string(code)
 	log.WriteEvent(
 		logPkg.AgentUpdateResultMessage,
@@ -128,46 +129,58 @@ func (u *updateManager) inactive(updateDetail *UpdateDetail, log logPkg.T, error
 	return u.finalize(u, updateDetail, errorWarnCode)
 }
 
+func (u *updateManager) skipped(updateDetail *UpdateDetail, log logPkg.T) (err error) {
+	updateDetail.State = Completed
+	updateDetail.Result = contracts.ResultStatusSuccess
+	updateDetail.AppendInfo(
+		log,
+		"update skipped")
+	return u.finalize(u, updateDetail, "")
+}
+
 // finalizeUpdateAndSendReply completes the update and sends reply to message service, also uploads to S3 (if any)
 func finalizeUpdateAndSendReply(u *updateManager, updateDetail *UpdateDetail, errorCode string) (err error) {
 	log := u.Context.Log()
 	updateDetail.EndDateTime = time.Now().UTC()
 
-	orchestrationDirectory := getOrchestrationDir(u.Context.Identity(), log, updateDetail)
-	filePath, err := fileutil.AppendToFile(orchestrationDirectory, updateDetail.StdoutFileName, updateDetail.StandardOut)
-	if err != nil {
-		log.Errorf("Error while appending to file %v", filePath)
-	}
-	if updateDetail.StandardOut, err = fileutil.ReadAllText(filePath); err != nil {
-		log.Errorf("Error reading contents from %v", filePath)
-	}
-
-	if filePath, err = fileutil.AppendToFile(orchestrationDirectory, updateDetail.StderrFileName, updateDetail.StandardError); err != nil {
-		log.Errorf("Error while appending to file %v", filePath)
-	}
-	if updateDetail.StandardError, err = fileutil.ReadAllText(filePath); err != nil {
-		log.Errorf("Error reading contents from %v", filePath)
-	}
-	// send reply except for self update, don't send any response back to service side for self update
-	if updateDetail.HasMessageID() && updateDetail.SelfUpdate == false {
-		if err = u.svc.SendReply(log, updateDetail); err != nil {
-			log.Errorf(err.Error())
+	if !updateDetail.SelfUpdate {
+		orchestrationDirectory := getOrchestrationDir(u.Context.Identity(), log, updateDetail)
+		var filePath string
+		filePath, err = fileutil.AppendToFile(orchestrationDirectory, updateDetail.StdoutFileName, updateDetail.StandardOut)
+		if err != nil {
+			log.Errorf("Error while appending to file %v", filePath)
+		}
+		if updateDetail.StandardOut, err = fileutil.ReadAllText(filePath); err != nil {
+			log.Errorf("Error reading contents from %v", filePath)
 		}
 
-		if err = u.svc.DeleteMessage(log, updateDetail); err != nil {
-			log.Errorf(err.Error())
+		if filePath, err = fileutil.AppendToFile(orchestrationDirectory, updateDetail.StderrFileName, updateDetail.StandardError); err != nil {
+			log.Errorf("Error while appending to file %v", filePath)
+		}
+		if updateDetail.StandardError, err = fileutil.ReadAllText(filePath); err != nil {
+			log.Errorf("Error reading contents from %v", filePath)
+		}
+		// send reply except for self update, don't send any response back to service side for self update
+		if updateDetail.HasMessageID() {
+			if err = u.svc.SendReply(log, updateDetail); err != nil {
+				log.Errorf(err.Error())
+			}
+
+			if err = u.svc.DeleteMessage(log, updateDetail); err != nil {
+				log.Errorf(err.Error())
+			}
+		}
+
+		// upload output to s3 bucket
+		log.Debugf("output s3 bucket name is %v", updateDetail.OutputS3BucketName)
+		if updateDetail.OutputS3BucketName != "" {
+			u.ctxMgr.uploadOutput(log, updateDetail, orchestrationDirectory)
 		}
 	}
 
 	// update health information
 	if err = u.svc.UpdateHealthCheck(log, updateDetail, errorCode); err != nil {
 		log.Errorf(err.Error())
-	}
-
-	// upload output to s3 bucket
-	log.Debugf("output s3 bucket name is %v", updateDetail.OutputS3BucketName)
-	if updateDetail.OutputS3BucketName != "" {
-		u.ctxMgr.uploadOutput(log, updateDetail, orchestrationDirectory)
 	}
 
 	if err = u.clean(u, log, updateDetail); err != nil {

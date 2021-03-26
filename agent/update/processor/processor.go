@@ -32,6 +32,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updates3util"
 	"github.com/aws/amazon-ssm-agent/agent/versionutil"
 )
 
@@ -43,6 +44,13 @@ var (
 	uncompress       = fileutil.Uncompress
 )
 
+const (
+	defaultStdoutFileName      = "stdout"
+	defaultStderrFileName      = "stderr"
+	defaultSSMAgentName        = "amazon-ssm-agent"
+	defaultSelfUpdateMessageID = "aws.ssm.self-update-agent.i-instanceid"
+)
+
 // NewUpdater creates an instance of Updater and other services it requires
 func NewUpdater(context context.T, info updateinfo.T) *Updater {
 	updater := &Updater{
@@ -52,22 +60,28 @@ func NewUpdater(context context.T, info updateinfo.T) *Updater {
 			util: &updateutil.Utility{
 				Context: context,
 			},
+			S3util: updates3util.New(context),
 			svc: &svcManager{
 				context: context,
 			},
 			ctxMgr: &contextManager{
 				context: context,
 			},
-			prepare:   prepareInstallationPackages,
-			update:    proceedUpdate,
-			verify:    verifyInstallation,
-			rollback:  rollbackInstallation,
-			uninstall: uninstallAgent,
-			install:   installAgent,
-			download:  downloadAndUnzipArtifact,
-			clean:     cleanUninstalledVersions,
-			runTests:  testerPkg.StartTests,
-			finalize:  finalizeUpdateAndSendReply,
+			initManifest:        initManifest,
+			initSelfUpdate:      initSelfUpdate,
+			determineTarget:     determineTarget,
+			validateUpdateParam: validateUpdateParam,
+			populateUrlHash:     populateUrlHash,
+			downloadPackages:    downloadPackages,
+			update:              proceedUpdate,
+			verify:              verifyInstallation,
+			rollback:            rollbackInstallation,
+			uninstall:           uninstallAgent,
+			install:             installAgent,
+			download:            downloadAndUnzipArtifact,
+			clean:               cleanUninstalledVersions,
+			runTests:            testerPkg.StartTests,
+			finalize:            finalizeUpdateAndSendReply,
 		},
 	}
 
@@ -78,7 +92,7 @@ func NewUpdater(context context.T, info updateinfo.T) *Updater {
 func (u *Updater) StartOrResumeUpdate(log log.T, updateDetail *UpdateDetail) (err error) {
 	switch {
 	case updateDetail.State == Initialized:
-		return u.mgr.prepare(u.mgr, log, updateDetail)
+		return u.mgr.initManifest(u.mgr, log, updateDetail)
 	case updateDetail.State == Staged:
 		return u.mgr.update(u.mgr, log, updateDetail)
 	case updateDetail.State == Installed:
@@ -96,12 +110,16 @@ func (u *Updater) StartOrResumeUpdate(log log.T, updateDetail *UpdateDetail) (er
 func (u *Updater) InitializeUpdate(log log.T, updateDetail *UpdateDetail) (err error) {
 	var pluginResult *updateutil.UpdatePluginResult
 
-	// load plugin update result
-	pluginResult, err = updateutil.LoadUpdatePluginResult(log, updateDetail.UpdateRoot)
-	if err != nil {
-		// TODO: Check old path
-		return fmt.Errorf("update failed, no rollback needed %v", err.Error())
+	// load plugin update result only if not self update
+	if !updateDetail.SelfUpdate {
+		pluginResult, err = updateutil.LoadUpdatePluginResult(log, updateDetail.UpdateRoot)
+		if err != nil {
+			return fmt.Errorf("update failed, no rollback needed %v", err.Error())
+		}
+	} else {
+		pluginResult = &updateutil.UpdatePluginResult{StartDateTime: time.Now()}
 	}
+
 	updateDetail.StandardOut = pluginResult.StandOut
 	// if failed to read time from updateplugin file
 	if !pluginResult.StartDateTime.Equal(time.Time{}) {
@@ -170,8 +188,177 @@ func getMinimumVSupportedVersions() (versions *map[string]string) {
 	return &minimumSupportedVersions
 }
 
-// prepareInstallationPackages downloads artifacts from public s3 storage
-func prepareInstallationPackages(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
+// initManifest determines the manifest URL and downloads the manifest
+func initManifest(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
+
+	// Initialize manifest URL if not set
+	// Manifest URL is not set by agents < v3 so we get the manifest url from source location
+	if len(updateDetail.ManifestURL) == 0 {
+		log.Infof("ManifestURL is not set, attempting to get url from source location")
+		updateDetail.ManifestURL, err = updateutil.GetManifestURLFromSourceUrl(updateDetail.SourceLocation)
+
+		if err != nil {
+			log.Errorf("Failed to get manifestURL from source location: %v", err)
+			return mgr.failed(updateDetail, log, updateconstants.ErrorManifestURLParse, fmt.Sprintf("Failed to resolve manifest url: %v", err), true)
+		}
+	}
+
+	log.Infof("Initiating download manifest %v", updateDetail.ManifestURL)
+	err = mgr.S3util.DownloadManifest(updateDetail.Manifest, updateDetail.ManifestURL)
+	if err != nil {
+		log.Errorf("Failed to download manifest: %v", err)
+		return mgr.failed(updateDetail, log, updateconstants.ErrorDownloadManifest, fmt.Sprintf("Failed to download manifest: %v", err), true)
+	}
+
+	return mgr.initSelfUpdate(mgr, log, updateDetail)
+}
+
+// initSelfUpdate populates the update detail for self update
+func initSelfUpdate(mgr *updateManager, logger log.T, updateDetail *UpdateDetail) (err error) {
+	if updateDetail.SelfUpdate {
+		logger.Infof("Starting self update preparation")
+
+		updateDetail.StdoutFileName = defaultStdoutFileName
+		updateDetail.StderrFileName = defaultStderrFileName
+		updateDetail.PackageName = defaultSSMAgentName
+		updateDetail.MessageID = defaultSelfUpdateMessageID
+
+		var isDeprecated bool
+		// Check if current/source version is deprecated
+		if isDeprecated, err = updateDetail.Manifest.IsVersionDeprecated(appconfig.DefaultAgentName, updateDetail.SourceVersion); err != nil {
+			return mgr.failed(updateDetail, logger, updateconstants.ErrorVersionNotFoundInManifest, fmt.Sprintf("Failed to check if version is deprecated: %v", err), true)
+		}
+		logger.Infof("Checking if version %s is deprecated: %v", updateDetail.SourceVersion, isDeprecated)
+
+		if isDeprecated {
+			var targetVersion string
+			if targetVersion, err = updateDetail.Manifest.GetLatestActiveVersion(appconfig.DefaultAgentName); err != nil {
+				return mgr.failed(updateDetail, logger, updateconstants.ErrorGetLatestActiveVersionManifest, fmt.Sprintf("Failed to get latest active version from manifest: %v", err), true)
+			}
+			updateDetail.TargetVersion = targetVersion
+			updateDetail.TargetResolver = updateconstants.TargetVersionSelfUpdate
+			logger.Infof("Source version %s is deprecated, Target version has been set to %s", updateDetail.SourceVersion, updateDetail.TargetVersion)
+		} else {
+			// Return if version is not deprecated, nothing else to do for selfupdate
+			logger.Infof("Current version %v is not deprecated, skipping self update", updateDetail.SourceVersion)
+			return mgr.finalize(mgr, updateDetail, "")
+		}
+	}
+
+	return mgr.determineTarget(mgr, logger, updateDetail)
+}
+
+// determineTarget resolves the target version if not yet defined
+func determineTarget(mgr *updateManager, logger log.T, updateDetail *UpdateDetail) (err error) {
+
+	// "None" passed as TargetVersion by the plugin if the customer does not define a version
+	if updateDetail.TargetVersion == "None" {
+		logger.Info("TargetVersion is empty string, defaulting to 'latest'")
+		updateDetail.TargetVersion = "latest"
+	}
+
+	if updateDetail.TargetVersion == "latest" {
+		updateDetail.TargetResolver = updateconstants.TargetVersionLatest
+		logger.Info("TargetVersion is 'latest', attempting to find the latest active version")
+		updateDetail.TargetVersion, err = updateDetail.Manifest.GetLatestActiveVersion(updateDetail.PackageName)
+
+		if err != nil {
+			logger.Errorf("Failed to get latest active version: %v", err)
+			return mgr.failed(updateDetail, logger, updateconstants.ErrorGetLatestActiveVersionManifest, fmt.Sprintf("Failed to get latest active version from manifest: %v", err), true)
+		}
+	} else {
+		updateDetail.TargetResolver = updateconstants.TargetVersionCustomerDefined
+	}
+
+	// TODO: Support version wild-cards e.g. 3.0.* to get latest of a minor version
+
+	if !versionutil.IsValidVersion(updateDetail.TargetVersion) {
+		logger.Errorf("%s is not a valid entry for Target Version", updateDetail.TargetVersion)
+		return mgr.failed(updateDetail, logger, updateconstants.ErrorInvalidTargetVersion, fmt.Sprintf("Invalid target version: %s", updateDetail.TargetVersion), true)
+	}
+
+	return mgr.validateUpdateParam(mgr, logger, updateDetail)
+}
+
+// validateUpdateParam populates the update detail for self update
+func validateUpdateParam(mgr *updateManager, logger log.T, updateDetail *UpdateDetail) (err error) {
+	updateDetail.AppendInfo(logger, "Updating %v from %v to %v\n",
+		updateDetail.PackageName,
+		updateDetail.SourceVersion,
+		updateDetail.TargetVersion)
+
+	logger.Infof("Comparing source version %s and target version %s", updateDetail.SourceVersion, updateDetail.TargetVersion)
+
+	var comp int
+	comp, err = versionutil.VersionCompare(updateDetail.SourceVersion, updateDetail.TargetVersion)
+	if err != nil {
+		logger.Errorf("Failed to compare versions %s and %s: %v", updateDetail.SourceVersion, updateDetail.TargetVersion, err)
+		return mgr.failed(updateDetail, logger, updateconstants.ErrorVersionCompare, fmt.Sprintf("Failed to compare versions %s and %s: %v", updateDetail.SourceVersion, updateDetail.TargetVersion, err), true)
+	}
+
+	if comp == 0 {
+		logger.Infof("%v %v has already been installed, update skipped", updateDetail.PackageName, updateDetail.SourceVersion)
+
+		updateDetail.AppendInfo(
+			logger,
+			"%v %v has already been installed",
+			updateDetail.PackageName,
+			updateDetail.SourceVersion)
+
+		return mgr.skipped(updateDetail, logger)
+	}
+
+	// If SourceVersion is higher
+	if comp > 0 {
+		// Downgrade requires uninstall
+		updateDetail.RequiresUninstall = true
+		logger.Infof("Source version is higher than target version")
+
+		// TODO: if updateDetail.TargetResolver != updateconstants.TargetVersionCustomerDefined { override allowDowngrade
+		//        - If latest active version is < current version, current version has been deprecated and there is no newer version
+
+		if !updateDetail.AllowDowngrade {
+			logger.Warnf("Downgrade is not enabled, please enable downgrade to perform this update")
+			return mgr.failed(updateDetail, logger, updateconstants.ErrorAttemptToDowngrade, fmt.Sprintf("Updating %v to an older version, please enable allow downgrade to proceed", updateDetail.TargetVersion), true)
+		}
+	}
+
+	logger.Infof("Verifying source version and target version are available in the region")
+	if !updateDetail.Manifest.HasVersion(updateDetail.PackageName, updateDetail.SourceVersion) {
+		logger.Infof("Source version %s is not available in the region", updateDetail.SourceVersion)
+		return mgr.failed(updateDetail, logger, updateconstants.ErrorInvalidSourceVersion, fmt.Sprintf("%v source version %v is unsupported on current platform", updateDetail.PackageName, updateDetail.SourceVersion), true)
+	}
+
+	if !updateDetail.Manifest.HasVersion(updateDetail.PackageName, updateDetail.TargetVersion) {
+		logger.Infof("Target version %s is not available in the region", updateDetail.TargetVersion)
+		return mgr.failed(updateDetail, logger, updateconstants.ErrorInvalidTargetVersion, fmt.Sprintf("%v target version %v is unsupported on current platform", updateDetail.PackageName, updateDetail.TargetVersion), true)
+	}
+
+	return mgr.populateUrlHash(mgr, logger, updateDetail)
+}
+
+// populateUrlHash continues initializing after self update has been handled
+func populateUrlHash(mgr *updateManager, logger log.T, updateDetail *UpdateDetail) (err error) {
+
+	// target version download url and hash
+	logger.Infof("target version is %v", updateDetail.TargetVersion)
+	if updateDetail.TargetLocation, updateDetail.TargetHash, err = updateDetail.Manifest.GetDownloadURLAndHash(appconfig.DefaultAgentName, updateDetail.TargetVersion); err != nil {
+		logger.Errorf("Failed to get the source Hash/URL from manifest file, %v", err)
+		return mgr.failed(updateDetail, logger, updateconstants.ErrorTargetPkgDownload, fmt.Sprintf("Failed to get target hash/url: %v", err), true)
+	}
+
+	// source version download url and hash
+	logger.Infof("source version is %v", updateDetail.SourceVersion)
+	if updateDetail.SourceLocation, updateDetail.SourceHash, err = updateDetail.Manifest.GetDownloadURLAndHash(appconfig.DefaultAgentName, updateDetail.SourceVersion); err != nil {
+		logger.Errorf("Failed to get the source Hash/URL from manifest file, %v", err)
+		return mgr.failed(updateDetail, logger, updateconstants.ErrorSourcePkgDownload, fmt.Sprintf("Failed to get source hash/url: %v", err), true)
+	}
+
+	return mgr.downloadPackages(mgr, logger, updateDetail)
+}
+
+// downloadPackages downloads artifacts from public s3 storage and sets update to status Staged
+func downloadPackages(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
 	log.Infof("Initiating download %v", updateDetail.PackageName)
 
 	updateDownload := ""
