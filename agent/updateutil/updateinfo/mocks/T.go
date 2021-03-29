@@ -23,8 +23,8 @@ func (_m *T) GenerateCompressedFileName(_a0 string) string {
 	return r0
 }
 
-// GetInstaller provides a mock function with given fields:
-func (_m *T) GetInstaller() string {
+// GetInstallScriptName provides a mock function with given fields:
+func (_m *T) GetInstallScriptName() string {
 	ret := _m.Called()
 
 	var r0 string
@@ -51,8 +51,8 @@ func (_m *T) GetPlatform() string {
 	return r0
 }
 
-// GetUnInstaller provides a mock function with given fields:
-func (_m *T) GetUnInstaller() string {
+// GetUninstallScriptName provides a mock function with given fields:
+func (_m *T) GetUninstallScriptName() string {
 	ret := _m.Called()
 
 	var r0 string
@@ -98,18 +98,4 @@ func (_m *T) IsPlatformUsingSystemD() (bool, error) {
 	}
 
 	return r0, r1
-}
-
-// GetInstallerName provides a mock function with given fields:
-func (_m *T) GetInstallerName() string {
-	ret := _m.Called()
-
-	var r0 string
-	if rf, ok := ret.Get(0).(func() string); ok {
-		r0 = rf()
-	} else {
-		r0 = ret.Get(0).(string)
-	}
-
-	return r0
 }

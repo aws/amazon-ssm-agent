@@ -21,20 +21,19 @@ type T interface {
 	IsPlatformUsingSystemD() (bool, error)
 	IsPlatformDarwin() bool
 	GenerateCompressedFileName(string) string
-	GetInstaller() string
-	GetUnInstaller() string
+	GetInstallScriptName() string
+	GetUninstallScriptName() string
 	GetPlatform() string
-	GetInstallerName() string
 }
 
 // updateInfoImpl holds information for the instance
 type updateInfoImpl struct {
-	context         context.T
-	platform        string
-	platformVersion string
-	installerName   string
-	arch            string
-	compressFormat  string
-	installer       string
-	unInstaller     string
+	context                  context.T
+	platform                 string
+	platformVersion          string
+	downloadPlatformOverride string
+	arch                     string
+	compressFormat           string
+	installScriptName        string
+	uninstallScriptName      string
 }

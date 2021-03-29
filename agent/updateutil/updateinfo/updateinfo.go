@@ -14,14 +14,12 @@
 package updateinfo
 
 import (
-	"os"
 	"os/exec"
 	"runtime"
 	"strings"
 	"sync"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
-	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/platform"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
@@ -36,11 +34,7 @@ var possiblyUsingSystemD = map[string]bool{
 	updateconstants.PlatformLinux:    true,
 }
 
-var mkDirAll = os.MkdirAll
-var openFile = os.OpenFile
 var execCommand = exec.Command
-var cmdStart = (*exec.Cmd).Start
-var cmdOutput = (*exec.Cmd).Output
 var once = new(sync.Once)
 var mutex = new(sync.Mutex)
 
@@ -75,24 +69,19 @@ func (i *updateInfoImpl) IsPlatformDarwin() (result bool) {
 	return 0 == strings.Compare(i.platform, updateconstants.PlatformMacOsX)
 }
 
-//GetInstaller returns the name of the install script
-func (i *updateInfoImpl) GetInstaller() string {
-	return i.installer
+//GetInstallScriptName returns the name of the install script
+func (i *updateInfoImpl) GetInstallScriptName() string {
+	return i.installScriptName
 }
 
-//GetUnInstaller returns the name of the uninstall script
-func (i *updateInfoImpl) GetUnInstaller() string {
-	return i.unInstaller
+//GetUninstallScriptName returns the name of the uninstall script
+func (i *updateInfoImpl) GetUninstallScriptName() string {
+	return i.uninstallScriptName
 }
 
-//GetUnInstaller returns the name of the current platform
+//GetPlatform returns the name of the current platform
 func (i *updateInfoImpl) GetPlatform() string {
 	return i.platform
-}
-
-//GetInstallerName returns the name of the instance install type
-func (i *updateInfoImpl) GetInstallerName() string {
-	return i.installerName
 }
 
 func getMinimumVersionForSystemD() (systemDMap *map[string]string) {
@@ -110,16 +99,20 @@ func getMinimumVersionForSystemD() (systemDMap *map[string]string) {
 
 // GenerateCompressedFileName generates downloadable file name base on agreed convension
 func (i *updateInfoImpl) GenerateCompressedFileName(packageName string) string {
+	platformReplacement := i.platform
+	if i.downloadPlatformOverride != "" {
+		platformReplacement = i.downloadPlatformOverride
+	}
+
 	fileName := "{PackageName}-{Platform}-{Arch}.{Compressed}"
 	fileName = strings.Replace(fileName, updateconstants.PackageNameHolder, packageName, -1)
-	fileName = strings.Replace(fileName, updateconstants.PlatformHolder, i.installerName, -1)
+	fileName = strings.Replace(fileName, updateconstants.PlatformHolder, platformReplacement, -1)
 	fileName = strings.Replace(fileName, updateconstants.ArchHolder, i.arch, -1)
 	fileName = strings.Replace(fileName, updateconstants.CompressedHolder, i.compressFormat, -1)
 
 	return fileName
 }
 
-var getDiskSpaceInfo = fileutil.GetDiskSpaceInfo
 var getPlatformName = platform.PlatformName
 var getPlatformVersion = platform.PlatformVersion
 
@@ -139,70 +132,79 @@ func New(context context.T) (T, error) {
 
 func newInner(context context.T) (updateInfo *updateInfoImpl, err error) {
 	log := context.Log()
-	var installer, unInstaller, platformName, platformVersion, installerName string
+	var installScriptName, uninstallScriptName, platformName, platformVersion, downloadPlatformOverride string
 	if platformName, err = getPlatformName(log); err != nil {
 		return nil, err
 	}
 
-	installer = updateconstants.InstallScript
-	unInstaller = updateconstants.UninstallScript
+	installScriptName = updateconstants.InstallScript
+	uninstallScriptName = updateconstants.UninstallScript
 	// TODO: Change this structure to a switch and inject the platform name from another method.
 	platformName = strings.ToLower(platformName)
 	if strings.Contains(platformName, updateconstants.PlatformAmazonLinux) {
+		log.Info("Detected platform Amazon Linux")
 		platformName = updateconstants.PlatformLinux
-		installerName = updateconstants.PlatformLinux
 	} else if strings.Contains(platformName, updateconstants.PlatformRedHat) {
+		log.Info("Detected platform RedHat")
 		platformName = updateconstants.PlatformRedHat
-		installerName = updateconstants.PlatformLinux
+		downloadPlatformOverride = updateconstants.PlatformLinux
 	} else if strings.Contains(platformName, updateconstants.PlatformOracleLinux) {
+		log.Info("Detected platform Oracle Linux")
 		platformName = updateconstants.PlatformOracleLinux
-		installerName = updateconstants.PlatformLinux
+		downloadPlatformOverride = updateconstants.PlatformLinux
 	} else if strings.Contains(platformName, updateconstants.PlatformUbuntu) {
 		platformName = updateconstants.PlatformUbuntu
+		log.Info("Detected platform Ubuntu")
 		if isSnap, err := isAgentInstalledUsingSnap(log); err == nil && isSnap {
-			installerName = updateconstants.PlatformUbuntuSnap
-			installer = updateconstants.SnapInstaller
-			unInstaller = updateconstants.SnapUnInstaller
-		} else {
-			installerName = updateconstants.PlatformUbuntu
-			installer = updateconstants.DebInstaller
-			unInstaller = updateconstants.DebUnInstaller
+			log.Info("Detected agent installed with snap")
+			installScriptName = updateconstants.SnapInstaller
+			uninstallScriptName = updateconstants.SnapUnInstaller
+
+			// TODO: when versions below 2.2.546.0 have been deprecated, add line below
+			//  Versions below 2.2.546 don't have *-snap-* download packages
+			//  with these names and version below would be unable to update
+			// downloadPlatformOverride = updateconstants.PlatformUbuntuSnap
 		}
 	} else if strings.Contains(platformName, updateconstants.PlatformCentOS) {
+		log.Info("Detected platform CentOS")
 		platformName = updateconstants.PlatformCentOS
-		installerName = updateconstants.PlatformLinux
+		downloadPlatformOverride = updateconstants.PlatformLinux
 	} else if strings.Contains(platformName, updateconstants.PlatformSuseOS) {
+		log.Info("Detected platform SuseOS")
 		platformName = updateconstants.PlatformSuseOS
-		installerName = updateconstants.PlatformLinux
+		downloadPlatformOverride = updateconstants.PlatformLinux
 	} else if strings.Contains(platformName, updateconstants.PlatformRaspbian) {
+		log.Info("Detected platform Raspbian")
 		platformName = updateconstants.PlatformRaspbian
-		installerName = updateconstants.PlatformUbuntu
+		downloadPlatformOverride = updateconstants.PlatformUbuntu
 	} else if strings.Contains(platformName, updateconstants.PlatformDebian) {
+		log.Info("Detected platform Debian")
 		platformName = updateconstants.PlatformDebian
-		installerName = updateconstants.PlatformUbuntu
+		downloadPlatformOverride = updateconstants.PlatformUbuntu
 	} else if strings.Contains(platformName, updateconstants.PlatformMacOsX) {
+		log.Info("Detected platform MacOS")
 		platformName = updateconstants.PlatformMacOsX
-		installerName = updateconstants.PlatformDarwin
+		downloadPlatformOverride = updateconstants.PlatformDarwin
 	} else if isNano, _ := platform.IsPlatformNanoServer(log); isNano {
+		log.Info("Detected platform Windows Nano")
 		platformName = updateconstants.PlatformWindowsNano
-		installerName = updateconstants.PlatformWindowsNano
 	} else {
+		log.Info("Detected platform Windows")
 		platformName = updateconstants.PlatformWindows
-		installerName = updateconstants.PlatformWindows
 	}
 
 	if platformVersion, err = getPlatformVersion(log); err != nil {
 		return nil, err
 	}
 	updateInfo = &updateInfoImpl{
-		context:         context,
-		platform:        platformName,
-		platformVersion: platformVersion,
-		installerName:   installerName,
-		arch:            runtime.GOARCH,
-		compressFormat:  updateconstants.CompressFormat,
-		installer:       installer,
-		unInstaller:     unInstaller,
+		context:                  context,
+		platform:                 platformName,
+		platformVersion:          platformVersion,
+		downloadPlatformOverride: downloadPlatformOverride,
+		arch:                     runtime.GOARCH,
+		compressFormat:           updateconstants.CompressFormat,
+		installScriptName:        installScriptName,
+		uninstallScriptName:      uninstallScriptName,
 	}
 
 	return updateInfo, nil

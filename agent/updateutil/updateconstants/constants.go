@@ -78,7 +78,7 @@ const (
 	// PlatformUbuntu represents Ubuntu
 	PlatformUbuntu = "ubuntu"
 
-	// PlatformUbuntuSnap represents Ubuntu
+	// PlatformUbuntuSnap represents Snap
 	PlatformUbuntuSnap = "snap"
 
 	//PlatformDarwin represents darwin
@@ -299,21 +299,11 @@ const (
 )
 
 const (
-	// installer script for debian
-	DebInstaller = "install.sh"
-	// uninstaller script for debian
-	DebUnInstaller = "uninstall.sh"
-
 	// installer script for snap
 	SnapInstaller = "snap-install.sh"
 	// uninstaller script for snap
 	SnapUnInstaller = "snap-uninstall.sh"
 )
-
-var PossiblyUsingSystemD = map[string]bool{
-	PlatformRaspbian: true,
-	PlatformLinux:    true,
-}
 
 // MinimumDiskSpaceForUpdate represents 100 Mb in bytes
 const MinimumDiskSpaceForUpdate int64 = 104857600

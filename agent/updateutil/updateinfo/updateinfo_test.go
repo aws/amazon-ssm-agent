@@ -43,14 +43,6 @@ func fakeExecCommand(command string, args ...string) *exec.Cmd {
 	return cmd
 }
 
-func fakeExecCommandWithError(command string, args ...string) *exec.Cmd {
-	cs := []string{"-test.run=TestExecCommandHelperProcess", "-test.error", "--", command}
-	cs = append(cs, args...)
-	cmd := exec.Command(os.Args[0], cs...)
-	cmd.Env = []string{"GO_WANT_HELPER_PROCESS=1"}
-	return cmd
-}
-
 func TestCreateInstanceContext(t *testing.T) {
 	testCases := []testUpdateInfo{
 		{updateconstants.PlatformAmazonLinux, nil, "2015.9", nil, updateconstants.PlatformLinux, updateconstants.PlatformLinux, false},
@@ -83,8 +75,24 @@ func TestCreateInstanceContext(t *testing.T) {
 		} else {
 			assert.NoError(t, err)
 			assert.Equal(t, info.GetPlatform(), test.expectedPlatformName)
-			assert.Equal(t, info.GetInstallerName(), test.expectedInstallerName)
 		}
+	}
+}
+
+func TestGenerateCompressedFileName(t *testing.T) {
+	testCases := []struct {
+		obj              updateInfoImpl
+		packageName      string
+		expectedFileName string
+	}{
+		{updateInfoImpl{platform: "linux", downloadPlatformOverride: "", arch: "someArch", compressFormat: "someExt"}, "packageName1", "packageName1-linux-someArch.someExt"},
+		{updateInfoImpl{platform: updateconstants.PlatformUbuntu, downloadPlatformOverride: "", arch: "someArch", compressFormat: "someExt"}, "packageName2", "packageName2-ubuntu-someArch.someExt"},
+		{updateInfoImpl{platform: updateconstants.PlatformMacOsX, downloadPlatformOverride: "darwin", arch: "someArch", compressFormat: "someExt"}, "packageName3", "packageName3-darwin-someArch.someExt"},
+		{updateInfoImpl{platform: updateconstants.PlatformLinux, downloadPlatformOverride: "darwin", arch: "someArch", compressFormat: "someExt"}, "packageName4", "packageName4-darwin-someArch.someExt"},
+	}
+
+	for _, test := range testCases {
+		assert.Equal(t, test.expectedFileName, test.obj.GenerateCompressedFileName(test.packageName))
 	}
 }
 

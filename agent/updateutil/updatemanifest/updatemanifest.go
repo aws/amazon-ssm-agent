@@ -57,21 +57,28 @@ func (m *manifestImpl) LoadManifest(manifestPath string) error {
 
 // HasVersion returns if manifest file has particular version for package
 func (m *manifestImpl) HasVersion(packageName string, version string) bool {
+	log := m.context.Log()
+	log.Debugf("checking if package %v has version %s", packageName, version)
 	fileName := m.info.GenerateCompressedFileName(packageName)
+	log.Debugf("Searching for file name %s", fileName)
 	for _, p := range m.manifest.Packages {
 		if p.Name == packageName {
+			log.Debugf("Found package %s", packageName)
 			for _, f := range p.Files {
 				if f.Name == fileName {
+					log.Debugf("Found file name %s", fileName)
 					for _, v := range f.AvailableVersions {
 						if v.Version == version || version == updateconstants.PipelineTestVersion {
+							log.Debugf("Found version %s", version)
 							return true
 						}
 					}
+
 				}
 			}
 		}
 	}
-
+	log.Warnf("Did not find file name %s with version %s for package %s", fileName, version, packageName)
 	return false
 }
 
@@ -154,7 +161,6 @@ func (m *manifestImpl) GetDownloadURLAndHash(
 	packageName string,
 	version string) (result string, hash string, err error) {
 	fileName := m.info.GenerateCompressedFileName(packageName)
-	fmt.Printf("\n\n\n%s - %s\n", packageName, fileName)
 	var region string
 	region, err = m.context.Identity().Region()
 
@@ -167,7 +173,6 @@ func (m *manifestImpl) GetDownloadURLAndHash(
 			for _, f := range p.Files {
 				if f.Name == fileName {
 					for _, v := range f.AvailableVersions {
-						fmt.Printf("%s - %s\n", version, v.Version)
 						if version == v.Version || version == updateconstants.PipelineTestVersion {
 							result = m.manifest.URIFormat
 							result = strings.Replace(result, updateconstants.RegionHolder, region, -1)
@@ -216,7 +221,7 @@ func (m *manifestImpl) isVersionStatus(packageName string, version string, statu
 								return
 							}
 
-							log.Infof("Version %v actual status is %v while checking if status is %v", version, actualStatus, status)
+							log.Infof("Version %v status in manifest is %v while checking if status is %v", version, actualStatus, status)
 							return actualStatus == status, nil
 						}
 					}
