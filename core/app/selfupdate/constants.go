@@ -74,7 +74,7 @@ const (
 	// PlatformDebian represents Debian
 	PlatformDebian = "debian"
 
-	// PlatformUbuntuSnap represents Ubuntu
+	// PlatformUbuntuSnap represents Snap
 	PlatformUbuntuSnap = "snap"
 
 	// PlatformCentOS represents CentOS

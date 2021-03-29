@@ -321,7 +321,7 @@ func validateUpdateParam(mgr *updateManager, logger log.T, updateDetail *UpdateD
 	if comp > 0 {
 		// Downgrade requires uninstall
 		updateDetail.RequiresUninstall = true
-		logger.Infof("Source version is higher than target version")
+		logger.Infof("Source version is higher than target version, will require a downgrade")
 
 		// TODO: if updateDetail.TargetResolver != updateconstants.TargetVersionCustomerDefined { override allowDowngrade
 		//        - If latest active version is < current version, current version has been deprecated and there is no newer version
@@ -332,7 +332,7 @@ func validateUpdateParam(mgr *updateManager, logger log.T, updateDetail *UpdateD
 		}
 	}
 
-	logger.Infof("Verifying source version and target version are available in the region")
+	logger.Infof("Verifying source version %s and target version %s are available in the manifest from %s", updateDetail.SourceVersion, updateDetail.TargetVersion, updateDetail.ManifestURL)
 	if !updateDetail.Manifest.HasVersion(updateDetail.PackageName, updateDetail.SourceVersion) {
 		logger.Infof("Source version %s is not available in the region", updateDetail.SourceVersion)
 		return mgr.failed(updateDetail, logger, updateconstants.ErrorInvalidSourceVersion, fmt.Sprintf("%v source version %v is unsupported on current platform", updateDetail.PackageName, updateDetail.SourceVersion), true)
@@ -350,14 +350,12 @@ func validateUpdateParam(mgr *updateManager, logger log.T, updateDetail *UpdateD
 func populateUrlHash(mgr *updateManager, logger log.T, updateDetail *UpdateDetail) (err error) {
 
 	// target version download url and hash
-	logger.Infof("target version is %v", updateDetail.TargetVersion)
 	if updateDetail.TargetLocation, updateDetail.TargetHash, err = updateDetail.Manifest.GetDownloadURLAndHash(appconfig.DefaultAgentName, updateDetail.TargetVersion); err != nil {
 		logger.Errorf("Failed to get the source Hash/URL from manifest file, %v", err)
 		return mgr.failed(updateDetail, logger, updateconstants.ErrorTargetPkgDownload, fmt.Sprintf("Failed to get target hash/url: %v", err), true)
 	}
 
 	// source version download url and hash
-	logger.Infof("source version is %v", updateDetail.SourceVersion)
 	if updateDetail.SourceLocation, updateDetail.SourceHash, err = updateDetail.Manifest.GetDownloadURLAndHash(appconfig.DefaultAgentName, updateDetail.SourceVersion); err != nil {
 		logger.Errorf("Failed to get the source Hash/URL from manifest file, %v", err)
 		return mgr.failed(updateDetail, logger, updateconstants.ErrorSourcePkgDownload, fmt.Sprintf("Failed to get source hash/url: %v", err), true)
@@ -590,7 +588,7 @@ func uninstallAgent(mgr *updateManager, log log.T, version string, updateDetail 
 		updateDetail.UpdateRoot,
 		updateDetail.PackageName,
 		version,
-		mgr.Info.GetUnInstaller())
+		mgr.Info.GetUninstallScriptName())
 
 	// calculate work directory
 	workDir := updateutil.UpdateArtifactFolder(
@@ -634,7 +632,7 @@ func installAgent(mgr *updateManager, log log.T, version string, updateDetail *U
 		updateDetail.UpdateRoot,
 		updateDetail.PackageName,
 		version,
-		mgr.Info.GetInstaller())
+		mgr.Info.GetInstallScriptName())
 	// calculate work directory
 	workDir := updateutil.UpdateArtifactFolder(
 		updateDetail.UpdateRoot,
@@ -739,7 +737,7 @@ func downloadAndUnzipArtifact(
 	updateDetail *UpdateDetail,
 	version string) (err error) {
 
-	log.Infof("Preparing source for version %v", version)
+	log.Infof("Preparing artifacts for version %v", version)
 	// download installation zip files
 	downloadOutput, err := downloadArtifact(mgr.Context, downloadInput)
 	if err != nil ||

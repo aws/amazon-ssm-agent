@@ -1462,8 +1462,8 @@ func createUpdaterStubs(control *stubControl) *Updater {
 	context := context.NewMockDefault()
 	info := &updateinfomocks.T{}
 	info.On("GetPlatform").Return(updateconstants.PlatformRedHat)
-	info.On("GetUnInstaller").Return(updateconstants.UninstallScript)
-	info.On("GetInstaller").Return(updateconstants.InstallScript)
+	info.On("GetUninstallScriptName").Return(updateconstants.UninstallScript)
+	info.On("GetInstallScriptName").Return(updateconstants.InstallScript)
 
 	updater := NewUpdater(context, info)
 	updater.mgr.svc = &serviceStub{}
