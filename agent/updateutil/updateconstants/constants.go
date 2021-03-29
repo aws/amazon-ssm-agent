@@ -141,6 +141,7 @@ type UpdateScriptExitCode int
 
 const (
 	// exit code represents exit code when there is no service manager
+	// TODO: Move error to a update precondition
 	ExitCodeUnsupportedPlatform UpdateScriptExitCode = 124
 
 	// exit code represents exit code from agent update install script
@@ -204,6 +205,9 @@ const (
 
 	// ErrorAttemptToDowngrade represents An update is attempting to downgrade Ec2Config to a lower version
 	ErrorAttemptToDowngrade ErrorCode = "ErrorAttempToDowngrade"
+
+	// ErrorFailedPrecondition represents An non fulfilled precondition
+	ErrorFailedPrecondition ErrorCode = "ErrorFailedPrecondition"
 
 	// ErrorInitializationFailed represents An update is failed to initialize
 	ErrorInitializationFailed ErrorCode = "ErrorInitializationFailed"
@@ -282,6 +286,7 @@ const (
 var NonAlarmingErrors = map[ErrorCode]struct{}{
 	ErrorUnsupportedServiceManager: {},
 	ErrorAttemptToDowngrade:        {},
+	ErrorFailedPrecondition:        {},
 }
 
 type SelfUpdateState string

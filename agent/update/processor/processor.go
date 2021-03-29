@@ -34,6 +34,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateprecondition"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updates3util"
 	"github.com/aws/amazon-ssm-agent/agent/versionutil"
 )
@@ -69,6 +70,7 @@ func NewUpdater(context context.T, info updateinfo.T) *Updater {
 			ctxMgr: &contextManager{
 				context: context,
 			},
+			preconditions:       updateprecondition.GetPreconditions(context),
 			initManifest:        initManifest,
 			initSelfUpdate:      initSelfUpdate,
 			determineTarget:     determineTarget,
@@ -345,6 +347,14 @@ func validateUpdateParam(mgr *updateManager, logger log.T, updateDetail *UpdateD
 	// Validate target version is not inactive
 	if err = validateInactiveVersion(mgr.Context, mgr.Info, updateDetail); err != nil {
 		return mgr.inactive(updateDetail, logger, updateconstants.WarnInactiveVersion)
+	}
+
+	// Checking target version update preconditions
+	for _, condition := range mgr.preconditions {
+		logger.Infof("Checking update precondition %s", condition.GetPreconditionName())
+		if err = condition.CheckPrecondition(updateDetail.TargetVersion); err != nil {
+			return mgr.failed(updateDetail, logger, updateconstants.ErrorFailedPrecondition, fmt.Sprintf("Failed update precondition check: %s", err.Error()), true)
+		}
 	}
 
 	return mgr.populateUrlHash(mgr, logger, updateDetail)
