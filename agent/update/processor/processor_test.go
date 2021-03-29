@@ -32,6 +32,8 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
 	updateinfomocks "github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo/mocks"
 	updatemanifestmocks "github.com/aws/amazon-ssm-agent/agent/updateutil/updatemanifest/mocks"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateprecondition"
+	updatepreconditionmocks "github.com/aws/amazon-ssm-agent/agent/updateutil/updateprecondition/mocks"
 	updates3utilmocks "github.com/aws/amazon-ssm-agent/agent/updateutil/updates3util/mocks"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
@@ -797,6 +799,55 @@ func TestValidateUpdateParam_FailInvalidVersion(t *testing.T) {
 	assert.False(t, called)
 }
 
+func TestValidateUpdateParam_FailedPrecondition(t *testing.T) {
+	// setup
+	updater := createDefaultUpdaterStub()
+
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.AllowDowngrade = false
+
+	manifest := &updatemanifestmocks.T{}
+	manifest.On("HasVersion", mock.Anything, updateDetail.SourceVersion).Return(true)
+	manifest.On("HasVersion", mock.Anything, updateDetail.TargetVersion).Return(true)
+	manifest.On("IsVersionActive", mock.Anything, mock.Anything).Return(true, nil)
+
+	updateDetail.Manifest = manifest
+
+	precondition1 := &updatepreconditionmocks.T{}
+	precondition1.On("GetPreconditionName").Return("Precondition1")
+	precondition1.On("CheckPrecondition", updateDetail.TargetVersion).Return(nil)
+
+	precondition2 := &updatepreconditionmocks.T{}
+	precondition2.On("GetPreconditionName").Return("Precondition2")
+	precondition2.On("CheckPrecondition", updateDetail.TargetVersion).Return(fmt.Errorf("SomeFailedPrecondition"))
+	updater.mgr.preconditions = []updateprecondition.T{precondition1, precondition2}
+
+	finalizeCalled := false
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, code string) (err error) {
+		finalizeCalled = true
+		return nil
+	}
+
+	called := false
+	updater.mgr.populateUrlHash = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
+		called = true
+		return nil
+	}
+
+	// action
+	err := validateUpdateParam(updater.mgr, logger, updateDetail)
+
+	assert.NoError(t, err)
+	assert.False(t, called)
+	assert.True(t, finalizeCalled)
+	assert.Equal(t, Completed, updateDetail.State)
+	assert.Equal(t, contracts.ResultStatusFailed, updateDetail.Result)
+	assert.False(t, updateDetail.RequiresUninstall)
+
+	assert.Contains(t, updateDetail.StandardOut, "Failed update precondition check: SomeFailedPrecondition")
+	assert.Equal(t, "", updateDetail.StandardError)
+}
+
 func TestValidateUpdateParam_SourceVersionV1UpdatePlugin(t *testing.T) {
 	// setup
 	updater := createDefaultUpdaterStub()
@@ -811,6 +862,15 @@ func TestValidateUpdateParam_SourceVersionV1UpdatePlugin(t *testing.T) {
 	manifest.On("IsVersionActive", mock.Anything, mock.Anything).Return(true, nil)
 
 	updateDetail.Manifest = manifest
+
+	precondition1 := &updatepreconditionmocks.T{}
+	precondition1.On("GetPreconditionName").Return("Precondition1")
+	precondition1.On("CheckPrecondition", updateDetail.TargetVersion).Return(nil)
+
+	precondition2 := &updatepreconditionmocks.T{}
+	precondition2.On("GetPreconditionName").Return("Precondition2")
+	precondition2.On("CheckPrecondition", updateDetail.TargetVersion).Return(nil)
+	updater.mgr.preconditions = []updateprecondition.T{precondition1, precondition2}
 
 	finalizeCalled := false
 	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, code string) (err error) {
@@ -850,8 +910,16 @@ func TestValidateUpdateParam_Success(t *testing.T) {
 	manifest.On("HasVersion", mock.Anything, updateDetail.SourceVersion).Return(true)
 	manifest.On("HasVersion", mock.Anything, updateDetail.TargetVersion).Return(true)
 	manifest.On("IsVersionActive", mock.Anything, mock.Anything).Return(true, nil)
-
 	updateDetail.Manifest = manifest
+
+	precondition1 := &updatepreconditionmocks.T{}
+	precondition1.On("GetPreconditionName").Return("Precondition1")
+	precondition1.On("CheckPrecondition", updateDetail.TargetVersion).Return(nil)
+
+	precondition2 := &updatepreconditionmocks.T{}
+	precondition2.On("GetPreconditionName").Return("Precondition2")
+	precondition2.On("CheckPrecondition", updateDetail.TargetVersion).Return(nil)
+	updater.mgr.preconditions = []updateprecondition.T{precondition1, precondition2}
 
 	finalizeCalled := false
 	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, code string) (err error) {

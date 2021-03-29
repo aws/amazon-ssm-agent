@@ -23,6 +23,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateprecondition"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updates3util"
 )
 
@@ -54,6 +55,7 @@ type updateManager struct {
 	Info                updateinfo.T
 	util                updateutil.T
 	S3util              updates3util.T
+	preconditions       []updateprecondition.T
 	svc                 Service
 	ctxMgr              ContextMgr
 	initManifest        initPrep
