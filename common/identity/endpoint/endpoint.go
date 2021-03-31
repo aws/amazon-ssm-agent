@@ -48,6 +48,8 @@ var awsRegionServiceDomainMap = map[string]string{
 
 const (
 	ec2ServiceDomainResource    = "services/domain"
+	defaultServiceDomain		= "amazonaws.com"
+	defaultCNServiceDomain		= "amazonaws.com.cn"
 	maxRetries                  = 3
 
 )
@@ -71,6 +73,11 @@ var ec2Metadata = newEC2MetadataClient()
 
 // getDefaultEndpoint returns the default endpoint for a service
 func GetDefaultEndpoint(log log.T, service, region, serviceDomain string) string {
+	if region == "" {
+		log.Error("Cannot get default endpoint for service due to unspecified region.")
+		return ""
+	}
+
 	var endpoint string
 	if serviceDomain != "" {
 		endpoint = serviceDomain
@@ -81,16 +88,18 @@ func GetDefaultEndpoint(log log.T, service, region, serviceDomain string) string
 		if err == nil {
 			endpoint = dynamicServiceDomain
 		} else {
-			log.Errorf("Failed to get service domain from ec2 metadata: %v", err)
-
-			if strings.HasPrefix(region, "cn-") {
-				endpoint = "amazonaws.com.cn"
-			}
+			log.Warnf("Failed to get service domain from ec2 metadata: %v", err)
 		}
 	}
 
-	if endpoint == "" || endpoint == "amazonaws.com" {
-		return ""
+	if endpoint == "" {
+		if strings.HasPrefix(region, "cn-") {
+			endpoint = defaultCNServiceDomain
+		} else {
+			endpoint = defaultServiceDomain
+		}
+
+		log.Warnf("Service domain not found in region-domain map and could not be retrieved from instance metadata. Using %s as default", endpoint)
 	}
 
 	return getServiceEndpoint(region, service, endpoint)
