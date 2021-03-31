@@ -16,34 +16,11 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/stretchr/testify/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	endpointmocks "github.com/aws/amazon-ssm-agent/common/identity/endpoint/mocks"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
-
-type metadataMock struct {
-	mock.Mock
-}
-
-func (m *metadataMock) GetMetadata(val string) (string, error) {
-	ret := m.Called(val)
-
-	var r0 string
-	if rf, ok := ret.Get(0).(func() string); ok {
-		r0 = rf()
-	} else {
-		r0 = ret.Get(0).(string)
-	}
-
-	var r1 error
-	if rf, ok := ret.Get(1).(func() error); ok {
-		r1 = rf()
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
 
 type GetDefaultEndPointTest struct {
 	Region  string
@@ -54,15 +31,16 @@ type GetDefaultEndPointTest struct {
 var (
 getDefaultEndPointTests = []GetDefaultEndPointTest{
 	{"", "", ""},
-	{"val", "test", ""},
-	{"us-east-1", "ssm", ""},
+	{"val", "test", "test.val.amazonaws.com"},
+	{"us-east-1", "ssm", "ssm.us-east-1.amazonaws.com"},
 	{"cn-north-1", "ssm", "ssm.cn-north-1.amazonaws.com.cn"},
+	{"unknown-region", "ssmmessages", "ssmmessages.unknown-region.amazonaws.com"},
 }
 )
 
 func TestGetDefaultEndPoint(t *testing.T) {
 	correctEc2Metadata := ec2Metadata
-	ec2MetadataMock := &metadataMock{}
+	ec2MetadataMock := &endpointmocks.IEC2MdsSdkClient{}
 	defer func() {ec2Metadata = correctEc2Metadata} ()
 
 	ec2MetadataMock.On("GetMetadata", mock.Anything).Return("", fmt.Errorf("SomeError"))
