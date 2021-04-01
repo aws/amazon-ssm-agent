@@ -469,8 +469,14 @@ func runPowershell(jsonObj interface{}, command string, properties []string, exp
 	args = append(args, "| ConvertTo-Json -Depth 3")
 
 	// execute powershell with arguments in cmd.
-	if cmdOut, err = cmdExec.ExecuteCommand("powershell", args...); err != nil || len(cmdOut) == 0 {
+	cmdOut, err = cmdExec.ExecuteCommand("powershell", args...)
+	if err != nil {
 		err = errors.New(fmt.Sprintf("Error while running powershell %v: %v", args, err.Error()))
+		return
+	}
+
+	if len(cmdOut) == 0 {
+		err = errors.New(fmt.Sprintf("Error while running powershell %v: No output", args))
 		return
 	}
 
