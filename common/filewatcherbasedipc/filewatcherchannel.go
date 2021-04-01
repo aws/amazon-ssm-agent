@@ -186,6 +186,11 @@ func (ch *fileWatcherChannel) CleanupOwnModeFiles() {
 	}
 }
 
+// GetPath returns IPC filepath
+func (ch *fileWatcherChannel) GetPath() string {
+	return ch.path
+}
+
 func (ch *fileWatcherChannel) removeMessage(filePath string) {
 	var err error
 	for attempt := 0; attempt < consumeAttemptCount; attempt++ {

@@ -136,6 +136,10 @@ func (f *FakeChannel) CleanupOwnModeFiles() {
 	}
 }
 
+func (f *FakeChannel) GetPath() string {
+	return f.name
+}
+
 func IsExists(name string) bool {
 	_, ok := queueMap[name]
 	return ok
