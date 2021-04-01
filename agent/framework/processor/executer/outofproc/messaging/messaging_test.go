@@ -19,6 +19,7 @@ func TestMessagingTerminate(t *testing.T) {
 	channelMock := new(channelmock.MockedChannel)
 	channelMock.On("GetMessage").Return(recvChan)
 	channelMock.On("Destroy").Return(nil)
+	channelMock.On("GetPath").Return("/test/path").Times(3)
 	channelMock.On("Send", testInputDatagram).Return(nil)
 	backendMock := new(BackendMock)
 	backendMock.On("Accept").Return(sendChan)
@@ -54,6 +55,7 @@ func TestMessagingShutdown(t *testing.T) {
 	channelMock.On("Send", testInputDatagram).Return(nil)
 	backendMock := new(BackendMock)
 	backendMock.On("Accept").Return(sendChan)
+	channelMock.On("GetPath").Return("/test/path").Times(3)
 	backendMock.On("Process", testOutputDatagram).Return(nil)
 	backendMock.On("Stop").Return(stopChan)
 	go func() {

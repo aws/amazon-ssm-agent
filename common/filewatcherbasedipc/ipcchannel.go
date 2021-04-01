@@ -45,6 +45,8 @@ type IPCChannel interface {
 	Destroy()
 	// CleanupOwnModeFiles cleans up it own mode files
 	CleanupOwnModeFiles()
+	// GetPath returns IPC filepath
+	GetPath() string
 }
 
 // IsFileWatcherChannelPresent checks whether the file watcher channel is present or not

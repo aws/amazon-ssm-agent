@@ -84,7 +84,8 @@ func Messaging(log log.T, ipc filewatcherbasedipc.IPCChannel, backend MessagingB
 			log.Errorf("Stacktrace:\n%s", debug.Stack())
 		}
 	}()
-	log.Info("inter process communication started")
+
+	log.Info("inter process communication started at %v", ipc.GetPath())
 	requestedStop := false
 	inboundClosed := false
 	//TODO add timer, if IPC is unresponsive to Close(), force return
@@ -129,7 +130,8 @@ func Messaging(log log.T, ipc filewatcherbasedipc.IPCChannel, backend MessagingB
 				//if inbound channel from backend breaks, still continue messaging to send outbound messages
 				break
 			}
-			log.Debugf("sending datagram: %v", datagram)
+
+			log.Debugf("sending datagram to %v: %v", ipc.GetPath(), datagram)
 			if err = ipc.Send(datagram); err != nil {
 				//this is fatal error, force return
 				log.Errorf("failed to send message to ipc channel: %v", err)
@@ -141,7 +143,8 @@ func Messaging(log log.T, ipc filewatcherbasedipc.IPCChannel, backend MessagingB
 				log.Info("ipc channel closed, stop messaging worker")
 				return
 			}
-			log.Debugf("received datagram: %v", datagram)
+
+			log.Debugf("received datagram from %v: %v", ipc.GetPath(), datagram)
 			if err = backend.Process(datagram); err != nil {
 				//encountered error in databackend, it's up to the backend to decide whether close or not
 				log.Errorf("messaging pipeline process datagram encountered error: %v", err)
