@@ -50,7 +50,7 @@ func newECSIdentity(log log.T, _ *appconfig.SsmagentConfig) []IAgentIdentityInne
 
 func newOnPremIdentity(log log.T, config *appconfig.SsmagentConfig) []IAgentIdentityInner {
 	return []IAgentIdentityInner{&onprem.Identity{
-		Log: log,
+		Log:    log,
 		Config: config,
 	}}
 }

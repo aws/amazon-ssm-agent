@@ -33,8 +33,8 @@ import (
 // ISurveySuite tests surveyor
 type ISurveySuite struct {
 	suite.Suite
-	log log.T
-	identity identity.IAgentIdentity
+	log            log.T
+	identity       identity.IAgentIdentity
 	surveyInstance *survey
 }
 

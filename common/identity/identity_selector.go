@@ -15,6 +15,7 @@ package identity
 
 import (
 	"fmt"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
@@ -22,16 +23,16 @@ import (
 // NewDefaultAgentIdentitySelector creates a instance of a default agent identity selector
 func NewDefaultAgentIdentitySelector(log log.T) IAgentIdentitySelector {
 	return &defaultAgentIdentitySelector{
-		log:                        log,
+		log: log,
 	}
 }
 
 // NewInstanceIDRegionAgentIdentitySelector creates a instance of a default agent identity selector
 func NewInstanceIDRegionAgentIdentitySelector(log log.T, instanceID, region string) IAgentIdentitySelector {
 	return &instanceIDRegionAgentIdentitySelector{
-		log:                        log,
-		instanceID:                 instanceID,
-		region:                     region,
+		log:        log,
+		instanceID: instanceID,
+		region:     region,
 	}
 }
 
@@ -68,7 +69,7 @@ func newAgentIdentityInner(log log.T, config *appconfig.SsmagentConfig, selector
 		}
 
 		// Testing if identity can be assumed
-		agentIdentity =  selector.selectAgentIdentity(selectedIdentityFunc(log, config), identityKey)
+		agentIdentity = selector.selectAgentIdentity(selectedIdentityFunc(log, config), identityKey)
 		if agentIdentity != nil {
 			log.Infof("Agent will take identity from %s", identityKey)
 			return &agentIdentityCacher{
@@ -91,7 +92,7 @@ func NewAgentIdentity(log log.T, config *appconfig.SsmagentConfig, selector IAge
 		if err == nil {
 			break
 		}
-		if i + 1 < MaxRetriesIdentitySelector {
+		if i+1 < MaxRetriesIdentitySelector {
 			log.Errorf("failed to find identity, retrying: %v", err)
 		}
 	}

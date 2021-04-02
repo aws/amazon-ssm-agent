@@ -22,15 +22,15 @@ import (
 const MaxRetriesIdentitySelector = 3
 
 type defaultAgentIdentitySelector struct {
-	log                        log.T
-	mutex                      sync.Mutex
+	log   log.T
+	mutex sync.Mutex
 }
 
 type instanceIDRegionAgentIdentitySelector struct {
-	log                        log.T
-	instanceID                 string
-	region                     string
-	mutex                      sync.Mutex
+	log        log.T
+	instanceID string
+	region     string
+	mutex      sync.Mutex
 }
 
 // IAgentIdentitySelector abstracts logic to select an agent identity

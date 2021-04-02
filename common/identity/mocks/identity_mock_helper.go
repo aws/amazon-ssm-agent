@@ -6,15 +6,15 @@ import (
 )
 
 var (
-MockAvailabilityZone = "us-east-1a"
-MockCredentials = creds.GetRemoteCreds()
-MockIdentityType = "EC2"
-MockInstanceID = "i-123123123"
-MockInstanceType = "someInstanceType"
-MockIsIdentityEnvironment = true
-MockRegion = "us-east-1"
-MockServiceDomain = "amazonaws.com"
-MockShortInstanceID = "i-123123123"
+	MockAvailabilityZone      = "us-east-1a"
+	MockCredentials           = creds.GetRemoteCreds()
+	MockIdentityType          = "EC2"
+	MockInstanceID            = "i-123123123"
+	MockInstanceType          = "someInstanceType"
+	MockIsIdentityEnvironment = true
+	MockRegion                = "us-east-1"
+	MockServiceDomain         = "amazonaws.com"
+	MockShortInstanceID       = "i-123123123"
 )
 
 func NewDefaultMockAgentIdentity() *IAgentIdentity {
