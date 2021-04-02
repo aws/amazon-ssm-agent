@@ -762,6 +762,83 @@ func TestValidateUpdateParam_TargetVersionNotExist(t *testing.T) {
 	assert.Equal(t, "", updateDetail.StandardError)
 }
 
+func TestValidateUpdateParam_FailInvalidVersion(t *testing.T) {
+	updater := createDefaultUpdaterStub()
+	updateDetail := createUpdateDetail(Initialized)
+
+	manifest := &updatemanifestmocks.T{}
+	manifest.On("HasVersion", mock.Anything, updateDetail.SourceVersion).Return(true)
+	manifest.On("HasVersion", mock.Anything, updateDetail.TargetVersion).Return(false)
+	manifest.On("IsVersionActive", mock.Anything, mock.Anything).Return(false, nil)
+	updateDetail.Manifest = manifest
+
+	finalizeCalled := false
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, code string) (err error) {
+		finalizeCalled = true
+		return nil
+	}
+
+	called := false
+	updater.mgr.populateUrlHash = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
+		called = true
+		return nil
+	}
+
+	// action
+	err := validateUpdateParam(updater.mgr, logger, updateDetail)
+
+	// assert
+	assert.Nil(t, err)
+	assert.Equal(t, Completed, updateDetail.State)
+	assert.Equal(t, contracts.ResultStatusFailed, updateDetail.Result)
+
+	assert.Contains(t, updateDetail.StandardOut, "Updating  from 5.0.0.0 to 6.0.0.0")
+	assert.True(t, finalizeCalled)
+	assert.False(t, called)
+}
+
+func TestValidateUpdateParam_SourceVersionV1UpdatePlugin(t *testing.T) {
+	// setup
+	updater := createDefaultUpdaterStub()
+
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.AllowDowngrade = false
+	updateDetail.SourceVersion = "3.0.855.0"
+
+	manifest := &updatemanifestmocks.T{}
+	manifest.On("HasVersion", mock.Anything, updateDetail.SourceVersion).Return(true)
+	manifest.On("HasVersion", mock.Anything, updateDetail.TargetVersion).Return(true)
+	manifest.On("IsVersionActive", mock.Anything, mock.Anything).Return(true, nil)
+
+	updateDetail.Manifest = manifest
+
+	finalizeCalled := false
+	updater.mgr.finalize = func(mgr *updateManager, updateDetail *UpdateDetail, code string) (err error) {
+		finalizeCalled = true
+		return nil
+	}
+
+	called := false
+	updater.mgr.populateUrlHash = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
+		called = true
+		return nil
+	}
+
+	// action
+	err := validateUpdateParam(updater.mgr, logger, updateDetail)
+
+	// assert
+	assert.NoError(t, err)
+	assert.True(t, called)
+	assert.False(t, finalizeCalled)
+	assert.Equal(t, Initialized, updateDetail.State)
+	assert.Equal(t, contracts.ResultStatusInProgress, updateDetail.Result)
+	assert.False(t, updateDetail.RequiresUninstall)
+
+	assert.Empty(t, updateDetail.StandardOut)
+	assert.Equal(t, "", updateDetail.StandardError)
+}
+
 func TestValidateUpdateParam_Success(t *testing.T) {
 	// setup
 	updater := createDefaultUpdaterStub()
@@ -772,6 +849,8 @@ func TestValidateUpdateParam_Success(t *testing.T) {
 	manifest := &updatemanifestmocks.T{}
 	manifest.On("HasVersion", mock.Anything, updateDetail.SourceVersion).Return(true)
 	manifest.On("HasVersion", mock.Anything, updateDetail.TargetVersion).Return(true)
+	manifest.On("IsVersionActive", mock.Anything, mock.Anything).Return(true, nil)
+
 	updateDetail.Manifest = manifest
 
 	finalizeCalled := false
@@ -831,25 +910,7 @@ func TestPrepareInstallationPackages(t *testing.T) {
 	assert.True(t, isUpdateCalled)
 }
 
-func TestPreparePackagesFailCreateInstanceContext(t *testing.T) {
-	// setup
-	control := &stubControl{failCreateInstanceContext: true}
-	updater := createUpdaterStubs(control)
-	updateDetail := createUpdateDetail(Initialized)
-
-	manifest := &updatemanifestmocks.T{}
-	manifest.On("IsVersionActive", mock.Anything, mock.Anything).Return(true, nil)
-	updateDetail.Manifest = manifest
-
-	// action
-	err := downloadPackages(updater.mgr, logger, updateDetail)
-
-	// assert
-	assert.NoError(t, err)
-	assert.Equal(t, Completed, updateDetail.State)
-}
-
-func TestPreparePackagesFailCreateUpdateDownloadFolder(t *testing.T) {
+func TestDownloadPackagesFailCreateUpdateDownloadFolder(t *testing.T) {
 	// setup
 	updater := createDefaultUpdaterStub()
 	updateDetail := createUpdateDetail(Initialized)
@@ -871,7 +932,7 @@ func TestPreparePackagesFailCreateUpdateDownloadFolder(t *testing.T) {
 	assert.Equal(t, Completed, updateDetail.State)
 }
 
-func TestPreparePackagesFailDownload(t *testing.T) {
+func TestDownloadPackagesFailDownload(t *testing.T) {
 	// setup
 	control := &stubControl{failCreateUpdateDownloadFolder: true}
 	updater := createUpdaterStubs(control)
@@ -887,39 +948,6 @@ func TestPreparePackagesFailDownload(t *testing.T) {
 	// assert
 	assert.NoError(t, err)
 	assert.Equal(t, Completed, updateDetail.State)
-}
-
-func TestPreparePackageFailInvalidVersion(t *testing.T) {
-	updater := createDefaultUpdaterStub()
-	updateDetail := createUpdateDetail(Initialized)
-	isUpdateCalled := false
-	isDownloadCalled := false
-
-	manifest := &updatemanifestmocks.T{}
-	manifest.On("IsVersionActive", mock.Anything, mock.Anything).Return(false, nil)
-	updateDetail.Manifest = manifest
-
-	// stub download for updater
-	updater.mgr.download = func(mgr *updateManager, log log.T, downloadInput artifact.DownloadInput, updateDetail *UpdateDetail, version string) (err error) {
-		isDownloadCalled = true
-		return nil
-	}
-	// stop at the end of prepareInstallationPackages, do not perform update
-	updater.mgr.update = func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
-		isUpdateCalled = true
-		return nil
-	}
-
-	// action
-	err := downloadPackages(updater.mgr, logger, updateDetail)
-
-	// assert
-	assert.Nil(t, err)
-	assert.Equal(t, Completed, updateDetail.State)
-
-	assert.Empty(t, updateDetail.StandardOut)
-	assert.Equal(t, isDownloadCalled, false)
-	assert.Equal(t, isUpdateCalled, false)
 }
 
 func TestValidateUpdateVersion(t *testing.T) {

@@ -207,7 +207,6 @@ func initManifest(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (er
 		updateDetail.ManifestURL, err = updateutil.GetManifestURLFromSourceUrl(updateDetail.SourceLocation)
 
 		if err != nil {
-			log.Errorf("Failed to get manifestURL from source location: %v", err)
 			return mgr.failed(updateDetail, log, updateconstants.ErrorManifestURLParse, fmt.Sprintf("Failed to resolve manifest url: %v", err), true)
 		}
 	}
@@ -215,7 +214,6 @@ func initManifest(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (er
 	log.Infof("Initiating download manifest %v", updateDetail.ManifestURL)
 	err = mgr.S3util.DownloadManifest(updateDetail.Manifest, updateDetail.ManifestURL)
 	if err != nil {
-		log.Errorf("Failed to download manifest: %v", err)
 		return mgr.failed(updateDetail, log, updateconstants.ErrorDownloadManifest, fmt.Sprintf("Failed to download manifest: %v", err), true)
 	}
 
@@ -272,7 +270,6 @@ func determineTarget(mgr *updateManager, logger log.T, updateDetail *UpdateDetai
 		updateDetail.TargetVersion, err = updateDetail.Manifest.GetLatestActiveVersion(updateDetail.PackageName)
 
 		if err != nil {
-			logger.Errorf("Failed to get latest active version: %v", err)
 			return mgr.failed(updateDetail, logger, updateconstants.ErrorGetLatestActiveVersionManifest, fmt.Sprintf("Failed to get latest active version from manifest: %v", err), true)
 		}
 	} else {
@@ -282,7 +279,6 @@ func determineTarget(mgr *updateManager, logger log.T, updateDetail *UpdateDetai
 	// TODO: Support version wild-cards e.g. 3.0.* to get latest of a minor version
 
 	if !versionutil.IsValidVersion(updateDetail.TargetVersion) {
-		logger.Errorf("%s is not a valid entry for Target Version", updateDetail.TargetVersion)
 		return mgr.failed(updateDetail, logger, updateconstants.ErrorInvalidTargetVersion, fmt.Sprintf("Invalid target version: %s", updateDetail.TargetVersion), true)
 	}
 
@@ -291,23 +287,23 @@ func determineTarget(mgr *updateManager, logger log.T, updateDetail *UpdateDetai
 
 // validateUpdateParam populates the update detail for self update
 func validateUpdateParam(mgr *updateManager, logger log.T, updateDetail *UpdateDetail) (err error) {
-	updateDetail.AppendInfo(logger, "Updating %v from %v to %v",
-		updateDetail.PackageName,
-		updateDetail.SourceVersion,
-		updateDetail.TargetVersion)
+	// Only write this to console if source version has other than v1 update plugin
+	if !updateutil.IsV1UpdatePlugin(updateDetail.SourceVersion) {
+		updateDetail.AppendInfo(logger, "Updating %v from %v to %v",
+			updateDetail.PackageName,
+			updateDetail.SourceVersion,
+			updateDetail.TargetVersion)
+	}
 
 	logger.Infof("Comparing source version %s and target version %s", updateDetail.SourceVersion, updateDetail.TargetVersion)
 
 	var comp int
 	comp, err = versionutil.VersionCompare(updateDetail.SourceVersion, updateDetail.TargetVersion)
 	if err != nil {
-		logger.Errorf("Failed to compare versions %s and %s: %v", updateDetail.SourceVersion, updateDetail.TargetVersion, err)
 		return mgr.failed(updateDetail, logger, updateconstants.ErrorVersionCompare, fmt.Sprintf("Failed to compare versions %s and %s: %v", updateDetail.SourceVersion, updateDetail.TargetVersion, err), true)
 	}
 
 	if comp == 0 {
-		logger.Infof("%v %v has already been installed, update skipped", updateDetail.PackageName, updateDetail.SourceVersion)
-
 		updateDetail.AppendInfo(
 			logger,
 			"%v %v has already been installed",
@@ -334,13 +330,21 @@ func validateUpdateParam(mgr *updateManager, logger log.T, updateDetail *UpdateD
 
 	logger.Infof("Verifying source version %s and target version %s are available in the manifest from %s", updateDetail.SourceVersion, updateDetail.TargetVersion, updateDetail.ManifestURL)
 	if !updateDetail.Manifest.HasVersion(updateDetail.PackageName, updateDetail.SourceVersion) {
-		logger.Infof("Source version %s is not available in the region", updateDetail.SourceVersion)
 		return mgr.failed(updateDetail, logger, updateconstants.ErrorInvalidSourceVersion, fmt.Sprintf("%v source version %v is unsupported on current platform", updateDetail.PackageName, updateDetail.SourceVersion), true)
 	}
 
 	if !updateDetail.Manifest.HasVersion(updateDetail.PackageName, updateDetail.TargetVersion) {
-		logger.Infof("Target version %s is not available in the region", updateDetail.TargetVersion)
 		return mgr.failed(updateDetail, logger, updateconstants.ErrorInvalidTargetVersion, fmt.Sprintf("%v target version %v is unsupported on current platform", updateDetail.PackageName, updateDetail.TargetVersion), true)
+	}
+
+	// Validate target version is supported
+	if err = validateUpdateVersion(logger, updateDetail, mgr.Info); err != nil {
+		return mgr.failed(updateDetail, logger, updateconstants.ErrorUnsupportedVersion, err.Error(), true)
+	}
+
+	// Validate target version is not inactive
+	if err = validateInactiveVersion(mgr.Context, mgr.Info, updateDetail); err != nil {
+		return mgr.inactive(updateDetail, logger, updateconstants.WarnInactiveVersion)
 	}
 
 	return mgr.populateUrlHash(mgr, logger, updateDetail)
@@ -348,16 +352,15 @@ func validateUpdateParam(mgr *updateManager, logger log.T, updateDetail *UpdateD
 
 // populateUrlHash continues initializing after self update has been handled
 func populateUrlHash(mgr *updateManager, logger log.T, updateDetail *UpdateDetail) (err error) {
+	logger.Infof("Attempting to get download url and artifact hashes from manifest")
 
 	// target version download url and hash
 	if updateDetail.TargetLocation, updateDetail.TargetHash, err = updateDetail.Manifest.GetDownloadURLAndHash(appconfig.DefaultAgentName, updateDetail.TargetVersion); err != nil {
-		logger.Errorf("Failed to get the source Hash/URL from manifest file, %v", err)
 		return mgr.failed(updateDetail, logger, updateconstants.ErrorTargetPkgDownload, fmt.Sprintf("Failed to get target hash/url: %v", err), true)
 	}
 
 	// source version download url and hash
 	if updateDetail.SourceLocation, updateDetail.SourceHash, err = updateDetail.Manifest.GetDownloadURLAndHash(appconfig.DefaultAgentName, updateDetail.SourceVersion); err != nil {
-		logger.Errorf("Failed to get the source Hash/URL from manifest file, %v", err)
 		return mgr.failed(updateDetail, logger, updateconstants.ErrorSourcePkgDownload, fmt.Sprintf("Failed to get source hash/url: %v", err), true)
 	}
 
@@ -370,10 +373,6 @@ func downloadPackages(mgr *updateManager, log log.T, updateDetail *UpdateDetail)
 
 	updateDownload := ""
 
-	if err = validateUpdateVersion(log, updateDetail, mgr.Info); err != nil {
-		return mgr.failed(updateDetail, log, updateconstants.ErrorUnsupportedVersion, err.Error(), true)
-	}
-
 	if updateDownload, err = mgr.util.CreateUpdateDownloadFolder(); err != nil {
 		message := updateutil.BuildMessage(
 			err,
@@ -381,10 +380,6 @@ func downloadPackages(mgr *updateManager, log log.T, updateDetail *UpdateDetail)
 			updateDetail.PackageName,
 			updateDetail.TargetVersion)
 		return mgr.failed(updateDetail, log, updateconstants.ErrorCreateUpdateFolder, message, true)
-	}
-
-	if err = validateInactiveVersion(mgr.Context, mgr.Info, updateDetail); err != nil {
-		return mgr.inactive(updateDetail, log, updateconstants.WarnInactiveVersion)
 	}
 
 	// Download source

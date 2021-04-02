@@ -637,3 +637,13 @@ func GetManifestURLFromSourceUrl(sourceURL string) (string, error) {
 
 	return u.String(), nil
 }
+
+// IsV1UpdatePlugin returns true if source agent version is equal or below 3.0.882.0, any error defaults to false
+//  this logic is required since moving logic from plugin to updater would otherwise lead
+//  to duplicate aws console logging when upgrading from V1UpdatePlugin agents
+func IsV1UpdatePlugin(SourceVersion string) bool {
+	const LastV1UpdatePluginAgentVersion = "3.0.882.0"
+
+	comp, err := versionutil.VersionCompare(SourceVersion, LastV1UpdatePluginAgentVersion)
+	return err == nil && comp <= 0
+}
