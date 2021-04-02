@@ -32,8 +32,8 @@ import (
 // IRespondentSuite tests respondent
 type IRespondentSuite struct {
 	suite.Suite
-	log log.T
-	identity identity.IAgentIdentity
+	log                log.T
+	identity           identity.IAgentIdentity
 	respondentInstance *respondent
 }
 

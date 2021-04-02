@@ -29,19 +29,19 @@ type GetDefaultEndPointTest struct {
 }
 
 var (
-getDefaultEndPointTests = []GetDefaultEndPointTest{
-	{"", "", ""},
-	{"val", "test", "test.val.amazonaws.com"},
-	{"us-east-1", "ssm", "ssm.us-east-1.amazonaws.com"},
-	{"cn-north-1", "ssm", "ssm.cn-north-1.amazonaws.com.cn"},
-	{"unknown-region", "ssmmessages", "ssmmessages.unknown-region.amazonaws.com"},
-}
+	getDefaultEndPointTests = []GetDefaultEndPointTest{
+		{"", "", ""},
+		{"val", "test", "test.val.amazonaws.com"},
+		{"us-east-1", "ssm", "ssm.us-east-1.amazonaws.com"},
+		{"cn-north-1", "ssm", "ssm.cn-north-1.amazonaws.com.cn"},
+		{"unknown-region", "ssmmessages", "ssmmessages.unknown-region.amazonaws.com"},
+	}
 )
 
 func TestGetDefaultEndPoint(t *testing.T) {
 	correctEc2Metadata := ec2Metadata
 	ec2MetadataMock := &endpointmocks.IEC2MdsSdkClient{}
-	defer func() {ec2Metadata = correctEc2Metadata} ()
+	defer func() { ec2Metadata = correctEc2Metadata }()
 
 	ec2MetadataMock.On("GetMetadata", mock.Anything).Return("", fmt.Errorf("SomeError"))
 	ec2Metadata = ec2MetadataMock

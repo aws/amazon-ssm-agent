@@ -15,6 +15,7 @@ package ecs
 
 import (
 	"fmt"
+
 	"github.com/aws/amazon-ssm-agent/common/identity/creds"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 )

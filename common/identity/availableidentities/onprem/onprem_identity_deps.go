@@ -14,12 +14,13 @@
 package onprem
 
 import (
+	"sync"
+	"time"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/onprem/rsaauth"
 	"github.com/aws/aws-sdk-go/aws/credentials"
-	"sync"
-	"time"
 )
 
 // IdentityType is the identity type for OnPrem
@@ -37,10 +38,10 @@ const (
 )
 
 var (
-	emptyCredential      = credentials.Value{ProviderName: ProviderName}
-	shareLock            sync.RWMutex
-	shareCreds           bool
-	shareProfile         string
+	emptyCredential = credentials.Value{ProviderName: ProviderName}
+	shareLock       sync.RWMutex
+	shareCreds      bool
+	shareProfile    string
 )
 
 // managedInstancesRoleProvider implements the AWS SDK credential provider, and is used to the create AWS client.
@@ -62,12 +63,12 @@ type managedInstancesRoleProvider struct {
 	// client is the required SSM managed instance service client to use when connecting to SSM Auth service.
 	client rsaauth.RsaSignedService
 	config *appconfig.SsmagentConfig
-	log log.T
+	log    log.T
 }
 
 // Identity is the struct defining the IAgentIdentityInner for OnPrem
 type Identity struct {
-	Log log.T
-	Config *appconfig.SsmagentConfig
+	Log                  log.T
+	Config               *appconfig.SsmagentConfig
 	credentialsSingleton *credentials.Credentials
 }

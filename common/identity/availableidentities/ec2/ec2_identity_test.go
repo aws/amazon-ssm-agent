@@ -14,17 +14,18 @@ package ec2
 
 import (
 	"fmt"
+	"testing"
+
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/aws-sdk-go/aws/ec2metadata"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
 
 func TestEC2IdentityType_InstanceId(t *testing.T) {
 	client := &iEC2MdsSdkClientMock{}
 
-	identity := Identity {
-		Log: log.NewMockLog(),
+	identity := Identity{
+		Log:    log.NewMockLog(),
 		Client: client,
 	}
 	val := "SomeId"
@@ -38,8 +39,8 @@ func TestEC2IdentityType_InstanceId(t *testing.T) {
 func TestEC2IdentityType_RegionFirstSuccess(t *testing.T) {
 	client := &iEC2MdsSdkClientMock{}
 
-	identity := Identity {
-		Log: log.NewMockLog(),
+	identity := Identity{
+		Log:    log.NewMockLog(),
 		Client: client,
 	}
 	val := "SomeRegion"
@@ -53,8 +54,8 @@ func TestEC2IdentityType_RegionFirstSuccess(t *testing.T) {
 func TestEC2IdentityType_RegionFailDocumentSuccess(t *testing.T) {
 	client := &iEC2MdsSdkClientMock{}
 
-	identity := Identity {
-		Log: log.NewMockLog(),
+	identity := Identity{
+		Log:    log.NewMockLog(),
 		Client: client,
 	}
 	val := "SomeOtherRegion"
@@ -71,8 +72,8 @@ func TestEC2IdentityType_RegionFailDocumentSuccess(t *testing.T) {
 func TestEC2IdentityType_AvailabilityZone(t *testing.T) {
 	client := &iEC2MdsSdkClientMock{}
 
-	identity := Identity {
-		Log: log.NewMockLog(),
+	identity := Identity{
+		Log:    log.NewMockLog(),
 		Client: client,
 	}
 	val := "SomeAZ"
@@ -86,8 +87,8 @@ func TestEC2IdentityType_AvailabilityZone(t *testing.T) {
 func TestEC2IdentityType_InstanceType(t *testing.T) {
 	client := &iEC2MdsSdkClientMock{}
 
-	identity := Identity {
-		Log: log.NewMockLog(),
+	identity := Identity{
+		Log:    log.NewMockLog(),
 		Client: client,
 	}
 	val := "SomeInstanceType"
@@ -101,8 +102,8 @@ func TestEC2IdentityType_InstanceType(t *testing.T) {
 func TestEC2IdentityType_ServiceDomain(t *testing.T) {
 	client := &iEC2MdsSdkClientMock{}
 
-	identity := Identity {
-		Log: log.NewMockLog(),
+	identity := Identity{
+		Log:    log.NewMockLog(),
 		Client: client,
 	}
 	val := "SomeServiceDomain"
@@ -116,8 +117,8 @@ func TestEC2IdentityType_ServiceDomain(t *testing.T) {
 func TestEC2IdentityType_Credentials(t *testing.T) {
 	client := &iEC2MdsSdkClientMock{}
 
-	identity := Identity {
-		Log: log.NewMockLog(),
+	identity := Identity{
+		Log:    log.NewMockLog(),
 		Client: client,
 	}
 
@@ -127,8 +128,8 @@ func TestEC2IdentityType_Credentials(t *testing.T) {
 func TestEC2IdentityType_IsIdentityEnvironment(t *testing.T) {
 	client := &iEC2MdsSdkClientMock{}
 
-	identity := Identity {
-		Log: log.NewMockLog(),
+	identity := Identity{
+		Log:    log.NewMockLog(),
 		Client: client,
 	}
 
@@ -142,7 +143,7 @@ func TestEC2IdentityType_IsIdentityEnvironment(t *testing.T) {
 }
 
 func TestEC2IdentityType_IdentityType(t *testing.T) {
-	identity := Identity {
+	identity := Identity{
 		Log: log.NewMockLog(),
 	}
 

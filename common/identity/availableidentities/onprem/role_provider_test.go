@@ -17,13 +17,14 @@ package onprem
 
 import (
 	"fmt"
+	"strings"
+	"testing"
+	"time"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/onprem/rsaauth"
 	"github.com/cenkalti/backoff"
-	"strings"
-	"testing"
-	"time"
 
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/stretchr/testify/assert"
@@ -62,7 +63,7 @@ func TestRetrieve_ShouldReturnValidToken(t *testing.T) {
 			},
 		},
 		config: &appconfig.SsmagentConfig{},
-		log: log.NewMockLog(),
+		log:    log.NewMockLog(),
 	}
 	cred, err := testProvider.Retrieve()
 	assert.NoError(t, err)
@@ -75,11 +76,11 @@ func TestRetrieve_ShouldUpdateKeyPair_Error(t *testing.T) {
 	updateKeyPair := true
 	tokenExpirationDate := time.Now().Add(1 * time.Hour)
 	managedInstance = &registrationStub{
-		publicKey:  "publicKey",
-		privateKey: "privateKey",
-		keyType:    "Rsa",
+		publicKey:    "publicKey",
+		privateKey:   "privateKey",
+		keyType:      "Rsa",
 		shouldRotate: false,
-		errList: []error{nil, fmt.Errorf("SomeError")},
+		errList:      []error{nil, fmt.Errorf("SomeError")},
 	}
 	client := &RsaSignedServiceStub{
 		roleResponse: ssm.RequestManagedInstanceRoleTokenOutput{
@@ -93,7 +94,7 @@ func TestRetrieve_ShouldUpdateKeyPair_Error(t *testing.T) {
 	testProvider := managedInstancesRoleProvider{
 		client: client,
 		config: &appconfig.SsmagentConfig{},
-		log: log.NewMockLog(),
+		log:    log.NewMockLog(),
 	}
 	_, err := testProvider.Retrieve()
 	assert.NoError(t, err)
@@ -109,7 +110,7 @@ func TestRetrieve_ShouldFailOnError(t *testing.T) {
 	testProvider := managedInstancesRoleProvider{
 		client: &RsaSignedServiceStub{},
 		config: &appconfig.SsmagentConfig{},
-		log: log.NewMockLog(),
+		log:    log.NewMockLog(),
 	}
 	_, err := testProvider.Retrieve()
 	assert.True(t, strings.Contains(err.Error(), machineFingerprintError.Error()))
@@ -122,7 +123,7 @@ func TestRetrieve_ShouldFailOnError(t *testing.T) {
 			errList: []error{requestManagedInstanceRoleTokenError},
 		},
 		config: &appconfig.SsmagentConfig{},
-		log: log.NewMockLog(),
+		log:    log.NewMockLog(),
 	}
 	_, err = testProvider.Retrieve()
 	assert.True(t, strings.Contains(err.Error(), requestManagedInstanceRoleTokenError.Error()))
@@ -136,7 +137,7 @@ func TestRotatePrivateKey_FailGenerateOldPublicKey(t *testing.T) {
 	testProvider := managedInstancesRoleProvider{
 		client: &RsaSignedServiceStub{},
 		config: &appconfig.SsmagentConfig{},
-		log: log.NewMockLog(),
+		log:    log.NewMockLog(),
 	}
 
 	err := testProvider.rotatePrivateKey("test123", nil)
@@ -151,7 +152,7 @@ func TestRotatePrivateKey_FailGenerateKeyPair(t *testing.T) {
 	testProvider := managedInstancesRoleProvider{
 		client: &RsaSignedServiceStub{},
 		config: &appconfig.SsmagentConfig{},
-		log: log.NewMockLog(),
+		log:    log.NewMockLog(),
 	}
 
 	err := testProvider.rotatePrivateKey("test123", nil)
@@ -161,15 +162,15 @@ func TestRotatePrivateKey_FailGenerateKeyPair(t *testing.T) {
 func TestRotatePrivateKey_FailUpdateKey_SuccessVerifyOldKey(t *testing.T) {
 	managedInstance = &registrationStub{}
 	rsaClient := &RsaSignedServiceStub{
-		keyResponse: ssm.UpdateManagedInstancePublicKeyOutput{},
+		keyResponse:  ssm.UpdateManagedInstancePublicKeyOutput{},
 		roleResponse: ssm.RequestManagedInstanceRoleTokenOutput{},
-		errList: []error{fmt.Errorf("SomeError")},
+		errList:      []error{fmt.Errorf("SomeError")},
 	}
 
 	testProvider := managedInstancesRoleProvider{
 		client: rsaClient,
 		config: &appconfig.SsmagentConfig{},
-		log: log.NewMockLog(),
+		log:    log.NewMockLog(),
 	}
 
 	err := testProvider.rotatePrivateKey("test123", nil)
@@ -181,15 +182,15 @@ func TestRotatePrivateKey_FailUpdateKey_SuccessVerifyOldKey(t *testing.T) {
 func TestRotatePrivateKey_FailUpdateKey_NewKeyWorks_SuccessSaveNewKey(t *testing.T) {
 	managedInstance = &registrationStub{}
 	rsaClient := &RsaSignedServiceStub{
-		keyResponse: ssm.UpdateManagedInstancePublicKeyOutput{},
+		keyResponse:  ssm.UpdateManagedInstancePublicKeyOutput{},
 		roleResponse: ssm.RequestManagedInstanceRoleTokenOutput{},
-		errList: []error{fmt.Errorf("UpdateError"), fmt.Errorf("OldKeyTestError")},
+		errList:      []error{fmt.Errorf("UpdateError"), fmt.Errorf("OldKeyTestError")},
 	}
 
 	testProvider := managedInstancesRoleProvider{
 		client: rsaClient,
 		config: &appconfig.SsmagentConfig{},
-		log: log.NewMockLog(),
+		log:    log.NewMockLog(),
 	}
 
 	err := testProvider.rotatePrivateKey("test123", nil)
@@ -198,21 +199,20 @@ func TestRotatePrivateKey_FailUpdateKey_NewKeyWorks_SuccessSaveNewKey(t *testing
 	assert.Equal(t, 2, rsaClient.roleCalled)
 }
 
-
 func TestRotatePrivateKey_SuccessUpdateKey_FailSaveNewKey_FailUpdateToOldKey(t *testing.T) {
 	managedInstance = &registrationStub{
 		errList: []error{nil, nil, fmt.Errorf("FailSaveKey")},
 	}
 	rsaClient := &RsaSignedServiceStub{
-		keyResponse: ssm.UpdateManagedInstancePublicKeyOutput{},
+		keyResponse:  ssm.UpdateManagedInstancePublicKeyOutput{},
 		roleResponse: ssm.RequestManagedInstanceRoleTokenOutput{},
-		errList: []error{nil, fmt.Errorf("FailUpdateToOldKey")},
+		errList:      []error{nil, fmt.Errorf("FailUpdateToOldKey")},
 	}
 
 	testProvider := managedInstancesRoleProvider{
 		client: rsaClient,
 		config: &appconfig.SsmagentConfig{},
-		log: log.NewMockLog(),
+		log:    log.NewMockLog(),
 	}
 
 	err := testProvider.rotatePrivateKey("test123", nil)
@@ -226,15 +226,15 @@ func TestRotatePrivateKey_SuccessUpdateKey_FailSaveNewKey_SuccessUpdateToOldKey(
 		errList: []error{nil, nil, fmt.Errorf("FailSaveKey")},
 	}
 	rsaClient := &RsaSignedServiceStub{
-		keyResponse: ssm.UpdateManagedInstancePublicKeyOutput{},
+		keyResponse:  ssm.UpdateManagedInstancePublicKeyOutput{},
 		roleResponse: ssm.RequestManagedInstanceRoleTokenOutput{},
-		errList: []error{nil, nil},
+		errList:      []error{nil, nil},
 	}
 
 	testProvider := managedInstancesRoleProvider{
 		client: rsaClient,
 		config: &appconfig.SsmagentConfig{},
-		log: log.NewMockLog(),
+		log:    log.NewMockLog(),
 	}
 
 	err := testProvider.rotatePrivateKey("test123", nil)
@@ -304,7 +304,8 @@ func (r *registrationStub) InstanceType(log log.T) string { return r.instanceTyp
 func (r *registrationStub) AvailabilityZone(log log.T) string { return r.availabilityZone }
 
 func (r *registrationStub) Fingerprint(log log.T) (string, error) {
-  return r.fingerprint, r.getErr() }
+	return r.fingerprint, r.getErr()
+}
 
 func (r *registrationStub) PrivateKey(log log.T) string { return r.privateKey }
 
@@ -326,6 +327,6 @@ func (r *registrationStub) GeneratePublicKey(string) (string, error) {
 	return r.publicKey, r.getErr()
 }
 
-func (r *registrationStub) HasManagedInstancesCredentials(log log.T) (bool) {
+func (r *registrationStub) HasManagedInstancesCredentials(log log.T) bool {
 	return r.hasCreds
 }

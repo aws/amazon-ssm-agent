@@ -17,9 +17,10 @@ package protocol
 import (
 	"errors"
 	"fmt"
+	"path/filepath"
+
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/common/identity"
-	"path/filepath"
 
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/common/channel/utils"
@@ -88,7 +89,6 @@ func (res *respondent) Recv() ([]byte, error) {
 		}
 		return []byte(message), nil
 	}
-	return nil, nil
 }
 
 // SetOption is used to specify additional options

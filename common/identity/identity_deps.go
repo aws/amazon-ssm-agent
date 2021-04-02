@@ -14,10 +14,11 @@
 package identity
 
 import (
+	"sync"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/aws-sdk-go/aws/credentials"
-	"sync"
 )
 
 // IAgentIdentity defines the interface identity cacher exposes

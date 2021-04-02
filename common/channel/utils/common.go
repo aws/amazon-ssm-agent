@@ -37,7 +37,7 @@ const (
 )
 
 const (
-	DefaultFileChannelPath   = "channels"
+	DefaultFileChannelPath = "channels"
 )
 
 // ICommProtocol interface is for implementing communication protocols

@@ -101,7 +101,7 @@ func (sur *survey) Recv() ([]byte, error) {
 		}
 		return []byte(message), nil
 	}
-	return nil, nil
+
 }
 
 // SetOption is used to specify additional options

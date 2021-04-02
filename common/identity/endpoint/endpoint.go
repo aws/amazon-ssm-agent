@@ -14,11 +14,12 @@
 package endpoint
 
 import (
+	"strings"
+
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/ec2metadata"
 	"github.com/aws/aws-sdk-go/aws/session"
-	"strings"
 )
 
 var awsRegionServiceDomainMap = map[string]string{
@@ -47,11 +48,10 @@ var awsRegionServiceDomainMap = map[string]string{
 }
 
 const (
-	ec2ServiceDomainResource    = "services/domain"
-	defaultServiceDomain		= "amazonaws.com"
-	defaultCNServiceDomain		= "amazonaws.com.cn"
-	maxRetries                  = 3
-
+	ec2ServiceDomainResource = "services/domain"
+	defaultServiceDomain     = "amazonaws.com"
+	defaultCNServiceDomain   = "amazonaws.com.cn"
+	maxRetries               = 3
 )
 
 // iEC2MdsSdkClient defines the functions that ec2_identity depends on from the aws sdk

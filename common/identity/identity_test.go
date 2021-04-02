@@ -14,13 +14,13 @@
 package identity
 
 import (
+	"testing"
+
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	identityMocks "github.com/aws/amazon-ssm-agent/common/identity/mocks"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/stretchr/testify/assert"
-	"testing"
 )
-
 
 func TestAgentIdentityCacher_InstanceID(t *testing.T) {
 	var resStr string

@@ -27,7 +27,7 @@ import (
 // NewFileChannel creates an new instance of FileChannel which internally uses file watcher based ipc channel
 func NewFileChannel(log log.T, identity identity.IAgentIdentity) IChannel {
 	return &fileChannel{
-		log: log,
+		log:      log,
 		identity: identity,
 	}
 }

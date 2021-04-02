@@ -33,7 +33,7 @@ import (
 // the desired credentials.
 func (m *managedInstancesRoleProvider) Retrieve() (credentials.Value, error) {
 	var err error
-	var roleCreds  *ssm.RequestManagedInstanceRoleTokenOutput
+	var roleCreds *ssm.RequestManagedInstanceRoleTokenOutput
 
 	fingerprint, err := managedInstance.Fingerprint(m.log)
 	if err != nil {
@@ -187,12 +187,12 @@ func (m *managedInstancesRoleProvider) InitializeClient(privateKey string) {
 	m.client = createNewClient(m.log, m.config, privateKey, m.client)
 }
 
-var createNewClient = func(log log.T, config *appconfig.SsmagentConfig, privateKey string, _ rsaauth.RsaSignedService) rsaauth.RsaSignedService{
+var createNewClient = func(log log.T, config *appconfig.SsmagentConfig, privateKey string, _ rsaauth.RsaSignedService) rsaauth.RsaSignedService {
 	instanceID := managedInstance.InstanceID(log)
 	region := managedInstance.Region(log)
 
 	// Get default SSM Endpoint
 	defaultEndpoint := endpoint.GetDefaultEndpoint(log, "ssm", region, "")
 
- 	return rsaauth.NewRsaService(log, config, instanceID, region, defaultEndpoint, privateKey)
+	return rsaauth.NewRsaService(log, config, instanceID, region, defaultEndpoint, privateKey)
 }
