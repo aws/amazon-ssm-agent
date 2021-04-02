@@ -316,6 +316,7 @@ var checkForLoggingInterruption = func(log log.T, ipcFile *os.File, plugin *Shel
 	// Enable append only mode for the ipcTempFile to protect it from being modified
 	u := &utility.SessionUtil{}
 	ticker := time.NewTicker(time.Second)
+	defer ticker.Stop()
 	if err := u.SetAttr(ipcFile, utility.FS_APPEND_FL); err != nil {
 		log.Debugf("Unable to set FS_APPEND_FL flag, %v", err)
 		// Periodically check if ipcTempFile is missing
