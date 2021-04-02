@@ -1,5 +1,21 @@
 Latest
 ===============
+- Added test-all flag to the makefile
+- Added support for onprem private key auto rotation
+- Added config to remove plugin output files after upload to s3
+- Added update precondition for upcoming 3.1 release
+- Fixed cloudwatch windows where TLS 1.0 is disabled
+- Fixed document cloudwatch upload when CreateLogStream permissions were missing left instances stuck in terminating
+- Fixed domain join windows EC2 instances where TLS 1.0 is disabled
+- Fixed domain join script for .local domain names
+- Fixed domain join script to exit when domain is already joined
+- Fixed panic issue in windows startup script when executing powershell command
+- Fixed session manager issue on MacOS for root and home path
+- Removed IMDS call in domain join script
+- Refactored update plugin and updater interaction
+
+3.0.882.0
+===============
 - Added jitter to first control channel call
 - Added dedicated folder for plugins
 - Added option to overwrite corrupt shared credentials
