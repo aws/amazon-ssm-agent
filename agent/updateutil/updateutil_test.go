@@ -569,6 +569,20 @@ func TestGetManifestURLFromSourceUrl(t *testing.T) {
 	assert.Equal(t, "", url)
 }
 
+func TestIsV1UpdatePlugin(t *testing.T) {
+	// lower than
+	assert.True(t, IsV1UpdatePlugin("3.0.881.0"))
+
+	// equal than
+	assert.True(t, IsV1UpdatePlugin("3.0.882.0"))
+
+	// greater than
+	assert.False(t, IsV1UpdatePlugin("3.0.883.0"))
+
+	// invalid source
+	assert.False(t, IsV1UpdatePlugin("SomeInvalidVersion"))
+}
+
 func (p *testProcess) Start(*model.WorkerConfig) (*model.Process, error) { return nil, nil }
 
 func (p *testProcess) Kill(pid int) error { return nil }
