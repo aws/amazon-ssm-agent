@@ -408,7 +408,6 @@ func (u *SessionUtil) Impersonate(log log.T, user string, pass string) error {
 		return err
 	}
 	defer mustCloseHandle(log, token)
-
 	if rc, _, ec := syscall.Syscall(impersonateProc.Addr(), 1, uintptr(token), 0, 0); rc == 0 {
 		return error(ec)
 	}
@@ -416,7 +415,7 @@ func (u *SessionUtil) Impersonate(log log.T, user string, pass string) error {
 }
 
 // LoadUserProfile loads user profile and return user handle to user's registry hive
-func (u *SessionUtil) LoadUserProfile(user string, pass string) (syscall.Handle, syscall.Handle, error) {
+func (u *SessionUtil) LoadUserProfile(user string, pass string) (syscall.Token, syscall.Handle, error) {
 	token, err := logonUser(user, pass)
 	if err != nil {
 		return 0, 0, err
@@ -435,7 +434,7 @@ func (u *SessionUtil) LoadUserProfile(user string, pass string) (syscall.Handle,
 }
 
 //logonUser attempts to log a user on to the local computer to generate a token.
-func logonUser(user, pass string) (token syscall.Handle, err error) {
+func logonUser(user, pass string) (token syscall.Token, err error) {
 	// ".\0" meaning "this computer:
 	domain := [2]uint16{uint16('.'), 0}
 
@@ -460,7 +459,7 @@ func logonUser(user, pass string) (token syscall.Handle, err error) {
 }
 
 // UnloadUserProfile attempts to unload user profile
-func (u *SessionUtil) UnloadUserProfile(log log.T, token, profile syscall.Handle) {
+func (u *SessionUtil) UnloadUserProfile(log log.T, token syscall.Token, profile syscall.Handle) {
 	var ret uintptr
 	var err error
 	if ret, _, err = unloadUserProfile.Call(uintptr(token), uintptr(profile)); ret == 0 {
@@ -512,8 +511,8 @@ func (u *SessionUtil) RevertToSelf() error {
 }
 
 //mustCloseHandle ensures to close the user token handle.
-func mustCloseHandle(log log.T, handle syscall.Handle) {
-	if err := syscall.CloseHandle(handle); err != nil {
+func mustCloseHandle(log log.T, token syscall.Token) {
+	if err := token.Close(); err != nil {
 		log.Error(err)
 	}
 }
