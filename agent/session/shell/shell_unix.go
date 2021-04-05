@@ -281,7 +281,9 @@ func (p *ShellPlugin) runShellProfile(log log.T, config agentContracts.Configura
 	if strings.TrimSpace(config.ShellProfile.Linux) == "" {
 		return nil
 	}
-
+	if p.stdin == nil {
+		return nil
+	}
 	if _, err := p.stdin.Write([]byte(config.ShellProfile.Linux + newLineCharacter)); err != nil {
 		log.Errorf("Unable to write to stdin, err: %v.", err)
 		return err

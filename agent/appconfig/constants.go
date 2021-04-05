@@ -241,3 +241,11 @@ var ByteControlSignalsLinux = map[byte]os.Signal{
 	'\003': syscall.SIGINT,
 	'\x1c': syscall.SIGQUIT,
 }
+
+// All the input control messages that can be transformed to SIGKILL signal on Windows platforms
+// Windows platforms do not support SIGINT or SIGQUIT signals.
+// It only processes SIGKILL signal, which is translated to taskkill command on the process.
+var ByteControlSignalsWindows = map[byte]os.Signal{
+	'\003': syscall.SIGKILL,
+	'\x1c': syscall.SIGKILL,
+}
