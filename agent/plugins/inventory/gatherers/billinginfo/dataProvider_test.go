@@ -11,17 +11,17 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// +build darwin freebsd linux netbsd openbsd
-
 package billinginfo
 
 import (
+	"encoding/json"
 	"fmt"
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/inventory/model"
 	"github.com/aws/amazon-ssm-agent/common/identity"
+	"github.com/aws/aws-sdk-go/aws/ec2metadata"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -146,32 +146,14 @@ var sampleDataUnixParsed = [][]model.BillingInfoData{
 	nil,
 }
 
-// createMockExecutor creates an executor that returns the given stdout values on subsequent invocations.
-// If the number of invocations exceeds the number of outputs provided, the executor will return the last output.
-// For example createMockExecutor("a", "b", "c") will return an executor that returns the following values:
-// on first call -> "a"
-// on second call -> "b"
-// on third call -> "c"
-// on every call after that -> "c"
-func createMockExecutor(stdout ...string) func(string, ...string) ([]byte, error) {
-	var index = 0
-	return func(string, ...string) ([]byte, error) {
-		if index < len(stdout) {
-			index += 1
-		}
-		return []byte(stdout[index-1]), nil
-	}
-}
+var curSampleData string
 
-func MockTestExecutorWithError(command string, args ...string) ([]byte, error) {
-	var result []byte
-	return result, fmt.Errorf("Random Error")
-}
-
-func TestParseCurlOutput(t *testing.T) {
+func TestParseOutput(t *testing.T) {
 	mockContext := context.NewMockDefault()
 	for i, sampleData := range sampleDataUnix {
-		parsedItems := parseCurlOutput(mockContext, sampleData)
+		var identityDocument ec2metadata.EC2InstanceIdentityDocument
+		json.Unmarshal([]byte(sampleData), &identityDocument)
+		parsedItems := parseInstanceIdentityDocumentOutput(mockContext, identityDocument)
 		for j := 0; j < len(parsedItems); j++ {
 			assert.Equal(t, sampleDataUnixParsed[i][j], parsedItems[j])
 		}
@@ -190,11 +172,23 @@ func mockIsNotOnPremInstanceType(identity.IAgentIdentity) bool {
 	return false
 }
 
+func mockQueryIdentityDocument() (ec2metadata.EC2InstanceIdentityDocument, error) {
+	var identityDocument ec2metadata.EC2InstanceIdentityDocument
+	json.Unmarshal([]byte(curSampleData), &identityDocument)
+	return identityDocument, nil
+}
+
+func mockQueryIdentityDocumentWithError() (ec2metadata.EC2InstanceIdentityDocument, error) {
+	var result ec2metadata.EC2InstanceIdentityDocument
+	return result, fmt.Errorf("Random Error")
+}
+
 func TestCollectBillingInfoData(t *testing.T) {
 	mockContext := context.NewMockDefault()
 	isOnPremInstance = mockIsNotOnPremInstanceType
+	queryIdentityDocument = mockQueryIdentityDocument
 	for i, sampleData := range sampleDataUnix {
-		cmdExecutor = createMockExecutor(sampleData)
+		curSampleData = sampleData
 		parsedItems := CollectBillingInfoData(mockContext)
 		for j := 0; j < len(parsedItems); j++ {
 			assert.Equal(t, sampleDataUnixParsed[i][j], parsedItems[j])
@@ -205,7 +199,7 @@ func TestCollectBillingInfoData(t *testing.T) {
 		}
 	}
 
-	cmdExecutor = MockTestExecutorWithError
+	queryIdentityDocument = mockQueryIdentityDocumentWithError
 	parsedItems := CollectBillingInfoData(mockContext)
 	assert.Equal(t, len(parsedItems), 0)
 }
