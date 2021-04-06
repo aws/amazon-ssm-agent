@@ -85,7 +85,7 @@ func Messaging(log log.T, ipc filewatcherbasedipc.IPCChannel, backend MessagingB
 		}
 	}()
 
-	log.Info("inter process communication started at %v", ipc.GetPath())
+	log.Infof("inter process communication started at %v", ipc.GetPath())
 	requestedStop := false
 	inboundClosed := false
 	//TODO add timer, if IPC is unresponsive to Close(), force return
