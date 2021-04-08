@@ -206,7 +206,7 @@ func TestFileS3DoesntCleanUpAfterS3CloudwatchUpload(t *testing.T) {
 		false).Return(true)
 
 	mockCWLoggingService.On("SetIsFileComplete", mock.AnythingOfType("bool")).Return()
-	mockCWLoggingService.On("GetIsUploadComplete").Return(false).Times(7)
+	mockCWLoggingService.On("GetIsUploadComplete").Return(false).Times(62)
 
 	var cwRetrieverMock = &cloudWatchServiceRetrieverMock{}
 	cwRetrieverMock.On("NewCloudWatchLogsService", mock.AnythingOfType("*context.Mock")).Return(mockCWLoggingService)

@@ -26,7 +26,7 @@ import (
 )
 
 const (
-	maxCloudWatchUploadRetry = 5
+	maxCloudWatchUploadRetry = 60
 )
 
 // File handles writing to an output file and upload to s3 and cloudWatch
