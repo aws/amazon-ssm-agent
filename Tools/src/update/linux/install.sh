@@ -64,10 +64,28 @@ elif [[ $(systemctl 2> /dev/null) =~ -\.mount ]]; then
 		echo "-> Agent is not running in the instance"
   fi
 
+  originalSvc=$(systemctl show -p FragmentPath amazon-ssm-agent.service)
+  
   echo "Installing agent"
   pmOutput=$(rpm -U amazon-ssm-agent.rpm 2>&1)
   pmExit=$?
   echo "RPM Output: $pmOutput"
+
+  updatedSvc=$(systemctl show -p FragmentPath amazon-ssm-agent.service)
+  if ! [ -z "$originalSvc" ] && ! [ -z "$updatedSvc" ]; then
+    if ! [ "$originalSvc" = "$updatedSvc" ]; then
+      echo "Service file changed"
+      originalSvc=${originalSvc#*=}
+      updatedSvc=${updatedSvc#*=}
+      SVC_SYMLINK="/etc/systemd/system/multi-user.target.wants/amazon-ssm-agent.service"
+      if [ -f "$updatedSvc" ] && [ -L "$SVC_SYMLINK" ]; then
+        if ! [ -e "$SVC_SYMLINK" ]; then
+          echo "Found broken symlink"
+          ln -nfs "$updatedSvc" "$SVC_SYMLINK"
+        fi
+      fi
+    fi
+  fi
 
   if [ "$DO_REGISTER" = true ]; then
     systemctl stop amazon-ssm-agent
