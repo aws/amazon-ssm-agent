@@ -93,6 +93,15 @@ Please follow the user guide to [copy and install the SSM Agent](http://docs.aws
 * rpm and dpkg artifacts are under packaging
 * build scripts are under Tools/src
 
+### Linting
+
+To lint the entire module call the `lint-all` target. This executes golangci-lint on all packages in the module.
+You can configure golangci-lint with different linters using the `.golangci.yml` file.
+
+For golangci-lint installation instructions see https://golangci-lint.run/usage/install/
+For more information on the golangci-lint configuration file see https://golangci-lint.run/usage/configuration/
+For more information on the linters used see https://golangci-lint.run/usage/linters/
+
 ### GOPATH
 
 To use vendor dependencies, the suggested GOPATH format is `:<packagesource>/vendor:<packagesource>`
@@ -120,6 +129,7 @@ The following targets are available. Each may be run with `make <target>`.
 | `build-darwin-386`       | `build-darwin-386` builds the agent for execution in the Darwin 386 environment |
 | `build-arm`              | `build-arm` builds the agent for execution in the arm environment |
 | `build-arm64`            | `build-arm64` builds the agent for execution in the arm64 environment |
+| `lint-all`               | `lint-all` runs golangci-lint on all packages. golangci-lint is configured by .golangci.yml |
 | `package-rpm`            | `package-rpm` builds the agent and packages it into a RPM package for Linux amd64 based distributions |
 | `package-deb`            | `package-deb` builds the agent and packages it into a DEB package Debian amd64 based distributions |
 | `package-win`            | `package-win` builds the agent and packages it into a ZIP package Windows amd64 based distributions |
