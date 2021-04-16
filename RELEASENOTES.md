@@ -1,5 +1,18 @@
 Latest
 ===============
+- Added a check for broken symlink after update
+- Added support for NonInteractiveCommands session type on Linux and Windows platforms
+- Added lint-all flag to makefile
+- Changed Inventory plugin billinginfo to use IMDSv2
+- Fixed indefinite retries for ResourceError during CWLogging
+- Fixed go vet call in checkstyle.sh
+- Fixed inter process communication log line
+- Fixed a bug where CloudWatch logs were not being uploaded
+- Fixed timer and goroutine leaks
+- Fixed an issue where document workers on Windows were not exiting
+
+3.0.1031.0
+===============
 - Added test-all flag to the makefile
 - Added support for onprem private key auto rotation
 - Added config to remove plugin output files after upload to s3
