@@ -196,7 +196,7 @@ func (testCase *TestCase) setupClock() {
 }
 
 func (testCase *TestCase) timeoutCancelWait() {
-	testCase.Clock.AfterChannel <- struct{}{}
+	testCase.Clock.AfterChannel <- time.Now()
 }
 
 func (testCase *TestCase) assertExpectations() {

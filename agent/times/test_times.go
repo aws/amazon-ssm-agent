@@ -26,12 +26,12 @@ import (
 // After method to return a channel that ca be woken up on demand.
 type MockedClock struct {
 	mock.Mock
-	AfterChannel chan struct{}
+	AfterChannel chan time.Time
 }
 
 // NewMockedClock creates a new instance of a mocked clock
 func NewMockedClock() *MockedClock {
-	return &MockedClock{AfterChannel: make(chan struct{}, 1)}
+	return &MockedClock{AfterChannel: make(chan time.Time, 1)}
 }
 
 // Now returns a predefined value.
@@ -40,7 +40,7 @@ func (c *MockedClock) Now() time.Time {
 }
 
 // After returns a channel that receives when we tell it to.
-func (c *MockedClock) After(d time.Duration) chan struct{} {
+func (c *MockedClock) After(d time.Duration) <-chan time.Time {
 	args := c.Called(d)
-	return args.Get(0).(chan struct{})
+	return args.Get(0).(chan time.Time)
 }

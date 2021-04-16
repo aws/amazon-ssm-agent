@@ -106,15 +106,9 @@ func ResetWaitTimerForNextScheduledAssociation(log log.T, targetDate time.Time) 
 		waitTimerForNextScheduledAssociation.Stop()
 	}
 
-	waitTimerForNextScheduledAssociation = time.NewTimer(duration)
-	nextScheduledDate = targetDate
-
 	log.Infof(scheduleForNextAssociationMessage, targetDate, duration)
-	go func() {
-		<-waitTimerForNextScheduledAssociation.C
-		ExecuteAssociation(log)
-	}()
-
+	waitTimerForNextScheduledAssociation = time.AfterFunc(duration, func() { ExecuteAssociation(log) })
+	nextScheduledDate = targetDate
 }
 
 // StopWaitTimerForNextScheduledAssociation stops the timer so it will not get triggered and send signal for the next scheduled association

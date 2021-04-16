@@ -44,7 +44,7 @@ func process(log log.T, job Job, cancelFlag *ChanneledCancelFlag, cancelWait tim
 	}
 
 	log.Debugf("Execution has been canceled, waiting up to %v to finish", cancelWait)
-	done = waitEither(doneChan, clock.After(cancelWait))
+	done = waitEither2(doneChan, clock.After(cancelWait))
 	if done {
 		// job completed within cancel waiting window
 		cancelFlag.Set(Completed)
@@ -57,6 +57,16 @@ func process(log log.T, job Job, cancelFlag *ChanneledCancelFlag, cancelWait tim
 // waitEither waits until one of the two channels receives something.
 // Returns true if the first channel received, false if the second one received.
 func waitEither(chan1 chan struct{}, chan2 chan struct{}) (chan1Done bool) {
+	select {
+	case <-chan1:
+		return true
+
+	case <-chan2:
+		return false
+	}
+}
+
+func waitEither2(chan1 chan struct{}, chan2 <-chan time.Time) (chan1Done bool) {
 	select {
 	case <-chan1:
 		return true

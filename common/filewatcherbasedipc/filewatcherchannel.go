@@ -379,6 +379,8 @@ func getFileSize(filepath string) (fileSize int64, err error) {
 // make sure this go routine not leaking
 func (ch *fileWatcherChannel) watch() {
 	log := ch.logger
+	defer log.Infof("%v listener stopped on path: %v", ch.mode, ch.path)
+
 	defer func() {
 		if r := recover(); r != nil {
 			log.Errorf("File watch panic: %v", r)
@@ -386,7 +388,7 @@ func (ch *fileWatcherChannel) watch() {
 		}
 	}()
 
-	log.Debugf("%v listener started on path: %v", ch.mode, ch.path)
+	log.Infof("%v listener started on path: %v", ch.mode, ch.path)
 	//drain all the current messages in the dir
 	ch.consumeAll()
 	for {
