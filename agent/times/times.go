@@ -25,7 +25,7 @@ type Clock interface {
 	Now() time.Time
 
 	// After returns a channel that will receive after the given duration.
-	After(time.Duration) chan struct{}
+	After(time.Duration) <-chan time.Time
 }
 
 // DefaultClock implements Clock by delegating to methods in package time.
@@ -40,12 +40,8 @@ func (defaultClock) Now() time.Time {
 }
 
 // After returns a channel that will receive after the given duration has elapsed.
-func (defaultClock) After(d time.Duration) chan struct{} {
-	c := make(chan struct{})
-	time.AfterFunc(d, func() {
-		c <- struct{}{}
-	})
-	return c
+func (defaultClock) After(d time.Duration) <-chan time.Time {
+	return time.After(d)
 }
 
 // ToIso8601UTC converts a time into a string in Iso8601 format in UTC timezone (yyyy-MM-ddTHH:mm:ss.fffZ).

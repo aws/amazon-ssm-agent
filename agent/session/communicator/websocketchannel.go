@@ -66,6 +66,7 @@ type WebSocketChannel struct {
 	Region       string
 	IsOpen       bool
 	writeLock    *sync.Mutex
+	stopPinging  chan bool
 }
 
 // Initialize a WebSocketChannel object.
@@ -163,10 +164,13 @@ func (webSocketChannel *WebSocketChannel) Open(log log.T) error {
 
 	webSocketChannel.Connection = ws
 	webSocketChannel.IsOpen = true
+	webSocketChannel.stopPinging = make(chan bool, 1)
 	webSocketChannel.StartPings(log, mgsconfig.WebSocketPingInterval)
 
 	// spin up a different routine to listen to the incoming traffic
 	go func() {
+		defer log.Info("Ending websocket listener")
+		log.Info("Starting websocket listener")
 
 		defer func() {
 			if msg := recover(); msg != nil {
@@ -215,38 +219,47 @@ func (webSocketChannel *WebSocketChannel) Open(log log.T) error {
 // StartPings starts the pinging process to keep the websocket channel alive.
 func (webSocketChannel *WebSocketChannel) StartPings(log log.T, pingInterval time.Duration) {
 
-	go func() {
+	go func(done chan bool) {
+		log.Info("Starting websocket pinger")
+		defer log.Info("Ending websocket pinger")
+
 		defer func() {
 			if r := recover(); r != nil {
 				log.Errorf("Websocket channel start pings panic: %v", r)
 				log.Errorf("Stacktrace:\n%s", debug.Stack())
 			}
 		}()
+		ticker := time.NewTicker(pingInterval)
+		defer ticker.Stop()
 		for {
-			if webSocketChannel.IsOpen == false {
+			select {
+			case <-done:
 				return
-			}
 
-			log.Debug("WebsocketChannel: Send ping. Message.")
-			webSocketChannel.writeLock.Lock()
-			err := webSocketChannel.Connection.WriteMessage(websocket.PingMessage, []byte("keepalive"))
-			webSocketChannel.writeLock.Unlock()
-			if err != nil {
-				log.Warnf("Error while sending websocket ping: %v", err)
-				return
+			case <-ticker.C:
+				log.Debug("WebsocketChannel: Send ping. Message.")
+				err := webSocketChannel.SendMessage(log, []byte("keepalive"), websocket.PingMessage)
+				if err != nil {
+					log.Warnf("Error while sending websocket ping: %v", err)
+					return
+				}
 			}
-			time.Sleep(pingInterval)
 		}
-	}()
+	}(webSocketChannel.stopPinging) // explicitly passed in case it changes on Close/Reopen
 }
 
 // Close closes the corresponding connection.
 func (webSocketChannel *WebSocketChannel) Close(log log.T) error {
 
 	log.Info("Closing websocket channel connection to: " + webSocketChannel.Url)
+
+	// Send signal to stop receiving message
 	if webSocketChannel.IsOpen == true {
-		// Send signal to stop receiving message
 		webSocketChannel.IsOpen = false
+
+		webSocketChannel.stopPinging <- true
+		close(webSocketChannel.stopPinging)
+
 		return websocketutil.NewWebsocketUtil(log, nil).CloseConnection(webSocketChannel.Connection)
 	}
 
@@ -266,7 +279,7 @@ func (webSocketChannel *WebSocketChannel) SendMessage(log log.T, input []byte, i
 	}
 
 	webSocketChannel.writeLock.Lock()
+	defer webSocketChannel.writeLock.Unlock()
 	err := webSocketChannel.Connection.WriteMessage(inputType, input)
-	webSocketChannel.writeLock.Unlock()
 	return err
 }
