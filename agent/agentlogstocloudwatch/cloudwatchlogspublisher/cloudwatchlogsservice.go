@@ -521,9 +521,11 @@ func (service *CloudWatchLogsService) StreamData(
 	var err error
 
 	IsLogStreamCreated := isLogStreamCreated
+	IsFirstTimeLogging := true
 
 	// Initialize timer and set upload frequency.
 	ticker := time.NewTicker(UploadFrequency)
+	defer ticker.Stop()
 
 	for range ticker.C {
 		// Get next message to be uploaded.
@@ -536,7 +538,6 @@ func (service *CloudWatchLogsService) StreamData(
 
 		// Exit case determining that the file is complete and has been scanned till EOF.
 		if eof {
-			ticker.Stop()
 			log.Info("Finished uploading events to CloudWatch")
 			service.isUploadComplete = true
 			success = true
@@ -549,30 +550,38 @@ func (service *CloudWatchLogsService) StreamData(
 			continue
 		}
 
+		if IsFirstTimeLogging {
+			log.Infof("Started CloudWatch upload")
+			IsFirstTimeLogging = false
+		}
 		log.Tracef("Uploading message line %d to CloudWatch", currentLineNumber)
 
 		if !IsLogStreamCreated {
+			log.Info("Checking log group")
 			// Terminate process if the log group is not present
 			if logGroupPresent, _ := service.IsLogGroupPresent(logGroupName); !logGroupPresent {
 				log.Errorf("CloudWatch log group \"%s\" does not exist. Log streaming cannot be continued.", logGroupName)
-				ticker.Stop()
 				break
 			}
+			log.Info("Log stream creation started")
 			// Terminate process if the log stream cannot be created
 			if err := service.CreateLogStream(logGroupName, logStreamName); err != nil {
 				log.Errorf("Error Creating Log Stream for CloudWatchLogs output: %v", err)
 				currentLineNumber = lastKnownLineUploadedToCWL
 				log.Debug("Failed to upload message to CloudWatch")
-				ticker.Stop()
 				break
 			} else {
+				log.Info("Log stream already created")
 				IsLogStreamCreated = true
 			}
+			log.Info("Log stream creation ended")
 		}
 
 		// Use sequenceToken returned by PutLogEvents if present, else fetch new one
 		if sequenceToken == nil {
+			log.Info("Calling Get Sequence token")
 			sequenceToken = service.GetSequenceTokenForStream(logGroupName, logStreamName)
+			log.Info("Received Sequence token")
 		}
 
 		sequenceToken, err = service.PutLogEvents(events, logGroupName, logStreamName, sequenceToken)
@@ -588,12 +597,11 @@ func (service *CloudWatchLogsService) StreamData(
 					logGroupName,
 					logStreamName,
 					err)
-				ticker.Stop()
 				break
 			}
 			// Upload failed for unknown reason. Reset the current line to last known line and retry upload again in the next iteration
 			currentLineNumber = lastKnownLineUploadedToCWL
-			log.Debugf("Failed to upload message to CloudWatch, err: %v", err)
+			log.Warnf("Failed to upload message to CloudWatch, err: %v", err)
 		}
 	}
 	return success
@@ -610,7 +618,7 @@ func (service *CloudWatchLogsService) getNextMessage(
 	// Open file to read.
 	file, err := os.Open(absoluteFilePath)
 	if err != nil {
-		log.Debugf("Error opening file: %v", err)
+		log.Warnf("Error opening file: %v", err)
 		return
 	}
 	defer file.Close()
@@ -630,7 +638,7 @@ func (service *CloudWatchLogsService) getNextMessage(
 			_, err = reader.ReadSlice(NewLineCharacter)
 		}
 		if err != nil && err != io.EOF {
-			log.Debugf("Error skipping to last uploaded Cloudwatch line: %v", err)
+			log.Warnf("Error skipping to last uploaded Cloudwatch line: %v", err)
 			return
 		}
 	}
@@ -673,7 +681,7 @@ func (service *CloudWatchLogsService) getNextMessage(
 	}
 
 	if err != io.EOF && err != nil {
-		log.Debug("Error reading from Cloudwatch logs file:", err)
+		log.Warnf("Error reading from Cloudwatch logs file:", err)
 	}
 
 	// Build event with the message read so far to be uploaded to CW
