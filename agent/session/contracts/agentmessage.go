@@ -150,11 +150,15 @@ func (agentMessage *AgentMessage) Deserialize(log logger.T, input []byte) (err e
 	}
 
 	agentMessage.PayloadLength, err = getUInteger(log, input, AgentMessage_PayloadLengthOffset)
+	if err != nil {
+		log.Errorf("Could not deserialize field PayloadLength with error: %v", err)
+		return err
+	}
 
 	headerLength, herr := getUInteger(log, input, AgentMessage_HLOffset)
 	if herr != nil {
-		log.Errorf("Could not deserialize field HeaderLength with error: %v", err)
-		return err
+		log.Errorf("Could not deserialize field HeaderLength with error: %v", herr)
+		return herr
 	}
 
 	agentMessage.HeaderLength = headerLength
@@ -521,7 +525,7 @@ func putULong(log logger.T, byteArray []byte, offset int, value uint64) (err err
 // getLong gets a long integer value from a byte array starting from the specified offset. 64 bit.
 func getLong(log logger.T, byteArray []byte, offset int) (result int64, err error) {
 	byteArrayLength := len(byteArray)
-	if offset > byteArrayLength-1 || offset+8 > byteArrayLength-1 || offset < 0 {
+	if offset > byteArrayLength-1 || offset+8-1 > byteArrayLength-1 || offset < 0 {
 		log.Error("getLong failed: Offset is invalid.")
 		return 0, errors.New("Offset is outside the byte array.")
 	}
@@ -531,7 +535,7 @@ func getLong(log logger.T, byteArray []byte, offset int) (result int64, err erro
 // putLong puts a long integer value to a byte array starting from the specified offset.
 func putLong(log logger.T, byteArray []byte, offset int, value int64) (err error) {
 	byteArrayLength := len(byteArray)
-	if offset > byteArrayLength-1 || offset+8 > byteArrayLength-1 || offset < 0 {
+	if offset > byteArrayLength-1 || offset+8-1 > byteArrayLength-1 || offset < 0 {
 		log.Error("putLong failed: Offset is invalid.")
 		return errors.New("Offset is outside the byte array.")
 	}
@@ -549,7 +553,7 @@ func putLong(log logger.T, byteArray []byte, offset int, value int64) (err error
 // getInteger gets an integer value from a byte array starting from the specified offset.
 func getInteger(log logger.T, byteArray []byte, offset int) (result int32, err error) {
 	byteArrayLength := len(byteArray)
-	if offset > byteArrayLength-1 || offset+4 > byteArrayLength-1 || offset < 0 {
+	if offset > byteArrayLength-1 || offset+4-1 > byteArrayLength-1 || offset < 0 {
 		log.Error("getInteger failed: Offset is invalid.")
 		return 0, errors.New("Offset is bigger than the byte array.")
 	}
@@ -559,7 +563,7 @@ func getInteger(log logger.T, byteArray []byte, offset int) (result int32, err e
 // putInteger puts an integer value to a byte array starting from the specified offset.
 func putInteger(log logger.T, byteArray []byte, offset int, value int32) (err error) {
 	byteArrayLength := len(byteArray)
-	if offset > byteArrayLength-1 || offset+4 > byteArrayLength-1 || offset < 0 {
+	if offset > byteArrayLength-1 || offset+4-1 > byteArrayLength-1 || offset < 0 {
 		log.Error("putInteger failed: Offset is invalid.")
 		return errors.New("Offset is outside the byte array.")
 	}
