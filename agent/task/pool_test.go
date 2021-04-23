@@ -38,6 +38,7 @@ func TestPool(t *testing.T) {
 		{Workers: 2, Jobs: 2},
 		{Workers: 2, Jobs: 10},
 		{Workers: 10, Jobs: 10},
+		{Workers: 10, Jobs: 1},
 		{Workers: 10, Jobs: 100},
 	}
 

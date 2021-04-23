@@ -15,7 +15,6 @@ package task
 
 import (
 	"fmt"
-	"runtime/debug"
 	"sync"
 	"time"
 
@@ -52,8 +51,9 @@ type Pool interface {
 type pool struct {
 	log            log.T
 	jobQueue       chan JobToken
-	nWorkers       int
+	maxWorkers     int
 	doneWorker     chan struct{}
+	jobHandlerDone chan struct{}
 	isShutdown     bool
 	clock          times.Clock
 	mut            sync.Mutex
@@ -76,8 +76,9 @@ func NewPool(log log.T, maxParallel int, cancelWaitDuration time.Duration, clock
 	p := &pool{
 		log:            log,
 		jobQueue:       make(chan JobToken),
-		nWorkers:       maxParallel,
+		maxWorkers:     maxParallel,
 		doneWorker:     make(chan struct{}),
+		jobHandlerDone: make(chan struct{}),
 		clock:          clock,
 		cancelDuration: cancelWaitDuration,
 	}
@@ -90,8 +91,8 @@ func NewPool(log log.T, maxParallel int, cancelWaitDuration time.Duration, clock
 		process(j.log, j.job, j.cancelFlag, cancelWaitDuration, p.clock)
 	}
 
-	// start the workers
-	p.start(processor)
+	// start job handler
+	go p.startJobHandler(processor)
 
 	return p
 }
@@ -120,44 +121,68 @@ func (p *pool) ShutdownAndWait(timeout time.Duration) (finished bool) {
 
 	timeoutTimer := p.clock.After(timeout)
 	exitTimer := p.clock.After(timeout + p.cancelDuration)
-	workersRunning := p.nWorkers
-	for workersRunning > 0 {
-		select {
-		case <-p.doneWorker:
-			workersRunning--
-			if workersRunning == 0 {
-				p.log.Debug("Pool shutdown normally.")
-				return true
-			}
-			p.log.Debugf("Pool worker done; %d still running", workersRunning)
 
-		case <-timeoutTimer:
-			p.log.Debugf("Pool shutdown timed out with %d workers still running, start cancelling jobs...", workersRunning)
+	for {
+		select {
+		case <-p.jobHandlerDone:
+			p.log.Debug("Pool shutdown normally.")
+			return true
+		case <-timeoutTimer: // timeoutTimer will always trigger before exitTimer
+			p.log.Debug("Pool shutdown timed, start cancelling jobs...")
 			// wait for the worker pool to react to the cancel flag and fail the ongoing jobs
 			p.CancelAll()
 		case <-exitTimer:
-			p.log.Debugf("Pool eventual timeout with %d workers still running ", workersRunning)
+			p.log.Debug("Pool eventual timeout with workers still running")
 			return false
 		}
 	}
-	return true
 }
 
-// start starts the workers of this pool
-func (p *pool) start(jobProcessor func(JobToken)) {
-	for i := 0; i < p.nWorkers; i++ {
-		workerName := fmt.Sprintf("worker-%d", i)
-		go func() {
-			defer func() {
-				if r := recover(); r != nil {
-					p.log.Errorf("Pool start panic: %v", r)
-					p.log.Errorf("Stacktrace:\n%s", debug.Stack())
+// startJobHandler starts the job handler
+func (p *pool) startJobHandler(jobProcessor func(JobToken)) {
+	workerCount := 0
+
+exitLoopLabel:
+	for {
+		// If there are too many workers currently running, wait for worker before trying to start a new job
+		if workerCount >= p.maxWorkers {
+			p.log.Debug("Max workers are running, waiting for a worker to complete")
+			<-p.doneWorker
+			p.log.Debug("Worker completed, can start next job")
+			workerCount--
+		}
+
+		// now there are workers available, wait for a job or a worker to finish
+		select {
+		case job, ok := <-p.jobQueue:
+			if !ok {
+				p.log.Info("JobQueue has been closed")
+				break exitLoopLabel
+			}
+
+			p.log.Infof("Got job %s, starting worker", job.id)
+			workerCount++
+			go func() {
+				defer p.workerDone()
+				if !job.cancelFlag.Canceled() {
+					jobProcessor(job)
 				}
 			}()
-			defer p.workerDone()
-			worker(workerName, p.jobQueue, jobProcessor)
-		}()
+		case <-p.doneWorker:
+			p.log.Debug("Worker completed")
+			workerCount--
+		}
 	}
+
+	// Wait for all workers
+	for workerCount != 0 {
+		<-p.doneWorker
+		p.log.Debug("Worker completed after shutdown")
+		workerCount--
+	}
+
+	p.log.Info("All workers have finished and pool has been put into shutdown")
+	close(p.jobHandlerDone)
 }
 
 // workerDone signals that a worker has terminated.
@@ -165,17 +190,13 @@ func (p *pool) workerDone() {
 	p.doneWorker <- struct{}{}
 }
 
-// worker processes jobs from a channel.
-func worker(workerName string, queue chan JobToken, processor func(JobToken)) {
-	for token := range queue {
-		if !token.cancelFlag.Canceled() {
-			processor(token)
-		}
-	}
-}
-
 // Submit adds a job to the execution queue of this pool.
 func (p *pool) Submit(log log.T, jobID string, job Job) (err error) {
+	if p.checkIsShutDown() {
+		p.log.Errorf("Attempting to add job %s to a closed queue", jobID)
+		return fmt.Errorf("pool is closed")
+	}
+
 	token := JobToken{
 		id:         jobID,
 		job:        job,
@@ -208,6 +229,13 @@ func (p *pool) Cancel(jobID string) (canceled bool) {
 
 	jobToken.cancelFlag.Set(Canceled)
 	return true
+}
+
+// checkIsShutDown safely reads if the pool has been set into shutdown
+func (p *pool) checkIsShutDown() bool {
+	p.mut.Lock()
+	defer p.mut.Unlock()
+	return p.isShutdown
 }
 
 // CancelAll cancels all the running jobs.
