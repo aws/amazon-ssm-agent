@@ -250,7 +250,7 @@ func (e *OutOfProcExecuter) WaitForProcess(stopTimer chan bool, process proc.OSP
 }
 
 func timeout(stopTimer chan bool, duration time.Duration, cancelFlag task.CancelFlag) {
-	stopChan := make(chan bool)
+	stopChan := make(chan bool, 1)
 	//TODO refactor cancelFlag.Wait() to return channel instead of blocking call
 	go func() {
 		cancelFlag.Wait()

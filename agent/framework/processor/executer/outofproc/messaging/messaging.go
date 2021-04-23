@@ -40,6 +40,8 @@ type MessagingBackend interface {
 	Process(string) error
 	//Sets input channel to nil.
 	Close()
+	//Sets stop channel to nil.
+	CloseStop()
 }
 
 //GetLatestVersion retrieves the current latest message version of the agent build
@@ -101,6 +103,7 @@ func Messaging(log log.T, ipc filewatcherbasedipc.IPCChannel, backend MessagingB
 			//stopChannel is closed, stop transmission
 			if !more {
 				ipc.Close()
+				backend.CloseStop()
 				break
 			}
 			//soft stop, safely close IPC
