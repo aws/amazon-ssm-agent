@@ -96,3 +96,7 @@ func (m *BackendMock) Stop() <-chan int {
 func (m *BackendMock) Close() {
 	m.Called()
 }
+
+func (m *BackendMock) CloseStop() {
+	m.Called()
+}
