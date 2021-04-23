@@ -17,21 +17,27 @@
 package platform
 
 import (
+	"context"
+	"fmt"
 	"os"
 	"os/exec"
 	"path/filepath"
 	"strings"
+	"sync"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
 const (
 	platformDetailsCommand = "sw_vers"
-	errorOccurredMessage   = "There was an error running %v, err: %v"
 )
 
+var platformInfoMap = map[string]string{}
+var platformQueryMutex = sync.Mutex{}
+
 func getPlatformName(log log.T) (value string, err error) {
-	value, err = getPlatformDetail(log, "-productName")
+	value, err = getPlatformDetail(log, "ProductName")
 	log.Debugf("platform name: %v", value)
 	return
 }
@@ -41,7 +47,7 @@ func getPlatformType(log log.T) (value string, err error) {
 }
 
 func getPlatformVersion(log log.T) (value string, err error) {
-	value, err = getPlatformDetail(log, "-productVersion")
+	value, err = getPlatformDetail(log, "ProductVersion")
 	log.Debugf("platform version: %v", value)
 	return
 }
@@ -50,18 +56,57 @@ func getPlatformSku(log log.T) (value string, err error) {
 	return
 }
 
+var execWithTimeout = func(cmd string, param ...string) ([]byte, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	return exec.CommandContext(ctx, cmd, param...).Output()
+}
+
 func getPlatformDetail(log log.T, param string) (value string, err error) {
 	var contentsBytes []byte
-	value = notAvailableMessage
+	platformQueryMutex.Lock()
+	defer platformQueryMutex.Unlock()
 
-	log.Debugf(gettingPlatformDetailsMessage)
-	if contentsBytes, err = exec.Command(platformDetailsCommand, param).Output(); err != nil {
-		log.Debugf(errorOccurredMessage, platformDetailsCommand, err)
-		return
+	if mapVal, ok := platformInfoMap[param]; ok {
+		return mapVal, nil
 	}
-	value = strings.TrimSpace(string(contentsBytes))
-	log.Debugf(commandOutputMessage, value)
-	return
+
+	if contentsBytes, err = execWithTimeout(platformDetailsCommand); err != nil {
+		log.Errorf("Failed to query for platform info: %v", err)
+		return notAvailableMessage, err
+	}
+
+	platformString := strings.TrimSpace(string(contentsBytes))
+	if len(platformString) == 0 {
+		return notAvailableMessage, fmt.Errorf("received empty string when querying for platform info")
+	}
+
+	log.Debugf("queried for platform info: %s", platformString)
+	platformInfoMap = map[string]string{}
+	for _, platformLine := range strings.Split(platformString, "\n") {
+		if len(platformLine) == 0 {
+			continue
+		}
+
+		platformLineSplit := strings.Split(platformLine, ":")
+
+		if len(platformLineSplit) < 2 {
+			log.Warnf("Unexpected line when parsing darwin platform: %s", platformLine)
+			continue
+		}
+
+		platformInfoKey := strings.TrimSpace(platformLineSplit[0])
+		platformInfoVal := strings.TrimSpace(platformLineSplit[1])
+		platformInfoMap[platformInfoKey] = platformInfoVal
+	}
+
+	if mapVal, ok := platformInfoMap[param]; ok {
+		return mapVal, err
+	}
+
+	log.Warnf("Failed to parse platform info for %s in string\n%s", param, platformString)
+	return notAvailableMessage, fmt.Errorf("failed to find platform key")
 }
 
 var hostNameCommand = filepath.Join("/bin", "hostname")
@@ -76,7 +121,7 @@ func fullyQualifiedDomainName(log log.T) string {
 	}
 
 	var contentBytes []byte
-	if contentBytes, err = exec.Command(hostNameCommand, "-f").Output(); err == nil {
+	if contentBytes, err = execWithTimeout(hostNameCommand, "-f"); err == nil {
 		fqdn = string(contentBytes)
 		//trim whitespaces - since by default above command appends '\n' at the end.
 		//e.g: 'ip-172-31-7-113.ec2.internal\n'
