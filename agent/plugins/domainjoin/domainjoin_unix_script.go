@@ -23,7 +23,6 @@ func getDomainJoinScript() []string {
 }
 
 const awsDomainJoinScript = `#!/bin/sh
-
 # Copyright 2020 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 #
 # Licensed under the Apache License, Version 2.0 (the "License"). You may not
@@ -179,7 +178,7 @@ install_components() {
         LINUX_DISTRO='CentOS'
         # yum -y update
         ## yum update takes too long
-        yum -y install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation unzip bind-utils >/dev/null
+        yum -y install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation unzip bind-utils python3 >/dev/null
         if [ $? -ne 0 ]; then echo "install_components(): yum install errors for CentOS" && return 1; fi
     elif grep -e 'Red Hat' /etc/os-release 1>/dev/null 2>/dev/null; then
         LINUX_DISTRO='RHEL'
@@ -198,22 +197,20 @@ install_components() {
         # yum -y update
         ## yum update takes too long
         # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html-single/deploying_different_types_of_servers/index
-        yum -y  install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation python3 vim unzip bind-utils >/dev/null
-        alias python=python3
+        yum -y  install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation vim unzip bind-utils python3 >/dev/null
         if [ $? -ne 0 ]; then echo "install_components(): yum install errors for Red Hat" && return 1; fi
     elif grep -e 'Fedora' /etc/os-release 1>/dev/null 2>/dev/null; then
         LINUX_DISTRO='Fedora'
         ## yum update takes too long, but it is unavoidable here.
         yum -y update
-        yum -y  install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation python3 vim unzip bind-utils >/dev/null
-        alias python=python3
+        yum -y  install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation vim unzip bind-utils python3 >/dev/null
         if [ $? -ne 0 ]; then echo "install_components(): yum install errors for Fedora" && return 1; fi
         systemctl restart dbus
     elif grep 'Amazon Linux' /etc/os-release 1>/dev/null 2>/dev/null; then
          LINUX_DISTRO='AMAZON_LINUX'
          # yum -y update
          ## yum update takes too long
-         yum -y  install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation unzip bind-utils >/dev/null
+         yum -y  install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation unzip bind-utils python3 >/dev/null
          if [ $? -ne 0 ]; then echo "install_components(): yum install errors for Amazon Linux" && return 1; fi
     elif grep 'Ubuntu' /etc/os-release 1>/dev/null 2>/dev/null; then
          LINUX_DISTRO='UBUNTU'
@@ -228,7 +225,7 @@ install_components() {
          export DEBIAN_FRONTEND=noninteractive
          apt-get -y update
          if [ $? -ne 0 ]; then echo "install_components(): apt-get update errors for Ubuntu" && return 1; fi
-         apt-get -yq install realmd adcli winbind samba libnss-winbind libpam-winbind libpam-krb5 krb5-config krb5-locales krb5-user packagekit  ntp unzip python dnsutils > /dev/null
+         apt-get -yq install realmd adcli winbind samba libnss-winbind libpam-winbind libpam-krb5 krb5-config krb5-locales krb5-user packagekit  ntp unzip dnsutils python3 > /dev/null
          if [ $? -ne 0 ]; then echo "install_components(): apt-get install errors for Ubuntu" && return 1; fi
          # Disable Reverse DNS resolution. Ubuntu Instances must be reverse-resolvable in DNS before the realm will work.
          sed -i "s/default_realm.*$/default_realm = $REALM\n\trdns = false/g" /etc/krb5.conf
@@ -248,11 +245,10 @@ install_components() {
          fi
          LINUX_DISTRO='SUSE'
          sudo zypper update -y
-         sudo zypper -n install realmd adcli sssd sssd-tools sssd-ad samba-client krb5-client samba-winbind krb5-client python bind-utils
+         sudo zypper -n install realmd adcli sssd sssd-tools sssd-ad samba-client krb5-client samba-winbind krb5-client bind-utils python3
          if [ $? -ne 0 ]; then
             return 1
          fi
-         alias python=python3
     elif grep 'Debian' /etc/os-release; then
          DEBIAN_MAJOR_VERSION=$(echo $LINUX_DISTRO_VERSION_ID | awk -F'.' '{print $1}')
          DEBIAN_MINOR_VERSION=$(echo $LINUX_DISTRO_VERSION_ID | awk -F'.' '{print $2}')
@@ -262,7 +258,7 @@ install_components() {
          fi
          apt-get -y update
          LINUX_DISTRO='DEBIAN'
-         DEBIAN_FRONTEND=noninteractive apt-get -yq install realmd adcli winbind samba libnss-winbind libpam-winbind libpam-krb5 krb5-config krb5-locales krb5-user packagekit  ntp unzip dnsutils > /dev/null
+         DEBIAN_FRONTEND=noninteractive apt-get -yq install realmd adcli winbind samba libnss-winbind libpam-winbind libpam-krb5 krb5-config krb5-locales krb5-user packagekit ntp unzip dnsutils python3 > /dev/null
          if [ $? -ne 0 ]; then
             return 1
          fi
@@ -289,15 +285,40 @@ install_components() {
 ######################################################################
 get_servicecreds() {
     SECRET_ID="${SECRET_ID_PREFIX}/$DIRECTORY_ID/seamless-domain-join"
-    secret=$(/usr/local/bin/aws secretsmanager get-secret-value --secret-id "$SECRET_ID" --region $REGION 2>/dev/null)
-    DOMAIN_USERNAME=$(echo $secret |  python -c 'import sys, json; obj=json.load(sys.stdin); print(obj["SecretString"])' | python -c 'import json,sys; obj=json.load(sys.stdin); print(obj["awsSeamlessDomainUsername"])')
+    SECRET_VALUE=$($AWSCLI secretsmanager get-secret-value --secret-id "$SECRET_ID" --region $REGION --query "SecretString"  --output text 2>/dev/null)
     if [ $? -ne 0 ]; then
-        echo "***Failed: Cannot find awsSeamlessDomainUsername in $SECRET_ID in Secrets Manager"
-        exit 1
+        PARENT_DIRECTORY_ID=$($AWSCLI ds describe-directories --region $REGION --query "DirectoryDescriptions[?DirectoryId =='$DIRECTORY_ID'].OwnerDirectoryDescription.DirectoryId | [0]" | sed 's/"//g')
+        if [ $? -ne 0 ] || [ -z "$PARENT_DIRECTORY_ID" ] || [ "$PARENT_DIRECTORY_ID" == null ]; then
+           echo "***Failed: Cannot find parent directory Id"
+           exit 1
+        fi
+        PARENT_ACCOUNT_ID=$($AWSCLI ds describe-directories --region $REGION --query "DirectoryDescriptions[?DirectoryId =='$DIRECTORY_ID'].OwnerDirectoryDescription.AccountId | [0]" | sed 's/"//g')
+        if [ $? -ne 0 ] || [ -z "$PARENT_ACCOUNT_ID" ] || [ "$PARENT_ACCOUNT_ID" == null ]; then
+           echo "***Failed: Cannot find parent account Id"
+           exit 1
+        fi
+        SECRET_ID="arn:aws:secretsmanager:${REGION}:${PARENT_ACCOUNT_ID}:secret:aws/directory-services/${PARENT_DIRECTORY_ID}/seamless-domain-join"
+        SECRET_VALUE=$($AWSCLI secretsmanager get-secret-value --secret-id "$SECRET_ID" --region $REGION --query 'SecretString' --output text 2>/dev/null)
+        if [ $? -ne 0 ] || [ -z "$SECRET_VALUE" ]; then
+           echo "***Failed: aws secretsmanager get-secret-value"
+           exit 1
+        fi
     fi
-    DOMAIN_PASSWORD=$(echo $secret |  python -c 'import sys, json; obj=json.load(sys.stdin); print(obj["SecretString"])' | python -c 'import json,sys; obj=json.load(sys.stdin); print(obj["awsSeamlessDomainPassword"])')
-    if [ $? -ne 0 ]; then
-        echo "***Failed: aws secretsmanager get-secret-value --secret-id $SECRET_ID --region $REGION"
+
+    which python3
+    if [ $? -eq 0 ]; then
+         PYTHON=$(which python3)
+    else
+         PYTHON=$(which python);
+    fi
+    DOMAIN_USERNAME=$(echo "$SECRET_VALUE" | $PYTHON -c 'import sys, json; obj=json.load(sys.stdin); print(obj["awsSeamlessDomainUsername"])')
+    if [ $? -ne 0 ] || [ -z "$DOMAIN_USERNAME" ]; then
+       echo "***Failed: Invalid DOMAIN_USERNAME"
+       exit 1
+    fi
+    DOMAIN_PASSWORD=$(echo "$SECRET_VALUE" | $PYTHON -c 'import sys, json; obj=json.load(sys.stdin); print(obj["awsSeamlessDomainPassword"])')
+    if [ $? -ne 0 ] || [ -z "$DOMAIN_PASSWORD" ]; then
+        echo "***Failed: Invalid DOMAIN_PASSWORD"
         exit 1
     fi
 }
