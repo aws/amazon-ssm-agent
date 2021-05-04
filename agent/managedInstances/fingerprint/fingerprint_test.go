@@ -95,6 +95,7 @@ func TestIsSimilarHardwareHash(t *testing.T) {
 	testData := []isSimilarHashTestData{
 		{origin, empty, 0, false},
 		{empty, origin, 0, false},
+		{origin, empty, -1, true},
 		{origin, origin, 100, true},
 		{origin, hwChanged, 0, false},
 		{origin, ipChanged, 66, true},         // 2 out of 3 items matched > 66%
@@ -307,7 +308,7 @@ func TestGenerateFingerprint_DoesNotSave_WhenHardwareHashesMatch(t *testing.T) {
 	savedHwInfo := &hwInfo{
 		HardwareHash:        savedHwHash,
 		Fingerprint:         sampleFingerprint,
-		SimilarityThreshold: minimumMatchPercent,
+		SimilarityThreshold: defaultMatchPercent,
 	}
 
 	savedHwData, _ := json.Marshal(savedHwInfo)
@@ -326,7 +327,7 @@ func TestSave_SavesNewFingerprint(t *testing.T) {
 	sampleHwInfo := hwInfo{
 		HardwareHash:        sampleHwHash,
 		Fingerprint:         sampleFingerprint,
-		SimilarityThreshold: minimumMatchPercent,
+		SimilarityThreshold: defaultMatchPercent,
 	}
 	sampleHwInfoData, _ := json.Marshal(sampleHwInfo)
 	vaultMock := &fpFsVaultMock{}

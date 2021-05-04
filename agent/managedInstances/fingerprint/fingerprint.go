@@ -40,7 +40,7 @@ type hwInfo struct {
 }
 
 const (
-	minimumMatchPercent = 40
+	defaultMatchPercent = 40
 	vaultKey            = "InstanceFingerprint"
 	ipAddressID         = "ipaddress-info"
 )
@@ -70,8 +70,8 @@ func InstanceFingerprint(log log.T) (string, error) {
 }
 
 func SetSimilarityThreshold(log log.T, value int) (err error) {
-	if value < 1 || 100 < value { // zero not allowed
-		return fmt.Errorf("Invalid Similarity Threshold value of %v. Value must be between 1 and 100.", value)
+	if value != -1 && (value < 1 || 100 < value) { // zero not allowed
+		return fmt.Errorf("Invalid Similarity Threshold value of %v. Value must be between 1 and 100 or -1 (check disabled)", value)
 	}
 
 	savedHwInfo := hwInfo{}
@@ -93,10 +93,6 @@ func generateFingerprint(log log.T) (string, error) {
 	var err error
 	var hwHashErr error
 
-	uuid.SwitchFormat(uuid.CleanHyphen)
-	result := ""
-	threshold := minimumMatchPercent
-
 	// retry getting the new hash and compare with the saved hash for 3 times
 	for attempt := 1; attempt <= 3; attempt++ {
 		// fetch current hardware hash values
@@ -114,20 +110,18 @@ func generateFingerprint(log log.T) (string, error) {
 			continue
 		}
 
-		if savedHwInfo.SimilarityThreshold >= 0 {
-			threshold = savedHwInfo.SimilarityThreshold
-		}
-
 		// first time generation, breakout retry
 		if !hasFingerprint(savedHwInfo) {
 			log.Debugf("No initial fingerprint detected, skipping retry...")
+			// Set the default similarity threshold during first time generation
+			savedHwInfo.SimilarityThreshold = defaultMatchPercent
 			break
 		}
 
 		// stop retry if the hardware hashes are the same
-		if isSimilarHardwareHash(log, savedHwInfo.HardwareHash, hardwareHash, threshold) {
-			log.Debugf("Calculated hardware hash is same as saved one, skipping retry...")
-			break
+		if isSimilarHardwareHash(log, savedHwInfo.HardwareHash, hardwareHash, savedHwInfo.SimilarityThreshold) {
+			log.Debugf("Calculated hardware hash is same as saved one, returning fingerprint")
+			return savedHwInfo.Fingerprint, nil
 		}
 
 		log.Debugf("Calculated hardware hash is different with saved one, retry to ensure the difference is not cause by the dependency has not been ready")
@@ -137,41 +131,42 @@ func generateFingerprint(log log.T) (string, error) {
 
 	if hwHashErr != nil {
 		log.Errorf("Error while fetching hardware hashes from instance: %s", hwHashErr)
-		return result, hwHashErr
+		return "", hwHashErr
 	} else if !isValidHardwareHash(hardwareHash) {
-		return result, fmt.Errorf("Hardware hash generated contains invalid characters. %s", hardwareHash)
+		return "", fmt.Errorf("Hardware hash generated contains invalid characters. %s", hardwareHash)
 	}
 
 	if err != nil {
 		log.Warnf("Error while fetching fingerprint data from vault: %s", err)
 	}
 
+	uuid.SwitchFormat(uuid.CleanHyphen)
 	// check if this is the first time we are generating the fingerprint
 	// or if there is no match
+	new_fingerprint := ""
 	if !hasFingerprint(savedHwInfo) {
 		// generate new fingerprint
 		log.Info("No initial fingerprint detected, generating fingerprint file...")
-		result = uuid.NewV4().String()
-	} else if !isSimilarHardwareHash(log, savedHwInfo.HardwareHash, hardwareHash, threshold) {
+		new_fingerprint = uuid.NewV4().String()
+	} else if !isSimilarHardwareHash(log, savedHwInfo.HardwareHash, hardwareHash, savedHwInfo.SimilarityThreshold) {
 		log.Info("Calculated hardware difference, regenerating fingerprint...")
-		result = uuid.NewV4().String()
+		new_fingerprint = uuid.NewV4().String()
 	} else {
-		result = savedHwInfo.Fingerprint
-		return result, nil
+		return savedHwInfo.Fingerprint, nil
 	}
 
 	// generate updated info to save to vault
 	updatedHwInfo := hwInfo{
-		Fingerprint:         result,
+		Fingerprint:         new_fingerprint,
 		HardwareHash:        hardwareHash,
-		SimilarityThreshold: threshold,
+		SimilarityThreshold: savedHwInfo.SimilarityThreshold,
 	}
 
 	// save content in vault
 	if err = save(updatedHwInfo); err != nil {
 		log.Errorf("Error while saving fingerprint data from vault: %s", err)
 	}
-	return result, err
+	return new_fingerprint, err
 }
 
 func fetch(log log.T) (hwInfo, error) {
@@ -238,6 +233,12 @@ func isSimilarHardwareHash(log log.T, savedHwHash map[string]string, currentHwHa
 
 	var totalCount, successCount int
 	isSimilar := true
+
+	// similarity check is disabled when threshold is set to -1
+	if threshold == -1 {
+		log.Debugf("Similarity check is disabled, skipping hardware comparison")
+		return true
+	}
 
 	// check input
 	if len(savedHwHash) == 0 || len(currentHwHash) == 0 {
@@ -364,4 +365,18 @@ func isValidHardwareHash(hardwareHash map[string]string) bool {
 	}
 
 	return true
+}
+
+func ClearStoredHardwareInfo(log log.T) {
+	// create empty hardware info
+	data, err := json.Marshal(hwInfo{})
+	if err != nil {
+		log.Errorf("Failed to create empty hardware info: %v", err)
+		return
+	}
+
+	// save content in vault
+	if err = vault.Store(vaultKey, data); err != nil {
+		log.Errorf("Failed to store empty hardware info: %v", err)
+	}
 }
