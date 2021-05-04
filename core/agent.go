@@ -31,20 +31,21 @@ import (
 )
 
 const (
-	activationCodeFlag      = "code"
-	activationIDFlag        = "id"
-	regionFlag              = "region"
-	registerFlag            = "register"
-	versionFlag             = "version"
-	fingerprintFlag         = "fingerprint"
-	similarityThresholdFlag = "similarityThreshold"
+	activationCodeFlag         = "code"
+	activationIDFlag           = "id"
+	regionFlag                 = "region"
+	registerFlag               = "register"
+	disableSimilarityCheckFlag = "disableSimilarityCheck"
+	versionFlag                = "version"
+	fingerprintFlag            = "fingerprint"
+	similarityThresholdFlag    = "similarityThreshold"
 )
 
 var (
-	activationCode, activationID, region             string
-	register, clear, force, fpFlag, agentVersionFlag bool
-	similarityThreshold                              int
-	registrationFile                                 = filepath.Join(appconfig.DefaultDataStorePath, "registration")
+	activationCode, activationID, region                                     string
+	register, clear, force, fpFlag, agentVersionFlag, disableSimilarityCheck bool
+	similarityThreshold                                                      int
+	registrationFile                                                         = filepath.Join(appconfig.DefaultDataStorePath, "registration")
 )
 
 func start(log logger.T) (app.CoreAgent, logger.T, error) {
