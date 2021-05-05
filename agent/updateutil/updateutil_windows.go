@@ -49,6 +49,8 @@ func isAgentServiceRunning(log log.T) (bool, error) {
 		log.Warnf("Cannot open agent service: %v", err)
 		return false, err
 	}
+	defer service.Close()
+
 	serviceStatus, err := service.Query()
 	if err != nil {
 		log.Warnf("Cannot query agent service: %v", err)
