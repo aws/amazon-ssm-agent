@@ -26,6 +26,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/httpresource/handler/auth/digest"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/types"
 	"github.com/aws/amazon-ssm-agent/agent/ssm/ssmparameterresolver"
 )
@@ -34,13 +35,15 @@ var ioCopy = io.Copy
 
 // Allowed auth method types
 const (
-	NONE  = "None"
-	BASIC = "Basic"
+	NONE   = "None"
+	BASIC  = "Basic"
+	DIGEST = "Digest"
 )
 
 var authMethods = map[types.TrimmedString]bool{
-	NONE:  true,
-	BASIC: true,
+	NONE:   true,
+	BASIC:  true,
+	DIGEST: true,
 }
 
 // HTTPAuthConfig defines the attributes used to perform authentication over HTTP
@@ -123,7 +126,7 @@ func (handler *httpHandler) Validate() (bool, error) {
 
 	if handler.authConfig.AuthMethod != "" && !authMethods[handler.authConfig.AuthMethod] {
 		return false, fmt.Errorf("Invalid authentication method: %s. "+
-			"The following methods are accepted: None, Basic", handler.authConfig.AuthMethod)
+			"The following methods are accepted: None, Basic, Digest", handler.authConfig.AuthMethod)
 	}
 
 	return true, nil
@@ -131,28 +134,43 @@ func (handler *httpHandler) Validate() (bool, error) {
 
 // authRequest takes care of adding the authorization header to a given request
 func (handler *httpHandler) authRequest(log log.T, req *http.Request) (err error) {
+	if handler.authConfig.AuthMethod == NONE || handler.authConfig.AuthMethod == "" {
+		return nil
+	}
+
+	var username = handler.authConfig.Username.Val()
+	if handler.ssmParameterResolverBridge.IsValidParameterStoreReference(username) {
+		username, err = handler.ssmParameterResolverBridge.GetParameterFromSsmParameterStore(log, username)
+		if err != nil {
+			return err
+		}
+	}
+
+	var password = handler.authConfig.Password.Val()
+	if handler.ssmParameterResolverBridge.IsValidParameterStoreReference(password) {
+		password, err = handler.ssmParameterResolverBridge.GetParameterFromSsmParameterStore(log, password)
+		if err != nil {
+			return err
+		}
+	}
+
 	switch handler.authConfig.AuthMethod {
+	case DIGEST:
+		authzHeader, err := digest.Authorize(username, password, req, &handler.client)
+		if err != nil {
+			return err
+		}
+
+		if authzHeader != "" {
+			if req.Header == nil {
+				req.Header = make(map[string][]string)
+			}
+			req.Header.Set("Authorization", authzHeader)
+		}
 	case BASIC:
-		var username = handler.authConfig.Username.Val()
-		if handler.ssmParameterResolverBridge.IsValidParameterStoreReference(username) {
-			username, err = handler.ssmParameterResolverBridge.GetParameterFromSsmParameterStore(log, username)
-			if err != nil {
-				return err
-			}
-		}
-
-		var password = handler.authConfig.Password.Val()
-		if handler.ssmParameterResolverBridge.IsValidParameterStoreReference(password) {
-			password, err = handler.ssmParameterResolverBridge.GetParameterFromSsmParameterStore(log, password)
-			if err != nil {
-				return err
-			}
-		}
-
 		req.SetBasicAuth(username, password)
-		break
 	default:
-		break
+		log.Warn("Auth method not supported: %s", handler.authConfig.AuthMethod)
 	}
 
 	return nil
