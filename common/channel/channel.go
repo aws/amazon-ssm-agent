@@ -15,6 +15,8 @@
 package channel
 
 import (
+	"runtime"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/common/channel/utils"
@@ -45,8 +47,14 @@ func GetChannelCreator(log log.T, appConfig appconfig.SsmagentConfig, identity i
 
 // canUseNamedPipe checks whether named pipe can be used for IPC or not
 func canUseNamedPipe(log log.T, appConfig appconfig.SsmagentConfig, identity identity.IAgentIdentity) (useNamedPipe bool) {
+	// named pipes '.Listen' halts randomly on windows 2012, disabling named pipes on windows and using file channel instead
+	if runtime.GOOS == "windows" {
+		log.Info("Not using named pipe on windows")
+		return false
+	}
+
 	if appConfig.Agent.ForceFileIPC {
-		return
+		return false
 	}
 	namedPipeChannel := NewNamedPipeChannel(log, identity)
 	defer func() {
@@ -62,7 +70,7 @@ func canUseNamedPipe(log log.T, appConfig appconfig.SsmagentConfig, identity ide
 	}()
 	namedPipeChannel.Initialize(utils.Surveyor)
 	if err := namedPipeChannel.Listen(utils.TestAddress); err == nil && !utils.IsDefaultChannelPresent(identity) {
-		useNamedPipe = true
+		return true
 	}
-	return
+	return false
 }
