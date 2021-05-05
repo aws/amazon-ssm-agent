@@ -135,14 +135,19 @@ func TestHttpHandlerImpl_Validate(t *testing.T) {
 			nil,
 		},
 		{
+			getHttpHandler(http.Client{}, getExampleURL("http", ""), true, "Digest ", "", ""),
+			true,
+			nil,
+		},
+		{
 			getHttpHandler(http.Client{}, getExampleURL("file", ""), true, "", "", ""),
 			false,
 			errors.New("URL scheme for HTTP resource type is invalid. HTTP or HTTPS is accepted"),
 		},
 		{
-			getHttpHandler(http.Client{}, getExampleURL("http", ""), true, "Digest ", "", ""),
+			getHttpHandler(http.Client{}, getExampleURL("http", ""), true, "Test ", "", ""),
 			false,
-			errors.New("Invalid authentication method: Digest. The following methods are accepted: None, Basic"),
+			errors.New("Invalid authentication method: Test. The following methods are accepted: None, Basic, Digest"),
 		},
 	}
 
@@ -252,17 +257,12 @@ func TestHttpHandlerImpl_authRequestBasic(t *testing.T) {
 	}
 }
 
-func TestHttpHandlerImpl_prepareRequest(t *testing.T) {
+func TestHttpHandlerImpl_prepareRequestBasicAuth(t *testing.T) {
 	tests := []struct {
 		handler       httpHandler
 		authenticated bool
 		err           error
 	}{
-		{
-			getHttpHandler(http.Client{}, getExampleURL("http", ""), true, "", "", ""),
-			false,
-			nil,
-		},
 		{
 			getHttpHandler(http.Client{}, getExampleURL("http", ""), true, "Basic", "admin", "pwd"),
 			true,
@@ -291,6 +291,23 @@ func TestHttpHandlerImpl_prepareRequest(t *testing.T) {
 
 		}
 	}
+}
+
+func TestHttpHandlerImpl_prepareRequestDigestAuth(t *testing.T) {
+	testServer := httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
+		res.Header().Set("Www-Authenticate", `Digest realm="realm"`)
+		res.WriteHeader(http.StatusUnauthorized)
+	}))
+	defer testServer.Close()
+
+	testUrl, _ := url.Parse(testServer.URL)
+	handler := getHttpHandler(http.Client{}, *testUrl, true, "Digest", "username", "password")
+
+	request, err := handler.prepareRequest(logMock)
+
+	assert.NoError(t, err)
+	assert.NotNil(t, request)
+	assert.NotEmpty(t, request.Header["Authorization"])
 }
 
 func TestHttpHandlerImpl_requestContent(t *testing.T) {
