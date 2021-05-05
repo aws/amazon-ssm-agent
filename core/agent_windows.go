@@ -78,8 +78,13 @@ func main() {
 	case true:
 		run(log)
 	case false:
-		svc.Run(serviceName, &amazonSSMAgentService{log: log})
+		err = svc.Run(serviceName, &amazonSSMAgentService{log: log})
+		if err != nil {
+			log.Errorf("SVC Run failed with error: %v", err)
+		}
 	}
+
+	log.Info("main function returning")
 }
 
 type amazonSSMAgentService struct {
@@ -100,7 +105,7 @@ func waitForSysPrep(log logger.T) (bool, uint32) {
 		log.Errorf("Something went wrong while trying to connect to Service Manager - %v", erro)
 		return true, appconfig.ErrorExitCode
 	}
-	defer winManager.Disconnect()
+
 	ec2ConfigService, erro = winManager.OpenService("EC2Config")
 	if erro != nil {
 		// If EC2Config does not exist, we do not consider that as an error, but just continue after giving the variables their defaults
@@ -116,9 +121,11 @@ func waitForSysPrep(log logger.T) (bool, uint32) {
 			log.Errorf("Error when trying to find the start type")
 		}
 	}
+
 	if ec2ConfigService != nil {
-		defer ec2ConfigService.Close()
+		ec2ConfigService.Close()
 	}
+	winManager.Disconnect()
 
 	// setupKey contains the ImageState of windows which will indicate if windows is done with sys prep
 	setupKey, err := registry.OpenKey(registry.LOCAL_MACHINE, `SOFTWARE\Microsoft\Windows\CurrentVersion\Setup\State`, registry.QUERY_VALUE)
@@ -153,13 +160,8 @@ func waitForSysPrep(log logger.T) (bool, uint32) {
 			log.Errorf("Image state cannot be obtained : %v", err)
 			return true, appconfig.ErrorExitCode
 		}
-		time.Sleep(15 * time.Second)
+		time.Sleep(5 * time.Second)
 	}
-	setupKey.Close()
-	if ec2ConfigService != nil {
-		ec2ConfigService.Close()
-	}
-	winManager.Disconnect()
 
 	return true, appconfig.SuccessExitCode //return to continue starting the agent
 }
@@ -176,25 +178,31 @@ func (a *amazonSSMAgentService) Execute(args []string, r <-chan svc.ChangeReques
 		}
 	}()
 
+	log.Info("Waiting for system state")
 	isSysPrepEC, erro := waitForSysPrep(log)
 	if !(isSysPrepEC && erro == appconfig.SuccessExitCode) { //returnCode true with success exit code means we can continue to start the agent
+		log.Warnf("System not ready, not starting agent: isSysPrepEC %v, erro %v", isSysPrepEC, erro)
 		// In this case, svcSpecificEC = sysPrepEC and so we will return it
 		return isSysPrepEC, erro
 	}
+	log.Info("System is ready")
 
 	// notify service controller status is now StartPending
 	s <- svc.Status{State: svc.StartPending}
 
 	// start service
+	log.Info("Starting up agent subsystem")
 	agent, contextLog, err := start(a.log)
 	if err != nil {
 		contextLog.Errorf("Failed to start agent. %v", err)
 		return true, appconfig.ErrorExitCode
 	}
+	contextLog.Info("Agent subsystem has started, notifying windows service manager")
 
 	// update service status to Running
 	const acceptCmds = svc.AcceptStop | svc.AcceptShutdown
 	s <- svc.Status{State: svc.Running, Accepts: acceptCmds}
+	contextLog.Info("Windows service manager notified that agent service has started")
 
 loop:
 	// using an infinite loop to wait for ChangeRequests
@@ -205,11 +213,16 @@ loop:
 		// handle ChangeRequest, svc.Pause is not supported
 		switch c.Cmd {
 		case svc.Interrogate:
+			contextLog.Info("Service received interrogate ChangeRequest")
 			s <- c.CurrentStatus
 			// Testing deadlock from https://code.google.com/p/winsvc/issues/detail?id=4
 			time.Sleep(100 * time.Millisecond)
 			s <- c.CurrentStatus
-		case svc.Stop, svc.Shutdown:
+		case svc.Stop:
+			contextLog.Info("Service received stop ChangeRequest")
+			break loop
+		case svc.Shutdown:
+			contextLog.Info("Service received shutdown ChangeRequest")
 			break loop
 		default:
 			continue loop
