@@ -1,5 +1,14 @@
 Latest
 ===============
+- Added support for digest authorization in downloadContent plugin
+- Added missing defer close for windows service in updater
+- Added support to disable onprem hardware similarity check
+- Fixed windows random halts issue
+- Refactored windows startup
+- Refactored task pool to dynamically dispatch goroutines
+
+3.0.1124.0
+===============
 - Added a check for broken symlink after update
 - Added support for NonInteractiveCommands session type on Linux and Windows platforms
 - Added lint-all flag to makefile
