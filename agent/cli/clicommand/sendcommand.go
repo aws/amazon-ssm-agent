@@ -84,11 +84,16 @@ type SendOfflineCommand struct {
 }
 
 // Execute validates and executes the send-offline-command cli command
-func (c *SendOfflineCommand) Execute(agentIdentity identity.IAgentIdentity, subcommands []string, parameters map[string][]string) (error, string) {
+func (c *SendOfflineCommand) Execute(subcommands []string, parameters map[string][]string) (error, string) {
 	validation := c.validateSendCommandInput(subcommands, parameters)
 	// return validation errors if any were found
 	if len(validation) > 0 {
 		return errors.New(strings.Join(validation, "\n")), ""
+	}
+
+	agentIdentity, err := cliutil.GetAgentIdentity()
+	if err != nil {
+		return err, ""
 	}
 
 	if err, content := c.loadContent(agentIdentity, parameters[sendCommandContent][0]); err != nil {

@@ -19,7 +19,10 @@ import (
 	"fmt"
 	"net/url"
 	"strings"
+	"sync"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/common/identity"
 )
 
@@ -27,7 +30,6 @@ const (
 	HelpFlag                  = "help"
 	SsmCliName                = "ssm-cli"
 	CLI_PARSE_FAIL_EXITCODE   = 2
-	CLI_NO_IDENTITY_EXITCODE  = 3
 	CLI_COMMAND_FAIL_EXITCODE = 255
 	CLI_SUCCESS_EXITCODE      = 0
 )
@@ -36,12 +38,17 @@ const (
 	flagPrefix = "--"
 )
 
+// package variables to store agent identity state
+var agentIdentity identity.IAgentIdentity
+var agentIdentityErr error
+var agentIdentityOnce sync.Once
+
 // CliCommands is the set of support commands
 var CliCommands map[string]CliCommand
 
 // CliCommand defines the interface for all commands the cli can execute
 type CliCommand interface {
-	Execute(agentIdentity identity.IAgentIdentity, subcommands []string, parameters map[string][]string) (error, string)
+	Execute(subcommands []string, parameters map[string][]string) (error, string)
 	Help() string
 	Name() string
 }
@@ -102,4 +109,15 @@ func ValidUrl(s string) bool {
 		return true
 	}
 	return false
+}
+
+// GetAgentIdentity returns the agent identity and only initializes it once
+func GetAgentIdentity() (identity.IAgentIdentity, error) {
+	agentIdentityOnce.Do(func() {
+		log := logger.NewSilentMockLog()
+		config := appconfig.DefaultConfig()
+		selector := identity.NewDefaultAgentIdentitySelector(log)
+		agentIdentity, agentIdentityErr = identity.NewAgentIdentity(log, &config, selector)
+	})
+	return agentIdentity, agentIdentityErr
 }

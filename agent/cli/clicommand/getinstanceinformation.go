@@ -24,7 +24,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/cli/cliutil"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/version"
-	"github.com/aws/amazon-ssm-agent/common/identity"
 )
 
 const (
@@ -70,11 +69,16 @@ type GetInstanceInformationCommand struct {
 }
 
 // Execute validates and executes the get-instance-information cli command
-func (c *GetInstanceInformationCommand) Execute(agentIdentity identity.IAgentIdentity, subcommands []string, parameters map[string][]string) (error, string) {
+func (c *GetInstanceInformationCommand) Execute(subcommands []string, parameters map[string][]string) (error, string) {
 	validation := c.validateGetInstanceInformationCommandInput(subcommands, parameters)
 	// return validation errors if any were found
 	if len(validation) > 0 {
 		return errors.New(strings.Join(validation, "\n")), ""
+	}
+
+	agentIdentity, err := cliutil.GetAgentIdentity()
+	if err != nil {
+		return err, ""
 	}
 
 	information := make(map[string]string)

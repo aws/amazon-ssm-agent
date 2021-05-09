@@ -15,7 +15,6 @@
 package mocks
 
 import (
-	"github.com/aws/amazon-ssm-agent/common/identity"
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -25,19 +24,19 @@ type CliCommand struct {
 }
 
 // Execute provides a mock function with given fields: subcommands, parameters
-func (_m *CliCommand) Execute(agentIdentity identity.IAgentIdentity, subcommands []string, parameters map[string][]string) (error, string) {
-	ret := _m.Called(agentIdentity, subcommands, parameters)
+func (_m *CliCommand) Execute(subcommands []string, parameters map[string][]string) (error, string) {
+	ret := _m.Called(subcommands, parameters)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(identity.IAgentIdentity, []string, map[string][]string) error); ok {
-		r0 = rf(agentIdentity, subcommands, parameters)
+	if rf, ok := ret.Get(0).(func([]string, map[string][]string) error); ok {
+		r0 = rf(subcommands, parameters)
 	} else {
 		r0 = ret.Error(0)
 	}
 
 	var r1 string
-	if rf, ok := ret.Get(1).(func(identity.IAgentIdentity, []string, map[string][]string) string); ok {
-		r1 = rf(agentIdentity, subcommands, parameters)
+	if rf, ok := ret.Get(1).(func([]string, map[string][]string) string); ok {
+		r1 = rf(subcommands, parameters)
 	} else {
 		r1 = ret.Get(1).(string)
 	}
