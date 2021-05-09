@@ -25,7 +25,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/cli/cliutil"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
-	"github.com/aws/amazon-ssm-agent/common/identity"
 )
 
 const (
@@ -80,11 +79,16 @@ type GetOfflineCommand struct {
 }
 
 // Execute validates and executes the get-offline-command-invocation cli command
-func (c *GetOfflineCommand) Execute(agentIdentity identity.IAgentIdentity, subcommands []string, parameters map[string][]string) (error, string) {
+func (c *GetOfflineCommand) Execute(subcommands []string, parameters map[string][]string) (error, string) {
 	validation, commandID, showDetails := c.validateGetCommandInput(subcommands, parameters)
 	// return validation errors if any were found
 	if len(validation) > 0 {
 		return errors.New(strings.Join(validation, "\n")), ""
+	}
+
+	agentIdentity, err := cliutil.GetAgentIdentity()
+	if err != nil {
+		return err, ""
 	}
 
 	instanceID, err := agentIdentity.InstanceID()

@@ -20,9 +20,7 @@ import (
 	"io"
 	"strings"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/cli/cliutil"
-	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/twinj/uuid"
 )
@@ -52,16 +50,7 @@ func RunCommand(args []string, out io.Writer) (exitCode int) {
 		if cliutil.IsHelp(subcommands, parameters) {
 			fmt.Fprint(out, cmd.Help())
 		} else {
-			log := logger.NewSilentMockLog()
-			config := appconfig.DefaultConfig()
-			selector := identity.NewDefaultAgentIdentitySelector(log)
-			agentIdentity, err := newAgentIdentity(log, &config, selector)
-			if err != nil {
-				fmt.Fprintf(out, "Failed to load agent identity: %v", err)
-				return cliutil.CLI_NO_IDENTITY_EXITCODE
-			}
-
-			cmdErr, result := cmd.Execute(agentIdentity, subcommands, parameters)
+			cmdErr, result := cmd.Execute(subcommands, parameters)
 			if cmdErr != nil {
 				displayUsage(out)
 				fmt.Fprintln(out, cmdErr.Error())
