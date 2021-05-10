@@ -1,4 +1,4 @@
-// +build freebsd linux netbsd openbsd
+// +build freebsd linux netbsd openbsd darwin
 
 package main
 
@@ -7,7 +7,6 @@ import (
 )
 
 func main() {
-
 	// parse input parameters
 	parseFlags()
 	handleAgentVersionFlag()

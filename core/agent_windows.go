@@ -4,14 +4,12 @@ package main
 
 import (
 	"log"
-	"os"
 	"runtime/debug"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
-	"github.com/aws/amazon-ssm-agent/agent/proxyconfig"
 	"golang.org/x/sys/windows/registry"
 	"golang.org/x/sys/windows/svc"
 	"golang.org/x/sys/windows/svc/mgr"
@@ -56,13 +54,6 @@ func main() {
 	log := ssmlog.SSMLogger(true)
 	defer log.Close()
 	defer log.Flush()
-
-	proxyconfig.SetProxySettings(log)
-
-	log.Infof("Proxy environment variables:")
-	for _, name := range []string{"http_proxy", "https_proxy", "no_proxy"} {
-		log.Infof(name + ": " + os.Getenv(name))
-	}
 
 	handleRegistrationAndFingerprintFlags(log)
 
