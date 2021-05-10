@@ -1,6 +1,20 @@
 // +build darwin
 
-package main
+// Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License"). You may not
+// use this file except in compliance with the License. A copy of the
+// License is located at
+//
+// http://aws.amazon.com/apache2.0/
+//
+// or in the "license" file accompanying this file. This file is distributed
+// on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing
+// permissions and limitations under the License.
+
+// Package proxy config to handle set/get proxy settings
+package proxyconfig
 
 import (
 	"context"
@@ -11,7 +25,6 @@ import (
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	logger "github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 )
 
 const (
@@ -27,47 +40,15 @@ const (
 	bypassProxyRegexExp     = `ExceptionsList:.*\n(\d.*\n)*}`
 )
 
-func main() {
-	// parse input parameters
-	parseFlags()
-	handleAgentVersionFlag()
-
-	// initialize logger
-	log := logger.SSMLogger(true)
-	defer log.Close()
-	defer log.Flush()
-
-	setProxySettings(log)
-	handleRegistrationAndFingerprintFlags(log)
-
-	// run agent
-	run(log)
-}
-
-// retrieve proxy info from 1) environmental variables, or 2) scutil output
-func setProxySettings(log log.T) {
-	httpProxy, httpsProxy, noProxy := getWebProxies(log)
-
-	os.Setenv("http_proxy", httpProxy)
-	log.Info("http_proxy set to: ", httpProxy)
-
-	os.Setenv("https_proxy", httpsProxy)
-	log.Info("https_proxy set to: ", httpsProxy)
-
-	os.Setenv("no_proxy", noProxy)
-	log.Info("no_proxy set to: ", noProxy)
-}
-
-// helper function to parse HTTP, HTTPS, and bypass proxy settings from "scutil --proxy" command on MacOS
-func getWebProxies(log log.T) (string, string, string) {
-
+// SetProxyConfig queries the proxy configuration from scutil and sets the required environment variables
+func SetProxyConfig(log log.T) map[string]string {
 	ctx, cancel := context.WithTimeout(context.Background(), time.Second*1) // command cancelled after 1 second
 	defer cancel()
 
 	output, err := exec.CommandContext(ctx, proxyCommand, proxyArgument).Output()
 	if err != nil {
 		log.Info("Could not run scutil to retrieve proxy information.")
-		return "", "", ""
+		return GetProxyConfig()
 	}
 
 	var proxyInfo = strings.ReplaceAll(string(output), " ", "") // remove white spaces
@@ -117,5 +98,9 @@ func getWebProxies(log log.T) (string, string, string) {
 		noProxy = strings.Join(exceptionsList, ",")
 	}
 
-	return httpProxy, httpsProxy, noProxy
+	os.Setenv("http_proxy", httpProxy)
+	os.Setenv("https_proxy", httpsProxy)
+	os.Setenv("no_proxy", noProxy)
+
+	return GetProxyConfig()
 }

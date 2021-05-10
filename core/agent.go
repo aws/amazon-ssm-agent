@@ -24,6 +24,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/proxyconfig"
 	"github.com/aws/amazon-ssm-agent/core/app"
 	"github.com/aws/amazon-ssm-agent/core/app/bootstrap"
 	"github.com/aws/amazon-ssm-agent/core/ipc/messagebus"
@@ -50,6 +51,12 @@ var (
 
 func start(log logger.T) (app.CoreAgent, logger.T, error) {
 	log.WriteEvent(logger.AgentTelemetryMessage, "", logger.AmazonAgentStartEvent)
+
+	proxyConfig := proxyconfig.SetProxyConfig(log)
+	log.Infof("Proxy environment variables:")
+	for key, value := range proxyConfig {
+		log.Infof(key + ": " + value)
+	}
 
 	bs := bootstrap.NewBootstrap(log, filesystem.NewFileSystem())
 	context, err := bs.Init()

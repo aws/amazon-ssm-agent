@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package proxy config to handle set/get functions of the Windows proxy settings
+// Package proxy config to handle set/get proxy settings
 package proxyconfig
 
 import (
@@ -68,13 +68,6 @@ type HttpDefaultProxyConfig struct {
 	bypass string
 }
 
-// HTTP Proxy environment variables possible values
-var ProxyEnvVariables = [3]string{
-	"https_proxy",
-	"http_proxy",
-	"no_proxy",
-}
-
 // ProxySettings represents the proxy settings for https_proxy and http_proxy
 type ProxySettings struct {
 	https_proxy *url.URL
@@ -106,7 +99,7 @@ func StringFromUTF16Ptr(s *uint16) string {
 // Windows proxy configuration if no settings are provided in the
 // registry HKLM:\SYSTEM\CurrentControlSet\Services\AmazonSSMAgent\Environment
 
-func SetProxySettings(log log.T) {
+func SetProxyConfig(log log.T) (proxySettings map[string]string) {
 	var err error
 	var ie HttpIEProxyConfig
 	var df HttpDefaultProxyConfig
@@ -189,12 +182,7 @@ func SetProxySettings(log log.T) {
 		os.Setenv("no_proxy", strings.Join(bypassList, ","))
 	}
 
-	for _, value := range ProxyEnvVariables {
-		v = append(v, value+":"+os.Getenv(value))
-	}
-	log.Debugf("New proxy environment variables: %v", strings.Join(v, ";"))
-
-	return
+	return GetProxyConfig()
 }
 
 // GetDefaultProxySettings returns the machine WinHTTP proxy configuration

@@ -152,7 +152,6 @@ build-freebsd: build-any-amd64-freebsd
 build-darwin: GOARCH=amd64
 build-darwin: GOOS=darwin
 build-darwin: GO_BUILD=$(GO_BUILD_NOPIE)
-build-darwin: GO_CORE_SRC_TYPE=darwin
 build-darwin: build-any-darwin-amd64
 
 .PHONY: build-windows
