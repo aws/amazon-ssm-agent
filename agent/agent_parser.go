@@ -192,12 +192,17 @@ func registerManagedInstance(log logger.T) (managedInstanceID string, err error)
 // clearRegistration clears any existing registration data
 func clearRegistration(log logger.T) (exitCode int) {
 	err := registration.UpdateServerInfo("", "", "", "")
-	if err == nil {
-		log.Info("Registration information has been removed from the instance.")
-		return 0
+	if err != nil {
+		log.Errorf("error clearing the instance registration information. %v\nTry running as sudo/administrator.", err)
+		return 1
 	}
-	log.Errorf("error clearing the instance registration information. %v\nTry running as sudo/administrator.", err)
-	return 1
+
+	// Remove the registration file
+	os.Remove(registrationFile)
+
+	log.Info("Registration information has been removed from the instance.")
+	return 0
+
 }
 
 // askForConfirmation will ask user for confirmation if they want to proceed.
