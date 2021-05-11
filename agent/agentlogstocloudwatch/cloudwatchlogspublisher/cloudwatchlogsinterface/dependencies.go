@@ -36,7 +36,6 @@ type ICloudWatchLogsService interface {
 	DescribeLogGroups(logGroupPrefix, nextToken string) (response *cloudwatchlogs.DescribeLogGroupsOutput, err error)
 	DescribeLogStreams(logGroup, logStreamPrefix, nextToken string) (response *cloudwatchlogs.DescribeLogStreamsOutput, err error)
 	IsLogGroupPresent(logGroup string) (bool, *cloudwatchlogs.LogGroup)
-	IsLogStreamPresent(logGroupName, logStreamName string) bool
 	GetSequenceTokenForStream(logGroupName, logStreamName string) (sequenceToken *string)
 	PutLogEvents(messages []*cloudwatchlogs.InputLogEvent, logGroup, logStream string, sequenceToken *string) (nextSequenceToken *string, err error)
 	IsLogGroupEncryptedWithKMS(logGroup *cloudwatchlogs.LogGroup) (bool, error)

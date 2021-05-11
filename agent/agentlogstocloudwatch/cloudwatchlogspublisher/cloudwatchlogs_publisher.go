@@ -125,22 +125,17 @@ func (cloudwatchPublisher *CloudWatchPublisher) CloudWatchLogsEventsListener() {
 // createLogGroupAndStream checks if log group and log stream are present. If not, creates them
 func (cloudwatchPublisher *CloudWatchPublisher) createLogGroupAndStream(logGroup, logStream string) error {
 	log := cloudwatchPublisher.context.Log()
-	if logGroupPresent, _ := cloudwatchPublisher.cloudWatchLogsService.IsLogGroupPresent(logGroup); !logGroupPresent {
-		//Create Log Group
-		if err := cloudwatchPublisher.cloudWatchLogsService.CreateLogGroup(logGroup); err != nil {
-			// Aborting Init
-			log.Errorf("Error creating log group:%v", err)
-			return err
-		}
+	//Create Log Group
+	if err := cloudwatchPublisher.cloudWatchLogsService.CreateLogGroup(logGroup); err != nil {
+		// Aborting Init
+		log.Errorf("Error creating log group: %v", err)
+		return err
 	}
 
-	if !cloudwatchPublisher.cloudWatchLogsService.IsLogStreamPresent(logGroup, logStream) {
-		//Create Log Stream
-		if err := cloudwatchPublisher.cloudWatchLogsService.CreateLogStream(logGroup, logStream); err != nil {
-			// Aborting Init
-			log.Errorf("Error creating log stream:%v", err)
-			return err
-		}
+	if err := cloudwatchPublisher.cloudWatchLogsService.CreateLogStream(logGroup, logStream); err != nil {
+		// Aborting Init
+		log.Errorf("Error creating log stream: %v", err)
+		return err
 	}
 	return nil
 }

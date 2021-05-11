@@ -359,11 +359,6 @@ func (service *CloudWatchLogsService) IsLogGroupPresent(logGroup string) (bool, 
 	return logGroupDetails != nil, logGroupDetails
 }
 
-// IsLogStreamPresent checks and returns true when the log stream is present
-func (service *CloudWatchLogsService) IsLogStreamPresent(logGroupName, logStreamName string) bool {
-	return service.getLogStreamDetails(logGroupName, logStreamName) != nil
-}
-
 // GetSequenceTokenForStream returns the current sequence token for the stream specified
 func (service *CloudWatchLogsService) GetSequenceTokenForStream(logGroupName, logStreamName string) (sequenceToken *string) {
 	logStream := service.getLogStreamDetails(logGroupName, logStreamName)
@@ -557,12 +552,6 @@ func (service *CloudWatchLogsService) StreamData(
 		log.Tracef("Uploading message line %d to CloudWatch", currentLineNumber)
 
 		if !IsLogStreamCreated {
-			log.Info("Checking log group")
-			// Terminate process if the log group is not present
-			if logGroupPresent, _ := service.IsLogGroupPresent(logGroupName); !logGroupPresent {
-				log.Errorf("CloudWatch log group \"%s\" does not exist. Log streaming cannot be continued.", logGroupName)
-				break
-			}
 			log.Info("Log stream creation started")
 			// Terminate process if the log stream cannot be created
 			if err := service.CreateLogStream(logGroupName, logStreamName); err != nil {

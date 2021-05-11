@@ -116,12 +116,6 @@ func (m *CloudWatchLogsServiceMock) IsLogGroupPresent(logGroup string) (bool, *c
 	return args.Bool(0), args.Get(1).(*cloudwatchlogs.LogGroup)
 }
 
-// IsLogStreamPresent mocks CloudWatchLogsService IsLogStreamPresent method
-func (m *CloudWatchLogsServiceMock) IsLogStreamPresent(logGroupName, logStreamName string) bool {
-	args := m.Called(logGroupName, logStreamName)
-	return args.Bool(0)
-}
-
 // GetSequenceTokenForStream mocks CloudWatchLogsService GetSequenceTokenForStream method
 func (m *CloudWatchLogsServiceMock) GetSequenceTokenForStream(logGroupName, logStreamName string) (sequenceToken *string) {
 	args := m.Called(logGroupName, logStreamName)

@@ -139,12 +139,10 @@ func (out *DefaultIOHandler) Init(filePath ...string) {
 	stdErrLogStreamName := ""
 	if out.ioConfig.CloudWatchConfig.LogGroupName != "" {
 		cwl := cloudwatchlogspublisher.NewCloudWatchLogsService(out.context)
-		if logGroupPresent, _ := cwl.IsLogGroupPresent(out.ioConfig.CloudWatchConfig.LogGroupName); !logGroupPresent {
-			if err := cwl.CreateLogGroup(out.ioConfig.CloudWatchConfig.LogGroupName); err != nil {
-				log.Errorf("Error Creating Log Group for CloudWatchLogs output: %v", err)
-				//Stop CloudWatch Streaming on Error
-				out.ioConfig.CloudWatchConfig.LogGroupName = ""
-			}
+		if err := cwl.CreateLogGroup(out.ioConfig.CloudWatchConfig.LogGroupName); err != nil {
+			log.Errorf("Error Creating Log Group for CloudWatchLogs output: %v", err)
+			//Stop CloudWatch Streaming on Error
+			out.ioConfig.CloudWatchConfig.LogGroupName = ""
 		}
 		stdOutLogStreamName = fmt.Sprintf("%s/%s", out.ioConfig.CloudWatchConfig.LogStreamPrefix, pluginConfig.StdoutFileName)
 		stdErrLogStreamName = fmt.Sprintf("%s/%s", out.ioConfig.CloudWatchConfig.LogStreamPrefix, pluginConfig.StderrFileName)

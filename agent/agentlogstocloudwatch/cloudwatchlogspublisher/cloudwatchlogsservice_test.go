@@ -507,12 +507,8 @@ func TestCloudWatchLogsService_StreamData(t *testing.T) {
 	var logGroups []*cloudwatchlogs.LogGroup
 	logGroup := &cloudwatchlogs.LogGroup{LogGroupName: &logGroupName}
 	logGroups = append(logGroups, logGroup)
-	logGroupOutput := &cloudwatchlogs.DescribeLogGroupsOutput{
-		LogGroups: logGroups,
-	}
 
 	cwLogsClientMock.On("CreateLogStream", mock.Anything).Return(&cloudwatchlogs.CreateLogStreamOutput{}, nil)
-	cwLogsClientMock.On("DescribeLogGroups", mock.Anything).Return(logGroupOutput, nil)
 	cwLogsClientMock.On("DescribeLogStreams", mock.Anything).Return(&cloudwatchlogs.DescribeLogStreamsOutput{}, nil)
 	// PutLogEvents called once indicates logs was uploaded all at once
 	cwLogsClientMock.On("PutLogEvents", mock.Anything).Return(&cloudwatchlogs.PutLogEventsOutput{}, nil).Once()
@@ -585,12 +581,8 @@ func TestCloudWatchLogsService_StreamData_StreamingEnabled(t *testing.T) {
 	var logGroups []*cloudwatchlogs.LogGroup
 	logGroup := &cloudwatchlogs.LogGroup{LogGroupName: &logGroupName}
 	logGroups = append(logGroups, logGroup)
-	logGroupOutput := &cloudwatchlogs.DescribeLogGroupsOutput{
-		LogGroups: logGroups,
-	}
 
 	cwLogsClientMock.On("CreateLogStream", mock.Anything).Return(&cloudwatchlogs.CreateLogStreamOutput{}, nil)
-	cwLogsClientMock.On("DescribeLogGroups", mock.Anything).Return(logGroupOutput, nil)
 	cwLogsClientMock.On("DescribeLogStreams", mock.Anything).Return(&cloudwatchlogs.DescribeLogStreamsOutput{}, nil)
 	// PutLogEvents calls twice indicates streaming of logs was done
 	cwLogsClientMock.On("PutLogEvents", mock.Anything).Return(&cloudwatchlogs.PutLogEventsOutput{}, nil).Twice()
@@ -669,12 +661,8 @@ func TestCloudWatchLogsService_StreamData_MissingStreamPermissions(t *testing.T)
 	var logGroups []*cloudwatchlogs.LogGroup
 	logGroup := &cloudwatchlogs.LogGroup{LogGroupName: &logGroupName}
 	logGroups = append(logGroups, logGroup)
-	logGroupOutput := &cloudwatchlogs.DescribeLogGroupsOutput{
-		LogGroups: logGroups,
-	}
 
 	cwLogsClientMock.On("CreateLogStream", mock.Anything).Return(&cloudwatchlogs.CreateLogStreamOutput{}, errors.New("error"))
-	cwLogsClientMock.On("DescribeLogGroups", mock.Anything).Return(logGroupOutput, nil)
 
 	go func() {
 		time.Sleep(1800 * time.Millisecond)
@@ -740,12 +728,8 @@ func TestCloudWatchLogsService_StreamData_InvalidLogStream(t *testing.T) {
 	var logGroups []*cloudwatchlogs.LogGroup
 	logGroup := &cloudwatchlogs.LogGroup{LogGroupName: &logGroupName}
 	logGroups = append(logGroups, logGroup)
-	logGroupOutput := &cloudwatchlogs.DescribeLogGroupsOutput{
-		LogGroups: logGroups,
-	}
 
 	cwLogsClientMock.On("CreateLogStream", mock.Anything).Return(&cloudwatchlogs.CreateLogStreamOutput{}, nil)
-	cwLogsClientMock.On("DescribeLogGroups", mock.Anything).Return(logGroupOutput, nil)
 	cwLogsClientMock.On("DescribeLogStreams", mock.Anything).Return(&cloudwatchlogs.DescribeLogStreamsOutput{}, nil)
 	// Returns a ResourceNotFoundException error when PutLogEvents is called
 	cwLogsClientMock.On("PutLogEvents", mock.Anything).Return(

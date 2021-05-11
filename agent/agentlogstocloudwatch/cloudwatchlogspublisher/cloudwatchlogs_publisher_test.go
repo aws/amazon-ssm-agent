@@ -46,8 +46,7 @@ func TestCreateLogGroupError(t *testing.T) {
 
 func TestCreateLogStreamError(t *testing.T) {
 	serviceMock := cloudwatchlogspublisher_mock.NewServiceMockDefault(logMock)
-	serviceMock.On("IsLogGroupPresent", mock.AnythingOfType("string")).Return(true, &cloudwatchlogs.LogGroup{})
-	serviceMock.On("IsLogStreamPresent", mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(false)
+	serviceMock.On("CreateLogGroup", mock.AnythingOfType("string")).Return(nil)
 	serviceMock.On("CreateLogStream", mock.AnythingOfType("string"), mock.AnythingOfType("string")).Return(errors.New("Log Stream Creation Service Error"))
 
 	cwPublisher := CloudWatchPublisher{
