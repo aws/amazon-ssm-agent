@@ -1,5 +1,11 @@
 Latest
 ===============
+- Fixed issue where registration file is not removed when registration is cleared
+- Removed unnecessary CloudWatch Log api calls
+- Added support for IMDSv2 in Windows AD domain join plugin
+
+3.0.1181.0
+===============
 - Added support for digest authorization in downloadContent plugin
 - Added missing defer close for windows service in updater
 - Added support to disable onprem hardware similarity check
