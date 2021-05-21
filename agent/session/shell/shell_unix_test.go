@@ -159,6 +159,7 @@ func (suite *ShellTestSuite) TestExecute() {
 	suite.mockIohandler.On("SetExitCode", 0).Return(nil)
 	suite.mockIohandler.On("SetStatus", contracts.ResultStatusSuccess).Return()
 	suite.mockIohandler.On("SetOutput", mock.Anything).Return()
+	suite.mockDataChannel.On("IsActive").Return(true)
 	suite.mockDataChannel.On("PrepareToCloseChannel", mock.Anything).Return(nil).Times(1)
 	suite.mockDataChannel.On("SendAgentSessionStateMessage", mock.Anything, mgsContracts.Terminating).
 		Return(nil).Times(1)
@@ -202,12 +203,16 @@ func (suite *ShellTestSuite) TestExecuteNonInteractiveCommands() {
 	suite.mockCancelFlag.On("Canceled").Return(false)
 	suite.mockCancelFlag.On("ShutDown").Return(false)
 	suite.mockCancelFlag.On("Wait").Return(task.Completed)
-	suite.mockIohandler.On("SetExitCode", 0).Return(nil)
-	suite.mockIohandler.On("SetStatus", contracts.ResultStatusSuccess).Return()
+	suite.mockIohandler.On("SetExitCode", mock.Anything).Return(nil)
+	suite.mockIohandler.On("SetStatus", mock.Anything).Return()
 	suite.mockIohandler.On("SetOutput", mock.Anything).Return()
 	suite.mockCmd.On("Start").Return(nil)
 	suite.mockCmd.On("Wait").Return(nil)
 	suite.mockCmd.On("Pid").Return(234)
+	suite.mockDataChannel.On("IsActive").Return(true)
+	suite.mockDataChannel.On("PrepareToCloseChannel", mock.Anything).Return(nil).Times(1)
+	suite.mockDataChannel.On("SendAgentSessionStateMessage", mock.Anything, mgsContracts.Terminating).
+		Return(nil).Times(1)
 
 	getCommandExecutor = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration, plugin *ShellPlugin) (err error) {
 		plugin.execCmd = suite.mockCmd
@@ -247,6 +252,7 @@ func (suite *ShellTestSuite) TestExecuteWithCWLoggingEnabled() {
 	suite.mockDataChannel.On("PrepareToCloseChannel", mock.Anything).Return(nil).Times(1)
 	suite.mockDataChannel.On("SendAgentSessionStateMessage", mock.Anything, mgsContracts.Terminating).
 		Return(nil).Times(1)
+	suite.mockDataChannel.On("IsActive").Return(true)
 
 	stdout, stdin, _ := os.Pipe()
 	stdin.Write(payload)
@@ -293,6 +299,7 @@ func (suite *ShellTestSuite) TestExecuteWithCWLogStreamingEnabled() {
 	suite.mockDataChannel.On("PrepareToCloseChannel", mock.Anything).Return(nil).Times(1)
 	suite.mockDataChannel.On("SendAgentSessionStateMessage", mock.Anything, mgsContracts.Terminating).
 		Return(nil).Times(1)
+	suite.mockDataChannel.On("IsActive").Return(true)
 
 	stdout, stdin, _ := os.Pipe()
 	stdin.Write(payload)
@@ -348,6 +355,7 @@ func (suite *ShellTestSuite) TestExecuteWithCWLoggingDisabledButStreamingEnabled
 	suite.mockDataChannel.On("PrepareToCloseChannel", mock.Anything).Return(nil).Times(1)
 	suite.mockDataChannel.On("SendAgentSessionStateMessage", mock.Anything, mgsContracts.Terminating).
 		Return(nil).Times(1)
+	suite.mockDataChannel.On("IsActive").Return(true)
 
 	stdout, stdin, _ := os.Pipe()
 	stdin.Write(payload)
@@ -390,6 +398,7 @@ func (suite *ShellTestSuite) TestExecuteWithCancelFlag() {
 	suite.mockDataChannel.On("PrepareToCloseChannel", mock.Anything).Return(nil).Times(0)
 	suite.mockDataChannel.On("SendAgentSessionStateMessage", mock.Anything, mgsContracts.Terminating).
 		Return(nil).Times(0)
+	suite.mockDataChannel.On("IsActive").Return(true)
 	suite.mockCmd.On("Wait").Return(nil)
 	suite.mockCmd.On("Kill").Return(nil)
 
@@ -430,13 +439,18 @@ func (suite *ShellTestSuite) TestExecuteNonInteractiveCommandsWithCancelFlag() {
 	suite.mockCancelFlag.On("Canceled").Return(true).Once()
 	suite.mockCancelFlag.On("ShutDown").Return(false)
 	suite.mockCancelFlag.On("Wait").Return(task.Completed)
-	suite.mockIohandler.On("SetExitCode", 0).Return(nil)
-	suite.mockIohandler.On("SetStatus", contracts.ResultStatusSuccess).Return()
+	suite.mockIohandler.On("SetExitCode", mock.Anything).Return(nil)
+	suite.mockIohandler.On("SetStatus", mock.Anything).Return()
 	suite.mockIohandler.On("SetOutput", mock.Anything).Return()
 	suite.mockCmd.On("Start").Return(nil)
-	suite.mockCmd.On("Wait").Return(nil)
 	suite.mockCmd.On("Kill").Return(nil)
 	suite.mockCmd.On("Pid").Return(234)
+	suite.mockCmd.On("Wait").Run(func(mock.Arguments) {
+		time.Sleep(100 * time.Millisecond)
+	}).Return(nil)
+	suite.mockDataChannel.On("PrepareToCloseChannel", mock.Anything).Return(nil).Times(0)
+	suite.mockDataChannel.On("SendAgentSessionStateMessage", mock.Anything, mgsContracts.Terminating).
+		Return(nil).Times(0)
 
 	getCommandExecutor = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration, plugin *ShellPlugin) (err error) {
 		plugin.execCmd = suite.mockCmd
@@ -486,7 +500,7 @@ func (suite *ShellTestSuite) TestWritePump() {
 		stdin.Close()
 		stdout.Close()
 	}()
-	suite.plugin.writePump(suite.mockLog, ipcFile)
+	suite.plugin.writePump(suite.mockLog, ipcFile, 1)
 
 	// Assert if SendStreamDataMessage function was called with same data from stdout
 	suite.mockDataChannel.AssertExpectations(suite.T())
@@ -518,7 +532,7 @@ func (suite *ShellTestSuite) TestWritePumpForInvalidUtf8Character() {
 		stdin.Close()
 		stdout.Close()
 	}()
-	suite.plugin.writePump(suite.mockLog, ipcFile)
+	suite.plugin.writePump(suite.mockLog, ipcFile, 1)
 
 	// Assert if SendStreamDataMessage function was called with same data from stdout
 	suite.mockDataChannel.AssertExpectations(suite.T())
@@ -539,7 +553,7 @@ func (suite *ShellTestSuite) TestWritePumpWhenDatachannelIsPaused() {
 	defer ipcFile.Close()
 
 	go func() {
-		suite.plugin.writePump(suite.mockLog, ipcFile)
+		suite.plugin.writePump(suite.mockLog, ipcFile, 1)
 	}()
 
 	time.Sleep(1500 * time.Millisecond)
@@ -757,12 +771,15 @@ func (suite *ShellTestSuite) TestCommandParser() {
 
 // Testing Execute with exec.Cmd
 func (suite *ShellTestSuite) TestExecuteWithExec() {
-	suite.mockIohandler.On("SetExitCode", 0).Return(nil)
-	suite.mockIohandler.On("SetStatus", contracts.ResultStatusSuccess).Return()
+	suite.mockIohandler.On("SetExitCode", mock.Anything).Return(nil)
+	suite.mockIohandler.On("SetStatus", mock.Anything).Return()
 	suite.mockCmd.On("Start").Return(nil)
 	suite.mockCmd.On("Wait").Return(nil)
 	suite.mockCmd.On("Pid").Return(234)
 	suite.mockDataChannel.On("IsActive").Return(true)
+	suite.mockDataChannel.On("PrepareToCloseChannel", mock.Anything).Return(nil).Times(1)
+	suite.mockDataChannel.On("SendAgentSessionStateMessage", mock.Anything, mgsContracts.Terminating).
+		Return(nil).Times(1)
 
 	getCommandExecutor = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration, plugin *ShellPlugin) (err error) {
 		plugin.execCmd = suite.mockCmd
@@ -839,6 +856,10 @@ func (suite *ShellTestSuite) TestExecuteWithExecFailedToWait() {
 	suite.mockCmd.On("Start").Return(nil)
 	suite.mockCmd.On("Wait").Return(errors.New("failed to wait for command to complete"))
 	suite.mockCmd.On("Pid").Return(234)
+	suite.mockDataChannel.On("IsActive").Return(true)
+	suite.mockDataChannel.On("PrepareToCloseChannel", mock.Anything).Return(nil).Times(1)
+	suite.mockDataChannel.On("SendAgentSessionStateMessage", mock.Anything, mgsContracts.Terminating).
+		Return(nil).Times(1)
 
 	getCommandExecutor = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration, plugin *ShellPlugin) (err error) {
 		plugin.execCmd = suite.mockCmd
@@ -865,6 +886,53 @@ func (suite *ShellTestSuite) TestExecuteWithExecFailedToWait() {
 		suite.mockIohandler,
 		ipcFile,
 	)
+
+	suite.mockCancelFlag.AssertExpectations(suite.T())
+	suite.mockIohandler.AssertExpectations(suite.T())
+	suite.mockDataChannel.AssertExpectations(suite.T())
+	suite.mockCmd.AssertExpectations(suite.T())
+}
+
+// Testing NonInteractiveCommands when cancel flag is set
+func (suite *ShellTestSuite) TestProcessNonInteractiveCommandsWithCancelFlag() {
+	suite.mockIohandler.On("SetExitCode", 0).Return(nil)
+	suite.mockIohandler.On("SetStatus", contracts.ResultStatusSuccess).Return()
+	suite.mockCmd.On("Kill").Return(nil)
+
+	// Create ipc file
+	ipcFile, _ := os.Create(suite.plugin.logger.ipcFilePath)
+	defer ipcFile.Close()
+
+	getCommandExecutor = func(log log.T, shellProps mgsContracts.ShellProperties, isSessionLogger bool, config contracts.Configuration, plugin *ShellPlugin) (err error) {
+		plugin.execCmd = suite.mockCmd
+		return nil
+	}
+
+	plugin := &ShellPlugin{
+		context:     suite.mockContext,
+		name:        appconfig.PluginNameNonInteractiveCommands,
+		dataChannel: suite.mockDataChannel,
+		execCmd:     suite.mockCmd,
+	}
+
+	cancelled := make(chan bool, 1)
+	go func() {
+		cancelled <- true
+	}()
+
+	cmdWaitDone := make(chan error, 1)
+	go func() {
+		time.Sleep(100 * time.Millisecond)
+		cmdWaitDone <- nil
+	}()
+
+	plugin.processCommandsWithExec(
+		cancelled,
+		cmdWaitDone,
+		true,
+		false,
+		suite.mockIohandler,
+		ipcFile)
 
 	suite.mockCancelFlag.AssertExpectations(suite.T())
 	suite.mockIohandler.AssertExpectations(suite.T())

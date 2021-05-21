@@ -257,7 +257,7 @@ func (p *ShellPlugin) executeCommandsWithPty(config agentContracts.Configuration
 
 	log := p.context.Log()
 
-	writePumpDone := p.setupRoutineToWriteCommandOutput(log, ipcFile)
+	writePumpDone := p.setupRoutineToWriteCommandOutput(log, ipcFile, 1)
 
 	log.Infof("Plugin %s started", p.name)
 
@@ -362,6 +362,22 @@ func (p *ShellPlugin) executeCommandsWithExec(config agentContracts.Configuratio
 		isCmdWaitSuccess = err == nil
 	}()
 
+	p.processCommandsWithExec(cancelled, cmdWaitDone, isSessionCancelled, isCmdWaitSuccess, output, ipcFile)
+
+	p.cleanupOutputFile(log, config)
+
+}
+
+// Handle go routines between session termination and command execution with exec.Cmd
+func (p *ShellPlugin) processCommandsWithExec(cancelled chan bool,
+	cmdWaitDone chan error,
+	isSessionCancelled bool,
+	isCmdWaitSuccess bool,
+	output iohandler.IOHandler,
+	ipcFile *os.File) {
+
+	log := p.context.Log()
+
 	select {
 	case <-cancelled:
 		log.Debug("Session cancelled. Attempting to stop the command execution.")
@@ -384,7 +400,7 @@ func (p *ShellPlugin) executeCommandsWithExec(config agentContracts.Configuratio
 
 	// If session is not cancelled, start go routine to read output from disk and write to data channel
 	if !isSessionCancelled {
-		writePumpDone := p.setupRoutineToWriteCommandOutput(log, ipcFile)
+		writePumpDone := p.setupRoutineToWriteCommandOutput(log, ipcFile, 0)
 
 		select {
 		case <-cancelled:
@@ -414,9 +430,16 @@ func (p *ShellPlugin) executeCommandsWithExec(config agentContracts.Configuratio
 				output.SetExitCode(appconfig.ErrorExitCode)
 				output.SetStatus(agentContracts.ResultStatusFailed)
 			}
+
+			// Call datachannel PrepareToCloseChannel so all messages in the buffer are sent
+			p.dataChannel.PrepareToCloseChannel(log)
+
+			// Send session status as Terminating to service on completing command execution
+			if err := p.dataChannel.SendAgentSessionStateMessage(log, mgsContracts.Terminating); err != nil {
+				log.Errorf("Unable to send AgentSessionState message with session status %s. %v", mgsContracts.Terminating, err)
+			}
 		}
 	}
-	p.cleanupOutputFile(log, config)
 }
 
 // initializeLogger initializes plugin logger to be used for s3/cw logging
@@ -460,19 +483,19 @@ func (p *ShellPlugin) uploadShellSessionLogsToS3(log log.T, s3UploaderUtil s3uti
 }
 
 // Set up go routine to write command output to data channel
-func (p *ShellPlugin) setupRoutineToWriteCommandOutput(log log.T, ipcFile *os.File) chan int {
+func (p *ShellPlugin) setupRoutineToWriteCommandOutput(log log.T, ipcFile *os.File, initialWaitSecond int) chan int {
 	log.Debugf("Start separate go routine to read from command output and write to data channel")
 
 	done := make(chan int, 1)
 	go func() {
-		done <- p.writePump(log, ipcFile)
+		done <- p.writePump(log, ipcFile, initialWaitSecond)
 	}()
 
 	return done
 }
 
 // writePump reads from pty stdout and writes to data channel.
-func (p *ShellPlugin) writePump(log log.T, ipcFile *os.File) (errorCode int) {
+func (p *ShellPlugin) writePump(log log.T, ipcFile *os.File, initialWaitSecond int) (errorCode int) {
 	defer func() {
 		if err := recover(); err != nil {
 			fmt.Println("WritePump thread crashed with message: \n", err)
@@ -484,14 +507,14 @@ func (p *ShellPlugin) writePump(log log.T, ipcFile *os.File) (errorCode int) {
 	reader := bufio.NewReader(p.stdout)
 
 	// Wait for all input commands to run.
-	time.Sleep(time.Second)
+	time.Sleep(time.Duration(initialWaitSecond) * time.Second)
 
 	var unprocessedBuf bytes.Buffer
 	for {
 		if p.dataChannel.IsActive() {
 			stdoutBytesLen, err := reader.Read(stdoutBytes)
 			if err != nil {
-				log.Debugf("Failed to read from pty master: %s", err)
+				log.Debugf("Failed to read from command output: %s", err)
 				return appconfig.SuccessExitCode
 			}
 
