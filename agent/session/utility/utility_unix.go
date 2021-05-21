@@ -101,7 +101,7 @@ func (u *SessionUtil) createSudoersFileIfNotPresent(log log.T) error {
 	// Return if the file exists
 	if _, err := os.Stat(sudoersFile); err == nil {
 		log.Infof("File %s already exists", sudoersFile)
-		u.changeModeOfSudoersFile(log)
+		_ = u.changeModeOfSudoersFile(log)
 		return err
 	}
 
@@ -113,10 +113,14 @@ func (u *SessionUtil) createSudoersFileIfNotPresent(log log.T) error {
 	}
 	defer file.Close()
 
-	file.WriteString(fmt.Sprintf("# User rules for %s\n", appconfig.DefaultRunAsUserName))
-	file.WriteString(fmt.Sprintf("%s ALL=(ALL) NOPASSWD:ALL\n", appconfig.DefaultRunAsUserName))
+	if _, err := file.WriteString(fmt.Sprintf("# User rules for %s\n", appconfig.DefaultRunAsUserName)); err != nil {
+		return err
+	}
+	if _, err := file.WriteString(fmt.Sprintf("%s ALL=(ALL) NOPASSWD:ALL\n", appconfig.DefaultRunAsUserName)); err != nil {
+		return err
+	}
 	log.Infof("Successfully created file %s", sudoersFile)
-	u.changeModeOfSudoersFile(log)
+	_ = u.changeModeOfSudoersFile(log)
 	return nil
 }
 
