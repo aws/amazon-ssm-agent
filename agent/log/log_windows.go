@@ -17,17 +17,23 @@ package log
 
 import (
 	"io/ioutil"
+	"os"
 	"path/filepath"
+	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/cihub/seelog"
 )
 
 // Default log directory
 var DefaultLogDir = filepath.Join(appconfig.SSMDataPath, "Logs")
+var ExeNamePlaceHolder = "{{EXECUTABLENAME}}"
 
 // The underlying logger is based of https://github.com/cihub/seelog
 // See Seelog documentation to customize the logger
 var DefaultSeelogConfigFilePath = filepath.Join(appconfig.DefaultProgramFolder, appconfig.SeelogConfigFileName)
+
+var getExePath = getExecutablePath
 
 // getLogConfigBytes reads and returns the seelog configs from the config file path if present
 // otherwise returns the seelog default configurations
@@ -35,7 +41,25 @@ var DefaultSeelogConfigFilePath = filepath.Join(appconfig.DefaultProgramFolder, 
 func getLogConfigBytes() (logConfigBytes []byte) {
 	var err error
 	if logConfigBytes, err = ioutil.ReadFile(DefaultSeelogConfigFilePath); err != nil {
-		logConfigBytes = DefaultConfig()
+		logConfigBytes = defaultConfigForExe()
 	}
+
+	if logConfigStr := string(logConfigBytes); strings.Contains(logConfigStr, ExeNamePlaceHolder) {
+		return []byte(strings.Replace(logConfigStr, ExeNamePlaceHolder, exeLogFileName(), -1))
+	}
+
 	return
+}
+
+func defaultConfigForExe() []byte {
+	return LoadLog(DefaultLogDir, exeLogFileName()+".log", seelog.InfoStr)
+}
+
+func exeLogFileName() string {
+	exeName := filepath.Base(getExePath())
+	return strings.Replace(exeName, ".exe", "", -1)
+}
+
+func getExecutablePath() string {
+	return os.Args[0]
 }
