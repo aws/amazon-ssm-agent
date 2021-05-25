@@ -144,6 +144,7 @@ func replaceLogger() {
 	// If err in creating logger, do not replace logger
 	if err != nil {
 		logger.Error("New logger creation failed")
+		logger.Error(err)
 		return
 	}
 
