@@ -28,6 +28,10 @@ func prepareProcess(command *exec.Cmd) {
 	// nothing to do on windows
 }
 
+func quiesce() {
+	// not needed for Darwin workaround
+}
+
 func killProcess(process *os.Process, signal *timeoutSignal) error {
 	// process kill doesn't send proper signal to the process status
 	// Setting the signal to indicate execution was interrupted
