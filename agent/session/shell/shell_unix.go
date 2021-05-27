@@ -70,7 +70,7 @@ func StartCommandExecutor(
 	//Start the command with a pty
 	var cmd *exec.Cmd
 
-	appConfig, _ := appconfig.Config(false)
+	appConfig := plugin.context.AppConfig()
 
 	if strings.TrimSpace(constants.GetShellCommand(shellProps)) == "" || isSessionLogger {
 

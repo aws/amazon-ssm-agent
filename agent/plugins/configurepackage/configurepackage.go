@@ -540,14 +540,8 @@ func (p *Plugin) execute(config contracts.Configuration, cancelFlag task.CancelF
 		tracer.CurrentTrace().WithError(err).End()
 		out.MarkAsFailed(nil, nil)
 	} else {
-		appCfg, err := getConfig(false)
-		var appConfig *appconfig.SsmagentConfig
-		if err != nil {
-			appConfig = nil
-		} else {
-			appConfig = &appCfg
-		}
-		packageService, err := p.packageServiceSelector(p.context, tracer, input, p.localRepository, appConfig, p.birdwatcherfacade, &p.isDocumentArchive)
+		appConfig := p.context.AppConfig()
+		packageService, err := p.packageServiceSelector(p.context, tracer, input, p.localRepository, &appConfig, p.birdwatcherfacade, &p.isDocumentArchive)
 		if err != nil {
 			tracer.CurrentTrace().WithError(err).End()
 			out.MarkAsFailed(nil, nil)

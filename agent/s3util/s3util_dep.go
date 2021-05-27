@@ -17,6 +17,7 @@ package s3util
 import (
 	"net/http"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/backoffconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/network"
@@ -29,11 +30,12 @@ type HttpProvider interface {
 
 // HttpProviderImpl provides http capabilities
 type HttpProviderImpl struct {
-	logger log.T
+	logger    log.T
+	appConfig appconfig.SsmagentConfig
 }
 
-var getHeadBucketTransportDelegate = func(log log.T) http.RoundTripper {
-	return network.GetDefaultTransport(log)
+var getHeadBucketTransportDelegate = func(log log.T, appConfig appconfig.SsmagentConfig) http.RoundTripper {
+	return network.GetDefaultTransport(log, appConfig)
 }
 
 func (p HttpProviderImpl) Head(url string) (resp *http.Response, err error) {
@@ -43,7 +45,7 @@ func (p HttpProviderImpl) Head(url string) (resp *http.Response, err error) {
 	}
 
 	httpClient := &http.Client{
-		Transport: makeHeadBucketTransport(p.logger, getHeadBucketTransportDelegate(p.logger)),
+		Transport: makeHeadBucketTransport(p.logger, getHeadBucketTransportDelegate(p.logger, p.appConfig)),
 	}
 
 	op := func() error {

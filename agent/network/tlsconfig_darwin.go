@@ -17,13 +17,15 @@ package network
 
 import (
 	"crypto/x509"
+
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 )
 
 func getSystemCertPool() (*x509.CertPool, error) {
 	return x509.SystemCertPool()
 }
 
-func getCustomCertificate() ([]byte, error) {
+func getCustomCertificate(appConfig appconfig.SsmagentConfig) ([]byte, error) {
 	// Custom Certificates not supported on darwin
 	return nil, nil
 }

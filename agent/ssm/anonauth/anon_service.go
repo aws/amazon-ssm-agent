@@ -45,24 +45,23 @@ func NewAnonymousService(logger logger.T, region string) AnonymousService {
 
 	log.SetFlags(0)
 
-	awsConfig := util.AwsConfig(logger).WithLogLevel(aws.LogOff)
+	appConfig, appErr := appconfig.Config(true)
+	if appErr != nil {
+		log.Printf("encountered error while loading appconfig - %v", appErr)
+	}
+	awsConfig := util.AwsConfig(logger, appConfig).WithLogLevel(aws.LogOff)
 
 	awsConfig.Region = &region
 	awsConfig.Credentials = credentials.AnonymousCredentials
 
-	//parse appConfig override to get ssm endpoint if there is any
-	appConfig, err := appconfig.Config(true)
-	if err == nil {
+	if appErr == nil {
 		if appConfig.Ssm.Endpoint != "" {
 			awsConfig.Endpoint = &appConfig.Ssm.Endpoint
 		} else {
 			// Get the default ssm endpoint for this region
 			defaultEndpoint := endpoint.GetDefaultEndpoint(logger, "ssm", region, "")
 			awsConfig.Endpoint = &defaultEndpoint
-
 		}
-	} else {
-		log.Printf("encountered error while loading appconfig - %s", err)
 	}
 
 	// Create a session to share service client config and handlers with

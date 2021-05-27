@@ -39,7 +39,7 @@ type sdkService struct {
 // NewRsaService creates a new SSM service instance.
 func NewRsaService(log log.T, appConfig *appconfig.SsmagentConfig, serverId, region, defaultEndpoint, encodedPrivateKey string) RsaSignedService {
 
-	awsConfig := util.AwsConfig(log)
+	awsConfig := util.AwsConfig(log, *appConfig)
 
 	awsConfig.Region = &region
 	awsConfig.Credentials = credentials.NewStaticCredentials(serverId, encodedPrivateKey, "")

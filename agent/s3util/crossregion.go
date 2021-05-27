@@ -24,9 +24,9 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/aws/amazon-ssm-agent/agent/context"
-
 	"github.com/Workiva/go-datastructures/cache"
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/network"
 	"github.com/aws/aws-sdk-go/aws/endpoints"
@@ -73,7 +73,7 @@ func GetS3CrossRegionCapableSession(context context.T, bucketName string) (*sess
 		return nil, err
 	}
 
-	guessedBucketRegion := getBucketRegion(context, initialRegion, bucketName, getHttpProvider(log))
+	guessedBucketRegion := getBucketRegion(context, initialRegion, bucketName, getHttpProvider(log, context.AppConfig()))
 	if guessedBucketRegion != "" {
 		initialRegion = guessedBucketRegion
 	} else {
@@ -93,7 +93,7 @@ func GetS3CrossRegionCapableSession(context context.T, bucketName string) (*sess
 	}
 
 	config.HTTPClient = &http.Client{
-		Transport: newS3BucketRegionHeaderCapturingTransport(log),
+		Transport: newS3BucketRegionHeaderCapturingTransport(log, context.AppConfig()),
 	}
 
 	sess := session.New(config)
@@ -383,9 +383,9 @@ type s3BucketRegionHeaderCapturingTransport struct {
 }
 
 // Create a new s3BucketRegionHeaderCapturingTransport
-func newS3BucketRegionHeaderCapturingTransport(log log.T) *s3BucketRegionHeaderCapturingTransport {
+func newS3BucketRegionHeaderCapturingTransport(log log.T, appConfig appconfig.SsmagentConfig) *s3BucketRegionHeaderCapturingTransport {
 	return &s3BucketRegionHeaderCapturingTransport{
-		delegate: network.GetDefaultTransport(log),
+		delegate: network.GetDefaultTransport(log, appConfig),
 		logger:   log,
 	}
 }

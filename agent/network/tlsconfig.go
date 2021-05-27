@@ -18,6 +18,7 @@ import (
 	"crypto/x509"
 	"sync"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 )
 
@@ -28,7 +29,7 @@ var tlsConfig *tls.Config
 var mutex = sync.Mutex{}
 
 // GetDefaultTLSConfig creates and returns a configured TLS config
-func GetDefaultTLSConfig(log log.T) *tls.Config {
+func GetDefaultTLSConfig(log log.T, appConfig appconfig.SsmagentConfig) *tls.Config {
 	var err error
 	var cert []byte
 	var certPool *x509.CertPool
@@ -59,7 +60,7 @@ func GetDefaultTLSConfig(log log.T) *tls.Config {
 		retryCount = 0
 		for retryCount < maxRetryCount {
 			// Load custom certificate
-			cert, err = getCustomCertificate()
+			cert, err = getCustomCertificate(appConfig)
 
 			if err == nil {
 				break

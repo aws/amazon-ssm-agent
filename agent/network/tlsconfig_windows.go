@@ -17,6 +17,8 @@ package network
 
 import (
 	"crypto/x509"
+
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 )
 
 func getSystemCertPool() (*x509.CertPool, error) {
@@ -25,7 +27,7 @@ func getSystemCertPool() (*x509.CertPool, error) {
 	return nil, nil
 }
 
-func getCustomCertificate() ([]byte, error) {
+func getCustomCertificate(appConfig appconfig.SsmagentConfig) ([]byte, error) {
 	// Custom Certificates not supported on windows
 	return nil, nil
 }

@@ -26,14 +26,8 @@ func getSystemCertPool() (*x509.CertPool, error) {
 	return x509.SystemCertPool()
 }
 
-func getCustomCertificate() ([]byte, error) {
-
-	config, err := appconfig.Config(false)
-	if err != nil {
-		return nil, err
-	}
-
-	if !config.Agent.ContainerMode {
+func getCustomCertificate(appConfig appconfig.SsmagentConfig) ([]byte, error) {
+	if !appConfig.Agent.ContainerMode {
 		// Custom certificate only supported in container mode
 		return nil, nil
 	}

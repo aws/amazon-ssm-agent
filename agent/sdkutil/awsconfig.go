@@ -49,7 +49,7 @@ func AwsConfigForRegion(context context.T, region string) (awsConfig *aws.Config
 
 	// set Http Client
 	awsConfig.HTTPClient = &http.Client{
-		Transport: network.GetDefaultTransport(context.Log()),
+		Transport: network.GetDefaultTransport(context.Log(), context.AppConfig()),
 	}
 
 	awsConfig.Credentials = context.Identity().Credentials()

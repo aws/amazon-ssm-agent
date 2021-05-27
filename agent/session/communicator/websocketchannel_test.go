@@ -117,7 +117,8 @@ func TestOpenCloseWebSocketChannel(t *testing.T) {
 	var log = log.NewMockLog()
 
 	websocketchannel := WebSocketChannel{
-		Url: u.String(),
+		Url:     u.String(),
+		Context: context.NewMockDefault(),
 	}
 
 	err := websocketchannel.Open(log)
@@ -151,6 +152,7 @@ func TestReadWriteTextToWebSocketChannel(t *testing.T) {
 	websocketchannel := WebSocketChannel{
 		Url:       u.String(),
 		OnMessage: onMessage,
+		Context:   context.NewMockDefault(),
 	}
 
 	// Open the websocket connection
@@ -188,6 +190,7 @@ func TestReadWriteBinaryToWebSocketChannel(t *testing.T) {
 	websocketchannel := WebSocketChannel{
 		Url:       u.String(),
 		OnMessage: onMessage,
+		Context:   context.NewMockDefault(),
 	}
 
 	// Open the websocket connection
@@ -229,6 +232,7 @@ func TestMultipleReadWriteWebSocketChannel(t *testing.T) {
 	websocketchannel := WebSocketChannel{
 		Url:       u.String(),
 		OnMessage: onMessage,
+		Context:   context.NewMockDefault(),
 	}
 
 	// Open the websocket connection

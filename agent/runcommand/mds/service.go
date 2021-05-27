@@ -112,7 +112,7 @@ func NewService(context context.T, connectionTimeout time.Duration) Service {
 			KeepAlive: 0,
 		}).Dial,
 		TLSHandshakeTimeout: 10 * time.Second,
-		TLSClientConfig:     network.GetDefaultTLSConfig(context.Log()),
+		TLSClientConfig:     network.GetDefaultTLSConfig(context.Log(), context.AppConfig()),
 	}
 	config.HTTPClient = &http.Client{Transport: tr, Timeout: connectionTimeout}
 

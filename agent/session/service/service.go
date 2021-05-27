@@ -76,7 +76,7 @@ func NewService(context context.T, mgsConfig appconfig.MgsConfig, connectionTime
 	v4Signer := v4.NewSigner(identity.Credentials())
 
 	// capture Transport so we can use it to cancel requests
-	tr := network.GetDefaultTransport(log)
+	tr := network.GetDefaultTransport(log, context.AppConfig())
 	tr.DialContext = (&net.Dialer{
 		Timeout:   connectionTimeout,
 		KeepAlive: 0,
@@ -91,7 +91,7 @@ func NewService(context context.T, mgsConfig appconfig.MgsConfig, connectionTime
 }
 
 // makeRestcall triggers rest api call.
-var makeRestcall = func(log log.T, request []byte, methodType string, url string, region string, signer *v4.Signer) ([]byte, error) {
+var makeRestcall = func(log log.T, appConfig appconfig.SsmagentConfig, request []byte, methodType string, url string, region string, signer *v4.Signer) ([]byte, error) {
 	httpRequest, err := http.NewRequest(methodType, url, bytes.NewBuffer(request))
 	if err != nil {
 		return nil, fmt.Errorf("failed to create http request: %s", err)
@@ -103,7 +103,7 @@ var makeRestcall = func(log log.T, request []byte, methodType string, url string
 		return nil, fmt.Errorf("failed to sign the request: %s", err)
 	}
 
-	tr := network.GetDefaultTransport(log)
+	tr := network.GetDefaultTransport(log, appConfig)
 	client := &http.Client{
 		Timeout:   mgsClientTimeout,
 		Transport: tr,
@@ -175,7 +175,7 @@ func (mgsService *MessageGatewayService) CreateControlChannel(log log.T, createC
 		return nil, errors.New("unable to marshal the createControlChannelInput")
 	}
 
-	resp, err := makeRestcall(log, jsonValue, "POST", url, mgsService.region, mgsService.signer)
+	resp, err := makeRestcall(log, mgsService.context.AppConfig(), jsonValue, "POST", url, mgsService.region, mgsService.signer)
 	if err != nil {
 		return nil, fmt.Errorf("createControlChannel request failed: %s", err)
 	}
@@ -207,7 +207,7 @@ func (mgsService *MessageGatewayService) CreateDataChannel(log log.T, createData
 		return nil, errors.New("unable to marshal the createDataChannelInput")
 	}
 
-	resp, err := makeRestcall(log, jsonValue, "POST", url, mgsService.region, mgsService.signer)
+	resp, err := makeRestcall(log, mgsService.context.AppConfig(), jsonValue, "POST", url, mgsService.region, mgsService.signer)
 	if err != nil {
 		return nil, fmt.Errorf("createDataChannel request failed: %s", err)
 	}

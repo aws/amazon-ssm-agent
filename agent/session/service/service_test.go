@@ -19,8 +19,8 @@ import (
 	"encoding/xml"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
-
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	mgsConfig "github.com/aws/amazon-ssm-agent/agent/session/config"
 	"github.com/aws/aws-sdk-go/aws"
@@ -66,7 +66,7 @@ func TestCreateControlChannel(t *testing.T) {
 	mgsConfig.GetMgsEndpointFromRip = func(context context.T, region string) string {
 		return mgsHost
 	}
-	makeRestcall = func(log log.T, request []byte, methodType string, url string, region string, signer *v4.Signer) ([]byte, error) {
+	makeRestcall = func(log log.T, appConfig appconfig.SsmagentConfig, request []byte, methodType string, url string, region string, signer *v4.Signer) ([]byte, error) {
 		output := &CreateControlChannelOutput{
 			TokenValue:           aws.String(token),
 			MessageSchemaVersion: aws.String(mgsConfig.MessageSchemaVersion),
@@ -89,7 +89,7 @@ func TestCreateDataChannel(t *testing.T) {
 	mgsConfig.GetMgsEndpointFromRip = func(context context.T, region string) string {
 		return mgsHost
 	}
-	makeRestcall = func(log log.T, request []byte, methodType string, url string, region string, signer *v4.Signer) ([]byte, error) {
+	makeRestcall = func(log log.T, appConfig appconfig.SsmagentConfig, request []byte, methodType string, url string, region string, signer *v4.Signer) ([]byte, error) {
 		output := &CreateDataChannelOutput{
 			TokenValue:           aws.String(token),
 			MessageSchemaVersion: aws.String(mgsConfig.MessageSchemaVersion),
@@ -124,7 +124,8 @@ func TestGetBaseUrl(t *testing.T) {
 
 func getService() Service {
 	return &MessageGatewayService{
-		region: "us-east-1",
-		signer: signer,
+		region:  "us-east-1",
+		signer:  signer,
+		context: context.NewMockDefault(),
 	}
 }
