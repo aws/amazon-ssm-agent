@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/stretchr/testify/assert"
 )
@@ -19,7 +20,7 @@ func TestHttpProviderImpl_Head_Handles301WithNoLocation(t *testing.T) {
 	}
 	trans := newMockTransport()
 	trans.AddResponse(bucketUrl, resp)
-	getHeadBucketTransportDelegate = func(log.T) http.RoundTripper {
+	getHeadBucketTransportDelegate = func(log.T, appconfig.SsmagentConfig) http.RoundTripper {
 		return trans
 	}
 

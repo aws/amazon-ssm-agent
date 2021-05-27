@@ -18,6 +18,7 @@ import (
 	"testing"
 
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
+	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
@@ -103,6 +104,7 @@ func TestUpdateAssociationStatus(t *testing.T) {
 	service := AssociationService{
 		ssmSvc:     ssmMock,
 		stopPolicy: &sdkutil.StopPolicy{},
+		context:    context.NewMockDefault(),
 	}
 
 	associationName := "test"

@@ -96,7 +96,7 @@ func StartCommandExecutor(
 		finalCmd = winptyCmd + " " + shellProps.Windows.Commands
 	}
 
-	appConfig, _ := appconfig.Config(false)
+	appConfig := plugin.context.AppConfig()
 
 	if !shellProps.Windows.RunAsElevated && !isSessionLogger && !appConfig.Agent.ContainerMode {
 		// Reset password for default ssm user

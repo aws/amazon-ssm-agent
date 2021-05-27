@@ -20,7 +20,6 @@ import (
 	"sync"
 	"time"
 
-	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/association/cache"
 	"github.com/aws/amazon-ssm-agent/agent/association/model"
 	"github.com/aws/amazon-ssm-agent/agent/association/schedulemanager"
@@ -333,11 +332,7 @@ func (s *AssociationService) UpdateAssociationStatus(
 	status string,
 	executionSummary string) {
 
-	config, err := appconfig.Config(false)
-	if err != nil {
-		log.Errorf("unable to load config, %v", err)
-		return
-	}
+	config := s.context.AppConfig()
 
 	agentInfoContent, err := jsonutil.Marshal(config.Agent)
 	if err != nil {

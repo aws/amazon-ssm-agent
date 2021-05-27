@@ -64,7 +64,9 @@ type UpdatePluginConfig struct {
 	ManifestLocation string
 }
 
-type updateManager struct{}
+type updateManager struct {
+	context context.T
+}
 
 //TODO move the interface and structs into a separate file to reduce the size of this main file
 // pluginHelper is a interface that has helper functions for update manager
@@ -336,12 +338,7 @@ func (m *updateManager) generateSetupUpdateCmd(log log.T,
 
 	cmd = updateutil.BuildUpdateCommand(cmd, HistoryCmd, numHistories)
 
-	var appConfig appconfig.SsmagentConfig
-	appConfig, err = appconfig.Config(false)
-	if err != nil {
-		log.Error("something went wrong while generating the setup installation command")
-		return "", err
-	}
+	appConfig := m.context.AppConfig()
 
 	cmd = updateutil.BuildUpdateCommand(cmd, MdsEndpointCmd, appConfig.Mds.Endpoint)
 
@@ -365,12 +362,7 @@ func (m *updateManager) generateUpdateCmd(log log.T,
 
 	cmd = updateutil.BuildUpdateCommand(cmd, HistoryCmd, numHistories)
 
-	var appConfig appconfig.SsmagentConfig
-	appConfig, err = appconfig.Config(false)
-	if err != nil {
-		log.Error("something went wrong while generating update command")
-		return "", err
-	}
+	appConfig := m.context.AppConfig()
 
 	cmd = updateutil.BuildUpdateCommand(cmd, MdsEndpointCmd, appConfig.Mds.Endpoint)
 
@@ -534,7 +526,9 @@ func (p *Plugin) Execute(config contracts.Configuration, cancelFlag task.CancelF
 	log.Info("RunCommand started with update configuration for EC2 config update ", config)
 	util := new(updateutil.Utility)
 	util.Context = p.context
-	manager := new(updateManager)
+	manager := &updateManager{
+		p.context,
+	}
 
 	if cancelFlag.ShutDown() {
 		output.MarkAsShutdown()

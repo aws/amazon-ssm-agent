@@ -25,7 +25,7 @@ import (
 	"github.com/aws/aws-sdk-go/aws"
 )
 
-func AwsConfig(log log.T) *aws.Config {
+func AwsConfig(log log.T, appConfig appconfig.SsmagentConfig) *aws.Config {
 	// create default config
 	awsConfig := &aws.Config{
 		Retryer:    newRetryer(),
@@ -34,8 +34,7 @@ func AwsConfig(log log.T) *aws.Config {
 
 	// TODO: test hook, can be removed before release
 	// this is to skip ssl verification for the beta self signed certs
-	awsConfig.HTTPClient = &http.Client{Transport: network.GetDefaultTransport(log)}
-	appConfig, _ := appconfig.Config(false)
+	awsConfig.HTTPClient = &http.Client{Transport: network.GetDefaultTransport(log, appConfig)}
 	if appConfig.Ssm.InsecureSkipVerify {
 		tlsConfig := awsConfig.HTTPClient.Transport.(*http.Transport).TLSClientConfig
 		tlsConfig.InsecureSkipVerify = true

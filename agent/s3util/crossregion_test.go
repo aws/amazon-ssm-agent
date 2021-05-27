@@ -203,7 +203,7 @@ func setupMockHeadBucketResponse(bucketName, instanceRegion, headBucketResponse 
 	setS3Endpoint(instanceRegion, s3Endpoint)
 	setS3FallbackEndpoint(instanceRegion, s3FallbackEndpoint)
 
-	getHttpProvider = func(log.T) HttpProvider {
+	getHttpProvider = func(log.T, appconfig.SsmagentConfig) HttpProvider {
 		provider := &MockedHttpProvider{}
 		resp := &http.Response{
 			Header: http.Header{},
@@ -736,7 +736,7 @@ func TestFixupRequest_HttpRequestUrlPresent_PathStyleUrlWithKey(t *testing.T) {
 }
 
 func TestNewS3BucketRegionHeaderCapturingTransport(t *testing.T) {
-	transport := newS3BucketRegionHeaderCapturingTransport(log.NewMockLog())
+	transport := newS3BucketRegionHeaderCapturingTransport(log.NewMockLog(), appconfig.SsmagentConfig{})
 	_, goodType := transport.delegate.(*http.Transport)
 	assert.True(t, goodType)
 }
@@ -990,19 +990,19 @@ func makeAuthorizationHeaderMalformedErrorResponse(wrongRegion, expRegion string
 
 func TestExtractRegionFromBody_ErrorXmlWithRegion(t *testing.T) {
 	bodyContents := makeAuthorizationHeaderMalformedErrorResponse("us-east-1", "eu-west-1")
-	transport := newS3BucketRegionHeaderCapturingTransport(log.NewMockLog())
+	transport := newS3BucketRegionHeaderCapturingTransport(log.NewMockLog(), appconfig.SsmagentConfig{})
 	assert.Equal(t, "eu-west-1", transport.extractRegionFromBody([]byte(bodyContents)))
 }
 
 func TestExtractRegionFromBody_ErrorXmlWithEndpoint(t *testing.T) {
 	bodyContents := makeRedirectResponseBodyText("bucket-1.s3.cn-north-1.amazonaws.com.cn", "cn-north-1")
-	transport := newS3BucketRegionHeaderCapturingTransport(log.NewMockLog())
+	transport := newS3BucketRegionHeaderCapturingTransport(log.NewMockLog(), appconfig.SsmagentConfig{})
 	assert.Equal(t, "cn-north-1", transport.extractRegionFromBody([]byte(bodyContents)))
 }
 
 func TestExtractRegionFromBody_ErrorXmlWithEndpoint_PathStyleEndpointUrl(t *testing.T) {
 	bodyContents := makeRedirectResponseBodyText("s3.cn-north-1.amazonaws.com.cn/bucket-1", "cn-north-1")
-	transport := newS3BucketRegionHeaderCapturingTransport(log.NewMockLog())
+	transport := newS3BucketRegionHeaderCapturingTransport(log.NewMockLog(), appconfig.SsmagentConfig{})
 	assert.Equal(t, "cn-north-1", transport.extractRegionFromBody([]byte(bodyContents)))
 }
 
@@ -1085,7 +1085,7 @@ func doGetResponseBodyTest(t *testing.T, mockResponses []mockReaderResponse, exp
 	response := &http.Response{
 		Body: body,
 	}
-	transport := newS3BucketRegionHeaderCapturingTransport(log.NewMockLog())
+	transport := newS3BucketRegionHeaderCapturingTransport(log.NewMockLog(), appconfig.SsmagentConfig{})
 	actualBody, actualErr := transport.getResponseBody(response)
 	assert.Equal(t, expResult, actualBody)
 	assert.Equal(t, expErr, actualErr)

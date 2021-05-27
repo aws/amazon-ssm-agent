@@ -157,7 +157,7 @@ func (webSocketChannel *WebSocketChannel) Open(log log.T) error {
 		log.Errorf("Failed to get the v4 signature, %v", err)
 	}
 
-	ws, err := websocketutil.NewWebsocketUtil(log, nil).OpenConnection(webSocketChannel.Url, header)
+	ws, err := websocketutil.NewWebsocketUtil(log, webSocketChannel.Context.AppConfig(), nil).OpenConnection(webSocketChannel.Url, header)
 	if err != nil {
 		return err
 	}
@@ -260,7 +260,7 @@ func (webSocketChannel *WebSocketChannel) Close(log log.T) error {
 		webSocketChannel.stopPinging <- true
 		close(webSocketChannel.stopPinging)
 
-		return websocketutil.NewWebsocketUtil(log, nil).CloseConnection(webSocketChannel.Connection)
+		return websocketutil.NewWebsocketUtil(log, webSocketChannel.Context.AppConfig(), nil).CloseConnection(webSocketChannel.Connection)
 	}
 
 	log.Debugf("Websocket channel connection to: " + webSocketChannel.Url + " is already Closed!")

@@ -21,6 +21,7 @@ import (
 	"net/url"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/gorilla/websocket"
 	"github.com/stretchr/testify/assert"
@@ -49,7 +50,8 @@ func TestWebsocketUtilOpenCloseConnection(t *testing.T) {
 	u, _ := url.Parse(srv.URL)
 	u.Scheme = "ws"
 	var log = log.NewMockLog()
-	var ws = NewWebsocketUtil(log, nil)
+	appConfig := appconfig.SsmagentConfig{}
+	var ws = NewWebsocketUtil(log, appConfig, nil)
 	conn, _ := ws.OpenConnection(u.String(), http.Header{})
 	assert.NotNil(t, conn, "Open connection failed.")
 
@@ -62,7 +64,9 @@ func TestWebsocketUtilOpenConnectionInvalidUrl(t *testing.T) {
 	u, _ := url.Parse(srv.URL)
 	u.Scheme = "ws"
 	var log = log.NewMockLog()
-	var ws = NewWebsocketUtil(log, nil)
+
+	appConfig := appconfig.SsmagentConfig{}
+	var ws = NewWebsocketUtil(log, appConfig, nil)
 	conn, _ := ws.OpenConnection("InvalidUrl", http.Header{})
 	assert.Nil(t, conn, "Open connection failed.")
 }
@@ -72,7 +76,9 @@ func TestSendMessage(t *testing.T) {
 	u, _ := url.Parse(srv.URL)
 	u.Scheme = "ws"
 	var log = log.NewMockLog()
-	var ws = NewWebsocketUtil(log, nil)
+
+	appConfig := appconfig.SsmagentConfig{}
+	var ws = NewWebsocketUtil(log, appConfig, nil)
 	conn, _ := ws.OpenConnection(u.String(), http.Header{})
 	assert.NotNil(t, conn, "Open connection failed.")
 	err := conn.WriteMessage(websocket.TextMessage, []byte("testing testing"))

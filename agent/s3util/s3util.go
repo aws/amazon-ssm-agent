@@ -19,8 +19,8 @@ import (
 	"os"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
-
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/sdkutil"
 	"github.com/aws/aws-sdk-go/aws"
@@ -31,9 +31,10 @@ import (
 var makeAwsConfig = sdkutil.AwsConfigForRegion
 var getS3Endpoint = GetS3Endpoint
 var getFallbackS3EndpointFunc = getFallbackS3Endpoint
-var getHttpProvider = func(logger log.T) HttpProvider {
+var getHttpProvider = func(logger log.T, appConfig appconfig.SsmagentConfig) HttpProvider {
 	return HttpProviderImpl{
-		logger: logger,
+		logger:    logger,
+		appConfig: appConfig,
 	}
 }
 
