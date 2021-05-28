@@ -92,6 +92,8 @@ const (
 
 	// PowerShellPluginCommandArgs is the arguments of powershell.exe to be used by the runPowerShellScript plugin
 	PowerShellPluginCommandArgs = "-f"
+	// SSM Agent Update download legacy path
+	LegacyUpdateDownloadFolder  = DownloadRoot
 
 	// Exit Code for a command that exits before completion (generally due to timeout or cancel)
 	CommandStoppedPreemptivelyExitCode = 137 // Fatal error (128) + signal for SIGKILL (9) = 137

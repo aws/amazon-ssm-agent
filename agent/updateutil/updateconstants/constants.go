@@ -25,7 +25,10 @@ const (
 	Updater = "updater"
 
 	// Directory containing older versions of agent during update
-	UpdateAmazonSSMAgentDir = "amazon-ssm-agent/"
+	UpdateAmazonSSMAgentDir = "amazon-ssm-agent"
+
+	// Directory containing older versions of agent updater during update
+	UpdateAmazonSSMAgentUpdaterDir = "amazon-ssm-agent-updater"
 
 	// UpdateContextFileName represents Update context json file
 	UpdateContextFileName = "updatecontext.json"

@@ -155,6 +155,9 @@ var DefaultCustomInventoryFolder string
 // Plugin folder path
 var PluginFolder string
 
+// SSM Agent Update download legacy path
+var LegacyUpdateDownloadFolder string
+
 func init() {
 	/*
 		System environment variable "AllUsersProfile" maps to following locations in different locations:
@@ -191,6 +194,7 @@ func init() {
 	DownloadRoot = filepath.Join(SSMDataPath, "Download")
 	UpdaterArtifactsRoot = filepath.Join(SSMDataPath, "Update")
 	UpdaterPidLockfile = filepath.Join(SSMDataPath, "update.lock")
+	LegacyUpdateDownloadFolder = DownloadRoot
 
 	DefaultCustomInventoryFolder = filepath.Join(SSMDataPath, "Inventory", "Custom")
 	EC2UpdateArtifactsRoot = filepath.Join(programData, EC2ConfigAppDataFolder, "Updater")

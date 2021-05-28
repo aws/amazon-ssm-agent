@@ -183,9 +183,7 @@ func finalizeUpdateAndSendReply(u *updateManager, updateDetail *UpdateDetail, er
 		log.Errorf(err.Error())
 	}
 
-	if err = u.clean(u, log, updateDetail); err != nil {
-		return err
-	}
+	u.clean(log, updateDetail)
 
 	return nil
 }

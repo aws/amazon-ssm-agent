@@ -20,9 +20,11 @@ package processor
 
 import (
 	"fmt"
+	"path/filepath"
 	"strings"
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
@@ -33,6 +35,8 @@ import (
 	updateinfomocks "github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo/mocks"
 	updatemanifestmocks "github.com/aws/amazon-ssm-agent/agent/updateutil/updatemanifest/mocks"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateprecondition"
+	"github.com/aws/amazon-ssm-agent/agent/version"
+
 	updatepreconditionmocks "github.com/aws/amazon-ssm-agent/agent/updateutil/updateprecondition/mocks"
 	updates3utilmocks "github.com/aws/amazon-ssm-agent/agent/updateutil/updates3util/mocks"
 	"github.com/stretchr/testify/assert"
@@ -512,6 +516,94 @@ func TestDetermineTarget_TargetVersionLatest_Success(t *testing.T) {
 
 	assert.Equal(t, "", updateDetail.StandardOut)
 	assert.Equal(t, "", updateDetail.StandardError)
+}
+
+func TestCleanAgentArtifacts_UpdateSuccess(t *testing.T) {
+	ssmAgentDownloadDir := filepath.Join(appconfig.UpdaterArtifactsRoot, updateconstants.UpdateAmazonSSMAgentDir)
+	ssmAgentUpdaterDir := filepath.Join(appconfig.UpdaterArtifactsRoot, updateconstants.UpdateAmazonSSMAgentUpdaterDir)
+	getDirectoryNames = func(srcPath string) (directories []string, err error) {
+		if srcPath == ssmAgentDownloadDir {
+			return []string{"2.3.0.1", version.Version}, nil
+		}
+		return []string{}, nil
+	}
+	deleteDirectory = func(dirName string) (err error) {
+		return nil
+	}
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.TargetVersion = version.Version
+	updateDetail.SourceVersion = "2.3.0.1"
+	updateDetail.Result = contracts.ResultStatusSuccess
+	removedVersions := cleanAgentUpdaterDir(logger, updateDetail)
+	assert.Equal(t, len(removedVersions[ssmAgentDownloadDir]), 1)
+	assert.Equal(t, len(removedVersions[ssmAgentUpdaterDir]), 0)
+	assert.Equal(t, removedVersions[ssmAgentDownloadDir][0], "2.3.0.1")
+}
+
+func TestCleanAgentArtifacts_UpdateFailed(t *testing.T) {
+	ssmAgentDownloadDir := filepath.Join(appconfig.UpdaterArtifactsRoot, updateconstants.UpdateAmazonSSMAgentDir)
+	ssmAgentUpdaterDir := filepath.Join(appconfig.UpdaterArtifactsRoot, updateconstants.UpdateAmazonSSMAgentUpdaterDir)
+	getDirectoryNames = func(srcPath string) (directories []string, err error) {
+		if srcPath == ssmAgentDownloadDir {
+			return []string{"2.3.0.1", version.Version}, nil
+		}
+		return []string{}, nil
+	}
+	deleteDirectory = func(dirName string) (err error) {
+		return nil
+	}
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.TargetVersion = version.Version
+	updateDetail.SourceVersion = "2.3.0.1"
+	updateDetail.Result = contracts.ResultStatusFailed
+	removedVersions := cleanAgentUpdaterDir(logger, updateDetail)
+	assert.Equal(t, len(removedVersions[ssmAgentDownloadDir]), 1)
+	assert.Equal(t, len(removedVersions[ssmAgentUpdaterDir]), 0)
+	assert.Equal(t, removedVersions[ssmAgentDownloadDir][0], version.Version)
+}
+
+func TestCleanUpdaterArtifacts_UpdateSuccess(t *testing.T) {
+	ssmAgentDownloadDir := filepath.Join(appconfig.UpdaterArtifactsRoot, updateconstants.UpdateAmazonSSMAgentDir)
+	ssmAgentUpdaterDir := filepath.Join(appconfig.UpdaterArtifactsRoot, updateconstants.UpdateAmazonSSMAgentUpdaterDir)
+	getDirectoryNames = func(srcPath string) (directories []string, err error) {
+		if srcPath == ssmAgentUpdaterDir {
+			return []string{"2.3.0.1", version.Version}, nil
+		}
+		return []string{}, nil
+	}
+	deleteDirectory = func(dirName string) (err error) {
+		return nil
+	}
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.TargetVersion = version.Version
+	updateDetail.SourceVersion = "2.3.0.1"
+	updateDetail.Result = contracts.ResultStatusSuccess
+	removedVersions := cleanAgentUpdaterDir(logger, updateDetail)
+	assert.Equal(t, len(removedVersions[ssmAgentDownloadDir]), 0)
+	assert.Equal(t, len(removedVersions[ssmAgentUpdaterDir]), 1)
+	assert.Equal(t, removedVersions[ssmAgentUpdaterDir][0], "2.3.0.1")
+}
+
+func TestCleanUpdaterArtifacts_UpdateFail(t *testing.T) {
+	ssmAgentDownloadDir := filepath.Join(appconfig.UpdaterArtifactsRoot, updateconstants.UpdateAmazonSSMAgentDir)
+	ssmAgentUpdaterDir := filepath.Join(appconfig.UpdaterArtifactsRoot, updateconstants.UpdateAmazonSSMAgentUpdaterDir)
+	getDirectoryNames = func(srcPath string) (directories []string, err error) {
+		if srcPath == ssmAgentUpdaterDir {
+			return []string{"2.3.0.1", version.Version}, nil
+		}
+		return []string{}, nil
+	}
+	deleteDirectory = func(dirName string) (err error) {
+		return nil
+	}
+	updateDetail := createUpdateDetail(Initialized)
+	updateDetail.TargetVersion = version.Version
+	updateDetail.SourceVersion = "2.3.0.1"
+	updateDetail.Result = contracts.ResultStatusFailed
+	removedVersions := cleanAgentUpdaterDir(logger, updateDetail)
+	assert.Equal(t, len(removedVersions[ssmAgentDownloadDir]), 0)
+	assert.Equal(t, len(removedVersions[ssmAgentUpdaterDir]), 1)
+	assert.Equal(t, removedVersions[ssmAgentUpdaterDir][0], "2.3.0.1")
 }
 
 func TestDetermineTarget_CustomerDefinedVersion_InvalidTarget(t *testing.T) {
