@@ -106,6 +106,9 @@ const (
 
 	// seelogFileName is the name of the log configuration file
 	seelogFileName = "seelog.xml"
+
+	// SSM Agent Update download legacy path
+	LegacyUpdateDownloadFolder = "/var/log/amazon/ssm/download"
 )
 
 // PowerShellPluginCommandName is the path of the powershell.exe to be used by the runPowerShellScript plugin

@@ -46,7 +46,7 @@ type rollback func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (e
 type uninstall func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error)
 type install func(mgr *updateManager, log log.T, version string, updateDetail *UpdateDetail) (exitCode updateconstants.UpdateScriptExitCode, err error)
 type download func(mgr *updateManager, log log.T, downloadInput artifact.DownloadInput, updateDetail *UpdateDetail, version string) (err error)
-type clean func(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error)
+type clean func(log log.T, updateDetail *UpdateDetail)
 type runTests func(context context.T, stage testCommon.TestStage, timeOutSeconds int) (testOutput string)
 type finalize func(mgr *updateManager, updateDetail *UpdateDetail, errorCode string) (err error)
 

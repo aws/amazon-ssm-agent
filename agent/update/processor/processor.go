@@ -16,10 +16,12 @@
 package processor
 
 import (
+	"bytes"
 	"fmt"
 	"math/rand"
 	"os"
 	"path/filepath"
+	"strings"
 	"sync"
 	"time"
 
@@ -36,6 +38,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateprecondition"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updates3util"
+	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/aws/amazon-ssm-agent/agent/versionutil"
 )
 
@@ -43,8 +46,11 @@ var minimumSupportedVersions map[string]string
 var once sync.Once
 
 var (
-	downloadArtifact = artifact.Download
-	uncompress       = fileutil.Uncompress
+	downloadArtifact       = artifact.Download
+	uncompress             = fileutil.Uncompress
+	getInstalledVersionRef = getInstalledVersions
+	getDirectoryNames      = fileutil.GetDirectoryNames
+	deleteDirectory        = os.RemoveAll
 )
 
 const (
@@ -83,7 +89,7 @@ func NewUpdater(context context.T, info updateinfo.T) *Updater {
 			uninstall:           uninstallAgent,
 			install:             installAgent,
 			download:            downloadAndUnzipArtifact,
-			clean:               cleanUninstalledVersions,
+			clean:               cleanAgentArtifacts,
 			runTests:            testerPkg.StartTests,
 			finalize:            finalizeUpdateAndSendReply,
 		},
@@ -693,45 +699,81 @@ func getNextBackOff(retryCounter int) (backOff time.Duration) {
 	return time.Duration((backOffSeconds*1000)+rand.Intn(randomDelay)) * time.Millisecond
 }
 
-// cleanUninstalledVersions deletes leftover files from previously installed versions in update folder
-func cleanUninstalledVersions(mgr *updateManager, log log.T, updateDetail *UpdateDetail) (err error) {
-	log.Infof("Initiating cleanup of other versions.")
+// getInstalledVersions returns the version which needs to be retained after deletion
+// returns empty for other folders except amazon-ssm-agent, amazon-ssm-agent-updater download folders
+func getInstalledVersions(updateDetail *UpdateDetail, path string) string {
+	var validVersion string
+	updaterBasePath := filepath.Base(path)
+	if updaterBasePath == updateconstants.UpdateAmazonSSMAgentDir {
+		switch updateDetail.Result {
+		case contracts.ResultStatusSuccess:
+			validVersion = updateDetail.TargetVersion
+		case contracts.ResultStatusFailed:
+			validVersion = updateDetail.SourceVersion
+		}
+	} else if updaterBasePath == updateconstants.UpdateAmazonSSMAgentUpdaterDir {
+		validVersion = version.Version
+	}
+	return validVersion
+}
+
+// cleanAgentArtifacts deletes leftover files from update folders (amazon-ssm-agent, amazon-ssm-agent-updater and downloads folder)
+func cleanAgentArtifacts(log log.T, updateDetail *UpdateDetail) {
+	_ = cleanAgentUpdaterDir(log, updateDetail)
+	cleanUpdateDownloadDir(log)
+}
+
+// cleanAgentUpdaterDir deletes files from update folders (amazon-ssm-agent and amazon-ssm-agent-updater folder)
+func cleanAgentUpdaterDir(log log.T, updateDetail *UpdateDetail) (rmVersions map[string][]string) {
+	log.Infof("initiating cleanup of other versions in amazon-ssm-agent and amazon-ssm-agent-updater folder")
 	var installedVersion string
+	var combinedErrors bytes.Buffer
+	removedVersions := make(map[string][]string, 2)
+	ssmAgentDownloadDir := filepath.Join(appconfig.UpdaterArtifactsRoot, updateconstants.UpdateAmazonSSMAgentDir)
+	ssmAgentUpdaterDir := filepath.Join(appconfig.UpdaterArtifactsRoot, updateconstants.UpdateAmazonSSMAgentUpdaterDir)
 
-	switch updateDetail.Result {
-	case contracts.ResultStatusSuccess:
-		installedVersion = updateDetail.TargetVersion
-	case contracts.ResultStatusFailed:
-		installedVersion = updateDetail.SourceVersion
-	}
-
-	path := appconfig.UpdaterArtifactsRoot + updateconstants.UpdateAmazonSSMAgentDir
-	directoryNames, err := fileutil.GetDirectoryNames(path)
-
-	if err != nil {
-		return err
-	}
-
-	removedVersions := ""
-	combinedErrors := fmt.Errorf("")
-	for _, directoryName := range directoryNames {
-		if directoryName == installedVersion {
-			continue
-		} else if err = fileutil.DeleteDirectory(path + directoryName); err != nil {
-			combinedErrors = fmt.Errorf(combinedErrors.Error() + err.Error() + "\n")
+	artifactDirPaths := []string{ssmAgentDownloadDir, ssmAgentUpdaterDir}
+	for _, artifactDirPath := range artifactDirPaths {
+		log.Infof("removing artifacts in the folder: %s", artifactDirPath)
+		installedVersion = getInstalledVersionRef(updateDetail, artifactDirPath)
+		artifactNames, dirErr := getDirectoryNames(artifactDirPath)
+		if dirErr == nil {
+			for _, artifactName := range artifactNames {
+				artifactDir := filepath.Join(artifactDirPath, artifactName)
+				if artifactName == installedVersion {
+					// we skip installed/running versions to avoid race conditions while deleting
+					continue
+				} else if err := deleteDirectory(artifactDir); err != nil {
+					combinedErrors.WriteString(err.Error())
+					combinedErrors.WriteString("\n")
+				} else {
+					removedVersions[artifactDirPath] = append(removedVersions[artifactDirPath], artifactName)
+				}
+			}
+			log.Infof("removed files and folders: %v", strings.Join(removedVersions[artifactDirPath], ", "))
 		} else {
-			removedVersions += directoryName + "\n"
+			log.Warnf("failed to list directory names: %v", dirErr)
 		}
 	}
-
-	log.Infof("Installed version: %v", installedVersion)
-	log.Infof("Removed versions: %v", removedVersions)
-
-	if combinedErrors.Error() != "" {
-		return combinedErrors
+	if combinedErrors.String() != "" {
+		log.Warnf("combined errors while deleting files in updater and agent download folders: %v", combinedErrors.String())
 	}
+	return removedVersions
+}
 
-	return nil
+// cleanUpdateDownloadDir deletes files from update download folders (update download folder)
+func cleanUpdateDownloadDir(log log.T) {
+	log.Infof("initiating cleanup of files in update download folder")
+	updateDownloadDir := filepath.Join(appconfig.DownloadRoot, "update")
+	legacyUpdateDownloadDir := filepath.Join(appconfig.LegacyUpdateDownloadFolder, "update")
+	if fileutil.Exists(legacyUpdateDownloadDir) {
+		if err := deleteDirectory(legacyUpdateDownloadDir); err != nil {
+			log.Warnf("error while deleting the update legacy download folder: %v", err)
+		}
+	}
+	if err := deleteDirectory(updateDownloadDir); err != nil {
+		log.Warnf("error while deleting the update download folder: %v", err)
+	}
 }
 
 // downloadAndUnzipArtifact downloads installation package and unzips it
