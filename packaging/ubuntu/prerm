@@ -1,3 +1,5 @@
+#!/bin/bash
+
 echo "Stopping agent"
 if [ $(cat /proc/1/comm) = init ]
 then
