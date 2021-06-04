@@ -1,5 +1,17 @@
 Latest
 ===============
+- Added configurable custom identity and identity consumption order
+- Added cross-account domain join
+- Added cleanup for older versions of updater artifacts
+- Added a workaround for MacOS kernel bug that sometimes kept RunCommand from launching
+- Added a workaround for log file contention on Windows
+- Added synchronization to RunCommand service stop
+- Changed hibernation log level  
+- MacOS executables are now signed
+- Removed delay in non-interactive session type
+
+3.0.1209.0
+===============
 - Fixed issue where registration file is not removed when registration is cleared
 - Removed unnecessary CloudWatch Log api calls
 - Added support for IMDSv2 in Windows AD domain join plugin
