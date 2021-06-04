@@ -76,6 +76,7 @@ func (s *RunCommandService) ModuleExecute() (err error) {
 	}
 
 	log.Info("Starting message polling")
+	s.messagePollWaitGroup = &sync.WaitGroup{}
 	if s.messagePollJob, err = scheduler.Every(pollMessageFrequencyMinutes).Minutes().Run(s.messagePollLoop); err != nil {
 		s.context.Log().Errorf("unable to schedule message poll job. %v", err)
 	}

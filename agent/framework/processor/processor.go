@@ -133,7 +133,7 @@ func (p *EngineProcessor) Submit(docState contracts.DocumentState) {
 	p.documentMgr.PersistDocumentState(docState.DocumentInformation.DocumentID, appconfig.DefaultLocationOfPending, docState)
 	err := p.submit(&docState)
 	if err != nil {
-		log.Error("Document Submission failed", err)
+		log.Error("Document Submission failed: ", err)
 		//move the fail-to-submit document to corrupt folder
 		p.documentMgr.MoveDocumentState(docState.DocumentInformation.DocumentID, appconfig.DefaultLocationOfPending, appconfig.DefaultLocationOfCorrupt)
 		return

@@ -58,6 +58,8 @@ func (s *RunCommandService) sendReplyLoop() {
 
 // loop reads messages from MDS then processes them.
 func (s *RunCommandService) messagePollLoop() {
+	s.messagePollWaitGroup.Add(1)
+	defer s.messagePollWaitGroup.Done()
 	// time lock to only have one loop active anytime.
 	// this is extra insurance to prevent any race condition
 	pollStartTime := time.Now()
@@ -127,14 +129,22 @@ func (s *RunCommandService) reset() {
 func (s *RunCommandService) stop() {
 	log := s.context.Log()
 	log.Debugf("Stopping processor:%v", s.name)
-	s.service.Stop()
 
+	// Ask scheduler not to schedule more jobs
 	if s.messagePollJob != nil {
 		s.messagePollJob.Quit <- true
 	}
 	if s.sendReplyJob != nil {
 		s.sendReplyJob.Quit <- true
 	}
+
+	// Stop any ongoing calls
+	s.service.Stop()
+
+	// Wait for ongoing messagePoll loops to terminate
+	log.Debugf("Waiting for polling function to return")
+	s.messagePollWaitGroup.Wait()
+	log.Debugf("processor has been stopped:%v", s.name)
 }
 
 // pollOnce calls GetMessages once and processes the result.

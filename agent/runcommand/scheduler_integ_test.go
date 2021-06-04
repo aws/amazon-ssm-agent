@@ -19,6 +19,7 @@ package runcommand
 import (
 	"errors"
 	"fmt"
+	"sync"
 	"testing"
 	"time"
 
@@ -46,6 +47,22 @@ var (
 	errAwsSample      = awserr.New("RequestError", "send request failed", errSample)
 	stopPolicyTimeout = time.Second * 2
 )
+
+// verifyWaitGroup verifies that the waitgroup counter is zero or until it times out
+func verifyWaitGroup(wg *sync.WaitGroup, timeout time.Duration) bool {
+	waitCh := make(chan struct{})
+	go func() {
+		wg.Wait()
+		close(waitCh)
+	}()
+
+	select {
+	case <-waitCh:
+		return true
+	case <-time.After(timeout):
+		return false
+	}
+}
 
 // NewMockDefault returns an instance of Mock with default expectations set.
 func MockContext() *context.Mock {
@@ -81,15 +98,20 @@ func TestLoop_Once(t *testing.T) {
 	}
 	messagePollJob, _ := scheduler.Every(10).Seconds().NotImmediately().Run(job)
 
+	wg := &sync.WaitGroup{}
 	proc := RunCommandService{
-		name:                mdsName,
-		context:             contextMock,
-		service:             mdsMock,
-		messagePollJob:      messagePollJob,
-		processorStopPolicy: sdkutil.NewStopPolicy(mdsName, stopPolicyThreshold),
+		name:                 mdsName,
+		context:              contextMock,
+		service:              mdsMock,
+		messagePollJob:       messagePollJob,
+		messagePollWaitGroup: wg,
+		processorStopPolicy:  sdkutil.NewStopPolicy(mdsName, stopPolicyThreshold),
 	}
 
 	proc.messagePollLoop()
+
+	success := verifyWaitGroup(wg, 1*time.Second)
+	assert.True(t, success, "Message loop failed to return within the expected time")
 
 	time.Sleep(1 * time.Second)
 	assert.Equal(t, 1, called)
@@ -112,12 +134,14 @@ func TestLoop_Multiple_Serial(t *testing.T) {
 	}
 	messagePollJob, _ := scheduler.Every(10).Seconds().NotImmediately().Run(job)
 
+	wg := &sync.WaitGroup{}
 	proc := RunCommandService{
-		name:                mdsName,
-		context:             contextMock,
-		service:             mdsMock,
-		messagePollJob:      messagePollJob,
-		processorStopPolicy: sdkutil.NewStopPolicy(mdsName, stopPolicyThreshold),
+		name:                 mdsName,
+		context:              contextMock,
+		service:              mdsMock,
+		messagePollWaitGroup: wg,
+		messagePollJob:       messagePollJob,
+		processorStopPolicy:  sdkutil.NewStopPolicy(mdsName, stopPolicyThreshold),
 	}
 
 	start := time.Now()
@@ -129,6 +153,8 @@ func TestLoop_Multiple_Serial(t *testing.T) {
 	// elapsed should be greater than number of polls in seconds as we force a 1 second delay
 	elapsed := time.Since(start)
 
+	success := verifyWaitGroup(wg, 1*time.Second)
+	assert.True(t, success, "Message loop failed to return within the expected time")
 	time.Sleep(1 * time.Second)
 
 	assert.Equal(t, multipleRetryCount, called)
@@ -152,17 +178,22 @@ func TestLoop_Multiple_Parallel(t *testing.T) {
 	}
 	messagePollJob, _ := scheduler.Every(10).Seconds().NotImmediately().Run(job)
 
+	wg := &sync.WaitGroup{}
 	proc := RunCommandService{
-		name:                mdsName,
-		context:             contextMock,
-		service:             mdsMock,
-		messagePollJob:      messagePollJob,
-		processorStopPolicy: sdkutil.NewStopPolicy(mdsName, stopPolicyThreshold),
+		name:                 mdsName,
+		context:              contextMock,
+		service:              mdsMock,
+		messagePollWaitGroup: wg,
+		messagePollJob:       messagePollJob,
+		processorStopPolicy:  sdkutil.NewStopPolicy(mdsName, stopPolicyThreshold),
 	}
 
 	for i := 0; i < multipleRetryCount; i++ {
 		go proc.messagePollLoop()
 	}
+
+	success := verifyWaitGroup(wg, 4*time.Second)
+	assert.True(t, success, "Message loop failed to return within the expected time")
 
 	time.Sleep(4 * time.Second)
 	assert.Equal(t, 1, called)
@@ -185,15 +216,20 @@ func TestLoop_Once_Error(t *testing.T) {
 	}
 	messagePollJob, _ := scheduler.Every(10).Seconds().NotImmediately().Run(job)
 
+	wg := &sync.WaitGroup{}
 	proc := RunCommandService{
-		name:                mdsName,
-		context:             contextMock,
-		service:             mdsMock,
-		messagePollJob:      messagePollJob,
-		processorStopPolicy: sdkutil.NewStopPolicy(mdsName, stopPolicyThreshold),
+		name:                 mdsName,
+		context:              contextMock,
+		service:              mdsMock,
+		messagePollWaitGroup: wg,
+		messagePollJob:       messagePollJob,
+		processorStopPolicy:  sdkutil.NewStopPolicy(mdsName, stopPolicyThreshold),
 	}
 
 	proc.messagePollLoop()
+
+	success := verifyWaitGroup(wg, 1*time.Second)
+	assert.True(t, success, "Message loop failed to return within the expected time")
 
 	time.Sleep(1 * time.Second)
 	assert.Equal(t, 1, called)
@@ -216,12 +252,14 @@ func TestLoop_Multiple_Serial_Error(t *testing.T) {
 	}
 	messagePollJob, _ := scheduler.Every(10).Seconds().NotImmediately().Run(job)
 
+	wg := &sync.WaitGroup{}
 	proc := RunCommandService{
-		name:                mdsName,
-		context:             contextMock,
-		service:             mdsMock,
-		messagePollJob:      messagePollJob,
-		processorStopPolicy: sdkutil.NewStopPolicy(mdsName, stopPolicyThreshold),
+		name:                 mdsName,
+		context:              contextMock,
+		service:              mdsMock,
+		messagePollWaitGroup: wg,
+		messagePollJob:       messagePollJob,
+		processorStopPolicy:  sdkutil.NewStopPolicy(mdsName, stopPolicyThreshold),
 	}
 
 	start := time.Now()
@@ -233,6 +271,8 @@ func TestLoop_Multiple_Serial_Error(t *testing.T) {
 	// elapsed should be greater than number of polls in seconds as we force a 1 second delay
 	elapsed := time.Since(start)
 
+	success := verifyWaitGroup(wg, 1*time.Second)
+	assert.True(t, success, "Message loop failed to return within the expected time")
 	time.Sleep(1 * time.Second)
 
 	// number of tries should be the same as stop threshold +1
@@ -286,17 +326,22 @@ func TestLoop_Multiple_Parallel_Error(t *testing.T) {
 	}
 	messagePollJob, _ := scheduler.Every(10).Seconds().NotImmediately().Run(job)
 
+	wg := &sync.WaitGroup{}
 	proc := RunCommandService{
-		name:                mdsName,
-		context:             contextMock,
-		service:             mdsMock,
-		messagePollJob:      messagePollJob,
-		processorStopPolicy: sdkutil.NewStopPolicy(mdsName, stopPolicyThreshold),
+		name:                 mdsName,
+		context:              contextMock,
+		service:              mdsMock,
+		messagePollWaitGroup: wg,
+		messagePollJob:       messagePollJob,
+		processorStopPolicy:  sdkutil.NewStopPolicy(mdsName, stopPolicyThreshold),
 	}
 
 	for i := 0; i < multipleRetryCount; i++ {
 		go proc.messagePollLoop()
 	}
+
+	success := verifyWaitGroup(wg, 5*time.Second)
+	assert.True(t, success, "Message loop failed to return within the expected time")
 
 	time.Sleep(5 * time.Second)
 	assert.Equal(t, 1, called)
