@@ -17,6 +17,7 @@ package runcommand
 import (
 	"encoding/json"
 	"path/filepath"
+	"sync"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -90,6 +91,7 @@ type RunCommandService struct {
 	sendResponse         SendResponse
 	orchestrationRootDir string
 	messagePollJob       *scheduler.Job
+	messagePollWaitGroup *sync.WaitGroup
 	sendReplyJob         *scheduler.Job
 	//TODO move association poller out, we surely have to
 	assocProcessor      *associationProcessor.Processor
