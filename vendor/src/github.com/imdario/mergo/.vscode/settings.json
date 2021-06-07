@@ -1,7 +1,0 @@
-{
-    "go.lintTool": "golangci-lint",
-    "go.lintFlags": [
-        "--enable-all",
-        "--disable=gomnd"
-    ]
-}
