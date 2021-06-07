@@ -12,8 +12,6 @@ GO_BUILD?=$(GO_BUILD_NOPIE)
 GO_SPACE?=$(CURDIR)
 GOTEMPPATH?=$(GO_SPACE)/build/private
 GOTEMPCOPYPATH?=$(GOTEMPPATH)/src/github.com/aws/amazon-ssm-agent
-GOPATH:=$(GOTEMPPATH):$(GO_SPACE)/vendor:$(GOPATH)
-export GOPATH
 export GO_SPACE
 
 checkstyle::
@@ -33,7 +31,7 @@ package:: create-package-folder package-linux package-windows package-darwin
 
 build-release:: clean quick-integtest checkstyle pre-release build prepack package finalize
 
-release:: clean quick-integtest checkstyle pre-release build-darwin cpy-plugins copy-win-dep finalize
+release:: clean quick-integtest checkstyle pre-release cpy-plugins copy-win-dep finalize
 
 package-src:: clean quick-integtest checkstyle pre-release cpy-plugins finalize
 
@@ -59,6 +57,8 @@ sources:: create-source-archive
 clean:: remove-prepacked-folder
 	rm -rf build/* bin/ pkg/ vendor/bin/ vendor/pkg/ .cover/
 	find . -type f -name '*.log' -delete
+	go clean -modcache
+	go version
 
 .PHONY: cpy-plugins
 cpy-plugins: copy-src pre-build
@@ -117,20 +117,20 @@ pre-build:
 .PHONY: build-any-%
 build-any-%: checkstyle copy-src pre-build
 	@echo "Build for $(GOARCH) $(GOOS) agent"
-	GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO_BUILD) -o $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/amazon-ssm-agent$(EXE_EXT) -v \
-	    $(GO_SPACE)/core/agent.go $(GO_SPACE)/core/agent_$(GO_CORE_SRC_TYPE).go $(GO_SPACE)/core/agent_parser.go
-	GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO_BUILD) -o $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/ssm-agent-worker$(EXE_EXT) -v \
-	    $(GO_SPACE)/agent/agent.go $(GO_SPACE)/agent/agent_$(GO_WORKER_SRC_TYPE).go $(GO_SPACE)/agent/agent_parser.go
-	GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO_BUILD) -o $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/updater$(EXE_EXT) -v \
-	    $(GO_SPACE)/agent/update/updater/updater.go $(GO_SPACE)/agent/update/updater/updater_$(GO_WORKER_SRC_TYPE).go
-	GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO_BUILD) -o $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/ssm-cli$(EXE_EXT) -v \
-	    $(GO_SPACE)/agent/cli-main/cli-main.go
-	GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO_BUILD) -o $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/ssm-document-worker$(EXE_EXT) -v \
-	    $(GO_SPACE)/agent/framework/processor/executer/outofproc/worker/main.go
-	GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO_BUILD) -o $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/ssm-session-logger$(EXE_EXT) -v \
-	    $(GO_SPACE)/agent/session/logging/main.go
-	GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO_BUILD) -o $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/ssm-session-worker$(EXE_EXT) -v \
-	    $(GO_SPACE)/agent/framework/processor/executer/outofproc/sessionworker/main.go
+	cd $(GOTEMPCOPYPATH) && GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO_BUILD) -o $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/amazon-ssm-agent$(EXE_EXT) -v \
+	    core/agent.go core/agent_$(GO_CORE_SRC_TYPE).go core/agent_parser.go
+	cd $(GOTEMPCOPYPATH) && GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO_BUILD) -o $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/ssm-agent-worker$(EXE_EXT) -v \
+	    agent/agent.go agent/agent_$(GO_WORKER_SRC_TYPE).go agent/agent_parser.go
+	cd $(GOTEMPCOPYPATH) && GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO_BUILD) -o $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/updater$(EXE_EXT) -v \
+	    agent/update/updater/updater.go agent/update/updater/updater_$(GO_WORKER_SRC_TYPE).go
+	cd $(GOTEMPCOPYPATH) && GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO_BUILD) -o $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/ssm-cli$(EXE_EXT) -v \
+	    agent/cli-main/cli-main.go
+	cd $(GOTEMPCOPYPATH) && GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO_BUILD) -o $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/ssm-document-worker$(EXE_EXT) -v \
+	    agent/framework/processor/executer/outofproc/worker/main.go
+	cd $(GOTEMPCOPYPATH) && GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO_BUILD) -o $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/ssm-session-logger$(EXE_EXT) -v \
+	    agent/session/logging/main.go
+	cd $(GOTEMPCOPYPATH) && GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO_BUILD) -o $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/ssm-session-worker$(EXE_EXT) -v \
+	    agent/framework/processor/executer/outofproc/sessionworker/main.go
 	@echo "Finished building $(GOARCH) $(GOOS) agent"
 
 # Pre-defined recipes for various supported builds:
@@ -198,6 +198,10 @@ copy-src:
 	$(COPY) -r $(GO_SPACE)/agent $(GOTEMPCOPYPATH)
 	$(COPY) -r $(GO_SPACE)/core $(GOTEMPCOPYPATH)
 	$(COPY) -r $(GO_SPACE)/common $(GOTEMPCOPYPATH)
+	$(COPY) -r $(GO_SPACE)/extra $(GOTEMPCOPYPATH)
+	$(COPY) $(GO_SPACE)/go.mod $(GOTEMPCOPYPATH)
+	$(COPY) $(GO_SPACE)/go.sum $(GOTEMPCOPYPATH)
+	$(COPY) -r $(GO_SPACE)/vendor $(GOTEMPCOPYPATH)/vendor
 
 .PHONY: copy-package-dep
 copy-package-dep: copy-src pre-build
@@ -219,7 +223,7 @@ copy-package-dep: copy-src pre-build
 	$(COPY) -r $(GO_SPACE)/LICENSE $(GO_SPACE)/bin/package_dep/
 	$(COPY) -r $(GO_SPACE)/VERSION $(GO_SPACE)/bin/package_dep/
 
-	cd $(GO_SPACE) && zip -q -y -r $(GO_SPACE)/bin/gosrc.zip agent common core vendor && cd -
+	cd $(GO_SPACE) && zip -q -y -r $(GO_SPACE)/bin/gosrc.zip go.mod go.sum agent common core extra vendor && cd -
 
 .PHONY: remove-prepacked-folder
 remove-prepacked-folder:
@@ -363,68 +367,68 @@ build-tests: build-tests-linux build-tests-windows
 
 .PHONY: build-tests-linux
 build-tests-linux: copy-src copy-tests-src pre-build
-	GOOS=linux GOARCH=amd64 go test -c -gcflags "-N -l" -tags=tests \
+	cd $(GOTEMPCOPYPATH) && GOOS=linux GOARCH=amd64 go test -c -gcflags "-N -l" -tags=tests \
 		github.com/aws/amazon-ssm-agent/internal/tests \
-		-o bin/agent-tests/linux_amd64/agent-tests.test
-	GOOS=linux GOARCH=arm64 go test -c -gcflags "-N -l" -tags=tests \
+		-o $(GO_SPACE)/bin/agent-tests/linux_amd64/agent-tests.test
+	cd $(GOTEMPCOPYPATH) && GOOS=linux GOARCH=arm64 go test -c -gcflags "-N -l" -tags=tests \
 		github.com/aws/amazon-ssm-agent/internal/tests \
-		-o bin/agent-tests/linux_arm64/agent-tests.test
+		-o $(GO_SPACE)/bin/agent-tests/linux_arm64/agent-tests.test
 
 .PHONY: build-tests-windows
 build-tests-windows: copy-src copy-tests-src pre-build
-	GOOS=windows GOARCH=amd64 go test -c -gcflags "-N -l" -tags=tests \
+	cd $(GOTEMPCOPYPATH) && GOOS=windows GOARCH=amd64 go test -c -gcflags "-N -l" -tags=tests \
 		github.com/aws/amazon-ssm-agent/internal/tests \
-		-o bin/agent-tests/windows_amd64/agent-tests.test
+		-o $(GO_SPACE)/bin/agent-tests/windows_amd64/agent-tests.test
 
 .PHONY: --quick-integtest
 --quick-integtest:
 # if you want to restrict to some specific package, sample below
 # go test -v -gcflags "-N -l" -timeout 20m -tags=integration github.com/aws/amazon-ssm-agent/agent/fileutil/...
-	go test -gcflags "-N -l" -timeout 20m -tags=integration github.com/aws/amazon-ssm-agent/agent/...
+	cd $(GOTEMPCOPYPATH) && go test -gcflags "-N -l" -timeout 20m -tags=integration github.com/aws/amazon-ssm-agent/agent/...
 
 .PHONY: --quick-integtest-core
 --quick-integtest-core:
 # if you want to restrict to some specific package, sample below
 # go test -v -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/agent/fileutil/...
-	go test -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/core/...
+	cd $(GOTEMPCOPYPATH) && go test -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/core/...
 
 .PHONY: --quick-integtest-common
 --quick-integtest-common:
 # if you want to restrict to some specific package, sample below
 # go test -v -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/agent/common/task
-	go test -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/common/...
+	cd $(GOTEMPCOPYPATH) && go test -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/common/...
 
 .PHONY: --quick-test
 --quick-test:
 # if you want to test a specific package, you can add the package name instead of the dots. Sample below
 # go test -gcflags "-N -l" -timeout 20m github.com/aws/amazon-ssm-agent/agent/task
-	go test -gcflags "-N -l" -timeout 20m github.com/aws/amazon-ssm-agent/agent/...
+	cd $(GOTEMPCOPYPATH) && go test -gcflags "-N -l" -timeout 20m github.com/aws/amazon-ssm-agent/agent/...
 
 --quick-test-core:
 # if you want to test a specific package, you can add the package name instead of the dots. Sample below
 # go test -gcflags "-N -l" github.com/aws/amazon-ssm-agent/agent/task
-	go test -gcflags "-N -l" github.com/aws/amazon-ssm-agent/core/...
+	cd $(GOTEMPCOPYPATH) && go test -gcflags "-N -l" github.com/aws/amazon-ssm-agent/core/...
 
 --quick-test-common:
 # if you want to test a specific package, you can add the package name instead of the dots. Sample below
 # go test -gcflags "-N -l" github.com/aws/amazon-ssm-agent/agent/common/task
-	go test -gcflags "-N -l" github.com/aws/amazon-ssm-agent/common/...
+	cd $(GOTEMPCOPYPATH) && go test -gcflags "-N -l" github.com/aws/amazon-ssm-agent/common/...
 
 .PHONY: --quick-e2e
 --quick-e2e:
 # if you want to restrict to some specific package, sample below
 # go test -v -gcflags "-N -l" -timeout 20m -tags=integration github.com/aws/amazon-ssm-agent/agent/fileutil/...
-	go test -gcflags "-N -l" -timeout 20m -tags=e2e github.com/aws/amazon-ssm-agent/agent/...
+	cd $(GOTEMPCOPYPATH) && go test -gcflags "-N -l" -timeout 20m -tags=e2e github.com/aws/amazon-ssm-agent/agent/...
 
 --quick-e2e-core:
 # if you want to restrict to some specific package, sample below
 # go test -v -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/agent/fileutil/...
-	go test -gcflags "-N -l" -tags=e2e github.com/aws/amazon-ssm-agent/core/...
+	cd $(GOTEMPCOPYPATH) && go test -gcflags "-N -l" -tags=e2e github.com/aws/amazon-ssm-agent/core/...
 
 --quick-e2e-common:
 # if you want to restrict to some specific package, sample below
 # go test -v -gcflags "-N -l" -tags=integration github.com/aws/amazon-ssm-agent/agent/fileutil/...
-	go test -gcflags "-N -l" -tags=e2e github.com/aws/amazon-ssm-agent/common/...
+	cd $(GOTEMPCOPYPATH) && go test -gcflags "-N -l" -tags=e2e github.com/aws/amazon-ssm-agent/common/...
 
 .PHONY: lint-all
 lint-all: copy-package-dep

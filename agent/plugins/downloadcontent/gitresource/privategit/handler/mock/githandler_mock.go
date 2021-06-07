@@ -19,8 +19,8 @@ package mock
 import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/gitresource/privategit/handler/core"
-	gogit "github.com/go-git/go-git"
-	"github.com/go-git/go-git/plumbing/transport"
+	gogit "github.com/go-git/go-git/v5"
+	"github.com/go-git/go-git/v5/plumbing/transport"
 	"github.com/stretchr/testify/mock"
 )
 

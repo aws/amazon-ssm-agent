@@ -25,7 +25,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/go-ini/ini"
+	"gopkg.in/ini.v1"
 )
 
 const (

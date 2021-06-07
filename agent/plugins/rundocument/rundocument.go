@@ -38,7 +38,7 @@ import (
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
-	"github.com/go-yaml/yaml"
+	"gopkg.in/yaml.v2"
 )
 
 const (

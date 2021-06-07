@@ -26,7 +26,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/docparser"
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer"
 	"github.com/aws/amazon-ssm-agent/agent/task"
-	"github.com/go-yaml/yaml"
+	"gopkg.in/yaml.v2"
 )
 
 type ExecDocument interface {

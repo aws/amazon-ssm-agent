@@ -26,11 +26,11 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/gitresource/privategit/handler/core"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/types"
 	"github.com/aws/amazon-ssm-agent/agent/ssm/ssmparameterresolver"
-	gogit "github.com/go-git/go-git"
-	"github.com/go-git/go-git/plumbing"
-	"github.com/go-git/go-git/plumbing/transport"
-	"github.com/go-git/go-git/plumbing/transport/http"
-	gitssh "github.com/go-git/go-git/plumbing/transport/ssh"
+	gogit "github.com/go-git/go-git/v5"
+	"github.com/go-git/go-git/v5/plumbing"
+	"github.com/go-git/go-git/v5/plumbing/transport"
+	"github.com/go-git/go-git/v5/plumbing/transport/http"
+	gitssh "github.com/go-git/go-git/v5/plumbing/transport/ssh"
 	"golang.org/x/crypto/ssh"
 )
 

@@ -33,10 +33,6 @@ if [[ -n $unformatted ]]; then
 	exit 1
 fi
 
-# run goimports
-echo "Try update 'goimports'"
-GOPATH=`pwd`/Tools go get golang.org/x/tools/cmd/goimports
-
 echo "Run 'goimports'"
 unformatted=$(Tools/bin/goimports -l `pwd`/agent/)
 if [[ -n $unformatted ]]; then
@@ -70,7 +66,6 @@ fi
 
 # run govet
 echo "Run 'go vet'"
-ln -s `pwd` `pwd`/vendor/src/github.com/aws/amazon-ssm-agent
 go vet -composites=false ./agent/...
 go vet -composites=false ./core/...
 go vet -composites=false ./common/...

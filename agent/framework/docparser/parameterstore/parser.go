@@ -22,7 +22,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/go-yaml/yaml"
+	"gopkg.in/yaml.v2"
 )
 
 // extractSSMParameters extracts parameters of the format {{ssm:*}} from input
