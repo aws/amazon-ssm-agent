@@ -59,6 +59,141 @@ var (
 	invalidTests = []s3BucketTest{
 		{"abc", "https://abcd/pqr/xyz.txt", AmazonS3URL{false, false, "", "", ""}},
 	}
+
+	websiteTests = []s3BucketTest{
+		{
+			"mybucket",
+			"http://mybucket.s3-website-us-west-1.amazonaws.com/mykey", // dash-region format
+			AmazonS3URL{
+				true,
+				false,
+				"mybucket",
+				"mykey",
+				"us-west-1",
+			},
+		},
+		{
+			"mybucket",
+			"http://mybucket.s3-website.us-west-1.amazonaws.com/mykey", // dot-region format
+			AmazonS3URL{
+				true,
+				false,
+				"mybucket",
+				"mykey",
+				"us-west-1",
+			},
+		},
+	}
+
+	// Dualstack works with both virtual-hosted and path-style URLs
+	dualstackTests = []s3BucketTest{
+		{
+			"mybucket",
+			"https://mybucket.s3.dualstack.us-west-1.amazonaws.com/mykey",
+			AmazonS3URL{
+				true,
+				false,
+				"mybucket",
+				"mykey",
+				"us-west-1",
+			},
+		},
+		{
+			"mybucket",
+			"https://s3.dualstack.us-west-1.amazonaws.com/mybucket/mykey",
+			AmazonS3URL{
+				true,
+				true,
+				"mybucket",
+				"mykey",
+				"us-west-1",
+			},
+		},
+	}
+
+	// Transfer acceleration uses global endpoint, so no region in the URL
+	accelerateTests = []s3BucketTest{
+		{
+			"mybucket",
+			"https://mybucket.s3-accelerate.amazonaws.com/mykey",
+			AmazonS3URL{
+				true,
+				false,
+				"mybucket",
+				"mykey",
+				"us-east-1",
+			},
+		},
+		{
+			"mybucket",
+			"https://mybucket.s3-accelerate.dualstack.amazonaws.com/mykey",
+			AmazonS3URL{
+				true,
+				false,
+				"mybucket",
+				"mykey",
+				"us-east-1",
+			},
+		},
+		{
+			"mybucket",
+			"https://s3-accelerate.amazonaws.com/mybucket/mykey",
+			AmazonS3URL{
+				true,
+				true,
+				"mybucket",
+				"mykey",
+				"us-east-1",
+			},
+		},
+	}
+
+	vpcEndpointTests = []s3BucketTest{
+		{
+			"mybucket",
+			"https://bucket.vpce-05a18c86214d4f28c-6p280e25.s3.us-west-1.vpce.amazonaws.com/mybucket/mykey",
+			AmazonS3URL{
+				true,
+				true,
+				"mybucket",
+				"mykey",
+				"us-west-1",
+			},
+		},
+		{
+			"mybucket",
+			"https://mybucket.bucket.vpce-07dd6fec74b812c52-2gqlpwuc.s3.us-west-1.vpce.amazonaws.com/mykey",
+			AmazonS3URL{
+				true,
+				false,
+				"mybucket",
+				"mykey",
+				"us-west-1",
+			},
+		},
+		{
+			"mybucket",
+			"https://bucket.vpce-0e3580b5f3cb40b34-tr39ydlu.s3.cn-northwest-1.vpce.amazonaws.com.cn/mybucket/mykey",
+			AmazonS3URL{
+				true,
+				true,
+				"mybucket",
+				"mykey",
+				"cn-northwest-1",
+			},
+		},
+		{
+			"mybucket",
+			"https://bucket.vpce-07dd6fec74b812c52-2gqlpwuc.s3.us-gov-west-1.vpce.amazonaws.com/mybucket/mykey",
+			AmazonS3URL{
+				true,
+				true,
+				"mybucket",
+				"mykey",
+				"us-gov-west-1",
+			},
+		},
+	}
 )
 
 func runTests(t *testing.T, tests []s3BucketTest) {
@@ -84,4 +219,20 @@ func TestPathStyleBucketBuild(t *testing.T) {
 
 func TestInValidS3PathStyle(t *testing.T) {
 	runTests(t, invalidTests)
+}
+
+func TestWebsite(t *testing.T) {
+	runTests(t, websiteTests)
+}
+
+func TestDualstack(t *testing.T) {
+	runTests(t, dualstackTests)
+}
+
+func TestAccelerate(t *testing.T) {
+	runTests(t, accelerateTests)
+}
+
+func TestVpcEndpoint(t *testing.T) {
+	runTests(t, vpcEndpointTests)
 }
