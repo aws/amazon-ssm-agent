@@ -23,6 +23,7 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/Jeffail/gabs"
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
@@ -33,7 +34,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/times"
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/aws-sdk-go/service/ssmmds"
-	"github.com/gabs"
 )
 
 // empty returns true if string is empty

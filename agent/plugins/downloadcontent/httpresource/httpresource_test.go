@@ -38,6 +38,7 @@ import (
 
 var contextMock = context.NewMockDefault()
 var logMock = contextMock.Log()
+var bm = bridgemock.GetSsmParamResolverBridge(map[string]string{})
 
 func getString(obj interface{}) string {
 	return fmt.Sprintf("%v", obj)
@@ -63,7 +64,7 @@ func getTestResource(url url.URL, authMethod, user, password string, allowInsecu
 			AuthMethod: types.NewTrimmedString(authMethod),
 			Username:   types.NewTrimmedString(user),
 			Password:   types.NewTrimmedString(password),
-		}, bridgemock.GetSsmParamResolverBridge(map[string]string{})),
+		}, bm),
 	}
 }
 
@@ -108,7 +109,7 @@ func TestNewHTTPResource(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		resource, err := NewHTTPResource(contextMock, test.sourceInfo, bridgemock.GetSsmParamResolverBridge(map[string]string{}))
+		resource, err := NewHTTPResource(contextMock, test.sourceInfo, bm)
 
 		if test.err != nil {
 			assert.Error(t, err, getString(test))

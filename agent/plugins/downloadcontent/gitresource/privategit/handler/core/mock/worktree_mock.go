@@ -17,7 +17,7 @@
 package mock
 
 import (
-	"github.com/go-git/go-git"
+	"github.com/go-git/go-git/v5"
 	"github.com/stretchr/testify/mock"
 )
 

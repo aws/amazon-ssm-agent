@@ -28,7 +28,7 @@ import (
 	filemock "github.com/aws/amazon-ssm-agent/agent/fileutil/filemanager/mock"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	githubclientmock "github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/gitresource/github/privategithub/githubclient/mock"
-	"github.com/go-github/github"
+	"github.com/google/go-github/github"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
 )

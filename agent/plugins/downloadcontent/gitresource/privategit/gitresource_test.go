@@ -30,13 +30,14 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/gitresource/privategit/handler/core"
 	handlermock "github.com/aws/amazon-ssm-agent/agent/plugins/downloadcontent/gitresource/privategit/handler/mock"
 	bridgemock "github.com/aws/amazon-ssm-agent/agent/ssm/ssmparameterresolver/mock"
-	gogit "github.com/go-git/go-git"
-	"github.com/go-git/go-git/plumbing/transport/http"
+	gogit "github.com/go-git/go-git/v5"
+	"github.com/go-git/go-git/v5/plumbing/transport/http"
 	"github.com/stretchr/testify/assert"
 )
 
 var contextMock = context.NewMockDefault()
 var logMock = contextMock.Log()
+var bm = bridgemock.GetSsmParamResolverBridge(map[string]string{})
 
 var downloadRemoteResourceDestPath = os.TempDir()
 var downloadRemoteResourceTempCloneDir = filepath.Join(downloadRemoteResourceDestPath, "tempCloneDir")
@@ -63,7 +64,7 @@ func TestNewGitResource(t *testing.T) {
 	}, gitresource.CheckoutOptions{
 		Branch:   "master",
 		CommitID: "",
-	}, bridgemock.GetSsmParamResolverBridge(map[string]string{}))
+	}, bm)
 
 	assert.NoError(t, err)
 
@@ -123,7 +124,7 @@ func TestNewGitResource(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		gitResource, err := NewGitResource(contextMock, test.sourceInfo, bridgemock.GetSsmParamResolverBridge(map[string]string{}))
+		gitResource, err := NewGitResource(contextMock, test.sourceInfo, bm)
 
 		if test.err != nil {
 			assert.Nil(t, gitResource)

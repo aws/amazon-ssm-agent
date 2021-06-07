@@ -17,7 +17,7 @@
 package core
 
 import (
-	"github.com/go-git/go-git"
+	"github.com/go-git/go-git/v5"
 )
 
 // IGitRepository defines a subset of git.Repository methods required to clone/checkout a git repository

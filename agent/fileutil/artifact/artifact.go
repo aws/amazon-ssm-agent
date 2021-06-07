@@ -36,7 +36,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/service/s3"
-	"github.com/cenkalti/backoff"
+	"github.com/cenkalti/backoff/v4"
 )
 
 // DownloadOutput holds the result of file download operation.

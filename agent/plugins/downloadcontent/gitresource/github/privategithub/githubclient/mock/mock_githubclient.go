@@ -19,7 +19,7 @@ import (
 	"net/http"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/go-github/github"
+	"github.com/google/go-github/github"
 	"github.com/stretchr/testify/mock"
 )
 

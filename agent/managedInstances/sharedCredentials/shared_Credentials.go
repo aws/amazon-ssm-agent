@@ -23,7 +23,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/aws-sdk-go/aws/awserr"
-	"github.com/go-ini/ini"
+	"gopkg.in/ini.v1"
 )
 
 const (
