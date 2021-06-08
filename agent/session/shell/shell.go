@@ -197,14 +197,12 @@ func (p *ShellPlugin) execute(config agentContracts.Configuration,
 	sigs := make(chan os.Signal, 1)
 	signal.Notify(sigs, syscall.SIGINT, syscall.SIGHUP, syscall.SIGTERM, syscall.SIGQUIT)
 
-	var isSessionCancelled = false
 	// Setup cancellation flag for accepting TerminateSession requests and idle session timeout scenarios
 	cancelled := make(chan bool, 1)
 	go func() {
 		sig := <-sigs
 		log.Infof("caught signal to terminate: %v", sig)
 		cancelled <- true
-		isSessionCancelled = true
 	}()
 
 	// Get the command executor, which is either pseudo terminal or exec.Cmd depending on the plugin type
@@ -230,16 +228,15 @@ func (p *ShellPlugin) execute(config agentContracts.Configuration,
 		cancelState := cancelFlag.Wait()
 		if cancelFlag.Canceled() {
 			cancelled <- true
-			isSessionCancelled = true
 			log.Debug("Cancel flag set to cancelled in session")
 		}
 		log.Debugf("Cancel flag set to %v in session", cancelState)
 	}()
 
 	if appconfig.PluginNameNonInteractiveCommands == p.name {
-		p.executeCommandsWithExec(config, cancelled, isSessionCancelled, output, ipcFile)
+		p.executeCommandsWithExec(config, cancelled, cancelFlag, output, ipcFile)
 	} else {
-		p.executeCommandsWithPty(config, cancelled, isSessionCancelled, output, ipcFile)
+		p.executeCommandsWithPty(config, cancelled, cancelFlag, output, ipcFile)
 	}
 
 	// Finish logger activity like uploading logs to S3/CW
@@ -251,7 +248,7 @@ func (p *ShellPlugin) execute(config agentContracts.Configuration,
 // Executes command in pseudo terminal with pty
 func (p *ShellPlugin) executeCommandsWithPty(config agentContracts.Configuration,
 	cancelled chan bool,
-	isSessionCancelled bool,
+	cancelFlag task.CancelFlag,
 	output iohandler.IOHandler,
 	ipcFile *os.File) {
 
@@ -324,7 +321,7 @@ func (p *ShellPlugin) executeCommandsWithPty(config agentContracts.Configuration
 			output.SetExitCode(appconfig.SuccessExitCode)
 			output.SetStatus(agentContracts.ResultStatusSuccess)
 		}
-		if isSessionCancelled {
+		if cancelFlag.Canceled() {
 			log.Errorf("The cancellation failed to stop the session.")
 		}
 	}
@@ -333,7 +330,7 @@ func (p *ShellPlugin) executeCommandsWithPty(config agentContracts.Configuration
 // Execute single command in non-interactive mode with exec.Cmd
 func (p *ShellPlugin) executeCommandsWithExec(config agentContracts.Configuration,
 	cancelled chan bool,
-	isSessionCancelled bool,
+	cancelFlag task.CancelFlag,
 	output iohandler.IOHandler,
 	ipcFile *os.File) {
 
@@ -353,16 +350,14 @@ func (p *ShellPlugin) executeCommandsWithExec(config agentContracts.Configuratio
 	p.startStreamingLogs(ipcFile, config)
 
 	// Wait for session to be completed/cancelled/interrupted
-	var isCmdWaitSuccess = false
 	cmdWaitDone := make(chan error, 1)
 	go func() {
 		log.Debugf("Start separate go routine to wait for command to complete. Pid: %v", p.execCmd.Pid())
 		err := p.execCmd.Wait()
 		cmdWaitDone <- err
-		isCmdWaitSuccess = err == nil
 	}()
 
-	p.processCommandsWithExec(cancelled, cmdWaitDone, isSessionCancelled, isCmdWaitSuccess, output, ipcFile)
+	p.processCommandsWithExec(cancelled, cmdWaitDone, cancelFlag, output, ipcFile)
 
 	p.cleanupOutputFile(log, config)
 
@@ -371,8 +366,7 @@ func (p *ShellPlugin) executeCommandsWithExec(config agentContracts.Configuratio
 // Handle go routines between session termination and command execution with exec.Cmd
 func (p *ShellPlugin) processCommandsWithExec(cancelled chan bool,
 	cmdWaitDone chan error,
-	isSessionCancelled bool,
-	isCmdWaitSuccess bool,
+	cancelFlag task.CancelFlag,
 	output iohandler.IOHandler,
 	ipcFile *os.File) {
 
@@ -390,54 +384,43 @@ func (p *ShellPlugin) processCommandsWithExec(cancelled chan bool,
 		log.Info("The session was cancelled")
 
 	case cmdWaitErr := <-cmdWaitDone:
-		if !isCmdWaitSuccess {
+		if cmdWaitErr != nil {
 			log.Errorf("received error when waiting for command to complete: %v", cmdWaitErr)
 		}
-		if isSessionCancelled {
+		if cancelFlag.Canceled() {
 			log.Errorf("the cancellation failed to stop the session.")
 		}
 	}
 
-	// If session is not cancelled, start go routine to read output from disk and write to data channel
-	if !isSessionCancelled {
-		writePumpDone := p.setupRoutineToWriteCommandOutput(log, ipcFile, 0)
+	writePumpDone := p.setupRoutineToWriteCommandOutput(log, ipcFile, 0)
 
-		select {
-		case <-cancelled:
-			log.Debug("Session cancelled. Attempting to stop the command execution.")
-			if err := p.execCmd.Kill(); err != nil {
-				log.Errorf("unable to terminate command execution process %s: %v", p.execCmd.Pid(), err)
-			}
-			errorCode := 0
-			output.SetExitCode(errorCode)
+	select {
+	case <-cancelled:
+		log.Debug("Session cancelled. Attempting to stop the command execution.")
+		if err := p.execCmd.Kill(); err != nil {
+			log.Errorf("unable to terminate command execution process %s: %v", p.execCmd.Pid(), err)
+		}
+		errorCode := 0
+		output.SetExitCode(errorCode)
+		output.SetStatus(agentContracts.ResultStatusSuccess)
+		log.Info("The session was cancelled")
+
+	case exitCode := <-writePumpDone:
+		log.Debugf("Writing command output is done. Exit code: %v.", exitCode)
+		if exitCode == 1 {
+			output.SetExitCode(appconfig.ErrorExitCode)
+			output.SetStatus(agentContracts.ResultStatusFailed)
+		} else {
+			output.SetExitCode(appconfig.SuccessExitCode)
 			output.SetStatus(agentContracts.ResultStatusSuccess)
-			log.Info("The session was cancelled")
+		}
 
-		case exitCode := <-writePumpDone:
-			log.Debugf("Writing command output is done. Exit code: %v.", exitCode)
-			if isSessionCancelled {
-				log.Errorf("The cancellation failed to stop the session.")
-			}
-			if exitCode == 1 {
-				output.SetExitCode(appconfig.ErrorExitCode)
-				output.SetStatus(agentContracts.ResultStatusFailed)
-				return
-			}
-			if isCmdWaitSuccess {
-				output.SetExitCode(appconfig.SuccessExitCode)
-				output.SetStatus(agentContracts.ResultStatusSuccess)
-			} else {
-				output.SetExitCode(appconfig.ErrorExitCode)
-				output.SetStatus(agentContracts.ResultStatusFailed)
-			}
+		// Call datachannel PrepareToCloseChannel so all messages in the buffer are sent
+		p.dataChannel.PrepareToCloseChannel(log)
 
-			// Call datachannel PrepareToCloseChannel so all messages in the buffer are sent
-			p.dataChannel.PrepareToCloseChannel(log)
-
-			// Send session status as Terminating to service on completing command execution
-			if err := p.dataChannel.SendAgentSessionStateMessage(log, mgsContracts.Terminating); err != nil {
-				log.Errorf("Unable to send AgentSessionState message with session status %s. %v", mgsContracts.Terminating, err)
-			}
+		// Send session status as Terminating to service on completing command execution
+		if err := p.dataChannel.SendAgentSessionStateMessage(log, mgsContracts.Terminating); err != nil {
+			log.Errorf("Unable to send AgentSessionState message with session status %s. %v", mgsContracts.Terminating, err)
 		}
 	}
 }
