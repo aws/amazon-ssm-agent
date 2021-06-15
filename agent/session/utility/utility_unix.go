@@ -111,7 +111,11 @@ func (u *SessionUtil) createSudoersFileIfNotPresent(log log.T) error {
 		log.Errorf("Failed to add %s to sudoers file: %v", appconfig.DefaultRunAsUserName, err)
 		return err
 	}
-	defer file.Close()
+	defer func() {
+		if closeErr := file.Close(); closeErr != nil {
+			log.Warnf("error occurred while closing file, %v", closeErr)
+		}
+	}()
 
 	if _, err := file.WriteString(fmt.Sprintf("# User rules for %s\n", appconfig.DefaultRunAsUserName)); err != nil {
 		return err
@@ -170,7 +174,7 @@ func (u *SessionUtil) GetAttr(f *os.File) (int32, error) {
 }
 
 // DeleteIpcTempFile resets file properties of ipcTempFile and tries deletion
-func (u *SessionUtil) DeleteIpcTempFile(sessionOrchestrationPath string) (bool, error) {
+func (u *SessionUtil) DeleteIpcTempFile(log log.T, sessionOrchestrationPath string) (bool, error) {
 	ipcTempFilePath := filepath.Join(sessionOrchestrationPath, appconfig.PluginNameStandardStream, "ipcTempFile.log")
 
 	// check if ipcTempFile exists
@@ -183,7 +187,11 @@ func (u *SessionUtil) DeleteIpcTempFile(sessionOrchestrationPath string) (bool, 
 	if err != nil {
 		return false, fmt.Errorf("failed to open ipcTempFile %s, %v", ipcTempFilePath, err)
 	}
-	defer ipcFile.Close()
+	defer func() {
+		if closeErr := ipcFile.Close(); closeErr != nil {
+			log.Warnf("error occurred while closing ipcFile, %v", closeErr)
+		}
+	}()
 
 	// reset file attributes
 	if err := u.SetAttr(ipcFile, FS_RESET_FL); err != nil {

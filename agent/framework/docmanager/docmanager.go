@@ -390,7 +390,7 @@ func DeleteSessionOrchestrationDirectories(log log.T, instanceID, orchestrationR
 				// This append only mode results into error while deletion of the file.
 				// Below logic is to attempt to delete ipcTempFile in case of such errors.
 				u := &utility.SessionUtil{}
-				success, err := u.DeleteIpcTempFile(sessionOrchestrationPath)
+				success, err := u.DeleteIpcTempFile(log, sessionOrchestrationPath)
 				if err != nil || !success {
 					log.Debugf("Retry attempt to delete session orchestration directory %s failed, %v", sessionOrchestrationPath, err)
 					continue

@@ -323,9 +323,9 @@ func (p *ShellPlugin) generateLogData(log log.T, config agentContracts.Configura
 		if err = p.generateTranscriptFile(log, transcriptFile, p.logger.ipcFilePath, false, config); err != nil {
 			return err
 		}
-		cleanControlCharacters(transcriptFile, p.logger.logFilePath)
+		cleanControlCharacters(log, transcriptFile, p.logger.logFilePath)
 	} else {
-		cleanControlCharacters(p.logger.ipcFilePath, p.logger.logFilePath)
+		cleanControlCharacters(log, p.logger.ipcFilePath, p.logger.logFilePath)
 	}
 
 	return nil
@@ -383,18 +383,26 @@ func (p *ShellPlugin) generateTranscriptFile(
 }
 
 // cleanControlCharacters cleans up control characters from the log file
-func cleanControlCharacters(sourceFileName, destinationFileName string) error {
+func cleanControlCharacters(log log.T, sourceFileName, destinationFileName string) error {
 	sourceFile, err := os.Open(sourceFileName)
 	if err != nil {
 		return err
 	}
-	defer sourceFile.Close()
+	defer func() {
+		if closeErr := sourceFile.Close(); closeErr != nil {
+			log.Warnf("error occurred while closing sourceFile, %v", closeErr)
+		}
+	}()
 
 	destinationFile, err := os.Create(destinationFileName)
 	if err != nil {
 		return err
 	}
-	defer destinationFile.Close()
+	defer func() {
+		if closeErr := destinationFile.Close(); closeErr != nil {
+			log.Warnf("error occurred while closing destinationFile, %v", closeErr)
+		}
+	}()
 
 	escapeCharRegEx := regexp.MustCompile(`←`)
 	specialChar1RegEx := regexp.MustCompile(`\[\?[0-9]+[a-zA-Z]`)
