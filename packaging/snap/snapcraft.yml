@@ -1,0 +1,32 @@
+name: amazon-ssm-agent
+base: core18
+version: {{version}}
+summary: Agent to enable remote management of your Amazon EC2 instance configuration
+description: |
+  The SSM Agent runs on EC2 instances and enables you to quickly and easily
+  execute remote commands or scripts against one or more instances. The agent
+  uses SSM documents. When you execute a command, the agent on the instance
+  processes the document and configures the instance as specified. Currently,
+  the SSM Agent and Run Command enable you to quickly run Shell scripts on an
+  instance using the AWS-RunShellScript SSM document.
+confinement: classic
+grade: stable
+apps:
+  amazon-ssm-agent:
+    command: amazon-ssm-agent
+    daemon: simple
+    restart-condition: always
+    stop-timeout: 60s
+    passthrough:
+      stop-mode: sigterm
+  ssm-cli:
+    command: ssm-cli
+parts:
+  ssm-agent:
+    plugin: nil
+    build-attributes: [no-patchelf]
+    source: .
+    override-build: |
+      snapcraftctl build
+      echo "start packaging under:: $ARCH_DIR"
+      mv prepacked/$ARCH_DIR/* $SNAPCRAFT_PART_INSTALL
