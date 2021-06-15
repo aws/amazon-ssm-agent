@@ -222,7 +222,11 @@ func (p *ShellPlugin) execute(config agentContracts.Configuration,
 		output.MarkAsFailed(errorString)
 		return
 	}
-	defer ipcFile.Close()
+	defer func() {
+		if closeErr := ipcFile.Close(); closeErr != nil {
+			log.Warnf("error occurred while closing ipcFile, %v", closeErr)
+		}
+	}()
 
 	go func() {
 		cancelState := cancelFlag.Wait()
