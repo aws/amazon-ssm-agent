@@ -83,6 +83,9 @@ var DefaultSessionLogger string
 // AppConfig Path
 var AppConfigPath string
 
+// Seelog file path
+var SeelogFilePath string
+
 // DefaultDataStorePath represents the directory for storing system data
 var DefaultDataStorePath string
 
@@ -152,9 +155,6 @@ var EnvWinDir string
 // Default Custom Inventory Data Folder
 var DefaultCustomInventoryFolder string
 
-// Plugin folder path
-var PluginFolder string
-
 // SSM Agent Update download legacy path
 var LegacyUpdateDownloadFolder string
 
@@ -183,6 +183,7 @@ func init() {
 	DefaultSessionLogger = fmt.Sprintf("&'%s'", filepath.Join(DefaultProgramFolder, "ssm-session-logger.exe"))
 	ManifestCacheDirectory = filepath.Join(EnvProgramFiles, ManifestCacheFolder)
 	AppConfigPath = filepath.Join(DefaultProgramFolder, AppConfigFileName)
+	SeelogFilePath = filepath.Join(DefaultProgramFolder, SeelogConfigFileName)
 	DefaultDataStorePath = filepath.Join(SSMDataPath, "InstanceData")
 	PackageRoot = filepath.Join(SSMDataPath, "Packages")
 	PackageLockRoot = filepath.Join(SSMDataPath, "Locks\\Packages")
@@ -204,4 +205,26 @@ func init() {
 	EC2ConfigSettingPath = filepath.Join(EnvProgramFiles, EC2ConfigServiceFolder, "Settings")
 	SessionFilesPath = filepath.Join(SSMDataPath, "Session")
 
+	// Support reading configuration from relative path like in linux
+	// curdir is amazon-ssm-agent current directory path
+	curdir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+	if err != nil {
+		return
+	}
+
+	const relativeConfigFolder = "configuration"
+	// check if relative appconfig file in configuration folder exists, if so use it
+	if shouldUseConfig(filepath.Join(curdir, relativeConfigFolder, AppConfigFileName)) {
+		AppConfigPath = filepath.Join(curdir, relativeConfigFolder, AppConfigFileName)
+	}
+	// check if relative seelog file in configuration folder exists, if so use it
+	if shouldUseConfig(filepath.Join(curdir, relativeConfigFolder, SeelogConfigFileName)) {
+		SeelogFilePath = filepath.Join(curdir, relativeConfigFolder, SeelogConfigFileName)
+	}
+}
+
+func shouldUseConfig(filePath string) bool {
+	_, err := os.Stat(filePath)
+	// Return false for any stat error
+	return err == nil
 }
