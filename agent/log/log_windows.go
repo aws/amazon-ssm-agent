@@ -31,7 +31,7 @@ var ExeNamePlaceHolder = "{{EXECUTABLENAME}}"
 
 // The underlying logger is based of https://github.com/cihub/seelog
 // See Seelog documentation to customize the logger
-var DefaultSeelogConfigFilePath = filepath.Join(appconfig.DefaultProgramFolder, appconfig.SeelogConfigFileName)
+var DefaultSeelogConfigFilePath = appconfig.SeelogFilePath
 
 var getExePath = getExecutablePath
 

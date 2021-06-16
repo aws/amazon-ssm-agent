@@ -197,7 +197,8 @@ const (
 	// PluginNameAwsApplications is the name of the Applications plugin
 	PluginNameAwsApplications = "aws:applications"
 
-	AppConfigFileName    = "amazon-ssm-agent.json"
+	AppConfigFileName = "amazon-ssm-agent.json"
+
 	SeelogConfigFileName = "seelog.xml"
 
 	// Output truncation limits
