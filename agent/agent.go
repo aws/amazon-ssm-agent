@@ -157,7 +157,7 @@ func blockUntilSignaled(log logger.T) {
 
 	select {
 	case s := <-c:
-		log.Info("Got signal:", s, " value:", s.Signal)
+		log.Info("ssm-agent-worker got signal:", s, " value:", s.Signal)
 	case <-messageBusClient.RebootRequestChannel():
 		log.Info("Received core agent reboot signal")
 	}

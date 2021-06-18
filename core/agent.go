@@ -90,7 +90,7 @@ func blockUntilSignaled(log logger.T) {
 	signal.Notify(c, os.Interrupt, os.Kill, syscall.SIGTERM)
 
 	s := <-c
-	log.Info("Got signal:", s, " value:", s.Signal)
+	log.Info("amazon-ssm-agent got signal:", s, " value:", s.Signal)
 }
 
 // Run as a single process. Used by Unix systems and when running agent from console.
