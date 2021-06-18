@@ -95,6 +95,16 @@ func parser(config *SsmagentConfig) {
 	config.Ssm.PluginLocalOutputCleanup = getStringEnum(config.Ssm.PluginLocalOutputCleanup,
 		pluginLocalOutputCleanupOptions,
 		DefaultPluginOutputRetention)
+
+	OrchestartionDirCleanupOtions := []string{
+		DefaultOrchestrationDirCleanup,
+		OrchestrationDirCleanupForSuccessFailedCommand,
+		OrchestrationDirCleanupForSuccessCommand,
+	}
+	config.Ssm.OrchestrationDirectoryCleanup = getStringEnum(config.Ssm.OrchestrationDirectoryCleanup,
+		OrchestartionDirCleanupOtions,
+		DefaultOrchestrationDirCleanup)
+
 	IdentityConsumptionOrderOptions := map[string]bool{
 		"OnPrem":         true,
 		"ECS":            true,

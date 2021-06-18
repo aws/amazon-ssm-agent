@@ -48,6 +48,8 @@ type SsmCfg struct {
 	SessionLogsRetentionDurationHours int
 	// Configure when after execution it is safe to delete local plugin output files in orchestration folder
 	PluginLocalOutputCleanup string
+	// Configure only when it is safe to delete orchestration folder after document execution. This config overrides PluginLocalOutputCleanup when set.
+	OrchestrationDirectoryCleanup string
 }
 
 // AgentInfo represents metadata for amazon-ssm-agent
