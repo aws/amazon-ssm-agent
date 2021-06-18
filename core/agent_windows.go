@@ -56,23 +56,25 @@ func main() {
 	defer log.Flush()
 
 	handleRegistrationAndFingerprintFlags(log)
+	log.Info("Starting up windows agent")
 
-	// check whether this is an interactive session
-	isIntSess, err := svc.IsAnInteractiveSession()
+	// Check if is running as windows service
+	isWinService, err := svc.IsWindowsService()
 	if err != nil {
-		log.Warnf("Failed to determine if we are running in an interactive session: %v", err)
+		log.Warnf("Failed to determine if we are running in an interactive session, assuming agent is running as a service: %v", err)
+		// Set isWinService to true if there is an error because the agent will most likely be running as a service than not
+		isWinService = true
 	}
 
-	// isIntSess is false by default (after declaration), this fits the use
-	// case that agent is running as Windows service most of times
-	switch isIntSess {
-	case true:
-		run(log)
-	case false:
+	if isWinService {
+		log.Debugf("Is running as windows service, starting svc")
 		err = svc.Run(serviceName, &amazonSSMAgentService{log: log})
 		if err != nil {
 			log.Errorf("SVC Run failed with error: %v", err)
 		}
+	} else {
+		log.Debugf("Not running as windows service")
+		run(log)
 	}
 
 	log.Info("main function returning")
