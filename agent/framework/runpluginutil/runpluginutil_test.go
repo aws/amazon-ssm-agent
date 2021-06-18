@@ -19,6 +19,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/log"
@@ -309,10 +310,14 @@ func TestRunPluginsWithInProgressDocuments(t *testing.T) {
 	pluginResults := make(map[string]*contracts.PluginResult)
 	plugins := make(map[string]*PluginMock)
 	pluginRegistry := PluginRegistry{}
-	ioConfig := contracts.IOConfiguration{}
+	ioConfig := contracts.IOConfiguration{
+		OrchestrationDirectory: "test",
+	}
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
-	ctx := context.NewMockDefault()
+	config := appconfig.SsmagentConfig{}
+	config.Ssm.OrchestrationDirectoryCleanup = appconfig.OrchestrationDirCleanupForSuccessFailedCommand
+	var ctx = context.NewMockDefaultWithConfig(config)
 	defaultTime := time.Now()
 
 	for index, name := range pluginNames {
@@ -349,6 +354,13 @@ func TestRunPluginsWithInProgressDocuments(t *testing.T) {
 	}
 
 	ch := make(chan contracts.PluginResult, 2)
+
+	// Not Deletion case - ResultStatusNotStarted
+	var deleteDirectoryFlag bool
+	deleteDirectoryRef = func(dirName string) (err error) {
+		deleteDirectoryFlag = true
+		return nil
+	}
 	outputs := RunPlugins(ctx, pluginStates, ioConfig, pluginRegistry, ch, cancelFlag)
 	close(ch)
 	// fix the times expectation.
@@ -360,6 +372,7 @@ func TestRunPluginsWithInProgressDocuments(t *testing.T) {
 		mockPlugin.AssertExpectations(t)
 	}
 	pluginResults[testPlugin2].Status = ""
+	assert.False(t, deleteDirectoryFlag)
 	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
 	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
 }
@@ -695,11 +708,16 @@ func TestRunPluginsWithIncompatiblePlatformPrecondition(t *testing.T) {
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*PluginMock)
 	pluginRegistry := PluginRegistry{}
-	ioConfig := contracts.IOConfiguration{}
+	ioConfig := contracts.IOConfiguration{
+		OrchestrationDirectory: "test",
+	}
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
-	ctx := context.NewMockDefault()
+	config := appconfig.SsmagentConfig{}
+	config.Ssm.OrchestrationDirectoryCleanup = appconfig.OrchestrationDirCleanupForSuccessFailedCommand
+	var ctx = context.NewMockDefaultWithConfig(config)
+
 	defaultTime := time.Now()
 	defaultOutput := ""
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
@@ -768,6 +786,14 @@ func TestRunPluginsWithIncompatiblePlatformPrecondition(t *testing.T) {
 			called++
 		}
 	}()
+
+	// Deletion case - ResultStatusSkipped
+	var deleteDirectoryFlag bool
+	deleteDirectoryRef = func(dirName string) (err error) {
+		deleteDirectoryFlag = true
+		return nil
+	}
+
 	// call the code we are testing
 	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
 	// fix the times expectation.
@@ -781,6 +807,7 @@ func TestRunPluginsWithIncompatiblePlatformPrecondition(t *testing.T) {
 		mockPlugin.AssertExpectations(t)
 	}
 	ctx.AssertCalled(t, "Log")
+	assert.True(t, deleteDirectoryFlag)
 	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
 	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
 
@@ -1010,11 +1037,16 @@ func TestRunPluginsWithMoreThanOnePrecondition(t *testing.T) {
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*PluginMock)
 	pluginRegistry := PluginRegistry{}
-	ioConfig := contracts.IOConfiguration{}
+	ioConfig := contracts.IOConfiguration{
+		OrchestrationDirectory: "test",
+	}
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
-	ctx := context.NewMockDefault()
+	config := appconfig.SsmagentConfig{}
+	config.Ssm.OrchestrationDirectoryCleanup = appconfig.OrchestrationDirCleanupForSuccessFailedCommand
+	var ctx = context.NewMockDefaultWithConfig(config)
+
 	defaultTime := time.Now()
 	defaultOutput := ""
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
@@ -1099,6 +1131,12 @@ func TestRunPluginsWithMoreThanOnePrecondition(t *testing.T) {
 			called++
 		}
 	}()
+	// Deletion case - ResultStatusFailed
+	var deleteDirectoryFlag bool
+	deleteDirectoryRef = func(dirName string) (err error) {
+		deleteDirectoryFlag = true
+		return nil
+	}
 	// call the code we are testing
 	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
 	// fix the times expectation.
@@ -1112,6 +1150,8 @@ func TestRunPluginsWithMoreThanOnePrecondition(t *testing.T) {
 		mockPlugin.AssertExpectations(t)
 	}
 	ctx.AssertCalled(t, "Log")
+
+	assert.True(t, deleteDirectoryFlag)
 	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
 	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
 
@@ -2218,11 +2258,15 @@ func TestRunPluginsWithIncompatibleParamParamPrecondition(t *testing.T) {
 	pluginResults := make(map[string]*contracts.PluginResult)
 	pluginInstances := make(map[string]*PluginMock)
 	pluginRegistry := PluginRegistry{}
-	ioConfig := contracts.IOConfiguration{}
+	ioConfig := contracts.IOConfiguration{
+		OrchestrationDirectory: "test",
+	}
 
 	var cancelFlag task.CancelFlag = task.NewChanneledCancelFlag()
 
-	ctx := context.NewMockDefault()
+	config := appconfig.SsmagentConfig{}
+	config.Ssm.OrchestrationDirectoryCleanup = appconfig.OrchestrationDirCleanupForSuccessFailedCommand
+	var ctx = context.NewMockDefaultWithConfig(config)
 	defaultTime := time.Now()
 	defaultOutput := ""
 	pluginConfigs2 := make([]contracts.PluginState, len(pluginNames))
@@ -2291,6 +2335,12 @@ func TestRunPluginsWithIncompatibleParamParamPrecondition(t *testing.T) {
 			called++
 		}
 	}()
+	// Deletion case - ResultStatusSkipped
+	var deleteDirectoryFlag bool
+	deleteDirectoryRef = func(dirName string) (err error) {
+		deleteDirectoryFlag = true
+		return nil
+	}
 	// call the code we are testing
 	outputs := RunPlugins(ctx, pluginConfigs2, ioConfig, pluginRegistry, ch, cancelFlag)
 	// fix the times expectation.
@@ -2304,6 +2354,7 @@ func TestRunPluginsWithIncompatibleParamParamPrecondition(t *testing.T) {
 		mockPlugin.AssertExpectations(t)
 	}
 	ctx.AssertCalled(t, "Log")
+	assert.True(t, deleteDirectoryFlag)
 	assert.Equal(t, pluginResults[testPlugin1], outputs[testPlugin1])
 	assert.Equal(t, pluginResults[testPlugin2], outputs[testPlugin2])
 

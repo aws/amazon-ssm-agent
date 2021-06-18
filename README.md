@@ -190,6 +190,10 @@ To set up your own custom configuration for the agent:
         * Default: "" - Don't delete logs immediately after execution. Fall back to AssociationLogsRetentionDurationHours, RunCommandLogsRetentionDurationHours, and SessionLogsRetentionDurationHours 
         * OptionalValue: "after-execution" - Delete plugin output file locally after plugin execution
         * OptionalValue: "after-upload" - Delete plugin output locally after successful s3 or cloudWatch upload
+    * OrchestrationDirectoryCleanup (string) - Configure only when it is safe to delete orchestration folder after document execution. This config overrides PluginLocalOutputCleanup when set.
+        * Default: "" - Don't delete orchestration folder after execution
+        * OptionalValue: "clean-success" - Deletes the orchestration folder only for successful document executions.
+        * OptionalValue: "clean-success-failed" - Deletes the orchestration folder for successful and failed document executions.
 * Mgs - represents configuration for Message Gateway service
     * Region (string)
     * Endpoint (string)

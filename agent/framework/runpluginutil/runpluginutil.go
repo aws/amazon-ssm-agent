@@ -52,7 +52,11 @@ type PluginFactory interface {
 // PluginRegistry stores a set of plugins (both worker and long running plugins), indexed by ID.
 type PluginRegistry map[string]PluginFactory
 
-var SSMPluginRegistry PluginRegistry
+var (
+	SSMPluginRegistry PluginRegistry
+
+	deleteDirectoryRef = fileutil.DeleteDirectory
+)
 
 // allPlugins is the list of all known plugins.
 // This allows us to differentiate between the case where a document asks for a plugin that exists but isn't supported on this platform
@@ -269,8 +273,34 @@ func RunPlugins(
 			break
 		}
 	}
-
+	// this will clean the orchestration folder for the successful and failed document executions only when the agent is configured
+	orchestrationDirCleanup(context, len(plugins), pluginOutputs, ioConfig.OrchestrationDirectory)
 	return
+}
+
+// orchestrationDirCleanup will clean orchestration folder for the successful and failed document executions. Cleaned only when the agent is configured to do so
+func orchestrationDirCleanup(context context.T, pluginsCount int, pluginOutputs map[string]*contracts.PluginResult, orchestrationDir string) {
+	log := context.Log()
+	if orchestrationDir == "" {
+		log.Info("orchestration directory is empty")
+		return
+	}
+
+	if pluginsCount == len(pluginOutputs) {
+		// this will clean the orchestration folder for the successful and failed document executions only when the agent is configured
+		orchestrationDirectoryCleanupConfig := context.AppConfig().Ssm.OrchestrationDirectoryCleanup
+		documentResult, _, _ := contracts.DocumentResultAggregator(log, "", pluginOutputs)
+		statusWithCleanupConfig := map[contracts.ResultStatus]map[string]interface{}{
+			contracts.ResultStatusSuccess: {appconfig.OrchestrationDirCleanupForSuccessCommand: nil, appconfig.OrchestrationDirCleanupForSuccessFailedCommand: nil},
+			contracts.ResultStatusFailed:  {appconfig.OrchestrationDirCleanupForSuccessFailedCommand: nil},
+		}
+		if _, ok := statusWithCleanupConfig[documentResult][orchestrationDirectoryCleanupConfig]; ok {
+			log.Infof("orchestration cleanup started for the command with status %v - deleting orchestration directory: %v", documentResult, orchestrationDir)
+			if err := deleteDirectoryRef(orchestrationDir); err != nil {
+				log.Warnf("error deleting the directory %v", orchestrationDir)
+			}
+		}
+	}
 }
 
 var runPlugin = func(

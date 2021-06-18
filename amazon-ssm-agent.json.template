@@ -18,7 +18,8 @@
         "AssociationLogsRetentionDurationHours" : 24,
         "RunCommandLogsRetentionDurationHours" : 336,
         "SessionLogsRetentionDurationHours" : 336,
-        "PluginLocalOutputCleanup": ""
+        "PluginLocalOutputCleanup": "",
+        "OrchestrationDirectoryCleanup": ""
     },
     "Mgs": {
         "Region": "",

@@ -63,6 +63,15 @@ const (
 	PluginLocalOutputCleanupAfterExecution = "after-execution"
 	// Delete plugin output locally after successful s3 or cloudWatch upload
 	PluginLocalOutputCleanupAfterUpload = "after-upload"
+
+	// OrchestrationDirCleanup
+	// Deletes the orchestration folder for successful and failed document execution.
+	OrchestrationDirCleanupForSuccessFailedCommand = "clean-success-failed"
+	// Deletes the orchestration folder only for successful document execution.
+	OrchestrationDirCleanupForSuccessCommand = "clean-success"
+	// Don't delete orchestration folder after execution
+	DefaultOrchestrationDirCleanup = "default"
+
 	// Don't delete logs immediately after execution. Fall back to AssociationLogsRetentionDurationHours,
 	// RunCommandLogsRetentionDurationHours, and SessionLogsRetentionDurationHours
 	DefaultPluginOutputRetention = "default"
