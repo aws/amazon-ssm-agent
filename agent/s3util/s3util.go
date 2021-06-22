@@ -96,7 +96,7 @@ func (u *AmazonS3Util) S3Upload(log log.T, bucketName string, objectKey string, 
 			log.Infof("Successfully uploaded file to ", result.Location)
 			break
 		} else {
-			log.Errorf("Attempt %s: Failed uploading %v to s3://%v/%v err:%v ", attempt, filePath, bucketName, objectKey, err)
+			log.Errorf("Attempt %v: Failed uploading %v to s3://%v/%v err:%v ", attempt, filePath, bucketName, objectKey, err)
 			time.Sleep(time.Duration(math.Pow(2, float64(attempt))*100) * time.Millisecond)
 		}
 	}
