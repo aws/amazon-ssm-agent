@@ -60,6 +60,10 @@ const (
 	PvName            = "Name"
 	PvVersionProperty = "Version"
 
+	// NitroEnclavesEntity Properties
+	NitroEnclavesName            = "Name"
+	NitroEnclavesVersionProperty = "Version"
+
 	// PnpEntity Properties
 	deviceIDProperty = "DeviceID"
 	serviceProperty  = "Service"
@@ -90,6 +94,9 @@ const (
 
 	// PS command to get AWS PV package entry from registry HKLM:\SOFTWARE\Amazon\PVDriver
 	getPvPackageVersionCmd = "Get-ItemProperty -Path 'HKLM:\\SOFTWARE\\Amazon\\PVDriver'"
+
+	// PS command to get AWS Nitro Enclaves package entry from registry HKLM:\SOFTWARE\Amazon\AwsNitroEnclaves
+	getNitroEnclavesPackageVersionCmd = "Get-ItemProperty -Path 'HKLM:\\SOFTWARE\\Amazon\\AwsNitroEnclaves'"
 
 	// PS command to get AWS PV Storage Host Adapter entry shown in Device Manager
 	getPvDriverPnpEntityCmd = "Get-CimInstance Win32_PnPEntity | Where-Object { $_.Service -eq 'xenvbd' }"
@@ -254,6 +261,12 @@ func (p *Processor) ExecuteTasks() (err error) {
 		sp.WritePort(fmt.Sprintf("Driver: AWS PV Driver Package v%v", pvPackageInfo.Version))
 	}
 
+	nitroEnclavesPackageInfo, NitroEnclavesError := getAWSNitroEnclavesPackageInfo(log)
+	// write AWS Nitro Enclaves Package version to serial port if exists
+	if NitroEnclavesError == nil {
+		sp.WritePort(fmt.Sprintf("Driver: AWS Nitro Enclaves Package v%v", nitroEnclavesPackageInfo.Version))
+	}
+
 	// write all running AWS drivers to serial port.
 	if driverInfo, err = getAWSDriverInfo(log); err == nil {
 		for _, di := range driverInfo {
@@ -321,6 +334,17 @@ func getAWSPvPackageInfo(log log.T) (pvPackageInfo model.PvPackageInfo, err erro
 		err = errors.New("is a nano server")
 	}
 
+	return
+}
+
+// getAWSNitroEnclavesPackage queries AwsNitroEnclaves information from registry key.
+func getAWSNitroEnclavesPackageInfo(log log.T) (NitroEnclavesPackageInfo model.NitroEnclavesPackageInfo, err error) {
+
+	// this queries the registry for AWS Nitro Enclaves Package version
+	properties := []string{NitroEnclavesName, NitroEnclavesVersionProperty}
+	if err = runPowershell(&NitroEnclavesPackageInfo, getNitroEnclavesPackageVersionCmd, properties, false); err != nil {
+		log.Debugf("Error occurred while querying Version for AWSNitroEnclavesPackage: %v", err.Error())
+	}
 	return
 }
 
