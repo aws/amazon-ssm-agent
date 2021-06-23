@@ -66,6 +66,12 @@ type PvPackageInfo struct {
 	Version string `json:"Version"`
 }
 
+// NitroEnclavesEntity contains Version from HKLM:\SOFTWARE\Amazon\AwsNitroEnclaves.
+type NitroEnclavesPackageInfo struct {
+	Name    string `json:"PSChildName"`
+	Version string `json:"Version"`
+}
+
 // PnpEntity contains DeviceId, Service, Name from Win32_PnpEntity.
 type PnpEntity struct {
 	DeviceID string `json:"DeviceID"`
