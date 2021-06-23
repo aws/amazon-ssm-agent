@@ -13,7 +13,7 @@ Source0      : https://github.com/aws/amazon-ssm-agent/%{name}-%{version}.tar.gz
 Packager     : Amazon.com, Inc. <http://aws.amazon.com>
 Vendor       : Amazon.com
 
-BuildRequires: golang >= 1.13.14
+BuildRequires: golang >= 1.15.12
 
 %if 0%{?amzn} >= 2
 BuildRequires: systemd-devel
@@ -32,9 +32,6 @@ sed -i -e 's#const[ \s]*Version.*#const Version = "%{version}"#g' agent/version/
 
 %build
 
-export GOPATH=`pwd`/vendor:`pwd`
-
-ln -s `pwd` vendor/src/github.com/aws/amazon-ssm-agent
 CGO_ENABLED=0 go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -o bin/amazon-ssm-agent -v core/agent.go core/agent_unix.go core/agent_parser.go
 CGO_ENABLED=0 go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -o bin/ssm-agent-worker -v agent/agent.go agent/agent_unix.go agent/agent_parser.go
 CGO_ENABLED=0 go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -o bin/ssm-document-worker -v agent/framework/processor/executer/outofproc/worker/main.go
