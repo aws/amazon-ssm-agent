@@ -56,6 +56,7 @@ type MuxPortSession struct {
 	context          agentContext.T
 	portSession      IPortSession
 	cancelled        chan struct{}
+	serverHost       string
 	serverPortNumber string
 	sessionId        string
 	socketFile       string
@@ -74,10 +75,11 @@ func (s *MuxServer) close() {
 }
 
 // NewMuxPortSession returns a new instance of the MuxPortSession.
-func NewMuxPortSession(context agentContext.T, cancelled chan struct{}, portNumber string, sessionId string) (IPortSession, error) {
+func NewMuxPortSession(context agentContext.T, cancelled chan struct{}, host string, portNumber string, sessionId string) (IPortSession, error) {
 	var plugin = MuxPortSession{
 		context:          context,
 		cancelled:        cancelled,
+		serverHost:       host,
 		serverPortNumber: portNumber,
 		sessionId:        sessionId}
 	return &plugin, nil
@@ -249,7 +251,7 @@ func (p *MuxPortSession) handleServerConnections(ctx context.Context, dataChanne
 		}
 	}()
 	// net.Dial assumes local system when host in addr is empty
-	localAddr := fmt.Sprintf(":%s", p.serverPortNumber)
+	destinationAddr := fmt.Sprintf("%s:%s", p.serverHost, p.serverPortNumber)
 	for {
 		select {
 		case <-ctx.Done():
@@ -263,8 +265,8 @@ func (p *MuxPortSession) handleServerConnections(ctx context.Context, dataChanne
 
 			log.Debugf("Started a new mux stream %d\n", stream.ID())
 
-			if conn, err := net.Dial("tcp", localAddr); err == nil {
-				log.Tracef("Established connection to port %s", p.serverPortNumber)
+			if conn, err := net.Dial("tcp", destinationAddr); err == nil {
+				log.Tracef("Established connection to address: %s", destinationAddr)
 				go func() {
 					defer func() {
 						if r := recover(); r != nil {

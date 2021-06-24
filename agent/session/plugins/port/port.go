@@ -39,6 +39,7 @@ const muxSupportedClientVersion = "1.1.70"
 // PortParameters contains inputs required to execute port plugin.
 type PortParameters struct {
 	PortNumber string `json:"portNumber" yaml:"portNumber"`
+	Host       string `json:"host"`
 	Type       string `json:"type"`
 }
 
@@ -65,7 +66,7 @@ var GetSession = func(context context.T, portParameters PortParameters, cancelle
 	if portParameters.Type == mgsConfig.LocalPortForwarding &&
 		versionutil.Compare(clientVersion, muxSupportedClientVersion, true) >= 0 {
 
-		if session, err = NewMuxPortSession(context, cancelled, portParameters.PortNumber, sessionId); err == nil {
+		if session, err = NewMuxPortSession(context, cancelled, portParameters.Host, portParameters.PortNumber, sessionId); err == nil {
 			return session, nil
 		}
 	} else {
