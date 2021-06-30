@@ -68,9 +68,11 @@ type EngineProcessor struct {
 	sendCommandPool   task.Pool
 	cancelCommandPool task.Pool
 	//TODO this should be abstract as the Processor's domain
-	supportedDocTypes []contracts.DocumentType
-	resChan           chan contracts.DocumentResult
-	documentMgr       docmanager.DocumentMgr
+	supportedDocTypes  []contracts.DocumentType
+	resChan            chan contracts.DocumentResult
+	documentMgr        docmanager.DocumentMgr
+	stopFlagMutex      sync.Mutex
+	isProcessorStopped bool
 }
 
 //TODO worker pool should be triggered in the Start() function
@@ -183,8 +185,25 @@ func (p *EngineProcessor) Cancel(docState contracts.DocumentState) {
 	}
 }
 
+// hasProcessorStoppedAlready returns whether the processor stop is called once or not
+func (p *EngineProcessor) hasProcessorStopCalledAlready() bool {
+	p.stopFlagMutex.Lock()
+	defer p.stopFlagMutex.Unlock()
+	if p.isProcessorStopped {
+		return true
+	}
+	p.isProcessorStopped = true
+	return false
+}
+
 //Stop set the cancel flags of all the running jobs, which are to be captured by the command worker and shutdown gracefully
 func (p *EngineProcessor) Stop(stopType contracts.StopType) {
+
+	if p.hasProcessorStopCalledAlready() {
+		p.context.Log().Info("Processor stop called already")
+		return
+	}
+
 	var waitTimeout time.Duration
 
 	if stopType == contracts.StopTypeSoftStop {
