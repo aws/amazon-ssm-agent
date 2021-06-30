@@ -45,8 +45,8 @@ func (DepWindows) IsPlatformNanoServer(log log.T) (bool, error) {
 
 func (DepWindows) SetDaemonConfig(daemonConfigPath string, daemonConfigContent string) (err error) {
 	if _, err := os.Stat(daemonConfigPath); os.IsNotExist(err) {
-		os.MkdirAll(filepath.Dir(daemonConfigPath), 744)
-		err := ioutil.WriteFile(daemonConfigPath, []byte(daemonConfigContent), 0644)
+		os.MkdirAll(filepath.Dir(daemonConfigPath), 0744)
+		err := ioutil.WriteFile(daemonConfigPath, []byte(daemonConfigContent), 0600)
 		if err != nil {
 			return err
 		}
