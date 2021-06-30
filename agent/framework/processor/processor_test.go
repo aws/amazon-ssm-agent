@@ -90,6 +90,12 @@ func TestEngineProcessor_Stop(t *testing.T) {
 	processor.Stop(contracts.StopTypeSoftStop)
 	sendCommandPoolMock.AssertExpectations(t)
 	cancelCommandPoolMock.AssertExpectations(t)
+	// multiple stop
+	sendCommandPoolMock = new(task.MockedPool)
+	cancelCommandPoolMock = new(task.MockedPool)
+	processor.Stop(contracts.StopTypeHardStop)
+	sendCommandPoolMock.AssertNotCalled(t, "ShutdownAndWait", mock.AnythingOfType("time.Duration"))
+	cancelCommandPoolMock.AssertNotCalled(t, "ShutdownAndWait", mock.AnythingOfType("time.Duration"))
 }
 
 //TODO add shutdown and reboot test once we encapsulate docmanager
