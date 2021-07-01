@@ -1,5 +1,19 @@
 Latest
 ===============
+- Added config option to delete orchestration folder
+- Added snapcraft packaging config
+- Added workaround for aws:runDocument status bug
+- Added improved handling of file closure
+- Added support for go mod and updated build to use go 1.16.4
+- Fixed bug parsing vpce s3 urls
+- Refactored use of agent identity in agent cli
+- Updated check if agent is running as windows service
+- Updated handling of session cancellation to still send output to client side
+- Updated interactive session exit code logic to match non-interactive mode
+- Updated vendor dependencies
+
+3.0.1295.0
+===============
 - Added configurable custom identity and identity consumption order
 - Added cross-account domain join
 - Added cleanup for older versions of updater artifacts
