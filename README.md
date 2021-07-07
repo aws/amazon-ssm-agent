@@ -15,6 +15,7 @@ SSM Agent also enables the Session Manager capability that lets you manage your 
 
 * [SSM Run Command Prerequisites](http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/remote-commands-prereq.html)
 * [SSM Session Manager Prerequisites and supported Operating Systems](http://docs.aws.amazon.com/systems-manager/latest/userguide/session-manager-prerequisites.html)
+* Linux systems require kernel version 3.2 or above
 
 ### Setup
 

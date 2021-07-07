@@ -1,6 +1,7 @@
 COPY := cp -p
 GO_BUILD_NOPIE := CGO_ENABLED=0 go build -ldflags "-s -w" -trimpath
 GO_BUILD_PIE := go build -ldflags "-s -w -extldflags=-Wl,-z,now,-z,relro,-z,defs" -buildmode=pie -trimpath
+GO_BUILD_STATIC_PIE := go build -ldflags '-linkmode external -s -w -extldflags "-static-pie -Wl,-z,relro,-z,defs"' -buildmode=pie -trimpath  -tags 'osusergo netgo static_build'
 
 # Default build configuration, can be overridden at build time.
 GOARCH?=$(shell go env GOARCH)
@@ -135,7 +136,7 @@ build-any-%: checkstyle copy-src pre-build
 
 # Pre-defined recipes for various supported builds:
 
-# Production binaries are built using GO_BUILD_PIE
+# Production 64bit linux binaries are built using GO_BUILD_STATIC_PIE
 .PHONY: build-linux
 build-linux: GOARCH=amd64
 build-linux: GOOS=linux
@@ -154,6 +155,7 @@ build-darwin: GOOS=darwin
 build-darwin: GO_BUILD=$(GO_BUILD_NOPIE)
 build-darwin: build-any-darwin-amd64
 
+# Production windows binaries are built using GO_BUILD_PIE
 .PHONY: build-windows
 build-windows: GOOS=windows
 build-windows: GOARCH=amd64
