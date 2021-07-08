@@ -1,5 +1,14 @@
 Latest
 ===============
+- Updated to version 3.1
+- Updated build to build statically linked binaries for linux 64bit
+  - Minimum supported linux kernel version for linux 64bit is 3.2+
+- Fixed permissions for docker config file
+- Fixed issue with ubuntu prerm and postinst scripts
+- Fixed issue where processor stop was being called twice
+
+3.0.1390.0
+===============
 - Added config option to delete orchestration folder
 - Added snapcraft packaging config
 - Added workaround for aws:runDocument status bug
