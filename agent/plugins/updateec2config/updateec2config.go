@@ -133,8 +133,8 @@ func getEC2ConfigCurrentVersion(log log.T) (res string, err error) {
 
 	data := string(cmdOut)
 	if len(data) > 1 {
-		version := strings.TrimSpace(data)
-		log.Debug("GetEC2ConfigCurrentVersion: version after trimming space is ", version)
+		version := strings.TrimPrefix(strings.TrimSpace(data), "\ufeff")
+		log.Debugf("GetEC2ConfigCurrentVersion: version after trimming space is %s", version)
 		return version, err
 	}
 
