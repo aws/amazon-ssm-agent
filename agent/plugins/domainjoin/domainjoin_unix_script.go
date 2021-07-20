@@ -53,22 +53,35 @@ DOMAIN_USERNAME=""
 DOMAIN_PASSWORD=""
 # Secrets Manager Secret ID needs to be of the form aws/directory-services/d-91673491b6/seamless-domain-join
 SECRET_ID_PREFIX="aws/directory-services"
-KEEP_HOSTNAME=""
 AWS_CLI_INSTALL_DIR="$PWD/"
+# Optional arguments to set hostname with or without appended digits
+SET_HOSTNAME=""
+SET_HOSTNAME_APPEND_NUM_DIGITS=""
+MAX_APPEND_DIGITS=5
+
+# NetBIOS computer names consist of up to 15 bytes of OEM characters
+# https://docs.microsoft.com/en-us/windows/win32/sysinfo/computer-names?redirectedfrom=MSDN
+NETBIOS_COMPUTER_NAME_LEN=15
+
+get_default_hostname() {
+    INSTANCE_NAME=$(hostname --short) 2>/dev/null
+
+    # Naming conventions in Active Directory
+    # https://support.microsoft.com/en-us/help/909264/naming-conventions-in-active-directory-for-computers-domains-sites-and
+    RANDOM_COMPUTER_NAME=$(head -c 512 /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 6 | head -n 1)
+    COMPUTER_NAME=$(echo EC2AMAZ-$RANDOM_COMPUTER_NAME)
+}
 
 ##################################################
 ## Set hostname to NETBIOS computer name #########
 ##################################################
 set_hostname() {
-    INSTANCE_NAME=$(hostname --short) 2>/dev/null
+    HOSTNAME_LEN=$(expr length $COMPUTER_NAME)
+    if [ $HOSTNAME_LEN -gt $NETBIOS_COMPUTER_NAME_LEN ]; then
+       echo "**Failed: Hostname exceeds NetBIOS hostname length : $HOSTNAME_LEN"
+       exit 1
+    fi
 
-    # NetBIOS computer names consist of up to 15 bytes of OEM characters
-    # https://docs.microsoft.com/en-us/windows/win32/sysinfo/computer-names?redirectedfrom=MSDN
-
-    # Naming conventions in Active Directory
-    # https://support.microsoft.com/en-us/help/909264/naming-conventions-in-active-directory-for-computers-domains-sites-and
-    RANDOM_COMPUTER_NAME=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 6 | head -n 1)
-    COMPUTER_NAME=$(echo EC2AMAZ-$RANDOM_COMPUTER_NAME)
     HOSTNAMECTL=$(which hostnamectl)
     if [ ! -z "$HOSTNAMECTL" ]; then
         hostnamectl set-hostname $COMPUTER_NAME.$DIRECTORY_NAME >/dev/null
@@ -82,6 +95,138 @@ set_hostname() {
             sed -i "s/HOSTNAME=.*$//g" /etc/sysconfig/network
         echo "HOSTNAME=$COMPUTER_NAME.$DIRECTORY_NAME" >> /etc/sysconfig/network
     fi
+}
+
+get_list_of_computers() {
+    LDAP_BASE_DN=$(echo $DIRECTORY_NAME | awk -F\. '{ for (i = 1; i <= NF; i++) { if (i != NF) printf "DC=%s,",$i ; else printf "DC=%s", $i} }')
+    DIRNAME_UPPER=$(echo "$DIRECTORY_NAME" | tr [:lower:] [:upper:])
+    ldapsearch -H ldap://$DIRECTORY_NAME -b $LDAP_BASE_DN 'objectClass=computer' -D "$DOMAIN_USERNAME@$DIRNAME_UPPER" -w "$DOMAIN_PASSWORD"  | grep "cn:" | sed 's/cn://g'
+}
+
+cleanup_temp_files() {
+    rm -f $AWS_CLI_INSTALL_DIR/ldap_search.txt
+    rm -f $AWS_CLI_INSTALL_DIR/all_suffixes.txt
+    rm -f $AWS_CLI_INSTALL_DIR/ldap_filtered_hosts.txt
+    rm -f $AWS_CLI_INSTALL_DIR/possible_suffixes.txt
+    rm -f $AWS_CLI_INSTALL_DIR/awscliv2.zip
+}
+
+#################################################
+## find unused hostname after appending digits ##
+#################################################
+find_unused_hostname() {
+    if [ -z $SET_HOSTNAME ]; then
+        echo "**Failed: Argument SET_HOSTNAME is blank"
+        exit 1
+    fi
+
+    if [ -z $SET_HOSTNAME_APPEND_NUM_DIGITS ]; then
+        COMPUTER_NAME=$SET_HOSTNAME
+        return
+    fi
+
+    COMPUTER_NAME=""
+
+    NUM_DIGITS=1
+    echo "SET_HOSTNAME_APPEND_NUM_DIGITS = $SET_HOSTNAME_APPEND_NUM_DIGITS"
+    for i in $(seq $SET_HOSTNAME_APPEND_NUM_DIGITS)
+    do
+        NUM_DIGITS=$(expr $NUM_DIGITS \* 10 )
+    done
+    NUM_DIGITS=$(expr $NUM_DIGITS - 1)
+
+    # If the number of digits is 5, $AWS_CLI_INSTALL_DIR/all_suffixes.txt will
+    # have numbers 00000-99999, one per line.
+    # If the number of digits is 2, the file will have numbers from 00 to 99, one per line.
+    for i in $(seq 0 $NUM_DIGITS)
+    do
+        if [ $SET_HOSTNAME_APPEND_NUM_DIGITS -eq 1 ]; then
+            printf "%01d\n" $i
+        fi
+        if [ $SET_HOSTNAME_APPEND_NUM_DIGITS -eq 2 ]; then
+            printf "%02d\n" $i
+        fi
+        if [ $SET_HOSTNAME_APPEND_NUM_DIGITS -eq 3 ]; then
+            printf "%03d\n" $i
+        fi
+        if [ $SET_HOSTNAME_APPEND_NUM_DIGITS -eq 4 ]; then
+            printf "%04d\n" $i
+        fi
+        if [ $SET_HOSTNAME_APPEND_NUM_DIGITS -eq 5 ]; then
+            printf "%05d\n" $i
+        fi
+    done > $AWS_CLI_INSTALL_DIR/all_suffixes.txt
+
+    MAX_RETRIES=5
+    for i in $(seq 1 $MAX_RETRIES)
+    do
+        get_list_of_computers > $AWS_CLI_INSTALL_DIR/ldap_search.txt
+        if [ ! -s $AWS_CLI_INSTALL_DIR/ldap_search.txt ]; then
+            echo "**Failed: Could not get list of computers"
+            exit 1
+        fi
+
+        # $AWS_CLI_INSTALL_DIR/ldap_filtered_hosts.txt has hosts
+        # with the same hostname prefix
+        # and then remove the hostname in each line so only the number suffixes remain.
+        # This gives us the list of suffixes that already exist.
+        cat $AWS_CLI_INSTALL_DIR/ldap_search.txt \
+            | grep -iP "^[ ]*$SET_HOSTNAME\d{$SET_HOSTNAME_APPEND_NUM_DIGITS}$" \
+            | sort | sed "s/$SET_HOSTNAME//gI" | tr -d ' ' \
+              > $AWS_CLI_INSTALL_DIR/ldap_filtered_hosts.txt
+
+        # The 'comm' utility does 'set complement' between
+        # $AWS_CLI_INSTALL_DIR/all_suffixes.txt
+        # and $AWS_CLI_INSTALL_DIR/ldap_filtered_hosts.txt
+        # to find suffixes that do not exist in ldap_filtered_hosts.
+        comm -23 $AWS_CLI_INSTALL_DIR/all_suffixes.txt \
+            $AWS_CLI_INSTALL_DIR/ldap_filtered_hosts.txt \
+                > $AWS_CLI_INSTALL_DIR/possible_suffixes.txt
+        if [ $? -ne 0 ]; then
+            echo "**Failed: Could not execute comm utility"
+            cleanup_temp_files
+            exit 1
+        fi
+
+        num_lines=$(wc -l $AWS_CLI_INSTALL_DIR/possible_suffixes.txt | awk '{ print $1 }')
+
+        if [ $num_lines -eq 0 ]; then
+           echo "**Failed: Could not find unused hostnames"
+           exit 1
+        fi
+
+        # When we have a list of possible hosts, one in each line, we can use
+        # a random number to choose one of the unused suffixes.
+        RANDOM_VALUE=$(head -c 512 /dev/urandom | xxd -p | tr -dc '0-9' \
+                            | fold -w $MAX_APPEND_DIGITS | head -n 1)
+        if [ -z $RANDOM_VALUE ]; then
+           LINE_N = 1
+        else
+           LINE_N=$(expr $RANDOM_VALUE % $num_lines)
+           if [ $LINE_N -eq 0 -o $num_lines -eq 1 ]; then
+              LINE_N=1
+           fi
+        fi
+        HOSTNAME_SUFFIX=$(sed -n "$LINE_N"p < $AWS_CLI_INSTALL_DIR/possible_suffixes.txt)
+
+        POSSIBLE_HOSTNAME=$SET_HOSTNAME$HOSTNAME_SUFFIX
+        if [ "$POSSIBLE_HOSTNAME" = "$SET_HOSTNAME" ]; then
+            echo "**Failed: Could not find a possible hostname"
+            cleanup_temp_files
+            exit 1
+        fi
+
+        echo "[$i] Trying possible hostname $POSSIBLE_HOSTNAME"
+        cat $AWS_CLI_INSTALL_DIR/ldap_search.txt | grep -i "$POSSIBLE_HOSTNAME$"
+        if [ $? -ne 0 ]; then
+            echo "[$i] Found unused hostname as $POSSIBLE_HOSTNAME"
+            COMPUTER_NAME=$POSSIBLE_HOSTNAME
+            cleanup_temp_files
+            break
+        fi
+    done
+
+    cleanup_temp_files
 }
 
 ##################################################
@@ -179,7 +324,7 @@ install_components() {
         LINUX_DISTRO='CentOS'
         # yum -y update
         ## yum update takes too long
-        yum -y install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation unzip bind-utils python3 >/dev/null
+        yum -y install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation unzip bind-utils python3 openldap-clients vim-common >/dev/null
         if [ $? -ne 0 ]; then echo "install_components(): yum install errors for CentOS" && return 1; fi
     elif grep -e 'Red Hat' /etc/os-release 1>/dev/null 2>/dev/null; then
         LINUX_DISTRO='RHEL'
@@ -198,20 +343,20 @@ install_components() {
         # yum -y update
         ## yum update takes too long
         # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html-single/deploying_different_types_of_servers/index
-        yum -y  install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation vim unzip bind-utils python3 >/dev/null
+        yum -y  install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation vim unzip bind-utils python3 openldap-clients >/dev/null
         if [ $? -ne 0 ]; then echo "install_components(): yum install errors for Red Hat" && return 1; fi
     elif grep -e 'Fedora' /etc/os-release 1>/dev/null 2>/dev/null; then
         LINUX_DISTRO='Fedora'
         ## yum update takes too long, but it is unavoidable here.
         yum -y update
-        yum -y  install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation vim unzip bind-utils python3 >/dev/null
+        yum -y  install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation vim unzip bind-utils python3 openldap-clients vim-common >/dev/null
         if [ $? -ne 0 ]; then echo "install_components(): yum install errors for Fedora" && return 1; fi
         systemctl restart dbus
     elif grep 'Amazon Linux' /etc/os-release 1>/dev/null 2>/dev/null; then
          LINUX_DISTRO='AMAZON_LINUX'
          # yum -y update
          ## yum update takes too long
-         yum -y  install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation unzip bind-utils python3 >/dev/null
+         yum -y  install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation unzip bind-utils python3 openldap-clients vim-common >/dev/null
          if [ $? -ne 0 ]; then echo "install_components(): yum install errors for Amazon Linux" && return 1; fi
     elif grep 'Ubuntu' /etc/os-release 1>/dev/null 2>/dev/null; then
          LINUX_DISTRO='UBUNTU'
@@ -226,7 +371,7 @@ install_components() {
          export DEBIAN_FRONTEND=noninteractive
          apt-get -y update
          if [ $? -ne 0 ]; then echo "install_components(): apt-get update errors for Ubuntu" && return 1; fi
-         apt-get -yq install realmd adcli winbind samba libnss-winbind libpam-winbind libpam-krb5 krb5-config krb5-locales krb5-user packagekit  ntp unzip dnsutils python3 > /dev/null
+         apt-get -yq install realmd adcli winbind samba libnss-winbind libpam-winbind libpam-krb5 krb5-config krb5-locales krb5-user packagekit  ntp unzip dnsutils python3 ldap-utils > /dev/null
          if [ $? -ne 0 ]; then echo "install_components(): apt-get install errors for Ubuntu" && return 1; fi
          # Disable Reverse DNS resolution. Ubuntu Instances must be reverse-resolvable in DNS before the realm will work.
          sed -i "s/default_realm.*$/default_realm = $REALM\n\trdns = false/g" /etc/krb5.conf
@@ -246,7 +391,7 @@ install_components() {
          fi
          LINUX_DISTRO='SUSE'
          sudo zypper update -y
-         sudo zypper -n install realmd adcli sssd sssd-tools sssd-ad samba-client krb5-client samba-winbind krb5-client bind-utils python3
+         sudo zypper -n install realmd adcli sssd sssd-tools sssd-ad samba-client krb5-client samba-winbind krb5-client bind-utils python3 openldap2-client
          if [ $? -ne 0 ]; then
             return 1
          fi
@@ -259,7 +404,7 @@ install_components() {
          fi
          apt-get -y update
          LINUX_DISTRO='DEBIAN'
-         DEBIAN_FRONTEND=noninteractive apt-get -yq install realmd adcli winbind samba libnss-winbind libpam-winbind libpam-krb5 krb5-config krb5-locales krb5-user packagekit ntp unzip dnsutils python3 > /dev/null
+         DEBIAN_FRONTEND=noninteractive apt-get -yq install realmd adcli winbind samba libnss-winbind libpam-winbind libpam-krb5 krb5-config krb5-locales krb5-user packagekit ntp unzip dnsutils python3 ldapscripts > /dev/null
          if [ $? -ne 0 ]; then
             return 1
          fi
@@ -289,12 +434,12 @@ get_servicecreds() {
     SECRET_VALUE=$($AWSCLI secretsmanager get-secret-value --secret-id "$SECRET_ID" --region $REGION --query "SecretString"  --output text 2>/dev/null)
     if [ $? -ne 0 ]; then
         PARENT_DIRECTORY_ID=$($AWSCLI ds describe-directories --region $REGION --query "DirectoryDescriptions[?DirectoryId =='$DIRECTORY_ID'].OwnerDirectoryDescription.DirectoryId | [0]" | sed 's/"//g')
-        if [ $? -ne 0 ] || [ -z "$PARENT_DIRECTORY_ID" ] || [ "$PARENT_DIRECTORY_ID" == null ]; then
+        if [ $? -ne 0 ] || [ -z "$PARENT_DIRECTORY_ID" ] || [ "$PARENT_DIRECTORY_ID" = null ]; then
            echo "***Failed: Cannot find parent directory Id"
            exit 1
         fi
         PARENT_ACCOUNT_ID=$($AWSCLI ds describe-directories --region $REGION --query "DirectoryDescriptions[?DirectoryId =='$DIRECTORY_ID'].OwnerDirectoryDescription.AccountId | [0]" | sed 's/"//g')
-        if [ $? -ne 0 ] || [ -z "$PARENT_ACCOUNT_ID" ] || [ "$PARENT_ACCOUNT_ID" == null ]; then
+        if [ $? -ne 0 ] || [ -z "$PARENT_ACCOUNT_ID" ] || [ "$PARENT_ACCOUNT_ID" = null ]; then
            echo "***Failed: Cannot find parent account Id"
            exit 1
         fi
@@ -596,9 +741,9 @@ reconfigure_samba() {
 ##################################################
 CURTIME=$(date | sed 's/ //g')
 
-#if [ $# -eq 0 ]; then
-#    exit 1
-#fi
+if [ $# -eq 0 ]; then
+    exit 1
+fi
 
 for i in "$@"; do
     case "$i" in
@@ -653,9 +798,14 @@ for i in "$@"; do
             NO_PROXY="$1"
             continue
             ;;
-        --keep-hostname)
+        --set-hostname)
             shift;
-            KEEP_HOSTNAME="TRUE"
+            SET_HOSTNAME="$1"
+            continue
+            ;;
+        --set-hostname-append-num-digits)
+            shift;
+            SET_HOSTNAME_APPEND_NUM_DIGITS="$1"
             continue
             ;;
     esac
@@ -664,6 +814,14 @@ done
 
 if [ -z $REGION ]; then
     echo "***Failed: No Region found" && exit 1
+fi
+
+if [ ! -z $SET_HOSTNAME_APPEND_NUM_DIGITS ]; then
+    if [ $SET_HOSTNAME_APPEND_NUM_DIGITS -le 0 -o \
+         $SET_HOSTNAME_APPEND_NUM_DIGITS -gt $MAX_APPEND_DIGITS ]; then
+           echo "**Failed: Invalid number of append digits $SET_HOSTNAME_APPEND_NUM_DIGITS"
+           exit 1
+    fi
 fi
 
 # Deal with scenario where this script is run again after the domain is already joined.
@@ -676,12 +834,6 @@ if [ $? -eq 0 ]; then
 fi
 
 REALM=$(echo "$DIRECTORY_NAME" | tr [a-z] [A-Z])
-
-COMPUTER_NAME=$(hostname --short)
-if [ -z $KEEP_HOSTNAME ]; then
-   set_hostname
-fi
-configure_hosts_file
 
 MAX_RETRIES=8
 for i in $(seq 1 $MAX_RETRIES)
@@ -705,6 +857,23 @@ fi
 
 ## Configure DNS even if DHCP option set is used.
 do_dns_config
+get_servicecreds
+
+COMPUTER_NAME=$(hostname --short)
+
+if [ ! -z $SET_HOSTNAME ]; then
+    find_unused_hostname "$SET_HOSTNAME"
+    if [ -z $COMPUTER_NAME ]; then
+        echo "**Failed: computername is empty"
+        exit 1
+    fi
+else
+    get_default_hostname
+fi
+
+set_hostname
+configure_hosts_file
+
 sed -i 's/PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
 systemctl restart sshd
 if [ $? -ne 0 ]; then
@@ -721,7 +890,6 @@ print_vars
 is_directory_reachable
 if [ $? -eq 0 ]; then
     config_nsswitch
-    get_servicecreds
     config_samba
     do_domainjoin
     reconfigure_samba

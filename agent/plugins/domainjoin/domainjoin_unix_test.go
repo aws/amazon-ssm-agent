@@ -41,14 +41,16 @@ type TestCase struct {
 }
 
 const (
-	orchestrationDirectory = "OrchesDir"
-	s3BucketName           = "bucket"
-	s3KeyPrefix            = "key"
-	testInstanceID         = "i-12345678"
-	bucketRegionErrorMsg   = "AuthorizationHeaderMalformed: The authorization header is malformed; the region 'us-east-1' is wrong; expecting 'us-west-2' status code: 400, request id: []"
-	testDirectoryName      = "corp.test.com"
-	testDirectoryId        = "d-0123456789"
-	testKeepHostName       = true
+	orchestrationDirectory         = "OrchesDir"
+	s3BucketName                   = "bucket"
+	s3KeyPrefix                    = "key"
+	testInstanceID                 = "i-12345678"
+	bucketRegionErrorMsg           = "AuthorizationHeaderMalformed: The authorization header is malformed; the region 'us-east-1' is wrong; expecting 'us-west-2' status code: 400, request id: []"
+	testDirectoryName              = "corp.test.com"
+	testDirectoryId                = "d-0123456789"
+	testKeepHostName               = true
+	testSetHostName                = "my_hostname"
+	testSetHostNameNumAppendDigits = "5"
 )
 
 var TestCases = []TestCase{
@@ -95,12 +97,22 @@ func generateDomainJoinPluginInput(id string, name string, ipAddress []string) D
 	}
 }
 
-func generateDomainJoinPluginInputOptionalParamKeepHostName(id string, name string, ipAddress []string, keepHostName bool) DomainJoinPluginInput {
+func generateDomainJoinPluginInputOptionalParamSetHostName(id string, name string, ipAddress []string, setHostName string) DomainJoinPluginInput {
 	return DomainJoinPluginInput{
 		DirectoryId:    id,
 		DirectoryName:  name,
 		DnsIpAddresses: ipAddress,
-		KeepHostName:   keepHostName,
+		HostName:       setHostName,
+	}
+}
+
+func generateDomainJoinPluginInputOptionalParamSetHostNameWithAppendDigits(id string, name string, ipAddress []string, setHostName string, setHostNameNumAppendDigits string) DomainJoinPluginInput {
+	return DomainJoinPluginInput{
+		DirectoryId:             id,
+		DirectoryName:           name,
+		DnsIpAddresses:          ipAddress,
+		HostName:                setHostName,
+		HostNameNumAppendDigits: setHostNameNumAppendDigits,
 	}
 }
 
@@ -191,9 +203,20 @@ func TestMakeArguments(t *testing.T) {
 	expected = ""
 	assert.Equal(t, expected, commandRes)
 
-	domainJoinInput = generateDomainJoinPluginInputOptionalParamKeepHostName(testDirectoryId, testDirectoryName, []string{"172.31.4.141", "172.31.21.240"}, testKeepHostName)
+	domainJoinInput = generateDomainJoinPluginInputOptionalParamSetHostName(testDirectoryId, testDirectoryName, []string{"172.31.4.141", "172.31.21.240"}, testSetHostName)
 	commandRes, _ = makeArguments(context, "./aws_domainjoin.sh", domainJoinInput)
-	expected = "./aws_domainjoin.sh --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --dns-addresses 172.31.4.141,172.31.21.240 --keep-hostname  "
+	expected = "./aws_domainjoin.sh --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --set-hostname my_hostname --dns-addresses 172.31.4.141,172.31.21.240"
+	assert.Equal(t, expected, commandRes)
+
+	domainJoinInput = generateDomainJoinPluginInputOptionalParamSetHostNameWithAppendDigits(testDirectoryId, testDirectoryName, []string{"172.31.4.141", "172.31.21.240"}, testSetHostName, testSetHostNameNumAppendDigits)
+	commandRes, _ = makeArguments(context, "./aws_domainjoin.sh", domainJoinInput)
+	expected = "./aws_domainjoin.sh --directory-id d-0123456789 --directory-name corp.test.com --instance-region us-east-1 --set-hostname my_hostname --set-hostname-append-num-digits 5 --dns-addresses 172.31.4.141,172.31.21.240"
+	assert.Equal(t, expected, commandRes)
+
+	// If num append digits is set to a non-number, the plugin must fail
+	domainJoinInput = generateDomainJoinPluginInputOptionalParamSetHostNameWithAppendDigits(testDirectoryId, testDirectoryName, []string{"172.31.4.141", "172.31.21.240"}, testSetHostName, "1I")
+	commandRes, _ = makeArguments(context, "./aws_domainjoin.sh", domainJoinInput)
+	expected = ""
 	assert.Equal(t, expected, commandRes)
 
 	// If region is not set, the domain join plugin must fail

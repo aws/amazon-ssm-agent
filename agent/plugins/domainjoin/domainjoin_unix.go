@@ -23,6 +23,7 @@ import (
 	"io"
 	"path/filepath"
 	"regexp"
+	"strconv"
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -59,8 +60,10 @@ const (
 	NoProxy = " --no-proxy "
 	// Default folder name for domain join plugin
 	DomainJoinFolderName = "awsDomainJoin"
-	// KeepHostName is a flag to retain instance hostnames as assigned (by customers).
-	KeepHostNameArgs = " --keep-hostname "
+	// SetHostName is an optional argument to set hostname name after domain join
+	SetHostNameArg = " --set-hostname "
+	// SetHostNameNumAppendDigits is an optional argument to set hostname name after domain join
+	SetHostNameNumAppendDigitsArg = " --set-hostname-append-num-digits "
 )
 
 // Makes command as variables, so that we can mock this for unit tests
@@ -77,11 +80,12 @@ type Plugin struct {
 // DomainJoinPluginInput represents one set of commands executed by the Domain join plugin.
 type DomainJoinPluginInput struct {
 	contracts.PluginInput
-	DirectoryId    string
-	DirectoryName  string
-	DirectoryOU    string
-	DnsIpAddresses []string
-	KeepHostName   bool
+	DirectoryId             string
+	DirectoryName           string
+	DirectoryOU             string
+	DnsIpAddresses          []string
+	HostName                string
+	HostNameNumAppendDigits string
 }
 
 // NewPlugin returns a new instance of the plugin.
@@ -289,6 +293,25 @@ func makeArguments(context context.T, scriptPath string, pluginInput DomainJoinP
 		return "", fmt.Errorf("Shell command injection string " + pluginInput.DirectoryName)
 	}
 
+	if len(pluginInput.HostName) != 0 {
+		if isShellInjection(pluginInput.HostName) {
+			return "", fmt.Errorf("Shell command injection string " + pluginInput.DirectoryName)
+		}
+		buffer.WriteString(SetHostNameArg)
+		buffer.WriteString(pluginInput.HostName)
+
+		if len(pluginInput.HostNameNumAppendDigits) != 0 {
+			val, err := strconv.Atoi(pluginInput.HostNameNumAppendDigits)
+			if err != nil {
+				return "", fmt.Errorf("HostNameNumAppendDigits %s has non-digits " + pluginInput.HostNameNumAppendDigits)
+			} else {
+				log.Debugf("HostNameNumAppendDigits parameter is : %d", val)
+			}
+			buffer.WriteString(SetHostNameNumAppendDigitsArg)
+			buffer.WriteString(pluginInput.HostNameNumAppendDigits)
+		}
+	}
+
 	if len(pluginInput.DnsIpAddresses) == 0 {
 		log.Debug("Do not provide dns addresses.")
 		return buffer.String(), nil
@@ -309,11 +332,6 @@ func makeArguments(context context.T, scriptPath string, pluginInput DomainJoinP
 		} else {
 			return "", fmt.Errorf("Invalid DNS IP address " + pluginInput.DnsIpAddresses[index])
 		}
-	}
-
-	if pluginInput.KeepHostName {
-		buffer.WriteString(KeepHostNameArgs)
-		buffer.WriteString(" ")
 	}
 
 	return buffer.String(), nil
