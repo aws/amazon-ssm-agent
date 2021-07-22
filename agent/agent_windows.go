@@ -3,6 +3,9 @@
 package main
 
 import (
+	"runtime"
+
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	"github.com/aws/amazon-ssm-agent/agent/longrunning/plugin/cloudwatch"
 )
@@ -11,6 +14,10 @@ const serviceName = "AmazonSSMAgent"
 const imageStateComplete = "IMAGE_STATE_COMPLETE"
 
 func main() {
+	config, _ := appconfig.Config(false)
+	// will use default when the value is less than one
+	runtime.GOMAXPROCS(config.Agent.GoMaxProcForAgentWorker)
+
 	// initialize logger
 	log := ssmlog.SSMLogger(true)
 	defer log.Close()
