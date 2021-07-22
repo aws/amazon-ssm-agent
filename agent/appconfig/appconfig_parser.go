@@ -17,6 +17,7 @@ package appconfig
 
 import (
 	"log"
+	"runtime"
 )
 
 //func parser(config *T) {
@@ -45,6 +46,11 @@ func parser(config *SsmagentConfig) {
 		DefaultSsmSelfUpdateFrequencyDaysMin,
 		DefaultSsmSelfUpdateFrequencyDaysMax,
 		DefaultSsmSelfUpdateFrequencyDays)
+	config.Agent.GoMaxProcForAgentWorker = getNumericValue(config.Agent.GoMaxProcForAgentWorker,
+		1,
+		runtime.NumCPU(),
+		0)
+
 	config.Agent.AuditExpirationDay = getNumericValue(
 		config.Agent.AuditExpirationDay,
 		DefaultAuditExpirationDayMin,

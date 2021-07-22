@@ -127,6 +127,7 @@ func DefaultConfig() SsmagentConfig {
 		AuditExpirationDay:                      DefaultAuditExpirationDay,
 		LongRunningWorkerMonitorIntervalSeconds: defaultLongRunningWorkerMonitorIntervalSeconds,
 		ForceFileIPC:                            false,
+		GoMaxProcForAgentWorker:                 0,
 	}
 	var os = OsInfo{
 		Lang:    "en-US",

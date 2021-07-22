@@ -68,6 +68,8 @@ type AgentInfo struct {
 	LongRunningWorkerMonitorIntervalSeconds int
 	AuditExpirationDay                      int
 	ForceFileIPC                            bool
+	// denotes GOMAXPROCS value for legacy agent worker
+	GoMaxProcForAgentWorker int
 }
 
 // MgsConfig represents configuration for Message Gateway service

@@ -216,6 +216,8 @@ To set up your own custom configuration for the agent:
         * Default: 7
     * LongRunningWorkerMonitorIntervalSeconds (int)
         * Default: 60
+    * GoMaxProcForAgentWorker (int)
+        * Default: 0
 * Os - represents os related information, will be logged in reply messages
     * Lang (string)
         * Default: "en-US"
