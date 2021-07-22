@@ -172,6 +172,10 @@ func (e *OutOfProcExecuter) initialize(stopTimer chan bool) (ipc filewatcherbase
 		if channelErr := filewatcherbasedipc.RemoveFileWatcherChannel(e.ctx.Identity(), documentID); channelErr != nil {
 			log.Warnf("failed to remove channel directory: %v", channelErr)
 		}
+		// change document status to in progress now instead of waiting for worker to avoid
+		// the chance agent is restarted before worker updates, leaving status as SuccessAndReboot,
+		// and resulting in agent deleting an in use file channel when it comes back up
+		e.docState.DocumentInformation.DocumentStatus = contracts.ResultStatusInProgress
 	}
 	ipc, err, found = channelCreator(log, e.ctx.Identity(), filewatcherbasedipc.ModeMaster, documentID)
 
