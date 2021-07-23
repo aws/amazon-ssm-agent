@@ -1,5 +1,10 @@
 Latest
 ===============
+- Added a workaround for windows random halts
+- Fixed race condition during reboot document execution
+
+3.1.90.0
+===============
 - Updated to version 3.1
 - Updated build to build statically linked binaries for linux 64bit
   - Minimum supported linux kernel version for linux 64bit is 3.2+
