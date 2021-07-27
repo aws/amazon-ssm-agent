@@ -162,7 +162,7 @@ func (c *CloudWatchService) createCloudWatchClient() *cloudwatch.CloudWatch {
 	})
 
 	appConfig := c.context.AppConfig()
-	if defaultEndpoint := c.context.Identity().GetDefaultEndpoint("logs"); defaultEndpoint != "" {
+	if defaultEndpoint := c.context.Identity().GetDefaultEndpoint("monitoring"); defaultEndpoint != "" {
 		config.Endpoint = &defaultEndpoint
 	}
 
