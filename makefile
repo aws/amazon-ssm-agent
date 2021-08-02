@@ -23,11 +23,11 @@ coverage:: build-linux
 	  github.com/aws/amazon-ssm-agent/agent/... \
 	  github.com/aws/amazon-ssm-agent/core/...
 
-build:: build-linux build-freebsd build-windows build-linux-386 build-windows-386 build-arm build-arm64 build-darwin
+build:: build-linux build-freebsd build-windows build-linux-386 build-windows-386 build-arm build-arm64 build-darwin-amd64 build-darwin-arm64
 
 prepack:: cpy-plugins copy-win-dep prepack-linux prepack-linux-arm64 prepack-linux-386 prepack-windows prepack-windows-386
 
-package:: create-package-folder package-linux package-windows package-darwin
+package:: create-package-folder package-linux package-windows package-darwin-amd64 package-darwin-arm64
 
 build-release:: clean quick-integtest checkstyle pre-release build prepack package finalize
 
@@ -148,11 +148,17 @@ build-freebsd: GOOS=freebsd
 build-freebsd: GO_BUILD=$(GO_BUILD_NOPIE)
 build-freebsd: build-any-amd64-freebsd
 
-.PHONY: build-darwin
-build-darwin: GOARCH=amd64
-build-darwin: GOOS=darwin
-build-darwin: GO_BUILD=$(GO_BUILD_NOPIE)
-build-darwin: build-any-darwin-amd64
+.PHONY: build-darwin-amd64
+build-darwin-amd64: GOARCH=amd64
+build-darwin-amd64: GOOS=darwin
+build-darwin-amd64: GO_BUILD=$(GO_BUILD_NOPIE)
+build-darwin-amd64: build-any-darwin-amd64
+
+.PHONY: build-darwin-arm64
+build-darwin-arm64: GOARCH=arm64
+build-darwin-arm64: GOOS=darwin
+build-darwin-arm64: GO_BUILD=$(GO_BUILD_NOPIE)
+build-darwin-arm64: build-any-darwin-arm64
 
 .PHONY: build-windows
 build-windows: GOOS=windows
@@ -313,10 +319,15 @@ package-deb: create-package-folder
 package-win: create-package-folder
 	$(GO_SPACE)/Tools/src/create_win.sh
 
-.PHONY: package-darwin
-package-darwin:
-	$(GO_SPACE)/Tools/src/create_darwin.sh
-	$(GO_SPACE)/Tools/src/create_darwin_package.sh
+.PHONY: package-darwin-amd64
+package-darwin-amd64:
+	$(GO_SPACE)/Tools/src/create_darwin.sh amd64
+	$(GO_SPACE)/Tools/src/create_darwin_package.sh amd64
+
+.PHONY: package-darwin-arm64
+package-darwin-arm64:
+	$(GO_SPACE)/Tools/src/create_darwin.sh arm64
+	$(GO_SPACE)/Tools/src/create_darwin_package.sh arm64
 
 .PHONY: package-rpm-386
 package-rpm-386: create-package-folder
