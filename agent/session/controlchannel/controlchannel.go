@@ -123,6 +123,7 @@ func (controlChannel *ControlChannel) SetWebSocket(context context.T,
 			InitialDelayInMilli: rand.Intn(mgsConfig.ControlChannelRetryInitialDelayMillis) + mgsConfig.ControlChannelRetryInitialDelayMillis,
 			MaxDelayInMilli:     mgsConfig.ControlChannelRetryMaxIntervalMillis,
 			MaxAttempts:         mgsConfig.ControlChannelNumMaxRetries,
+			NonRetryableErrors:  getNonRetryableControlChannelErrors(),
 		}
 
 		// add a jitter to the first control-channel call
@@ -363,4 +364,9 @@ func delayWithJitter(maxDelayMillis int64) {
 	}
 	jitter := rand.Int63n(maxDelayMillis)
 	time.Sleep(time.Duration(jitter) * time.Millisecond)
+}
+
+// getNonRetryableControlChannelErrors returns list of non retryable errors for control channel retry strategy
+func getNonRetryableControlChannelErrors() []string {
+	return []string{}
 }

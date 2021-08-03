@@ -299,6 +299,7 @@ func (dataChannel *DataChannel) SetWebSocket(context context.T,
 			InitialDelayInMilli: rand.Intn(mgsConfig.DataChannelRetryInitialDelayMillis) + mgsConfig.DataChannelRetryInitialDelayMillis,
 			MaxDelayInMilli:     mgsConfig.DataChannelRetryMaxIntervalMillis,
 			MaxAttempts:         mgsConfig.DataChannelNumMaxAttempts,
+			NonRetryableErrors:  getNonRetryableDataChannelErrors(),
 		}
 		if _, err := retryer.Call(); err != nil {
 			log.Error(err)
@@ -1141,4 +1142,9 @@ func getMgsEndpoint(context context.T, region string) (string, error) {
 	endpointBuilder.WriteString(mgsConfig.HttpsPrefix)
 	endpointBuilder.WriteString(hostName)
 	return endpointBuilder.String(), nil
+}
+
+// getNonRetryableDataChannelErrors returns list of non retryable errors for data channel retry strategy
+func getNonRetryableDataChannelErrors() []string {
+	return []string{mgsConfig.SessionAlreadyTerminatedError}
 }
