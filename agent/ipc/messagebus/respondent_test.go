@@ -54,10 +54,11 @@ func (suite *MessageBusTestSuite) SetupTest() {
 	channels[message.TerminateWorkerRequest] = suite.mockTerminateChannel
 
 	suite.messageBus = &MessageBus{
-		context:            suite.mockContext,
-		healthChannel:      suite.mockHealthChannel,
-		terminationChannel: suite.mockTerminateChannel,
-		rebootRequest:      make(chan bool, 1),
+		context:                     suite.mockContext,
+		healthChannel:               suite.mockHealthChannel,
+		terminationChannel:          suite.mockTerminateChannel,
+		terminationRequestChannel:   make(chan bool, 1),
+		terminationChannelConnected: make(chan bool, 1),
 	}
 }
 
@@ -81,4 +82,8 @@ func (suite *MessageBusTestSuite) TestProcessTerminationRequest_Successful() {
 	suite.messageBus.ProcessTerminationRequest()
 
 	suite.mockTerminateChannel.AssertExpectations(suite.T())
+
+	// Assert termination channel connected and that a termination message is sent
+	suite.Assertions.Equal(true, <-suite.messageBus.GetTerminationChannelConnectedChan())
+	suite.Assertions.Equal(true, <-suite.messageBus.GetTerminationRequestChan())
 }

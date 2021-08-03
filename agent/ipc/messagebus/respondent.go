@@ -32,16 +32,18 @@ import (
 type IMessageBus interface {
 	ProcessHealthRequest()
 	ProcessTerminationRequest()
-	RebootRequestChannel() chan bool
+	GetTerminationRequestChan() chan bool
+	GetTerminationChannelConnectedChan() chan bool
 }
 
 // MessageBus contains the ipc channel to communicate to core agent.
 // It contains a reboot request channel that agent listens to
 type MessageBus struct {
-	context            context.T
-	healthChannel      channel.IChannel
-	terminationChannel channel.IChannel
-	rebootRequest      chan bool
+	context                     context.T
+	healthChannel               channel.IChannel
+	terminationChannel          channel.IChannel
+	terminationRequestChannel   chan bool
+	terminationChannelConnected chan bool
 }
 
 // NewMessageBus creates a new instance of MessageBus
@@ -50,10 +52,11 @@ func NewMessageBus(context context.T) *MessageBus {
 	identity := context.Identity()
 	channelCreator := channel.GetChannelCreator(log, context.AppConfig(), identity)
 	return &MessageBus{
-		context:            context,
-		healthChannel:      channelCreator(log, identity),
-		terminationChannel: channelCreator(log, identity),
-		rebootRequest:      make(chan bool, 1),
+		context:                     context,
+		healthChannel:               channelCreator(log, identity),
+		terminationChannel:          channelCreator(log, identity),
+		terminationRequestChannel:   make(chan bool, 1),
+		terminationChannelConnected: make(chan bool, 1),
 	}
 }
 
@@ -74,7 +77,7 @@ func (bus *MessageBus) ProcessHealthRequest() {
 		if bus.healthChannel.IsConnect() {
 
 			if err = bus.healthChannel.Close(); err != nil {
-				bus.context.Log().Errorf("failed to close ipc channel: %v", err)
+				bus.context.Log().Errorf("failed to close health channel: %v", err)
 			}
 		}
 	}()
@@ -84,7 +87,7 @@ func (bus *MessageBus) ProcessHealthRequest() {
 			if err = bus.dialToCoreAgentChannel(message.GetWorkerHealthRequest, message.GetWorkerHealthChannel); err != nil {
 				// This happens when worker started before core agent is
 				// In practise, it should never happen
-				log.Errorf("failed to listen to Core Agent broadcast channel: %s", err.Error())
+				log.Errorf("failed to listen to Core Agent health channel: %s", err.Error())
 				time.Sleep(time.Duration(bus.context.AppConfig().Ssm.HealthFrequencyMinutes) * time.Minute)
 			} else {
 				break
@@ -96,16 +99,16 @@ func (bus *MessageBus) ProcessHealthRequest() {
 	for {
 		var request *message.Message
 		if msg, err = bus.healthChannel.Recv(); err != nil {
-			log.Errorf("cannot recv: %s", err.Error())
+			log.Errorf("Failed to receive from health channel: %s", err.Error())
 			continue
 		}
-		log.Debugf("Received Core Agent health request %s", string(msg))
+		log.Debugf("Received health request from core agent %s", string(msg))
 
 		if err = json.Unmarshal(msg, &request); err != nil {
 			log.Errorf("failed to unmarshal message: %s", err.Error())
 			continue
 		}
-		log.Debugf("unmarshal health request: %v", request)
+
 		if request.Topic == message.GetWorkerHealthRequest {
 
 			var result *message.Message
@@ -122,7 +125,7 @@ func (bus *MessageBus) ProcessHealthRequest() {
 				continue
 			}
 		} else {
-			log.Infof("Received invalid message, %s", request.Topic)
+			log.Warnf("Received invalid message on health channel, %s", request.Topic)
 		}
 	}
 }
@@ -143,7 +146,7 @@ func (bus *MessageBus) ProcessTerminationRequest() {
 		if bus.terminationChannel.IsConnect() {
 
 			if err = bus.terminationChannel.Close(); err != nil {
-				bus.context.Log().Errorf("failed to close ipc channel: %v", err)
+				bus.context.Log().Errorf("failed to close termination channel: %v", err)
 			}
 		}
 	}()
@@ -153,7 +156,7 @@ func (bus *MessageBus) ProcessTerminationRequest() {
 			if err = bus.dialToCoreAgentChannel(message.TerminateWorkerRequest, message.TerminationWorkerChannel); err != nil {
 				// This happens when worker started before core agent is
 				// In practise, it should never happen
-				log.Errorf("failed to listen to Core Agent broadcast channel: %s", err.Error())
+				log.Errorf("failed to listen to termination channel: %s", err.Error())
 				time.Sleep(time.Duration(bus.context.AppConfig().Ssm.HealthFrequencyMinutes) * time.Minute)
 			} else {
 				break
@@ -162,21 +165,22 @@ func (bus *MessageBus) ProcessTerminationRequest() {
 	}
 
 	log.Infof("Start to listen to Core Agent termination channel")
+	bus.terminationChannelConnected <- true
+
 	for {
 		var request *message.Message
 		if msg, err = bus.terminationChannel.Recv(); err != nil {
 			log.Errorf("cannot recv: %s", err.Error())
 			continue
 		}
-		log.Infof("Received Core Agent termination request %s", string(msg))
+		log.Infof("Received termination message from core agent %s", string(msg))
 		if err = json.Unmarshal(msg, &request); err != nil {
 			log.Errorf("failed to unmarshal message: %s", err.Error())
 			continue
 		}
-		log.Debugf("unmarshal health request: %v", request)
 
 		if request.Topic == message.TerminateWorkerRequest {
-			log.Infof("Received Core Agent termination signal, terminating %s", appconfig.SSMAgentWorkerName)
+			log.Debugf("Received termination signal from core agent, terminating %s", appconfig.SSMAgentWorkerName)
 
 			var result *message.Message
 			if result, err = message.CreateTerminateWorkerResult(
@@ -184,7 +188,7 @@ func (bus *MessageBus) ProcessTerminationRequest() {
 				message.LongRunning,
 				os.Getpid(),
 				true); err != nil {
-				log.Errorf("failed to create health message: %s", err.Error())
+				log.Errorf("failed to create termination response: %s", err.Error())
 			}
 
 			if err = bus.terminationChannel.Send(result); err != nil {
@@ -193,17 +197,12 @@ func (bus *MessageBus) ProcessTerminationRequest() {
 			}
 
 			// terminating ssm-agent-worker
-			bus.rebootRequest <- true
+			bus.terminationRequestChannel <- true
 			break
 		} else {
-			log.Infof("Received invalid message, %s", request.Topic)
+			log.Warnf("Received invalid message on termination channel, %s", request.Topic)
 		}
 	}
-}
-
-// RebootRequestChannel returns the reboot request channel
-func (bus *MessageBus) RebootRequestChannel() chan bool {
-	return bus.rebootRequest
 }
 
 func (bus *MessageBus) dialToCoreAgentChannel(topic message.TopicType, address string) error {
@@ -233,4 +232,14 @@ func (bus *MessageBus) dialToCoreAgentChannel(topic message.TopicType, address s
 	default:
 		return fmt.Errorf("unknown topic type: %s", topic)
 	}
+}
+
+// GetTerminationRequestChan returns the terminate request channel
+func (bus *MessageBus) GetTerminationRequestChan() chan bool {
+	return bus.terminationRequestChannel
+}
+
+// GetTerminationChannelConnectedChan returns the channel notifying when termination channel is connected
+func (bus *MessageBus) GetTerminationChannelConnectedChan() chan bool {
+	return bus.terminationChannelConnected
 }
