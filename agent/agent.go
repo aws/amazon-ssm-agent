@@ -143,6 +143,9 @@ func startAgent(ssmAgent agent.ISSMAgent, context context.T) (err error) {
 }
 
 func blockUntilSignaled(log logger.T) {
+	// ssm-agent-worker will rely on the termination channel to be notified when to terminate
+	// the agent worker will listen to OS signals until termination channel is successfully connected
+
 	// Below channel will handle all machine initiated shutdown/reboot requests.
 
 	// Set up channel on which to receive signal notifications.
@@ -155,12 +158,21 @@ func blockUntilSignaled(log logger.T) {
 	// Otherwise we will continue execution and exit the program.
 	signal.Notify(c, os.Interrupt, os.Kill, syscall.SIGTERM)
 
+	log.Debug("Listening to os signal until core agent termination channel is connected")
 	select {
 	case s := <-c:
 		log.Info("ssm-agent-worker got signal:", s, " value:", s.Signal)
-	case <-messageBusClient.RebootRequestChannel():
-		log.Info("Received core agent reboot signal")
+		return
+	case <-messageBusClient.GetTerminationChannelConnectedChan():
+		log.Debug("ssm-agent-worker is connected to core agent termination channel, stopping OS signal listener")
 	}
+
+	// Clean up OS signal listener
+	signal.Stop(c)
+	close(c)
+
+	log.Debug("Waiting for termination request from core agent")
+	<-messageBusClient.GetTerminationRequestChan()
 }
 
 // Run as a single process. Used by Unix systems and when running agent from console.
