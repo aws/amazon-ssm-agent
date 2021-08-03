@@ -37,6 +37,8 @@ var (
 		totalAttempts = totalAttempts + 1
 		return RetryCounter{TotalAttempts: totalAttempts}, errors.New("error occured in callable function")
 	}
+	nonRetryableError = "non retryable error"
+	retryableError    = "retryable error"
 )
 
 func TestRepeatableExponentialRetryerRetriesForGivenNumberOfMaxAttempts(t *testing.T) {
@@ -47,6 +49,7 @@ func TestRepeatableExponentialRetryerRetriesForGivenNumberOfMaxAttempts(t *testi
 		initialDelayInMilli,
 		maxDelayInMilli,
 		maxAttempts,
+		[]string{},
 	}
 
 	retryCounterInterface, err := retryer.Call()
@@ -65,9 +68,82 @@ func TestExponentialRetryerWithJitter(t *testing.T) {
 		initialDelayInMilli,
 		maxDelayInMilli,
 		1,
+		[]string{},
 	}
 	minDelay := int64(initialDelayInMilli) * time.Millisecond.Nanoseconds()
 	maxDelay := int64(float64(minDelay) * (1.0 + jitterRatio))
 	sleep, _ := retryerWithJitter.NextSleepTime(0)
 	assert.True(t, sleep.Nanoseconds() >= minDelay && sleep.Nanoseconds() < maxDelay)
+}
+
+func TestRepeatableExponentialRetryerDoesNotRetryInCaseOfNoError(t *testing.T) {
+	totalAttempts := 0
+	callableFunc := func() (interface{}, error) {
+		totalAttempts = totalAttempts + 1
+		return RetryCounter{TotalAttempts: totalAttempts}, nil
+	}
+
+	retryer := ExponentialRetryer{
+		callableFunc,
+		retryGeometricRatio,
+		jitterRatio,
+		initialDelayInMilli,
+		maxDelayInMilli,
+		maxAttempts,
+		[]string{nonRetryableError},
+	}
+
+	retryCounterInterface, err := retryer.Call()
+
+	retryCounter := retryCounterInterface.(RetryCounter)
+	assert.Nil(t, err)
+	assert.Equal(t, retryCounter.TotalAttempts, 1)
+}
+
+func TestRepeatableExponentialRetryerDoesNotRetryInCaseOfNonRetryableError(t *testing.T) {
+	totalAttempts := 0
+	callableFunc := func() (interface{}, error) {
+		totalAttempts = totalAttempts + 1
+		return RetryCounter{TotalAttempts: totalAttempts}, errors.New(nonRetryableError)
+	}
+
+	retryer := ExponentialRetryer{
+		callableFunc,
+		retryGeometricRatio,
+		jitterRatio,
+		initialDelayInMilli,
+		maxDelayInMilli,
+		maxAttempts,
+		[]string{nonRetryableError},
+	}
+
+	retryCounterInterface, err := retryer.Call()
+
+	retryCounter := retryCounterInterface.(RetryCounter)
+	assert.NotNil(t, err)
+	assert.Equal(t, retryCounter.TotalAttempts, 1)
+}
+
+func TestRepeatableExponentialRetryerRetriesInCaseOfRetryableError(t *testing.T) {
+	totalAttempts := 0
+	callableFunc := func() (interface{}, error) {
+		totalAttempts = totalAttempts + 1
+		return RetryCounter{TotalAttempts: totalAttempts}, errors.New(retryableError)
+	}
+
+	retryer := ExponentialRetryer{
+		callableFunc,
+		retryGeometricRatio,
+		jitterRatio,
+		initialDelayInMilli,
+		maxDelayInMilli,
+		maxAttempts,
+		[]string{nonRetryableError},
+	}
+
+	retryCounterInterface, err := retryer.Call()
+
+	retryCounter := retryCounterInterface.(RetryCounter)
+	assert.NotNil(t, err)
+	assert.Equal(t, retryCounter.TotalAttempts, maxAttempts+1)
 }

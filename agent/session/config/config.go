@@ -65,6 +65,9 @@ const (
 	DataChannelRetryInitialDelayMillis = 100
 	DataChannelRetryMaxIntervalMillis  = 5000
 
+	// MGS Errors
+	SessionAlreadyTerminatedError = "Session is already terminated"
+
 	IpcFileName        = "ipcTempFile"
 	ExecOutputFileName = "output"
 	LogFileExtension   = ".log"
