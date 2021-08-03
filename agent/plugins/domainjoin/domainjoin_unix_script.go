@@ -287,12 +287,12 @@ get_servicecreds() {
     SECRET_ID="${SECRET_ID_PREFIX}/$DIRECTORY_ID/seamless-domain-join"
     SECRET_VALUE=$($AWSCLI secretsmanager get-secret-value --secret-id "$SECRET_ID" --region $REGION --query "SecretString"  --output text 2>/dev/null)
     if [ $? -ne 0 ]; then
-        PARENT_DIRECTORY_ID=$($AWSCLI ds describe-directories --region $REGION --query "DirectoryDescriptions[?DirectoryId =='$DIRECTORY_ID'].OwnerDirectoryDescription.DirectoryId | [0]" | sed 's/"//g')
+        PARENT_DIRECTORY_ID=$($AWSCLI ds describe-directories --region $REGION --query "DirectoryDescriptions[?DirectoryId =='$DIRECTORY_ID'].DirectoryId | [0]" | sed 's/"//g')
         if [ $? -ne 0 ] || [ -z "$PARENT_DIRECTORY_ID" ] || [ "$PARENT_DIRECTORY_ID" == null ]; then
            echo "***Failed: Cannot find parent directory Id"
            exit 1
         fi
-        PARENT_ACCOUNT_ID=$($AWSCLI ds describe-directories --region $REGION --query "DirectoryDescriptions[?DirectoryId =='$DIRECTORY_ID'].OwnerDirectoryDescription.AccountId | [0]" | sed 's/"//g')
+        PARENT_ACCOUNT_ID=$($AWSCLI ds describe-directories --region $REGION --query "DirectoryDescriptions[?DirectoryId =='$DIRECTORY_ID'].AccountId | [0]" | sed 's/"//g')
         if [ $? -ne 0 ] || [ -z "$PARENT_ACCOUNT_ID" ] || [ "$PARENT_ACCOUNT_ID" == null ]; then
            echo "***Failed: Cannot find parent account Id"
            exit 1
