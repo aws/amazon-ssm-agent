@@ -20,6 +20,7 @@ import (
 	"path/filepath"
 	"regexp"
 	"runtime/debug"
+	"sync"
 	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
@@ -301,6 +302,36 @@ func isLegacyAssociationDirectory(log log.T, commandOrchestrationPath string) (b
 	return false, nil
 }
 
+// Global variables to throttle the impact of constantly rechecking the stale orchestation files
+var cleanupLock sync.Mutex
+var inCleanup = make(map[string]bool)
+var nextCleanup = make(map[string]time.Time) // okay that these will default to start of epoch
+
+func getLock(name string) bool {
+	cleanupLock.Lock()
+	defer cleanupLock.Unlock()
+	if inCleanup[name] {
+		return false
+	}
+	if !nextCleanup[name].IsZero() && time.Now().Before(nextCleanup[name]) {
+		return false
+	}
+	inCleanup[name] = true
+	return true
+}
+
+func releaseLock(name string) {
+	cleanupLock.Lock()
+	defer cleanupLock.Unlock()
+	inCleanup[name] = false
+}
+
+func updateTime(name string) {
+	cleanupLock.Lock()
+	defer cleanupLock.Unlock()
+	nextCleanup[name] = time.Now().Add(time.Minute * 60)
+}
+
 // DeleteOldOrchestrationDirectories deletes expired orchestration directories based on retentionDurationHours and associationRetentionDurationHours.
 func DeleteOldOrchestrationDirectories(log log.T, instanceID, orchestrationRootDirName string, retentionDurationHours int, associationRetentionDurationHours int) {
 	defer func() {
@@ -309,6 +340,14 @@ func DeleteOldOrchestrationDirectories(log log.T, instanceID, orchestrationRootD
 			log.Errorf("Stacktrace:\n%s", debug.Stack())
 		}
 	}()
+
+	// if somebody else is cleaning up this directory, or if it's too soon to try again, bail.
+	if !getLock(orchestrationRootDirName) {
+		return
+	}
+	// make certain that we release our hold if something goes sideways
+	defer releaseLock(orchestrationRootDirName)
+
 	orchestrationRootDir, dirNames, err := getOrchestrationDirectoryNames(log, instanceID, orchestrationRootDirName, appconfig.DefaultDocumentRootDirName)
 	if err != nil {
 		log.Debugf("Failed to get orchestration directories under %v", err)
@@ -350,7 +389,9 @@ func DeleteOldOrchestrationDirectories(log log.T, instanceID, orchestrationRootD
 
 	}
 
+	updateTime(orchestrationRootDir)
 	log.Debugf("Completed orchestration directory clean up")
+
 }
 
 // DeleteSessionOrchestrationDirectories deletes expired orchestration directories based on session retentionDurationHours.
