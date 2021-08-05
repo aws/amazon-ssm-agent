@@ -18,6 +18,7 @@ package cloudwatchlogspublisher
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"os"
 	"strings"
 	"testing"
@@ -113,6 +114,51 @@ func TestCloudWatchLogsService_CreateLogGroup(t *testing.T) {
 
 }
 
+func TestCloudWatchLogsService_CreateLogGroup_AccessDenied_LogGroupExists(t *testing.T) {
+	cloudWatchMock := cloudwatchlogspublisher_mock.NewClientMockDefault(logMock)
+	service := CloudWatchLogsService{
+		context:              contextMock,
+		cloudWatchLogsClient: cloudWatchMock,
+		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
+	}
+	var logGroups []*cloudwatchlogs.LogGroup
+	logGroup := &cloudwatchlogs.LogGroup{LogGroupName: &logGroupName}
+	logGroups = append(logGroups, logGroup)
+	logGroupOutput := &cloudwatchlogs.DescribeLogGroupsOutput{
+		LogGroups: logGroups,
+	}
+	createLogGrpOutput := cloudwatchlogs.CreateLogGroupOutput{}
+	accessDeniedError := fmt.Errorf("access denied")
+
+	cloudWatchMock.On("CreateLogGroup", mock.AnythingOfType("*cloudwatchlogs.CreateLogGroupInput")).Return(&createLogGrpOutput, accessDeniedError)
+	cloudWatchMock.On("DescribeLogGroups", mock.AnythingOfType("*cloudwatchlogs.DescribeLogGroupsInput")).Return(logGroupOutput, nil)
+
+	err := service.CreateLogGroup(logGroupName)
+
+	assert.NoError(t, err, "expected create log group to be successful")
+}
+
+func TestCloudWatchLogsService_CreateLogGroup_AccessDenied_LogGroupNotExists(t *testing.T) {
+
+	cloudWatchMock := cloudwatchlogspublisher_mock.NewClientMockDefault(logMock)
+	service := CloudWatchLogsService{
+		context:              contextMock,
+		cloudWatchLogsClient: cloudWatchMock,
+		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
+	}
+	createLogGrpOutput := cloudwatchlogs.CreateLogGroupOutput{}
+	accessDeniedError := fmt.Errorf("access denied")
+	noLogGroupError := fmt.Errorf("no log group error")
+	describeLogGroupOutput := &cloudwatchlogs.DescribeLogGroupsOutput{}
+
+	cloudWatchMock.On("CreateLogGroup", mock.AnythingOfType("*cloudwatchlogs.CreateLogGroupInput")).Return(&createLogGrpOutput, accessDeniedError)
+	cloudWatchMock.On("DescribeLogGroups", mock.AnythingOfType("*cloudwatchlogs.DescribeLogGroupsInput")).Return(describeLogGroupOutput, noLogGroupError)
+
+	err := service.CreateLogGroup(logGroupName)
+
+	assert.Error(t, err, "error expected while creating log group")
+}
+
 func TestCloudWatchLogsService_DescribeLogStreams(t *testing.T) {
 	service := CloudWatchLogsService{
 		context:              contextMock,
@@ -143,6 +189,51 @@ func TestCloudWatchLogsService_CreateLogStream(t *testing.T) {
 
 	assert.NoError(t, err, "CreateLogStream should be called successfully")
 
+}
+
+func TestCloudWatchLogsService_CreateLogStream_AccessDenied_Exists(t *testing.T) {
+
+	cloudWatchMock := cloudwatchlogspublisher_mock.NewClientMockDefault(logMock)
+	service := CloudWatchLogsService{
+		context:              contextMock,
+		cloudWatchLogsClient: cloudWatchMock,
+		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
+	}
+	var logStreams []*cloudwatchlogs.LogStream
+	logStream := &cloudwatchlogs.LogStream{LogStreamName: &logStreamName}
+	logStreams = append(logStreams, logStream)
+	describeLogStreamOutput := &cloudwatchlogs.DescribeLogStreamsOutput{
+		LogStreams: logStreams,
+	}
+	createLogStreamOutput := cloudwatchlogs.CreateLogStreamOutput{}
+
+	cloudWatchMock.On("CreateLogStream", mock.AnythingOfType("*cloudwatchlogs.CreateLogStreamInput")).Return(&createLogStreamOutput, nil)
+	cloudWatchMock.On("DescribeLogStreams", mock.Anything).Return(describeLogStreamOutput, nil)
+
+	err := service.CreateLogStream("LogGroup", "LogStream")
+
+	assert.NoError(t, err, "CreateLogStream should be called successfully")
+}
+
+func TestCloudWatchLogsService_CreateLogStream_AccessDenied_NotExists(t *testing.T) {
+
+	cloudWatchMock := cloudwatchlogspublisher_mock.NewClientMockDefault(logMock)
+	service := CloudWatchLogsService{
+		context:              contextMock,
+		cloudWatchLogsClient: cloudWatchMock,
+		stopPolicy:           sdkutil.NewStopPolicy("Test", 0),
+	}
+	accessDeniedError := fmt.Errorf("access denied")
+	noLogStreamError := fmt.Errorf("no log stream error")
+	createLogStreamOutput := cloudwatchlogs.CreateLogStreamOutput{}
+	describeLogStreamOutput := &cloudwatchlogs.DescribeLogStreamsOutput{}
+
+	cloudWatchMock.On("CreateLogStream", mock.AnythingOfType("*cloudwatchlogs.CreateLogStreamInput")).Return(&createLogStreamOutput, accessDeniedError)
+	cloudWatchMock.On("DescribeLogStreams", mock.Anything).Return(describeLogStreamOutput, noLogStreamError)
+
+	err := service.CreateLogStream("LogGroup", logStreamName)
+
+	assert.Error(t, err, "error expected during CreateLogStream")
 }
 
 func TestCloudWatchLogsService_PutLogEvents(t *testing.T) {
@@ -663,6 +754,7 @@ func TestCloudWatchLogsService_StreamData_MissingStreamPermissions(t *testing.T)
 	logGroups = append(logGroups, logGroup)
 
 	cwLogsClientMock.On("CreateLogStream", mock.Anything).Return(&cloudwatchlogs.CreateLogStreamOutput{}, errors.New("error"))
+	cwLogsClientMock.On("DescribeLogStreams", mock.Anything).Return(&cloudwatchlogs.DescribeLogStreamsOutput{}, nil)
 
 	go func() {
 		time.Sleep(1800 * time.Millisecond)

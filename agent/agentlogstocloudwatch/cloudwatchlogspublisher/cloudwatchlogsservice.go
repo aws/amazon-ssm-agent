@@ -192,21 +192,26 @@ func (service *CloudWatchLogsService) CreateLogGroup(logGroup string) (err error
 
 	//Calling the API
 	if _, err = service.cloudWatchLogsClient.CreateLogGroup(params); err != nil {
-		// Handle the common AWS errors and update the stop policy accordingly
-		sdkutil.HandleAwsError(log, err, service.stopPolicy)
-
 		// Cast err to awserr.Error to get the Code
 		errorCode := sdkutil.GetAwsErrorCode(err)
 
 		switch errorCode {
 		// Check for error code. Note that the AWS Retrier has already made retries for the 5xx Response Codes
 		case resourceAlreadyExistsException:
+			log.Debugf("log group /%v/ already exists", logGroup)
 			// 400 Error, occurs when the LogGroup already exists
 			// Ignoring the error
 			err = nil
 		default:
-			// Other 400 Errors, 500 Errors even after retries. Log the error
-			log.Errorf("Error Calling CreateLogGroup:%v", err.Error())
+			if logGroupPresent, _ := service.IsLogGroupPresent(logGroup); logGroupPresent {
+				log.Debugf("skipping error check as the log group /%v/ already exists", logGroup)
+				err = nil
+			} else {
+				// Other 400 Errors, 500 Errors even after retries. Log the error
+				log.Errorf("Error Calling CreateLogGroup:%v", err.Error())
+				// Handle the common AWS errors and update the stop policy accordingly
+				sdkutil.HandleAwsError(log, err, service.stopPolicy)
+			}
 		}
 	}
 	return
@@ -225,21 +230,27 @@ func (service *CloudWatchLogsService) CreateLogStream(logGroup, logStream string
 
 	//Calling the API
 	if _, err = service.cloudWatchLogsClient.CreateLogStream(params); err != nil {
-		// Handle the common AWS errors and update the stop policy accordingly
-		sdkutil.HandleAwsError(log, err, service.stopPolicy)
-
 		// Cast err to awserr.Error to get the Code
 		errorCode := sdkutil.GetAwsErrorCode(err)
 
 		switch errorCode {
 		// Check for error code. Note that the AWS Retrier has already made retries for the 5xx Response Codes
 		case resourceAlreadyExistsException:
+			log.Debugf("log stream /%v/ already exists in the log group /%v/", logStream, logGroup)
 			// 400 Error, occurs when the LogStream already exists
 			// Ignoring the error
 			err = nil
 		default:
-			// Other 400 Errors, 500 Errors even after retries. Log the error
-			log.Errorf("Error Calling CreateLogStream:%v", err.Error())
+			if service.IsLogStreamPresent(logGroup, logStream) {
+				log.Debugf("skipping error check as the log stream /%v/ already exists in the log group /%v/", logStream, logGroup)
+				err = nil
+			} else {
+				// Other 400 Errors, 500 Errors even after retries. Log the error
+				log.Errorf("Error Calling CreateLogStream:%v", err.Error())
+
+				// Handle the common AWS errors and update the stop policy accordingly
+				sdkutil.HandleAwsError(log, err, service.stopPolicy)
+			}
 		}
 	}
 	return
@@ -357,6 +368,11 @@ func (service *CloudWatchLogsService) getLogGroupDetails(logGroup string) (logGr
 func (service *CloudWatchLogsService) IsLogGroupPresent(logGroup string) (bool, *cloudwatchlogs.LogGroup) {
 	logGroupDetails, _ := service.getLogGroupDetails(logGroup)
 	return logGroupDetails != nil, logGroupDetails
+}
+
+// IsLogStreamPresent checks and returns true when the log stream is present
+func (service *CloudWatchLogsService) IsLogStreamPresent(logGroupName, logStreamName string) bool {
+	return service.getLogStreamDetails(logGroupName, logStreamName) != nil
 }
 
 // GetSequenceTokenForStream returns the current sequence token for the stream specified
