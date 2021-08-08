@@ -1,5 +1,16 @@
 Latest
 ===============
+- Added darwin arm64 to makefile
+- Added logic to limit orchestration directory cleanup
+- Added packaging for public SSM Agent container image
+- Fixed cloudwatch endpoint for telemetry metrics requests
+- Fixed handling of Windows filepaths and mutex locks
+- Fixed agent worker handling of OS signals and termination channel requests
+- Updated datachannel retry strategy to not retry for a specific error scenario
+- Updated default gomaxproc value for Windows
+
+3.1.127.0
+===============
 - Added a workaround for windows random halts
 - Fixed race condition during reboot document execution
 
