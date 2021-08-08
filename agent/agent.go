@@ -18,6 +18,7 @@ import (
 	"os"
 	"os/signal"
 	"path/filepath"
+	"runtime"
 	"runtime/debug"
 	"syscall"
 
@@ -186,6 +187,8 @@ func run(log logger.T, shouldCheckHibernation bool) {
 			log.Errorf("%s: %s", msg, debug.Stack())
 		}
 	}()
+
+	log.Debugf("Current GoMaxProc value - %v", runtime.GOMAXPROCS(0))
 
 	log.WriteEvent(logger.AgentTelemetryMessage, "", logger.AmazonAgentWorkerStartEvent)
 	// run ssm agent
