@@ -313,20 +313,19 @@ func (p *EngineProcessor) processInProgressDocuments(skipDocumentIfExpired bool)
 		//inspect document state
 		docState := p.documentMgr.GetDocumentState(f.Name(), appconfig.DefaultLocationOfCurrent)
 
-		retryLimit := config.Mds.CommandRetryLimit
-		if docState.DocumentInformation.RunCount >= retryLimit {
-			p.documentMgr.MoveDocumentState(f.Name(), appconfig.DefaultLocationOfCurrent, appconfig.DefaultLocationOfCorrupt)
-			continue
-		}
-
-		// increment the command run count
-		docState.DocumentInformation.RunCount++
-
-		p.documentMgr.PersistDocumentState(docState.DocumentInformation.DocumentID, appconfig.DefaultLocationOfCurrent, docState)
-
 		if p.isSupportedDocumentType(docState.DocumentType) {
-			log.Infof("Processing in-progress document %v", docState.DocumentInformation.DocumentID)
+			retryLimit := config.Mds.CommandRetryLimit
+			if docState.DocumentInformation.RunCount >= retryLimit {
+				p.documentMgr.MoveDocumentState(f.Name(), appconfig.DefaultLocationOfCurrent, appconfig.DefaultLocationOfCorrupt)
+				continue
+			}
 
+			// increment the command run count
+			docState.DocumentInformation.RunCount++
+
+			p.documentMgr.PersistDocumentState(docState.DocumentInformation.DocumentID, appconfig.DefaultLocationOfCurrent, docState)
+
+			log.Infof("Processing in-progress document %v", docState.DocumentInformation.DocumentID)
 			if skipDocumentIfExpired && docState.DocumentInformation.CreatedDate != "" {
 				createDate := times.ParseIso8601UTC(docState.DocumentInformation.CreatedDate)
 
