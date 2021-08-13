@@ -289,7 +289,7 @@ func orchestrationDirCleanup(context context.T, pluginsCount int, pluginOutputs 
 	if pluginsCount == len(pluginOutputs) {
 		// this will clean the orchestration folder for the successful and failed document executions only when the agent is configured
 		orchestrationDirectoryCleanupConfig := context.AppConfig().Ssm.OrchestrationDirectoryCleanup
-		documentResult, _, _ := contracts.DocumentResultAggregator(log, "", pluginOutputs)
+		documentResult, _, _, _ := contracts.DocumentResultAggregator(log, "", pluginOutputs)
 		statusWithCleanupConfig := map[contracts.ResultStatus]map[string]interface{}{
 			contracts.ResultStatusSuccess: {appconfig.OrchestrationDirCleanupForSuccessCommand: nil, appconfig.OrchestrationDirCleanupForSuccessFailedCommand: nil},
 			contracts.ResultStatusFailed:  {appconfig.OrchestrationDirCleanupForSuccessFailedCommand: nil},

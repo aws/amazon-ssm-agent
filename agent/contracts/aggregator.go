@@ -62,16 +62,17 @@ func prepareRuntimeStatus(log log.T, pluginResult PluginResult) PluginRuntimeSta
 // DocumentResultAggregator aggregates the result from the plugins to construct the agent response
 func DocumentResultAggregator(log log.T,
 	pluginID string,
-	pluginOutputs map[string]*PluginResult) (ResultStatus, map[string]int, map[string]*PluginRuntimeStatus) {
+	pluginOutputs map[string]*PluginResult) (documentStatus ResultStatus, runtimeStatusCounts map[string]int,
+	runtimeStatusesFiltered map[string]*PluginRuntimeStatus, runtimeStatuses map[string]*PluginRuntimeStatus) {
 
-	runtimeStatuses := make(map[string]*PluginRuntimeStatus)
+	runtimeStatuses = make(map[string]*PluginRuntimeStatus)
 	for pluginID, pluginResult := range pluginOutputs {
 		rs := prepareRuntimeStatus(log, *pluginResult)
 		runtimeStatuses[pluginID] = &rs
 	}
 	// TODO instance this needs to be revised to be in parity with ec2config
-	documentStatus := ResultStatusSuccess
-	var runtimeStatusCounts = map[string]int{}
+	documentStatus = ResultStatusSuccess
+	runtimeStatusCounts = map[string]int{}
 	pluginCounts := len(runtimeStatuses)
 
 	for _, pluginResult := range runtimeStatuses {
@@ -109,14 +110,18 @@ func DocumentResultAggregator(log log.T,
 		documentStatus = ResultStatusInProgress
 	}
 
-	runtimeStatusesFiltered := make(map[string]*PluginRuntimeStatus)
+	runtimeStatusesFiltered = make(map[string]*PluginRuntimeStatus)
 
+	// When pluginID isn't empty, the agent is sending update information about the current plugin.
+	// When it's empty, the agent is sending update information about the document.
+	// When it's empty, the agent only sends plugin status if it's a single plugin invocation.
 	if pluginID != "" {
 		runtimeStatusesFiltered[pluginID] = runtimeStatuses[pluginID]
-	} else {
+		runtimeStatuses = runtimeStatusesFiltered
+	} else if len(runtimeStatuses) <= 1 {
 		runtimeStatusesFiltered = runtimeStatuses
 	}
 
-	return documentStatus, runtimeStatusCounts, runtimeStatusesFiltered
+	return documentStatus, runtimeStatusCounts, runtimeStatusesFiltered, runtimeStatuses
 
 }

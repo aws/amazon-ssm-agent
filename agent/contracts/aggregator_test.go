@@ -122,8 +122,8 @@ func TestDocumentStatus(t *testing.T) {
 		},
 	}
 	for _, tstCase := range testCases {
-		status1, _, _ := DocumentResultAggregator(logger, "aws:runScript", tstCase.Input)
-		status2, _, _ := DocumentResultAggregator(logger, "", tstCase.Input)
+		status1, _, _, _ := DocumentResultAggregator(logger, "aws:runScript", tstCase.Input)
+		status2, _, _, _ := DocumentResultAggregator(logger, "", tstCase.Input)
 		assert.Equal(t, status1, ResultStatusInProgress)
 		assert.Equal(t, status2, tstCase.Output)
 	}
@@ -157,6 +157,6 @@ func TestDocumentStatusCount(t *testing.T) {
 		"Success": 1,
 		"Failed":  1,
 	}
-	_, statusCount, _ := DocumentResultAggregator(logger, "", input)
+	_, statusCount, _, _ := DocumentResultAggregator(logger, "", input)
 	assert.Equal(t, statusCount, output)
 }
