@@ -142,14 +142,25 @@ func verifyRunCommandOutput(suite *RunCommandOutputTestSuite,
 			c <- 1
 		} else if sendReplyPayload.DocumentStatus == expectedResultStatus {
 			foundPlugin := false
-			for _, pluginStatus := range sendReplyPayload.RuntimeStatus {
-				if pluginStatus.Status == expectedResultStatus {
-					foundPlugin = true
-					assert.Contains(suite.T(), pluginStatus.StandardOutput, stdout, "plugin stdout is not as expected")
-					assert.Contains(suite.T(), pluginStatus.StandardError, stderr, "plugin stderr is not as expected")
-					assert.Equal(suite.T(), pluginStatus.Code, code, "Exit code is %v expected %v", pluginStatus.Code, code)
-				}
+			runTimeStatusCount := 0
+			for _, counts := range sendReplyPayload.AdditionalInfo.RuntimeStatusCounts {
+				runTimeStatusCount += counts
 			}
+
+			if runTimeStatusCount <= 1 {
+				for _, pluginStatus := range sendReplyPayload.RuntimeStatus {
+					if pluginStatus.Status == expectedResultStatus {
+						foundPlugin = true
+						assert.Contains(suite.T(), pluginStatus.StandardOutput, stdout, "plugin stdout is not as expected")
+						assert.Contains(suite.T(), pluginStatus.StandardError, stderr, "plugin stderr is not as expected")
+						assert.Equal(suite.T(), pluginStatus.Code, code, "Exit code is %v expected %v", pluginStatus.Code, code)
+					}
+				}
+			} else {
+				suite.T().Log("For multiple plugin docs, last sendreply contains empty plugin runtime status map.")
+				foundPlugin = true
+			}
+
 			if !foundPlugin {
 				suite.T().Errorf("Couldn't find plugin with result status %v", expectedResultStatus)
 			}

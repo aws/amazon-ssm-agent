@@ -75,7 +75,7 @@ func run(context context.T,
 		for res := range statusChan {
 			results[res.PluginID] = &res
 			//TODO decompose this function to return only Status
-			status, _, _ := contracts.DocumentResultAggregator(context.Log(), res.PluginID, results)
+			status, _, _, _ := contracts.DocumentResultAggregator(context.Log(), res.PluginID, results)
 			docResult := contracts.DocumentResult{
 				Status:          status,
 				PluginResults:   results,
@@ -98,7 +98,7 @@ func run(context context.T,
 	pluginOutputContent, _ := jsonutil.Marshal(outputs)
 	context.Log().Debugf("Plugin outputs %v", jsonutil.Indent(pluginOutputContent))
 	//send DocLevel response
-	status, _, _ := contracts.DocumentResultAggregator(context.Log(), "", outputs)
+	status, _, _, _ := contracts.DocumentResultAggregator(context.Log(), "", outputs)
 	result := contracts.DocumentResult{
 		Status:          status,
 		PluginResults:   outputs,

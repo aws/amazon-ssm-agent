@@ -198,7 +198,7 @@ func (p *WorkerBackend) pluginListener(statusChan chan contracts.PluginResult) {
 		var result = res
 		results[res.PluginID] = &result
 		//TODO move the aggregator under executer package and protect it, there's global lock in this package
-		status, _, _ := contracts.DocumentResultAggregator(log, res.PluginID, results)
+		status, _, _, _ := contracts.DocumentResultAggregator(log, res.PluginID, results)
 		docResult := contracts.DocumentResult{
 			Status:        status,
 			PluginResults: results,
@@ -209,7 +209,7 @@ func (p *WorkerBackend) pluginListener(statusChan chan contracts.PluginResult) {
 		p.input <- replyMessage
 	}
 	log.Info("document execution complete")
-	finalStatus, _, _ = contracts.DocumentResultAggregator(log, "", results)
+	finalStatus, _, _, _ = contracts.DocumentResultAggregator(log, "", results)
 
 }
 
