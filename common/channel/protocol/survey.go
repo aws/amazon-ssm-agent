@@ -123,6 +123,8 @@ func (sur *survey) SetOption(name string, value interface{}) (err error) {
 func (sur *survey) Listen(address string) error {
 	sur.address = address
 	channel, err, _ := filewatcherbasedipc.CreateFileWatcherChannel(sur.log, sur.identity, filewatcherbasedipc.ModeSurveyor, filepath.Base(address), false)
+	// clean up surveyor files in case agent was not able to clean last time it stopped
+	channel.CleanupOwnModeFiles()
 	sur.fileChannel = channel
 	return err
 }
