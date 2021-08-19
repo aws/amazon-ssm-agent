@@ -386,10 +386,9 @@ func DeleteOldOrchestrationDirectories(log log.T, instanceID, orchestrationRootD
 			// Deletion of both document state and orchestration file was successful
 			deletedCount += 1
 		}
-
 	}
 
-	updateTime(orchestrationRootDir)
+	updateTime(orchestrationRootDirName)
 	log.Debugf("Completed orchestration directory clean up")
 
 }
