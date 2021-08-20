@@ -206,7 +206,7 @@ loop:
 		// handle ChangeRequest, svc.Pause is not supported
 		switch c.Cmd {
 		case svc.Interrogate:
-			contextLog.Info("Service received interrogate ChangeRequest")
+			contextLog.Debug("Service received interrogate ChangeRequest")
 			s <- c.CurrentStatus
 			// Testing deadlock from https://code.google.com/p/winsvc/issues/detail?id=4
 			time.Sleep(100 * time.Millisecond)
