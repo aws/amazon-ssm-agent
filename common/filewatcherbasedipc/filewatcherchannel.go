@@ -1,3 +1,17 @@
+// Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.
+//
+// Licensed under the Apache License, Version 2.0 (the "License"). You may not
+// use this file except in compliance with the License. A copy of the
+// License is located at
+//
+// http://aws.amazon.com/apache2.0/
+//
+// or in the "license" file accompanying this file. This file is distributed
+// on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND,
+// either express or implied. See the License for the specific language governing
+// permissions and limitations under the License.
+
+// package filewatcherbasedipc is used to establish IPC between master and workers using files.
 package filewatcherbasedipc
 
 import (
@@ -50,9 +64,10 @@ type fileWatcherChannel struct {
 	startTime                string
 	watcher                  *fsnotify.Watcher
 	mu                       sync.Mutex
-	closed                   bool
 	shouldDeleteAfterConsume bool
 	shouldReadRetry          bool
+	isWatcherClosed          bool
+	watcherClosedChan        chan bool
 }
 
 //TODO make this constructor private
@@ -101,16 +116,17 @@ func NewFileWatcherChannel(logger log.T, mode Mode, name string, shouldReadRetry
 	}
 
 	ch := &fileWatcherChannel{
-		path:            name,
-		tmpPath:         tmpPath,
-		watcher:         watcher,
-		onMessageChan:   onMessageChan,
-		logger:          logger,
-		mode:            mode,
-		counter:         0,
-		recvCounter:     0,
-		shouldReadRetry: shouldReadRetry,
-		startTime:       fmt.Sprintf("%04d%02d%02d%02d%02d%02d", curTime.Year(), curTime.Month(), curTime.Day(), curTime.Hour(), curTime.Minute(), curTime.Second()),
+		path:              name,
+		tmpPath:           tmpPath,
+		watcher:           watcher,
+		onMessageChan:     onMessageChan,
+		logger:            logger,
+		mode:              mode,
+		counter:           0,
+		recvCounter:       0,
+		shouldReadRetry:   shouldReadRetry,
+		watcherClosedChan: make(chan bool, 1),
+		startTime:         fmt.Sprintf("%04d%02d%02d%02d%02d%02d", curTime.Year(), curTime.Month(), curTime.Day(), curTime.Hour(), curTime.Minute(), curTime.Second()),
 	}
 	if ch.mode == ModeRespondent {
 		ch.shouldDeleteAfterConsume = false
@@ -138,7 +154,7 @@ func createIfNotExist(dir string) (err error) {
 func (ch *fileWatcherChannel) Send(rawJson string) error {
 	ch.mu.Lock()
 	defer ch.mu.Unlock()
-	if ch.closed {
+	if ch.isWatcherClosed {
 		return errors.New("channel already closed")
 	}
 	log := ch.logger
@@ -222,30 +238,43 @@ func (ch *fileWatcherChannel) isFileFromSameMode(filename string) bool {
 // Close a filechannel
 // non-blocking call, drain the buffered messages and clear file watcher resources
 func (ch *fileWatcherChannel) Close() {
-	if ch.closed {
+	if ch.closeIfNotClosed() {
+		ch.logger.Infof("file channel already closed: %v", ch.path)
 		return
 	}
 	log := ch.logger
 	log.Infof("channel %v requested close", ch.path)
-	//block other threads to call Send()
-	ch.closed = true
-	//read all the left over messages
-	ch.consumeAll()
-	// fsnotify.watch.close() could be a blocking call, we should offload them to a different go-routine
-	go func() {
-		defer func() {
-			if msg := recover(); msg != nil {
-				log.Errorf("closing file watcher panics: %v", msg)
-			}
-			close(ch.onMessageChan)
-			log.Infof("channel %v closed", ch.path)
-		}()
-		//make sure the file watcher closed as well as the watch list is removed, otherwise can cause leak in ubuntu kernel
-		ch.watcher.Remove(ch.path)
-		ch.watcher.Close()
-	}()
 
-	return
+	completedWatcherCleanup := make(chan bool, 1)
+
+	go ch.cleanUpWatcher(completedWatcherCleanup, log)
+
+	select {
+	case <-completedWatcherCleanup:
+	case <-time.After(time.Second):
+		log.Infof("allocated file watcher cleanup time expired")
+	}
+
+	ch.consumeAll() //read all the left over messages
+	// would be better to close after all the messages are read
+	close(ch.onMessageChan)
+}
+
+func (ch *fileWatcherChannel) closeIfNotClosed() bool {
+	ch.mu.Lock()
+	defer ch.mu.Unlock()
+
+	if ch.isWatcherClosed {
+		return true
+	}
+
+	// close the file watcher listener thread
+	ch.watcherClosedChan <- true
+
+	//block other threads to call Send()
+	ch.isWatcherClosed = true
+
+	return false
 }
 
 //parse the counter out of the sequence id, return -1 if parsing fails
@@ -394,6 +423,9 @@ func (ch *fileWatcherChannel) watch() {
 	ch.consumeAll()
 	for {
 		select {
+		case <-ch.watcherClosedChan:
+			log.Infof("Closed the file watcher listener thread")
+			return
 		case event, ok := <-ch.watcher.Events:
 			if !ok {
 				log.Debug("fileWatcher already closed")

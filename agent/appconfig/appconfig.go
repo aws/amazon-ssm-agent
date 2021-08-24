@@ -129,10 +129,7 @@ func DefaultConfig() SsmagentConfig {
 		ForceFileIPC:                            false,
 		GoMaxProcForAgentWorker:                 0,
 	}
-	// setting the default GoMaxProc value to 1 for windows
-	if runtime.GOOS == "windows" {
-		agent.GoMaxProcForAgentWorker = 1
-	}
+
 	var os = OsInfo{
 		Lang:    "en-US",
 		Version: "1",
