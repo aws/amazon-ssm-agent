@@ -448,7 +448,3 @@ lint-all: copy-package-dep
 # if you want to configure what linters are run, edit .golangci.yml
 # if you want to restrict to some specific package edit Tools/src/run_golangci-lint.sh
 	$(GO_SPACE)/Tools/src/run_golangci-lint.sh
-
-.PHONY: gen-report
-gen-report:
-	$(GO_SPACE)/Tools/src/gen-report.sh
