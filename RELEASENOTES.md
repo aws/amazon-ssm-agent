@@ -1,5 +1,17 @@
 Latest
 ===============
+- Add serial port logging of AwsNitroEnclaves package version on windows during startup
+- Allow usage of existing loggroup/logstream when the user does not have create permission
+- Change service interrogate request log to debug
+- Cleanup old surveyor channel files on startup
+- Fix filehandle leak in windows leading to agent going offline
+- Fix to schedule correct next run time during orchestration directories cleanup
+- Fix to sequentially update correct runcount value in the document bookkeeping file
+- Fix a bug with version parsing EC2Config updater
+- Updated rpm packaging for fips compliance
+
+3.1.192.0
+===============
 - Added darwin arm64 to makefile
 - Added logic to limit orchestration directory cleanup
 - Added packaging for public SSM Agent container image
@@ -8,6 +20,7 @@ Latest
 - Fixed agent worker handling of OS signals and termination channel requests
 - Updated datachannel retry strategy to not retry for a specific error scenario
 - Updated default gomaxproc value for Windows
+- Update build to use go1.16.6
 
 3.1.127.0
 ===============
