@@ -15,6 +15,9 @@ package tests
 
 import (
 	"errors"
+	"fmt"
+	"github.com/aws/amazon-ssm-agent/core/app/runtimeconfiginit"
+	"os"
 	"runtime/debug"
 	"testing"
 	"time"
@@ -70,6 +73,11 @@ func (suite *AgentHealthIntegrationTestSuite) SetupTest() {
 
 	suite.context = context.Default(log, config, agentIdentity)
 
+	rtci := runtimeconfiginit.New(log, agentIdentity)
+	if err := rtci.Init(); err != nil {
+		panic(fmt.Sprintf("Failed to initialize runtimeconfig: %v", err))
+	}
+
 	// Changing the minimum heathcheck frequency as 1 minute for testing
 	suite.context.AppConstants().MinHealthFrequencyMinutes = 1
 
@@ -95,6 +103,11 @@ func (suite *AgentHealthIntegrationTestSuite) SetupTest() {
 	suite.ssmAgent = agent.NewSSMAgent(suite.context, healthcheck, hs)
 	suite.ssmAgent.SetContext(suite.context)
 	suite.ssmAgent.SetCoreManager(cpm)
+}
+
+func (suite *AgentHealthIntegrationTestSuite) TearDownSuite() {
+	// Cleanup runtime config
+	os.RemoveAll(appconfig.RuntimeConfigFolderPath)
 }
 
 func (suite *AgentHealthIntegrationTestSuite) TestHealthCheck() {

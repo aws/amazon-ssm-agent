@@ -101,4 +101,6 @@ const (
 
 	// RunCommandScriptName is the script name where all downloaded or provided commands will be stored
 	RunCommandScriptName = "_script.sh"
+
+	RuntimeConfigFolderPath = DefaultProgramFolder + "runtimeconfig"
 )

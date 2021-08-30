@@ -17,6 +17,7 @@ import (
 	"sync"
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 )
 
 const MaxRetriesIdentitySelector = 3
@@ -31,6 +32,13 @@ type instanceIDRegionAgentIdentitySelector struct {
 	instanceID string
 	region     string
 	mutex      sync.Mutex
+}
+
+type runtimeConfigIdentitySelector struct {
+	log                 log.T
+	configClient        runtimeconfig.IIdentityRuntimeConfigClient
+	config              runtimeconfig.IdentityRuntimeConfig
+	isConfigInitialized bool
 }
 
 // IAgentIdentitySelector abstracts logic to select an agent identity

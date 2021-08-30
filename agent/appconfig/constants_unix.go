@@ -130,6 +130,8 @@ var CustomCertificatePath = ""
 // SeelogFilePath specifies the path to the seelog
 var SeelogFilePath = DefaultProgramFolder + SeelogConfigFileName
 
+var RuntimeConfigFolderPath = AgentData + "runtimeconfig"
+
 func init() {
 	/*
 	   Powershell command used to be poweshell in alpha versions, now it's pwsh in prod versions

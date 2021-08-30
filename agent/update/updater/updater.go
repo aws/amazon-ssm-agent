@@ -107,8 +107,7 @@ func main() {
 		log.Warnf("Failed to load agent config: %v", err)
 	}
 	// Create identity selector
-	selector := identity.NewDefaultAgentIdentitySelector(log)
-	agentIdentity, err := newAgentIdentity(log, &appConfig, selector)
+	agentIdentity, err := resolveAgentIdentity(appConfig)
 	if err != nil {
 		log.Errorf("Failed to assume agent identity: %v", err)
 		os.Exit(1)
@@ -215,6 +214,25 @@ func main() {
 		log.Infof(updateDetail.StandardOut)
 	}
 
+}
+
+func resolveAgentIdentity(appConfig appconfig.SsmagentConfig) (identity.IAgentIdentity, error) {
+	selector := identity.NewRuntimeConfigIdentitySelector(log)
+	agentIdentity, err := identity.NewAgentIdentity(log, &appConfig, selector)
+	if err == nil {
+		log.Debugf("Using identity from runtime config")
+		return agentIdentity, nil
+	}
+
+	// If not able to resolve agent identity with runtime config use default identity selector
+	// This can occur when updating from old agent that didn't have runtime config
+	selector = identity.NewDefaultAgentIdentitySelector(log)
+	agentIdentity, err = newAgentIdentity(log, &appConfig, selector)
+	if err != nil {
+		return nil, err
+	}
+
+	return agentIdentity, nil
 }
 
 // recoverUpdaterFromPanic recovers updater if panic occurs and fails the updater

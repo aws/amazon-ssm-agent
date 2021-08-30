@@ -164,7 +164,6 @@ func (e *OutOfProcExecuter) initialize(stopTimer chan bool) (ipc filewatcherbase
 	log := e.ctx.Log()
 	var found bool
 	documentID := e.docState.DocumentInformation.DocumentID
-	instanceID := e.docState.DocumentInformation.InstanceID
 
 	// this fix is added to delete channels which were not deleted in previous execution
 	if e.docState.DocumentInformation.DocumentStatus == contracts.ResultStatusSuccessAndReboot {
@@ -204,7 +203,7 @@ func (e *OutOfProcExecuter) initialize(stopTimer chan bool) (ipc filewatcherbase
 			workerName = appconfig.DefaultDocumentWorker
 		}
 		var process proc.OSProcess
-		if process, err = processCreator(workerName, proc.FormArgv(documentID, instanceID)); err != nil {
+		if process, err = processCreator(workerName, []string{documentID}); err != nil {
 			log.Errorf("start process: %v error: %v", workerName, err)
 			//make sure close the channel
 			ipc.Destroy()

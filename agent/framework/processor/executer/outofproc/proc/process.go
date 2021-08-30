@@ -76,26 +76,19 @@ func StartProcess(name string, argv []string) (OSProcess, error) {
 }
 
 //TODO figure out why sometimes argv does not contain program name
-func ParseArgv(argv []string) (channelName string, instanceID string, err error) {
+func ParseArgv(argv []string) (channelName string, err error) {
 	if len(argv) == 1 {
 		if argv[0] == appconfig.DefaultDocumentWorker || argv[0] == appconfig.DefaultSessionWorker {
-			return "", "", errors.New("insufficient argument number")
+			return "", errors.New("insufficient argument number")
 		}
-		return argv[0], "", nil
+		return argv[0], nil
 	} else if len(argv) == 2 {
 		if argv[0] == appconfig.DefaultDocumentWorker || argv[0] == appconfig.DefaultSessionWorker {
-			return argv[1], "", nil
+			return argv[1], nil
 		}
-		return argv[0], argv[1], nil
-
-	} else if len(argv) == 3 {
-		return argv[1], argv[2], nil
+		return argv[0], nil
 	} else {
-		return "", "", errors.New("executable argument number mismatch")
+		return "", errors.New("executable argument number mismatch")
 	}
 
-}
-
-func FormArgv(channelName string, instanceID string) []string {
-	return []string{channelName, instanceID}
 }

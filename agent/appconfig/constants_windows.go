@@ -159,6 +159,8 @@ var DefaultCustomInventoryFolder string
 // SSM Agent Update download legacy path
 var LegacyUpdateDownloadFolder string
 
+var RuntimeConfigFolderPath string
+
 func init() {
 	/*
 		System environment variable "AllUsersProfile" maps to following locations in different locations:
@@ -222,6 +224,8 @@ func init() {
 	if shouldUseConfig(filepath.Join(curdir, relativeConfigFolder, SeelogConfigFileName)) {
 		SeelogFilePath = filepath.Join(curdir, relativeConfigFolder, SeelogConfigFileName)
 	}
+
+	RuntimeConfigFolderPath = filepath.Join(SSMDataPath, "runtimeconfig")
 }
 
 func shouldUseConfig(filePath string) bool {

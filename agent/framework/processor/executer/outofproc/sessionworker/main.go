@@ -68,12 +68,12 @@ func initialize(args []string) (context.T, string, error) {
 	}
 
 	logger.Debugf("Session worker parse args: %v", args)
-	channelName, instanceID, err := proc.ParseArgv(args)
+	channelName, err := proc.ParseArgv(args)
 	if err != nil {
 		logger.Errorf("Failed to parse argv: %v", err)
 	}
 
-	selector := identity.NewInstanceIDRegionAgentIdentitySelector(logger, instanceID, "")
+	selector := identity.NewRuntimeConfigIdentitySelector(logger)
 	agentIdentity, err := newAgentIdentity(logger, &config, selector)
 	if err != nil {
 		return nil, "", err

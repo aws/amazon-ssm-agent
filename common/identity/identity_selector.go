@@ -18,6 +18,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 )
 
 // NewDefaultAgentIdentitySelector creates a instance of a default agent identity selector
@@ -33,6 +34,15 @@ func NewInstanceIDRegionAgentIdentitySelector(log log.T, instanceID, region stri
 		log:        log,
 		instanceID: instanceID,
 		region:     region,
+	}
+}
+
+func NewRuntimeConfigIdentitySelector(log log.T) IAgentIdentitySelector {
+	return &runtimeConfigIdentitySelector{
+		log:                 log,
+		configClient:        runtimeconfig.NewIdentityRuntimeConfigClient(),
+		config:              runtimeconfig.IdentityRuntimeConfig{},
+		isConfigInitialized: false,
 	}
 }
 
@@ -160,4 +170,33 @@ func isDefaultIdentityConsumptionOrder(identitySelectionOrder, defaultIdentitySe
 	}
 
 	return true
+}
+
+func (d *runtimeConfigIdentitySelector) selectAgentIdentity(agentIdentities []IAgentIdentityInner, identityKey string) IAgentIdentityInner {
+	var err error
+	if !d.isConfigInitialized {
+		d.config, err = d.configClient.GetConfig()
+		if err != nil {
+			d.log.Warnf("%v", err)
+			return nil
+		}
+
+		d.isConfigInitialized = true
+	}
+
+	if identityKey != d.config.IdentityType {
+		return nil
+	}
+
+	for _, agentIdentity := range agentIdentities {
+		instanceId, err := agentIdentity.InstanceID()
+		if err != nil || instanceId != d.config.InstanceId {
+			// Failed to get instance id or instance id is not the same as stored in runtime config
+			continue
+		}
+
+		return agentIdentity
+	}
+
+	return nil
 }

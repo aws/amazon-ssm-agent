@@ -16,6 +16,9 @@ package tests
 
 import (
 	"encoding/json"
+	"fmt"
+	"github.com/aws/amazon-ssm-agent/core/app/runtimeconfiginit"
+	"os"
 	"runtime"
 	"runtime/debug"
 	"testing"
@@ -61,17 +64,22 @@ func (suite *RunCommandOutputTestSuite) SetupTest() {
 
 	config, err := appconfig.Config(true)
 	if err != nil {
-		log.Debugf("appconfig could not be loaded - %v", err)
+		panic(fmt.Sprintf("appconfig could not be loaded - %v", err))
 		return
 	}
 	identitySelector := identity.NewDefaultAgentIdentitySelector(log)
 	agentIdentity, err := identity.NewAgentIdentity(log, &config, identitySelector)
 	if err != nil {
-		log.Debugf("unable to assume identity - %v", err)
+		panic(fmt.Sprintf("unable to assume identity - %v", err))
 		return
 	}
 
 	suite.context = context.Default(log, config, agentIdentity)
+
+	rtci := runtimeconfiginit.New(log, agentIdentity)
+	if err := rtci.Init(); err != nil {
+		panic(fmt.Sprintf("Failed to initialize runtimeconfig: %v", err))
+	}
 
 	sendMdsSdkRequest := func(req *request.Request) error {
 		return nil
@@ -98,6 +106,9 @@ func (suite *RunCommandOutputTestSuite) SetupTest() {
 }
 
 func (suite *RunCommandOutputTestSuite) TearDownSuite() {
+	// Cleanup runtime config
+	os.RemoveAll(appconfig.RuntimeConfigFolderPath)
+	
 	// Close the log only after the all tests are done.
 	suite.log.Close()
 }

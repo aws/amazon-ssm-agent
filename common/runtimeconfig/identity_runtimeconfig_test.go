@@ -1,0 +1,212 @@
+package runtimeconfig
+
+import (
+	"encoding/json"
+	"fmt"
+	"reflect"
+	"testing"
+
+	"github.com/aws/amazon-ssm-agent/common/runtimeconfig/runtimeconfighandler"
+	"github.com/aws/amazon-ssm-agent/common/runtimeconfig/runtimeconfighandler/mocks"
+	"github.com/stretchr/testify/assert"
+)
+
+func TestIdentityRuntimeConfig_Equal(t *testing.T) {
+	type fields struct {
+		InstanceId   string
+		IdentityType string
+	}
+	type args struct {
+		config IdentityRuntimeConfig
+	}
+
+	baselineArg := args{
+		IdentityRuntimeConfig{
+			"InstanceId",
+			"IdentityType",
+		},
+	}
+
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   bool
+	}{
+		{
+			"Success",
+			fields{
+				"InstanceId",
+				"IdentityType",
+			},
+			baselineArg,
+			true,
+		},
+		{
+			"NotSameInstanceId",
+			fields{
+				"InstanceId1",
+				"IdentityType",
+			},
+			baselineArg,
+			false,
+		},
+		{
+			"NotSameIdentityType",
+			fields{
+				"InstanceId",
+				"IdentityType1",
+			},
+			baselineArg,
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			i := IdentityRuntimeConfig{
+				InstanceId:   tt.fields.InstanceId,
+				IdentityType: tt.fields.IdentityType,
+			}
+			if got := i.Equal(tt.args.config); got != tt.want {
+				t.Errorf("Equal() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_identityRuntimeConfigClient_ConfigExists(t *testing.T) {
+	handlerMock := &mocks.IRuntimeConfigHandler{}
+	handlerMock.On("ConfigExists").Return(true, nil)
+
+	i := &identityRuntimeConfigClient{
+		configHandler: handlerMock,
+	}
+
+	exists, err := i.ConfigExists()
+	assert.Nil(t, err)
+	assert.True(t, exists)
+}
+
+func Test_identityRuntimeConfigClient_GetConfig(t *testing.T) {
+	var emptyConfig IdentityRuntimeConfig
+	parsedConfig := IdentityRuntimeConfig{
+		"InstanceId",
+		"IdentityType",
+	}
+	handlerErrorMock := &mocks.IRuntimeConfigHandler{}
+	handlerErrorMock.On("GetConfig").Return(nil, fmt.Errorf("SomeError"))
+
+	handlerSuccessButBadFormatMock := &mocks.IRuntimeConfigHandler{}
+	handlerSuccessButBadFormatMock.On("GetConfig").Return([]byte("SomeBadBytes"), nil)
+
+	content, _ := json.Marshal(parsedConfig)
+	handlerSuccessMock := &mocks.IRuntimeConfigHandler{}
+	handlerSuccessMock.On("GetConfig").Return(content, nil)
+
+	type fields struct {
+		configHandler runtimeconfighandler.IRuntimeConfigHandler
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		want    IdentityRuntimeConfig
+		wantErr bool
+	}{
+		{
+			"ErrorHandlerGetConfig",
+			fields{
+				handlerErrorMock,
+			},
+			emptyConfig,
+			true,
+		},
+		{
+			"ErrorUnmashal",
+			fields{
+				handlerSuccessButBadFormatMock,
+			},
+			emptyConfig,
+			true,
+		},
+		{
+			"Success",
+			fields{
+				handlerSuccessMock,
+			},
+			parsedConfig,
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			i := &identityRuntimeConfigClient{
+				configHandler: tt.fields.configHandler,
+			}
+			got, err := i.GetConfig()
+			if (err != nil) != tt.wantErr {
+				t.Errorf("GetConfig() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("GetConfig() got = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_identityRuntimeConfigClient_SaveConfig(t *testing.T) {
+	successConfig := IdentityRuntimeConfig{
+		"InstanceId",
+		"IdentityType",
+	}
+	successContent, _ := json.Marshal(successConfig)
+	failContent, _ := json.Marshal(IdentityRuntimeConfig{})
+
+	handlerMock := &mocks.IRuntimeConfigHandler{}
+	handlerMock.On("SaveConfig", successContent).Return(nil)
+	handlerMock.On("SaveConfig", failContent).Return(fmt.Errorf("SomeError"))
+
+	type fields struct {
+		configHandler runtimeconfighandler.IRuntimeConfigHandler
+	}
+	type args struct {
+		config IdentityRuntimeConfig
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		args    args
+		wantErr bool
+	}{
+		{
+			"FailedSaveConfig",
+			fields{
+				handlerMock,
+			},
+			args{
+				IdentityRuntimeConfig{},
+			},
+			true,
+		},
+		{
+			"Success",
+			fields{
+				handlerMock,
+			},
+			args{
+				successConfig,
+			},
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			i := &identityRuntimeConfigClient{
+				configHandler: tt.fields.configHandler,
+			}
+			if err := i.SaveConfig(tt.args.config); (err != nil) != tt.wantErr {
+				t.Errorf("SaveConfig() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}

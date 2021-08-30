@@ -16,6 +16,9 @@ package tests
 
 import (
 	"encoding/json"
+	"fmt"
+	"github.com/aws/amazon-ssm-agent/core/app/runtimeconfiginit"
+	"os"
 	"runtime/debug"
 	"testing"
 
@@ -67,6 +70,11 @@ func (suite *AgentStressTestSuite) SetupTest() {
 	}
 
 	suite.context = context.Default(log, config, agentIdentity)
+
+	rtci := runtimeconfiginit.New(log, agentIdentity)
+	if err := rtci.Init(); err != nil {
+		panic(fmt.Sprintf("Failed to initialize runtimeconfig: %v", err))
+	}
 
 	// Mock MDS service to remove dependency on external service
 	sendMdsSdkRequest := func(req *request.Request) error {
@@ -153,6 +161,11 @@ func (suite *AgentStressTestSuite) TestCoreAgent() {
 
 	// stop agent execution
 	suite.ssmAgent.Stop()
+}
+
+func (suite *AgentStressTestSuite) TearDownSuite() {
+	// Cleanup runtime config
+	os.RemoveAll(appconfig.RuntimeConfigFolderPath)
 }
 
 func TestAgentStressTestSuite(t *testing.T) {

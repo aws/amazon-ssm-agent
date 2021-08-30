@@ -116,7 +116,16 @@ func GetAgentIdentity() (identity.IAgentIdentity, error) {
 	agentIdentityOnce.Do(func() {
 		log := logger.NewSilentMockLog()
 		config := appconfig.DefaultConfig()
-		selector := identity.NewDefaultAgentIdentitySelector(log)
+
+		selector := identity.NewRuntimeConfigIdentitySelector(log)
+		agentIdentity, agentIdentityErr = identity.NewAgentIdentity(log, &config, selector)
+
+		// Don't need to fallback to identity selection if runtimeconfig identity selector works
+		if agentIdentityErr == nil {
+			return
+		}
+
+		selector = identity.NewDefaultAgentIdentitySelector(log)
 		agentIdentity, agentIdentityErr = identity.NewAgentIdentity(log, &config, selector)
 	})
 	return agentIdentity, agentIdentityErr

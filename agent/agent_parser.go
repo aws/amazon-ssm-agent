@@ -35,10 +35,6 @@ func parseFlags(log logger.T) {
 	flag.CommandLine = flag.NewFlagSet(os.Args[0], flag.ExitOnError)
 	flag.Usage = flagUsage
 
-	// instance id and region for overriding in dev test scenarios
-	instanceIDPtr = flag.String("i", "", "instance id")
-	regionPtr = flag.String("r", "", "instance region")
-
 	// managed instance registration
 	flag.BoolVar(&register, registerFlag, false, "")
 	flag.StringVar(&activationCode, activationCodeFlag, "", "")

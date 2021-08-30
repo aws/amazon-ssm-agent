@@ -50,7 +50,6 @@ const (
 )
 
 var (
-	instanceIDPtr, regionPtr                 *string
 	activationCode, activationID, region     string
 	register, clear, force, fpFlag, isWorker bool
 	similarityThreshold                      int
@@ -59,14 +58,14 @@ var (
 	process                                  *startup.Processor
 )
 
-func start(log logger.T, instanceIDPtr *string, regionPtr *string, shouldCheckHibernation bool) (ssmAgent agent.ISSMAgent, err error) {
+func start(log logger.T, shouldCheckHibernation bool) (ssmAgent agent.ISSMAgent, err error) {
 	config, err := appconfig.Config(false)
 	if err != nil {
 		log.Debugf("appconfig could not be loaded - %v", err)
-		return
+		return nil, err
 	}
 
-	selector := identity.NewInstanceIDRegionAgentIdentitySelector(log, *instanceIDPtr, *regionPtr)
+	selector := identity.NewRuntimeConfigIdentitySelector(log)
 	agentIdentity, err := identity.NewAgentIdentity(log, &config, selector)
 	if err != nil {
 		return nil, err
@@ -192,7 +191,7 @@ func run(log logger.T, shouldCheckHibernation bool) {
 
 	log.WriteEvent(logger.AgentTelemetryMessage, "", logger.AmazonAgentWorkerStartEvent)
 	// run ssm agent
-	agent, err := start(log, instanceIDPtr, regionPtr, shouldCheckHibernation)
+	agent, err := start(log, shouldCheckHibernation)
 	if err != nil {
 		log.Errorf("error occurred when starting ssm-agent-worker: %v", err)
 		return

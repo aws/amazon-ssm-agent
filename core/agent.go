@@ -27,6 +27,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/proxyconfig"
 	"github.com/aws/amazon-ssm-agent/core/app"
 	"github.com/aws/amazon-ssm-agent/core/app/bootstrap"
+	"github.com/aws/amazon-ssm-agent/core/app/runtimeconfiginit"
 	"github.com/aws/amazon-ssm-agent/core/ipc/messagebus"
 	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/datastore/filesystem"
 )
@@ -62,6 +63,13 @@ func start(log logger.T) (app.CoreAgent, logger.T, error) {
 	context, err := bs.Init()
 	if err != nil {
 		return nil, log, err
+	}
+
+	// Initialize runtime configs
+	rci := runtimeconfiginit.New(context.Log(), context.Identity())
+	err = rci.Init()
+	if err != nil {
+		return nil, context.Log(), err
 	}
 
 	context = context.With("[amazon-ssm-agent]")

@@ -16,6 +16,9 @@ package tests
 
 import (
 	"encoding/json"
+	"fmt"
+	"github.com/aws/amazon-ssm-agent/core/app/runtimeconfiginit"
+	"os"
 	"path"
 	"path/filepath"
 	"runtime/debug"
@@ -68,6 +71,11 @@ func (suite *CrashWorkerTestSuite) SetupTest() {
 
 	suite.context = context.Default(log, config, agentIdentity)
 
+	rtci := runtimeconfiginit.New(log, agentIdentity)
+	if err := rtci.Init(); err != nil {
+		panic(fmt.Sprintf("Failed to initialize runtimeconfig: %v", err))
+	}
+
 	// Mock MDS service to remove dependency on external service
 	sendMdsSdkRequest := func(req *request.Request) error {
 		return nil
@@ -96,6 +104,9 @@ func (suite *CrashWorkerTestSuite) SetupTest() {
 }
 
 func (suite *CrashWorkerTestSuite) TearDownSuite() {
+	// Cleanup runtime config
+	os.RemoveAll(appconfig.RuntimeConfigFolderPath)
+
 	// Close the log only after the all tests are done.
 	suite.log.Close()
 

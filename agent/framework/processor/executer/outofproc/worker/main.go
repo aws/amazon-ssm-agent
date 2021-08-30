@@ -45,15 +45,22 @@ func initialize(args []string) (context.T, string, error) {
 	config, _ := appconfig.Config(true)
 	logger.Infof("ssm-document-worker - %v", version.String())
 	logger.Infof("parsing args: %v", args)
-	channelName, instanceID, err := proc.ParseArgv(args)
-	logger.Infof("using channelName %v, instanceID: %v", channelName, instanceID)
+	channelName, err := proc.ParseArgv(args)
 	//cache the instanceID here in order to avoid throttle by metadata endpoint.
 
-	selector := identity.NewInstanceIDRegionAgentIdentitySelector(logger, instanceID, "")
+	selector := identity.NewRuntimeConfigIdentitySelector(logger)
 	agentIdentity, err := identity.NewAgentIdentity(logger, &config, selector)
 	if err != nil {
 		return nil, "", err
 	}
+
+	instanceID, err := agentIdentity.InstanceID()
+	if err != nil {
+		return nil, "", err
+	}
+
+	logger.Infof("using channelName %v, instanceID: %v", channelName, instanceID)
+
 	//use process as context name
 	return context.Default(logger, config, agentIdentity).With(defaultWorkerContextName).With("[" + channelName + "]"), channelName, err
 }

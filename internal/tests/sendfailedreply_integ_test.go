@@ -16,6 +16,7 @@ package tests
 
 import (
 	"fmt"
+	"github.com/aws/amazon-ssm-agent/core/app/runtimeconfiginit"
 	"os"
 	"path"
 	"runtime/debug"
@@ -70,6 +71,11 @@ func (suite *SendFailedReplyTestSuite) SetupTest() {
 
 	suite.context = context.Default(log, config, agentIdentity)
 
+	rtci := runtimeconfiginit.New(log, agentIdentity)
+	if err := rtci.Init(); err != nil {
+		panic(fmt.Sprintf("Failed to initialize runtimeconfig: %v", err))
+	}
+
 	// Mock mds sdk, sendRequest should return error only in case of sending reply to MDS
 	sendMdsSdkRequest := func(req *request.Request) error {
 		switch req.Params.(type) {
@@ -101,6 +107,9 @@ func (suite *SendFailedReplyTestSuite) SetupTest() {
 }
 
 func (suite *SendFailedReplyTestSuite) TearDownSuite() {
+	// Cleanup runtime config
+	os.RemoveAll(appconfig.RuntimeConfigFolderPath)
+
 	// Close the log only after the all tests are done.
 	suite.context.Log().Close()
 }
