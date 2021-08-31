@@ -17,7 +17,6 @@ package runscript
 import (
 	"fmt"
 	"path/filepath"
-
 	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -27,14 +26,17 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/framework/processor/executer/iohandler"
 	"github.com/aws/amazon-ssm-agent/agent/jsonutil"
 	"github.com/aws/amazon-ssm-agent/agent/plugins/pluginutil"
-
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
 	"github.com/aws/amazon-ssm-agent/agent/task"
+	"github.com/aws/amazon-ssm-agent/common/identity"
+	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 )
 
 const (
 	downloadsDir = "downloads" //Directory under the orchestration directory where the downloaded resource resides
 )
+
+var getCredentialsRefresherIdentity = identity.GetCredentialsRefresherIdentity
 
 // Plugin is the type for the runscript plugin.
 type Plugin struct {
@@ -42,11 +44,12 @@ type Plugin struct {
 	// ExecuteCommand is an object that can execute commands.
 	CommandExecuter executers.T
 	// Name is the plugin name (PowerShellScript or ShellScript)
-	Name           string
-	ScriptName     string
-	ShellCommand   string
-	ShellArguments []string
-	ByteOrderMark  fileutil.ByteOrderMark
+	Name                  string
+	ScriptName            string
+	ShellCommand          string
+	ShellArguments        []string
+	ByteOrderMark         fileutil.ByteOrderMark
+	IdentityRuntimeClient runtimeconfig.IIdentityRuntimeConfigClient
 }
 
 // RunScriptPluginInput represents one set of commands executed by the RunScript plugin.
@@ -82,6 +85,43 @@ func (p *Plugin) Execute(config contracts.Configuration, cancelFlag task.CancelF
 	}
 }
 
+func (p *Plugin) setShareCredsEnvironment(pluginInput RunScriptPluginInput) {
+	shareCredsIdentity, ok := getCredentialsRefresherIdentity(p.Context.Identity())
+	if !ok {
+		return
+	}
+
+	// Don't set environment variables if credentials are not being shared
+	if !shareCredsIdentity.ShouldShareCredentials() {
+		return
+	}
+
+	// Get identity runtime config
+	identityConfig, err := p.IdentityRuntimeClient.GetConfig()
+	if err != nil {
+		p.Context.Log().Infof("Failed to get identity runtime config, unable to set profile and creds file: %v", err)
+		return
+	}
+
+	if identityConfig.ShareProfile != "" {
+		pluginInput.Environment["AWS_PROFILE"] = identityConfig.ShareProfile
+	}
+
+	if identityConfig.ShareFile != "" {
+		pluginInput.Environment["AWS_SHARED_CREDENTIALS_FILE"] = identityConfig.ShareFile
+	}
+}
+
+func (p *Plugin) setCommandIdEnvironment(pluginInput RunScriptPluginInput, runCommandID string) {
+	if runCommandID != "" {
+		// Check if "SSM_COMMAND_ID" exists already in the env. If so, log that it will be overwritten
+		if _, ok := pluginInput.Environment["SSM_COMMAND_ID"]; ok {
+			p.Context.Log().Warnf("The environment variable 'SSM_COMMAND_ID' has been detected as pre-existing and will be overwritten with the CommandId of this execution.")
+		}
+		pluginInput.Environment["SSM_COMMAND_ID"] = runCommandID
+	}
+}
+
 // runCommandsRawInput executes one set of commands and returns their output.
 // The input is in the default json unmarshal format (e.g. map[string]interface{}).
 func (p *Plugin) runCommandsRawInput(pluginID string, rawPluginInput interface{}, orchestrationDirectory string, defaultWorkingDirectory string, cancelFlag task.CancelFlag, output iohandler.IOHandler, runCommandID string) {
@@ -93,16 +133,13 @@ func (p *Plugin) runCommandsRawInput(pluginID string, rawPluginInput interface{}
 		return
 	}
 
-	if runCommandID != "" {
-		if pluginInput.Environment == nil {
-			pluginInput.Environment = make(map[string]string)
-		}
-		// Check if "SSM_COMMAND_ID" exists already in the env. If so, log that it will be overwritten
-		if _, ok := pluginInput.Environment["SSM_COMMAND_ID"]; ok {
-			p.Context.Log().Warnf("The environment variable 'SSM_COMMAND_ID' has been detected as pre-existing and will be overwritten with the CommandId of this execution.")
-		}
-		pluginInput.Environment["SSM_COMMAND_ID"] = runCommandID
+	if pluginInput.Environment == nil {
+		pluginInput.Environment = make(map[string]string)
 	}
+
+	p.setCommandIdEnvironment(pluginInput, runCommandID)
+	p.setShareCredsEnvironment(pluginInput)
+
 	p.runCommands(pluginID, pluginInput, orchestrationDirectory, defaultWorkingDirectory, cancelFlag, output)
 }
 

@@ -20,6 +20,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/executers"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
+	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 )
 
 // runShellPlugin is the type for the RunShellScript plugin and embeds Plugin struct.
@@ -37,13 +38,14 @@ func NewRunShellPlugin(context context.T) (*runShellPlugin, error) {
 	shplugin := runShellPlugin{
 		context: context,
 		Plugin: Plugin{
-			Context:         context,
-			Name:            appconfig.PluginNameAwsRunShellScript,
-			ScriptName:      shellScriptName,
-			ShellCommand:    shellCommand,
-			ShellArguments:  shellArgs,
-			ByteOrderMark:   fileutil.ByteOrderMarkSkip,
-			CommandExecuter: executers.ShellCommandExecuter{},
+			Context:               context,
+			Name:                  appconfig.PluginNameAwsRunShellScript,
+			ScriptName:            shellScriptName,
+			ShellCommand:          shellCommand,
+			ShellArguments:        shellArgs,
+			ByteOrderMark:         fileutil.ByteOrderMarkSkip,
+			CommandExecuter:       executers.ShellCommandExecuter{},
+			IdentityRuntimeClient: runtimeconfig.NewIdentityRuntimeConfigClient(),
 		},
 	}
 
