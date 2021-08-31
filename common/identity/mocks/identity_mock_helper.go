@@ -1,13 +1,13 @@
 package mocks
 
 import (
-	"github.com/aws/amazon-ssm-agent/common/identity/creds"
+	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders"
 	"github.com/stretchr/testify/mock"
 )
 
 var (
 	MockAvailabilityZone      = "us-east-1a"
-	MockCredentials           = creds.GetRemoteCreds()
+	MockCredentials           = credentialproviders.GetRemoteCreds()
 	MockIdentityType          = "EC2"
 	MockInstanceID            = "i-123123123"
 	MockInstanceType          = "someInstanceType"

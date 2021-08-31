@@ -16,6 +16,7 @@ package runtimeconfig
 import (
 	"encoding/json"
 	"fmt"
+	"time"
 
 	rch "github.com/aws/amazon-ssm-agent/common/runtimeconfig/runtimeconfighandler"
 )
@@ -25,15 +26,21 @@ const (
 )
 
 type IdentityRuntimeConfig struct {
-	InstanceId   string
-	IdentityType string
+	InstanceId             string
+	IdentityType           string
+	ShareFile              string
+	ShareProfile           string
+	CredentialsExpiresAt   time.Time
+	CredentialsRetrievedAt time.Time
 }
 
 func (i IdentityRuntimeConfig) Equal(config IdentityRuntimeConfig) bool {
 	sameId := i.InstanceId == config.InstanceId
+	sameProfile := i.ShareProfile == config.ShareProfile
+	sameFile := i.ShareFile == config.ShareFile
 	sameType := i.IdentityType == config.IdentityType
 
-	return sameId && sameType
+	return sameId && sameProfile && sameFile && sameType
 }
 
 func NewIdentityRuntimeConfigClient() IIdentityRuntimeConfigClient {

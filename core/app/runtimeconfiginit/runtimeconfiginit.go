@@ -56,6 +56,11 @@ func (r *runtimeConfigInit) getCurrentIdentityRuntimeConfig() (runtimeconfig.Ide
 		return currentConfig, err
 	}
 
+	if credentialsRefresherIdentity, ok := identity.GetCredentialsRefresherIdentity(r.agentIdentity); ok {
+		currentConfig.ShareFile = credentialsRefresherIdentity.ShareFile()
+		currentConfig.ShareProfile = credentialsRefresherIdentity.ShareProfile()
+	}
+
 	return currentConfig, nil
 }
 

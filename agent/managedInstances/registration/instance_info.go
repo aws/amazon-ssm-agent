@@ -222,3 +222,63 @@ func getInstanceInfo(log log.T) instanceInfo {
 	defer lock.RUnlock()
 	return loadedServerInfo
 }
+
+// Temp moved here, should refactor entire file to be behind interface
+func NewOnpremRegistrationInfo() IOnpremRegistrationInfo {
+	return onpremRegistation{}
+}
+
+type IOnpremRegistrationInfo interface {
+	InstanceID(log.T) string
+	Region(log.T) string
+	PrivateKey(log.T) string
+	PrivateKeyType(log log.T) string
+	Fingerprint(log.T) (string, error)
+	GenerateKeyPair() (string, string, string, error)
+	UpdatePrivateKey(log.T, string, string) error
+	HasManagedInstancesCredentials(log.T) bool
+	GeneratePublicKey(string) (string, error)
+	ShouldRotatePrivateKey(log.T, int, bool) (bool, error)
+}
+
+type onpremRegistation struct{}
+
+// ServerID returns the managed instance ID
+func (onpremRegistation) InstanceID(log log.T) string { return InstanceID(log) }
+
+// Region returns the managed instance region
+func (onpremRegistation) Region(log log.T) string { return Region(log) }
+
+// PrivateKey returns the managed instance PrivateKey
+func (onpremRegistation) PrivateKey(log log.T) string { return PrivateKey(log) }
+
+// PrivateKey returns the managed instance PrivateKey
+func (onpremRegistation) PrivateKeyType(log log.T) string { return PrivateKeyType(log) }
+
+// Fingerprint returns the managed instance fingerprint
+func (onpremRegistation) Fingerprint(log log.T) (string, error) { return Fingerprint(log) }
+
+// GenerateKeyPair generate a new keypair
+func (onpremRegistation) GenerateKeyPair() (publicKey, privateKey, keyType string, err error) {
+	return GenerateKeyPair()
+}
+
+// UpdatePrivateKey saves the private key into the registration persistence store
+func (onpremRegistation) UpdatePrivateKey(log log.T, privateKey, privateKeyType string) (err error) {
+	return UpdatePrivateKey(log, privateKey, privateKeyType)
+}
+
+// HasManagedInstanceCredentials returns if the instance has registration
+func (onpremRegistation) HasManagedInstancesCredentials(log log.T) bool {
+	return HasManagedInstancesCredentials(log)
+}
+
+// ShouldRotatePrivateKey returns true of the age of the private key is greater or equal than argument.
+func (onpremRegistation) ShouldRotatePrivateKey(log log.T, privateKeyMaxDaysAge int, serviceSaysRotate bool) (bool, error) {
+	return ShouldRotatePrivateKey(log, privateKeyMaxDaysAge, serviceSaysRotate)
+}
+
+// GeneratePublicKey generate the public key of a provided private key
+func (onpremRegistation) GeneratePublicKey(privateKey string) (string, error) {
+	return GeneratePublicKey(privateKey)
+}

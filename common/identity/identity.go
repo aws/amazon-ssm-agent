@@ -142,3 +142,7 @@ func (c *agentIdentityCacher) GetDefaultEndpoint(service string) string {
 
 	return endpoint.GetDefaultEndpoint(c.log, service, region, serviceDomain)
 }
+
+func (c *agentIdentityCacher) getInner() IAgentIdentityInner {
+	return c.client
+}

@@ -16,6 +16,9 @@ package identity
 import (
 	"testing"
 
+	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/ec2"
+	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/onprem"
+
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/stretchr/testify/assert"
@@ -42,4 +45,19 @@ func TestIsOnPremInstance(t *testing.T) {
 		client: newOnPremIdentity(logger, appConfig)[0],
 	}
 	assert.True(t, IsOnPremInstance(agentIdentity))
+}
+
+func TestGetCredentialsRefresherIdentity(t *testing.T) {
+	cacher := &agentIdentityCacher{
+		client: &ec2.Identity{},
+	}
+
+	// Ec2 identity does not implement credentials refresher identity
+	_, isCredsRefresher := GetCredentialsRefresherIdentity(cacher)
+	assert.False(t, isCredsRefresher)
+
+	// Verify onprem identity implements credentials refresher identity
+	cacher.client = &onprem.Identity{}
+	_, isCredsRefresher = GetCredentialsRefresherIdentity(cacher)
+	assert.True(t, isCredsRefresher)
 }

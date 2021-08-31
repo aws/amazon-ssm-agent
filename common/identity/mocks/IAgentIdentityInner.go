@@ -4,7 +4,6 @@ package mocks
 
 import (
 	credentials "github.com/aws/aws-sdk-go/aws/credentials"
-
 	mock "github.com/stretchr/testify/mock"
 )
 
@@ -143,27 +142,6 @@ func (_m *IAgentIdentityInner) Region() (string, error) {
 
 // ServiceDomain provides a mock function with given fields:
 func (_m *IAgentIdentityInner) ServiceDomain() (string, error) {
-	ret := _m.Called()
-
-	var r0 string
-	if rf, ok := ret.Get(0).(func() string); ok {
-		r0 = rf()
-	} else {
-		r0 = ret.Get(0).(string)
-	}
-
-	var r1 error
-	if rf, ok := ret.Get(1).(func() error); ok {
-		r1 = rf()
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
-// ShortInstanceID provides a mock function with given fields:
-func (_m *IAgentIdentityInner) ShortInstanceID() (string, error) {
 	ret := _m.Called()
 
 	var r0 string

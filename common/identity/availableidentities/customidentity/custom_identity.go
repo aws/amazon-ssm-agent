@@ -15,7 +15,7 @@ package customidentity
 
 import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
-	"github.com/aws/amazon-ssm-agent/common/identity/creds"
+	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 )
 
@@ -48,11 +48,11 @@ func (i *Identity) ServiceDomain() (string, error) {
 func (i *Identity) Credentials() *credentials.Credentials {
 	switch i.CustomIdentity.CredentialsProvider {
 	case appconfig.DefaultCustomIdentityCredentialsProvider:
-		return creds.GetDefaultCreds()
+		return credentialproviders.GetDefaultCreds()
 	}
 
 	i.Log.Warnf("CustomIdentity credentials provider '%s' not supported", i.CustomIdentity.CredentialsProvider)
-	return creds.GetDefaultCreds()
+	return credentialproviders.GetDefaultCreds()
 }
 
 // IsIdentityEnvironment always returns true for custom identities

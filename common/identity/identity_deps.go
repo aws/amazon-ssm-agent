@@ -33,6 +33,10 @@ type IAgentIdentity interface {
 	GetDefaultEndpoint(string) string
 }
 
+type iInnerIdentityGetter interface {
+	getInner() IAgentIdentityInner
+}
+
 // IAgentIdentityInner defines the interface each identity needs to expose
 type IAgentIdentityInner interface {
 	InstanceID() (string, error)
@@ -43,6 +47,14 @@ type IAgentIdentityInner interface {
 	IsIdentityEnvironment() bool
 	Credentials() *credentials.Credentials
 	IdentityType() string
+}
+
+// ICredentialRefresherAgentIdentity defines the interface for identities that require custom credential refresh (e.g. onprem)
+type ICredentialRefresherAgentIdentity interface {
+	CredentialProvider() credentials.Provider
+	ShareProfile() string
+	ShareFile() string
+	ShouldShareCredentials() bool
 }
 
 type agentIdentityCacher struct {

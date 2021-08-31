@@ -19,3 +19,20 @@ import "github.com/aws/amazon-ssm-agent/common/identity/availableidentities/onpr
 func IsOnPremInstance(agentIdentity IAgentIdentity) bool {
 	return agentIdentity != nil && agentIdentity.IdentityType() == onprem.IdentityType
 }
+
+// GetCredentialsRefresherIdentity returns the credentials refresher interface if the identity supports it
+func GetCredentialsRefresherIdentity(agentIdentity IAgentIdentity) (ICredentialRefresherAgentIdentity, bool) {
+	var innerGetter iInnerIdentityGetter
+	var ok bool
+
+	// Cast to innerIdentityGetter interface that defined getInner
+	innerGetter, ok = agentIdentity.(iInnerIdentityGetter)
+	if !ok {
+		return nil, false
+	}
+
+	// Attempt to cast inner identity to CredentialsRefresher
+	var credentialIdentity ICredentialRefresherAgentIdentity
+	credentialIdentity, ok = innerGetter.getInner().(ICredentialRefresherAgentIdentity)
+	return credentialIdentity, ok
+}

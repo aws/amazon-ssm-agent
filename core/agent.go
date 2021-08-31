@@ -79,7 +79,9 @@ func start(log logger.T) (app.CoreAgent, logger.T, error) {
 	}
 
 	ssmAgentCore := app.NewSSMCoreAgent(context, message)
-	ssmAgentCore.Start()
+	if err := ssmAgentCore.Start(); err != nil {
+		return nil, log, fmt.Errorf("failed to start core agent app: %v", err)
+	}
 
 	return ssmAgentCore, context.Log(), nil
 }

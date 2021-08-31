@@ -5,74 +5,12 @@ import (
 	"fmt"
 	"reflect"
 	"testing"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig/runtimeconfighandler"
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig/runtimeconfighandler/mocks"
 	"github.com/stretchr/testify/assert"
 )
-
-func TestIdentityRuntimeConfig_Equal(t *testing.T) {
-	type fields struct {
-		InstanceId   string
-		IdentityType string
-	}
-	type args struct {
-		config IdentityRuntimeConfig
-	}
-
-	baselineArg := args{
-		IdentityRuntimeConfig{
-			"InstanceId",
-			"IdentityType",
-		},
-	}
-
-	tests := []struct {
-		name   string
-		fields fields
-		args   args
-		want   bool
-	}{
-		{
-			"Success",
-			fields{
-				"InstanceId",
-				"IdentityType",
-			},
-			baselineArg,
-			true,
-		},
-		{
-			"NotSameInstanceId",
-			fields{
-				"InstanceId1",
-				"IdentityType",
-			},
-			baselineArg,
-			false,
-		},
-		{
-			"NotSameIdentityType",
-			fields{
-				"InstanceId",
-				"IdentityType1",
-			},
-			baselineArg,
-			false,
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			i := IdentityRuntimeConfig{
-				InstanceId:   tt.fields.InstanceId,
-				IdentityType: tt.fields.IdentityType,
-			}
-			if got := i.Equal(tt.args.config); got != tt.want {
-				t.Errorf("Equal() = %v, want %v", got, tt.want)
-			}
-		})
-	}
-}
 
 func Test_identityRuntimeConfigClient_ConfigExists(t *testing.T) {
 	handlerMock := &mocks.IRuntimeConfigHandler{}
@@ -92,6 +30,10 @@ func Test_identityRuntimeConfigClient_GetConfig(t *testing.T) {
 	parsedConfig := IdentityRuntimeConfig{
 		"InstanceId",
 		"IdentityType",
+		"ShareFile",
+		"ShareProfile",
+		time.Time{},
+		time.Time{},
 	}
 	handlerErrorMock := &mocks.IRuntimeConfigHandler{}
 	handlerErrorMock.On("GetConfig").Return(nil, fmt.Errorf("SomeError"))
@@ -158,6 +100,10 @@ func Test_identityRuntimeConfigClient_SaveConfig(t *testing.T) {
 	successConfig := IdentityRuntimeConfig{
 		"InstanceId",
 		"IdentityType",
+		"ShareFile",
+		"ShareProfile",
+		time.Now(),
+		time.Now(),
 	}
 	successContent, _ := json.Marshal(successConfig)
 	failContent, _ := json.Marshal(IdentityRuntimeConfig{})
@@ -206,6 +152,119 @@ func Test_identityRuntimeConfigClient_SaveConfig(t *testing.T) {
 			}
 			if err := i.SaveConfig(tt.args.config); (err != nil) != tt.wantErr {
 				t.Errorf("SaveConfig() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func TestIdentityRuntimeConfig_Equal(t *testing.T) {
+	type fields struct {
+		InstanceId             string
+		IdentityType           string
+		ShareFile              string
+		ShareProfile           string
+		CredentialsExpiresAt   time.Time
+		CredentialsRetrievedAt time.Time
+	}
+	type args struct {
+		config IdentityRuntimeConfig
+	}
+
+	baselineArg := args{
+		IdentityRuntimeConfig{
+			"InstanceId",
+			"IdentityType",
+			"ShareFile",
+			"ShareProfile",
+			time.Now(),
+			time.Now(),
+		},
+	}
+	tests := []struct {
+		name   string
+		fields fields
+		args   args
+		want   bool
+	}{
+		{
+			"Success",
+			fields{
+				"InstanceId",
+				"IdentityType",
+				"ShareFile",
+				"ShareProfile",
+				time.Now(),
+				time.Now(),
+			},
+			baselineArg,
+			true,
+		},
+		{
+			"NotSameInstanceId",
+			fields{
+				"InstanceId1",
+				"IdentityType",
+				"ShareFile",
+				"ShareProfile",
+				time.Now(),
+				time.Now(),
+			},
+			baselineArg,
+			false,
+		},
+		{
+			"NotSameIdentityType",
+			fields{
+				"InstanceId",
+				"IdentityType1",
+				"ShareFile",
+				"ShareProfile",
+				time.Now(),
+				time.Now(),
+			},
+			baselineArg,
+			false,
+		},
+		{
+			"NotSameShareFile",
+			fields{
+				"InstanceId",
+				"IdentityType",
+				"ShareFile1",
+				"ShareProfile",
+				time.Now(),
+				time.Now(),
+			},
+			baselineArg,
+			false,
+		},
+
+		{
+			"NotSameShareProfile",
+			fields{
+				"InstanceId",
+				"IdentityType",
+				"ShareFile",
+				"ShareProfile1",
+				time.Now(),
+				time.Now(),
+			},
+			baselineArg,
+			false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			i := IdentityRuntimeConfig{
+				InstanceId:             tt.fields.InstanceId,
+				IdentityType:           tt.fields.IdentityType,
+				ShareFile:              tt.fields.ShareFile,
+				ShareProfile:           tt.fields.ShareProfile,
+				CredentialsExpiresAt:   tt.fields.CredentialsExpiresAt,
+				CredentialsRetrievedAt: tt.fields.CredentialsRetrievedAt,
+			}
+			if got := i.Equal(tt.args.config); got != tt.want {
+				t.Errorf("Equal() = %v, want %v", got, tt.want)
 			}
 		})
 	}

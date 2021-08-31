@@ -21,6 +21,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	contextmocks "github.com/aws/amazon-ssm-agent/core/app/context/mocks"
+	refresherMocks "github.com/aws/amazon-ssm-agent/core/app/credentialrefresher/mocks"
 	selfupdatemocks "github.com/aws/amazon-ssm-agent/core/app/selfupdate/mocks"
 	containermocks "github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/mocks"
 	"github.com/stretchr/testify/suite"
@@ -31,10 +32,11 @@ import (
 // returns the current testing context
 type AgentTestSuite struct {
 	suite.Suite
-	coreAgent      CoreAgent
-	context        *contextmocks.ICoreAgentContext
-	mockconatiner  *containermocks.IContainer
-	mockselfupdate *selfupdatemocks.ISelfUpdate
+	coreAgent               CoreAgent
+	context                 *contextmocks.ICoreAgentContext
+	mockconatiner           *containermocks.IContainer
+	mockselfupdate          *selfupdatemocks.ISelfUpdate
+	mockCredentialRefresher *refresherMocks.ICredentialRefresher
 }
 
 // SetupTest makes sure that all the components referenced in the test case are initialized
@@ -43,10 +45,12 @@ func (suite *AgentTestSuite) SetupTest() {
 	suite.mockconatiner = &containermocks.IContainer{}
 	suite.context = &contextmocks.ICoreAgentContext{}
 	suite.mockselfupdate = &selfupdatemocks.ISelfUpdate{}
+	suite.mockCredentialRefresher = &refresherMocks.ICredentialRefresher{}
 	suite.coreAgent = &SSMCoreAgent{
-		context:    suite.context,
-		container:  suite.mockconatiner,
-		selfupdate: suite.mockselfupdate,
+		context:        suite.context,
+		container:      suite.mockconatiner,
+		selfupdate:     suite.mockselfupdate,
+		credsRefresher: suite.mockCredentialRefresher,
 	}
 
 	mockLog := log.NewMockLog()
@@ -63,6 +67,7 @@ func (suite *AgentTestSuite) TestAgentStart() {
 	suite.mockconatiner.On("Monitor").Return()
 	suite.mockconatiner.On("Start").Return([]error{})
 	suite.mockselfupdate.On("Start").Return()
+	suite.mockCredentialRefresher.On("Start").Return(nil)
 
 	suite.coreAgent.Start()
 	time.Sleep(10 * time.Millisecond)
@@ -75,9 +80,22 @@ func (suite *AgentTestSuite) TestAgentStart_WithStartWorkerError() {
 	suite.mockconatiner.On("Start").Return(
 		[]error{fmt.Errorf("test1"), fmt.Errorf("test2")})
 	suite.mockselfupdate.On("Start").Return()
+	suite.mockCredentialRefresher.On("Start").Return(nil)
 
 	suite.coreAgent.Start()
 	time.Sleep(10 * time.Millisecond)
 
 	suite.mockconatiner.AssertExpectations(suite.T())
+}
+
+func (suite *AgentTestSuite) TestAgentStart_WithCredentialRefresherError() {
+	suite.mockconatiner.On("Monitor").Return()
+	suite.mockconatiner.On("Start").Return([]error{})
+	suite.mockselfupdate.On("Start").Return()
+	suite.mockCredentialRefresher.On("Start").Return(fmt.Errorf("SomeStartError"))
+
+	suite.coreAgent.Start()
+	time.Sleep(10 * time.Millisecond)
+
+	suite.mockCredentialRefresher.AssertExpectations(suite.T())
 }

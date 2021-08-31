@@ -19,6 +19,7 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/version"
 	"github.com/aws/amazon-ssm-agent/core/app/context"
+	"github.com/aws/amazon-ssm-agent/core/app/credentialrefresher"
 	reboot "github.com/aws/amazon-ssm-agent/core/app/reboot/model"
 	"github.com/aws/amazon-ssm-agent/core/app/selfupdate"
 	"github.com/aws/amazon-ssm-agent/core/ipc/messagebus"
@@ -26,38 +27,44 @@ import (
 )
 
 type CoreAgent interface {
-	Start()
+	Start() error
 	Stop()
 }
 
 // SSMCoreAgent encapsulates the core functionality of the agent
 type SSMCoreAgent struct {
-	context    context.ICoreAgentContext
-	container  longrunningprovider.IContainer
-	selfupdate selfupdate.ISelfUpdate
+	context        context.ICoreAgentContext
+	container      longrunningprovider.IContainer
+	selfupdate     selfupdate.ISelfUpdate
+	credsRefresher credentialrefresher.ICredentialRefresher
 }
 
 // NewSSMCoreAgent creates and returns and object of type CoreAgent interface
 func NewSSMCoreAgent(context context.ICoreAgentContext, messageBus messagebus.IMessageBus) CoreAgent {
-
 	return &SSMCoreAgent{
-		context:    context,
-		container:  longrunningprovider.NewWorkerContainer(context, messageBus),
-		selfupdate: selfupdate.NewSelfUpdater(context),
+		context:        context,
+		container:      longrunningprovider.NewWorkerContainer(context, messageBus),
+		selfupdate:     selfupdate.NewSelfUpdater(context),
+		credsRefresher: credentialrefresher.NewCredentialRefresher(context),
 	}
 }
 
 // Start the core manager
-func (agent *SSMCoreAgent) Start() {
+func (agent *SSMCoreAgent) Start() error {
 	log := agent.context.Log()
 
 	log.Infof("amazon-ssm-agent - %v", version.String())
 	log.Infof("OS: %s, Arch: %s", runtime.GOOS, runtime.GOARCH)
 
+	if err := agent.credsRefresher.Start(); err != nil {
+		return err
+	}
+
 	agent.container.Start()
 	go agent.container.Monitor()
 	agent.selfupdate.Start()
-	log.Flush()
+
+	return nil
 }
 
 // Stop the core manager
@@ -68,6 +75,7 @@ func (agent *SSMCoreAgent) Stop() {
 
 	agent.selfupdate.Stop()
 	agent.container.Stop(reboot.StopTypeHardStop)
+	agent.credsRefresher.Stop()
 	log.Info("Bye.")
 	log.Flush()
 }

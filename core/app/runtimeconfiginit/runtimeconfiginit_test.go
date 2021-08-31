@@ -265,8 +265,8 @@ func Test_runtimeConfigInit_saveIdentityConfigWithRetry(t *testing.T) {
 	icc := &mocks.IIdentityRuntimeConfigClient{}
 
 	successConfig := runtimeconfig.IdentityRuntimeConfig{
-		"InstanceId",
-		"IdentityType",
+		InstanceId:   "InstanceId",
+		IdentityType: "IdentityType",
 	}
 	failureConfig := runtimeconfig.IdentityRuntimeConfig{}
 

@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-package onprem
+package onpremprovider
 
 import (
 	"fmt"
@@ -20,22 +20,42 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/backoffconfig"
 	"github.com/aws/amazon-ssm-agent/agent/log"
-	"github.com/aws/amazon-ssm-agent/agent/managedInstances/sharedCredentials"
-	"github.com/aws/amazon-ssm-agent/common/identity/availableidentities/onprem/rsaauth"
+	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
+	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/onpremprovider/rsaauth"
 	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/cenkalti/backoff/v4"
 )
 
+const (
+	// ProviderName provides a name of managed instance Role provider
+	ProviderName = "OnPremRoleProvider"
+)
+
+func NewCredentialsProvider(log log.T, config *appconfig.SsmagentConfig, info registration.IOnpremRegistrationInfo, sharingCreds bool) credentials.Provider {
+	log = log.WithContext("[OnPremCredsProvider]")
+	provider := &onpremCredentialsProvider{
+		log:                         log,
+		config:                      config,
+		registrationInfo:            info,
+		shouldReduceCredsExpiration: !sharingCreds,
+	}
+
+	provider.initializeClient(info.PrivateKey(log))
+	return provider
+}
+
+var emptyCredential = credentials.Value{ProviderName: ProviderName}
+
 // Retrieve retrieves credentials from the SSM Auth service.
 // Error will be returned if the request fails, or unable to extract
 // the desired credentials.
-func (m *managedInstancesRoleProvider) Retrieve() (credentials.Value, error) {
+func (m *onpremCredentialsProvider) Retrieve() (credentials.Value, error) {
 	var err error
 	var roleCreds *ssm.RequestManagedInstanceRoleTokenOutput
 
-	fingerprint, err := managedInstance.Fingerprint(m.log)
+	fingerprint, err := m.registrationInfo.Fingerprint(m.log)
 	if err != nil {
 		m.log.Warnf("Failed to get machine fingerprint: %v", err)
 		return emptyCredential, err
@@ -43,7 +63,7 @@ func (m *managedInstancesRoleProvider) Retrieve() (credentials.Value, error) {
 
 	exponentialBackoff, err := backoffconfig.GetDefaultExponentialBackoff()
 	if err != nil {
-		m.log.Warnf("Failed to create backoff config with error: %v", exponentialBackoff)
+		m.log.Warnf("Failed to create backoff config with error: %v", err)
 		return emptyCredential, err
 	}
 
@@ -58,7 +78,7 @@ func (m *managedInstancesRoleProvider) Retrieve() (credentials.Value, error) {
 		return emptyCredential, fmt.Errorf("error occurred in RequestManagedInstanceRoleToken: %v", err)
 	}
 
-	shouldRotate, err := managedInstance.ShouldRotatePrivateKey(m.log, m.config.Profile.KeyAutoRotateDays, *roleCreds.UpdateKeyPair)
+	shouldRotate, err := m.registrationInfo.ShouldRotatePrivateKey(m.log, m.config.Profile.KeyAutoRotateDays, *roleCreds.UpdateKeyPair)
 	if err != nil {
 		m.log.Warnf("Failed to check if private key should be rotated: %v", err)
 	} else if shouldRotate {
@@ -68,25 +88,19 @@ func (m *managedInstancesRoleProvider) Retrieve() (credentials.Value, error) {
 		}
 	}
 
-	// Set the expiration window to be half of the token's lifetime. This allows credential refreshes to survive transient
-	// network issues more easily. Expiring at half the lifetime also follows the behavior of other protocols such as DHCP
-	// https://tools.ietf.org/html/rfc2131#section-4.4.5. Note that not all of the behavior specified in that RFC is
-	// implemented, just the suggestion to start renewals at 50% of token validity.
-	m.ExpiryWindow = time.Until(*roleCreds.TokenExpirationDate) / 2
+	expiryWindow := time.Duration(0)
+	// If true, the credentials are not being shared and the expiration/refresh is handled by the aws sdk
+	// if shouldReduceCredsExpiration is false, the credentialsRefresher will be the one to refresh the credentials and make sure credentials are refreshed at the required time
+	if m.shouldReduceCredsExpiration {
+		// Set the expiration window to be half of the token's lifetime. This allows credential refreshes to survive transient
+		// network issues more easily. Expiring at half the lifetime also follows the behavior of other protocols such as DHCP
+		// https://tools.ietf.org/html/rfc2131#section-4.4.5. Note that not all of the behavior specified in that RFC is
+		// implemented, just the suggestion to start renewals at 50% of token validity.
+		expiryWindow = time.Until(*roleCreds.TokenExpirationDate) / 2
+	}
 
 	// Set the expiration of our credentials
-	m.SetExpiration(*roleCreds.TokenExpirationDate, m.ExpiryWindow)
-
-	// check to see if the agent should publish the credentials to the account aws credentials
-	shareLock.RLock()
-	defer shareLock.RUnlock()
-	if shareCreds {
-		err = sharedCredentials.Store(m.log, *roleCreds.AccessKeyId, *roleCreds.SecretAccessKey,
-			*roleCreds.SessionToken, shareProfile, m.config.Profile.ForceUpdateCreds)
-		if err != nil {
-			m.log.Error(ProviderName, "Error occurred sharing credentials. ", err) // error does not stop execution
-		}
-	}
+	m.SetExpiration(*roleCreds.TokenExpirationDate, expiryWindow)
 
 	return credentials.Value{
 		AccessKeyID:     *roleCreds.AccessKeyId,
@@ -97,18 +111,18 @@ func (m *managedInstancesRoleProvider) Retrieve() (credentials.Value, error) {
 }
 
 // rotatePrivateKey attempts to rotate the instance private key
-func (m *managedInstancesRoleProvider) rotatePrivateKey(fingerprint string, exponentialBackoff *backoff.ExponentialBackOff) error {
+func (m *onpremCredentialsProvider) rotatePrivateKey(fingerprint string, exponentialBackoff *backoff.ExponentialBackOff) error {
 	m.log.Infof("Attempting to rotate private key")
 
-	oldPrivateKey := managedInstance.PrivateKey(m.log)
-	oldKeyType := managedInstance.PrivateKeyType(m.log)
-	oldPublicKey, err := managedInstance.GeneratePublicKey(oldPrivateKey)
+	oldPrivateKey := m.registrationInfo.PrivateKey(m.log)
+	oldKeyType := m.registrationInfo.PrivateKeyType(m.log)
+	oldPublicKey, err := m.registrationInfo.GeneratePublicKey(oldPrivateKey)
 	if err != nil {
 		m.log.Warnf("Failed to generate old public key: %v", err)
 		return err
 	}
 
-	newPublicKey, newPrivateKey, newKeyType, err := managedInstance.GenerateKeyPair()
+	newPublicKey, newPrivateKey, newKeyType, err := m.registrationInfo.GenerateKeyPair()
 
 	if err != nil {
 		m.log.Warnf("Failed to generate new key pair: %v", err)
@@ -135,7 +149,7 @@ func (m *managedInstancesRoleProvider) rotatePrivateKey(fingerprint string, expo
 		}
 
 		// Test if new key works
-		m.InitializeClient(newPrivateKey)
+		m.initializeClient(newPrivateKey)
 
 		err = backoffRetry(func() error {
 			_, innerErr := m.client.RequestManagedInstanceRoleToken(fingerprint)
@@ -144,7 +158,7 @@ func (m *managedInstancesRoleProvider) rotatePrivateKey(fingerprint string, expo
 
 		if err != nil {
 			m.log.Warnf("Unable to verify neither new nor old key, rolling back private key change")
-			m.InitializeClient(managedInstance.PrivateKey(m.log))
+			m.initializeClient(m.registrationInfo.PrivateKey(m.log))
 			return err
 		}
 
@@ -152,11 +166,11 @@ func (m *managedInstancesRoleProvider) rotatePrivateKey(fingerprint string, expo
 	}
 
 	// New key has been updated remotely, update client to use new private key
-	m.InitializeClient(newPrivateKey)
+	m.initializeClient(newPrivateKey)
 
 	// New key was successfully updated in service, trying to save new key to disk
 	err = backoffRetry(func() error {
-		innerErr := managedInstance.UpdatePrivateKey(m.log, newPrivateKey, newKeyType)
+		innerErr := m.registrationInfo.UpdatePrivateKey(m.log, newPrivateKey, newKeyType)
 		return innerErr
 	}, exponentialBackoff)
 
@@ -175,7 +189,7 @@ func (m *managedInstancesRoleProvider) rotatePrivateKey(fingerprint string, expo
 		}
 
 		m.log.Warn("Successfully rolled back remote key, and recovered registration")
-		m.InitializeClient(oldPrivateKey)
+		m.initializeClient(oldPrivateKey)
 		return fmt.Errorf("Failed to save new private key to disk")
 	}
 
@@ -183,16 +197,17 @@ func (m *managedInstancesRoleProvider) rotatePrivateKey(fingerprint string, expo
 	return nil
 }
 
-func (m *managedInstancesRoleProvider) InitializeClient(privateKey string) {
-	m.client = createNewClient(m.log, m.config, privateKey, m.client)
+func (m *onpremCredentialsProvider) initializeClient(newPrivateKey string) {
+	m.client = createNewClient(m, newPrivateKey)
 }
 
-var createNewClient = func(log log.T, config *appconfig.SsmagentConfig, privateKey string, _ rsaauth.RsaSignedService) rsaauth.RsaSignedService {
-	instanceID := managedInstance.InstanceID(log)
-	region := managedInstance.Region(log)
+// Assigning function to variable to be able to mock out during tests
+var createNewClient = func(m *onpremCredentialsProvider, privateKey string) rsaauth.RsaSignedService {
+	instanceID := m.registrationInfo.InstanceID(m.log)
+	region := m.registrationInfo.Region(m.log)
 
 	// Get default SSM Endpoint
-	defaultEndpoint := endpoint.GetDefaultEndpoint(log, "ssm", region, "")
+	defaultEndpoint := endpoint.GetDefaultEndpoint(m.log, "ssm", region, "")
 
-	return rsaauth.NewRsaService(log, config, instanceID, region, defaultEndpoint, privateKey)
+	return rsaauth.NewRsaService(m.log, m.config, instanceID, region, defaultEndpoint, privateKey)
 }

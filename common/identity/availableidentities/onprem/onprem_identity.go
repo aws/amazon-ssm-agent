@@ -15,15 +15,22 @@ package onprem
 
 import (
 	"fmt"
+	"sync"
 
+	"github.com/aws/amazon-ssm-agent/agent/appconfig"
+	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
+	"github.com/aws/amazon-ssm-agent/agent/managedInstances/sharedCredentials"
+	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/onpremprovider"
+	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/sharedprovider"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 )
 
 // InstanceID returns the managed instance ID
-func (i *Identity) InstanceID() (string, error) { return managedInstance.InstanceID(i.Log), nil }
+func (i *Identity) InstanceID() (string, error) { return i.registrationInfo.InstanceID(i.Log), nil }
 
 // Region returns the region of the managed instance
-func (i *Identity) Region() (string, error) { return managedInstance.Region(i.Log), nil }
+func (i *Identity) Region() (string, error) { return i.registrationInfo.Region(i.Log), nil }
 
 // AvailabilityZone returns the managed instance availabilityZone
 func (*Identity) AvailabilityZone() (string, error) {
@@ -40,31 +47,96 @@ func (*Identity) ServiceDomain() (string, error) {
 	return "", fmt.Errorf("No service domain available in OnPrem")
 }
 
+// initShareCreds initializes credentials using shared credentials provider that reads credentials from shared location, falls back to non shared credentials provider for any failure
+func (i *Identity) initShareCreds() {
+	shareCredsProvider, err := sharedprovider.NewCredentialsProvider(i.Log)
+	if err != nil {
+		i.Log.Errorf("Failed to initialize shared credentials provider, falling back to remote credentials provider: %v", err)
+		i.initNonShareCreds()
+		return
+	}
+	i.credentials = credentials.NewCredentials(shareCredsProvider)
+}
+
+// initNonShareCreds initializes credentials provider and credentials that do not share credentials via aws credentials file
+func (i *Identity) initNonShareCreds() {
+	i.credentialsProvider = onpremprovider.NewCredentialsProvider(i.Log, i.Config, i.registrationInfo, true)
+	i.credentials = credentials.NewCredentials(i.credentialsProvider)
+}
+
 // Credentials returns the managed instance credentials
 func (i *Identity) Credentials() *credentials.Credentials {
-	shareLock.Lock()
-	defer shareLock.Unlock()
+	i.credsInitMutex.Lock()
+	defer i.credsInitMutex.Unlock()
 
-	shareCreds = i.Config.Profile.ShareCreds
-	shareProfile = i.Config.Profile.ShareProfile
-	if i.credentialsSingleton == nil {
-		p := &managedInstancesRoleProvider{
-			log:          i.Log.WithContext("[OnPremCreds]"),
-			config:       i.Config,
-			ExpiryWindow: EarlyExpiryTimeWindow,
+	if i.credentials == nil {
+		if i.shouldShareCredentials {
+			i.initShareCreds()
+		} else {
+			i.initNonShareCreds()
 		}
-
-		p.InitializeClient(managedInstance.PrivateKey(i.Log))
-
-		i.credentialsSingleton = credentials.NewCredentials(p)
 	}
-	return i.credentialsSingleton
+
+	return i.credentials
+}
+
+// CredentialProvider returns the initialized credentials provider
+func (i *Identity) CredentialProvider() credentials.Provider {
+	return i.credentialsProvider
+}
+
+// ShouldShareCredentials returns true if credentials refresher in core agent should rotate credentials for instance
+func (i *Identity) ShouldShareCredentials() bool {
+	return i.shouldShareCredentials
+}
+
+// ShareProfile is the profile where the agent should write shared credentials
+func (i *Identity) ShareProfile() string {
+	return i.Config.Profile.ShareProfile
+}
+
+// ShareFile is the credentials file where the agent should write shared credentials
+func (i *Identity) ShareFile() string {
+	return i.shareFile
 }
 
 // IsIdentityEnvironment returns if instance has managed instance registration
 func (i *Identity) IsIdentityEnvironment() bool {
-	return managedInstance.HasManagedInstancesCredentials(i.Log)
+	return i.registrationInfo.HasManagedInstancesCredentials(i.Log)
 }
 
 // IdentityType returns the identity type of the managed instance
 func (*Identity) IdentityType() string { return IdentityType }
+
+// NewOnPremIdentity initializes the onprem identity and credentials providers and determines if credentials should be shared or not
+func NewOnPremIdentity(log log.T, config *appconfig.SsmagentConfig) *Identity {
+	var err error
+	var shareFile string
+
+	log = log.WithContext("[OnPremIdentity]")
+	shouldShareCredentials := config.Profile.ShareCreds
+
+	registrationInfo := registration.NewOnpremRegistrationInfo()
+
+	// Check if share creds path can be set, if it should, determine the path
+	if shouldShareCredentials {
+		shareFile, err = sharedCredentials.GetSharedCredsFilePath("")
+		if err != nil {
+			log.Errorf("Failed to get path to shared credentials file, not sharing credentials: %v", err)
+			shouldShareCredentials = false
+		}
+	}
+
+	remoteCredentialsProvider := onpremprovider.NewCredentialsProvider(log, config, registrationInfo, shouldShareCredentials)
+
+	return &Identity{
+		Log:                    log,
+		Config:                 config,
+		registrationInfo:       registrationInfo,
+		credentialsProvider:    remoteCredentialsProvider,
+		credentials:            nil,
+		shareFile:              shareFile,
+		shouldShareCredentials: shouldShareCredentials,
+		credsInitMutex:         sync.Mutex{},
+	}
+}
