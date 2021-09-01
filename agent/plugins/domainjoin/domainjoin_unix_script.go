@@ -343,20 +343,20 @@ install_components() {
         # yum -y update
         ## yum update takes too long
         # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html-single/deploying_different_types_of_servers/index
-        yum -y  install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation vim unzip bind-utils python3 openldap-clients >/dev/null
+        yum -y  install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation vim unzip bind-utils python3 openldap-clients NetworkManager >/dev/null
         if [ $? -ne 0 ]; then echo "install_components(): yum install errors for Red Hat" && return 1; fi
     elif grep -e 'Fedora' /etc/os-release 1>/dev/null 2>/dev/null; then
         LINUX_DISTRO='Fedora'
         ## yum update takes too long, but it is unavoidable here.
         yum -y update
-        yum -y  install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation vim unzip bind-utils python3 openldap-clients vim-common >/dev/null
+        yum -y  install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation vim unzip bind-utils python3 openldap-clients vim-common NetworkManager >/dev/null
         if [ $? -ne 0 ]; then echo "install_components(): yum install errors for Fedora" && return 1; fi
         systemctl restart dbus
     elif grep 'Amazon Linux' /etc/os-release 1>/dev/null 2>/dev/null; then
          LINUX_DISTRO='AMAZON_LINUX'
          # yum -y update
          ## yum update takes too long
-         yum -y  install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation unzip bind-utils python3 openldap-clients vim-common >/dev/null
+         yum -y  install realmd adcli oddjob-mkhomedir oddjob samba-winbind-clients samba-winbind samba-common-tools samba-winbind-krb5-locator krb5-workstation unzip bind-utils python3 openldap-clients vim-common network-manager >/dev/null
          if [ $? -ne 0 ]; then echo "install_components(): yum install errors for Amazon Linux" && return 1; fi
     elif grep 'Ubuntu' /etc/os-release 1>/dev/null 2>/dev/null; then
          LINUX_DISTRO='UBUNTU'
@@ -371,7 +371,7 @@ install_components() {
          export DEBIAN_FRONTEND=noninteractive
          apt-get -y update
          if [ $? -ne 0 ]; then echo "install_components(): apt-get update errors for Ubuntu" && return 1; fi
-         apt-get -yq install realmd adcli winbind samba libnss-winbind libpam-winbind libpam-krb5 krb5-config krb5-locales krb5-user packagekit  ntp unzip dnsutils python3 ldap-utils > /dev/null
+         apt-get -yq install realmd adcli winbind samba libnss-winbind libpam-winbind libpam-krb5 krb5-config krb5-locales krb5-user packagekit  ntp unzip dnsutils python3 ldap-utils network-manager > /dev/null
          if [ $? -ne 0 ]; then echo "install_components(): apt-get install errors for Ubuntu" && return 1; fi
          # Disable Reverse DNS resolution. Ubuntu Instances must be reverse-resolvable in DNS before the realm will work.
          sed -i "s/default_realm.*$/default_realm = $REALM\n\trdns = false/g" /etc/krb5.conf
@@ -391,7 +391,7 @@ install_components() {
          fi
          LINUX_DISTRO='SUSE'
          sudo zypper update -y
-         sudo zypper -n install realmd adcli sssd sssd-tools sssd-ad samba-client krb5-client samba-winbind krb5-client bind-utils python3 openldap2-client
+         sudo zypper -n install realmd adcli sssd sssd-tools sssd-ad samba-client krb5-client samba-winbind krb5-client bind-utils python3 openldap2-client NetworkManager
          if [ $? -ne 0 ]; then
             return 1
          fi
@@ -404,7 +404,7 @@ install_components() {
          fi
          apt-get -y update
          LINUX_DISTRO='DEBIAN'
-         DEBIAN_FRONTEND=noninteractive apt-get -yq install realmd adcli winbind samba libnss-winbind libpam-winbind libpam-krb5 krb5-config krb5-locales krb5-user packagekit ntp unzip dnsutils python3 ldapscripts > /dev/null
+         DEBIAN_FRONTEND=noninteractive apt-get -yq install realmd adcli winbind samba libnss-winbind libpam-winbind libpam-krb5 krb5-config krb5-locales krb5-user packagekit ntp unzip dnsutils python3 ldapscripts network-manager > /dev/null
          if [ $? -ne 0 ]; then
             return 1
          fi
@@ -553,12 +553,40 @@ configure_hosts_file() {
         /^127.0.0.1\s+localhost\s*/a\\${ip_address} ${fullhost} ${COMPUTER_NAME} ${cleanup_comment}" /etc/hosts
 }
 
+#########################################################
+## Restart NetworkManager if present ####################
+#########################################################
+restart_network_manager() {
+    if [ -d /etc/NetworkManager/conf.d/ ]; then
+       systemctl restart NetworkManager
+       if [ $? -ne 0 ]; then
+          service NetworkManager restart
+       fi
+       if [ $? -ne 0 ]; then
+         echo "**Failed: NetworkManager failed"
+         exit 1
+       fi
+    fi
+}
+
 ##################################################
 ## Add AWS Directory Service DNS IP Addresses as #
 ## primary to the resolv.conf and dhclient       #
 ## configuration files.                          #
 ##################################################
 do_dns_config() {
+    # Prevent Network Manager from overwriting resolv.conf
+    # https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux/8/html/configuring_and_managing_networking/manually-configuring-the-etc-resolv-conf-file_configuring-and-managing-networking
+    if [ -d /etc/NetworkManager/conf.d/ ]; then
+        echo "[main]" > /etc/NetworkManager/conf.d/90-dns-none.conf
+        echo "dns=none" >> /etc/NetworkManager/conf.d/90-dns-none.conf
+        if [ $? -ne 0 ]; then
+            echo "**Failed: Writing to /etc/NetworkManager/conf.d/90-dns-none.conf"
+            exit 1
+        fi
+        restart_network_manager
+    fi
+
     setup_resolv_conf_and_dhclient_conf
     if [ $LINUX_DISTRO = 'AMAZON_LINUX' ]; then
         set_peer_dns
@@ -595,20 +623,8 @@ EOF
     if [ $LINUX_DISTRO = "CentOS" ]; then
         set_peer_dns
     fi
-}
 
-##################################################
-## DNS IP reachability test to                  ##
-## catch invalid or unreachable DNS IPs         ##
-##################################################
-is_dns_ip_reachable() {
-    DNS_IP="$1"
-    ping -c 1 "$DNS_IP" 2>/dev/null
-    if [ $? -eq 0 ]; then
-            return 0
-    fi
-
-    return 1
+    restart_network_manager
 }
 
 ##################################################
@@ -626,30 +642,18 @@ resolve_name_to_ip() {
 ## sets are used.                               ##
 ##################################################
 is_directory_reachable() {
+    grep "Generated by Domain Join SSMDocument" /etc/resolv.conf
+    if [ $? -ne 0 ]; then
+        echo "**Failed: /etc/resolv.conf was overwritten"
+        exit 1
+    fi
     DNS_IPS=$(resolve_name_to_ip $DIRECTORY_NAME)
     if [ $? -ne 0 ]; then
         echo "***Failed: Cannot resolve domain name $DIRECTORY_NAME" && return 1
     fi
     echo -e "Successfully resolve domain name $DIRECTORY_NAME to IP address(es):\n$DNS_IPS"
 
-    DNS_IP1=$(echo $DNS_IPS | awk '{ print $1 }')
-    DNS_IP2=$(echo $DNS_IPS | awk '{ print $2 }')
-
-    MAX_RETRIES=5
-    for i in $(seq 1 $MAX_RETRIES)
-    do
-        is_dns_ip_reachable $DNS_IP1
-        if [ $? -eq 0 ]; then
-            return 0
-        fi
-
-        is_dns_ip_reachable $DNS_IP2
-        if [ $? -eq 0 ]; then
-            return 0
-        fi
-    done
-
-    return 1
+    return 0
 }
 
 ##################################################
@@ -772,20 +776,6 @@ for i in "$@"; do
             DNS_ADDRESSES="$1"
             DNS_IP_ADDRESS1=$(echo $DNS_ADDRESSES | awk -F',' '{ print $1 }')
             DNS_IP_ADDRESS2=$(echo $DNS_ADDRESSES | awk -F',' '{ print $2 }')
-            if [ ! -z $DNS_IP_ADDRESS1 ]; then
-                is_dns_ip_reachable $DNS_IP_ADDRESS1
-                if [ $? -ne 0 ]; then
-                    echo "**Failed: Unable to reach DNS server $DNS_IP_ADDRESS1"
-                    exit 1
-                fi
-            fi
-            if [ ! -z $DNS_IP_ADDRESS2 ]; then
-                is_dns_ip_reachable $DNS_IP_ADDRESS2
-                if [ $? -ne 0 ]; then
-                    echo "**Failed: Unable to reach DNS server $DNS_IP_ADDRESS2"
-                    exit 1
-                fi
-            fi
             continue
             ;;
         --proxy-address)
@@ -827,7 +817,7 @@ fi
 # Deal with scenario where this script is run again after the domain is already joined.
 # We want to avoid rerunning as the set_hostname function can change the hostname of a server that is already
 # domain joined and cause a mismatch. 
-realm list | grep -q "domain-name: ${DIRECTORY_NAME}\$"
+realm list 2>/dev/null | grep -q "domain-name: ${DIRECTORY_NAME}\$"
 if [ $? -eq 0 ]; then
     echo "########## SKIPPING Domain Join: ${DIRECTORY_NAME} already joined  ##########"
     exit 0
