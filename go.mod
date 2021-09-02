@@ -10,7 +10,7 @@ require (
 	github.com/Jeffail/gabs v1.0.0
 	github.com/Workiva/go-datastructures v1.0.53
 	github.com/aws/aws-sdk-go v1.35.23
-	github.com/carlescere/scheduler v0.0.0-20170109141437-ee74d2f83d82
+	github.com/carlescere/scheduler v0.0.0-20150615230211-9b78eac89dfb
 	github.com/cenkalti/backoff/v4 v4.0.2
 	github.com/cihub/seelog v0.0.0-20170130134532-f561c5e57575
 	github.com/coreos/go-semver v0.2.0
