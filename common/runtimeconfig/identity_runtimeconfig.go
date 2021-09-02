@@ -85,5 +85,22 @@ func (i *identityRuntimeConfigClient) SaveConfig(config IdentityRuntimeConfig) e
 		return fmt.Errorf("error encoding identity runtime config: %v", err)
 	}
 
-	return i.configHandler.SaveConfig(bytesContent)
+	err = i.configHandler.SaveConfig(bytesContent)
+
+	if err != nil {
+		return err
+	}
+
+	// Because of the importance of identityRuntimeConfig, we want to make sure the file is readable after writing
+	savedConfig, err := i.GetConfig()
+	if err != nil {
+		return fmt.Errorf("failed to validate config is readable after writing: %v", err)
+	}
+
+	// verify saved config and config to be saved are equivalent
+	if !savedConfig.Equal(config) {
+		return fmt.Errorf("failed to verify config on disk is equivalent to the config that was saved")
+	}
+
+	return nil
 }

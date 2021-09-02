@@ -10,6 +10,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig/runtimeconfighandler"
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig/runtimeconfighandler/mocks"
 	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/mock"
 )
 
 func Test_identityRuntimeConfigClient_ConfigExists(t *testing.T) {
@@ -110,6 +111,7 @@ func Test_identityRuntimeConfigClient_SaveConfig(t *testing.T) {
 
 	handlerMock := &mocks.IRuntimeConfigHandler{}
 	handlerMock.On("SaveConfig", successContent).Return(nil)
+	handlerMock.On("GetConfig").Return(successContent, nil)
 	handlerMock.On("SaveConfig", failContent).Return(fmt.Errorf("SomeError"))
 
 	type fields struct {
@@ -155,6 +157,66 @@ func Test_identityRuntimeConfigClient_SaveConfig(t *testing.T) {
 			}
 		})
 	}
+}
+
+func Test_identityRuntimeConfigClient_SaveConfig_VerifyFailGetConfig(t *testing.T) {
+	config := IdentityRuntimeConfig{
+		"InstanceId",
+		"IdentityType",
+		"ShareFile",
+		"ShareProfile",
+		time.Now(),
+		time.Now(),
+	}
+	byteConfig, _ := json.Marshal(config)
+
+	handlerMock := &mocks.IRuntimeConfigHandler{}
+	handlerMock.On("SaveConfig", byteConfig).Return(nil)
+	handlerMock.On("GetConfig").Return(nil, fmt.Errorf("SomeErrorFailedGetConfig"))
+
+	i := &identityRuntimeConfigClient{
+		configHandler: handlerMock,
+	}
+
+	err := i.SaveConfig(config)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "failed to validate config is readable after writing")
+	handlerMock.AssertExpectations(t)
+}
+
+func Test_identityRuntimeConfigClient_SaveConfig_VerifyFailConfigEquals(t *testing.T) {
+	correctConfig := IdentityRuntimeConfig{
+		"InstanceId",
+		"IdentityType",
+		"ShareFile",
+		"ShareProfile",
+		time.Now(),
+		time.Now(),
+	}
+
+	wrongConfig := IdentityRuntimeConfig{
+		"InstanceId",
+		"SomeOtherIdentityType",
+		"ShareFile",
+		"ShareProfile",
+		time.Now(),
+		time.Now(),
+	}
+	wrongByteConfig, _ := json.Marshal(wrongConfig)
+
+	handlerMock := &mocks.IRuntimeConfigHandler{}
+	handlerMock.On("SaveConfig", mock.Anything).Return(nil)
+	handlerMock.On("GetConfig").Return(wrongByteConfig, nil)
+
+	i := &identityRuntimeConfigClient{
+		configHandler: handlerMock,
+	}
+
+	err := i.SaveConfig(correctConfig)
+	assert.Error(t, err)
+	assert.Contains(t, err.Error(), "failed to verify config on disk is equivalent to the config that was saved")
+
+	handlerMock.AssertExpectations(t)
 }
 
 func TestIdentityRuntimeConfig_Equal(t *testing.T) {
