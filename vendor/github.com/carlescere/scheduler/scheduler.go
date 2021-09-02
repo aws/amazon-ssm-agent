@@ -18,7 +18,6 @@ import (
 	"errors"
 	"strconv"
 	"strings"
-	"sync"
 	"time"
 )
 
@@ -28,13 +27,11 @@ type scheduled interface {
 
 // Job defines a running job and allows to stop a scheduled job or run it.
 type Job struct {
-	fn        func()
-	Quit      chan bool
-	SkipWait  chan bool
-	err       error
-	schedule  scheduled
-	isRunning bool
-	sync.RWMutex
+	fn       func()
+	Quit     chan bool
+	SkipWait chan bool
+	err      error
+	schedule scheduled
 }
 
 type recurrent struct {
@@ -177,30 +174,14 @@ func (j *Job) Run(f func()) (*Job, error) {
 			case <-j.Quit:
 				return
 			case <-j.SkipWait:
-				go runJob(j)
+				go j.fn()
 			case <-time.After(next):
-				go runJob(j)
+				go j.fn()
 			}
 			next, _ = j.schedule.nextRun()
 		}
 	}(j)
 	return j, nil
-}
-
-func (j *Job) setRunning(running bool) {
-	j.Lock()
-	defer j.Unlock()
-
-	j.isRunning = running
-}
-
-func runJob(job *Job) {
-	if job.IsRunning() {
-		return
-	}
-	job.setRunning(true)
-	job.fn()
-	job.setRunning(false)
 }
 
 func parseTime(str string) (hour, min, sec int, err error) {
@@ -317,11 +298,4 @@ func (j *Job) Minutes() *Job {
 // Hours sets the job to run every n Hours where n was defined in the Every function.
 func (j *Job) Hours() *Job {
 	return j.timeOfDay(time.Hour)
-}
-
-// IsRunning returns if the job is currently running
-func (j *Job) IsRunning() bool {
-	j.RLock()
-	defer j.RUnlock()
-	return j.isRunning
 }
