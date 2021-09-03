@@ -63,9 +63,12 @@ func (s *RunCommandService) messagePollLoop() {
 	// time lock to only have one loop active anytime.
 	// this is extra insurance to prevent any race condition
 	pollStartTime := time.Now()
+	log := s.context.Log()
+	if s.name == mdsName {
+		log.Debug("Starting message poll")
+	}
 	updateLastPollTime(s.name, pollStartTime)
 
-	log := s.context.Log()
 	if err := s.checkStopPolicy(log); err != nil {
 		return
 	}
@@ -84,9 +87,13 @@ func (s *RunCommandService) messagePollLoop() {
 
 	// check if any other poll loop has started in the meantime
 	// to prevent any possible race condition due to the scheduler
-	if getLastPollTime(s.name) == pollStartTime {
+	if pollStartTime.Equal(getLastPollTime(s.name)) {
 		// skip waiting for the next scheduler polling event and start polling immediately
 		scheduleNextRun(s.messagePollJob)
+	} else {
+		if s.name == mdsName {
+			log.Debugf("Other message poll already started at %v, scheduler wait will not be skipped", getLastPollTime(s.name))
+		}
 	}
 }
 
@@ -150,9 +157,6 @@ func (s *RunCommandService) stop() {
 // pollOnce calls GetMessages once and processes the result.
 func (s *RunCommandService) pollOnce() {
 	log := s.context.Log()
-	if s.name == mdsName {
-		log.Debugf("Polling for messages")
-	}
 	messages, err := s.service.GetMessages(log, s.config.InstanceID)
 	if err != nil {
 		sdkutil.HandleAwsError(log, err, s.processorStopPolicy)
@@ -166,6 +170,6 @@ func (s *RunCommandService) pollOnce() {
 		processMessage(s, msg)
 	}
 	if s.name == mdsName {
-		log.Debugf("Done poll once")
+		log.Debugf("Finished message poll")
 	}
 }
