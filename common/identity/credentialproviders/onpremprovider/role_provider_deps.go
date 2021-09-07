@@ -51,5 +51,6 @@ type onpremCredentialsProvider struct {
 
 	registrationInfo registration.IOnpremRegistrationInfo
 
-	shouldReduceCredsExpiration bool
+	isSharingCreds        bool
+	executableToRotateKey string
 }

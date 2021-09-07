@@ -35,11 +35,23 @@ const (
 
 func NewCredentialsProvider(log log.T, config *appconfig.SsmagentConfig, info registration.IOnpremRegistrationInfo, sharingCreds bool) credentials.Provider {
 	log = log.WithContext("[OnPremCredsProvider]")
+
+	// If credentials are not being shared, the ssm-agent-worker should be in charge of rotating private key
+	// because as of now the amazon-ssm-agent does not use the aws sdk and therefore the retrieve function is never called.
+	// If credentials are being shared, the amazon-ssm-agent is the only executable that calls retrieve using the onpremcreds provider,
+	// all other workers will be using the sharedprovider.
+	// TODO: When amazon-ssm-agent starts using the aws-sdk, make the executableToRotateKey always be amazon-ssm-agent
+	executableToRotateKey := "ssm-agent-worker"
+	if sharingCreds {
+		executableToRotateKey = "amazon-ssm-agent"
+	}
+
 	provider := &onpremCredentialsProvider{
-		log:                         log,
-		config:                      config,
-		registrationInfo:            info,
-		shouldReduceCredsExpiration: !sharingCreds,
+		log:                   log,
+		config:                config,
+		registrationInfo:      info,
+		isSharingCreds:        sharingCreds,
+		executableToRotateKey: executableToRotateKey,
 	}
 
 	provider.initializeClient(info.PrivateKey(log))
@@ -78,7 +90,7 @@ func (m *onpremCredentialsProvider) Retrieve() (credentials.Value, error) {
 		return emptyCredential, fmt.Errorf("error occurred in RequestManagedInstanceRoleToken: %v", err)
 	}
 
-	shouldRotate, err := m.registrationInfo.ShouldRotatePrivateKey(m.log, m.config.Profile.KeyAutoRotateDays, *roleCreds.UpdateKeyPair)
+	shouldRotate, err := m.registrationInfo.ShouldRotatePrivateKey(m.log, m.executableToRotateKey, m.config.Profile.KeyAutoRotateDays, *roleCreds.UpdateKeyPair)
 	if err != nil {
 		m.log.Warnf("Failed to check if private key should be rotated: %v", err)
 	} else if shouldRotate {
@@ -89,9 +101,9 @@ func (m *onpremCredentialsProvider) Retrieve() (credentials.Value, error) {
 	}
 
 	expiryWindow := time.Duration(0)
-	// If true, the credentials are not being shared and the expiration/refresh is handled by the aws sdk
-	// if shouldReduceCredsExpiration is false, the credentialsRefresher will be the one to refresh the credentials and make sure credentials are refreshed at the required time
-	if m.shouldReduceCredsExpiration {
+	// If isSharingCreds is false, the credentials are not being shared and the expiration/refresh is handled by the aws sdk
+	// if isSharingCreds is true, the credentialsRefresher will be the one to refresh the credentials and make sure credentials are refreshed at the required time
+	if !m.isSharingCreds {
 		// Set the expiration window to be half of the token's lifetime. This allows credential refreshes to survive transient
 		// network issues more easily. Expiring at half the lifetime also follows the behavior of other protocols such as DHCP
 		// https://tools.ietf.org/html/rfc2131#section-4.4.5. Note that not all of the behavior specified in that RFC is

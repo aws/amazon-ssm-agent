@@ -97,9 +97,9 @@ func UpdatePrivateKey(log log.T, privateKey, privateKeyType string) (err error) 
 	return updateServerInfo(info)
 }
 
-func ShouldRotatePrivateKey(log log.T, privateKeyMaxDaysAge int, serviceSaysRotate bool) (bool, error) {
-	// only ssm-agent-worker should rotate private key to reduce chances of race condition
-	if !strings.HasPrefix(filepath.Base(os.Args[0]), "ssm-agent-worker") {
+func ShouldRotatePrivateKey(log log.T, executableToRotateKey string, privateKeyMaxDaysAge int, serviceSaysRotate bool) (bool, error) {
+	// only one executable should rotate private key to reduce chances of race condition
+	if !strings.HasPrefix(filepath.Base(os.Args[0]), executableToRotateKey) {
 		return false, nil
 	}
 
@@ -238,7 +238,7 @@ type IOnpremRegistrationInfo interface {
 	UpdatePrivateKey(log.T, string, string) error
 	HasManagedInstancesCredentials(log.T) bool
 	GeneratePublicKey(string) (string, error)
-	ShouldRotatePrivateKey(log.T, int, bool) (bool, error)
+	ShouldRotatePrivateKey(log.T, string, int, bool) (bool, error)
 }
 
 type onpremRegistation struct{}
@@ -274,8 +274,8 @@ func (onpremRegistation) HasManagedInstancesCredentials(log log.T) bool {
 }
 
 // ShouldRotatePrivateKey returns true of the age of the private key is greater or equal than argument.
-func (onpremRegistation) ShouldRotatePrivateKey(log log.T, privateKeyMaxDaysAge int, serviceSaysRotate bool) (bool, error) {
-	return ShouldRotatePrivateKey(log, privateKeyMaxDaysAge, serviceSaysRotate)
+func (onpremRegistation) ShouldRotatePrivateKey(log log.T, executableToRotateKey string, privateKeyMaxDaysAge int, serviceSaysRotate bool) (bool, error) {
+	return ShouldRotatePrivateKey(log, executableToRotateKey, privateKeyMaxDaysAge, serviceSaysRotate)
 }
 
 // GeneratePublicKey generate the public key of a provided private key

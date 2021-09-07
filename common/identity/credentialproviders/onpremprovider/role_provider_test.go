@@ -317,7 +317,7 @@ func (r *registrationStub) UpdatePrivateKey(log log.T, privateKey, privateKeyTyp
 	return r.getErr()
 }
 
-func (r *registrationStub) ShouldRotatePrivateKey(log.T, int, bool) (bool, error) {
+func (r *registrationStub) ShouldRotatePrivateKey(log.T, string, int, bool) (bool, error) {
 	return r.shouldRotate, r.getErr()
 }
 
