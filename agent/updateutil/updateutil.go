@@ -647,3 +647,13 @@ func IsV1UpdatePlugin(SourceVersion string) bool {
 	comp, err := versionutil.VersionCompare(SourceVersion, LastV1UpdatePluginAgentVersion)
 	return err == nil && comp <= 0
 }
+
+// IsIdentityRuntimeConfigSupported returns true if source agent version is greater than 3.1.282.0, any error defaults to false
+// this logic is required to ensure that updater does not rely on an old runtime config if an agent has been downgraded
+// from a version that supported identity runtimeconfig and also to skip the runtimeconfig check when we know it does not exist
+func IsIdentityRuntimeConfigSupported(sourceVersion string) bool {
+	const LastAgentVersionBeforeIdentityRuntimeConfig = "3.1.282.0"
+
+	comp, err := versionutil.VersionCompare(sourceVersion, LastAgentVersionBeforeIdentityRuntimeConfig)
+	return err == nil && comp > 0
+}

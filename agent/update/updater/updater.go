@@ -27,6 +27,7 @@ import (
 	logger "github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	"github.com/aws/amazon-ssm-agent/agent/update/processor"
+	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updatemanifest"
@@ -217,15 +218,23 @@ func main() {
 }
 
 func resolveAgentIdentity(appConfig appconfig.SsmagentConfig) (identity.IAgentIdentity, error) {
-	selector := identity.NewRuntimeConfigIdentitySelector(log)
-	agentIdentity, err := identity.NewAgentIdentity(log, &appConfig, selector)
-	if err == nil {
-		log.Debugf("Using identity from runtime config")
-		return agentIdentity, nil
+	var selector identity.IAgentIdentitySelector
+	var agentIdentity identity.IAgentIdentity
+	var err error
+	// To support downgrades and rollbacks, we want to make sure that the source version supports runtime config
+	if updateutil.IsIdentityRuntimeConfigSupported(*sourceVersion) {
+		selector = identity.NewRuntimeConfigIdentitySelector(log)
+		agentIdentity, err = identity.NewAgentIdentity(log, &appConfig, selector)
+
+		// If success, return the identity
+		if err == nil {
+			log.Debugf("Using identity from runtime config")
+			return agentIdentity, nil
+		}
 	}
 
-	// If not able to resolve agent identity with runtime config use default identity selector
-	// This can occur when updating from old agent that didn't have runtime config
+	// If not able to resolve agent identity with runtime config or source version
+	// does not support runtimeconfig, fallback to default identity selector
 	selector = identity.NewDefaultAgentIdentitySelector(log)
 	agentIdentity, err = newAgentIdentity(log, &appConfig, selector)
 	if err != nil {

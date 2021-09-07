@@ -583,6 +583,25 @@ func TestIsV1UpdatePlugin(t *testing.T) {
 	assert.False(t, IsV1UpdatePlugin("SomeInvalidVersion"))
 }
 
+func TestIsIdentityRuntimeConfigSupported(t *testing.T) {
+	// lower than
+	assert.False(t, IsIdentityRuntimeConfigSupported("3.0.281.0"))
+	assert.False(t, IsIdentityRuntimeConfigSupported("1.1.281.0"))
+	assert.False(t, IsIdentityRuntimeConfigSupported("3.1.281.0"))
+
+	// equal than
+	assert.False(t, IsIdentityRuntimeConfigSupported("3.1.282.0"))
+
+	// greater than
+	assert.True(t, IsIdentityRuntimeConfigSupported("3.1.282.1"))
+	assert.True(t, IsIdentityRuntimeConfigSupported("3.1.1111.0"))
+	assert.True(t, IsIdentityRuntimeConfigSupported("3.1.283.0"))
+	assert.True(t, IsIdentityRuntimeConfigSupported("3.2.283.0"))
+
+	// invalid source
+	assert.False(t, IsIdentityRuntimeConfigSupported("SomeInvalidVersion"))
+}
+
 func (p *testProcess) Start(*model.WorkerConfig) (*model.Process, error) { return nil, nil }
 
 func (p *testProcess) Kill(pid int) error { return nil }
