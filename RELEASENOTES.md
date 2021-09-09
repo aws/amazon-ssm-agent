@@ -1,5 +1,12 @@
 Latest
 ===============
+- Fix to eliminate WaitGroup reuse panic triggered during agent reboot
+- Fix to include applications without UninstallString in Inventory for Windows
+- Fixed a bug where multi-plugin documents with large outputs would timeout RunCommand
+- Fixed a bug where RunCommand could delay executions for up to 15 minutes
+
+3.1.282.0
+===============
 - Add serial port logging of AwsNitroEnclaves package version on windows during startup
 - Allow usage of existing loggroup/logstream when the user does not have create permission
 - Change service interrogate request log to debug
