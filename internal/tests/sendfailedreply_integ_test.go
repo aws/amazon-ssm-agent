@@ -48,7 +48,7 @@ type SendFailedReplyTestSuite struct {
 	suite.Suite
 	ssmAgent   agent.ISSMAgent
 	mdsSdkMock *mdssdkmock.SSMMDSAPI
-	context        context.T
+	context    context.T
 }
 
 // SetupTest makes sure that all the components referenced in the test case are initialized

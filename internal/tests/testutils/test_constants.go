@@ -17,5 +17,5 @@ package testutils
 const (
 	// Test defaults
 	TestInstanceId = "i-123123123"
-	TestRegion = "us-west-1"
+	TestRegion     = "us-west-1"
 )

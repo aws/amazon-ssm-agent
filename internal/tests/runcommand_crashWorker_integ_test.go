@@ -43,7 +43,7 @@ import (
 
 // CrashWorkerTestSuite defines test suite for sending a command to the agent and handling the worker process crash
 type CrashWorkerTestSuite struct {
-	context    context.T
+	context context.T
 	suite.Suite
 	ssmAgent   agent.ISSMAgent
 	mdsSdkMock *mdssdkmock.SSMMDSAPI
