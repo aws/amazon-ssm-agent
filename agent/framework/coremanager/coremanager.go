@@ -242,6 +242,9 @@ func (c *CoreManager) stopCoreModules(stopType contracts.StopType) {
 	var wg sync.WaitGroup
 	l := len(c.coreModules)
 	for i := 0; i < l; i++ {
+		if stopType == contracts.StopTypeSoftStop {
+			wg.Add(1)
+		}
 		go func(wgc *sync.WaitGroup, i int) {
 			defer func() {
 				if r := recover(); r != nil {
@@ -250,7 +253,6 @@ func (c *CoreManager) stopCoreModules(stopType contracts.StopType) {
 				}
 			}()
 			if stopType == contracts.StopTypeSoftStop {
-				wgc.Add(1)
 				defer wgc.Done()
 			}
 

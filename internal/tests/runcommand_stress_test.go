@@ -19,7 +19,6 @@ import (
 	"runtime/debug"
 	"testing"
 
-	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/amazon-ssm-agent/agent/agent"
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -28,6 +27,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	logger "github.com/aws/amazon-ssm-agent/agent/log/ssmlog"
 	messageContracts "github.com/aws/amazon-ssm-agent/agent/runcommand/contracts"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/amazon-ssm-agent/internal/tests/testdata"
 	"github.com/aws/amazon-ssm-agent/internal/tests/testutils"
 	"github.com/aws/aws-sdk-go/aws/request"
@@ -41,7 +41,7 @@ import (
 // functionality from testify - including a T() method which
 // returns the current testing context
 type AgentStressTestSuite struct {
-	context    context.T
+	context context.T
 	suite.Suite
 	ssmAgent   agent.ISSMAgent
 	mdsSdkMock *mdssdkmock.SSMMDSAPI

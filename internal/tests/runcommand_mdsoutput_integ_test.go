@@ -43,7 +43,7 @@ import (
 
 // RunCommandOutputTestSuite defines test suite for sending runcommand output, error and exit code to MDS service
 type RunCommandOutputTestSuite struct {
-	context      context.T
+	context context.T
 	suite.Suite
 	ssmAgent     agent.ISSMAgent
 	mdsSdkMock   *mdssdkmock.SSMMDSAPI
