@@ -37,6 +37,14 @@ var (
 	tenMinAfterTime   = time.Date(2021, time.January, 1, 12, 25, 30, 0, time.UTC).Round(0)
 )
 
+func init() {
+	newSharedCredentials = func(_, _ string) *credentials.Credentials {
+		provider := &mocks.Provider{}
+		provider.On("Retrieve").Return(credentials.Value{}, nil).Once()
+		return credentials.NewCredentials(provider)
+	}
+}
+
 func Test_credentialsRefresher_durationUntilRefresh(t *testing.T) {
 	type fields struct {
 		log                         log.T
@@ -129,7 +137,7 @@ func Test_credentialsRefresher_durationUntilRefresh(t *testing.T) {
 	}
 }
 
-func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsExist_NotCallRefresh(t *testing.T) {
+func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsNotExpired_NotCallRefresh(t *testing.T) {
 	storeSharedCredentials = func(log.T, string, string, string, string, string, bool) error {
 		return nil
 	}
@@ -164,6 +172,66 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsExist_NotCa
 	case <-time.After(time.Second):
 		assert.Fail(t, "Took more than a second to stop credential refresher")
 	}
+}
+
+func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsNotExpired_CredentialsFileFailure(t *testing.T) {
+	storeSharedCredentials = func(log.T, string, string, string, string, string, bool) error {
+		return nil
+	}
+
+	oldFun := newSharedCredentials
+	defer func() { newSharedCredentials = oldFun }()
+	newSharedCredentials = func(_, _ string) *credentials.Credentials {
+		provider := &mocks.Provider{}
+		provider.On("Retrieve").Return(credentials.Value{}, fmt.Errorf("SomeShareCredsErr")).Once()
+		return credentials.NewCredentials(provider)
+	}
+
+	runtimeConfig := runtimeconfig.IdentityRuntimeConfig{
+		CredentialsExpiresAt:   tenMinAfterTime,
+		CredentialsRetrievedAt: fiveMinBeforeTime,
+	}
+
+	provider := &mocks.Provider{}
+	provider.On("Retrieve").Return(func() credentials.Value { return credentials.Value{} }, func() error {
+		// Sleep here because we know that if we reach this point and have not got message in credentialsReadyChan, the time is set correctly
+		time.Sleep(time.Second)
+		return fmt.Errorf("SomeRetrieveErr")
+	})
+
+	expirer := &mocks.Expirer{}
+	expirer.On("ExpiresAt").Return(tenMinAfterTime)
+
+	c := &credentialsRefresher{
+		log:                          log.NewMockLog(),
+		provider:                     provider,
+		expirer:                      expirer,
+		identityRuntimeConfig:        runtimeConfig,
+		credsReadyOnce:               sync.Once{},
+		credentialsReadyChan:         make(chan struct{}, 1),
+		stopCredentialRefresherChan:  make(chan struct{}),
+		isCredentialRefresherRunning: true,
+		getCurrentTimeFunc:           func() time.Time { return currentTime },
+	}
+
+	go c.credentialRefresherRoutine()
+
+	// verify credentials ready message is sent
+	select {
+	case <-c.credentialsReadyChan:
+		assert.Fail(t, "CredentialsReadyChan got a message when credentials were not available")
+	case <-time.After(time.Second):
+	}
+
+	// Stop goroutine and verify it stops within a second
+	select {
+	case c.stopCredentialRefresherChan <- struct{}{}:
+	case <-time.After(time.Second):
+		assert.Fail(t, "Took more than a second to stop credential refresher")
+	}
+
+	assert.True(t, c.identityRuntimeConfig.CredentialsExpiresAt.Equal(time.Time{}))
+	assert.True(t, c.identityRuntimeConfig.CredentialsRetrievedAt.Equal(time.Time{}))
 }
 
 func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsExist_CallStopMultipleTimes(t *testing.T) {

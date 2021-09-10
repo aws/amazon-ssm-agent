@@ -31,6 +31,7 @@ import (
 
 var storeSharedCredentials = sharedCredentials.Store
 var backoffRetry = backoff.Retry
+var newSharedCredentials = credentials.NewSharedCredentials
 
 type ICredentialRefresher interface {
 	Start() error
@@ -164,6 +165,17 @@ func (c *credentialsRefresher) credentialRefresherRoutine() {
 			go c.credentialRefresherRoutine()
 		}
 	}()
+
+	// if credentials are not expired, verify that credentials are available.
+	if c.identityRuntimeConfig.CredentialsExpiresAt.After(c.getCurrentTimeFunc()) {
+		localCredsProvider := newSharedCredentials(c.identityRuntimeConfig.ShareFile, c.identityRuntimeConfig.ShareProfile)
+		if _, err := localCredsProvider.Get(); err != nil {
+			c.log.Warnf("Credentials are not available when they should: %v", err)
+			// set expiration and retrieved to beginning of time if shared credentials are not available to force credential refresh
+			c.identityRuntimeConfig.CredentialsExpiresAt = time.Time{}
+			c.identityRuntimeConfig.CredentialsRetrievedAt = time.Time{}
+		}
+	}
 
 	if c.identityRuntimeConfig.CredentialsExpiresAt.After(c.getCurrentTimeFunc()) {
 		c.log.Infof("Credentials exist and have not expired, sending ready message")
