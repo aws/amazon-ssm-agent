@@ -1,9 +1,13 @@
 #!/bin/sh
 
-launchctl list com.amazon.aws.ssm >/dev/null 2>&1
-if [ $? -eq 0 ]; then
-    echo "-> Agent is running in the instance"
-    echo "Stopping the agent"
-    launchctl unload -w /Library/LaunchDaemons/com.amazon.aws.ssm.plist
-    echo "Agent stopped"
+if [ $3 == "/" ]; then
+    launchctl list com.amazon.aws.ssm >/dev/null 2>&1
+    if [ $? -eq 0 ]; then
+        echo "-> Agent is running in the instance"
+        echo "Stopping the agent"
+        launchctl unload -w /Library/LaunchDaemons/com.amazon.aws.ssm.plist
+        echo "Agent stopped"
+    fi
+else
+    echo "Skipping launchctl for non-root installation"
 fi
