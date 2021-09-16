@@ -105,6 +105,7 @@ func (m *Manifest) LatestVersion(log log.T, info updateinfo.T) (result string, e
 		return version, fmt.Errorf("cannot find the latest version for package %v", EC2UpdaterPackageName)
 	}
 
+	log.Debugf("EC2Config manifest latest version: %v", version)
 	return version, nil
 }
 

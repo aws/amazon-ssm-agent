@@ -22,6 +22,7 @@ import (
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"strconv"
 	"strings"
 	"time"
@@ -40,6 +41,11 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
+	"github.com/aws/amazon-ssm-agent/agent/versionutil"
+)
+
+var (
+	ec2ConfigVersionPattern = regexp.MustCompile("[.0-9]+")
 )
 
 // Plugin is the type for the RunCommand plugin.
@@ -132,8 +138,9 @@ func getEC2ConfigCurrentVersion(log log.T) (res string, err error) {
 	}
 
 	data := string(cmdOut)
-	if len(data) > 1 {
-		version := strings.TrimPrefix(strings.TrimSpace(data), "\ufeff")
+	matches := ec2ConfigVersionPattern.FindStringSubmatch(data)
+	if matches != nil {
+		version := matches[0]
 		log.Debugf("GetEC2ConfigCurrentVersion: version after trimming space is %s", version)
 		return version, err
 	}
@@ -487,14 +494,19 @@ func (m *updateManager) validateUpdate(log log.T,
 		return true, err
 	}
 
-	if pluginInput.TargetVersion == currentVersion {
+	var versionCmpVal int
+	if versionCmpVal, err = versionutil.VersionCompare(pluginInput.TargetVersion, currentVersion); err != nil {
+		return true, err
+	}
+
+	if versionCmpVal == 0 {
 		out.AppendInfof("%v %v has already been installed, update skipped",
 			pluginInput.AgentName,
 			currentVersion)
 		out.MarkAsSucceeded()
 		return true, nil
 	}
-	if pluginInput.TargetVersion < currentVersion && !allowDowngrade {
+	if versionCmpVal < 0 && !allowDowngrade {
 		return true,
 			fmt.Errorf(
 				"updating %v to an older version, please enable allow downgrade to proceed",
