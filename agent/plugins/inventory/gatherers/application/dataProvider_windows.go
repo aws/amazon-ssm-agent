@@ -29,7 +29,7 @@ import (
 )
 
 const (
-	PowershellCmd                                   = "powershell"
+	PowershellCmd                                   = "powershell -NoProfile"
 	SysnativePowershellCmd                          = `C:\Windows\sysnative\WindowsPowerShell\v1.0\powershell.exe `
 	ArgsForDetectingOSArch                          = `get-wmiobject -class win32_processor | select-object addresswidth`
 	KeywordFor64BitArchitectureReportedByPowershell = "64"

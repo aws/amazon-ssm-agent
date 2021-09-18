@@ -53,7 +53,7 @@ $result = "[" + $result + "]"
 )
 
 const (
-	PowershellCmd = "powershell"
+	PowershellCmd = "powershell -NoProfile"
 )
 
 func randomString(length int) string {
