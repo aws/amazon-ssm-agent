@@ -28,7 +28,7 @@ const (
 	GathererName = "AWS:WindowsUpdate"
 
 	schemaVersionOfWindowsUpdate = "1.0"
-	cmd                          = "powershell"
+	cmd                          = "powershell -NoProfile"
 	windowsUpdateQueryCmd        = `
   [Console]::OutputEncoding = [System.Text.Encoding]::UTF8
   Get-WmiObject -Class win32_quickfixengineering | Select-Object HotFixId,Description,@{l="InstalledTime";e={[DateTime]::Parse($_.psbase.properties["installedon"].value,$([System.Globalization.CultureInfo]::GetCultureInfo("en-US"))).ToUniversalTime().ToString("yyyy-MM-ddTHH:mm:ssZ")}},InstalledBy | sort InstalledTime -desc | ConvertTo-Json`

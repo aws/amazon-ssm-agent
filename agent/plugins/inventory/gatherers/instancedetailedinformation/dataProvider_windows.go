@@ -27,7 +27,7 @@ import (
 )
 
 const (
-	PowershellCmd = "powershell"
+	PowershellCmd = "powershell -NoProfile"
 	CPUInfoScript = `
 $wmi_proc = Get-WmiObject -Class Win32_Processor
 if (@($wmi_proc)[0].NumberOfCores) #Modern OS
