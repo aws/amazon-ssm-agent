@@ -1,4 +1,11 @@
-Latest
+Latest 3.0.x
+===============
+- Includes all changes from 3.0.1390.0 to 3.1.338.0 ***except*** the following:
+  - Updated to version 3.1
+  - Updated build to build statically linked binaries for linux 64bit
+    - Minimum supported linux kernel version for linux 64bit is 3.2+
+
+3.1.338.0
 ===============
 - Fix to eliminate WaitGroup reuse panic triggered during agent reboot
 - Fix to include applications without UninstallString in Inventory for Windows
