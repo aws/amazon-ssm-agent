@@ -954,3 +954,16 @@ func buildAgentMessage(payloadType uint32, payload []byte) mgsContracts.AgentMes
 	}
 	return agentMessage
 }
+
+func (suite *ShellTestSuite) TestGetUserCredentials() {
+	var result int
+	var err error
+	value1 := "1002"
+	_, err = extractGroupId(value1)
+	assert.NotNil(suite.T(), err)
+
+	value2 := "1002(user-test)"
+	result, err = extractGroupId(value2)
+	assert.Nil(suite.T(), err)
+	assert.Equal(suite.T(), 1002, result)
+}

@@ -16,6 +16,7 @@ package main
 
 import (
 	"os"
+	"runtime/debug"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
@@ -94,6 +95,13 @@ func main() {
 	log.Infof("ssm-session-worker - %v", version.String())
 	//ensure logs are flushed
 	defer log.Close()
+	defer func() {
+		if err := recover(); err != nil {
+			log.Errorf("session worker panic: %v", err)
+			log.Errorf("Stacktrace:\n%s", debug.Stack())
+			log.Flush()
+		}
+	}()
 	if err != nil {
 		log.Errorf("Session worker failed to initialize: %s", err)
 		return

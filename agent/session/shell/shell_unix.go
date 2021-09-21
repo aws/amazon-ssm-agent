@@ -259,7 +259,7 @@ func getUserCredentials(log log.T, sessionUser string) (uint32, uint32, []uint32
 
 		// Extract group ids from the output
 		for _, value := range groupNamesAndIds {
-			groupId, err := strconv.Atoi(strings.TrimSpace(value[:strings.Index(value, "(")]))
+			groupId, err := extractGroupId(value)
 			if err != nil {
 				log.Errorf("Failed to retrieve group id from %s: %v", value, err)
 				return 0, 0, nil, err
@@ -275,6 +275,19 @@ func getUserCredentials(log log.T, sessionUser string) (uint32, uint32, []uint32
 	}
 
 	return 0, 0, nil, errors.New("invalid uid and gid")
+}
+
+// extract groupId.
+func extractGroupId(value string) (int, error) {
+	parenthesisIndex := strings.Index(value, "(")
+	if parenthesisIndex <= 0 {
+		return 0, errors.New("invalid group")
+	}
+	groupId, err := strconv.Atoi(strings.TrimSpace(value[:parenthesisIndex]))
+	if err != nil {
+		return 0, err
+	}
+	return groupId, nil
 }
 
 // runShellProfile executes the shell profile config
