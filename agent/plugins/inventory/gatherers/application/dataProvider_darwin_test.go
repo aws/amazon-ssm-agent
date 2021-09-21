@@ -30,6 +30,97 @@ var (
 	sampleData = `<?xml version="1.0" encoding="UTF-8"?>
                   <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
                   <plist version="1.0">
+					<dict>
+						<key>install-location</key>
+						<string>private/tmp</string>
+						<key>install-time</key>
+						<integer>1581382444</integer>
+						<key>pkg-version</key>
+						<string>16.17.18080304</string>
+						<key>pkgid</key>
+						<string>randomPackage-1</string>
+						<key>receipt-plist-version</key>
+						<real>1</real>
+						<key>volume</key>
+						<string>/</string>
+					</dict>
+					<dict>
+						<key>install-location</key>
+						<string>Applications</string>
+						<key>install-time</key>
+						<integer>1581382096</integer>
+						<key>pkg-version</key>
+						<string>16.31.19111002</string>
+						<key>pkgid</key>
+						<string>randomPackage-2</string>
+						<key>receipt-plist-version</key>
+						<real>1</real>
+						<key>volume</key>
+						<string>/</string>
+					</dict>
+                  </plist>`
+	unexpectedSampleData = `<a><b>test</b></a>`
+	sampleDataPackages   = `<WrapperXMLTag>
+	                       <plist version="1.0">
+                             <dict>
+                                <key>install-location</key>
+                                <string>private/tmp</string>
+                                <key>install-time</key>
+                                <integer>1581382444</integer>
+                                <key>pkg-version</key>
+                                <string>16.17.18080304</string>
+                                <key>pkgid</key>
+                                <string>randomPackage-1</string>
+                                <key>receipt-plist-version</key>
+                                <real>1</real>
+                                <key>volume</key>
+                                <string>/</string>
+                             </dict>
+                             </plist>
+
+                             <plist version="1.0">
+                             <dict>
+                                <key>install-location</key>
+                                <string>Applications</string>
+                                <key>install-time</key>
+                                <integer>1581382096</integer>
+                                <key>pkg-version</key>
+                                <string>16.31.19111002</string>
+                                <key>pkgid</key>
+                                <string>randomPackage-2</string>
+                                <key>receipt-plist-version</key>
+                                <real>1</real>
+                                <key>volume</key>
+                                <string>/</string>
+                             </dict>
+                             </plist>
+                           </WrapperXMLTag>`
+	applicationSampleData = `
+                            <key>_name</key>
+                            <string>Calendar</string>
+                            <key>has64BitIntelCode</key>
+                            <string>yes</string>
+                            <key>lastModified</key>
+                            <date>2019-04-03T07:20:22Z</date>
+                            <key>obtained_from</key>
+                            <string>apple</string>
+                            <key>path</key>
+                            <string>/Applications/Calendar.app</string>
+                            <key>runtime_environment</key>
+                            <string>arch_x86</string>
+                            <key>test-key</key>
+                            <key>signed_by</key>
+                            <array>
+                                <string>Software Signing</string>
+                                <string>Apple Code Signing Certification Authority</string>
+                                <string>Apple Root CA</string>
+                            </array>
+                            <key>version</key>
+                            <string>11.0</string>`
+
+	applicationSampleDataWrapper = `<?xml version="1.0" encoding="UTF-8"?>
+                  <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+                  <plist version="1.0">
                   <array>
                   	<dict>
                   		<key>_SPCommandLineArguments</key>
@@ -99,64 +190,6 @@ var (
                   	</dict>
                   </array>
                   </plist>`
-	unexpectedSampleData = `<a><b>test</b></a>`
-	sampleDataPackages   = `<WrapperXMLTag>
-	                       <plist version="1.0">
-                             <dict>
-                                <key>install-location</key>
-                                <string>private/tmp</string>
-                                <key>install-time</key>
-                                <integer>1581382444</integer>
-                                <key>pkg-version</key>
-                                <string>16.17.18080304</string>
-                                <key>pkgid</key>
-                                <string>randomPackage-1</string>
-                                <key>receipt-plist-version</key>
-                                <real>1</real>
-                                <key>volume</key>
-                                <string>/</string>
-                             </dict>
-                             </plist>
-
-                             <plist version="1.0">
-                             <dict>
-                                <key>install-location</key>
-                                <string>Applications</string>
-                                <key>install-time</key>
-                                <integer>1581382096</integer>
-                                <key>pkg-version</key>
-                                <string>16.31.19111002</string>
-                                <key>pkgid</key>
-                                <string>randomPackage-2</string>
-                                <key>receipt-plist-version</key>
-                                <real>1</real>
-                                <key>volume</key>
-                                <string>/</string>
-                             </dict>
-                             </plist>
-                           </WrapperXMLTag>`
-	applicationSampleData = `
-                            <key>_name</key>
-                            <string>Calendar</string>
-                            <key>has64BitIntelCode</key>
-                            <string>yes</string>
-                            <key>lastModified</key>
-                            <date>2019-04-03T07:20:22Z</date>
-                            <key>obtained_from</key>
-                            <string>apple</string>
-                            <key>path</key>
-                            <string>/Applications/Calendar.app</string>
-                            <key>runtime_environment</key>
-                            <string>arch_x86</string>
-                            <key>test-key</key>
-                            <key>signed_by</key>
-                            <array>
-                                <string>Software Signing</string>
-                                <string>Apple Code Signing Certification Authority</string>
-                                <string>Apple Root CA</string>
-                            </array>
-                            <key>version</key>
-                            <string>11.0</string>`
 )
 
 var sampleDataParsed = []model.ApplicationData{
@@ -190,7 +223,7 @@ var sampleDataPackagesParsed = []model.ApplicationData{
 	{
 		Name:            "randomPackage-1",
 		Version:         "16.17.18080304",
-		InstalledTime:   "2020-02-11 00:54:04 +0000 UTC",
+		InstalledTime:   "2020-02-11T00:54:04Z",
 		Release:         "",
 		Epoch:           "",
 		Publisher:       "",
@@ -203,7 +236,7 @@ var sampleDataPackagesParsed = []model.ApplicationData{
 	{
 		Name:            "randomPackage-2",
 		Version:         "16.31.19111002",
-		InstalledTime:   "2020-02-11 00:48:16 +0000 UTC",
+		InstalledTime:   "2020-02-11T00:48:16Z",
 		Release:         "",
 		Epoch:           "",
 		Publisher:       "",
@@ -227,7 +260,7 @@ func MockTestExecutorWithoutError(command string, args ...string) ([]byte, error
 }
 
 func TestConvertToApplicationData(t *testing.T) {
-	data, err := convertToApplicationData(sampleData)
+	data, err := convertToApplicationData(applicationSampleDataWrapper)
 
 	assert.Nil(t, err, "Check conversion logic - since sample data in unit test is tied to implementation")
 	assertEqual(t, sampleDataParsed, data)
@@ -258,7 +291,9 @@ func TestGetApplicationData(t *testing.T) {
 	assert.Equal(t, 0, len(data), "When command execution fails - application dataset must be empty")
 
 	//testing without error
-	cmdExecutor = MockTestExecutorWithoutError
+	cmdExecutor = func(command string, args ...string) ([]byte, error) {
+		return []byte(applicationSampleDataWrapper), nil
+	}
 
 	data, err = getApplicationData(mockContext, mockCommand, mockArgs)
 
@@ -270,7 +305,10 @@ func TestCollectApplicationData(t *testing.T) {
 	mockContext := context.NewMockDefault()
 
 	// sysctl return result without error
-	cmdExecutor = MockTestExecutorWithoutError
+	cmdExecutor = func(command string, args ...string) ([]byte, error) {
+		return []byte(applicationSampleDataWrapper), nil
+	}
+
 	data := collectPlatformDependentApplicationData(mockContext)
 	assertEqual(t, sampleDataParsed, data)
 

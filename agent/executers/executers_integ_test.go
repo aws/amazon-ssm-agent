@@ -11,7 +11,8 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-//go:build integration
+//go:build (freebsd || linux || netbsd || openbsd) && integration
+// +build freebsd linux netbsd openbsd
 // +build integration
 
 // Package executers contains general purpose (shell) command executing objects.

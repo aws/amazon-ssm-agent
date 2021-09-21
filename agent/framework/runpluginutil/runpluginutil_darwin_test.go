@@ -11,8 +11,8 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 //
-//go:build freebsd || linux || netbsd || openbsd
-// +build freebsd linux netbsd openbsd
+//go:build darwin
+// +build darwin
 
 // Package runpluginutil run plugin utility functions without referencing the actually plugin impl packages
 package runpluginutil
@@ -44,5 +44,5 @@ func TestKnownUnsupported(t *testing.T) {
 func TestUnknown(t *testing.T) {
 	isKnown, isSupported, _ := IsPluginSupportedForCurrentPlatform(mockLog, "FOO")
 	assert.False(t, isKnown)
-	assert.True(t, isSupported)
+	assert.False(t, isSupported)
 }
