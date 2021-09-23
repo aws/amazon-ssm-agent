@@ -23,6 +23,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
 	"github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/onpremprovider/rsaauth"
 	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
+	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/cenkalti/backoff/v4"
@@ -60,6 +61,21 @@ func NewCredentialsProvider(log log.T, config *appconfig.SsmagentConfig, info re
 
 var emptyCredential = credentials.Value{ProviderName: ProviderName}
 
+func shouldRetryAwsRequest(err error) bool {
+	// Don't retry if no error
+	if err == nil {
+		return false
+	}
+
+	if _, ok := err.(awserr.Error); ok {
+		// No aws sdk errors for RequestManagedInstanceRoleToken nor UpdateManagedInstancePublicKey are retryable
+		return false
+	}
+
+	// Retry for any non-aws errors
+	return true
+}
+
 // Retrieve retrieves credentials from the SSM Auth service.
 // Error will be returned if the request fails, or unable to extract
 // the desired credentials.
@@ -80,9 +96,12 @@ func (m *onpremCredentialsProvider) Retrieve() (credentials.Value, error) {
 	}
 
 	// Get role token
-	err = backoffRetry(func() error {
+	_ = backoffRetry(func() error {
 		roleCreds, err = m.client.RequestManagedInstanceRoleToken(fingerprint)
-		return err
+		if shouldRetryAwsRequest(err) {
+			return err
+		}
+		return nil
 	}, exponentialBackoff)
 
 	// Failed to get role token
@@ -142,18 +161,24 @@ func (m *onpremCredentialsProvider) rotatePrivateKey(fingerprint string, exponen
 	}
 
 	// Update remote public key
-	err = backoffRetry(func() error {
-		_, innerErr := m.client.UpdateManagedInstancePublicKey(newPublicKey, newKeyType)
-		return innerErr
+	_ = backoffRetry(func() error {
+		_, err = m.client.UpdateManagedInstancePublicKey(newPublicKey, newKeyType)
+		if shouldRetryAwsRequest(err) {
+			return err
+		}
+		return nil
 	}, exponentialBackoff)
 
 	if err != nil {
 		m.log.Warnf("Failed to update public key, trying to recover: %s", err)
 
 		// Updating public key failed, test if old public key is stored in SSM
-		err = backoffRetry(func() error {
-			_, innerErr := m.client.RequestManagedInstanceRoleToken(fingerprint)
-			return innerErr
+		_ = backoffRetry(func() error {
+			_, err = m.client.RequestManagedInstanceRoleToken(fingerprint)
+			if shouldRetryAwsRequest(err) {
+				return err
+			}
+			return nil
 		}, exponentialBackoff)
 
 		if err == nil {
@@ -163,9 +188,12 @@ func (m *onpremCredentialsProvider) rotatePrivateKey(fingerprint string, exponen
 		// Test if new key works
 		m.initializeClient(newPrivateKey)
 
-		err = backoffRetry(func() error {
-			_, innerErr := m.client.RequestManagedInstanceRoleToken(fingerprint)
-			return innerErr
+		_ = backoffRetry(func() error {
+			_, err = m.client.RequestManagedInstanceRoleToken(fingerprint)
+			if shouldRetryAwsRequest(err) {
+				return err
+			}
+			return nil
 		}, exponentialBackoff)
 
 		if err != nil {
@@ -181,9 +209,9 @@ func (m *onpremCredentialsProvider) rotatePrivateKey(fingerprint string, exponen
 	m.initializeClient(newPrivateKey)
 
 	// New key was successfully updated in service, trying to save new key to disk
-	err = backoffRetry(func() error {
-		innerErr := m.registrationInfo.UpdatePrivateKey(m.log, newPrivateKey, newKeyType)
-		return innerErr
+	_ = backoffRetry(func() error {
+		err = m.registrationInfo.UpdatePrivateKey(m.log, newPrivateKey, newKeyType)
+		return err
 	}, exponentialBackoff)
 
 	if err != nil {
@@ -191,8 +219,11 @@ func (m *onpremCredentialsProvider) rotatePrivateKey(fingerprint string, exponen
 
 		// Attempt to update the remote public key to the old public key
 		err = backoffRetry(func() error {
-			_, innerErr := m.client.UpdateManagedInstancePublicKey(oldPublicKey, oldKeyType)
-			return innerErr
+			_, err = m.client.UpdateManagedInstancePublicKey(oldPublicKey, oldKeyType)
+			if shouldRetryAwsRequest(err) {
+				return err
+			}
+			return nil
 		}, exponentialBackoff)
 
 		if err != nil {

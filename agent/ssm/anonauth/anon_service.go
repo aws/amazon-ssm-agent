@@ -23,6 +23,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/ssm/util"
 	"github.com/aws/amazon-ssm-agent/common/identity/endpoint"
 	"github.com/aws/aws-sdk-go/aws"
+	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/aws/aws-sdk-go/aws/request"
 	"github.com/aws/aws-sdk-go/aws/session"
@@ -38,6 +39,24 @@ type AnonymousService interface {
 // sdkService is an service wrapper that delegates to the ssm sdk.
 type sdkService struct {
 	sdk *ssm.SSM
+}
+
+// shouldRetryAwsRequest determines if request should be retried
+func shouldRetryAwsRequest(err error) bool {
+	// Don't retry if no error
+	if err == nil {
+		return false
+	}
+
+	if awsErr, ok := err.(awserr.Error); ok {
+		if awsErr.Code() == ssm.ErrCodeTooManyUpdates {
+			return true
+		}
+		return false
+	}
+
+	// Retry for any non-aws errors
+	return true
 }
 
 // NewAnonymousService creates a new SSM service instance.
@@ -88,11 +107,12 @@ func (svc *sdkService) RegisterManagedInstance(activationCode, activationID, pub
 	}
 
 	var result *ssm.RegisterManagedInstanceOutput
-	var innerErr error
-
-	err = backoff.Retry(func() error {
-		result, innerErr = svc.sdk.RegisterManagedInstance(&params)
-		return innerErr
+	_ = backoff.Retry(func() error {
+		result, err = svc.sdk.RegisterManagedInstance(&params)
+		if shouldRetryAwsRequest(err) {
+			return err
+		}
+		return nil
 	}, exponentialBackoff)
 
 	if err != nil {
