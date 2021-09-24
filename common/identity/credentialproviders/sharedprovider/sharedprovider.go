@@ -37,6 +37,7 @@ type sharedCredentialsProvider struct {
 	log                   log.T
 	runtimeConfigClient   runtimeconfig.IIdentityRuntimeConfigClient
 	identityRuntimeConfig runtimeconfig.IdentityRuntimeConfig
+	getTimeNow            func() time.Time
 }
 
 func NewCredentialsProvider(log log.T) (credentials.Provider, error) {
@@ -58,10 +59,12 @@ func NewCredentialsProvider(log log.T) (credentials.Provider, error) {
 	return &sharedCredentialsProvider{
 		log:                 log,
 		runtimeConfigClient: runtimeConfigClient,
+		getTimeNow:          time.Now,
 	}, nil
 }
 
 var emptyCredential = credentials.Value{ProviderName: providerName}
+var newSharedCredentials = credentials.NewSharedCredentials
 
 // Retrieve retrieves credentials from the shared profile
 // Error will be returned if the request fails, or unable to extract
@@ -70,19 +73,29 @@ func (s *sharedCredentialsProvider) Retrieve() (credentials.Value, error) {
 	// before sharedCredentialsProvider is initialized, we check if the runtime config exists
 	config, err := s.runtimeConfigClient.GetConfig()
 	if err != nil {
-		s.log.Errorf("Failed get the identity runtime config: %v", err)
 		return emptyCredential, err
 	}
 
-	credsProvider := credentials.NewSharedCredentials(config.ShareFile, config.ShareProfile)
+	// If credentials are already expired, return error
+	if config.CredentialsExpiresAt.Before(s.getTimeNow()) {
+		return emptyCredential, fmt.Errorf("shared credentials are already expired, they were queried at %v and expired at %v", config.CredentialsRetrievedAt.Format(time.RFC3339), config.CredentialsExpiresAt.Format(time.RFC3339))
+	}
 
+	credsProvider := newSharedCredentials(config.ShareFile, config.ShareProfile)
 	creds, err := credsProvider.Get()
 	if err != nil {
 		return emptyCredential, err
 	}
 
 	creds.ProviderName = providerName
-	s.SetExpiration(config.CredentialsExpiresAt, s.getTimeWindow())
+
+	expirationWindow := s.getTimeWindow()
+	// If credentials currently saved credentials expire in less than 'refreshBeforeExpiryDuration', no expiry window should be set
+	if config.CredentialsExpiresAt.Before(s.getTimeNow().Add(refreshBeforeExpiryDuration)) {
+		expirationWindow = time.Duration(0)
+	}
+
+	s.SetExpiration(config.CredentialsExpiresAt, expirationWindow)
 
 	return creds, err
 }

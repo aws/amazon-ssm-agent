@@ -21,9 +21,9 @@ import (
 
 	"github.com/aws/amazon-ssm-agent/agent/log"
 	"github.com/aws/amazon-ssm-agent/common/identity"
+	mocks3 "github.com/aws/amazon-ssm-agent/common/identity/credentialproviders/mocks"
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 	mocks2 "github.com/aws/amazon-ssm-agent/common/runtimeconfig/mocks"
-	"github.com/aws/amazon-ssm-agent/core/app/credentialrefresher/mocks"
 	"github.com/aws/aws-sdk-go/aws/credentials"
 	"github.com/cenkalti/backoff/v4"
 	"github.com/stretchr/testify/assert"
@@ -39,7 +39,7 @@ var (
 
 func init() {
 	newSharedCredentials = func(_, _ string) *credentials.Credentials {
-		provider := &mocks.Provider{}
+		provider := &mocks3.Provider{}
 		provider.On("Retrieve").Return(credentials.Value{}, nil).Once()
 		return credentials.NewCredentials(provider)
 	}
@@ -182,7 +182,7 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsNotExpired_
 	oldFun := newSharedCredentials
 	defer func() { newSharedCredentials = oldFun }()
 	newSharedCredentials = func(_, _ string) *credentials.Credentials {
-		provider := &mocks.Provider{}
+		provider := &mocks3.Provider{}
 		provider.On("Retrieve").Return(credentials.Value{}, fmt.Errorf("SomeShareCredsErr")).Once()
 		return credentials.NewCredentials(provider)
 	}
@@ -192,14 +192,14 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsNotExpired_
 		CredentialsRetrievedAt: fiveMinBeforeTime,
 	}
 
-	provider := &mocks.Provider{}
+	provider := &mocks3.Provider{}
 	provider.On("Retrieve").Return(func() credentials.Value { return credentials.Value{} }, func() error {
 		// Sleep here because we know that if we reach this point and have not got message in credentialsReadyChan, the time is set correctly
 		time.Sleep(time.Second)
 		return fmt.Errorf("SomeRetrieveErr")
 	})
 
-	expirer := &mocks.Expirer{}
+	expirer := &mocks3.Expirer{}
 	expirer.On("ExpiresAt").Return(tenMinAfterTime)
 
 	c := &credentialsRefresher{
@@ -294,10 +294,10 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsDontExist(t
 	runtimeConfigClient := &mocks2.IIdentityRuntimeConfigClient{}
 	runtimeConfigClient.On("SaveConfig", mock.Anything).Return(nil).Once()
 
-	provider := &mocks.Provider{}
+	provider := &mocks3.Provider{}
 	provider.On("Retrieve").Return(credentials.Value{}, nil).Once()
 
-	expirer := &mocks.Expirer{}
+	expirer := &mocks3.Expirer{}
 	expirer.On("ExpiresAt").Return(tenMinAfterTime).Once()
 
 	c := &credentialsRefresher{
