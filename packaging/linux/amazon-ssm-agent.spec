@@ -1,3 +1,5 @@
+%define _buildhost build.amazon.com
+
 Name         : amazon-ssm-agent
 Version      : %rpmversion
 Release      : 1
