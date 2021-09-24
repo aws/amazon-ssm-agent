@@ -82,6 +82,12 @@ func (i *Identity) Credentials() *credentials.Credentials {
 
 // CredentialProvider returns the initialized credentials provider
 func (i *Identity) CredentialProvider() credentials.Provider {
+	i.credsInitMutex.Lock()
+	defer i.credsInitMutex.Unlock()
+
+	if i.credentialsProvider == nil {
+		i.credentialsProvider = onpremprovider.NewCredentialsProvider(i.Log, i.Config, i.registrationInfo, i.shouldShareCredentials)
+	}
 	return i.credentialsProvider
 }
 
@@ -127,13 +133,11 @@ func NewOnPremIdentity(log log.T, config *appconfig.SsmagentConfig) *Identity {
 		}
 	}
 
-	remoteCredentialsProvider := onpremprovider.NewCredentialsProvider(log, config, registrationInfo, shouldShareCredentials)
-
 	return &Identity{
 		Log:                    log,
 		Config:                 config,
 		registrationInfo:       registrationInfo,
-		credentialsProvider:    remoteCredentialsProvider,
+		credentialsProvider:    nil,
 		credentials:            nil,
 		shareFile:              shareFile,
 		shouldShareCredentials: shouldShareCredentials,
