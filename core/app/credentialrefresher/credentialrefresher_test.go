@@ -129,6 +129,7 @@ func Test_credentialsRefresher_durationUntilRefresh(t *testing.T) {
 				credentialsReadyChan:        tt.fields.credentialsReadyChan,
 				stopCredentialRefresherChan: tt.fields.stopCredentialRefresherChan,
 				getCurrentTimeFunc:          tt.fields.getCurrentTimeFunc,
+				timeAfterFunc:               time.After,
 			}
 			if got := c.durationUntilRefresh(); got != tt.want {
 				t.Errorf("durationUntilRefresh() = %v, want %v", got, tt.want)
@@ -155,6 +156,7 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsNotExpired_
 		stopCredentialRefresherChan:  make(chan struct{}),
 		isCredentialRefresherRunning: true,
 		getCurrentTimeFunc:           func() time.Time { return currentTime },
+		timeAfterFunc:                time.After,
 	}
 
 	go c.credentialRefresherRoutine()
@@ -212,6 +214,7 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsNotExpired_
 		stopCredentialRefresherChan:  make(chan struct{}),
 		isCredentialRefresherRunning: true,
 		getCurrentTimeFunc:           func() time.Time { return currentTime },
+		timeAfterFunc:                time.After,
 	}
 
 	go c.credentialRefresherRoutine()
@@ -252,6 +255,7 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsExist_CallS
 		stopCredentialRefresherChan:  make(chan struct{}),
 		isCredentialRefresherRunning: true,
 		getCurrentTimeFunc:           func() time.Time { return currentTime },
+		timeAfterFunc:                time.After,
 	}
 
 	go c.credentialRefresherRoutine()
@@ -311,6 +315,7 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsDontExist(t
 		stopCredentialRefresherChan:  make(chan struct{}),
 		isCredentialRefresherRunning: true,
 		getCurrentTimeFunc:           func() time.Time { return currentTime },
+		timeAfterFunc:                time.After,
 	}
 
 	go c.credentialRefresherRoutine()
@@ -336,4 +341,84 @@ func Test_credentialsRefresher_credentialRefresherRoutine_CredentialsDontExist(t
 	c.identityRuntimeConfig.CredentialsRetrievedAt.Equal(currentTime)
 	c.identityRuntimeConfig.CredentialsExpiresAt.Equal(tenMinAfterTime)
 
+}
+
+// Mock aws error struct
+type awsTestError struct {
+	errCode string
+}
+
+func (a awsTestError) Error() string   { return "" }
+func (a awsTestError) Message() string { return "" }
+func (a awsTestError) OrigErr() error  { return fmt.Errorf("SomeErr") }
+func (a awsTestError) Code() string    { return a.errCode }
+
+func Test_credentialsRefresher_retrieveCredsWithRetry_NonActionableErr(t *testing.T) {
+	for _, awsErr := range []error{awsTestError{"AccessDeniedException"}, awsTestError{"MachineFingerprintDoesNotMatch"}} {
+		provider := &mocks3.Provider{}
+		provider.On("Retrieve").Return(credentials.Value{}, awsErr).Once()
+
+		var timeAfterParamVal time.Duration
+		c := &credentialsRefresher{
+			log:                         log.NewMockLog(),
+			provider:                    provider,
+			stopCredentialRefresherChan: make(chan struct{}),
+			timeAfterFunc: func(duration time.Duration) <-chan time.Time {
+				timeAfterParamVal = duration
+				c := make(chan time.Time)
+				return c
+			},
+		}
+
+		waitGrp := sync.WaitGroup{}
+		waitGrp.Add(1)
+		stopped := false
+		go func() {
+			defer waitGrp.Done()
+			_, stopped = c.retrieveCredsWithRetry()
+		}()
+
+		// Allow retrieve to finish one round
+		time.Sleep(time.Millisecond * 100)
+
+		// Verify sleep was at least 24 hours
+		assert.True(t, timeAfterParamVal >= time.Hour*24)
+		provider.AssertExpectations(t)
+
+		// stop
+		c.stopCredentialRefresherChan <- struct{}{}
+
+		waitGrp.Wait()
+		assert.True(t, stopped, "expected retrieve to have been stopped by channel message")
+	}
+}
+
+func Test_credentialsRefresher_retrieveCredsWithRetry_Retry2000TimesNoExitUntilSuccess(t *testing.T) {
+	provider := &mocks3.Provider{}
+	provider.On("Retrieve").Return(credentials.Value{}, awsTestError{"PotentiallyRecoverableAWSError"}).Times(1000)
+	provider.On("Retrieve").Return(credentials.Value{}, fmt.Errorf("SomeRandomNonAwsErr")).Times(1000)
+	provider.On("Retrieve").Return(credentials.Value{}, nil).Once()
+
+	numSleeps := 0
+	c := &credentialsRefresher{
+		log:                         log.NewMockLog(),
+		provider:                    provider,
+		stopCredentialRefresherChan: make(chan struct{}),
+		timeAfterFunc: func(duration time.Duration) <-chan time.Time {
+			numSleeps++
+			// assumes random aws error first 3 retries which would never produce a retry below 6 seconds
+			assert.True(t, duration > time.Second*5, "AWS Error produced retry below 6 seconds")
+
+			// Retry for errors that are not invalid instance id nor machine fingerprint should never produce sleep longer than 22 hours
+			assert.True(t, duration < time.Hour*22, "sleep for longer than 22 hours")
+			c := make(chan time.Time, 1)
+			c <- time.Now()
+			return c
+		},
+	}
+
+	_, stopped := c.retrieveCredsWithRetry()
+	provider.AssertExpectations(t)
+	assert.Equal(t, 2000, numSleeps, "Number of retries was not correct")
+	assert.False(t, stopped, "expected retrieve to not have been stopped by channel message")
 }

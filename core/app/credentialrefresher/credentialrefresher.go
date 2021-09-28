@@ -15,6 +15,8 @@ package credentialrefresher
 
 import (
 	"fmt"
+	"math"
+	"math/rand"
 	"runtime/debug"
 	"sync"
 	"time"
@@ -25,7 +27,9 @@ import (
 	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/amazon-ssm-agent/common/runtimeconfig"
 	"github.com/aws/amazon-ssm-agent/core/app/context"
+	"github.com/aws/aws-sdk-go/aws/awserr"
 	"github.com/aws/aws-sdk-go/aws/credentials"
+	"github.com/aws/aws-sdk-go/service/ssm"
 	"github.com/cenkalti/backoff/v4"
 )
 
@@ -56,11 +60,12 @@ type credentialsRefresher struct {
 	isCredentialRefresherRunning bool
 
 	getCurrentTimeFunc func() time.Time
+	timeAfterFunc      func(time.Duration) <-chan time.Time
 }
 
 func NewCredentialRefresher(context context.ICoreAgentContext) ICredentialRefresher {
 	return &credentialsRefresher{
-		log:                          context.Log(),
+		log:                          context.Log().WithContext("[CredentialRefresher]"),
 		agentIdentity:                context.Identity(),
 		provider:                     nil,
 		expirer:                      nil,
@@ -71,6 +76,7 @@ func NewCredentialRefresher(context context.ICoreAgentContext) ICredentialRefres
 		stopCredentialRefresherChan:  make(chan struct{}),
 		isCredentialRefresherRunning: false,
 		getCurrentTimeFunc:           time.Now,
+		timeAfterFunc:                time.After,
 	}
 }
 
@@ -127,6 +133,9 @@ func (c *credentialsRefresher) Start() error {
 		return fmt.Errorf("error creating backoff config: %v", err)
 	}
 
+	// Seed random number generator used to generate jitter during retry
+	rand.Seed(time.Now().UnixNano())
+
 	go c.credentialRefresherRoutine()
 
 	// Block until credentials are ready
@@ -154,7 +163,53 @@ func (c *credentialsRefresher) sendCredentialsReadyMessage() {
 	})
 }
 
+func (*credentialsRefresher) getBackoffRetryJitterSleepDuration(retryCount int) time.Duration {
+	expBackoff := math.Pow(2, float64(retryCount))
+	return time.Duration(int(expBackoff)+rand.Intn(int(math.Ceil(expBackoff*0.2)))) * time.Second
+}
+
+// retrieveCredsWithRetry will never exit unless it receives a message on stopChan or is able to successfully call Retrieve
+func (c *credentialsRefresher) retrieveCredsWithRetry() (credentials.Value, bool) {
+	retryCount := 0
+	for {
+		creds, err := c.provider.Retrieve()
+		if err == nil {
+			return creds, false
+		}
+
+		// Default sleep duration for non-aws errors
+		sleepDuration := c.getBackoffRetryJitterSleepDuration(retryCount)
+		// Max retry count is 16, which will sleep for about 18-22 hours
+		if retryCount < 16 {
+			retryCount++
+		}
+
+		if awsErr, ok := err.(awserr.Error); ok {
+			// Check if error is a non-retryable error if fingerprint changes or response is access denied exception
+			if awsErr.Code() == ssm.ErrCodeMachineFingerprintDoesNotMatch || awsErr.Code() == "AccessDeniedException" {
+				// Sleep 24 hours with random jitter of up to 2 hour if error is non-retryable to make sure we spread retries for large de-registered fleets
+				sleepDuration = 24*time.Hour + time.Second*time.Duration(rand.Intn(7200))
+				c.log.Errorf("Retrieve credentials produced unrecoverable aws error: %v", awsErr)
+			} else {
+				// Sleep additional 10 - 20 seconds in case of an aws error
+				sleepDuration += time.Second * time.Duration(10+rand.Intn(10))
+				c.log.Errorf("Retrieve credentials produced aws error: %v", awsErr)
+			}
+		} else {
+			c.log.Errorf("Retrieve credentials produced error: %v", err)
+		}
+
+		c.log.Infof("Sleeping for %v before retrying retrieve credentials", sleepDuration)
+		select {
+		case <-c.stopCredentialRefresherChan:
+			return creds, true
+		case <-c.timeAfterFunc(sleepDuration):
+		}
+	}
+}
+
 func (c *credentialsRefresher) credentialRefresherRoutine() {
+	var err error
 	defer func() {
 		if err := recover(); err != nil {
 			c.log.Errorf("credentials refresher panic: %v", err)
@@ -188,15 +243,13 @@ func (c *credentialsRefresher) credentialRefresherRoutine() {
 		case <-c.stopCredentialRefresherChan:
 			c.log.Infof("Stopping credentials refresher")
 			return
-		case <-time.After(c.durationUntilRefresh()):
+		case <-c.timeAfterFunc(c.durationUntilRefresh()):
 			c.log.Debugf("Calling Retrieve on credentials provider")
-
-			creds, err := c.provider.Retrieve()
+			creds, stopped := c.retrieveCredsWithRetry()
 			credentialsRetrievedAt := c.getCurrentTimeFunc()
-
-			if err != nil {
-				c.log.Errorf("failed to refresh credentials: %v", err)
-				continue
+			if stopped {
+				c.log.Infof("Stopping credentials refresher")
+				return
 			}
 
 			err = backoffRetry(func() error {

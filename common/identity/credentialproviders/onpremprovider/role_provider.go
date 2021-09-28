@@ -87,7 +87,7 @@ func (m *onpremCredentialsProvider) Retrieve() (credentials.Value, error) {
 
 	// Failed to get role token
 	if err != nil {
-		return emptyCredential, fmt.Errorf("error occurred in RequestManagedInstanceRoleToken: %v", err)
+		return emptyCredential, err
 	}
 
 	shouldRotate, err := m.registrationInfo.ShouldRotatePrivateKey(m.log, m.executableToRotateKey, m.config.Profile.KeyAutoRotateDays, *roleCreds.UpdateKeyPair)
