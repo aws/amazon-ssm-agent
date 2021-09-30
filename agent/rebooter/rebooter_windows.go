@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build windows
 // +build windows
 
 // Package rebooter provides utilities used to reboot a machine.

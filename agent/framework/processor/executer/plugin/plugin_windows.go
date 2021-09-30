@@ -14,6 +14,7 @@
 // Package plugin contains general interfaces and types relevant to plugins.
 // It also provides the methods for registering plugins.
 //
+//go:build windows
 // +build windows
 
 package plugin

@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 //
+//go:build linux
 // +build linux
 
 // Package interop provides structures and functions for syscall's data structure marshalling.

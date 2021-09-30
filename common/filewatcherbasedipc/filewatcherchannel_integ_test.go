@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build integration
 // +build integration
 
 //Package channel defines and implements the communication interface between agent and command runner process

@@ -13,6 +13,7 @@
 
 // Package application implements the application plugin.
 //
+//go:build windows
 // +build windows
 
 package application

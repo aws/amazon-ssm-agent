@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 //
+//go:build freebsd || linux || netbsd || openbsd
 // +build freebsd linux netbsd openbsd
 
 // Package singlecommand implements session shell plugin with interactive or non-interactive single command.

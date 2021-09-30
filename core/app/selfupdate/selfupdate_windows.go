@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
+//go:build windows
 // +build windows
 
 // Package selfupdate provides an interface to force update with Message Gateway Service and S3

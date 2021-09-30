@@ -1,3 +1,4 @@
+//go:build darwin || freebsd || linux || netbsd || openbsd
 // +build darwin freebsd linux netbsd openbsd
 
 // Copyright 2016 Amazon.com, Inc. or its affiliates. All Rights Reserved.

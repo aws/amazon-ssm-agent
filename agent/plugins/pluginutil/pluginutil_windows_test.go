@@ -13,6 +13,7 @@
 //
 // Package pluginutil implements some common functions shared by multiple plugins.
 //
+//go:build windows
 // +build windows
 
 package pluginutil

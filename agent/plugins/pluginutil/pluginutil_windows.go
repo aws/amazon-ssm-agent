@@ -14,6 +14,7 @@
 // Package pluginutil implements some common functions shared by multiple plugins.
 // pluginutil_windows contains a function for returning the ResultStatus based on the exitCode
 //
+//go:build windows
 // +build windows
 
 package pluginutil

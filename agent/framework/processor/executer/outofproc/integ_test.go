@@ -11,7 +11,8 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-//+build integration
+//go:build integration
+// +build integration
 
 // Package outofproc implements Executer interface with out-of-process plugin running capabilities
 package outofproc

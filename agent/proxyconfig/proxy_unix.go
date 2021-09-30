@@ -1,3 +1,4 @@
+//go:build freebsd || linux || netbsd || openbsd
 // +build freebsd linux netbsd openbsd
 
 // Copyright 2021 Amazon.com, Inc. or its affiliates. All Rights Reserved.

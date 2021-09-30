@@ -13,7 +13,8 @@
 
 // package filewatcherbasedipc is used to establish IPC between master and workers using files.
 //
-//+build windows
+//go:build windows
+// +build windows
 
 package filewatcherbasedipc
 

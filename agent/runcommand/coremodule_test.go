@@ -13,6 +13,7 @@
 
 // Package runcommand implements runcommand core processing module
 
+//go:build integration
 // +build integration
 
 package runcommand

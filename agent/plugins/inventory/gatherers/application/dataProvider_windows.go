@@ -13,6 +13,7 @@
 
 // Package application contains application gatherer.
 
+//go:build windows
 // +build windows
 
 package application

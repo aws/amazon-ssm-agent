@@ -13,6 +13,7 @@
 
 // Package psmodule implements the power shell module plugin.
 //
+//go:build windows
 // +build windows
 
 package psmodule

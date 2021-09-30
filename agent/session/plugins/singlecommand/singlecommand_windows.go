@@ -11,6 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 //
+//go:build windows
 // +build windows
 
 // Package singlecommand implements session shell plugin with interactive or non-interactive single command.
