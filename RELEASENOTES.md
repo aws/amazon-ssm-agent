@@ -1,5 +1,13 @@
 Latest
 ===============
+- Fixed cpu spike issue manifesting on snap
+- Fixed issue with version comparison in EC2Config update plugin
+- Fixed panic when command output was being truncated
+- Updated build to use go1.16.8
+- Removed Profile from inventory powershell commands on Windows
+
+3.1.338.0
+===============
 - Fix to eliminate WaitGroup reuse panic triggered during agent reboot
 - Fix to include applications without UninstallString in Inventory for Windows
 - Fixed a bug where multi-plugin documents with large outputs would timeout RunCommand
