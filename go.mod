@@ -15,7 +15,7 @@ require (
 	github.com/cihub/seelog v0.0.0-20170130134532-f561c5e57575
 	github.com/coreos/go-semver v0.2.0
 	github.com/creack/pty v1.1.11
-	github.com/fsnotify/fsnotify v1.4.7
+	github.com/fsnotify/fsnotify v1.5.1
 	github.com/go-git/go-billy/v5 v5.3.0 // indirect
 	github.com/go-git/go-git/v5 v5.3.0
 	github.com/google/go-github v0.0.0-20170604025028-a117bb2595a5 // this corresponds to v8
