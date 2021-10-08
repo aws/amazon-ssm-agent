@@ -15,7 +15,9 @@
 package messagebus
 
 import (
+	"fmt"
 	"testing"
+	"time"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	contextmocks "github.com/aws/amazon-ssm-agent/agent/context"
@@ -59,6 +61,7 @@ func (suite *MessageBusTestSuite) SetupTest() {
 		terminationChannel:          suite.mockTerminateChannel,
 		terminationRequestChannel:   make(chan bool, 1),
 		terminationChannelConnected: make(chan bool, 1),
+		sleepFunc:                   func(time.Duration) {},
 	}
 }
 
@@ -68,11 +71,43 @@ func TestMessageBusTestSuite(t *testing.T) {
 }
 
 func (suite *MessageBusTestSuite) TestProcessTerminationRequest_Successful() {
+	suite.mockTerminateChannel.On("IsConnect").Return(true).Twice()
+	suite.mockTerminateChannel.On("Close").Return(nil).Once()
+
+	request := message.CreateTerminateWorkerRequest()
+	requestString, _ := jsonutil.Marshal(request)
+	suite.mockTerminateChannel.On("Recv").Return([]byte(requestString), nil)
+	suite.mockTerminateChannel.On("Send", mock.Anything).Return(nil)
+
+	suite.messageBus.ProcessTerminationRequest()
+
+	suite.mockTerminateChannel.AssertExpectations(suite.T())
+
+	// Assert termination channel connected and that a termination message is sent
+	suite.Assertions.Equal(true, <-suite.messageBus.GetTerminationChannelConnectedChan())
+	suite.Assertions.Equal(true, <-suite.messageBus.GetTerminationRequestChan())
+}
+
+func (suite *MessageBusTestSuite) TestProcessTerminationRequest_SuccessfulConnectionRetry() {
+	// First try channel not connected but fails initialize
 	suite.mockTerminateChannel.On("IsConnect").Return(false).Once()
-	suite.mockTerminateChannel.On("IsConnect").Return(true).Once()
-	suite.mockTerminateChannel.On("Initialize", mock.Anything).Return(nil)
-	suite.mockTerminateChannel.On("Dial", mock.Anything).Return(nil)
-	suite.mockTerminateChannel.On("Close").Return(nil)
+	suite.mockTerminateChannel.On("Initialize", mock.Anything).Return(fmt.Errorf("SomeErr")).Once()
+	suite.mockTerminateChannel.On("Close").Return(nil).Once()
+
+	// Second try channel not connected but fails dial
+	suite.mockTerminateChannel.On("IsConnect").Return(false).Once()
+	suite.mockTerminateChannel.On("Initialize", mock.Anything).Return(nil).Once()
+	suite.mockTerminateChannel.On("Dial", mock.Anything).Return(fmt.Errorf("SomeDialError")).Once()
+	suite.mockTerminateChannel.On("Close").Return(nil).Once()
+
+	// Third try channel not connected but finally succeeds
+	suite.mockTerminateChannel.On("IsConnect").Return(false).Once()
+	suite.mockTerminateChannel.On("Initialize", mock.Anything).Return(nil).Once()
+	suite.mockTerminateChannel.On("Dial", mock.Anything).Return(nil).Once()
+
+	// Fourth call to isConnect succeeds, fourth call is for defer where it will call close
+	suite.mockTerminateChannel.On("IsConnect").Return(true).Twice()
+	suite.mockTerminateChannel.On("Close").Return(nil).Once()
 
 	request := message.CreateTerminateWorkerRequest()
 	requestString, _ := jsonutil.Marshal(request)

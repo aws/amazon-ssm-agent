@@ -75,6 +75,9 @@ func (channel *namedPipeChannel) Send(message *message.Message) error {
 }
 
 func (channel *namedPipeChannel) Close() error {
+	defer func() {
+		channel.socket = nil
+	}()
 	return channel.socket.Close()
 }
 

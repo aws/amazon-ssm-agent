@@ -44,6 +44,7 @@ type MessageBus struct {
 	terminationChannel          channel.IChannel
 	terminationRequestChannel   chan bool
 	terminationChannelConnected chan bool
+	sleepFunc                   func(time.Duration)
 }
 
 // NewMessageBus creates a new instance of MessageBus
@@ -57,6 +58,7 @@ func NewMessageBus(context context.T) *MessageBus {
 		terminationChannel:          channelCreator(log, identity),
 		terminationRequestChannel:   make(chan bool, 1),
 		terminationChannelConnected: make(chan bool, 1),
+		sleepFunc:                   time.Sleep,
 	}
 }
 
@@ -75,23 +77,18 @@ func (bus *MessageBus) ProcessHealthRequest() {
 
 	defer func() {
 		if bus.healthChannel.IsConnect() {
-
 			if err = bus.healthChannel.Close(); err != nil {
 				bus.context.Log().Errorf("failed to close health channel: %v", err)
 			}
 		}
 	}()
 
-	for {
-		if !bus.healthChannel.IsConnect() {
-			if err = bus.dialToCoreAgentChannel(message.GetWorkerHealthRequest, message.GetWorkerHealthChannel); err != nil {
-				// This happens when worker started before core agent is
-				// In practise, it should never happen
-				log.Errorf("failed to listen to Core Agent health channel: %s", err.Error())
-				time.Sleep(time.Duration(bus.context.AppConfig().Ssm.HealthFrequencyMinutes) * time.Minute)
-			} else {
-				break
-			}
+	for !bus.healthChannel.IsConnect() {
+		if err = bus.dialToCoreAgentChannel(message.GetWorkerHealthRequest, message.GetWorkerHealthChannel); err != nil {
+			// This happens when worker started before core agent is
+			//   and when the amazon-ssm-agent is terminated milliseconds after the ssm-agent-worker has been started
+			log.Errorf("failed to listen to Core Agent health channel: %s", err.Error())
+			bus.sleepFunc(time.Duration(bus.context.AppConfig().Ssm.HealthFrequencyMinutes) * time.Minute)
 		}
 	}
 
@@ -144,23 +141,18 @@ func (bus *MessageBus) ProcessTerminationRequest() {
 	var msg []byte
 	defer func() {
 		if bus.terminationChannel.IsConnect() {
-
 			if err = bus.terminationChannel.Close(); err != nil {
 				bus.context.Log().Errorf("failed to close termination channel: %v", err)
 			}
 		}
 	}()
 
-	for {
-		if !bus.terminationChannel.IsConnect() {
-			if err = bus.dialToCoreAgentChannel(message.TerminateWorkerRequest, message.TerminationWorkerChannel); err != nil {
-				// This happens when worker started before core agent is
-				// In practise, it should never happen
-				log.Errorf("failed to listen to termination channel: %s", err.Error())
-				time.Sleep(time.Duration(bus.context.AppConfig().Ssm.HealthFrequencyMinutes) * time.Minute)
-			} else {
-				break
-			}
+	for !bus.terminationChannel.IsConnect() {
+		if err = bus.dialToCoreAgentChannel(message.TerminateWorkerRequest, message.TerminationWorkerChannel); err != nil {
+			// This happens when worker started before core agent is
+			//   and when the amazon-ssm-agent is terminated milliseconds after the ssm-agent-worker has been started
+			log.Errorf("failed to listen to termination channel: %s", err.Error())
+			bus.sleepFunc(time.Duration(bus.context.AppConfig().Ssm.HealthFrequencyMinutes) * time.Minute)
 		}
 	}
 
@@ -213,18 +205,22 @@ func (bus *MessageBus) dialToCoreAgentChannel(topic message.TopicType, address s
 	switch topic {
 	case message.GetWorkerHealthRequest:
 		if err = bus.healthChannel.Initialize("respondent"); err != nil {
+			_ = bus.healthChannel.Close()
 			return fmt.Errorf("can't get new respondent socket: %s", err.Error())
 		}
 		if err = bus.healthChannel.Dial(address); err != nil {
+			_ = bus.healthChannel.Close()
 			return fmt.Errorf("can't dial on respondent socket: %s", err.Error())
 		}
 
 		return nil
 	case message.TerminateWorkerRequest:
 		if err = bus.terminationChannel.Initialize("respondent"); err != nil {
+			_ = bus.terminationChannel.Close()
 			return fmt.Errorf("can't get new respondent socket: %s", err.Error())
 		}
 		if err = bus.terminationChannel.Dial(address); err != nil {
+			_ = bus.terminationChannel.Close()
 			return fmt.Errorf("can't dial on respondent socket: %s", err.Error())
 		}
 
