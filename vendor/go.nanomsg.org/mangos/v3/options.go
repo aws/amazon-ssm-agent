@@ -1,4 +1,4 @@
-// Copyright 2018 The Mangos Authors
+// Copyright 2021 The Mangos Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use file except in compliance with the License.
@@ -134,7 +134,7 @@ const (
 	// This option is only intended to prevent gross abuse  of the system,
 	// and not a substitute for proper application message verification.
 	//
-	// This option is type int64.
+	// This option is type int.
 	OptionMaxRecvSize = "MAX-RCV-SIZE"
 
 	// OptionReconnectTime is the initial interval used for connection
@@ -214,4 +214,15 @@ const (
 	// Solaris platforms at present, and only when cgo support is enabled.
 	// The value is an int.
 	OptionPeerZone = "PEER-ZONE"
+
+	// OptionFailNoPeers causes send or receive operations to fail
+	// immediately rather than waiting for a timeout if there are no
+	// connected peers.  This helps discriminate between cases involving
+	// flow control, from those where we we have no peers.  Use of this
+	// option may make applications more brittle, as a temporary disconnect
+	// that may otherwise self-heal quickly will now create an immediate
+	// failure.  Applications using this should be prepared to deal with
+	// such failures.  Note that not all protocols respect this -- best
+	// effort protocols will particularly not support this.
+	OptionFailNoPeers = "FAIL-NO-PEERS"
 )

@@ -1,4 +1,4 @@
-// Copyright 2018 The Mangos Authors
+// Copyright 2021 The Mangos Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use file except in compliance with the License.
@@ -67,6 +67,7 @@ const (
 	ErrProtoOp     = errors.ErrProtoOp
 	ErrProtoState  = errors.ErrProtoState
 	ErrCanceled    = errors.ErrCanceled
+	ErrNoPeers     = errors.ErrNoPeers
 )
 
 // Common option definitions
@@ -84,6 +85,7 @@ const (
 	OptionLinger       = mangos.OptionLinger // Remove?
 	OptionTTL          = mangos.OptionTTL
 	OptionBestEffort   = mangos.OptionBestEffort
+	OptionFailNoPeers  = mangos.OptionFailNoPeers
 )
 
 // MakeSocket creates a Socket on top of a Protocol.

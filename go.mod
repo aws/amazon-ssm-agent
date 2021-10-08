@@ -30,7 +30,7 @@ require (
 	github.com/stretchr/testify v1.7.0
 	github.com/twinj/uuid v0.0.0-20151029044442-89173bcdda19 // Don't update -- breaks
 	github.com/xtaci/smux v1.5.15
-	go.nanomsg.org/mangos/v3 v3.1.2
+	go.nanomsg.org/mangos/v3 v3.3.0
 	golang.org/x/crypto v0.0.0-20210506145944-38f3c27a63bf
 	golang.org/x/net v0.0.0-20210508051633-16afe75a6701
 	golang.org/x/oauth2 v0.0.0-20211005180243-6b3c2da341f1

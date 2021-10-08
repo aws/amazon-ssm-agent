@@ -4,3 +4,6 @@ ignore:
  - "internal/test/*"
  - "test/*"
  - "*_test.go"
+ - "*/perf/*
+ - "*/examples/*
+ - "*/test/*

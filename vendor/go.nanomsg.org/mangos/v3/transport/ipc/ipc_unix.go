@@ -1,6 +1,6 @@
 // +build !windows,!plan9,!js
 
-// Copyright 2020 The Mangos Authors
+// Copyright 2021 The Mangos Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use file except in compliance with the License.
@@ -19,6 +19,7 @@
 package ipc
 
 import (
+	"errors"
 	"net"
 	"os"
 	"sync"
@@ -30,7 +31,7 @@ import (
 )
 
 const (
-	// Transport is a transport.Transport for IPC.
+	// Transport implements IPC.
 	Transport = ipcTran(0)
 )
 
@@ -39,11 +40,11 @@ func init() {
 }
 
 type dialer struct {
-	addr        *net.UnixAddr
-	proto       transport.ProtocolInfo
-	hs          transport.Handshaker
-	maxRecvSize int
-	lock        sync.Mutex
+	addr       *net.UnixAddr
+	proto      transport.ProtocolInfo
+	hs         transport.Handshaker
+	maxRcvSize int
+	lock       sync.Mutex
 }
 
 // Dial implements the Dialer Dial method
@@ -55,7 +56,7 @@ func (d *dialer) Dial() (transport.Pipe, error) {
 	}
 	p := transport.NewConnPipeIPC(conn, d.proto)
 	d.lock.Lock()
-	p.SetOption(mangos.OptionMaxRecvSize, d.maxRecvSize)
+	p.SetOption(mangos.OptionMaxRecvSize, d.maxRcvSize)
 	getPeer(conn, p)
 	d.lock.Unlock()
 	d.hs.Start(p)
@@ -70,7 +71,7 @@ func (d *dialer) SetOption(n string, v interface{}) error {
 	switch n {
 	case mangos.OptionMaxRecvSize:
 		if b, ok := v.(int); ok {
-			d.maxRecvSize = b
+			d.maxRcvSize = b
 			return nil
 		}
 		return mangos.ErrBadValue
@@ -85,26 +86,26 @@ func (d *dialer) GetOption(n string) (interface{}, error) {
 
 	switch n {
 	case mangos.OptionMaxRecvSize:
-		return d.maxRecvSize, nil
+		return d.maxRcvSize, nil
 	}
 	return nil, mangos.ErrBadOption
 }
 
 type listener struct {
-	addr        *net.UnixAddr
-	proto       transport.ProtocolInfo
-	listener    *net.UnixListener
-	hs          transport.Handshaker
-	closeq      chan struct{}
-	closed      bool
-	maxRecvSize int
-	owner       int
-	group       int
-	chown       bool
-	mode        uint32
-	chmod       bool
-	once        sync.Once
-	lock        sync.Mutex
+	addr       *net.UnixAddr
+	proto      transport.ProtocolInfo
+	listener   *net.UnixListener
+	hs         transport.Handshaker
+	closeQ     chan struct{}
+	closed     bool
+	maxRcvSize int
+	owner      int
+	group      int
+	chown      bool
+	mode       uint32
+	chmod      bool
+	once       sync.Once
+	lock       sync.Mutex
 }
 
 // Listen implements the PipeListener Listen method.
@@ -113,19 +114,11 @@ func (l *listener) Listen() error {
 	defer l.lock.Unlock()
 
 	select {
-	case <-l.closeq:
+	case <-l.closeQ:
 		return mangos.ErrClosed
 	default:
 	}
 	listener, err := net.ListenUnix("unix", l.addr)
-
-	if l.chown {
-		os.Chown(l.addr.String(), l.owner, l.group)
-
-	}
-	if l.chmod {
-		os.Chmod(l.addr.String(), os.FileMode(l.mode))
-	}
 
 	if err != nil && (isSyscallError(err, syscall.EADDRINUSE) || isSyscallError(err, syscall.EEXIST)) {
 		l.removeStaleIPC()
@@ -137,13 +130,23 @@ func (l *listener) Listen() error {
 	if err != nil {
 		return err
 	}
+
+	// Best effort to update permissions -- note that this can fail for various reasons,
+	// and it is unadvisable to rely too strongly upon it.  (It isn't portable at least.)
+	if l.chown {
+		_ = os.Chown(l.addr.String(), l.owner, l.group)
+	}
+	if l.chmod {
+		_ = os.Chmod(l.addr.String(), os.FileMode(l.mode))
+	}
+
 	l.listener = listener
 	go func() {
 		for {
 			conn, err := l.listener.AcceptUnix()
 			if err != nil {
 				select {
-				case <-l.closeq:
+				case <-l.closeQ:
 					return
 				default:
 					continue
@@ -151,7 +154,7 @@ func (l *listener) Listen() error {
 			}
 			p := transport.NewConnPipeIPC(conn, l.proto)
 			l.lock.Lock()
-			p.SetOption(mangos.OptionMaxRecvSize, l.maxRecvSize)
+			p.SetOption(mangos.OptionMaxRecvSize, l.maxRcvSize)
 			getPeer(conn, p)
 			l.lock.Unlock()
 			l.hs.Start(p)
@@ -164,7 +167,7 @@ func (l *listener) Address() string {
 	return "ipc://" + l.addr.String()
 }
 
-// Accept implements the the PipeListener Accept method.
+// Accept implements the PipeListener Accept method.
 func (l *listener) Accept() (transport.Pipe, error) {
 	l.lock.Lock()
 	if l.listener == nil {
@@ -181,10 +184,10 @@ func (l *listener) Close() error {
 		l.lock.Lock()
 		l.closed = true
 		if l.listener != nil {
-			l.listener.Close()
+			_ = l.listener.Close()
 		}
 		l.hs.Close()
-		close(l.closeq)
+		close(l.closeQ)
 		l.lock.Unlock()
 	})
 	return nil
@@ -198,7 +201,7 @@ func (l *listener) SetOption(n string, v interface{}) error {
 	switch n {
 	case mangos.OptionMaxRecvSize:
 		if b, ok := v.(int); ok {
-			l.maxRecvSize = b
+			l.maxRcvSize = b
 			return nil
 		}
 		return mangos.ErrBadValue
@@ -240,7 +243,7 @@ func (l *listener) GetOption(n string) (interface{}, error) {
 
 	switch n {
 	case mangos.OptionMaxRecvSize:
-		return l.maxRecvSize, nil
+		return l.maxRcvSize, nil
 	}
 	return nil, mangos.ErrBadOption
 }
@@ -253,11 +256,11 @@ func (l *listener) removeStaleIPC() {
 	}
 	conn, err := net.DialTimeout("unix", l.addr.String(), 100*time.Millisecond)
 	if err != nil && isSyscallError(err, syscall.ECONNREFUSED) {
-		os.Remove(l.addr.String())
+		_ = os.Remove(l.addr.String())
 		return
 	}
 	if err == nil {
-		conn.Close()
+		_ = conn.Close()
 	}
 }
 
@@ -291,7 +294,7 @@ func (t ipcTran) NewListener(addr string, sock mangos.Socket) (transport.Listene
 	var err error
 	l := &listener{
 		proto:  sock.Info(),
-		closeq: make(chan struct{}),
+		closeQ: make(chan struct{}),
 		hs:     transport.NewConnHandshaker(),
 		owner:  os.Geteuid(),
 		group:  os.Getegid(),
@@ -307,20 +310,10 @@ func (t ipcTran) NewListener(addr string, sock mangos.Socket) (transport.Listene
 }
 
 func isSyscallError(err error, code syscall.Errno) bool {
-	opErr, ok := err.(*net.OpError)
-	if !ok {
-		return false
-	}
-	syscallErr, ok := opErr.Err.(*os.SyscallError)
-	if !ok {
-		return false
-	}
-	errno, ok := syscallErr.Err.(syscall.Errno)
-	if !ok {
-		return false
-	}
-	if errno == code {
-		return true
+
+	var errno syscall.Errno
+	if errors.As(err, &errno) {
+		return errno == code
 	}
 	return false
 }

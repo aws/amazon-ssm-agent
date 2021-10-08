@@ -1,7 +1,7 @@
 # github.com/Jeffail/gabs v1.0.0
 ## explicit
 github.com/Jeffail/gabs
-# github.com/Microsoft/go-winio v0.4.16
+# github.com/Microsoft/go-winio v0.5.0
 github.com/Microsoft/go-winio
 github.com/Microsoft/go-winio/pkg/guid
 # github.com/Workiva/go-datastructures v1.0.53
@@ -218,7 +218,7 @@ github.com/xanzy/ssh-agent
 # github.com/xtaci/smux v1.5.15
 ## explicit
 github.com/xtaci/smux
-# go.nanomsg.org/mangos/v3 v3.1.2
+# go.nanomsg.org/mangos/v3 v3.3.0
 ## explicit
 go.nanomsg.org/mangos/v3
 go.nanomsg.org/mangos/v3/errors
