@@ -31,6 +31,8 @@ import (
 const (
 	// maximumPluginOutputSize represents the maximum output size that agent supports
 	MaximumPluginOutputSize = 2500
+	// errTitle represents the header that is printed before the error
+	errTitle = "\n----------ERROR-------\n"
 	// truncateOut represents the string appended when output is truncated
 	truncateOut = "\n---Output truncated---"
 	// truncateError represents the string appended when error is truncated
@@ -440,7 +442,7 @@ func TruncateOutput(stdout string, stderr string, capacity int) (response string
 	errorTitle := ""
 	lenErrorTitle := 0
 	if errorSize > 0 {
-		errorTitle = "\n----------ERROR-------\n"
+		errorTitle = errTitle
 		lenErrorTitle = len(errorTitle)
 	}
 
@@ -459,7 +461,7 @@ func TruncateOutput(stdout string, stderr string, capacity int) (response string
 	}
 
 	// truncate error when output is short
-	if outputSize < availableSpace/2 {
+	if outputSize <= availableSpace/2 {
 		truncateSize := availableSpace - len(truncateError)
 		return fmt.Sprint(stdout, errorTitle, stderr[:truncateSize-outputSize], truncateError)
 	}

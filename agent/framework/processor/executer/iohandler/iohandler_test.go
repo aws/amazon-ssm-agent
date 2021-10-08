@@ -15,6 +15,7 @@ package iohandler
 
 import (
 	"fmt"
+	"strings"
 	"sync"
 	"testing"
 	"time"
@@ -59,6 +60,12 @@ var testData = []truncateOutputTest{
 	{longMessage, "", sampleSize, "This is a sample text. This is a sample text. This is a sample text. This is \n---Output truncated---"},
 	{"", longMessage, sampleSize, "\n----------ERROR-------\nThis is a sample text. This is a sample text. This is\n---Error truncated----"},
 	{longMessage, longMessage, sampleSize, "This is a sampl\n---Output truncated---\n----------ERROR-------\nThis is a sampl\n---Error truncated----"},
+	{
+		strings.Repeat("o", ((sampleSize - len(errTitle)) / 2)), //stdout
+		strings.Repeat("e", sampleSize*3),                       //stderr
+		sampleSize,                                              //capacity
+		"oooooooooooooooooooooooooooooooooooooo\n----------ERROR-------\neeeeeeeeeeeeeee\n---Error truncated----", //expected
+	},
 }
 
 func TestTruncateOutput(t *testing.T) {
