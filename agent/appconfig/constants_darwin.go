@@ -83,10 +83,11 @@ const (
 	// Default Session files Folder
 	SessionFilesPath = DefaultDataStorePath + "session"
 
-	DefaultSSMAgentWorker = DefaultProgramFolder + "bin/ssm-agent-worker"
-	DefaultDocumentWorker = DefaultProgramFolder + "bin/ssm-document-worker"
-	DefaultSessionWorker  = DefaultProgramFolder + "bin/ssm-session-worker"
-	DefaultSessionLogger  = DefaultProgramFolder + "bin/ssm-session-logger"
+	DefaultSSMAgentBinaryPath = DefaultProgramFolder + "bin/amazon-ssm-agent"
+	DefaultSSMAgentWorker     = DefaultProgramFolder + "bin/ssm-agent-worker"
+	DefaultDocumentWorker     = DefaultProgramFolder + "bin/ssm-document-worker"
+	DefaultSessionWorker      = DefaultProgramFolder + "bin/ssm-session-worker"
+	DefaultSessionLogger      = DefaultProgramFolder + "bin/ssm-session-logger"
 
 	// PowerShellPluginCommandName is the path of the powershell.exe to be used by the runPowerShellScript plugin
 	PowerShellPluginCommandName = "/usr/local/bin/pwsh"

@@ -11,7 +11,7 @@
 // either express or implied. See the License for the specific language governing
 // permissions and limitations under the License.
 
-// Package proxy config to handle set/get proxy settings
+// Package proxyconfig to handle set/get proxy settings
 package proxyconfig
 
 import (
@@ -70,8 +70,8 @@ type HttpDefaultProxyConfig struct {
 
 // ProxySettings represents the proxy settings for https_proxy and http_proxy
 type ProxySettings struct {
-	https_proxy *url.URL
-	http_proxy  *url.URL
+	HttpsProxy *url.URL
+	HttpProxy  *url.URL
 }
 
 // StringFromUTF16Ptr converts a *uint16 C string to a Go String
@@ -125,11 +125,11 @@ func SetProxyConfig(log log.T) (proxySettings map[string]string) {
 		bypass = ie.bypass
 
 		if ie.auto {
-			log.Warnf("IE option 'Automatically  detect settings' is not supported")
+			log.Debugf("IE option 'Automatically  detect settings' is not supported")
 		}
 
 		if len(ie.config) > 0 {
-			log.Warnf("IE option 'Use automatic configuration script' is not supported")
+			log.Debugf("IE option 'Use automatic configuration script' is not supported")
 		}
 	} else {
 		if df, err = GetDefaultProxySettings(log); len(df.proxy) > 0 && err == nil {
@@ -153,36 +153,38 @@ func SetProxyConfig(log log.T) (proxySettings map[string]string) {
 
 	settings := ParseProxySettings(log, proxy)
 
-	if settings.https_proxy != nil {
-		os.Setenv("https_proxy", settings.https_proxy.String())
+	if settings.HttpsProxy != nil {
+		os.Setenv("https_proxy", settings.HttpsProxy.String())
 	}
-	if settings.http_proxy != nil {
-		os.Setenv("http_proxy", settings.http_proxy.String())
-	}
-
-	// Parse no_proxy settings allowing only valid URL or host[:port] values
-	// The proxy bypass string contains multiple addresses and host names, separate
-	// with blank spaces or semicolons
-	var bypassList = []string{}
-	for _, f := range strings.Fields(bypass) {
-		for _, s := range strings.Split(f, ";") {
-			if len(s) == 0 {
-				continue
-			}
-			url, err := ValidateHost(s)
-			if err == nil {
-				bypassList = append(bypassList, url.Host)
-			} else {
-				log.Warnf("SetProxySettings invalid URL or host for no_proxy: %v", err.Error())
-			}
-		}
+	if settings.HttpProxy != nil {
+		os.Setenv("http_proxy", settings.HttpProxy.String())
 	}
 
+	bypassList := ParseProxyBypass(log, bypass)
 	if len(bypassList) > 0 {
 		os.Setenv("no_proxy", strings.Join(bypassList, ","))
 	}
 
 	return GetProxyConfig()
+}
+
+func ParseProxyBypass(log log.T, bypass string) []string {
+	var bypassList []string
+	for _, f := range strings.Fields(bypass) {
+		for _, s := range strings.Split(f, ";") {
+			if len(s) == 0 {
+				continue
+			}
+			parsedUrl, err := ValidateHost(s)
+			if err == nil {
+				bypassList = append(bypassList, parsedUrl.Host)
+			} else {
+				log.Warnf("SetProxySettings invalid URL or host for no_proxy: %v\n", err.Error())
+			}
+		}
+	}
+
+	return bypassList
 }
 
 // GetDefaultProxySettings returns the machine WinHTTP proxy configuration
@@ -309,22 +311,22 @@ func ParseProxySettings(log log.T, proxy string) ProxySettings {
 	}
 
 	result := ProxySettings{
-		http_proxy:  http,
-		https_proxy: https,
+		HttpProxy:  http,
+		HttpsProxy: https,
 	}
 
 	// If no [<scheme>=] is provided http is the default option
 	if https == nil && http == nil {
-		result.http_proxy = other
+		result.HttpProxy = other
 	} else if https != nil && http == nil {
-		result.http_proxy = other
+		result.HttpProxy = other
 	} else if https == nil && http != nil {
-		result.https_proxy = other
+		result.HttpsProxy = other
 	}
 
 	log.Debugf("ParseProxySettings result: http_proxy:%v,https_proxy:%v",
-		result.http_proxy,
-		result.https_proxy,
+		result.HttpProxy,
+		result.HttpsProxy,
 	)
 
 	return result

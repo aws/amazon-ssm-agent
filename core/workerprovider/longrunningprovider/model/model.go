@@ -36,6 +36,7 @@ type Process struct {
 }
 
 const (
+	SSMAgentName       = "amazon-ssm-agent"
 	SSMAgentWorkerName = "ssm-agent-worker"
 )
 

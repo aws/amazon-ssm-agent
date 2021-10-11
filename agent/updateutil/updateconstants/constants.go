@@ -123,17 +123,16 @@ const (
 
 	SnapServiceFile = "/etc/systemd/system/snap.amazon-ssm-agent.amazon-ssm-agent.service"
 
+	BucketPath = "/amazon-ssm-{Region}/"
+
 	// ManifestFile is the manifest file name
 	ManifestFile = "ssm-agent-manifest.json"
 
-	//ManifestPath is path of manifest in the s3 bucket
-	ManifestPath = "/amazon-ssm-{Region}/" + ManifestFile
+	// CommonS3URL is the s3 URL for regular regions
+	CommonS3URL = "https://s3.{Region}.amazonaws.com"
 
-	// CommonManifestURL is the Manifest URL for regular regions
-	CommonManifestURL = "https://s3.{Region}.amazonaws.com" + ManifestPath
-
-	// ChinaManifestURL is the manifest URL for regions in China
-	ChinaManifestURL = "https://s3.{Region}.amazonaws.com.cn" + ManifestPath
+	// ChinaS3URL is the s3 URL for regions in China
+	ChinaS3URL = "https://s3.{Region}.amazonaws.com.cn"
 
 	// DarwinBinaryPath is the default path of the amazon-ssm-agent binary on darwin
 	DarwinBinaryPath = "/opt/aws/ssm/bin/amazon-ssm-agent"

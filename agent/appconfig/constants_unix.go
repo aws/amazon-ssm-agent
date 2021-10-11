@@ -116,6 +116,7 @@ var PowerShellPluginCommandName string
 var DefaultProgramFolder = "/etc/amazon/ssm/"
 
 var defaultWorkerPath = "/usr/bin/"
+var DefaultSSMAgentBinaryPath = defaultWorkerPath + "amazon-ssm-agent"
 var DefaultSSMAgentWorker = defaultWorkerPath + "ssm-agent-worker"
 var DefaultDocumentWorker = defaultWorkerPath + "ssm-document-worker"
 var DefaultSessionWorker = defaultWorkerPath + "ssm-session-worker"

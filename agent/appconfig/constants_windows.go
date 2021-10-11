@@ -69,7 +69,10 @@ var PowerShellPluginCommandName = filepath.Join(os.Getenv("SystemRoot"), "System
 // Program Folder
 var DefaultProgramFolder string
 
-//SSM Agent executable path
+// SSM Agent executable path
+var DefaultSSMAgentBinaryPath string
+
+//SSM Agent worker executable path
 var DefaultSSMAgentWorker string
 
 //Document executable path
@@ -180,6 +183,7 @@ func init() {
 
 	DefaultProgramFolder = filepath.Join(EnvProgramFiles, SSMFolder)
 	DefaultPluginPath = filepath.Join(EnvProgramFiles, SSMPluginFolder)
+	DefaultSSMAgentBinaryPath = filepath.Join(DefaultProgramFolder, "amazon-ssm-agent.exe")
 	DefaultSSMAgentWorker = filepath.Join(DefaultProgramFolder, "ssm-agent-worker.exe")
 	DefaultDocumentWorker = filepath.Join(DefaultProgramFolder, "ssm-document-worker.exe")
 	DefaultSessionWorker = filepath.Join(DefaultProgramFolder, "ssm-session-worker.exe")

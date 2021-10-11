@@ -22,7 +22,6 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil/artifact"
-	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updatemanifest"
@@ -45,16 +44,11 @@ func (util *updateS3UtilImpl) resolveManifestUrl(manifestUrl string) (string, er
 	}
 
 	if manifestUrl == "" {
-		if dynamicS3Endpoint := util.context.Identity().GetDefaultEndpoint("s3"); dynamicS3Endpoint != "" {
-			manifestUrl = "https://" + dynamicS3Endpoint + updateconstants.ManifestPath
-		} else if strings.HasPrefix(region, s3util.ChinaRegionPrefix) {
-			manifestUrl = updateconstants.ChinaManifestURL
-		} else {
-			manifestUrl = updateconstants.CommonManifestURL
-		}
+		bucketURL := updateutil.ResolveAgentReleaseBucketURL(region, util.context.Identity())
+		manifestUrl = bucketURL + updateconstants.ManifestFile
+	} else {
+		manifestUrl = strings.Replace(manifestUrl, updateconstants.RegionHolder, region, -1)
 	}
-
-	manifestUrl = strings.Replace(manifestUrl, updateconstants.RegionHolder, region, -1)
 
 	return manifestUrl, nil
 }

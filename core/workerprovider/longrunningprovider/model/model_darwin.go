@@ -19,4 +19,5 @@ package model
 
 import "github.com/aws/amazon-ssm-agent/agent/appconfig"
 
+var SSMAgentBinaryName = appconfig.DefaultSSMAgentBinaryPath
 var SSMAgentWorkerBinaryName = appconfig.DefaultSSMAgentWorker

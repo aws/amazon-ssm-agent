@@ -33,9 +33,11 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/context"
 	"github.com/aws/amazon-ssm-agent/agent/fileutil"
 	"github.com/aws/amazon-ssm-agent/agent/log"
+	"github.com/aws/amazon-ssm-agent/agent/s3util"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateconstants"
 	"github.com/aws/amazon-ssm-agent/agent/updateutil/updateinfo"
 	"github.com/aws/amazon-ssm-agent/agent/versionutil"
+	"github.com/aws/amazon-ssm-agent/common/identity"
 	"github.com/aws/amazon-ssm-agent/core/executor"
 	"github.com/aws/amazon-ssm-agent/core/workerprovider/longrunningprovider/model"
 )
@@ -636,6 +638,20 @@ func GetManifestURLFromSourceUrl(sourceURL string) (string, error) {
 	u.Path += "/" + updateconstants.ManifestFile
 
 	return u.String(), nil
+}
+
+// ResolveAgentReleaseBucketURL makes best effort to generate an url for the ssm agent bucket
+func ResolveAgentReleaseBucketURL(region string, identity identity.IAgentIdentity) string {
+	s3Url := ""
+	if dynamicS3Endpoint := identity.GetDefaultEndpoint("s3"); dynamicS3Endpoint != "" {
+		s3Url = "https://" + dynamicS3Endpoint
+	} else if strings.HasPrefix(region, s3util.ChinaRegionPrefix) {
+		s3Url = updateconstants.ChinaS3URL
+	} else {
+		s3Url = updateconstants.CommonS3URL
+	}
+
+	return strings.Replace(s3Url+updateconstants.BucketPath, updateconstants.RegionHolder, region, -1)
 }
 
 // IsV1UpdatePlugin returns true if source agent version is equal or below 3.0.882.0, any error defaults to false

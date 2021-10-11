@@ -17,4 +17,5 @@
 //Package model contains data objects for long running container
 package model
 
+var SSMAgentBinaryName = SSMAgentName + ".exe"
 var SSMAgentWorkerBinaryName = SSMAgentWorkerName + ".exe"
