@@ -1,5 +1,9 @@
 Latest
 ===============
+- Fixed a bug with powershell command for Inventory
+
+3.1.426.0
+===============
 - Fixed cpu spike issue manifesting on snap
 - Fixed issue with version comparison in EC2Config update plugin
 - Fixed panic when command output was being truncated
