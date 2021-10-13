@@ -87,7 +87,7 @@ $result = "[" + $result + "]"
 
 const (
 	// Use powershell to get role info
-	PowershellCmd = "powershell -NoProfile"
+	PowershellCmd = "powershell"
 	QueryFileName = "roleInfo.xml"
 )
 

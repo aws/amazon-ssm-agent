@@ -31,7 +31,7 @@ import (
 )
 
 const (
-	PowershellCmd      = "powershell -NoProfile"
+	PowershellCmd      = "powershell"
 	MaxValueCountLimit = 250
 	ValueLimitExceeded = "ValueLimitExceeded"
 )
