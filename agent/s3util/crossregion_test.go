@@ -882,24 +882,34 @@ func newS3BucketRegionHeaderCapturingTransportForTest(delegate http.RoundTripper
 	}
 }
 
+type mockTransportResponse struct {
+	resp *http.Response
+	err  error
+}
+
 // A mock Transport implementation with a map of hard-coded responses
 // for a set of URLs.
 type mockTransport struct {
-	urlToResponseAndError map[string]*http.Response
+	urlToResponseAndError map[string]mockTransportResponse
 	requestURLsReceived   []string
 }
 
 // Create a new mockTransport with an empty response map
 func newMockTransport() *mockTransport {
 	return &mockTransport{
-		urlToResponseAndError: make(map[string]*http.Response),
+		urlToResponseAndError: make(map[string]mockTransportResponse),
 		requestURLsReceived:   make([]string, 0),
 	}
 }
 
 // Register a mock response for the specified url
 func (t *mockTransport) AddResponse(url string, response *http.Response) {
-	t.urlToResponseAndError[url] = response
+	t.urlToResponseAndError[url] = mockTransportResponse{response, nil}
+}
+
+// Register a transport error for the specified url
+func (t *mockTransport) AddTransportError(url string, err error) {
+	t.urlToResponseAndError[url] = mockTransportResponse{nil, err}
 }
 
 // Mock RoundTrip implementation.  If the request is for a URL that is in
@@ -908,7 +918,7 @@ func (t *mockTransport) AddResponse(url string, response *http.Response) {
 func (t *mockTransport) RoundTrip(request *http.Request) (*http.Response, error) {
 	t.requestURLsReceived = append(t.requestURLsReceived, request.URL.String())
 	if response, ok := t.urlToResponseAndError[request.URL.String()]; ok {
-		return response, nil
+		return response.resp, response.err
 	}
 	return nil, fmt.Errorf("ERROR")
 }

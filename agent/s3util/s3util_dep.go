@@ -16,6 +16,7 @@ package s3util
 
 import (
 	"net/http"
+	"strings"
 
 	"github.com/aws/amazon-ssm-agent/agent/appconfig"
 	"github.com/aws/amazon-ssm-agent/agent/backoffconfig"
@@ -50,6 +51,7 @@ func (p HttpProviderImpl) Head(url string) (resp *http.Response, err error) {
 
 	op := func() error {
 		resp, err = httpClient.Head(url)
+		err = wrapForRetryer(err)
 		if err != nil {
 			p.logger.Debugf("attempt failed for HTTP HEAD request: url=%v, error=%v", url, err)
 		}
@@ -75,6 +77,32 @@ func makeHeadBucketTransport(logger log.T, delegate http.RoundTripper) headBucke
 	return headBucketTransport{
 		logger:   logger,
 		delegate: delegate,
+	}
+}
+
+// If err is non-retryable, then wrap it in *PermanentError to signal to
+// cenkalti/backoff's retryer that the error should not be retried.
+func wrapForRetryer(err error) error {
+	if err == nil {
+		return nil
+	}
+
+	var permanentErrorStrings = []string{
+		"certificate is valid for", // SSL cert validation error
+	}
+
+	isPermanent := false
+	for _, s := range permanentErrorStrings {
+		if strings.Contains(err.Error(), s) {
+			isPermanent = true
+			break
+		}
+	}
+
+	if isPermanent {
+		return &backoff.PermanentError{Err: err}
+	} else {
+		return err
 	}
 }
 
