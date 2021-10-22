@@ -1,5 +1,15 @@
 Latest
 ===============
+- Add diagnostics command to ssm-cli
+- Fix caching for onprem credentials
+- Additional configuration options for Seamless Domain Join
+- Gracefully exit session if group of runas user is modified
+- Skip retries for cert validation errors in S3 HEAD requests
+- Fix DNS failures on CentOS 8.2
+- Update several dependencies
+
+3.1.459.0
+===============
 - Fixed a bug with powershell command for Inventory
 
 3.1.426.0
