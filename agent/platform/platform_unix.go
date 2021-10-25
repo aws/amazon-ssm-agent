@@ -91,6 +91,9 @@ func getPlatformDetails(log log.T) (name string, version string, err error) {
 				version = strings.TrimSpace(versionData[0])
 			}
 		}
+	}
+	if !(strings.EqualFold(name, notAvailableMessage)) || !(strings.EqualFold(version, notAvailableMessage)) {
+		return
 	} else if fileutil.Exists(osReleaseFile) {
 
 		log.Debugf(fetchingDetailsMessage, osReleaseFile)
@@ -148,6 +151,12 @@ func getPlatformDetails(log log.T) (name string, version string, err error) {
 				version = strings.TrimSpace(data[1])
 			}
 		} else if strings.Contains(contents, "Oracle") {
+			data := strings.Split(contents, "release")
+			name = strings.TrimSpace(data[0])
+			if len(data) >= 2 {
+				version = strings.TrimSpace(data[1])
+			}
+		} else if strings.Contains(contents, "Rocky") {
 			data := strings.Split(contents, "release")
 			name = strings.TrimSpace(data[0])
 			if len(data) >= 2 {
