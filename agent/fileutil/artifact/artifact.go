@@ -223,17 +223,20 @@ func ListS3Directory(context context.T, amazonS3URL s3util.AmazonS3URL) (folderN
 	}
 
 	s3client := s3.New(sess)
-	obj, err := s3client.ListObjects(params)
+	err = s3client.ListObjectsPages(params, func(page *s3.ListObjectsOutput, lastPage bool) bool {
+		log.Debugf("Contents %v ", page.Contents)
+		for i, contents := range page.Contents {
+			folderNames = append(folderNames, *contents.Key)
+			log.Debug("Name of file/folder - ", folderNames[i])
+		}
+		return true
+	})
+
 	if err != nil {
 		log.Warnf("ListS3Directory error %v", err.Error())
 		return folderNames, err
 	}
 
-	log.Debugf("Contents %v ", obj.Contents)
-	for i, contents := range obj.Contents {
-		folderNames = append(folderNames, *contents.Key)
-		log.Debug("Name of file/folder - ", folderNames[i])
-	}
 	return
 }
 
