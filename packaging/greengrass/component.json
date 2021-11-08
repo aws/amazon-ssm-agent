@@ -1,0 +1,100 @@
+{
+    "RecipeFormatVersion": "2020-01-25",
+    "ComponentName": "aws.greengrass.SystemsManagerAgent",
+    "ComponentVersion": "1.0.0",
+    "ComponentType": "aws.greengrass.generic",
+    "ComponentDescription": "Systems Manager Agent component to enable Systems Manager capabilities on your Greengrass devices",
+    "ComponentPublisher": "Amazon",
+    "ComponentConfiguration": {
+      "DefaultConfiguration": {
+        "SSMRegistrationRole": "",
+        "SSMResourceTags": [
+          {
+            "Key": "",
+            "Value": ""
+          }
+        ],
+        "SSMOverrideExistingRegistration": false
+      }
+    },
+    "ComponentDependencies": {
+      "aws.greengrass.TokenExchangeService": {
+        "VersionRequirement": ">=2.0.0 <3.0.0",
+        "DependencyType": "HARD"
+      }
+    },
+    "Manifests": [
+      {
+        "Platform": {
+          "os": "linux",
+          "architecture": "/amd64|x86_64/"
+        },
+        "Lifecycle": {
+          "SetEnv": {
+            "SSM_REGISTRATION_ROLE": "{configuration:/SSMRegistrationRole}",
+            "SSM_RESOURCE_TAGS": "{configuration:/SSMResourceTags}",
+            "SSM_OVERRIDE_EXISTING_REGISTRATION": "{configuration:/SSMOverrideExistingRegistration}"
+          },
+          "Install": {
+            "Script": "{artifacts:decompressedPath}/artifacts/ssm-setup-cli -install",
+            "RequiresPrivilege": true
+          },
+          "Startup": {
+            "Script": "{artifacts:decompressedPath}/artifacts/ssm-setup-cli -register",
+            "RequiresPrivilege": true
+          },
+          "Shutdown": {
+            "Script": "{artifacts:decompressedPath}/artifacts/ssm-setup-cli -shutdown",
+            "RequiresPrivilege": true
+          }
+        },
+        "Artifacts": [
+          {
+            "Uri": "",
+            "Unarchive": "ZIP",
+            "Permission": {
+              "Read": "OWNER",
+              "Execute": "OWNER"
+            }
+          }
+        ]
+      },
+      {
+        "Platform": {
+          "os": "linux",
+          "architecture": "/aarch64|armv8/"
+        },
+        "Lifecycle": {
+          "SetEnv": {
+            "SSM_ARTIFACTS_PATH": "{artifacts:decompressedPath}/artifacts",
+            "SSM_REGISTRATION_ROLE": "{configuration:/SSMRegistrationRole}",
+            "SSM_RESOURCE_TAGS": "{configuration:/SSMResourceTags}",
+            "SSM_OVERRIDE_EXISTING_REGISTRATION": "{configuration:/SSMOverrideExistingRegistration}"
+          },
+          "Install": {
+            "Script": "{artifacts:decompressedPath}/artifacts/ssm-setup-cli -install -local",
+            "RequiresPrivilege": true
+          },
+          "Startup": {
+            "Script": "{artifacts:decompressedPath}/artifacts/ssm-setup-cli -register ",
+            "RequiresPrivilege": true
+          },
+          "Shutdown": {
+            "Script": "{artifacts:decompressedPath}/artifacts/ssm-setup-cli -shutdown",
+            "RequiresPrivilege": true
+          }
+        },
+        "Artifacts": [
+          {
+            "Uri": "",
+            "Unarchive": "ZIP",
+            "Permission": {
+              "Read": "OWNER",
+              "Execute": "OWNER"
+            }
+          }
+        ]
+      }
+    ],
+    "Lifecycle": {}
+  }

@@ -28,6 +28,7 @@ import (
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/fingerprint"
 	"github.com/aws/amazon-ssm-agent/agent/managedInstances/registration"
 	"github.com/aws/amazon-ssm-agent/agent/ssm/anonauth"
+	"github.com/aws/amazon-ssm-agent/agent/ssm/authregister"
 	"github.com/aws/amazon-ssm-agent/agent/version"
 )
 
@@ -43,6 +44,8 @@ func parseFlags() {
 	flag.StringVar(&activationID, activationIDFlag, "", "")
 	flag.StringVar(&region, regionFlag, "", "")
 	flag.BoolVar(&agentVersionFlag, versionFlag, false, "")
+	flag.StringVar(&role, roleFlag, "", "")
+	flag.StringVar(&tagsJson, tagsFlag, "", "")
 
 	// clear registration
 	flag.BoolVar(&clear, "clear", false, "")
@@ -89,9 +92,11 @@ func handleAgentVersionFlag() {
 func flagUsage() {
 	fmt.Fprintln(os.Stderr, "\n\nCommand-line Usage:")
 	fmt.Fprintln(os.Stderr, "\t-register\tregister managed instance")
-	fmt.Fprintln(os.Stderr, "\t\t-id                    \tSSM activation ID                                                                          \t(REQUIRED)")
-	fmt.Fprintln(os.Stderr, "\t\t-code                  \tSSM activation code                                                                        \t(REQUIRED)")
-	fmt.Fprintln(os.Stderr, "\t\t-region                \tSSM region                                                                                 \t(REQUIRED)")
+	fmt.Fprintln(os.Stderr, "\t\t-id                    \tSSM activation ID                                                                          \t(REQUIRED with activation registration)")
+	fmt.Fprintln(os.Stderr, "\t\t-code                  \tSSM activation code                                                                        \t(REQUIRED with activation registration)")
+	fmt.Fprintln(os.Stderr, "\t\t-role                  \tIAM role name the agent should assume                                                      \t(REQUIRED with greengrass registration)")
+	fmt.Fprintln(os.Stderr, "\t\t-region                \tSSM region                                                                                 \t(REQUIRED with greengrass registration)")
+	fmt.Fprintln(os.Stderr, "\t\t-tags                  \tSSM activation code                                                                        \t(OPTIONAL with greengrass registration)")
 	fmt.Fprintln(os.Stderr, "\t\t-disableSimilarityCheck\tDisable the agent hardware/fingerprint similarity check (similarity threshold is set to -1)\t(OPTIONAL)")
 	fmt.Fprintln(os.Stderr, "\n\t\t-clear\tClears the previously saved SSM registration")
 	fmt.Fprintln(os.Stderr, "\t-fingerprint\tWhether to update the machine fingerprint similarity threshold\t(OPTIONAL)")
@@ -101,7 +106,7 @@ func flagUsage() {
 
 // processRegistration handles flags related to the registration category
 func processRegistration(log logger.T) (exitCode int) {
-	if activationCode == "" || activationID == "" || region == "" {
+	if ((activationCode == "" || activationID == "") && role == "") || region == "" {
 		// clear registration
 		if clear {
 			fingerprint.ClearStoredHardwareInfo(log)
@@ -130,7 +135,6 @@ func processRegistration(log logger.T) (exitCode int) {
 		log.Errorf("Registration failed due to %v", err)
 		return 1
 	}
-
 	log.Infof("Successfully registered the instance with AWS SSM using Managed instance-id: %s", managedInstanceID)
 	return 0
 }
@@ -176,14 +180,25 @@ func registerManagedInstance(log logger.T) (managedInstanceID string, err error)
 		}
 	}
 
-	service := anonauth.NewAnonymousService(log, region)
-	managedInstanceID, err = service.RegisterManagedInstance(
-		activationCode,
-		activationID,
-		publicKey,
-		keyType,
-		fingerprintUUID,
-	)
+	if role != "" {
+		authRegisterService := authregister.NewAuthRegisterService(log, region)
+		managedInstanceID, err = authRegisterService.RegisterManagedInstance(
+			publicKey,
+			keyType,
+			fingerprintUUID,
+			role,
+			tagsJson,
+		)
+	} else {
+		service := anonauth.NewAnonymousService(log, region)
+		managedInstanceID, err = service.RegisterManagedInstance(
+			activationCode,
+			activationID,
+			publicKey,
+			keyType,
+			fingerprintUUID,
+		)
+	}
 
 	if err != nil {
 		return managedInstanceID, fmt.Errorf("error registering the instance with AWS SSM. %v", err)

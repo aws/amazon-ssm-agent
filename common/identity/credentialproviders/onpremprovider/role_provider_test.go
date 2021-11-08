@@ -328,3 +328,5 @@ func (r *registrationStub) GeneratePublicKey(string) (string, error) {
 func (r *registrationStub) HasManagedInstancesCredentials(log log.T) bool {
 	return r.hasCreds
 }
+
+func (r *registrationStub) ReloadInstanceInfo(log log.T) {}

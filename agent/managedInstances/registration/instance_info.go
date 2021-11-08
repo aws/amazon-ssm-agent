@@ -223,6 +223,12 @@ func getInstanceInfo(log log.T) instanceInfo {
 	return loadedServerInfo
 }
 
+func ReloadInstanceInfo(log log.T) {
+	if err := loadServerInfo(); err != nil {
+		log.Warnf("error while loading server info", err)
+	}
+}
+
 // Temp moved here, should refactor entire file to be behind interface
 func NewOnpremRegistrationInfo() IOnpremRegistrationInfo {
 	return onpremRegistation{}
@@ -239,11 +245,12 @@ type IOnpremRegistrationInfo interface {
 	HasManagedInstancesCredentials(log.T) bool
 	GeneratePublicKey(string) (string, error)
 	ShouldRotatePrivateKey(log.T, string, int, bool) (bool, error)
+	ReloadInstanceInfo(log log.T)
 }
 
 type onpremRegistation struct{}
 
-// ServerID returns the managed instance ID
+// InstanceID returns the managed instance ID
 func (onpremRegistation) InstanceID(log log.T) string { return InstanceID(log) }
 
 // Region returns the managed instance region
@@ -252,7 +259,7 @@ func (onpremRegistation) Region(log log.T) string { return Region(log) }
 // PrivateKey returns the managed instance PrivateKey
 func (onpremRegistation) PrivateKey(log log.T) string { return PrivateKey(log) }
 
-// PrivateKey returns the managed instance PrivateKey
+// PrivateKeyType returns the managed instance PrivateKey
 func (onpremRegistation) PrivateKeyType(log log.T) string { return PrivateKeyType(log) }
 
 // Fingerprint returns the managed instance fingerprint
@@ -268,7 +275,7 @@ func (onpremRegistation) UpdatePrivateKey(log log.T, privateKey, privateKeyType 
 	return UpdatePrivateKey(log, privateKey, privateKeyType)
 }
 
-// HasManagedInstanceCredentials returns if the instance has registration
+// HasManagedInstancesCredentials returns if the instance has registration
 func (onpremRegistation) HasManagedInstancesCredentials(log log.T) bool {
 	return HasManagedInstancesCredentials(log)
 }
@@ -281,4 +288,9 @@ func (onpremRegistation) ShouldRotatePrivateKey(log log.T, executableToRotateKey
 // GeneratePublicKey generate the public key of a provided private key
 func (onpremRegistation) GeneratePublicKey(privateKey string) (string, error) {
 	return GeneratePublicKey(privateKey)
+}
+
+// ReloadInstanceInfo reloads instance info from disk
+func (onpremRegistation) ReloadInstanceInfo(log log.T) {
+	ReloadInstanceInfo(log)
 }

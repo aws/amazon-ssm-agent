@@ -41,10 +41,12 @@ const (
 	versionFlag                = "version"
 	fingerprintFlag            = "fingerprint"
 	similarityThresholdFlag    = "similarityThreshold"
+	roleFlag                   = "role"
+	tagsFlag                   = "tags"
 )
 
 var (
-	activationCode, activationID, region                                     string
+	activationCode, activationID, region, role, tagsJson                     string
 	register, clear, force, fpFlag, agentVersionFlag, disableSimilarityCheck bool
 	similarityThreshold                                                      int
 	registrationFile                                                         = filepath.Join(appconfig.DefaultDataStorePath, "registration")

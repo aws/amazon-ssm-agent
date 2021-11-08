@@ -132,6 +132,8 @@ build-any-%: checkstyle copy-src pre-build
 	    agent/session/logging/main.go
 	cd $(GOTEMPCOPYPATH) && GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO_BUILD) -o $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/ssm-session-worker$(EXE_EXT) -v \
 	    agent/framework/processor/executer/outofproc/sessionworker/main.go
+	cd $(GOTEMPCOPYPATH) && GOOS=$(GOOS) GOARCH=$(GOARCH) $(GO_BUILD) -o $(GO_SPACE)/bin/$(GOOS)_$(GOARCH)/ssm-setup-cli$(EXE_EXT) -v \
+		agent/setupcli/setupcli.go
 	@echo "Finished building $(GOARCH) $(GOOS) agent"
 
 # Pre-defined recipes for various supported builds:
